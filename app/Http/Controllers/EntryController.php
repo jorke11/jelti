@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class EntryController extends Controller
 {
    public function index(){
-       return "entry";
+       return view("entry.init");
    }
 }

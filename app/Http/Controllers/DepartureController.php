@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class DepartureController extends Controller
 {
     public function index(){
-       return "departure";
+       return view("departure.init");
    }
 }

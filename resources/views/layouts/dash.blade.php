@@ -8,9 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Superfuds</title>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        {!!Html::style('/css/edited.css')!!}
         <!-- Bootstrap -->
         <!--<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">-->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
@@ -19,7 +17,7 @@
         {!!Html::style('/vendor/template/vendors/google-code-prettify/bin/prettify.min.css')!!}
         {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
         <!-- Font Awesome -->
-
+        
         <!--<link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">-->
         <!-- NProgress -->
         <!--<link href="../vendors/nprogress/nprogress.css" rel="stylesheet">-->
@@ -28,10 +26,6 @@
 
         <!-- Custom styling plus plugins -->
         <!--<link href="../build/css/custom.min.css" rel="stylesheet">-->
-        <script>
-            window.Laravel = <?php
-                echo json_encode(['csrfToken' => csrf_token(),]);?>
-        </script>
     </head>
 
     <body class="nav-md">
@@ -40,7 +34,7 @@
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view">
                         <div class="navbar nav_title" style="border: 0;">
-                            <a href="index.html" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>Superfufs</span></a>
+                            <a href="index.html" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>Superfuds</span></a>
                         </div>
 
                         <div class="clearfix"></div>
@@ -49,12 +43,13 @@
                         <div class="profile clearfix">
                             <div class="profile_pic">
                                 <!--{!!Html::image('/assets/images/logo.png','foto',array('class' => 'img-circle profile_img'))!!}-->
-                                {!!Html::image('/vendor/template/images/img.jpg','foto',array('class' => 'img-circle profile_img'))!!}
+                                {!!Html::image('/assets/images/default.jpeg','Profile Image',array('class' => 'img-circle profile_img'))!!}
+                                <!--{!!Html::image('/vendor/template/images/img.jpg','foto',array('class' => 'img-circle profile_img'))!!}-->
                                 <!--<img src="images/img.jpg" alt="..." class="img-circle profile_img">-->
                             </div>
                             <div class="profile_info">
                                 <span>Welcome,</span>
-                                <h2>John Doe</h2>
+                                <h2>{{auth()->user()->name}}</h2>
                             </div>
                         </div>
                         <!-- /menu profile quick info -->
@@ -80,58 +75,12 @@
                                             <li><a href="/departure">Departure</a></li>                                    
                                         </ul>
                                     </li>
-                                                              
                                    
-                                    <li><a><i class="fa fa-clone"></i>Layouts <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="fixed_sidebar.html">Fixed Sidebar</a></li>
-                                            <li><a href="fixed_footer.html">Fixed Footer</a></li>
-                                        </ul>
-                                    </li>
+                                    
+                                  
                                 </ul>
                             </div>
-                            <div class="menu_section">
-                                <h3>Live On</h3>
-                                <ul class="nav side-menu">
-                                    <li><a><i class="fa fa-bug"></i> Additional Pages <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="e_commerce.html">E-commerce</a></li>
-                                            <li><a href="projects.html">Projects</a></li>
-                                            <li><a href="project_detail.html">Project Detail</a></li>
-                                            <li><a href="contacts.html">Contacts</a></li>
-                                            <li><a href="profile.html">Profile</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-windows"></i> Extras <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="page_403.html">403 Error</a></li>
-                                            <li><a href="page_404.html">404 Error</a></li>
-                                            <li><a href="page_500.html">500 Error</a></li>
-                                            <li><a href="plain_page.html">Plain Page</a></li>
-                                            <li><a href="login.html">Login Page</a></li>
-                                            <li><a href="pricing_tables.html">Pricing Tables</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-sitemap"></i> Multilevel Menu <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="#level1_1">Level One</a>
-                                            <li><a>Level One<span class="fa fa-chevron-down"></span></a>
-                                                <ul class="nav child_menu">
-                                                    <li class="sub_menu"><a href="level2.html">Level Two</a>
-                                                    </li>
-                                                    <li><a href="#level2_1">Level Two</a>
-                                                    </li>
-                                                    <li><a href="#level2_2">Level Two</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#level1_2">Level One</a>
-                                            </li>
-                                        </ul>
-                                    </li>                  
-                                    <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
-                                </ul>
-                            </div>
+                         
 
                         </div>
                         <!-- /sidebar menu -->
@@ -167,8 +116,9 @@
                                 <li class="">
                                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <!--<img src="images/img.jpg" alt="">-->
-                                        {!!Html::image('/vendor/template/images/img.jpg','Profile Image')!!}
-                                        John Doe
+                                        <!--{!!Html::image('/vendor/template/images/img.jpg','Profile Image')!!}-->
+                                        {!!Html::image('/assets/images/default.jpeg','Profile Image')!!}
+                                        {{auth()->user()->name}}
                                         <span class=" fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -180,7 +130,17 @@
                                             </a>
                                         </li>
                                         <li><a href="javascript:;">Help</a></li>
-                                        <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                        <li>
+                                        <a href="{{ url('/logout') }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            Logout
+                                        </a>
+
+                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </li>
                                     </ul>
                                 </li>
 
@@ -272,7 +232,7 @@
 
                         <div class="page-title">
                             <div class="title_left">
-                                <h3>Inbox Design <small>Some examples to get you started</small></h3>
+                                <h3>@yield('title') <small>@yield('subtitle')</small></h3>
                             </div>
 
                             <div class="title_right">
@@ -293,7 +253,7 @@
                             <div class="col-md-12">
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <h2>Inbox Design<small>User Mail</small></h2>
+                                        <h2>@yield('title')<small>{{auth()->user()->name}}</small></h2>
                                         <ul class="nav navbar-right panel_toolbox">
                                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                             </li>
@@ -311,210 +271,8 @@
                                         </ul>
                                         <div class="clearfix"></div>
                                     </div>
-                                    <div class="x_content">
-                                        <div class="row">
-                                            <div class="col-sm-3 mail_list_column">
-                                                <button id="compose" class="btn btn-sm btn-success btn-block" type="button">COMPOSE</button>
-                                                <a href="#">
-                                                    <div class="mail_list">
-                                                        <div class="left">
-                                                            <i class="fa fa-circle"></i> <i class="fa fa-edit"></i>
-                                                        </div>
-                                                        <div class="right">
-                                                            <h3>Dennis Mugo <small>3.00 PM</small></h3>
-                                                            <p>Ut enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud exercitation...</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="mail_list">
-                                                        <div class="left">
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                        <div class="right">
-                                                            <h3>Jane Nobert <small>4.09 PM</small></h3>
-                                                            <p><span class="badge">To</span> Ut enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud exercitation...</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="mail_list">
-                                                        <div class="left">
-                                                            <i class="fa fa-circle-o"></i><i class="fa fa-paperclip"></i>
-                                                        </div>
-                                                        <div class="right">
-                                                            <h3>Musimbi Anne <small>4.09 PM</small></h3>
-                                                            <p><span class="badge">CC</span> Ut enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud exercitation...</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="mail_list">
-                                                        <div class="left">
-                                                            <i class="fa fa-paperclip"></i>
-                                                        </div>
-                                                        <div class="right">
-                                                            <h3>Jon Dibbs <small>4.09 PM</small></h3>
-                                                            <p>Ut enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud exercitation...</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="mail_list">
-                                                        <div class="left">
-                                                            .
-                                                        </div>
-                                                        <div class="right">
-                                                            <h3>Debbis & Raymond <small>4.09 PM</small></h3>
-                                                            <p>Ut enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud exercitation...</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="mail_list">
-                                                        <div class="left">
-                                                            .
-                                                        </div>
-                                                        <div class="right">
-                                                            <h3>Debbis & Raymond <small>4.09 PM</small></h3>
-                                                            <p>Ut enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud exercitation...</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="mail_list">
-                                                        <div class="left">
-                                                            <i class="fa fa-circle"></i> <i class="fa fa-edit"></i>
-                                                        </div>
-                                                        <div class="right">
-                                                            <h3>Dennis Mugo <small>3.00 PM</small></h3>
-                                                            <p>Ut enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud exercitation...</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="mail_list">
-                                                        <div class="left">
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                        <div class="right">
-                                                            <h3>Jane Nobert <small>4.09 PM</small></h3>
-                                                            <p>Ut enim ad minim veniam, quis nostrud exercitation enim ad minim veniam, quis nostrud exercitation...</p>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <!-- /MAIL LIST -->
-
-                                            <!-- CONTENT MAIL -->
-                                            <div class="col-sm-9 mail_view">
-                                                <div class="inbox-body">
-                                                    <div class="mail_heading row">
-                                                        <div class="col-md-8">
-                                                            <div class="btn-group">
-                                                                <button class="btn btn-sm btn-primary" type="button"><i class="fa fa-reply"></i> Reply</button>
-                                                                <button class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i></button>
-                                                                <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Print"><i class="fa fa-print"></i></button>
-                                                                <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Trash"><i class="fa fa-trash-o"></i></button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4 text-right">
-                                                            <p class="date"> 8:02 PM 12 FEB 2014</p>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <h4> Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum.</h4>
-                                                        </div>
-                                                    </div>
-                                                    <div class="sender-info">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <strong>Jon Doe</strong>
-                                                                <span>(jon.doe@gmail.com)</span> to
-                                                                <strong>me</strong>
-                                                                <a class="sender-dropdown"><i class="fa fa-chevron-down"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="view-mail">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
-                                                        <p>Riusmod tempor incididunt ut labor erem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                                            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                                                            mollit anim id est laborum.</p>
-                                                        <p>Modesed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                                    </div>
-                                                    <div class="attachment">
-                                                        <p>
-                                                            <span><i class="fa fa-paperclip"></i> 3 attachments — </span>
-                                                            <a href="#">Download all attachments</a> |
-                                                            <a href="#">View all images</a>
-                                                        </p>
-                                                        <ul>
-                                                            <li>
-                                                                <a href="#" class="atch-thumb">
-                                                                    {!!Html::image('/vendor/template/images/inbox.png','img')!!}
-                                                                    <!--<img src="images/inbox.png" alt="img" />-->
-                                                                </a>
-
-                                                                <div class="file-name">
-                                                                    image-name.jpg
-                                                                </div>
-                                                                <span>12KB</span>
-
-
-                                                                <div class="links">
-                                                                    <a href="#">View</a> -
-                                                                    <a href="#">Download</a>
-                                                                </div>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="#" class="atch-thumb">
-                                                                    {!!Html::image('/vendor/template/images/inbox.png','img')!!}
-                                                                    <!--<img src="images/inbox.png" alt="img" />-->
-                                                                </a>
-
-                                                                <div class="file-name">
-                                                                    img_name.jpg
-                                                                </div>
-                                                                <span>40KB</span>
-
-                                                                <div class="links">
-                                                                    <a href="#">View</a> -
-                                                                    <a href="#">Download</a>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#" class="atch-thumb">
-                                                                    {!!Html::image('/vendor/template/images/inbox.png','img')!!}
-                                                                    <!--<img src="images/inbox.png" alt="img" />-->
-                                                                </a>
-
-                                                                <div class="file-name">
-                                                                    img_name.jpg
-                                                                </div>
-                                                                <span>30KB</span>
-
-                                                                <div class="links">
-                                                                    <a href="#">View</a> -
-                                                                    <a href="#">Download</a>
-                                                                </div>
-                                                            </li>
-
-                                                        </ul>
-                                                    </div>
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-sm btn-primary" type="button"><i class="fa fa-reply"></i> Reply</button>
-                                                        <button class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"><i class="fa fa-share"></i></button>
-                                                        <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Print"><i class="fa fa-print"></i></button>
-                                                        <button class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Trash"><i class="fa fa-trash-o"></i></button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <!-- /CONTENT MAIL -->
-                                        </div>
+                                    <div class="x_content">                          
+                                           @yield('content')
                                     </div>
                                 </div>
                             </div>
@@ -526,7 +284,7 @@
                 <!-- footer content -->
                 <footer>
                     <div class="pull-right">
-                        Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                        Created by <a href="https://www.superfuds.com">Superfuds</a>
                     </div>
                     <div class="clearfix"></div>
                 </footer>

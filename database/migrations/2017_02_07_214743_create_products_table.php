@@ -14,26 +14,27 @@ class CreateProductsTable extends Migration {
     public function up() {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('url_part', 60);
-            $table->string('bar_code', 30);
-            $table->string('reference', 10);
             $table->string('title', 120);
-            $table->boolean('status');
-            $table->decimal('units_supplier',15,2);
-            $table->numeric('units_sf',15,2);
-            $table->numeric('cost_sf',15,2);
-            $table->numeric('tax',15,2);
-            $table->numeric('price_sf',15,2);
-            $table->numeric('price_cust',15,2);
-            $table->string('image', 20);
-            $table->string('other_images', 100);
             $table->string('description', 100);
             $table->string('short_description', 100);
+            $table->string('reference', 10);
+            $table->decimal('units_supplier', 15, 2);
+            $table->decimal('units_sf', 15, 2);
+            $table->decimal('cost_sf', 15, 2);
+            $table->decimal('tax', 15, 2);
+            $table->decimal('price_sf', 15, 2);
+            $table->decimal('price_cust', 15, 2);
+            $table->integer('categories_id');
+            $table->integer('supplier_id');
+            $table->string('url_part', 60);
+            $table->string('bar_code', 30);
+            $table->string('image', 20);
+            $table->string('other_images', 100);
+            $table->integer('status');
             $table->string('meta_title', 100);
             $table->string('meta_keywords', 100);
             $table->string('meta_description', 100);
-            $table->integer('categories_id');
-            $table->integer('supplier_id');
+
             $table->integer('minimun_stock');
         });
     }
@@ -44,7 +45,7 @@ class CreateProductsTable extends Migration {
      * @return void
      */
     public function down() {
-       Schema::drop('products');
+        Schema::drop('products');
     }
 
 }

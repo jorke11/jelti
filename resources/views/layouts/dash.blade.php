@@ -6,8 +6,22 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+         <link rel="shortcut icon" href="{{{ asset('assets/images/logoico.png') }}}">
         <title>Superfuds</title>
+        {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
+
+        <!--{!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}-->
+        <!--{!!Html::script('/vendor/DataTables-1.10.13/media/js/dataTables.bootstrap.js')!!}-->
+
+
+        <script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+        <link href='//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css' rel="stylesheet" />
+
+        {!!Html::script('/vendor/toastr/toastr.min.js')!!}
+        {!!Html::style('/vendor/toastr/toastr.min.css')!!}
+        <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/dataTables.bootstrap.css')!!}--> 
+        <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}--> 
+
         {!!Html::style('/css/edited.css')!!}
         <!-- Bootstrap -->
         <!--<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">-->
@@ -17,7 +31,7 @@
         {!!Html::style('/vendor/template/vendors/google-code-prettify/bin/prettify.min.css')!!}
         {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
         <!-- Font Awesome -->
-        
+
         <!--<link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">-->
         <!-- NProgress -->
         <!--<link href="../vendors/nprogress/nprogress.css" rel="stylesheet">-->
@@ -61,27 +75,40 @@
                             <div class="menu_section">
                                 <h3>General</h3>
                                 <ul class="nav side-menu">
-                                    <li><a><i class="fa fa-home"></i> Security <span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="index.html">Sales</a></li>
+                                            <li><a href="index2.html">Profile</a></li>
+                                            <li><a href="index3.html">Permission</a></li>
+                                            <li><a href="{{url("/register")}}">Register</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="index.html">Users</a></li>
                                             <li><a href="index2.html">Profile</a></li>
                                             <li><a href="index3.html">Permission</a></li>
+                                            <li><a href="{{url("/register")}}">Register</a></li>
+
                                         </ul>
                                     </li>
-                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventario <span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
+                                            <li><a href="/category">Category</a></li>                                    
                                             <li><a href="/products">Products</a></li>
+                                            <li><a href="/supplier">Supplier</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
                                             <li><a href="/entry">Entry</a></li>
                                             <li><a href="/departure">Departure</a></li>                                    
+                                            <li><a href="/kardex">Kardex</a></li>                                    
                                         </ul>
                                     </li>
-                                   
-                                    
-                                  
                                 </ul>
                             </div>
-                         
-
                         </div>
                         <!-- /sidebar menu -->
 
@@ -131,16 +158,16 @@
                                         </li>
                                         <li><a href="javascript:;">Help</a></li>
                                         <li>
-                                        <a href="{{ url('/logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
+                                            <a href="{{ url('/logout') }}"
+                                               onclick="event.preventDefault();
+    document.getElementById('logout-form').submit();">
+                                                Logout
+                                            </a>
 
-                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
+                                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                                {{ csrf_field() }}
+                                            </form>
+                                        </li>
                                     </ul>
                                 </li>
 
@@ -272,7 +299,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="x_content">                          
-                                           @yield('content')
+                                        @yield('content')
                                     </div>
                                 </div>
                             </div>
@@ -383,7 +410,7 @@
         <!-- /compose -->
 
         <!-- jQuery -->
-        {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
+
         {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
         {!!Html::script('/vendor/template/vendors/fastclick/lib/fastclick.js')!!}
         {!!Html::script('/vendor/template/vendors/nprogress/nprogress.js')!!}
@@ -401,6 +428,8 @@
         <!--<script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>-->
         <!--<script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>-->
         <!--<script src="../vendors/google-code-prettify/src/prettify.js"></script>-->
+
+
 
         <!-- Custom Theme Scripts -->
         <!--<script src="../build/js/custom.min.js"></script>-->

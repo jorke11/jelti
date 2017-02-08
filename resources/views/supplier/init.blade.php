@@ -1,48 +1,43 @@
 @extends('layouts.dash')
-
 @section('content')
 @section('title','Supplier')
 @section('subtitle','Management')
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-lg-3">List Supplier</div>
+                    <div class="col-lg-9 text-right">
+                        <button class="btn btn-success" type="submit" data-toggle='modal' data-target="#modalNew">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
 
-<div class="col-lg-8">
-<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-bordered" id="tblSuppliers" width='100%'>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Last Name</th>
+                            <th>Document</th>
+                            <th>Address</th>
+                            <th>Type Person</th>
+                            <th>Regimen</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
-        </div>
-    </div>
-    <div class="ln_solid"></div>
-    <div class="form-group">
-        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-            <button class="btn btn-primary" type="button">Cancel</button>
-            <button class="btn btn-primary" type="reset">Reset</button>
-            <button type="submit" class="btn btn-success">Submit</button>
-        </div>
-    </div>
-
-</form>
 </div>
+@include('supplier.edit')
+@include('supplier.new')
+{!!Html::script('js/Administration/Supplier.js')!!}
 @endsection

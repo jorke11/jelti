@@ -4,22 +4,26 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSuppliersTable extends Migration
-{
+class CreateSuppliersTable extends Migration {
+
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('last_name');
             $table->string('document');
-            $table->string('type_document_id');
-            $table->string('type_person_id');
+            $table->string('address');
+            $table->string('phone');
+            $table->string('contact');
+            $table->string('phone_contact');
+            $table->integer('type_regimen_id');
+            $table->integer('type_person_id');
+            $table->timestamps();
         });
     }
 
@@ -28,8 +32,8 @@ class CreateSuppliersTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::drop('suppliers');
     }
+
 }

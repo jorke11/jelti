@@ -24,6 +24,11 @@
                             <th>Name</th>
                             <th>Last Name</th>
                             <th>Document</th>
+                            <th>Contact</th>
+                            <th>Phone Contact</th>
+                            <th>Email</th>
+                            <th>Term</th>
+                            <th>City</th>
                             <th>Address</th>
                             <th>Type Person</th>
                             <th>Regimen</th>

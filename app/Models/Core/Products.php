@@ -8,5 +8,26 @@ class Product extends Model
 {
     protected $table="products";
     protected $primaryKey='id';
+    protected $fillable=["id",
+        "title",
+        "description",
+        "short_description",
+        "reference",
+        "units_supplier",
+        "units_sf",
+        "cost_sf",
+        "tax",
+        "price_sf",
+        "price_cust",
+        "categories_id",
+        "supplier_id",
+        "url_part",
+        "bar_code",
+        "status",
+        "meta_title",
+        "meta_keywords",
+        "meta_description",
+        "minimun_stock",
+        ];
     public $timestamp=false;
 }

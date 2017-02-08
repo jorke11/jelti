@@ -17,11 +17,15 @@ class CreateSuppliersTable extends Migration {
             $table->string('name');
             $table->string('last_name');
             $table->string('document');
+            $table->string('email');
             $table->string('address');
             $table->string('phone');
             $table->string('contact');
             $table->string('phone_contact');
-            $table->integer('type_regimen_id');
+            $table->integer('term');
+            $table->integer('city_id');
+            $table->integer('web_site');
+            $table->integer('type_regime_id');
             $table->integer('type_person_id');
             $table->timestamps();
         });

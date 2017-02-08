@@ -36,5 +36,5 @@ Route::get('/api/listSupplier', function() {
     return Datatables::eloquent(Models\Administration\Suppliers::query())->make(true);
 });
 Route::get('/api/listProducts', function() {
-    return Datatables::eloquent(Models\Administration\Suppliers::query())->make(true);
+    return Datatables::eloquent(Models\Core\Product::query())->make(true);
 });

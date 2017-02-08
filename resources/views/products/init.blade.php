@@ -3,42 +3,40 @@
 @section('title','Products')
 @section('subtitle','Management')
 <div class="row">
-    <div class="col-md-10 col-md-offset-1">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-lg-3">List Products</div>
-                    <div class="col-lg-9 text-right">
-                        <button class="btn btn-success" type="submit" data-toggle='modal' data-target="#modalNew">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                        </button>
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" id='myTabs'>
+            <li role="presentation" class="active"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">List</a></li>
+            <li role="presentation"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Management</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="list">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @include('products.table')
                     </div>
                 </div>
 
             </div>
-            <div class="panel-body">
-                <table class="table table-condensed table-bordered" id="tblProducts" width='100%'>
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>reference</th>
-                            <th>Bar code</th>
-                            <th>units_supplier</th>
-                            <th>units_sf</th>
-                            <th>cost_sf</th>
-                            <th>tax</th>
-                            <th>price_sf</th>
-                            <th>price_cust</th>
-                            <th>image</th>
-                            <th>status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+            <div role="tabpanel" class="tab-pane " id="management">
+                <div class="panel panel-default">
+                    <div class="page-title">
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <button class="btn btn-success" id='new'>
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        @include('products.management')
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 </div>

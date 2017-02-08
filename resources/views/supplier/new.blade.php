@@ -15,7 +15,8 @@
                 {!!form::text('phone',null,['id'=>'phone','class'=>'form-control','placeholder'=>'phone'])!!}<br>
                 {!!form::text('contact',null,['id'=>'contact','class'=>'form-control','placeholder'=>'Name Contact'])!!}<br>
                 {!!form::text('phone_contact',null,['id'=>'phone_contact','class'=>'form-control','placeholder'=>'Phone Contact'])!!}<br>
-                <select class="form-control"  id="type_regimen_id" name="type_regimen_id">
+                
+                <select class="form-control"  id="type_regime_id" name="type_regime_id">
                     @foreach($type_person as $category)
                     <option value="{{$category->id}}">{{$category->description}}</option>
                     @endforeach

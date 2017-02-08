@@ -13,7 +13,11 @@ class CreateTypepersonTable extends Migration
      */
     public function up()
     {
-        //
+       Schema::create('typeperson', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('description');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ class CreateTypepersonTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('typeperson');
     }
 }

@@ -30,12 +30,12 @@ class CreateProductsTable extends Migration {
             $table->string('bar_code', 30);
             $table->string('image', 20);
             $table->string('other_images', 100);
-            $table->integer('status');
+            $table->integer('status_id');
             $table->string('meta_title', 100);
             $table->string('meta_keywords', 100);
             $table->string('meta_description', 100);
-
             $table->integer('minimun_stock');
+            $table->timestamps();
         });
     }
 

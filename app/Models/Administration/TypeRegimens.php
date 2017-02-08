@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TypeRegimens extends Model {
 
-    protected $table = "type_regimens";
+    protected $table = "typeregimes";
     protected $primaryKey = "id";
     protected $fillable = ["id", "description"];
 

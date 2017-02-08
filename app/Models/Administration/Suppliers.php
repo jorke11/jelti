@@ -12,12 +12,16 @@ class Suppliers extends Model {
         "id",
         "name",
         "last_name",
-        "address",
         "document",
+        "email",
+        "address",
         "phone",
         "contact",
         "phone_contact",
-        "type_regimen_id",
+        "term",
+        "city_id",
+        "web_site",
+        "type_regime_id",
         "type_person_id"];
 
 //    public $timestamp = false;

@@ -4,6 +4,10 @@ function Products() {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
+        $("#tabManagement").click(function(){
+            $('#myTabs a[href="#management"]').tab('show');
+        });
+        
     }
 
     this.save = function () {
@@ -99,12 +103,18 @@ function Products() {
             "ajax": "/api/listProducts",
             columns: [
                 {data: "id"},
-                {data: "name"},
-                {data: "last_name"},
-                {data: "document"},
-                {data: "address"},
-                {data: "type_person_id"},
-                {data: "type_regimen_id"},
+                {data: "title"},
+                {data: "description"},
+                {data: "reference"},
+                {data: "bar_code"},
+                {data: "units_supplier"},
+                {data: "units_sf"},
+                {data: "cost_sf"},
+                {data: "tax"},
+                {data: "price_sf"},
+                {data: "price_cust"},
+                {data: "image"},
+                {data: "status"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [

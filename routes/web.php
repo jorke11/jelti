@@ -27,6 +27,7 @@ Route::resource('/entry', 'EntryController');
 Route::resource('/departure', 'DepartureController');
 Route::resource('/category', 'CategoryController');
 Route::resource('/supplier', 'SupplierController');
+Route::resource('/warehouse', 'WarehouseController');
 
 Route::get('/api/listCategory', function() {
     return Datatables::eloquent(Models\Core\Categories::query())->make(true);
@@ -37,4 +38,7 @@ Route::get('/api/listSupplier', function() {
 });
 Route::get('/api/listProducts', function() {
     return Datatables::eloquent(Models\Core\Products::query())->make(true);
+});
+Route::get('/api/listWarehouse', function() {
+    return Datatables::eloquent(Models\Core\Warehouse::query())->make(true);
 });

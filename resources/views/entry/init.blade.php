@@ -1,5 +1,4 @@
 @extends('layouts.dash')
-
 @section('content')
 @section('title','Entry')
 @section('subtitle','Management')

@@ -26,7 +26,7 @@ class CategoryController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Core\Category::create($input);
+            $result = Core\Categories::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -37,12 +37,12 @@ class CategoryController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Core\Category::FindOrFail($id);
+        $suppliers = Core\Categories::FindOrFail($id);
         return response()->json($suppliers);
     }
 
     public function update(Request $request, $id) {
-        $categories = Core\Category::FindOrFail($id);
+        $categories = Core\Categories::FindOrFail($id);
         $input = $request->all();
         $result = $categories->fill($input)->save();
         if ($result) {
@@ -54,7 +54,7 @@ class CategoryController extends Controller {
     }
 
     public function destroy($id) {
-        $category = Core\Category::FindOrFail($id);
+        $category = Core\Categories::FindOrFail($id);
         $result = $category->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {

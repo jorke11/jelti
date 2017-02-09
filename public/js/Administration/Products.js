@@ -4,46 +4,39 @@ function Products() {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
-        $("#tabManagement").click(function(){
+        $("#tabManagement").click(function () {
+            $(".input-product").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
-        
+
     }
 
     this.save = function () {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = frm.attr("action");
-        $.ajax({
-            url: url,
-            method: "POST",
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    table.ajax.reload();
-                    $("#modalNew").modal("toggle");
-                    toastr.success("Ok");
-                }
-            }
-        })
-    }
+        var url = "", method = "";
+        var id = $("#frm #id").val();
+        var msg = '';
+        if (id == '') {
+            method = 'POST';
+            url = "products";
+            msg = "Created Record";
 
-    this.edit = function () {
-        toastr.remove();
-        var frm = $("#frmEditSupplier");
-        var data = frm.serialize();
-        var url = "supplier/" + $("#frmEditSupplier #id").val();
+        } else {
+            method = 'PUT';
+            url = "products/" + id;
+            msg = "Edited Record";
+        }
+
         $.ajax({
             url: url,
-            method: "PUT",
+            method: method,
             data: data,
             dataType: 'JSON',
             success: function (data) {
                 if (data.success == 'true') {
                     table.ajax.reload();
-                    toastr.success("Ok");
-                    $("#modalEdit").modal("toggle");
+                    toastr.success(msg);
                 }
             }
         })
@@ -52,24 +45,36 @@ function Products() {
     this.showModal = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/product/" + id + "/edit";
-        $("#modalEdit").modal("show");
+        var url = "/products/" + id + "/edit";
+        $('#myTabs a[href="#management"]').tab('show');
         $.ajax({
             url: url,
             method: "GET",
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frmEdit #id").val(data.id);
-                $("#frmEdit #name").val(data.name);
-                $("#frmEdit #last_name").val(data.last_name);
-                $("#frmEdit #document").val(data.document);
-                $("#frmEdit #address").val(data.address);
-                $("#frmEdit #phone").val(data.phone);
-                $("#frmEdit #name_contact").val(data.name_contact);
-                $("#frmEdit #phone_contact").val(data.phone_contact);
-                $("#frmEdit #type_regimen_id").val(data.type_regimen_id);
-                $("#frmEdit #type_person_id").val(data.type_person_id);
+                console.log(data)
+                $("#frm #id").val(data.id);
+                $("#frm #title").val(data.title);
+                $("#frm #description").val(data.description);
+                $("#frm #short_description").val(data.short_description);
+                $("#frm #reference").val(data.reference);
+                $("#frm #units_supplier").val(data.units_supplier);
+                $("#frm #units_sf").val(data.units_sf);
+                $("#frm #cost_sf").val(data.cost_sf);
+                $("#frm #tax").val(data.tax);
+                $("#frm #price_sf").val(data.price_sf);
+                $("#frm #price_cust").val(data.price_cust);
+                $("#frm #categories_id").val(data.categories_id);
+                $("#frm #supplier_id").val(data.supplier_id);
+                $("#frm #url_part").val(data.url_part);
+                $("#frm #bar_code").val(data.bar_code);
+                $("#frm #status_id").val(data.status_id);
+                $("#frm #meta_title").val(data.meta_title);
+                $("#frm #meta_keywords").val(data.meta_keywords);
+                $("#frm #meta_description").val(data.meta_description);
+                $("#frm #minimun_stock").val(data.minimun_stock);
+                $("#frm #image").val(data.Image);
             }
         })
     }
@@ -78,7 +83,7 @@ function Products() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/product/" + id;
+            var url = "/products/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -114,22 +119,23 @@ function Products() {
                 {data: "price_sf"},
                 {data: "price_cust"},
                 {data: "image"},
-                {data: "status"},
+                {data: "status_id"},
+                {data: "status_id"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5],
+                    aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [13],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        return '<button class="btn btn-danger" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

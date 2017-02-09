@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTypepersonTable extends Migration
+class CreateConsecutivesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,14 @@ class CreateTypepersonTable extends Migration
      */
     public function up()
     {
-       Schema::create('typeperson', function (Blueprint $table) {
+        Schema::create('consecutives', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
+            $table->integer('type_form');
+            $table->integer('initial');
+            $table->integer('final');
+            $table->integer('current');
+            $table->integer('large');
             $table->timestamps();
         });
     }
@@ -27,6 +32,6 @@ class CreateTypepersonTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('typeperson');
+        Schema::dropIfExists('consecutives');
     }
 }

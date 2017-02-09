@@ -4,7 +4,7 @@ namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Entry extends Model
+class Entries extends Model
 {
     protected $table='entries';
     protected $primaryKey="id";

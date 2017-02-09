@@ -27,6 +27,6 @@ class CreateTyperegimesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('typeregimes');
+        Schema::dropIfExists('typeregimes');
     }
 }

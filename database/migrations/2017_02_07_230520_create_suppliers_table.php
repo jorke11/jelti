@@ -37,7 +37,7 @@ class CreateSuppliersTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::drop('suppliers');
+        Schema::dropIfExists('suppliers');
     }
 
 }

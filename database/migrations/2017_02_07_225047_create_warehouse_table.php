@@ -28,6 +28,6 @@ class CreateWarehouseTable extends Migration
      */
     public function down()
     {
-        Schema::drop('warehouse');
+        Schema::dropIfExists('warehouse');
     }
 }

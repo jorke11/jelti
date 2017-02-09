@@ -2,46 +2,43 @@
 @section('content')
 @section('title','Entry')
 @section('subtitle','Management')
+<div class="row">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" id='myTabs'>
+            <li role="presentation" class="active"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">List</a></li>
+            <li role="presentation" id="insideManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Management</a></li>
+        </ul>
 
-<div class="col-lg-8">
-<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="list">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @include('entry.list')
+                    </div>
+                </div>
 
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
-        </div>
-    </div>
-    <div class="ln_solid"></div>
-    <div class="form-group">
-        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-            <button class="btn btn-primary" type="button">Cancel</button>
-            <button class="btn btn-primary" type="reset">Reset</button>
-            <button type="submit" class="btn btn-success">Submit</button>
-        </div>
-    </div>
+            </div>
+            <div role="tabpanel" class="tab-pane " id="management">
+                <div class="panel panel-default">
+                    <div class="page-title">
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <button class="btn btn-success" id='new'>
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        @include('entry.management')
+                    </div>
+                </div>
+            </div>
 
-</form>
+        </div>
+    </div>
 </div>
+{!!Html::script('js/Inventory/Entry.js')!!}
 @endsection

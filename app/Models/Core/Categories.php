@@ -3,7 +3,7 @@ namespace App\Models\Core;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model {
+class Categories extends Model {
 
     protected $table = "categories";
     protected $primaryKey = "id";

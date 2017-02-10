@@ -29,12 +29,12 @@ Route::resource('/category', 'CategoryController');
 Route::resource('/supplier', 'SupplierController');
 
 Route::get('/api/listCategory', function() {
-    return Datatables::eloquent(Models\Core\Category::query())->make(true);
+    return Datatables::eloquent(Models\Core\Categories::query())->make(true);
 });
 
 Route::get('/api/listSupplier', function() {
     return Datatables::eloquent(Models\Administration\Suppliers::query())->make(true);
 });
 Route::get('/api/listProducts', function() {
-    return Datatables::eloquent(Models\Core\Product::query())->make(true);
+    return Datatables::eloquent(Models\Core\Products::query())->make(true);
 });

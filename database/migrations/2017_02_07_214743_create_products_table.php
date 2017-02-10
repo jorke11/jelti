@@ -28,12 +28,12 @@ class CreateProductsTable extends Migration {
             $table->integer('supplier_id');
             $table->string('url_part', 60);
             $table->string('bar_code', 30);
-            $table->string('image', 20);
-            $table->string('other_images', 100);
+            $table->string('image', 20)->nullable();
+            $table->string('other_images', 100)->nullable();
             $table->integer('status_id');
-            $table->string('meta_title', 100);
-            $table->string('meta_keywords', 100);
-            $table->string('meta_description', 100);
+            $table->string('meta_title', 100)->nullable();
+            $table->string('meta_keywords', 100)->nullable();
+            $table->string('meta_description', 100)->nullable();
             $table->integer('minimun_stock');
             $table->timestamps();
         });
@@ -45,7 +45,7 @@ class CreateProductsTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::drop('products');
+        Schema::dropIfExists('products');
     }
 
 }

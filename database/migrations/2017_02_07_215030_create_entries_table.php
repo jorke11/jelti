@@ -20,7 +20,6 @@ class CreateEntriesTable extends Migration
             $table->string('bill');
             $table->dateTime('created');
             $table->decimal('value',15,2);
-            $table->integer('supplier_id');
             $table->integer('warehouse_id');
         });
     }
@@ -32,6 +31,6 @@ class CreateEntriesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('entries');
+        Schema::dropIfExists('entries');
     }
 }

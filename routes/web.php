@@ -27,6 +27,9 @@ Route::resource('/entry', 'EntryController');
 Route::resource('/departure', 'DepartureController');
 Route::resource('/category', 'CategoryController');
 Route::resource('/supplier', 'SupplierController');
+Route::resource('/warehouse', 'WarehouseController');
+Route::resource('/entry', 'EntryController');
+Route::get('/entry/{id}/consecutive', ['uses' => 'EntryController@getConsecutive']);
 
 Route::get('/api/listCategory', function() {
     return Datatables::eloquent(Models\Core\Categories::query())->make(true);
@@ -37,4 +40,13 @@ Route::get('/api/listSupplier', function() {
 });
 Route::get('/api/listProducts', function() {
     return Datatables::eloquent(Models\Core\Products::query())->make(true);
+<<<<<<< HEAD
+=======
+});
+Route::get('/api/listWarehouse', function() {
+    return Datatables::eloquent(Models\Core\Warehouse::query())->make(true);
+});
+Route::get('/api/listEntries', function() {
+    return Datatables::eloquent(Models\Inventory\Entries::query())->make(true);
+>>>>>>> 9212b662814b5738c34aaafcb3f79c58fe9ff0f0
 });

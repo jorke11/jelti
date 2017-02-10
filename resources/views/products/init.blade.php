@@ -15,7 +15,7 @@
             <div role="tabpanel" class="tab-pane active" id="list">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        @include('products.table')
+                        @include('products.list')
                     </div>
                 </div>
 
@@ -40,7 +40,5 @@
         </div>
     </div>
 </div>
-@include('products.edit')
-@include('products.new')
 {!!Html::script('js/Administration/Products.js')!!}
 @endsection

@@ -23,11 +23,12 @@ class Products extends Model
         "supplier_id",
         "url_part",
         "bar_code",
-        "status",
+        "status_id",
         "meta_title",
         "meta_keywords",
         "meta_description",
         "minimun_stock",
+        "image",
         ];
     public $timestamp=false;
 }

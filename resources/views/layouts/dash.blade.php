@@ -98,6 +98,7 @@
                                             <li><a href="/category">Category</a></li>                                    
                                             <li><a href="/products">Products</a></li>
                                             <li><a href="/supplier">Supplier</a></li>
+                                            <li><a href="/warehouse">Warehouse</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>

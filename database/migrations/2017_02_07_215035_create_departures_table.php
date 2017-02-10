@@ -30,6 +30,6 @@ class CreateDeparturesTable extends Migration
      */
     public function down()
     {
-         Schema::drop('departures');
+         Schema::dropIfExists('departures');
     }
 }

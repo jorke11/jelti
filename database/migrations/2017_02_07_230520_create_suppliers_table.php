@@ -20,11 +20,11 @@ class CreateSuppliersTable extends Migration {
             $table->string('email');
             $table->string('address');
             $table->string('phone');
-            $table->string('contact');
-            $table->string('phone_contact');
+            $table->string('contact')->nullable();
+            $table->string('phone_contact')->nullable();
             $table->integer('term');
             $table->integer('city_id');
-            $table->integer('web_site');
+            $table->string('web_site')->nullable();
             $table->integer('type_regime_id');
             $table->integer('type_person_id');
             $table->timestamps();
@@ -37,7 +37,7 @@ class CreateSuppliersTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::drop('suppliers');
+        Schema::dropIfExists('suppliers');
     }
 
 }

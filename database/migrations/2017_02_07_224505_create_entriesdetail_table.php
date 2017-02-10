@@ -20,6 +20,7 @@ class CreateEntriesdetailTable extends Migration
             $table->dateTime('created');
             $table->decimal('value',15,2);
             $table->integer('categories_id'); 
+             $table->integer('supplier_id');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateEntriesdetailTable extends Migration
      */
     public function down()
     {
-        Schema::drop('entriesdetail');
+        Schema::dropIfExists('entriesdetail');
     }
 }

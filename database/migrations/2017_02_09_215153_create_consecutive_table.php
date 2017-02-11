@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePermissionsTable extends Migration
+class CreateConsecutiveTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreatePermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('consecutive', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
-            $table->string('controller');
-            $table->string('title');
-            $table->string('alternative');
-            $table->integer('idparent');
-            $table->boolean('event');
+            $table->integer('type_form');
+            $table->integer('initial');
+            $table->integer('final');
+            $table->integer('current');
+            $table->integer('large');
+            $table->timestamps();
         });
     }
 
@@ -31,6 +32,6 @@ class CreatePermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('consecutive');
     }
 }

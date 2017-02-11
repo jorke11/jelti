@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class TyperegimesTableSeeder extends Seeder
+class ProductTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,8 +11,6 @@ class TyperegimesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table("typeregimes")->insert([
-            'description'=>'simpli',
-        ]);
+        //
     }
 }

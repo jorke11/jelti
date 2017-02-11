@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Session;
 use Illuminate\Support\Facades\DB;
-use App\Models\Core\Warehouse;
+use App\Models\Administration\Warehouse;
 use \App\Models\Inventory\Entries;
 
 class EntryController extends Controller {

@@ -4,9 +4,9 @@ namespace App\Models\Administration;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Suppliers extends Model {
+class Supplier extends Model {
 
-    protected $table = "suppliers";
+    protected $table = "supplier";
     protected $primaryKey = "id";
     protected $fillable = [
         "id",

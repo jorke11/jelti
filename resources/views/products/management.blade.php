@@ -68,8 +68,8 @@
         </div>
         <div class="col-lg-3">
             <div class="form-group">
-                <label for="email">categories_id:</label>
-                <select class="form-control input-product" id='categories_id' name="categories_id">
+                <label for="email">category_id:</label>
+                <select class="form-control input-product" id='category_id' name="category_id">
                     @foreach($categories as $cate)
                     <option value="{{$cate->id}}">{{$cate->description}}</option>
                     @endforeach
@@ -104,7 +104,7 @@
         <div class="col-lg-3">
             <div class="form-group">
                 <label for="email">status:</label>
-                <input type="text" class="form-control input-product" id="status_id" name='status_id'>
+                <input type="text" class="form-control input-product" id="status" name='status'>
 
             </div>
         </div>

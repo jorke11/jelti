@@ -4,23 +4,22 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEntriesTable extends Migration
-{
+class CreateDepartureTable extends Migration {
+
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('entries', function (Blueprint $table) {
+    public function up() {
+        Schema::create('departure', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description');
-            $table->string('consecutive');
-            $table->string('bill');
-            $table->dateTime('created');
-            $table->decimal('value',15,2);
             $table->integer('warehouse_id');
+            $table->integer('responsable_id');
+            $table->string('consecutive');
+            $table->string('sale_order');
+            $table->dateTime('created');
+            $table->timestamps();
         });
     }
 
@@ -29,8 +28,8 @@ class CreateEntriesTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::dropIfExists('entries');
+    public function down() {
+        Schema::dropIfExists('departure');
     }
+
 }

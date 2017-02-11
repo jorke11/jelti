@@ -3,9 +3,6 @@
 @section('content')
 @section('title','Warehouse')
 @section('subtitle','Management')
-
-
-
 <div class="row">
     <div class="col-lg-6 col-lg-offset-3">
         <div class="panel panel-default">
@@ -13,7 +10,7 @@
                 <div class="row">
                     <div class="col-lg-3">List Warehouse</div>
                     <div class="col-lg-9 text-right">
-                        <button class="btn btn-success" type="submit" data-toggle='modal' data-target="#modalNew">
+                        <button class="btn btn-success" type="button" id="btnOpenModal">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -39,5 +36,5 @@
 </div>
 @include('warehouse.new')
 @include('Warehouse.edit')
-{!!Html::script('js/Core/Warehouse.js')!!}
+{!!Html::script('js/Administration/Warehouse.js')!!}
 @endsection

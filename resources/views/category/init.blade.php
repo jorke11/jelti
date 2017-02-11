@@ -38,5 +38,5 @@
 </div>
 @include('Category.new')
 @include('Category.edit')
-{!!Html::script('js/Core/Category.js')!!}
+{!!Html::script('js/Administration/Category.js')!!}
 @endsection

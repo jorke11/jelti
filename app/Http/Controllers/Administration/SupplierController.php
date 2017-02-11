@@ -11,8 +11,8 @@ use Session;
 class SupplierController extends Controller
 {
      public function index() {
-        $type_person = Administration\TypePersons::all();
-        $type_regimen = Administration\TypeRegime::all();
+        $type_person = Administration\TypePerson::all();
+     $type_regimen = Administration\TypeRegime::all();
         return view("supplier.init", compact('type_person', "type_regimen"));
     }
 

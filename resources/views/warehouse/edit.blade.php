@@ -6,13 +6,13 @@
                 <h4 class="modal-title">Edit Products</h4>
             </div>
             <div class="modal-body">
-                {!! Form::open(['id'=>'frmEdit','url'=>'category.edit']) !!}
+                {!! Form::open(['id'=>'frmEdit','url'=>'warehouse.edit']) !!}
                 <input type="hidden" id="id" name="id">
                 {!! Form::text('description',null,['id'=>'description','class'=>'form-control','placeholder'=>'Detail'])!!}<br>
                 {!!Form::close()!!}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-success" id='edit'>Save</button>
             </div>
         </div>

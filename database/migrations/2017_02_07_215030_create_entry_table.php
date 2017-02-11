@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConsecutivesTable extends Migration
+class CreateEntryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateConsecutivesTable extends Migration
      */
     public function up()
     {
-        Schema::create('consecutives', function (Blueprint $table) {
+        Schema::create('entry', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('warehouse_id');
             $table->string('description');
-            $table->integer('type_form');
-            $table->integer('initial');
-            $table->integer('final');
-            $table->integer('current');
-            $table->integer('large');
+            $table->string('consecutive');
+            $table->string('bill');
+            $table->dateTime('created');
+            $table->decimal('value',15,2);
             $table->timestamps();
+            
         });
     }
 
@@ -32,6 +33,6 @@ class CreateConsecutivesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('consecutives');
+        Schema::dropIfExists('entry');
     }
 }

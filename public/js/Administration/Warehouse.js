@@ -4,6 +4,14 @@ function Warehouse() {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
+        $("#btnOpenModal").click(function () {
+            $("#modalEdit").modal("hide");
+            $("#modalNew").modal("show");
+            $("#frm #id").val("");
+            $("#frm #description").val("");
+            $("#frm #address").val("");
+        });
+
     }
 
     this.save = function () {
@@ -33,6 +41,7 @@ function Warehouse() {
                     table.ajax.reload();
                     toastr.success(msg);
                     $("#modalNew").modal("hide");
+
                 }
             }
         })

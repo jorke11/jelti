@@ -4,10 +4,9 @@ namespace App\Models\Administration;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TypeRegimens extends Model {
+class TypePerson extends Model {
 
-    protected $table = "typeregimes";
+    protected $table = "typeperson";
     protected $primaryKey = "id";
     protected $fillable = ["id", "description"];
-
 }

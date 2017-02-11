@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Models\Core;
+namespace App\Models\Administration;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Products extends Model
-{
-    protected $table="products";
-    protected $primaryKey='id';
-    protected $fillable=["id",
+class Product extends Model {
+
+    protected $table = "product";
+    protected $primaryKey = 'id';
+    protected $fillable = [
+        "id",
+        "category_id",
+        "supplier_id",
         "title",
         "description",
         "short_description",
@@ -19,16 +22,15 @@ class Products extends Model
         "tax",
         "price_sf",
         "price_cust",
-        "categories_id",
-        "supplier_id",
         "url_part",
         "bar_code",
-        "status_id",
+        "status",
         "meta_title",
         "meta_keywords",
         "meta_description",
         "minimun_stock",
         "image",
-        ];
-    public $timestamp=false;
+    ];
+    public $timestamp = false;
+
 }

@@ -1,4 +1,4 @@
-function Products() {
+function Product() {
     var table;
     this.init = function () {
         table = this.table();
@@ -19,12 +19,12 @@ function Products() {
         var msg = '';
         if (id == '') {
             method = 'POST';
-            url = "products";
+            url = "product";
             msg = "Created Record";
 
         } else {
             method = 'PUT';
-            url = "products/" + id;
+            url = "product/" + id;
             msg = "Edited Record";
         }
 
@@ -45,7 +45,7 @@ function Products() {
     this.showModal = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/products/" + id + "/edit";
+        var url = "/product/" + id + "/edit";
         $('#myTabs a[href="#management"]').tab('show');
         $.ajax({
             url: url,
@@ -53,7 +53,6 @@ function Products() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                console.log(data)
                 $("#frm #id").val(data.id);
                 $("#frm #title").val(data.title);
                 $("#frm #description").val(data.description);
@@ -65,11 +64,11 @@ function Products() {
                 $("#frm #tax").val(data.tax);
                 $("#frm #price_sf").val(data.price_sf);
                 $("#frm #price_cust").val(data.price_cust);
-                $("#frm #categories_id").val(data.categories_id);
+                $("#frm #category_id").val(data.category_id);
                 $("#frm #supplier_id").val(data.supplier_id);
                 $("#frm #url_part").val(data.url_part);
                 $("#frm #bar_code").val(data.bar_code);
-                $("#frm #status_id").val(data.status_id);
+                $("#frm #status").val(data.status);
                 $("#frm #meta_title").val(data.meta_title);
                 $("#frm #meta_keywords").val(data.meta_keywords);
                 $("#frm #meta_description").val(data.meta_description);
@@ -83,7 +82,7 @@ function Products() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/products/" + id;
+            var url = "/product/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -105,7 +104,7 @@ function Products() {
         return $('#tblProducts').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listProducts",
+            "ajax": "/api/listProduct",
             columns: [
                 {data: "id"},
                 {data: "title"},
@@ -119,8 +118,8 @@ function Products() {
                 {data: "price_sf"},
                 {data: "price_cust"},
                 {data: "image"},
-                {data: "status_id"},
-                {data: "status_id"},
+                {data: "status"},
+                {data: "id"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
@@ -144,5 +143,5 @@ function Products() {
 
 }
 
-var obj = new Products();
+var obj = new Product();
 obj.init();

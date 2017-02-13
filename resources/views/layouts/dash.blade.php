@@ -96,6 +96,11 @@
                                             <li><a href="/sale">Sales</a></li>
                                         </ul>
                                     </li>
+                                    <li><a><i class="fa fa-file"></i> Operation <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/sale">Sales</a></li>
+                                        </ul>
+                                    </li>
                                     <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/user">Users</a></li>

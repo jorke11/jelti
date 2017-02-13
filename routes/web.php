@@ -30,8 +30,11 @@ Route::resource('/supplier', 'Administration\SupplierController');
 Route::resource('/warehouse', 'Administration\WarehouseController');
 Route::resource('/mark', 'Administration\MarkController');
 
-Route::resource('/user', 'Administration\UserController');
 Route::resource('/city', 'Administration\CityController');
+
+Route::resource('/user', 'Security\UserController');
+Route::resource('/profile', 'Security\ProfileController');
+Route::resource('/permission', 'Security\PermissionController');
 
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
@@ -74,5 +77,8 @@ Route::get('/api/listDeparture', function() {
 });
 Route::get('/api/listCity', function() {
     return Datatables::eloquent(Models\Administration\City::query())->make(true);
+});
+Route::get('/api/listProfile', function() {
+    return Datatables::eloquent(Models\Security\Profile::query())->make(true);
 });
 

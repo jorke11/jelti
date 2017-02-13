@@ -26,8 +26,8 @@ class DepartureController extends Controller {
     }
 
     public function getQuantity($id) {
-        $product = \App\Models\Inventory\EntryDetail::where("product_id", $id)->get();
-        echo response()->json(["response" => $product]);
+        $product = \App\Models\Inventory\EntryDetail::where("product_id", $id)->first();
+        return response()->json(["response" => $product]);
     }
 
     public function store(Request $request) {
@@ -54,7 +54,7 @@ class DepartureController extends Controller {
     }
 
     public function getDetail($id) {
-        $detail = EntryDetail::FindOrFail($id);
+        $detail = DepartureDetail::FindOrFail($id);
         return response()->json($detail);
     }
 
@@ -72,7 +72,7 @@ class DepartureController extends Controller {
     }
 
     public function updateDetail(Request $request, $id) {
-        $entry = EntryDetail::FindOrFail($id);
+        $entry = DepartureDetail::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
@@ -97,7 +97,7 @@ class DepartureController extends Controller {
     }
 
     public function destroyDetail($id) {
-        $entry = EntryDetail::FindOrFail($id);
+        $entry = DepartureDetail::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {

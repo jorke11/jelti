@@ -53,28 +53,6 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Quantity:</label>
-                            <input type="text" class="form-control input-detail" id="quantity" name='quantity' min='0'>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Value:</label>
-                            <input type="text" class="form-control input-detail" id="value" name='value'>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Lot:</label>
-                            <input type="text" class="form-control input-detail" id="lot" name='lot'>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
                             <label for="email">Category:</label>
                             <select class="form-control input-detail" id="category_id" name='category_id'>
                                 @if(isset($mark))
@@ -85,12 +63,22 @@
                             </select>
                         </div>
                     </div>
+
+                </div>
+                <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Expiration Date:</label>
-                            <input type="text" class="form-control input-detail" id="expiration_date" value="">
+                            <label for="email">Quantity Max (<span id="quantityMax"></span>):</label>
+                            <input type="text" class="form-control input-detail" id="quantity" name='quantity' min='0' disabled="">
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Value:</label>
+                            <input type="text" class="form-control input-detail" id="value" name='value'>
+                        </div>
+                    </div>
+
                 </div>
                 {!!Form::close()!!}
             </div>

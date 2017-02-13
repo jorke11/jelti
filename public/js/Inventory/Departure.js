@@ -1,5 +1,5 @@
 function Departure() {
-    var table;
+    var table, maxDeparture = 0;
     this.init = function () {
         table = this.table();
         $("#new").click(this.save);
@@ -31,7 +31,13 @@ function Departure() {
             $("#frmDetail #lot").val("");
         });
 
-        $("#product_id").change(this.getQuantity)
+        $("#product_id").change(this.getQuantity);
+        $("#quantity").blur(function () {
+            if (maxDeparture < $(this).val()) {
+                toastr.warning("No hay sufiente disponible");
+                $(this).val("");
+            }
+        });
     }
 
     this.getQuantity = function () {
@@ -39,8 +45,13 @@ function Departure() {
         $.ajax({
             url: 'departure/' + id + '/quantity',
             method: 'GET',
-            dataType: 'JSONP',
+            dataType: 'JSON',
             success: function (data) {
+                if (data.response.quantity > 0) {
+                    maxDeparture = data.response.quantity;
+                    $("#quantity").prop("disabled", false);
+                    $("#quantityMax").html(data.response.quantity);
+                }
             }
 
         })
@@ -147,7 +158,7 @@ function Departure() {
     this.editDetail = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/derparture/" + id + "/detail";
+        var url = "/departure/" + id + "/detail";
         $.ajax({
             url: url,
             method: "GET",

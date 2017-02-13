@@ -1,47 +1,45 @@
-function Warehouse() {
+function City() {
     var table;
     this.init = function () {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
-        $("#btnOpenModal").click(function () {
-            $("#modalEdit").modal("hide");
-            $("#modalNew").modal("show");
-            $("#frm #id").val("");
-            $("#frm #description").val("");
-            $("#frm #address").val("");
-        });
-
     }
 
     this.save = function () {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "", method = "";
-        var id = $("#frm #id").val();
-        var msg = '';
-        if (id == '') {
-            method = 'POST';
-            url = "warehouse";
-            msg = "Created Record";
-
-        } else {
-            method = 'PUT';
-            url = "warehouse/" + id;
-            msg = "Edited Record";
-        }
-
+        var url = frm.attr("action");
         $.ajax({
             url: url,
-            method: method,
+            method: "POST",
             data: data,
             dataType: 'JSON',
             success: function (data) {
                 if (data.success == 'true') {
                     table.ajax.reload();
-                    toastr.success(msg);
-                    $("#modalNew").modal("hide");
+                    $("#modalNew").modal("toggle");
+                    toastr.success("Ok");
+                }
+            }
+        })
+    }
 
+    this.edit = function () {
+        toastr.remove();
+        var frm = $("#frmEdit");
+        var data = frm.serialize();
+        var url = "city/" + $("#frmEdit #id").val();
+        $.ajax({
+            url: url,
+            method: "PUT",
+            data: data,
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.success == 'true') {
+                    table.ajax.reload();
+                    toastr.success("Ok");
+                    $("#modalEdit").modal("toggle");
                 }
             }
         })
@@ -50,17 +48,16 @@ function Warehouse() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/warehouse/" + id + "/edit";
-        $("#modalNew").modal("show");
+        var url = "/city/" + id + "/edit";
+        $("#modalEdit").modal("show");
         $.ajax({
             url: url,
             method: "GET",
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #id").val(data.id);
-                $("#frm #description").val(data.description);
-                $("#frm #address").val(data.address);
+                $("#frmEdit #id").val(data.id);
+                $("#frmEdit #description").val(data.description);
             }
         })
     }
@@ -69,7 +66,7 @@ function Warehouse() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/warehouse/" + id;
+            var url = "/city/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -91,22 +88,21 @@ function Warehouse() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listWarehouse",
+            "ajax": "/api/listCity",
             columns: [
                 {data: "id"},
-                {data: "description"},
-                {data: "address"}
+                {data: "description"}
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2],
+                    aTargets: [0, 1],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [3],
+                    targets: [2],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
@@ -119,5 +115,5 @@ function Warehouse() {
 
 }
 
-var obj = new Warehouse();
+var obj = new City();
 obj.init();

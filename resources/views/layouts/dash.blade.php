@@ -6,16 +6,32 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-         <link rel="shortcut icon" href="{{{ asset('assets/images/logoico.png') }}}">
+        <link rel="shortcut icon" href="{{{ asset('assets/images/logoico.png') }}}">
         <title>Superfuds</title>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
 
-        <!--{!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}-->
-        <!--{!!Html::script('/vendor/DataTables-1.10.13/media/js/dataTables.bootstrap.js')!!}-->
+        {!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}
+        {!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}
+        
+        
+        
+        {!!Html::style('/vendor/DataTables-1.10.13/extensions/Buttons/css/buttons.bootstrap.css')!!}
+        {!!Html::style('/vendor/DataTables-1.10.13/extensions/Buttons/css/buttons.dataTables.min.css')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.html5.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.colVis.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.flash.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.print.js')!!}
+       
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js"></script>
 
 
-        <script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-        <link href='//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css' rel="stylesheet" />
+        <!--<script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>-->
+        <!--<link href='//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css' rel="stylesheet" />-->
 
         {!!Html::script('/vendor/toastr/toastr.min.js')!!}
         {!!Html::style('/vendor/toastr/toastr.min.css')!!}
@@ -77,18 +93,14 @@
                                 <ul class="nav side-menu">
                                     <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="index.html">Sales</a></li>
-                                            <li><a href="index2.html">Profile</a></li>
-                                            <li><a href="index3.html">Permission</a></li>
-                                            <li><a href="{{url("/register")}}">Register</a></li>
-
+                                            <li><a href="/sale">Sales</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="index.html">Users</a></li>
-                                            <li><a href="index2.html">Profile</a></li>
-                                            <li><a href="index3.html">Permission</a></li>
+                                            <li><a href="/user">Users</a></li>
+                                            <li><a href="/profile">Profile</a></li>
+                                            <li><a href="/register">Permission</a></li>
                                             <li><a href="{{url("/register")}}">Register</a></li>
 
                                         </ul>
@@ -100,6 +112,7 @@
                                             <li><a href="/supplier">Supplier</a></li>
                                             <li><a href="/warehouse">Warehouse</a></li>
                                             <li><a href="/mark">Mark</a></li>
+                                            <li><a href="/city">City</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>

@@ -85,7 +85,7 @@ function Category() {
     }
 
     this.table = function () {
-        return $('#tbl').DataTable({
+        return $('#tbl').DataTable({ 
             "processing": true,
             "serverSide": true,
             "ajax": "/api/listCategory",
@@ -106,7 +106,7 @@ function Category() {
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

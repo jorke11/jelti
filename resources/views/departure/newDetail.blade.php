@@ -8,25 +8,30 @@
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmDetail']) !!}
                 <input type="hidden" id="id" name="id">
-                <input type="hidden" id="entry_id" name="entry_id">
+                <input type="hidden" id="departure_id" name="departure_id">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Supplier:</label>
                             <select class="form-control input-detail" id="supplier_id" name='supplier_id'>
+                                @if(isset($responsable))
                                 @foreach($responsable as $res)
                                 <option value="{{$res->id}}">{{$res->name}}</option>
                                 @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Product:</label>
-                            <select class="form-control input-detail" id="product_id" name='product_id'>
-                                @foreach($product as $pro)
-                                <option value="{{$pro->id}}">{{$pro->description}}</option>
+                            <label for="email">Mark:</label>
+                            <select class="form-control input-detail" id="mark_id" name='mark_id'>
+                                <option value="0">Seleccione</option>
+                                @if(isset($mark))
+                                @foreach($mark as $mar)
+                                <option value="{{$mar->id}}">{{$mar->description}}</option>
                                 @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -34,18 +39,22 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Mark:</label>
-                            <select class="form-control input-detail" id="mark_id" name='mark_id'>
-                                @foreach($mark as $mar)
-                                <option value="{{$mar->id}}">{{$mar->description}}</option>
+                            <label for="email">Product:</label>
+                            <select class="form-control input-detail" id="product_id" name='product_id'>
+                                <option value="0">Seleccione</option>
+                                @if(isset($product))
+                                @foreach($product as $pro)
+                                <option value="{{$pro->id}}">{{$pro->description}}</option>
                                 @endforeach
+                                @endif
                             </select>
                         </div>
+
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Quantity:</label>
-                            <input type="text" class="form-control input-detail" id="quantity" name='quantity'>
+                            <input type="text" class="form-control input-detail" id="quantity" name='quantity' min='0'>
                         </div>
                     </div>
                 </div>
@@ -68,16 +77,18 @@
                         <div class="form-group">
                             <label for="email">Category:</label>
                             <select class="form-control input-detail" id="category_id" name='category_id'>
+                                @if(isset($mark))
                                 @foreach($category as $cat)
                                 <option value="{{$cat->id}}">{{$cat->description}}</option>
                                 @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Expiration Date:</label>
-                            <input type="text" class="form-control input-detail" id="expiration_date" name='expiration_date' value="<?php echo date("Y-m-d H:i") ?>">
+                            <input type="text" class="form-control input-detail" id="expiration_date" value="">
                         </div>
                     </div>
                 </div>

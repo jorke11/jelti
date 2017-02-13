@@ -48,7 +48,7 @@
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view">
                         <div class="navbar nav_title" style="border: 0;">
-                            <a href="index.html" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>Superfuds</span></a>
+                            <a href="/home" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>Superfuds</span></a>
                         </div>
 
                         <div class="clearfix"></div>
@@ -96,9 +96,10 @@
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/category">Category</a></li>                                    
-                                            <li><a href="/products">Products</a></li>
+                                            <li><a href="/product">Products</a></li>
                                             <li><a href="/supplier">Supplier</a></li>
                                             <li><a href="/warehouse">Warehouse</a></li>
+                                            <li><a href="/mark">Mark</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>

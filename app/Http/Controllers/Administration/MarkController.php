@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Administration;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administration\Mark;
+use Session;
 
 class MarkController extends Controller
 {
        public function index() {
-        return view("administration.mark.init");
+        return view("mark.init");
     }
 
     public function store(Request $request) {

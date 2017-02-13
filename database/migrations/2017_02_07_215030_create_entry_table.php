@@ -16,11 +16,11 @@ class CreateEntryTable extends Migration
         Schema::create('entry', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('warehouse_id');
+            $table->integer('responsable_id');
             $table->string('description');
             $table->string('consecutive');
             $table->string('bill');
             $table->dateTime('created');
-            $table->decimal('value',15,2);
             $table->timestamps();
             
         });

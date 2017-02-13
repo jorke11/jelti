@@ -14,12 +14,15 @@ class CreateEntrydetailTable extends Migration {
     public function up() {
         Schema::create('entrydetail', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('entry_id');
             $table->integer('supplier_id');
             $table->integer('product_id');
             $table->integer('category_id');
+            $table->integer('mark_id');
             $table->integer('quantity');
-            $table->dateTime('created');
+            $table->dateTime('expiration_date');
             $table->decimal('value', 15, 2);
+            $table->string('lot');
             $table->timestamps();
         });
     }

@@ -14,11 +14,10 @@ class CreateDeparturedetailTable extends Migration {
     public function up() {
         Schema::create('departuredetail', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('products_id');
+            $table->integer('departure_id');
+            $table->integer('product_id');
             $table->integer('quantity');
-            $table->dateTime('created');
             $table->decimal('value', 15, 2);
-            $table->integer('category_id');
             $table->timestamps();
         });
     }

@@ -40,5 +40,6 @@
         </div>
     </div>
 </div>
+@include('entry.newDetail')
 {!!Html::script('js/Inventory/Entry.js')!!}
 @endsection

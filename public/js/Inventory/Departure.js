@@ -1,4 +1,4 @@
-function Entry() {
+function Departure() {
     var table;
     this.init = function () {
         table = this.table();
@@ -14,7 +14,7 @@ function Entry() {
         $("#insideManagement").click(function () {
 //            $(".input-entry").val("");
             $.ajax({
-                url: 'entry/1/consecutive',
+                url: 'departure/1/consecutive',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
@@ -29,7 +29,22 @@ function Entry() {
             $("#frmDetail #quantity").val("");
             $("#frmDetail #value").val("");
             $("#frmDetail #lot").val("");
+        });
+
+        $("#product_id").change(this.getQuantity)
+    }
+
+    this.getQuantity = function () {
+        const id = this.value;
+        $.ajax({
+            url: 'departure/' + id + '/quantity',
+            method: 'GET',
+            dataType: 'JSONP',
+            success: function (data) {
+            }
+
         })
+
     }
 
     this.save = function () {
@@ -40,12 +55,12 @@ function Entry() {
         var msg = '';
         if (id == '') {
             method = 'POST';
-            url = "entry";
+            url = "departure";
             msg = "Created Record";
 
         } else {
             method = 'PUT';
-            url = "entry/" + id;
+            url = "departure/" + id;
             msg = "Edited Record";
         }
 
@@ -66,7 +81,7 @@ function Entry() {
     }
 
     this.saveDetail = function () {
-        $("#frmDetail #entry_id").val($("#frm #id").val());
+        $("#frmDetail #departure_id").val($("#frm #id").val());
         var frm = $("#frmDetail");
         var data = frm.serialize();
         var url = "", method = "";
@@ -74,12 +89,12 @@ function Entry() {
         var msg = 'Record Detail';
         if (id == '') {
             method = 'POST';
-            url = "entry/storeDetail";
+            url = "departure/storeDetail";
             msg = "Created " + msg;
 
         } else {
             method = 'PUT';
-            url = "entry/detail/" + id;
+            url = "departure/detail/" + id;
             msg = "Edited " + msg;
         }
 
@@ -102,7 +117,7 @@ function Entry() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/entry/" + id + "/edit";
+        var url = "/departure/" + id + "/edit";
         $.ajax({
             url: url,
             method: "GET",
@@ -115,9 +130,11 @@ function Entry() {
                 $("#frm #responsable_id").val(data.header.responsable_id);
                 $("#frm #consecutive").val(data.header.consecutive);
                 $("#frm #description").val(data.header.description);
-                $("#frm #bill").val(data.header.bill);
+                $("#frm #order").val(data.header.order);
                 $("#frm #warehouse_id").val(data.header.warehouse_id);
-                $("#frm #user_create_id").val(data.header.user_create_id);
+                $("#frm #address").val(data.header.address);
+                $("#frm #description").val(data.header.description);
+                $("#frm #destination").val(data.header.destination);
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -130,7 +147,7 @@ function Entry() {
     this.editDetail = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/entry/" + id + "/detail";
+        var url = "/derparture/" + id + "/detail";
         $.ajax({
             url: url,
             method: "GET",
@@ -156,12 +173,14 @@ function Entry() {
         $.each(data, function (i, val) {
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
-            html += "<td>" + val.supplier_id + "</td>";
+            html += "<td>Supplier</td>";
+//            html += "<td>" + val.supplier_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.value + "</td>";
-            html += "<td>" + val.expiration_date + "</td>";
+//            html += "<td>" + val.expiration_date + "</td>";
+            html += "<td>20/12/2001</td>";
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";
@@ -174,7 +193,7 @@ function Entry() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/entry/" + id;
+            var url = "/departure/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -196,7 +215,7 @@ function Entry() {
         toastr.remove();
         if (confirm("Do you want delete this record?")) {
             var token = $("input[name=_token]").val();
-            var url = "/entry/detail/" + id;
+            var url = "/departure/detail/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -218,7 +237,7 @@ function Entry() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listEntry",
+            "ajax": "/api/listDepartue",
             columns: [
                 {data: "id"},
                 {data: "consecutive"},
@@ -249,13 +268,13 @@ function Entry() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listEntry",
+            "ajax": "/api/listDeparture",
             columns: [
                 {data: "id"},
                 {data: "consecutive"},
                 {data: "description"},
                 {data: "created"},
-                {data: "bill"},
+                {data: "order"},
                 {data: "warehouse_id"},
             ],
             order: [[1, 'ASC']],
@@ -280,5 +299,5 @@ function Entry() {
 
 }
 
-var obj = new Entry();
+var obj = new Departure();
 obj.init();

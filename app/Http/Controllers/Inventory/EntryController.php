@@ -7,15 +7,19 @@ use App\Http\Controllers\Controller;
 use Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\Administration\Warehouse;
-use \App\Models\Inventory\Entries;
+use App\Models\Inventory\Entry;
+use App\Models\Inventory\EntryDetail;
 
 class EntryController extends Controller {
 
     public function index() {
-        $date = date("Y-m-d");
         $responsable = DB::select('select id,name from users');
         $warehouse = Warehouse::all();
-        return view("entry.init", compact("responsable", "date", "warehouse"));
+        $product = \App\Models\Administration\Product::all();
+        $mark = \App\Models\Administration\Mark::all();
+        $supplier = \App\Models\Administration\Supplier::all();
+        $category = \App\Models\Administration\Category::all();
+        return view("entry.init", compact("responsable", "warehouse", "supplier", "product", "mark", "category"));
     }
 
     public function getConsecutive($id) {
@@ -28,10 +32,11 @@ class EntryController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Entries::create($input);
+            $result = Entry::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                $resp = Entry::FindOrFail($result["attributes"]["id"]);
+                return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);
             }
@@ -39,14 +44,46 @@ class EntryController extends Controller {
     }
 
     public function edit($id) {
-        $product = Entries::FindOrFail($id);
-        return response()->json($product);
+        $entry = Entry::FindOrFail($id);
+        $detail = DB::table("entrydetail")->where("entry_id", "=", $id)->get();
+        return response()->json(["header" => $entry, "detail" => $detail]);
+    }
+
+    public function getDetail($id) {
+        $detail = EntryDetail::FindOrFail($id);
+        return response()->json($detail);
     }
 
     public function update(Request $request, $id) {
-        $product = Entries::FindOrFail($id);
+        $entry = Entry::FindOrFail($id);
         $input = $request->all();
-        $result = $product->fill($input)->save();
+        $result = $entry->fill($input)->save();
+        if ($result) {
+            $resp = Entry::FindOrFail($id);
+            Session::flash('save', 'Se ha creado correctamente');
+            return response()->json(['success' => 'true', "data" => $resp]);
+        } else {
+            return response()->json(['success' => 'false']);
+        }
+    }
+
+    public function updateDetail(Request $request, $id) {
+        $entry = EntryDetail::FindOrFail($id);
+        $input = $request->all();
+        $result = $entry->fill($input)->save();
+        if ($result) {
+            $resp = DB::table("entrydetail")->where("entry_id", "=", $input["entry_id"])->get();
+            Session::flash('save', 'Se ha creado correctamente');
+            return response()->json(['success' => 'true', "data" => $resp]);
+        } else {
+            return response()->json(['success' => 'false']);
+        }
+    }
+
+    public function destroy($id) {
+        $entry = Entry::FindOrFail($id);
+        $result = $entry->delete();
+        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true']);
@@ -55,15 +92,34 @@ class EntryController extends Controller {
         }
     }
 
-    public function destroy($id) {
-        $product = Entries::FindOrFail($id);
-        $result = $product->delete();
+    public function destroyDetail($id) {
+        $entry = EntryDetail::FindOrFail($id);
+        $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
+            $resp = DB::table("entrydetail")->where("entry_id", "=", $entry["entry_id"])->get();
             Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => 'true', "data" => $resp]);
         } else {
             return response()->json(['success' => 'false']);
+        }
+    }
+
+    public function storeDetail(Request $request) {
+        if ($request->ajax()) {
+            $input = $request->all();
+
+            unset($input["id"]);
+//            $user = Auth::User();
+//            $input["users_id"] = 1;
+            $result = EntryDetail::create($input);
+            if ($result) {
+                Session::flash('save', 'Se ha creado correctamente');
+                $resp = EntryDetail::FindOrFail($result["attributes"]["id"])->get();
+                return response()->json(['success' => 'true', "data" => $resp]);
+            } else {
+                return response()->json(['success' => 'false']);
+            }
         }
     }
 

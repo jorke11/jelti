@@ -46,13 +46,14 @@ function Product() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "/product/" + id + "/edit";
-        $('#myTabs a[href="#management"]').tab('show');
+        
         $.ajax({
             url: url,
             method: "GET",
             data: data,
             dataType: 'JSON',
             success: function (data) {
+                $('#myTabs a[href="#management"]').tab('show');
                 $("#frm #id").val(data.id);
                 $("#frm #title").val(data.title);
                 $("#frm #description").val(data.description);

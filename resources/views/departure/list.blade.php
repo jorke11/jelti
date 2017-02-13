@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-lg-3">List Entry</div>
+                <div class="col-lg-3">List Departure</div>
                 <div class="col-lg-9 text-right">
                     <button class="btn btn-success" id='tabManagement'>
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -19,7 +19,7 @@
                         <th>Consecutive</th>
                         <th>Description</th>
                         <th>Date</th>
-                        <th>Bill</th>
+                        <th>Order</th>
                         <th>Warehouse</th>
                         <th>Action</th>
                     </tr>

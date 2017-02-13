@@ -1,4 +1,4 @@
-function Category() {
+function Mark() {
     var table;
     this.init = function () {
         table = this.table();
@@ -29,7 +29,7 @@ function Category() {
         toastr.remove();
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "category/" + $("#frmEdit #id").val();
+        var url = "mark/" + $("#frmEdit #id").val();
         $.ajax({
             url: url,
             method: "PUT",
@@ -48,7 +48,7 @@ function Category() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/category/" + id + "/edit";
+        var url = "/mark/" + id + "/edit";
         $("#modalEdit").modal("show");
         $.ajax({
             url: url,
@@ -66,7 +66,7 @@ function Category() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/category/" + id;
+            var url = "/mark/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -88,7 +88,7 @@ function Category() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listCategory",
+            "ajax": "/api/listMark",
             columns: [
                 {data: "id"},
                 {data: "description"}
@@ -115,5 +115,5 @@ function Category() {
 
 }
 
-var obj = new Category();
+var obj = new Mark();
 obj.init();

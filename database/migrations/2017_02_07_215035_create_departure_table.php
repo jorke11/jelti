@@ -16,8 +16,12 @@ class CreateDepartureTable extends Migration {
             $table->increments('id');
             $table->integer('warehouse_id');
             $table->integer('responsable_id');
+            $table->integer('city_id');
+            $table->string('destination');
             $table->string('consecutive');
-            $table->string('sale_order');
+            $table->string('order');
+            $table->string('address');
+            $table->string('description');
             $table->dateTime('created');
             $table->timestamps();
         });

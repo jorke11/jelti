@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Administration;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Session;
 use App\Models\Administration;
+use Input;
 
 class ProductController extends Controller {
 
@@ -57,6 +59,21 @@ class ProductController extends Controller {
         } else {
             return response()->json(['success' => 'false']);
         }
+    }
+
+    public function uploadImage(Request $req) {
+        $data = $req->all();
+        $file = array_get($data, 'kartik-input-700');
+        $name = $file[0]->getClientOriginalName();
+        \Illuminate\Support\Facades\Storage::disk("product")->put($data["product_id"] . "/" . $name, $req->file('kartik-input-700'));
+        Administration\Productimage::where("product_id", $data["product_id"])->get();
+        $product = new Administration\Productimage();
+        $product->product_id = $data["product_id"];
+        $product->path = $data["product_id"] . "/" . $name;
+        $product->main = true;
+
+        $product->save();
+        return response()->json(["id" => $data["product_id"]]);
     }
 
 }

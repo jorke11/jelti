@@ -2,6 +2,9 @@
 @section('content')
 @section('title','Products')
 @section('subtitle','Management')
+{!!Html::script('/vendor/file-input/js/fileinput.js')!!}
+{!!Html::style('/vendor/file-input/css/fileinput.css')!!}
+
 <div class="row">
     <div>
         <!-- Nav tabs -->

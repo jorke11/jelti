@@ -1,5 +1,5 @@
 function Product() {
-    var table;
+    var table, product_id = 0;
     this.init = function () {
         table = this.table();
         $("#new").click(this.save);
@@ -9,6 +9,27 @@ function Product() {
             $('#myTabs a[href="#management"]').tab('show');
         });
 
+        $("#modalImage").click(function () {
+
+            $("#input-700").fileinput({
+                uploadUrl: "product/upload", // server upload action
+                uploadAsync: true,
+                maxFileCount: 5,
+                allowedFileExtensions: ['jpg', 'png', 'gif'],
+                uploadExtraData: {
+                    product_id: $("#frm #id").val()
+                },
+            }).on('fileuploaded', function (event, data, id, index) {
+                $("#modalUpload").modal("hide");
+                obj.showImages(data.extra.product_id);
+            })
+            
+            $("#modalUpload").modal("show");
+        })
+    }
+    
+    this.showImages=function(id){
+       
     }
 
     this.save = function () {
@@ -46,7 +67,7 @@ function Product() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "/product/" + id + "/edit";
-        
+
         $.ajax({
             url: url,
             method: "GET",

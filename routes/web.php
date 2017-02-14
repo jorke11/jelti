@@ -24,6 +24,7 @@ Route::get('/dash', 'DashboardController@index');
 Route::get('/kardex', 'Inventory\KardexController@index');
 
 Route::resource('/product', 'Administration\ProductController');
+Route::post('/product/upload', 'Administration\ProductController@uploadImage');
 
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/supplier', 'Administration\SupplierController');
@@ -50,6 +51,14 @@ Route::get('/departure/{id}/detail', ['uses' => 'Inventory\DepartureController@g
 Route::post('/departure/storeDetail', 'Inventory\DepartureController@storeDetail');
 Route::put('/departure/detail/{id}', 'Inventory\DepartureController@updateDetail');
 Route::delete('/departure/detail/{id}', 'Inventory\DepartureController@destroyDetail');
+
+Route::resource('/service', 'Inventory\DepartureController');
+Route::get('/service/{id}/consecutive', ['uses' => 'Inventory\DepartureController@getConsecutive']);
+Route::get('/service/{id}/quantity', ['uses' => 'Inventory\DepartureController@getQuantity']);
+Route::get('/service/{id}/detail', ['uses' => 'Inventory\DepartureController@getDetail']);
+Route::post('/service/storeDetail', 'Inventory\DepartureController@storeDetail');
+Route::put('/service/detail/{id}', 'Inventory\DepartureController@updateDetail');
+Route::delete('/service/detail/{id}', 'Inventory\DepartureController@destroyDetail');
 
 Route::get('/api/listCategory', function() {
     return Datatables::eloquent(Models\Administration\Category::query())->make(true);

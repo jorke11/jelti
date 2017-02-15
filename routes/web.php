@@ -25,6 +25,10 @@ Route::get('/kardex', 'Inventory\KardexController@index');
 
 Route::resource('/product', 'Administration\ProductController');
 Route::post('/product/upload', 'Administration\ProductController@uploadImage');
+Route::put('/product/checkmain/{id}', 'Administration\ProductController@checkMain');
+Route::delete('/product/deleteImage/{id}', 'Administration\ProductController@deleteImage');
+Route::get('/product/getImages/{id}', 'Administration\ProductController@getImages');
+
 
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/supplier', 'Administration\SupplierController');

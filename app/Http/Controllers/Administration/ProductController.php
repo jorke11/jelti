@@ -33,8 +33,10 @@ class ProductController extends Controller {
     }
 
     public function edit($id) {
-        $product = Administration\Product::FindOrFail($id);
-        return response()->json($product);
+        $resp["header"] = Administration\Product::FindOrFail($id);
+        $resp["images"] = Administration\Productimage::where("product_id", $id)->get();
+
+        return response()->json($resp);
     }
 
     public function update(Request $request, $id) {
@@ -65,7 +67,8 @@ class ProductController extends Controller {
         $data = $req->all();
         $file = array_get($data, 'kartik-input-700');
         $name = $file[0]->getClientOriginalName();
-        \Illuminate\Support\Facades\Storage::disk("product")->put($data["product_id"] . "/" . $name, $req->file('kartik-input-700'));
+        $file[0]->move("images/product/" . $data["product_id"], $name);
+
         Administration\Productimage::where("product_id", $data["product_id"])->get();
         $product = new Administration\Productimage();
         $product->product_id = $data["product_id"];
@@ -74,6 +77,30 @@ class ProductController extends Controller {
 
         $product->save();
         return response()->json(["id" => $data["product_id"]]);
+    }
+
+    public function checkmain(Request $data, $id) {
+        $input = $data->all();
+        $product = Administration\Product::find($input["product_id"]);
+        \Illuminate\Support\Facades\DB::table("productimage")->where("product_id", $input["product_id"])->update(['main' => false]);
+        $image = Administration\Productimage::where("id", $id)->update(['main'=>true]);
+        $image = Administration\Productimage::find($id);
+        $product->image=$image->path;
+        $product->save();
+        return response()->json(["response"=>true,"path"=>$image]);
+        
+    }
+    public function deleteImage(Request $data, $id) {
+        $image = Administration\Productimage::find($id);
+        $image->delete();
+        Administration\Productimage::where("product_id",$data["product_id"]);
+        return response()->json(["response"=>true,"path"=>$data->all()]);
+        
+    }
+    
+    public function getImages($id){
+        $image= Administration\Productimage::where("product_id",$id)->get();
+        return response()->json($image);
     }
 
 }

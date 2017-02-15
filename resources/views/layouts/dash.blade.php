@@ -38,7 +38,7 @@
         <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/dataTables.bootstrap.css')!!}--> 
         <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}--> 
 
-        {!!Html::style('/css/edited.css')!!}
+       
         <!-- Bootstrap -->
         <!--<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">-->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
@@ -56,6 +56,8 @@
 
         <!-- Custom styling plus plugins -->
         <!--<link href="../build/css/custom.min.css" rel="stylesheet">-->
+        
+         {!!Html::style('/css/edited.css')!!}
     </head>
 
     <body class="nav-md">

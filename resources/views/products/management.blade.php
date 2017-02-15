@@ -136,17 +136,21 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <div class="form-group">
-            <label for="email">Image:</label>
-            <input type="text" class="form-control input-product" id="image" name='image'>
-        </div>
+            <a href="#">
+                <img src="" alt="Image" id="imageMain"  width="20%">
+            </a>
+       
     </div>
 </div>
 <div class="row">
     <div class="col-lg-1">
         <button class="btn btn-success" type="button" id="modalImage"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
     </div>
-</div>
-{!!Form::close()!!}
+    <div class="col-lg-11">
+        <div class="row" id='contentImages'>
 
-@include('products.modalUpload')
+        </div>
+    </div>
+    {!!Form::close()!!}
+
+    @include('products.modalUpload')

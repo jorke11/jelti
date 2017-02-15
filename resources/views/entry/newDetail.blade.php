@@ -34,38 +34,6 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Mark:</label>
-                            <select class="form-control input-detail" id="mark_id" name='mark_id'>
-                                @foreach($mark as $mar)
-                                <option value="{{$mar->id}}">{{$mar->description}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Quantity:</label>
-                            <input type="text" class="form-control input-detail" id="quantity" name='quantity'>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Value:</label>
-                            <input type="text" class="form-control input-detail" id="value" name='value'>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Lot:</label>
-                            <input type="text" class="form-control input-detail" id="lot" name='lot'>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
                             <label for="email">Category:</label>
                             <select class="form-control input-detail" id="category_id" name='category_id'>
                                 @foreach($category as $cat)
@@ -77,14 +45,40 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Expiration Date:</label>
-                            <input type="text" class="form-control input-detail" id="expiration_date" name='expiration_date' value="<?php echo date("Y-m-d H:i") ?>">
+                            <input size="16" type="text" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail form-control">
+                            <!--<input type="text" class="form-control input-detail" id="expiration_date" name='expiration_date' >-->
                         </div>
                     </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Quantity:</label>
+                            <input type="text" class="form-control input-detail" id="quantity" name='quantity'>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Value:</label>
+                            <input type="text" class="form-control input-detail" id="value" name='value'>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Lot:</label>
+                            <input type="text" class="form-control input-detail" id="lot" name='lot'>
+                        </div>
+                    </div>
+
                 </div>
                 {!!Form::close()!!}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-success" id='newDetail'>Save</button>
             </div>
         </div>

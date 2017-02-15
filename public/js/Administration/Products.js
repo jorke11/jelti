@@ -68,6 +68,7 @@ function Product() {
             }
         })
     }
+
     this.deleteImage = function (id, product_id) {
         $("#div_" + id).remove();
         var obj = {};
@@ -192,7 +193,11 @@ function Product() {
                 {data: "price_sf"},
                 {data: "price_cust"},
                 {data: "image", render: function (data, type, row) {
-                        return '<img src="/images/product/' + data+'" width="50%">';
+
+                        if (data == null) {
+                            data = "default.jpg";
+                        }
+                        return '<img src="/images/product/' + data + '" width="50%">';
                     }
                 },
                 {data: "status"},

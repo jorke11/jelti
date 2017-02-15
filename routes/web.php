@@ -29,9 +29,13 @@ Route::put('/product/checkmain/{id}', 'Administration\ProductController@checkMai
 Route::delete('/product/deleteImage/{id}', 'Administration\ProductController@deleteImage');
 Route::get('/product/getImages/{id}', 'Administration\ProductController@getImages');
 
+Route::resource('/supplier', 'Administration\SupplierController');
+Route::post('/supplier/upload', 'Administration\SupplierController@uploadImage');
+Route::put('/supplier/checkmain/{id}', 'Administration\SupplierController@checkMain');
+Route::delete('/supplier/deleteImage/{id}', 'Administration\SupplierController@deleteImage');
+Route::get('/supplier/getImages/{id}', 'Administration\SupplierController@getImages');
 
 Route::resource('/category', 'Administration\CategoryController');
-Route::resource('/supplier', 'Administration\SupplierController');
 Route::resource('/warehouse', 'Administration\WarehouseController');
 Route::resource('/mark', 'Administration\MarkController');
 
@@ -69,7 +73,9 @@ Route::get('/api/listCategory', function() {
 });
 
 Route::get('/api/listSupplier', function() {
-    return Datatables::eloquent(Models\Administration\Supplier::query())->make(true);
+    return Datatables::queryBuilder(
+            DB::table('vsupplier')
+            )->make(true);
 });
 Route::get('/api/listProduct', function() {
     return Datatables::eloquent(Models\Administration\Product::query())->make(true);

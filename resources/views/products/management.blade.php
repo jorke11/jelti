@@ -136,10 +136,10 @@
         </div>
     </div>
     <div class="col-lg-3">
-            <a href="#">
-                <img src="" alt="Image" id="imageMain"  width="20%">
-            </a>
-       
+        <a href="#">
+            <img src="" alt="Image" id="imageMain"  width="20%">
+        </a>
+
     </div>
 </div>
 <div class="row">
@@ -151,6 +151,7 @@
 
         </div>
     </div>
-    {!!Form::close()!!}
+</div>
+{!!Form::close()!!}
 
-    @include('products.modalUpload')
+@include('products.modalUpload')

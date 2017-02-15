@@ -18,7 +18,6 @@ class CreateEntrydetailTable extends Migration {
             $table->integer('supplier_id');
             $table->integer('product_id');
             $table->integer('category_id');
-            $table->integer('mark_id');
             $table->integer('quantity');
             $table->dateTime('expiration_date');
             $table->decimal('value', 15, 2);

@@ -6,28 +6,28 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="{{{ asset('assets/images/logoico.png') }}}">
+        <link rel="shortcut icon" href="{{{ asset('assets/images/icono.png') }}}">
         <title>Superfuds</title>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
 
         {!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}
-        {!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}
-        
-        
-        
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/ColReorder/js/dataTables.colReorder.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/jszip.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/pdfmake.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/vfs_fonts.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/buttons.html5.min.js')!!}
+
+        {!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}	
+
         {!!Html::style('/vendor/DataTables-1.10.13/extensions/Buttons/css/buttons.bootstrap.css')!!}
         {!!Html::style('/vendor/DataTables-1.10.13/extensions/Buttons/css/buttons.dataTables.min.css')!!}
+
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.html5.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.colVis.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.flash.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.print.js')!!}
-       
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js"></script>
+
 
 
         <!--<script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>-->
@@ -38,7 +38,7 @@
         <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/dataTables.bootstrap.css')!!}--> 
         <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}--> 
 
-       
+
         <!-- Bootstrap -->
         <!--<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">-->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
@@ -57,7 +57,11 @@
         <!-- Custom styling plus plugins -->
         <!--<link href="../build/css/custom.min.css" rel="stylesheet">-->
         
-         {!!Html::style('/css/edited.css')!!}
+        {!!Html::style('/vendor/datetimepicker/css/bootstrap-datetimepicker.min.css')!!}
+        {!!Html::script('/vendor/datetimepicker/js/bootstrap-datetimepicker.min.js')!!}
+
+
+        {!!Html::style('/css/edited.css')!!}
     </head>
 
     <body class="nav-md">
@@ -183,7 +187,7 @@
                                         <li>
                                             <a href="{{ url('/logout') }}"
                                                onclick="event.preventDefault();
-    document.getElementById('logout-form').submit();">
+                                                       document.getElementById('logout-form').submit();">
                                                 Logout
                                             </a>
 

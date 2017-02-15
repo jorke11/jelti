@@ -15,8 +15,8 @@ class CreateSupplierdocumentTable extends Migration {
         Schema::create('supplierdocument', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('supplier_id');
-            $table->integer('documents_id');
-            $table->string('url');
+            $table->integer('document_id');
+            $table->string('path');
             $table->timestamps();
         });
     }

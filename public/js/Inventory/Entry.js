@@ -4,7 +4,7 @@ function Entry() {
         table = this.table();
         $("#new").click(this.save);
         $("#newDetail").click(this.saveDetail);
-
+        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
 //            $(".input-entry").val("");

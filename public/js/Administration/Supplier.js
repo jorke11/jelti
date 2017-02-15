@@ -8,6 +8,51 @@ function Suppliers() {
             $(".input-supplier").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
+
+        $("#modalImage").click(function () {
+
+            $("#input-700").fileinput({
+                uploadUrl: "supplier/upload", // server upload action
+                uploadAsync: true,
+                maxFileCount: 5,
+                uploadExtraData: {
+                    supplier_id: $("#frm #id").val(),
+                    document_id: $("#document_id").val(),
+                    
+                },
+            }).on('fileuploaded', function (event, data, id, index) {
+                $("#modalUpload").modal("hide");
+                obj.showImages(data.extra.supplier_id);
+            })
+
+            $("#modalUpload").modal("show");
+        })
+    }
+     this.showImages = function (id) {
+        $.ajax({
+            url: 'supplier/getImages/' + id,
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (data) {
+                obj.printImages(data);
+            }
+        })
+    }
+    this.printImages = function (data) {
+        var html = '';
+        $.each(data, function (i, val) {
+
+            html += '<div class="col-sm-6 col-lg-3" id="div_' + val.id + '">' +
+                    '<div class="thumbnail">' +
+                    '<img src="/images/product/' + val.path + '" alt="Product">' +
+                    '<div class="caption">' +
+                    '<h4>Check Main <input type="radio" name="main[]" onclick=obj.checkMain(' + val.id + ',' + val.product_id + ')></h4>' +
+                    '<p><button type="button" class="btn btn-primary btn-xs" aria-label="Left Align" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>' +
+                    '<button type="button" class="btn btn-danger btn-xs" onclick=obj.deleteImage(' + val.id + ',' + val.product_id + ')><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>' +
+                    '</p>' +
+                    '</div></div></div>';
+        })
+        $("#contentImages").html(html);
     }
 
     this.save = function () {
@@ -19,12 +64,12 @@ function Suppliers() {
         if (id == '') {
             method = 'POST';
             url = "supplier";
-            msg="Created Record";
- 
+            msg = "Created Record";
+
         } else {
             method = 'PUT';
             url = "supplier/" + id;
-            msg="Edited Record";
+            msg = "Edited Record";
         }
 
         $.ajax({
@@ -52,20 +97,37 @@ function Suppliers() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #id").val(data.id);
-                $("#frm #name").val(data.name);
-                $("#frm #last_name").val(data.last_name);
-                $("#frm #document").val(data.document);
-                $("#frm #phone").val(data.phone);
-                $("#frm #email").val(data.email);
-                $("#frm #address").val(data.address);
-                $("#frm #term").val(data.term);
-                $("#frm #city_id").val(data.city_id);
-                $("#frm #web_site").val(data.web_site);
-                $("#frm #contact").val(data.contact);
-                $("#frm #phone_contact").val(data.phone_contact);
-                $("#frm #type_regimen_id").val(data.type_regimen_id);
-                $("#frm #type_person_id").val(data.type_person_id);
+                $("#frm #id").val(data.header.id);
+                $("#frm #name").val(data.header.name);
+                $("#frm #last_name").val(data.header.last_name);
+                $("#frm #document").val(data.header.document);
+                $("#frm #phone").val(data.header.phone);
+                $("#frm #email").val(data.header.email);
+                $("#frm #address").val(data.header.address);
+                $("#frm #term").val(data.header.term);
+                $("#frm #city_id").val(data.header.city_id);
+                $("#frm #web_site").val(data.header.web_site);
+                $("#frm #contact").val(data.header.contact);
+                $("#frm #phone_contact").val(data.header.phone_contact);
+                $("#frm #type_regimen_id").val(data.header.type_regimen_id);
+                $("#frm #type_person_id").val(data.header.type_person_id);
+                obj.printImages(data.images);
+            }
+        })
+    }
+    
+    this.deleteImage = function (id, product_id) {
+        $("#div_" + id).remove();
+        var obj = {};
+        obj.product_id = product_id;
+        $.ajax({
+            url: 'supplier/deleteImage/' + id,
+            method: 'DELETE',
+            data: obj,
+            dataType: 'JSON',
+            success: function (data) {
+                toastr.success("Image Deleted")
+//                $("#imageMain").attr("src", "/images/product/" + data.path.path);
             }
         })
     }
@@ -94,6 +156,11 @@ function Suppliers() {
 
     this.table = function () {
         return $('#tblSuppliers').DataTable({
+            bSort: true,
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "processing": true,
             "serverSide": true,
             "ajax": "/api/listSupplier",
@@ -110,8 +177,14 @@ function Suppliers() {
                 {data: "term"},
                 {data: "city_id"},
                 {data: "web_site"},
-                {data: "type_person_id"},
-                {data: "type_regime_id"},
+                {data: "typeperson"},
+                {data: "typeregime"},
+            ],
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [

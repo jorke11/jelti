@@ -45,7 +45,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Expiration Date:</label>
-                            <input size="16" type="text" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail form-control">
+                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail form-control">
                             <!--<input type="text" class="form-control input-detail" id="expiration_date" name='expiration_date' >-->
                         </div>
                     </div>

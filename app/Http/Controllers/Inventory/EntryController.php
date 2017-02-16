@@ -115,7 +115,7 @@ class EntryController extends Controller {
             $result = EntryDetail::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = EntryDetail::FindOrFail($result["attributes"]["id"])->get();
+                $resp = EntryDetail::where("entry_id", $input["entry_id"])->get();
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);

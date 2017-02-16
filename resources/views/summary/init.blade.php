@@ -23,7 +23,7 @@
                         $totalEntry = 0;
                         $totalDeparture = 0;
                         $total = 0;
-                        foreach ($kardex as $k) {
+                        foreach ($summary as $k) {
                             $totalEntry += $k->entry;
                             $totalDeparture += $k->departure;
                             $total += $k->available;

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Administration;
+namespace App\Http\Controllers\Security;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Administration\Category;
+use App\Models\Security\User;
+use App\Models\Security\Profile;
+use App\Models\Administration\Supplier;
 use Session;
 
-class CategoryController extends Controller {
-
-    public function __construct() {
-        $this->middleware("auth");
-    }
+class UserController extends Controller {
 
     public function index() {
-        return view("category.init");
+        $profile = Profile::all();
+        $supplier = Supplier::all();
+        return view("user.init", compact("profile","supplier"));
     }
 
     public function create() {
@@ -38,14 +38,14 @@ class CategoryController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Category::FindOrFail($id);
-        return response()->json($suppliers);
+        $resp["header"] = User::FindOrFail($id);
+        return response()->json($resp);
     }
 
     public function update(Request $request, $id) {
-        $category = Category::FindOrFail($id);
+        $user = User::FindOrFail($id);
         $input = $request->all();
-        $result = $category->fill($input)->save();
+        $result = $user->fill($input)->save();
         if ($result) {
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true']);
@@ -55,8 +55,8 @@ class CategoryController extends Controller {
     }
 
     public function destroy($id) {
-        $category = Category::FindOrFail($id);
-        $result = $category->delete();
+        $user = User::FindOrFail($id);
+        $result = $user->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             Session::flash('save', 'Se ha creado correctamente');

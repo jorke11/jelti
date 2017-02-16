@@ -17,9 +17,9 @@ class CreatePermissionTable extends Migration {
             $table->integer('parent_id');
             $table->string('description');
             $table->string('controller');
-            $table->string('title');
-            $table->string('alternative');
-            $table->boolean('event');
+            $table->string('title')->nullable();
+            $table->string('alternative')->nullable();
+            $table->boolean('event')->nullable();
             $table->timestamps();
         });
     }

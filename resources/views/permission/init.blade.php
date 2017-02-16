@@ -1,7 +1,7 @@
 @extends('layouts.dash')
 
 @section('content')
-@section('title','Category')
+@section('title','Permission')
 @section('subtitle','Management')
 
 
@@ -11,7 +11,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-lg-3">List Categories</div>
+                    <div class="col-lg-3">List Permission</div>
                     <div class="col-lg-9 text-right">
                         <button class="btn btn-success" type="submit" data-toggle='modal' data-target="#modalNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -25,7 +25,12 @@
                     <thead>
                         <tr>
                             <th></th>
+                            <th>Parent</th>
                             <th>Description</th>
+                            <th>Controller</th>
+                            <th>Title</th>
+                            <th>Alternative</th>
+                            <th>Event</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -36,7 +41,7 @@
         </div>
     </div>
 </div>
-@include('Category.new')
-@include('Category.edit')
-{!!Html::script('js/Administration/Category.js')!!}
+@include('permission.new')
+@include('permission.edit')
+{!!Html::script('js/Security/Permission.js')!!}
 @endsection

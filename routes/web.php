@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::get('/dash', 'DashboardController@index');
-Route::get('/kardex', 'Inventory\KardexController@index');
+Route::get('/summary', 'Inventory\SummaryController@index');
 
 Route::resource('/product', 'Administration\ProductController');
 Route::post('/product/upload', 'Administration\ProductController@uploadImage');
@@ -35,6 +35,7 @@ Route::put('/supplier/checkmain/{id}', 'Administration\SupplierController@checkM
 Route::delete('/supplier/deleteImage/{id}', 'Administration\SupplierController@deleteImage');
 Route::get('/supplier/getImages/{id}', 'Administration\SupplierController@getImages');
 
+
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/warehouse', 'Administration\WarehouseController');
 Route::resource('/mark', 'Administration\MarkController');
@@ -42,6 +43,9 @@ Route::resource('/mark', 'Administration\MarkController');
 Route::resource('/city', 'Administration\CityController');
 
 Route::resource('/user', 'Security\UserController');
+
+
+
 Route::resource('/profile', 'Security\ProfileController');
 Route::resource('/permission', 'Security\PermissionController');
 
@@ -99,5 +103,13 @@ Route::get('/api/listCity', function() {
 });
 Route::get('/api/listProfile', function() {
     return Datatables::eloquent(Models\Security\Profile::query())->make(true);
+});
+
+Route::get('/api/listUser', function() {
+    return Datatables::eloquent(Models\Security\User::query())->make(true);
+});
+
+Route::get('/api/listPermission', function() {
+    return Datatables::eloquent(Models\Security\Permission::query())->make(true);
 });
 

@@ -119,7 +119,7 @@ class DepartureController extends Controller {
             $result = DepartureDetail::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = DepartureDetail::FindOrFail($result["attributes"]["id"])->get();
+                $resp = DepartureDetail::where("departure_id",$input["departure_id"])->get();
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);

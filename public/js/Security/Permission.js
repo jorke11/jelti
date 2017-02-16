@@ -1,4 +1,4 @@
-function Category() {
+function Permission() {
     var table;
     this.init = function () {
         table = this.table();
@@ -29,7 +29,7 @@ function Category() {
         toastr.remove();
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "profile/" + $("#frmEdit #id").val();
+        var url = "permission/" + $("#frmEdit #id").val();
         $.ajax({
             url: url,
             method: "PUT",
@@ -48,7 +48,7 @@ function Category() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/profile/" + id + "/edit";
+        var url = "/permission/" + id + "/edit";
         $("#modalEdit").modal("show");
         $.ajax({
             url: url,
@@ -58,6 +58,15 @@ function Category() {
             success: function (data) {
                 $("#frmEdit #id").val(data.id);
                 $("#frmEdit #description").val(data.description);
+                $("#frmEdit #controller").val(data.controller);
+                $("#frmEdit #title").val(data.title);
+                $("#frmEdit #alternative").val(data.alternative);
+                if (data.event == true) {
+                    $("#frmEdit #event").prop("checked", true);
+                } else {
+                    $("#frmEdit #event").prop("checked", false);
+                }
+
             }
         })
     }
@@ -66,7 +75,7 @@ function Category() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/profile/" + id;
+            var url = "/permission/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -85,28 +94,35 @@ function Category() {
     }
 
     this.table = function () {
-        return $('#tbl').DataTable({ 
+        return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listCategory",
+            "ajax": "/api/listPermission",
             columns: [
                 {data: "id"},
-                {data: "description"}
+                {data: "parent_id"},
+                {data: "description"},
+                {data: "controller"},
+                {data: "title"},
+                {data: "alternative"},
+                {data: "event"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1],
+                    aTargets: [0, 1, 2, 3, 4, 5],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+
                     }
                 },
                 {
-                    targets: [2],
+                    targets: [7],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+//                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],
@@ -115,5 +131,5 @@ function Category() {
 
 }
 
-var obj = new Category();
+var obj = new Permission();
 obj.init();

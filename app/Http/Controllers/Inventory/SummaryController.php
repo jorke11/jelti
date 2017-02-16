@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 class SummaryController extends Controller {
 
     public function index() {
-        $kardex = \Illuminate\Support\Facades\DB::table("summary")->get();
-        return view("summary.init", compact("kardex"));
+        $summary = \Illuminate\Support\Facades\DB::table("summary")->get();
+        return view("summary.init", compact("summary"));
     }
 
 }

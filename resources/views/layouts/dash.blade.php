@@ -112,7 +112,7 @@
                                         <ul class="nav child_menu">
                                             <li><a href="/user">Users</a></li>
                                             <li><a href="/profile">Profile</a></li>
-                                            <li><a href="/register">Permission</a></li>
+                                            <li><a href="/permission">Permission</a></li>
                                             <li><a href="{{url("/register")}}">Register</a></li>
 
                                         </ul>
@@ -131,7 +131,7 @@
                                         <ul class="nav child_menu">
                                             <li><a href="/entry">Entry</a></li>
                                             <li><a href="/departure">Departure</a></li>                                    
-                                            <li><a href="/kardex">Kardex</a></li>                                    
+                                            <li><a href="/summary">Summary</a></li>                                    
                                         </ul>
                                     </li>
                                 </ul>

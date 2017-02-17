@@ -20,6 +20,7 @@
                         <th>Email</th>
                         <th>Profile</th>
                         <th>Supplier</th>
+                        <th>City</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>

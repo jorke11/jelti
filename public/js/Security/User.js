@@ -1,5 +1,5 @@
 function User() {
-    var table, product_id = 0;
+    var table, product_id = 0, $checkableTree;
     this.init = function () {
         table = this.table();
         $("#new").click(this.save);
@@ -9,15 +9,53 @@ function User() {
             $('#myTabs a[href="#management"]').tab('show');
         });
 
+        $("#tabPermission").click(function () {
+            obj.getListPermission();
+        });
+        
+        
     }
 
-    this.showImages = function (id) {
+    this.getTree = function (permission) {
+        $("#treeview-container").html("");
+        var html = "<ul>";
+        $.each(permission, function (i, val) {
+
+            if (val.nodes) {
+                html += '<li data-value="' + val.id + '"> ' + val.text;
+                html += "<ul>";
+                $.each(val.nodes, function (i, value) {
+                    html += '<li data-value="' + value.id + '"> ' + value.text + "</li>";
+                });
+                html += "</ul></li>";
+
+            } else {
+                html += "<li> " + val.text + "</li>";
+            }
+        });
+        html += "</ul>";
+        
+        $("#treeview-container").html(html);
+
+        $('#treeview-container').treeview({
+            debug: false,
+            data: ['3.2', '2.2.3']
+        });
+        
+        $('#btnPermission').on('click', function () {
+            console.log($('#treeview-container').treeview('selectedValues'));
+        });
+
+    }
+
+    this.getListPermission = function () {
+
         $.ajax({
-            url: 'product/getImages/' + id,
+            url: 'user/getListPermission/' + $("#frm #id").val(),
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {
-                obj.printImages(data);
+                obj.getTree(data.tree)
             }
         })
     }
@@ -114,10 +152,11 @@ function User() {
                 $("#frm #name").val(data.header.name);
                 $("#frm #email").val(data.header.email);
                 $("#frm #profile_id").val(data.header.profile_id);
+                $("#frm #city_id").val(data.header.city_id);
                 if (data.header.status == true) {
-                    $("#frm #status").prop("checked",true);
-                }else{
-                    $("#frm #status").prop("checked",false);
+                    $("#frm #status").prop("checked", true);
+                } else {
+                    $("#frm #status").prop("checked", false);
                 }
             }
         })
@@ -144,8 +183,8 @@ function User() {
             })
         }
     }
-    
-    this.showPermission=function(){
+
+    this.showPermission = function () {
         $('#myTabs a[href="#permission"]').tab('show');
     }
 
@@ -160,23 +199,24 @@ function User() {
                 {data: "email"},
                 {data: "profile_id"},
                 {data: "supplier_id"},
+                {data: "city_id"},
                 {data: "status"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5],
+                    aTargets: [0, 1, 2, 3, 4, 5, 6],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [6],
+                    targets: [7],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        var html='<button class="btn btn-danger btn-xs" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
-                        html+='<button class="btn btn-primary btn-xs" onclick="obj.showPermission()"><i class="fa fa-unlock-alt" aria-hidden="true"></i></button>';
+                        var html = '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        html += '<button class="btn btn-primary btn-xs" onclick="obj.showPermission()"><i class="fa fa-unlock-alt" aria-hidden="true"></i></button>';
                         return html;
                     }
                 }

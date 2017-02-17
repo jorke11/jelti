@@ -23,6 +23,7 @@ class CreateSupplierTable extends Migration {
             $table->string('email');
             $table->string('address');
             $table->string('phone');
+            $table->string('bussines_name');
             $table->string('contact')->nullable();
             $table->string('phone_contact')->nullable();
             $table->integer('term');

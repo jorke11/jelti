@@ -15,6 +15,7 @@ class CreatePermissionTable extends Migration {
         Schema::create('permission', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id');
+            $table->integer('typemenu_id');
             $table->string('description');
             $table->string('controller');
             $table->string('title')->nullable();

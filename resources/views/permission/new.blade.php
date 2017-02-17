@@ -11,13 +11,25 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="email">Parent:</label>
-                            <select  class="form-control input-user" id="parent_id" name='parent_id'>
+                            <label for="email">Type Option:</label>
+                            <select  class="form-control input-user" id="typemenu_id" name='typemenu_id'>
                                 <option value="0">Main</option>
+                                <option value="1">Submain</option>
+                                <option value="2">Form</option>
                             </select>
                         </div>
                     </div>
                 </div>
+                <div class="row hidden" id="fieldParent">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Parent:</label>
+                            <select class="form-control input-user" id="parent_id" name='parent_id'>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+               
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">

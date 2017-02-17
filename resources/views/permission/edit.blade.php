@@ -7,13 +7,15 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmEdit','url'=>'category.edit']) !!}
-                 <input type="hidden" id="id" name="id">
+                <input type="hidden" id="id" name="id">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Parent:</label>
                             <select  class="form-control input-user" id="parent_id" name='parent_id'>
                                 <option value="0">Main</option>
+                                <option value="1">Submain</option>
+                                <option value="2">Form</option>
                             </select>
                         </div>
                     </div>

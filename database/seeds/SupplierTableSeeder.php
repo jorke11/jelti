@@ -22,6 +22,7 @@ class SupplierTableSeeder extends Seeder {
             'phone' => '23342',
             'contact' => 'contacto',
             'phone_contact' => '23234',
+            'bussines_name'=>'bussines name',
             'term' => 45,
             'web_site' => "asdasd",
         ]);

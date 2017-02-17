@@ -15,6 +15,7 @@ class UsersTableSeeder extends Seeder {
             'email'=>'jpinedom@hotmail.com',
             'profile_id'=>1,
             'supplier_id'=>1,
+            'city_id'=>1,
             'status'=>true,
             'password'=>bcrypt('123456')
         ]);

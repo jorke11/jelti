@@ -4,6 +4,13 @@ function Permission() {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
+        $("#frm #parent_id").change(function () {
+            if($(this).val()==1){
+                $("#fieldParent").removeClass("hidden");
+            }else{
+                $("#fieldParent").addClass("hidden");
+            }
+        });
     }
 
     this.save = function () {

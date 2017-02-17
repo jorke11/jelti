@@ -43,6 +43,7 @@ Route::resource('/mark', 'Administration\MarkController');
 Route::resource('/city', 'Administration\CityController');
 
 Route::resource('/user', 'Security\UserController');
+Route::get('/user/getListPermission/{id}', 'Security\UserController@getPermission');
 
 
 

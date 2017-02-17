@@ -18,7 +18,7 @@ function Suppliers() {
                 uploadExtraData: {
                     supplier_id: $("#frm #id").val(),
                     document_id: $("#document_id").val(),
-                    
+
                 },
             }).on('fileuploaded', function (event, data, id, index) {
                 $("#modalUpload").modal("hide");
@@ -28,7 +28,7 @@ function Suppliers() {
             $("#modalUpload").modal("show");
         })
     }
-     this.showImages = function (id) {
+    this.showImages = function (id) {
         $.ajax({
             url: 'supplier/getImages/' + id,
             method: 'GET',
@@ -41,18 +41,10 @@ function Suppliers() {
     this.printImages = function (data) {
         var html = '';
         $.each(data, function (i, val) {
-
-            html += '<div class="col-sm-6 col-lg-3" id="div_' + val.id + '">' +
-                    '<div class="thumbnail">' +
-                    '<img src="/images/product/' + val.path + '" alt="Product">' +
-                    '<div class="caption">' +
-                    '<h4>Check Main <input type="radio" name="main[]" onclick=obj.checkMain(' + val.id + ',' + val.product_id + ')></h4>' +
-                    '<p><button type="button" class="btn btn-primary btn-xs" aria-label="Left Align" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>' +
-                    '<button type="button" class="btn btn-danger btn-xs" onclick=obj.deleteImage(' + val.id + ',' + val.product_id + ')><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>' +
-                    '</p>' +
-                    '</div></div></div>';
+            html += '<tr><td>' + val.document_id + '</td><td><a href="images/supplier/' + val.path + '" target="_blank">See</a></td>';
+            html += '<td><button class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>';
         })
-        $("#contentImages").html(html);
+        $("#contentAttach tbody").html(html);
     }
 
     this.save = function () {
@@ -115,7 +107,7 @@ function Suppliers() {
             }
         })
     }
-    
+
     this.deleteImage = function (id, product_id) {
         $("#div_" + id).remove();
         var obj = {};

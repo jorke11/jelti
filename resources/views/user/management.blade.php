@@ -32,4 +32,17 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label for="email">City:</label>
+            <select id="city_id" name="city_id" class="form-control input-user">
+                <option value="0">Seleccione</option>
+                @foreach($city as $cit)
+                <option value="{{$cit->id}}">{{$cit->description}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+</div>
 {!!Form::close()!!}

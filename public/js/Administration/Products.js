@@ -25,6 +25,10 @@ function Product() {
 
             $("#modalUpload").modal("show");
         })
+
+        $("#tabList").click(function () {
+            table.ajax.reload();
+        });
     }
 
     this.showImages = function (id) {

@@ -12,6 +12,7 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         DB::table("permission")->insert([
+            'typemenu_id' => 0,
             'parent_id' => 0,
             'description' => 'Module security',
             'controller' => '/user',

@@ -1,139 +1,135 @@
 function Permission() {
     var table;
     this.init = function () {
-        table = this.table();
-        $("#new").click(this.save);
-        $("#edit").click(this.edit);
-        $("#frm #parent_id").change(function () {
-            if($(this).val()==1){
-                $("#fieldParent").removeClass("hidden");
-            }else{
-                $("#fieldParent").addClass("hidden");
-            }
-        });
+        table = this.listPermission();
+        $("#btnNew").click(this.new);
+        $("#btnSave").click(this.save);
+        $("#btnDelete").click(this.delete);
+
     }
 
     this.save = function () {
+        toastr.remove();
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = frm.attr("action");
+        var url = "", method = "";
+        var id = $("#frm #id").val();
+        var msg = '';
+        if (id == '') {
+            method = 'POST';
+            url = "permission";
+            msg = "Created Record";
+        } else {
+            method = 'PUT';
+            url = "permission/" + id;
+            msg = "Edited Record";
+        }
+
         $.ajax({
             url: url,
-            method: "POST",
+            method: method,
             data: data,
             dataType: 'JSON',
             success: function (data) {
                 if (data.success == 'true') {
-                    table.ajax.reload();
-                    $("#modalNew").modal("toggle");
-                    toastr.success("Ok");
+                    obj.printList(data.data);
+                    toastr.success(msg);
                 }
             }
         })
     }
 
-    this.edit = function () {
+    this.new = function () {
         toastr.remove();
-        var frm = $("#frmEdit");
-        var data = frm.serialize();
-        var url = "permission/" + $("#frmEdit #id").val();
-        $.ajax({
-            url: url,
-            method: "PUT",
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    table.ajax.reload();
-                    toastr.success("Ok");
-                    $("#modalEdit").modal("toggle");
-                }
-            }
-        })
-    }
+        $(".input-user").val("");
+        $("#typemenu_id").val(0);
+        $("#parent_id").val(0);
 
-    this.showModal = function (id) {
-        var frm = $("#frmEdit");
-        var data = frm.serialize();
-        var url = "/permission/" + id + "/edit";
-        $("#modalEdit").modal("show");
-        $.ajax({
-            url: url,
-            method: "GET",
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                $("#frmEdit #id").val(data.id);
-                $("#frmEdit #description").val(data.description);
-                $("#frmEdit #controller").val(data.controller);
-                $("#frmEdit #title").val(data.title);
-                $("#frmEdit #alternative").val(data.alternative);
-                if (data.event == true) {
-                    $("#frmEdit #event").prop("checked", true);
-                } else {
-                    $("#frmEdit #event").prop("checked", false);
-                }
-
-            }
-        })
     }
 
     this.delete = function (id) {
         toastr.remove();
-        if (confirm("Deseas eliminar")) {
-            var token = $("input[name=_token]").val();
-            var url = "/permission/" + id;
-            $.ajax({
-                url: url,
-                headers: {'X-CSRF-TOKEN': token},
-                method: "DELETE",
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == 'true') {
-                        table.ajax.reload();
-                        toastr.warning("Ok");
+        var id = $("#frm #id").val();
+        if (id != '') {
+            if (confirm("Deseas eliminar")) {
+                var token = $("input[name=_token]").val();
+                var url = "/permission/" + id;
+                $.ajax({
+                    url: url,
+                    headers: {'X-CSRF-TOKEN': token},
+                    method: "DELETE",
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success == 'true') {
+                            toastr.warning("Ok");
+                            obj.printList(data.data);
+                        }
+                    }, error: function (err) {
+                        toastr.error("No se puede borrra Este registro");
                     }
-                }, error: function (err) {
-                    toastr.error("No se puede borrra Este registro");
-                }
-            })
+                })
+            }
+        }else{
+            toastr.error("You need selected a record!");
         }
     }
 
-    this.table = function () {
-        return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "/api/listPermission",
-            columns: [
-                {data: "id"},
-                {data: "parent_id"},
-                {data: "description"},
-                {data: "controller"},
-                {data: "title"},
-                {data: "alternative"},
-                {data: "event"},
-            ],
-            order: [[1, 'ASC']],
-            aoColumnDefs: [
-                {
-                    aTargets: [0, 1, 2, 3, 4, 5],
-                    mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
-
-                    }
-                },
-                {
-                    targets: [7],
-                    searchable: false,
-                    "mData": null,
-                    "mRender": function (data, type, full) {
-//                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
-                    }
-                }
-            ],
+    this.printList = function (data) {
+        $("#treeview-container").html("");
+        var html = "<ul>";
+        $.each(data, function (i, val) {
+            if (val.nodes) {
+                html += '<li data-value="' + val.id + '"><a href="#" onclick=obj.getMenuId(' + val.id + ');javascript:void(0);> ' + val.title + "</a>";
+                html += "<ul>";
+                $.each(val.nodes, function (j, value) {
+                    html += '<li data-value="' + value.id + '" ><a href="#" onclick=obj.getMenuId(' + value.id + ');javascript:void(0);> ' + value.title + "</li>";
+                });
+                html += "</ul></li>";
+            } else {
+                html += '<li><a href="#" onclick=obj.getMenuId(' + val.id + ');javascript:void(0);> ' + val.title + '</li>';
+            }
         });
+        html += "</ul>";
+
+        $("#treeview-container").html(html);
+
+        $('#treeview-container').treeview({
+            debug: false,
+        });
+    }
+
+    this.getMenuId = function (id) {
+        var url = "permission/" + id + "/getMenu";
+        $.ajax({
+            url: url,
+            method: "GET",
+            dataType: 'JSON',
+            success: function (data) {
+                $("#frm #id").val(data.id);
+                $("#frm #description").val(data.description);
+                $("#frm #parent_id").val(data.parent_id);
+                $("#frm #controller").val(data.controller);
+                $("#frm #title").val(data.title);
+                $("#frm #alternative").val(data.alternative);
+                $("#frm #icon").val(data.icon);
+                if (data.event == true) {
+                    $("#frm #event").prop("checked", true);
+                } else {
+                    $("#frm #event").prop("checked", false);
+                }
+            }
+        })
+    }
+
+    this.listPermission = function () {
+        $.ajax({
+            url: "/api/listPermission",
+            method: "GET",
+            dataType: 'JSON',
+            success: function (data) {
+                obj.printList(data)
+            }
+        })
     }
 
 }

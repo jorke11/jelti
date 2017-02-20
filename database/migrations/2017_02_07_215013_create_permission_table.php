@@ -18,6 +18,8 @@ class CreatePermissionTable extends Migration {
             $table->integer('typemenu_id');
             $table->string('description');
             $table->string('controller');
+            $table->string('icon');
+            $table->integer('priority');
             $table->string('title')->nullable();
             $table->string('alternative')->nullable();
             $table->boolean('event')->nullable();

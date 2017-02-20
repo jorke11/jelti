@@ -7,10 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Security\Permission;
 use Session;
 
-class PermissionController extends Controller
-{
-     public function index() {
-        return view("permission.init");
+class PermissionController extends Controller {
+
+    public function index() {
+        $parents = Permission::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
+        return view("permission.init", compact("parents"));
     }
 
     public function create() {
@@ -26,7 +27,7 @@ class PermissionController extends Controller
             $result = Permission::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => 'true', 'data' => $this->getPermission()]);
             } else {
                 return response()->json(['success' => 'false']);
             }
@@ -44,7 +45,7 @@ class PermissionController extends Controller
         $result = $data->fill($input)->save();
         if ($result) {
             Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => 'true', 'data' => $this->getPermission()]);
         } else {
             return response()->json(['success' => 'false']);
         }
@@ -56,10 +57,30 @@ class PermissionController extends Controller
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => 'true', 'data' => $this->getPermission()]);
         } else {
             return response()->json(['success' => 'false']);
         }
+    }
+
+    public function getPermission() {
+        $data = Permission::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
+        $resp = array();
+        foreach ($data as $key => $val) {
+            $children = Permission::where("parent_id", "=", $val->id)->get();
+            array_push($resp, $val);
+            if (count($children) > 0) {
+                foreach ($children as $k => $v) {
+                    $resp[$key]["nodes"] = array($v);
+                }
+            }
+        }
+        return $resp;
+    }
+
+    public function getMenu($id) {
+        $data = Permission::FindOrFail($id);
+        return response()->json($data);
     }
 
 }

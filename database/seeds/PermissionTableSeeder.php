@@ -15,7 +15,9 @@ class PermissionTableSeeder extends Seeder
             'typemenu_id' => 0,
             'parent_id' => 0,
             'description' => 'Module security',
+            'icon' => 'fa-unlock-alt',
             'controller' => '/user',
+            'priority' => 1,
             'title' => 'security',
         ]);
     }

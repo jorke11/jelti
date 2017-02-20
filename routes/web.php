@@ -48,7 +48,12 @@ Route::get('/user/getListPermission/{id}', 'Security\UserController@getPermissio
 
 
 Route::resource('/profile', 'Security\ProfileController');
+
+
 Route::resource('/permission', 'Security\PermissionController');
+Route::get('/api/listPermission', 'Security\PermissionController@getPermission');
+Route::get('/permission/{id}/getMenu', ['uses' => 'Security\PermissionController@getMenu']);
+
 
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
@@ -79,7 +84,7 @@ Route::get('/api/listCategory', function() {
 
 Route::get('/api/listSupplier', function() {
     return Datatables::queryBuilder(
-            DB::table('vsupplier')
+                    DB::table('vsupplier')
             )->make(true);
 });
 Route::get('/api/listProduct', function() {
@@ -110,7 +115,5 @@ Route::get('/api/listUser', function() {
     return Datatables::eloquent(Models\Security\User::query())->make(true);
 });
 
-Route::get('/api/listPermission', function() {
-    return Datatables::eloquent(Models\Security\Permission::query())->make(true);
-});
+
 

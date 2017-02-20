@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Security\Permission;
 use Session;
+use DB;
 
 class PermissionController extends Controller {
 
     public function index() {
+        
         $parents = Permission::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
         return view("permission.init", compact("parents"));
     }
@@ -66,13 +68,17 @@ class PermissionController extends Controller {
     public function getPermission() {
         $data = Permission::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
         $resp = array();
+
         foreach ($data as $key => $val) {
-            $children = Permission::where("parent_id", "=", $val->id)->get();
+            $children = Permission::where("parent_id", $val->id)->get();
+
             array_push($resp, $val);
+
             if (count($children) > 0) {
                 foreach ($children as $k => $v) {
-                    $resp[$key]["nodes"] = array($v);
+                    $child[] = $v;
                 }
+                $resp[$key]->nodes = $child;
             }
         }
         return $resp;

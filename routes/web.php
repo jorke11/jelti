@@ -44,7 +44,7 @@ Route::resource('/city', 'Administration\CityController');
 
 Route::resource('/user', 'Security\UserController');
 Route::get('/user/getListPermission/{id}', 'Security\UserController@getPermission');
-
+Route::put('/user/savePermission/{id}', 'Security\UserController@savePermission');
 
 
 Route::resource('/profile', 'Security\ProfileController');
@@ -114,6 +114,11 @@ Route::get('/api/listProfile', function() {
 Route::get('/api/listUser', function() {
     return Datatables::eloquent(Models\Security\User::query())->make(true);
 });
+Route::get('/api/listUser', function() {
+    return Datatables::eloquent(Models\Security\User::query())->make(true);
+});
+
+Route::get('/api/listMenu', 'DashboardController@getMenu');
 
 
 

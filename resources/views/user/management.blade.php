@@ -1,5 +1,5 @@
 {!! Form::open(['id'=>'frm']) !!}
-<input id="id" name="id" type="hidden" class="input-product">
+<input id="id" name="id" type="hidden" class="input-user">
 <div class="row">
     <div class="col-lg-3">
         <div class="form-group">
@@ -28,7 +28,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Status</label>
-            <input type="checkbox" class="form-control input-user" id="status" name='status'>
+            <input type="checkbox" class="form-control" id="status" name='status'>
         </div>
     </div>
 </div>
@@ -42,6 +42,29 @@
                 <option value="{{$cit->id}}">{{$cit->description}}</option>
                 @endforeach
             </select>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label for="email">Role:</label>
+            <select id="profile_id" name="profile_id" class="form-control input-user">
+                <option value="0">Seleccione</option>
+                @foreach($profile as $rol)
+                <option value="{{$rol->id}}">{{$rol->description}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label for="email">Password:</label>
+            <input type="password" class="form-control input-user" id="password" name='password'>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label for="email">Confirmation:</label>
+            <input type="password" class="form-control input-user" id="confirmation" name='confirmation'>
         </div>
     </div>
 </div>

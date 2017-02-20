@@ -56,12 +56,13 @@
 
         <!-- Custom styling plus plugins -->
         <!--<link href="../build/css/custom.min.css" rel="stylesheet">-->
-        
+
         {!!Html::style('/vendor/datetimepicker/css/bootstrap-datetimepicker.min.css')!!}
         {!!Html::script('/vendor/datetimepicker/js/bootstrap-datetimepicker.min.js')!!}
 
 
         {!!Html::style('/css/edited.css')!!}
+        {!!Html::script('js/Administration/Dash.js')!!}
     </head>
 
     <body class="nav-md">
@@ -96,46 +97,52 @@
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
                                 <h3>General</h3>
-                                <ul class="nav side-menu">
-                                    <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="/sale">Sales</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-file"></i> Operation <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="/service">Request Service</a></li>
-                                            <li><a href="/order">Order Sale</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="/user">Users</a></li>
-                                            <li><a href="/profile">Profile</a></li>
-                                            <li><a href="/permission">Permission</a></li>
-                                            <li><a href="{{url("/register")}}">Register</a></li>
+                                <ul class="nav side-menu" id="addMenu">
 
-                                        </ul>
-                                    </li>
-                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="/category">Category</a></li>                                    
-                                            <li><a href="/product">Products</a></li>
-                                            <li><a href="/supplier">Supplier</a></li>
-                                            <li><a href="/warehouse">Warehouse</a></li>
-                                            <li><a href="/mark">Mark</a></li>
-                                            <li><a href="/city">City</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="/entry">Entry</a></li>
-                                            <li><a href="/departure">Departure</a></li>                                    
-                                            <li><a href="/summary">Summary</a></li>                                    
-                                        </ul>
-                                    </li>
                                 </ul>
                             </div>
+                            <!--                            <div class="menu_section">
+                                                            <h3>General</h3>
+                                                            <ul class="nav side-menu">
+                                                                <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                                                    <ul class="nav child_menu">
+                                                                        <li><a href="/sale">Sales</a></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li><a><i class="fa fa-file"></i> Operation <span class="fa fa-chevron-down"></span></a>
+                                                                    <ul class="nav child_menu">
+                                                                        <li><a href="/service">Request Service</a></li>
+                                                                        <li><a href="/order">Order Sale</a></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
+                                                                    <ul class="nav child_menu">
+                                                                        <li><a href="/user">Users</a></li>
+                                                                        <li><a href="/profile">Profile</a></li>
+                                                                        <li><a href="/permission">Permission</a></li>
+                                                                        <li><a href="{{url("/register")}}">Register</a></li>
+                            
+                                                                    </ul>
+                                                                </li>
+                                                                <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
+                                                                    <ul class="nav child_menu">
+                                                                        <li><a href="/category">Category</a></li>                                    
+                                                                        <li><a href="/product">Products</a></li>
+                                                                        <li><a href="/supplier">Supplier</a></li>
+                                                                        <li><a href="/warehouse">Warehouse</a></li>
+                                                                        <li><a href="/mark">Mark</a></li>
+                                                                        <li><a href="/city">City</a></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
+                                                                    <ul class="nav child_menu">
+                                                                        <li><a href="/entry">Entry</a></li>
+                                                                        <li><a href="/departure">Departure</a></li>                                    
+                                                                        <li><a href="/summary">Summary</a></li>                                    
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        </div>-->
                         </div>
                         <!-- /sidebar menu -->
 
@@ -437,7 +444,7 @@
         <!-- /compose -->
 
         <!-- jQuery -->
-
+        
         {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
         {!!Html::script('/vendor/template/vendors/fastclick/lib/fastclick.js')!!}
         {!!Html::script('/vendor/template/vendors/nprogress/nprogress.js')!!}
@@ -461,5 +468,6 @@
         <!-- Custom Theme Scripts -->
         <!--<script src="../build/js/custom.min.js"></script>-->
         {!!Html::script('vendor/template/build/js/custom.min.js')!!}
+
     </body>
 </html>

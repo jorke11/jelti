@@ -9,5 +9,4 @@ class PermissionUser extends Model {
     protected $table = "permissionuser";
     protected $primaryKey = "id";
     protected $fillable = ["id", "users_id", "permission_id"];
-
 }

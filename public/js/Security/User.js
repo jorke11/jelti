@@ -5,47 +5,64 @@ function User() {
         $("#new").click(this.save);
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
-            $(".input-product").val("");
+            $(".input-user").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
 
         $("#tabPermission").click(function () {
             obj.getListPermission();
         });
-        
-        
+
+
     }
 
     this.getTree = function (permission) {
         $("#treeview-container").html("");
-        var html = "<ul>";
+        var html = "<ul>", checked = "", check = "";
         $.each(permission, function (i, val) {
 
+            checked = (val.allowed == true) ? "data-checked=true" : '';
+
             if (val.nodes) {
-                html += '<li data-value="' + val.id + '"> ' + val.text;
+                html += '<li data-value="' + val.id + '" ' + checked + '> ' + val.title;
                 html += "<ul>";
                 $.each(val.nodes, function (i, value) {
-                    html += '<li data-value="' + value.id + '"> ' + value.text + "</li>";
+                    check = (value.allowed == true) ? "data-checked=true" : ''
+                    html += '<li data-value="' + value.id + '"  ' + check + '> ' + value.title + "</li>";
                 });
                 html += "</ul></li>";
 
             } else {
-                html += "<li> " + val.text + "</li>";
+                html += '<li data-value="' + val.id + '" ' + checked + '> ' + val.title + '</li>';
             }
         });
         html += "</ul>";
-        
+
         $("#treeview-container").html(html);
 
         $('#treeview-container').treeview({
             debug: false,
             data: ['3.2', '2.2.3']
         });
-        
-        $('#btnPermission').on('click', function () {
-            console.log($('#treeview-container').treeview('selectedValues'));
-        });
 
+        $('#btnPermission').on('click', function () {
+            obj.savePermission();
+        });
+    }
+
+    this.savePermission = function () {
+        toastr.remove();
+        var data = {};
+        data.arr = ($('#treeview-container').treeview('selectedValues')).join();
+        $.ajax({
+            url: 'user/savePermission/' + $("#frm #id").val(),
+            method: 'PUT',
+            data: data,
+            dataType: 'JSON',
+            success: function (data) {
+                toastr.success("Process Ok");
+            }
+        })
     }
 
     this.getListPermission = function () {
@@ -55,7 +72,7 @@ function User() {
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {
-                obj.getTree(data.tree)
+                obj.getTree(data.permission)
             }
         })
     }
@@ -115,11 +132,11 @@ function User() {
         var msg = '';
         if (id == '') {
             method = 'POST';
-            url = "product";
+            url = "user";
             msg = "Created Record";
         } else {
             method = 'PUT';
-            url = "product/" + id;
+            url = "user/" + id;
             msg = "Edited Record";
         }
 

@@ -9,6 +9,5 @@ class Profile extends Model {
     protected $table = "profile";
     protected $primaryKey = "id";
     protected $fillable = ["id", "description"];
-    public $timestamp = false;
 
 }

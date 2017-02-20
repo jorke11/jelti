@@ -17,6 +17,7 @@ class CreatePermissionuserTable extends Migration
             $table->increments('id');
             $table->integer('users_id');
             $table->integer('permission_id'); 
+            $table->timestamps();
         });
     }
 

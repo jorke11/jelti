@@ -11,9 +11,11 @@ use App\Models\Security\Profile;
 use App\Models\Administration\Supplier;
 use App\Models\Administration\City;
 use Session;
+use DB;
 
 class UserController extends Controller {
 
+    
     public function index() {
         $profile = Profile::all();
         $supplier = Supplier::all();
@@ -29,9 +31,14 @@ class UserController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
+            if (!isset($input["status"])) {
+                $input["status"] = false;
+            }
+            
+            $input["password"] = bcrypt($input["password"]); 
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Category::create($input);
+            $result = User::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -47,19 +54,30 @@ class UserController extends Controller {
     }
 
     public function getPermission($id) {
-        $resp["permission"] = Permission::where("parent_id", 0)->get();
+        $resp["permission"] = DB::select("
+                                        SELECT p.id = ANY (SELECT permission_id FROM permissionuser where users_id=" . $id . " and permission_id=p.id) allowed,p.*
+                                        from permission p 
+                                        WHERE parent_id=0 
+                                        AND typemenu_id=0 
+                                        ORDER BY priority asc");
         $resp["tree"] = array();
-        foreach ($resp["permission"] as $value) {
 
-            $data = Permission::where("parent_id", $value->id)->get();
-            if (count($data) > 0) {
-                foreach ($data as $val) {
-                    $resp["tree"][] = array("text" => $value->title, "id" => $value->id, "nodes" => array(array("text" => $val->title)));
+        foreach ($resp["permission"] as $key => $val) {
+            $query = "
+                                        SELECT p.id = ANY (SELECT permission_id FROM permissionuser where users_id=" . $id . " and permission_id=p.id) allowed,p.*
+                                        from permission p 
+                                        WHERE parent_id=" . $val->id . "
+                                        ORDER BY priority asc";
+
+            $children = DB::select($query);
+            array_push($resp["tree"], $val);
+            if (count($children) > 0) {
+                foreach ($children as $k => $v) {
+                    $resp["tree"][$key]->nodes[] = $v;
                 }
-            } else {
-                $resp["tree"][] = array("text" => $value->title, "id" => $value->id);
             }
         }
+
 
         $resp["permissionuser"] = PermissionUser::where("users_id", $id)->get();
 
@@ -69,6 +87,11 @@ class UserController extends Controller {
     public function update(Request $request, $id) {
         $user = User::FindOrFail($id);
         $input = $request->all();
+        if (!isset($input["status"])) {
+            $input["status"] = false;
+        }
+        
+      
         $result = $user->fill($input)->save();
         if ($result) {
             Session::flash('save', 'Se ha creado correctamente');
@@ -76,6 +99,25 @@ class UserController extends Controller {
         } else {
             return response()->json(['success' => 'false']);
         }
+    }
+
+    public function savePermission(Request $request, $id) {
+        $input = $request->all();
+        $per = explode(",", $input["arr"]);
+        $del = PermissionUser::whereNotIn("permission_id", $per)->where("users_id", $id)->delete();
+
+        foreach ($per as $val) {
+            $us = PermissionUser::where("permission_id", $val)->where("users_id", $id)->get();
+            if (count($us) == 0) {
+                $per = new PermissionUser();
+                $per->users_id = $id;
+                $per->permission_id = $val;
+                $per->save();
+            }
+        }
+
+        Session::flash('save', 'Se ha creado correctamente');
+        return response()->json(['success' => 'true']);
     }
 
     public function destroy($id) {

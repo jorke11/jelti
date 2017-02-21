@@ -115,7 +115,7 @@
                     </div>
                     <div class="col-lg-3">
                         <div class="form-group">
-                            <label for="address">Bussines name</label>
+                            <label for="address">Business name</label>
                             <input type="text" class="form-control input-supplier" id="bussines_name" name="bussines_name" placeholder="Bussines Name">
                         </div>
                     </div>

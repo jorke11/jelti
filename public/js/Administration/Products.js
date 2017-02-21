@@ -196,12 +196,12 @@ function Product() {
                 {data: "tax"},
                 {data: "price_sf"},
                 {data: "price_cust"},
-                {data: "image", render: function (data, type, row) {
+                {data: "image",width: 10 ,render: function (data, type, row) {
 
                         if (data == null) {
                             data = "default.jpg";
                         }
-                        return '<img src="/images/product/' + data + '" width="50%">';
+                        return '<img src="/images/product/' + data + '" width="25px">';
                     }
                 },
                 {data: "status"},

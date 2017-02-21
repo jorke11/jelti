@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Security\User;
 use App\Models\Security\Permission;
 use App\Models\Security\PermissionUser;
-use App\Models\Security\Profile;
+use App\Models\Security\Role;
 use App\Models\Administration\Supplier;
 use App\Models\Administration\City;
 use Session;
@@ -17,7 +17,7 @@ class UserController extends Controller {
 
     
     public function index() {
-        $profile = Profile::all();
+        $profile = Role::all();
         $supplier = Supplier::all();
         $city = City::all();
         return view("user.init", compact("profile", "supplier", "city"));

@@ -10,6 +10,8 @@
         <title>Superfuds</title>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
 
+
+
         {!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/ColReorder/js/dataTables.colReorder.min.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js')!!}
@@ -38,14 +40,14 @@
         <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/dataTables.bootstrap.css')!!}--> 
         <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}--> 
 
-
+        {!!Html::script('js/Administration/Dash.js')!!}
         <!-- Bootstrap -->
         <!--<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">-->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
         {!!Html::style('/vendor/template/vendors/font-awesome/css/font-awesome.min.css')!!}
         {!!Html::style('/vendor/template/vendors/nprogress/nprogress.css')!!}
         {!!Html::style('/vendor/template/vendors/google-code-prettify/bin/prettify.min.css')!!}
-        {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
+
         <!-- Font Awesome -->
 
         <!--<link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">-->
@@ -62,7 +64,8 @@
 
 
         {!!Html::style('/css/edited.css')!!}
-        {!!Html::script('js/Administration/Dash.js')!!}
+
+        {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
     </head>
 
     <body class="nav-md">
@@ -95,54 +98,54 @@
 
                         <!-- sidebar menu -->
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                            <div class="menu_section">
+<!--                            <div class="menu_section">
                                 <h3>General</h3>
                                 <ul class="nav side-menu" id="addMenu">
 
                                 </ul>
+                            </div>                                                       <div class="menu_section">-->
+                                <h3>General</h3>
+                                <ul class="nav side-menu">
+                                    <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/sale">Sales</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-file"></i> Operation <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/service">Request Service</a></li>
+                                            <li><a href="/order">Order Sale</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/user">Users</a></li>
+                                            <li><a href="/role">Profile</a></li>
+                                            <li><a href="/permission">Permission</a></li>
+                                            <li><a href="{{url("/register")}}">Register</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/category">Category</a></li>                                    
+                                            <li><a href="/product">Products</a></li>
+                                            <li><a href="/supplier">Supplier</a></li>
+                                            <li><a href="/warehouse">Warehouse</a></li>
+                                            <li><a href="/mark">Mark</a></li>
+                                            <li><a href="/city">City</a></li>
+                                            <li><a href="/puc">PUC</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Billing <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/purchage">Purchage</a></li>
+                                            <li><a href="/sale">Sale</a></li>                                    
+                                            <li><a href="/summary">Summary</a></li>                                    
+                                        </ul>
+                                    </li>
+                                </ul>
                             </div>
-                            <!--                            <div class="menu_section">
-                                                            <h3>General</h3>
-                                                            <ul class="nav side-menu">
-                                                                <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
-                                                                    <ul class="nav child_menu">
-                                                                        <li><a href="/sale">Sales</a></li>
-                                                                    </ul>
-                                                                </li>
-                                                                <li><a><i class="fa fa-file"></i> Operation <span class="fa fa-chevron-down"></span></a>
-                                                                    <ul class="nav child_menu">
-                                                                        <li><a href="/service">Request Service</a></li>
-                                                                        <li><a href="/order">Order Sale</a></li>
-                                                                    </ul>
-                                                                </li>
-                                                                <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
-                                                                    <ul class="nav child_menu">
-                                                                        <li><a href="/user">Users</a></li>
-                                                                        <li><a href="/profile">Profile</a></li>
-                                                                        <li><a href="/permission">Permission</a></li>
-                                                                        <li><a href="{{url("/register")}}">Register</a></li>
-                            
-                                                                    </ul>
-                                                                </li>
-                                                                <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
-                                                                    <ul class="nav child_menu">
-                                                                        <li><a href="/category">Category</a></li>                                    
-                                                                        <li><a href="/product">Products</a></li>
-                                                                        <li><a href="/supplier">Supplier</a></li>
-                                                                        <li><a href="/warehouse">Warehouse</a></li>
-                                                                        <li><a href="/mark">Mark</a></li>
-                                                                        <li><a href="/city">City</a></li>
-                                                                    </ul>
-                                                                </li>
-                                                                <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
-                                                                    <ul class="nav child_menu">
-                                                                        <li><a href="/entry">Entry</a></li>
-                                                                        <li><a href="/departure">Departure</a></li>                                    
-                                                                        <li><a href="/summary">Summary</a></li>                                    
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>
-                                                        </div>-->
                         </div>
                         <!-- /sidebar menu -->
 
@@ -291,22 +294,22 @@
                 <div class="right_col" role="main">
                     <div class="">
 
-                        <div class="page-title">
-                            <div class="title_left">
-                                <h3>@yield('title') <small>@yield('subtitle')</small></h3>
-                            </div>
-
-                            <div class="title_right">
-                                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search for...">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="button">Go!</button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--                        <div class="page-title">
+                                                    <div class="title_left">
+                                                        <h3>@yield('title') <small>@yield('subtitle')</small></h3>
+                                                    </div>
+                        
+                                                    <div class="title_right">
+                                                        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" placeholder="Search for...">
+                                                                <span class="input-group-btn">
+                                                                    <button class="btn btn-default" type="button">Go!</button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
 
                         <div class="clearfix"></div>
 
@@ -314,7 +317,7 @@
                             <div class="col-md-12">
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <h2>@yield('title')<small>{{auth()->user()->name}}</small></h2>
+                                        <h2>@yield('title')<small>@yield('subtitle')</small></h2>
                                         <ul class="nav navbar-right panel_toolbox">
                                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                             </li>
@@ -444,7 +447,7 @@
         <!-- /compose -->
 
         <!-- jQuery -->
-        
+
         {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
         {!!Html::script('/vendor/template/vendors/fastclick/lib/fastclick.js')!!}
         {!!Html::script('/vendor/template/vendors/nprogress/nprogress.js')!!}
@@ -468,6 +471,7 @@
         <!-- Custom Theme Scripts -->
         <!--<script src="../build/js/custom.min.js"></script>-->
         {!!Html::script('vendor/template/build/js/custom.min.js')!!}
+
 
     </body>
 </html>

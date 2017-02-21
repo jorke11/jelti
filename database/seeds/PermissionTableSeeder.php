@@ -16,9 +16,26 @@ class PermissionTableSeeder extends Seeder
             'parent_id' => 0,
             'description' => 'Module security',
             'icon' => 'fa-unlock-alt',
-            'controller' => '/user',
+            'controller' => '',
             'priority' => 1,
             'title' => 'security',
+        ]);
+        
+        DB::table("permission")->insert([
+            'typemenu_id' => 1,
+            'parent_id' => 1,
+            'description' => 'form Users',
+            'controller' => '/user',
+            'priority' => 1,
+            'title' => 'Users',
+        ]);
+        DB::table("permission")->insert([
+            'typemenu_id' => 1,
+            'parent_id' => 1,
+            'description' => 'form Permission',
+            'controller' => '/permission',
+            'priority' => 2,
+            'title' => 'Permission',
         ]);
     }
 }

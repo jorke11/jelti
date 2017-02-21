@@ -3,8 +3,6 @@
 @section('content')
 @section('title','Permission')
 @section('subtitle','Management')
-{!!Html::script('/vendor/treeview/logger.min.js')!!}
-{!!Html::script('/vendor/treeview/treeview.js')!!}
 
 <div class="row">
     <div class="col-lg-4">
@@ -131,5 +129,7 @@
 
     </div>
 </div>
+{!!Html::script('/vendor/treeview/logger.min.js')!!}
+{!!Html::script('/vendor/treeview/treeview.js')!!}
 {!!Html::script('js/Security/Permission.js')!!}
 @endsection

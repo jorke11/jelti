@@ -6,6 +6,16 @@ function Permission() {
         $("#btnSave").click(this.save);
         $("#btnDelete").click(this.delete);
 
+        $("#parent_id").attr("disabled",true);
+
+        $("#typemenu_id").change(function () {
+            if ($(this).val() != 0) {
+                $("#parent_id").attr("disabled",false);
+            }else{
+                $("#parent_id").val(0);
+                $("#parent_id").attr("disabled",true);
+            }
+        });
     }
 
     this.save = function () {
@@ -32,7 +42,7 @@ function Permission() {
             dataType: 'JSON',
             success: function (data) {
                 if (data.success == 'true') {
-                    obj.printList(data.data);
+                    objP.printList(data.data);
                     toastr.success(msg);
                 }
             }
@@ -62,14 +72,14 @@ function Permission() {
                     success: function (data) {
                         if (data.success == 'true') {
                             toastr.warning("Ok");
-                            obj.printList(data.data);
+                            objP.printList(data.data);
                         }
                     }, error: function (err) {
                         toastr.error("No se puede borrra Este registro");
                     }
                 })
             }
-        }else{
+        } else {
             toastr.error("You need selected a record!");
         }
     }
@@ -79,14 +89,14 @@ function Permission() {
         var html = "<ul>";
         $.each(data, function (i, val) {
             if (val.nodes) {
-                html += '<li data-value="' + val.id + '"><a href="#" onclick=obj.getMenuId(' + val.id + ');javascript:void(0);> ' + val.title + "</a>";
+                html += '<li data-value="' + val.id + '"><a href="#" onclick=objP.getMenuId(' + val.id + ');javascript:void(0);> ' + val.title + "</a>";
                 html += "<ul>";
                 $.each(val.nodes, function (j, value) {
-                    html += '<li data-value="' + value.id + '" ><a href="#" onclick=obj.getMenuId(' + value.id + ');javascript:void(0);> ' + value.title + "</li>";
+                    html += '<li data-value="' + value.id + '" ><a href="#" onclick=objP.getMenuId(' + value.id + ');javascript:void(0);> ' + value.title + "</li>";
                 });
                 html += "</ul></li>";
             } else {
-                html += '<li><a href="#" onclick=obj.getMenuId(' + val.id + ');javascript:void(0);> ' + val.title + '</li>';
+                html += '<li><a href="#" onclick=objP.getMenuId(' + val.id + ');javascript:void(0);> ' + val.title + '</li>';
             }
         });
         html += "</ul>";
@@ -112,6 +122,7 @@ function Permission() {
                 $("#frm #title").val(data.title);
                 $("#frm #alternative").val(data.alternative);
                 $("#frm #icon").val(data.icon);
+                $("#frm #priority").val(data.priority);
                 if (data.event == true) {
                     $("#frm #event").prop("checked", true);
                 } else {
@@ -127,12 +138,12 @@ function Permission() {
             method: "GET",
             dataType: 'JSON',
             success: function (data) {
-                obj.printList(data)
+                objP.printList(data)
             }
         })
     }
 
 }
 
-var obj = new Permission();
-obj.init();
+var objP = new Permission();
+objP.init();

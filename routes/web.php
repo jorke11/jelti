@@ -53,22 +53,45 @@ Route::get('/api/listPermission', 'Security\PermissionController@getPermission')
 Route::get('/permission/{id}/getMenu', ['uses' => 'Security\PermissionController@getMenu']);
 
 
-Route::resource('/purchage', 'Billing\PurchageController');
-Route::get('/purchage/{id}/consecutive', ['uses' => 'Billing\PurchageController@getConsecutive']);
-Route::get('/purchage/{id}/detail', ['uses' => 'Billing\PurchageController@getDetail']);
-Route::get('/purchage/{id}/getSupplier', ['uses' => 'Billing\PurchageController@getSupplier']);
-Route::get('/purchage/{id}/getProducts', ['uses' => 'Billing\PurchageController@getProducts']);
-Route::post('/purchage/storeDetail', 'Billing\PurchageController@storeDetail');
-Route::put('/purchage/detail/{id}', 'Billing\PurchageController@updateDetail');
-Route::delete('/purchage/detail/{id}', 'Billing\PurchageController@destroyDetail');
+Route::resource('/purchage', 'Invoicing\PurchageController');
+Route::get('/purchage/{id}/consecutive', ['uses' => 'Invoicing\PurchageController@getConsecutive']);
+Route::get('/purchage/{id}/detail', ['uses' => 'Invoicing\PurchageController@getDetail']);
+Route::get('/purchage/{id}/getSupplier', ['uses' => 'Invoicing\PurchageController@getSupplier']);
+Route::get('/purchage/{id}/getProducts', ['uses' => 'Invoicing\PurchageController@getProducts']);
+Route::post('/purchage/storeDetail', 'Invoicing\PurchageController@storeDetail');
+Route::put('/purchage/detail/{id}', 'Invoicing\PurchageController@updateDetail');
+Route::delete('/purchage/detail/{id}', 'Invoicing\PurchageController@destroyDetail');
 
-Route::resource('/sale', 'Billing\SaleController');
-Route::get('/sale/{id}/consecutive', ['uses' => 'Billing\SaleController@getConsecutive']);
-Route::get('/sale/{id}/quantity', ['uses' => 'Billing\SaleController@getQuantity']);
-Route::get('/sale/{id}/detail', ['uses' => 'Billing\SaleController@getDetail']);
-Route::post('/sale/storeDetail', 'Billing\SaleController@storeDetail');
-Route::put('/sale/detail/{id}', 'Billing\SaleController@updateDetail');
-Route::delete('/sale/detail/{id}', 'Billing\SaleController@destroyDetail');
+
+Route::resource('/sale', 'Invoicing\SaleController');
+Route::get('/sale/{id}/consecutive', ['uses' => 'Invoicing\SaleController@getConsecutive']);
+Route::get('/sale/{id}/quantity', ['uses' => 'Invoicing\SaleController@getQuantity']);
+Route::get('/sale/{id}/detail', ['uses' => 'Invoicing\SaleController@getDetail']);
+Route::post('/sale/storeDetail', 'Invoicing\SaleController@storeDetail');
+Route::put('/sale/detail/{id}', 'Invoicing\SaleController@updateDetail');
+Route::delete('/sale/detail/{id}', 'Invoicing\SaleController@destroyDetail');
+
+
+Route::resource('/entry', 'Inventory\EntryController');
+Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
+Route::get('/entry/{id}/getDetailProduct', ['uses' => 'Inventory\EntryController@getDetailProduct']);
+Route::get('/entry/{id}/detail', ['uses' => 'Inventory\EntryController@getDetail']);
+Route::get('/entry/{id}/getSupplier', ['uses' => 'Inventory\EntryController@getSupplier']);
+Route::get('/entry/{id}/getProducts', ['uses' => 'Inventory\EntryController@getProducts']);
+Route::post('/entry/storeDetail', 'Inventory\EntryController@storeDetail');
+Route::put('/entry/detail/{id}', 'Inventory\EntryController@updateDetail');
+Route::delete('/entry/detail/{id}', 'Inventory\EntryController@destroyDetail');
+
+
+Route::resource('/departure', 'Inventory\DepartureController');
+Route::get('/departure/{id}/consecutive', ['uses' => 'Inventory\DepartureController@getConsecutive']);
+Route::get('/departure/{id}/quantity', ['uses' => 'Inventory\DepartureController@getQuantity']);
+Route::get('/departure/{id}/getDetailProduct', ['uses' => 'Inventory\DepartureController@getDetailProduct']);
+Route::get('/departure/{id}/detail', ['uses' => 'Inventory\DepartureController@getDetail']);
+Route::post('/departure/storeDetail', 'Inventory\DepartureController@storeDetail');
+Route::put('/departure/detail/{id}', 'Inventory\DepartureController@updateDetail');
+Route::delete('/departure/detail/{id}', 'Inventory\DepartureController@destroyDetail');
+
 
 Route::resource('/service', 'Inventory\DepartureController');
 Route::get('/service/{id}/consecutive', ['uses' => 'Inventory\DepartureController@getConsecutive']);
@@ -99,10 +122,16 @@ Route::get('/api/listMark', function() {
 });
 
 Route::get('/api/listPurchage', function() {
-    return Datatables::eloquent(Models\Billing\Purchage::query())->make(true);
+    return Datatables::eloquent(Models\Invoicing\Purchage::query())->make(true);
 });
 Route::get('/api/listSale', function() {
-    return Datatables::eloquent(Models\Billing\Sale::query())->make(true);
+    return Datatables::eloquent(Models\Invoicing\Sale::query())->make(true);
+});
+Route::get('/api/listEntry', function() {
+    return Datatables::eloquent(Models\Inventory\Entry::query())->make(true);
+});
+Route::get('/api/listDeparture', function() {
+    return Datatables::eloquent(Models\Inventory\Departure::query())->make(true);
 });
 Route::get('/api/listCity', function() {
     return Datatables::eloquent(Models\Administration\City::query())->make(true);
@@ -119,6 +148,13 @@ Route::get('/api/listPuc', function() {
 });
 
 Route::get('/api/listMenu', 'DashboardController@getMenu');
+
+Route::get('/api/getCity', 'Administration\SeekController@getCity');
+Route::get('/api/getSupplier', 'Administration\SeekController@getSupplier');
+Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
+Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
+Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
+
 
 
 

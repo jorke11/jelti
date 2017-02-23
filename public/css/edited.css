@@ -2,3 +2,8 @@
 table>thead>tr{background:#2a3f54;color:white;border-color: #2a3f54}
 .thumbnail{height: 250px;}
 .panel-heading{height: 45px;}
+.modal-footer {padding: 5px;}
+.page-title{height:0 !important;}
+.select2-container {
+    width: 100% !important;
+}

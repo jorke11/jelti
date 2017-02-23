@@ -28,5 +28,5 @@
     </div>
 </div>
 @include('purchage.newDetail')
-{!!Html::script('js/Billing/Purchage.js')!!}
+{!!Html::script('js/Invoicing/Purchage.js')!!}
 @endsection

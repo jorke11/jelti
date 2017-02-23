@@ -11,6 +11,7 @@
         <ul class="nav nav-tabs" role="tablist" id='myTabs'>
             <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">List</a></li>
             <li role="presentation"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Management</a></li>
+            <li role="presentation"><a href="#special" aria-controls="special" role="tab" data-toggle="tab">Special</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -24,20 +25,10 @@
 
             </div>
             <div role="tabpanel" class="tab-pane " id="management">
-                <div class="panel panel-default">
-                    <div class="page-title">
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <button class="btn btn-success" id='new'>
-                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        @include('products.management')
-                    </div>
-                </div>
+                @include('products.management')
+            </div>
+            <div role="tabpanel" class="tab-pane " id="special">
+                @include('products.special')
             </div>
 
         </div>

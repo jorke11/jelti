@@ -14,6 +14,7 @@ class UsersTableSeeder extends Seeder {
             'name'=>'jorge',
             'email'=>'jpinedom@hotmail.com',
             'profile_id'=>1,
+            'warehouse_id'=>1,
             'supplier_id'=>1,
             'city_id'=>1,
             'status'=>true,

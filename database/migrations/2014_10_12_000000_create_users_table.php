@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('profile_id');
             $table->integer('supplier_id');
+            $table->integer('warehouse_id');
             $table->integer('city_id');
             $table->string('name');
             $table->string('email')->unique();

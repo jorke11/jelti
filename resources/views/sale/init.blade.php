@@ -41,5 +41,5 @@
     </div>
 </div>
 @include('sale.newDetail')
-{!!Html::script('js/Billing/Sale.js')!!}
+{!!Html::script('js/Invoicing/Sale.js')!!}
 @endsection

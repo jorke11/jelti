@@ -11,9 +11,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-lg-3">List Categories</div>
+                    <div class="col-lg-3">List Category</div>
                     <div class="col-lg-9 text-right">
-                        <button class="btn btn-success" type="submit" data-toggle='modal' data-target="#modalNew">
+                        <button class="btn btn-success btn-sm" type="submit" data-toggle='modal' data-target="#modalNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </div>

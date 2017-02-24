@@ -82,20 +82,14 @@ class EntryController extends Controller {
                 $detail = EntryDetail::where()->get();
 
                 foreach ($detail as $value) {
-                    Purchage::insert();
+                    $pro = Product::findOrFail($value->product_id);
+                    Purchage::insert([
+                        'purchage_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
+                        "category_id" => $value->category_id, "quantity" => $value->quantity,
+                        "expiration_date" => $value->expiration_date, "value" => $value->value, "tax" => $pro->tax
+                    ]);
                 }
             });
-
-
-
-
-            $sql = "
-                    INSERT INTO purchage_detail(purchage_id,product_id,category_id,quantity,expiration_date,value,lot)
-                    SELECT $id,product_id,category_id,quantity,expiration_date,value,lot
-                    FROM entry_detail
-                    WHERE entry_id=" . $input["id"];
-
-            DB::insert($sql);
 
             $purchage = $entry;
             $entry->status_id = 2;

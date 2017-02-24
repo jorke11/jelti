@@ -20,6 +20,7 @@ class CreateEntryDetailTable extends Migration {
             $table->integer('quantity');
             $table->dateTime('expiration_date');
             $table->decimal('value', 15, 2);
+            $table->decimal('tax', 15, 2);
             $table->string('lot');
             $table->timestamps();
         });

@@ -24,6 +24,7 @@ class CreateDepartureTable extends Migration
             $table->string('address');
             $table->string('phone');
             $table->dateTime('created');
+            $table->string('status_id');
             $table->timestamps();
         });
     }

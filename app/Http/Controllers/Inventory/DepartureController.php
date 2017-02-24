@@ -48,7 +48,8 @@ class DepartureController extends Controller {
             $input = $request->all();
             unset($input["id"]);
 //            $user = Auth::User();
-            $input["city_id"] = 1;
+            $input["status_id"] = 1;
+            
             $result = Departure::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');

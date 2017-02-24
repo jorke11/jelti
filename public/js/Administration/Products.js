@@ -9,17 +9,17 @@ function Product() {
             $('#myTabs a[href="#management"]').tab('show');
         });
         $("#modalImage").click(function () {
-
             $("#input-700").fileinput({
                 uploadUrl: "product/upload", // server upload action
                 uploadAsync: true,
                 maxFileCount: 5,
-                allowedFileExtensions: ['jpg', 'png', 'gif'],
+                allowedFileExtensions: ['jpg','jpeg','png', 'gif'],
                 uploadExtraData: {
                     product_id: $("#frm #id").val()
                 },
             }).on('fileuploaded', function (event, data, id, index) {
                 $("#modalUpload").modal("hide");
+                
                 obj.showImages(data.extra.product_id);
             })
 
@@ -130,28 +130,12 @@ function Product() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $("#frm #id").val(data.header.id);
-                $("#frm #title").val(data.header.title);
-                $("#frm #description").val(data.header.description);
-                $("#frm #short_description").val(data.header.short_description);
-                $("#frm #reference").val(data.header.reference);
-                $("#frm #units_supplier").val(data.header.units_supplier);
-                $("#frm #units_sf").val(data.header.units_sf);
-                $("#frm #cost_sf").val(data.header.cost_sf);
-                $("#frm #tax").val(data.header.tax);
-                $("#frm #price_sf").val(data.header.price_sf);
-                $("#frm #price_cust").val(data.header.price_cust);
-                $("#frm #category_id").val(data.header.category_id);
-                $("#frm #supplier_id").val(data.header.supplier_id);
-                $("#frm #url_part").val(data.header.url_part);
-                $("#frm #bar_code").val(data.header.bar_code);
-                $("#frm #status").val(data.header.status);
-                $("#frm #meta_title").val(data.header.meta_title);
-                $("#frm #meta_keywords").val(data.header.meta_keywords);
-                $("#frm #meta_description").val(data.header.meta_description);
-                $("#frm #minimun_stock").val(data.header.minimun_stock);
+                $(".input-product").setFields({data:data.header});
+                
                 $("#frm #image").val(data.header.Image);
-                $("#imageMain").attr("src", "/images/product/" + data.header.image);
+                if (data.header.image != null) {
+                    $("#imageMain").attr("src", "/images/product/" + data.header.image);
+                }
                 obj.printImages(data.images);
             }
         })
@@ -196,7 +180,7 @@ function Product() {
                 {data: "tax"},
                 {data: "price_sf"},
                 {data: "price_cust"},
-                {data: "image",width: 10 ,render: function (data, type, row) {
+                {data: "image", width: 10, render: function (data, type, row) {
 
                         if (data == null) {
                             data = "default.jpg";

@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use App\Models\Administration\Warehouse;
+use App\Models\Administration\Product;
 use App\Models\Inventory\Entry;
 use App\Models\Inventory\EntryDetail;
 use App\Models\Administration\Category;
+use \App\Models\Invoicing\Purchage;
 use Session;
 
 class EntryController extends Controller {
@@ -48,6 +50,7 @@ class EntryController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
+            $input["status_id"] = 1;
             $result = Entry::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
@@ -56,6 +59,47 @@ class EntryController extends Controller {
             } else {
                 return response()->json(['success' => 'false']);
             }
+        }
+    }
+
+    public function sendEntry(Request $request) {
+        if ($request->ajax()) {
+            $input = $request->all();
+
+            $purchage = new \App\Models\Invoicing\Purchage();
+            $entry = Entry::findOrFail($input["id"]);
+
+
+//            dd($purchage->all());Exit;
+//            $user = Auth::User();
+//            $input["users_id"] = 1;
+            DB::transaction(function() {
+                $id = DB::table("purchage")->insertGetId(
+                        ["entry_id" => $entry->id, "warehouse_id" => $entry->warehouse_id, "responsable_id" => $entry->responsable_id,
+                            "supplier_id" => $entry->supplier_id, "city_id" => $entry->city_id, "description" => $entry->description,
+                            "avoice" => $entry->avoice, "status_id" => $entry->status_id, "created" => $entry->created]
+                );
+                $detail = EntryDetail::where()->get();
+
+                foreach ($detail as $value) {
+                    Purchage::insert();
+                }
+            });
+
+
+
+
+            $sql = "
+                    INSERT INTO purchage_detail(purchage_id,product_id,category_id,quantity,expiration_date,value,lot)
+                    SELECT $id,product_id,category_id,quantity,expiration_date,value,lot
+                    FROM entry_detail
+                    WHERE entry_id=" . $input["id"];
+
+            DB::insert($sql);
+
+            $purchage = $entry;
+            $entry->status_id = 2;
+            $entry->save();
         }
     }
 

@@ -16,7 +16,7 @@ class SeekController extends Controller {
     public function getCity(Request $req) {
         $in = $req->all();
         $query = City::select("id", "description");
-        if (isset($in["q"]) && $in["q"] == 0) {
+        if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->city_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"])->get();
@@ -32,7 +32,7 @@ class SeekController extends Controller {
     public function getSupplier(Request $req) {
         $in = $req->all();
         $query = Supplier::select("id", "name as description");
-        if (isset($in["q"]) && $in["q"] == 0) {
+        if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"])->get();
@@ -62,7 +62,7 @@ class SeekController extends Controller {
     public function getResponsable(Request $req) {
         $in = $req->all();
         $query = User::select("id", "name as description");
-        if (isset($in["q"]) && $in["q"] == 0) {
+        if (isset($in["q"]) && $in["q"] == "0") {
             $city = $query->where("id", Auth::user()->id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"])->get();

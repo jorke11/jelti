@@ -17,6 +17,7 @@
                         <th>Bill</th>
                         <th>Warehouse</th>
                         <th>City</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>

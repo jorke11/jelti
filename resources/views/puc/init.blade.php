@@ -31,10 +31,10 @@
                 <div class="row">
                     <div class="col-lg-3">P.U.C</div>
                     <div class="col-lg-9 text-right">
-                        <button class="btn btn-success" type="button" id="btnNew">
+                        <button class="btn btn-success btn-sm" type="button" id="btnNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
-                        <button class="btn btn-success" type="button" id="btnSave">
+                        <button class="btn btn-success btn-sm" type="button" id="btnSave">
                             <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -43,6 +43,34 @@
             <div class="panel-body">
                 {!! Form::open(['id'=>'frm']) !!}
                 <input type="hidden" id="id" name="id" class="input-puc">
+                <div class="row"> 
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Level:</label>
+                            <select class="form-control input-puc" id="level" name="level">
+                                <option value="0">Selection</option>
+                                <option value="1">Class Account</option>
+                                <option value="2">Group</option>
+                                <option value="3">General Account</option>
+                                <option value="4">Sub-Account</option>
+                                <option value="5">Auxiliary account</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Nature:</label>
+                            <select class="form-control input-puc" id="nature" name="nature">
+                                <option value="0">Select</option>
+                                <option value="1">Debt</option>
+                                <option value="2">Credit</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="row"> 
                     <div class="col-lg-12">
                         <div class="form-group">

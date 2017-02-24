@@ -8,6 +8,6 @@ class Puc extends Model {
 
     protected $table = "puc";
     protected $primaryKey = "id";
-    protected $fillable = ["id", "code","account"];
+    protected $fillable = ["id", "code","account","level"];
 
 }

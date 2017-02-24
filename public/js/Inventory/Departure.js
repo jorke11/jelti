@@ -27,6 +27,8 @@ function Sale() {
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+            $("#frm #status_id").val(1).trigger('change');
+            $("#frm #status_id").prop("disabled", true);
             $.ajax({
                 url: 'departure/1/consecutive',
                 method: 'GET',
@@ -40,14 +42,10 @@ function Sale() {
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
             $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
-            $("#frmDetail #quantityMax").html("")
-             $("#frmDetail #quantity").attr("disabled",true);
-            $("#frmDetail #id").val("");
-            $("#frmDetail #quantity").val("");
-            $("#frmDetail #value").val("");
-            $("#frmDetail #lot").val("");
+            $(".input-detail").cleanFields();
+            
         });
-        
+
         $("#frmDetail #product_id").change(function () {
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
@@ -56,17 +54,21 @@ function Sale() {
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf)
-                    
+
                     $("#frmDetail #quantityMax").html(resp.quantity)
-                    if(resp.quantity>0){
-                        $("#frmDetail #quantity").attr("disabled",false);
+                    if (resp.quantity > 0) {
+                        $("#frmDetail #quantity").attr("disabled", false);
+                        $("#newDetail").attr("disabled", false);
+                    } else {
+                        $("#newDetail").attr("disabled", true);
+                        $("#frmDetail #quantity").attr("disabled", true);
                     }
-                    
+
                 }
             })
         });
 
-       
+
 //        $("#quantity").blur(function () {
 //            if (maxDeparture < $(this).val()) {
 //                toastr.warning("No hay sufiente disponible");
@@ -119,12 +121,14 @@ function Sale() {
                     table.ajax.reload();
                     toastr.success(msg);
                     $("#btnmodalDetail").attr("disabled", false);
+
                 }
             }
         })
     }
 
     this.saveDetail = function () {
+
         $("#frmDetail #departure_id").val($("#frm #id").val());
         var frm = $("#frmDetail");
         var data = frm.serialize();
@@ -152,10 +156,13 @@ function Sale() {
                     toastr.success(msg);
                     $("#btnmodalDetail").attr("disabled", false);
                     obj.printDetail(data.data);
-                    $("#modalDetail").modal("hide");
+//                    $("#modalDetail").modal("hide");
+                    $("#newDetail").attr("disabled", true);
+                    $("#frmDetail #quantity").attr("disabled", true);
                 }
             }
         })
+
     }
 
     this.showModal = function (id) {
@@ -170,7 +177,7 @@ function Sale() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header});
-                
+
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -210,12 +217,10 @@ function Sale() {
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
             html += "<td>Supplier</td>";
-//            html += "<td>" + val.supplier_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.value + "</td>";
-//            html += "<td>" + val.expiration_date + "</td>";
             html += "<td>20/12/2001</td>";
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
@@ -269,37 +274,6 @@ function Sale() {
         }
     }
 
-    this.tableDetail = function () {
-        return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "/api/listDeparture",
-            columns: [
-                {data: "id"},
-                {data: "consecutive"},
-                {data: "date"},
-                {data: "order"},
-                {data: "warehouse"},
-            ],
-            order: [[1, 'ASC']],
-            aoColumnDefs: [
-                {
-                    aTargets: [0, 1],
-                    mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
-                    }
-                },
-                {
-                    targets: [4],
-                    searchable: false,
-                    "mData": null,
-                    "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
-                    }
-                }
-            ],
-        });
-    }
     this.table = function () {
         return $('#tbl').DataTable({
             "processing": true,
@@ -312,17 +286,18 @@ function Sale() {
                 {data: "order"},
                 {data: "warehouse_id"},
                 {data: "city_id"},
+                {data: "status_id"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4],
+                    aTargets: [0, 1, 2, 3, 4, 5, 6],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [6],
+                    targets: [7],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

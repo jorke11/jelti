@@ -2,9 +2,11 @@ function Entry() {
     var table;
     this.init = function () {
         table = this.table();
+
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#newDetail").click(this.saveDetail);
+        $("#btnSend").click(this.send);
         $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
@@ -25,6 +27,8 @@ function Entry() {
         $("#insideManagement").click(function () {
             $(".input-entry").cleanFields();
             $("#frm #consecutive").val(1);
+            $("#frm #supplier_id").prop("disabled", true);
+            $("#frm #status_id").prop("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
@@ -64,11 +68,28 @@ function Entry() {
         toastr.remove();
         $(".input-entry").cleanFields();
         $(".input-detail").cleanFields();
+        $(".input-fillable").prop("readonly", false);
         $("#tblDetail tbody").empty();
-
+        $("#frm #status_id").val(1).trigger("change").prop("disabled", true);
+        $("#frm #supplier_id").prop("disabled", false);
+        $("#btnSave").prop("disabled", false);
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+    }
+
+    this.send = function () {
+        var obj = {};
+        obj.id = $("#frm #id").val()
+        $.ajax({
+            url: 'entry/setEntry',
+            method: 'POST',
+            data: obj,
+            dataType: 'JSON',
+            success: function (resp) {
+
+            }
+        })
     }
 
     this.getSupplier = function (id) {
@@ -114,6 +135,7 @@ function Entry() {
                     table.ajax.reload();
                     toastr.success(msg);
                     $("#btnmodalDetail").attr("disabled", false);
+                    $("#btnSend").prop("disabled", false);
                 }
             }
         })
@@ -166,7 +188,7 @@ function Entry() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-entry").setFields({data: data.header});
-
+                $("#btnSend").prop("disabled", false);
                 if (data.header.supplier_id != 0) {
                     obj.getSupplier(data.header.supplier_id);
                 }
@@ -191,14 +213,6 @@ function Entry() {
             success: function (data) {
                 $("#modalDetail").modal("show");
                 $(".input-detail").setFields({data: data});
-//                $("#frmDetail #id").val(data.id);
-//                $("#frmDetail #supplier_id").val(data.supplier_id);
-//                $("#frmDetail #mark_id").val(1);
-//                $("#frmDetail #quantity").val(data.quantity);
-//                $("#frmDetail #value").val(data.value);
-//                $("#frmDetail #lot").val(1);
-//                $("#frmDetail #category_id").val(data.category_id);
-//                $("#frmDetail #expiration_date").val(data.expiration_date);
             }
         })
     }
@@ -206,20 +220,25 @@ function Entry() {
     this.printDetail = function (data) {
         var html = "";
         $("#tblDetail tbody").empty();
+        var total = 0, calc = 0;
         $.each(data, function (i, val) {
+            calc = val.quantity * val.value;
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
+             html += "<td>" + val.expiration_date + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.value + "</td>";
-            html += "<td>" + val.expiration_date + "</td>";
+            html += "<td>" + (calc) + "</td>";
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";
+            total += calc;
         });
-
         $("#tblDetail tbody").html(html);
+        $("#tblDetail tfoot").html('<tr><td colspan="6">Total</td><td>' + total + '</td></tr>');
+
     }
 
     this.delete = function (id) {
@@ -274,23 +293,24 @@ function Entry() {
             "ajax": "/api/listEntry",
             columns: [
                 {data: "id"},
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "description"},
                 {data: "created"},
-                {data: "bill"},
+                {data: "avoice"},
                 {data: "warehouse_id"},
                 {data: "city_id"},
+                {data: "status_id"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6],
+                    aTargets: [0, 1, 2, 3, 4, 5, 6, 7],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [8],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

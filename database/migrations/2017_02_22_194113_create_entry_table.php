@@ -14,9 +14,10 @@ class CreateEntryTable extends Migration
             $table->integer('supplier_id');
             $table->integer('city_id');
             $table->string('description');
-            $table->string('consecutive');
-            $table->string('bill');
+//            $table->string('consecutive');
+            $table->string('avoice');
             $table->dateTime('created');
+            $table->integer('status_id');
             $table->timestamps();
         });
     }

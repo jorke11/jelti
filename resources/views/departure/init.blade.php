@@ -21,20 +21,7 @@
 
             </div>
             <div role="tabpanel" class="tab-pane " id="management">
-                <div class="panel panel-default">
-                    <div class="page-title">
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <button class="btn btn-success btn-sm" id='new'>
-                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        @include('departure.management')
-                    </div>
-                </div>
+                 @include('departure.management')
             </div>
 
         </div>

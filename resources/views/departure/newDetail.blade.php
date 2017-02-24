@@ -14,6 +14,7 @@
                         <div class="form-group">
                             <label for="email">Product:</label>
                             <select class="form-control input-detail" id="product_id" name='product_id' data-api="/api/getProduct">
+                                
                             </select>
                         </div>
 
@@ -50,8 +51,8 @@
                 {!!Form::close()!!}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-success" id='newDetail'>Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+                <button type="button" class="btn btn-success" id='newDetail' disabled="">Save</button>
             </div>
         </div>
     </div>

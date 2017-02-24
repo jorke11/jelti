@@ -18,10 +18,11 @@ class CreatePurchageTable extends Migration {
             $table->integer('responsable_id');
             $table->integer('supplier_id');
             $table->integer('city_id');
+            $table->integer('entry_id')->nullable();
             $table->string('description');
-            $table->string('consecutive');
-            $table->string('bill');
+            $table->string('avoice');
             $table->dateTime('created');
+            $table->integer('status_id');
             $table->timestamps();
         });
     }

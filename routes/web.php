@@ -81,6 +81,7 @@ Route::get('/entry/{id}/getProducts', ['uses' => 'Inventory\EntryController@getP
 Route::post('/entry/storeDetail', 'Inventory\EntryController@storeDetail');
 Route::put('/entry/detail/{id}', 'Inventory\EntryController@updateDetail');
 Route::delete('/entry/detail/{id}', 'Inventory\EntryController@destroyDetail');
+Route::post('entry/setEntry/', 'Inventory\EntryController@sendEntry');
 
 
 Route::resource('/departure', 'Inventory\DepartureController');

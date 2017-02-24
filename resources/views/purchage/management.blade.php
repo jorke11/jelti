@@ -18,7 +18,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Consecutive:</label>
-                    <input type="text" class="form-control input-purchage input-sm" id="consecutive" name='consecutive' value="0001" readonly="">
+                    <input type="text" class="form-control input-purchage input-sm" id="id" name='id' readonly="">
                 </div>
             </div>
 
@@ -48,8 +48,8 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Bill:</label>
-                    <input type="text" class="form-control input-purchage input-sm" id="bill" name='bill'>
+                    <label for="email">Avoice:</label>
+                    <input type="text" class="form-control input-purchage input-sm" id="avoice" name='avoice'>
                 </div>
             </div>
             <div class="col-lg-2">
@@ -119,7 +119,6 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Supplier</th>
                             <th>Product</th>
                             <th>Mark</th>
                             <th>Quantity</th>

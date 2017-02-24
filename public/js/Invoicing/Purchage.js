@@ -150,15 +150,8 @@ function Purchage() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $("#frm #id").val(data.header.id);
-                $("#frm #created").val(data.header.created);
-                $("#frm #responsable_id").val(data.header.responsable_id);
-                $("#frm #consecutive").val(data.header.consecutive);
-                $("#frm #description").val(data.header.description);
-                $("#frm #bill").val(data.header.bill);
-                $("#frm #warehouse_id").val(data.header.warehouse_id);
-                $("#frm #user_create_id").val(data.header.user_create_id);
-                $("#frm #supplier_id").val(data.header.supplier_id);
+                $(".input-purchage").setFields({data: data.header});
+
 
                 if (data.header.supplier_id != 0) {
                     obj.getSupplier(data.header.supplier_id);
@@ -201,7 +194,6 @@ function Purchage() {
         $.each(data, function (i, val) {
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
-            html += "<td>" + val.supplier_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.quantity + "</td>";
@@ -267,23 +259,24 @@ function Purchage() {
             "ajax": "/api/listPurchage",
             columns: [
                 {data: "id"},
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "description"},
                 {data: "created"},
-                {data: "bill"},
+                {data: "avoice"},
                 {data: "warehouse_id"},
                 {data: "city_id"},
+                {data: "status_id"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6],
+                    aTargets: [0, 1, 2, 3, 4, 5, 6, 7],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [8],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

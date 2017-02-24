@@ -8,6 +8,18 @@ class Departure extends Model {
 
     protected $table = "departure";
     protected $primaryKey = "id";
-    protected $fillable = ["id", "consecutive", "responsable_id", "order", "city_id", "supplier_id","warehouse_id","created","destination_id","address","phone"];
+    protected $fillable = [
+        "id",
+        "consecutive",
+        "responsable_id", 
+        "order", 
+        "city_id", 
+        "supplier_id",
+        "warehouse_id",
+        "created",
+        "destination_id",
+        "address",
+        "phone",
+        "status_id"];
 
 }

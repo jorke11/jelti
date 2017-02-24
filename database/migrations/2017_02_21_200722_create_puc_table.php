@@ -16,6 +16,8 @@ class CreatePucTable extends Migration {
             $table->increments('id');
             $table->integer('code');
             $table->string('account');
+            $table->integer('level');
+            $table->integer('nature')->nullable();
             $table->timestamps();
         });
     }

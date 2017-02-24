@@ -4,6 +4,14 @@ function Puc() {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
+
+//        $("#type_account").change(function () {
+//            if ($(this).val() == 1) {
+//                $("#nature").attr("disabled", false);
+//            } else {
+//                $("#nature").attr("disabled", true);
+//            }
+//        });
     }
 
     this.new = function () {
@@ -40,7 +48,7 @@ function Puc() {
             }
         })
     }
-    
+
     this.showModal = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();

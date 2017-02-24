@@ -1508,7 +1508,6 @@ S2.define('select2/selection/single',[
       if (evt.which !== 1) {
         return;
       }
-
       self.trigger('toggle', {
         originalEvent: evt
       });

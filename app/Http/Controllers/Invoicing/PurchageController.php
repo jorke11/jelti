@@ -57,7 +57,7 @@ class PurchageController extends Controller {
 
     public function edit($id) {
         $entry = Purchage::FindOrFail($id);
-        $detail = DB::table("purchagedetail")->where("purchage_id", "=", $id)->get();
+        $detail = DB::table("purchage_detail")->where("purchage_id", "=", $id)->get();
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 

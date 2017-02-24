@@ -67,8 +67,9 @@
 
         {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
         {!!Html::style('/vendor/select2/css/select2.min.css')!!}
-        {!!Html::script('/vendor/select2/js/select2.min.js')!!}
+        {!!Html::script('/vendor/select2/js/select2.js')!!}
         {!!Html::script('/vendor/plugins.js')!!}
+        {!!Html::script('/vendor/bootstrap-typeahead.js')!!}
     </head>
 
     <body class="nav-md">

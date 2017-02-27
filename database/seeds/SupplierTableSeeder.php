@@ -19,6 +19,7 @@ class SupplierTableSeeder extends Seeder {
             'last_name' => 'Supplier 1',
             'document' => '1233',
             'email' => 'supplier@',
+            'commercial_id' => 1,
             'phone' => '23342',
             'contact' => 'contacto',
             'phone_contact' => '23234',

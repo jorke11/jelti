@@ -27,6 +27,7 @@ function Purchage() {
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+            $("#frm #branch_id").getSeeker({default: true, api: '/api/getSupplier', disabled: true});
             $.ajax({
                 url: 'purchage/1/consecutive',
                 method: 'GET',
@@ -189,22 +190,53 @@ function Purchage() {
     }
 
     this.printDetail = function (data) {
-        var html = "";
+        var html = "", total = 0, debt = 0, credit = 0;
         $("#tblDetail tbody").empty();
         $.each(data, function (i, val) {
+            total = val.quantity * val.value;
+
+            val.product_id = (val.product_id == null) ? '' : val.product_id
+            val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date
+            val.tax = (val.tax == null) ? '' : val.tax
+            val.quantity = (val.quantity == null) ? '' : val.tax
+
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
+            html += "<td>" + val.description + "</td>";
+            html += "<td>" + val.account_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
-            html += "<td>" + val.product_id + "</td>";
-            html += "<td>" + val.quantity + "</td>";
-            html += "<td>" + val.value + "</td>";
             html += "<td>" + val.expiration_date + "</td>";
+            html += "<td>" + val.tax + "</td>";
+            html += "<td>" + val.quantity + "</td>";
+            html += "<td>" + total + "</td>";
+
+            if (val.account_id == 2) {
+                html += "<td>" + 0 + "</td>";
+                html += "<td>" + val.value + "</td>";
+                credit += parseFloat(val.value);
+            } else {
+                if (val.product_id == '') {
+                    html += "<td>" + val.value + "</td>";
+                    html += "<td>" + 0 + "</td>";
+                    debt += parseFloat(val.value);
+
+                } else {
+                    debt += parseFloat(total);
+                    html += "<td>" + total + "</td>";
+                    html += "<td>" + 0 + "</td>";
+                }
+
+            }
+
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";
         });
 
         $("#tblDetail tbody").html(html);
+        $("#tblDetail tfoot").html('<tr><td colspan="8">Total</td><td>' + Math.round(debt) + '</td><td>' + Math.round(credit) + '</td></tr>');
+
+
     }
 
     this.delete = function (id) {

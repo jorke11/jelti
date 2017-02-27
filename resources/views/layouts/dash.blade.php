@@ -141,7 +141,7 @@
                                         <li><a href="/puc">PUC</a></li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Billing <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Avoicing <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/purchage">Purchage</a></li>
                                         <li><a href="/sale">Sale</a></li>                                    
@@ -151,6 +151,7 @@
                                 <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/entry">Entry</a></li>
+                                        <li><a href="/order">Request</a></li>                                    
                                         <li><a href="/departure">Departure</a></li>                                    
                                     </ul>
                                 </li>

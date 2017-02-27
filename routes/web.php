@@ -89,18 +89,23 @@ Route::get('/departure/{id}/consecutive', ['uses' => 'Inventory\DepartureControl
 Route::get('/departure/{id}/quantity', ['uses' => 'Inventory\DepartureController@getQuantity']);
 Route::get('/departure/{id}/getDetailProduct', ['uses' => 'Inventory\DepartureController@getDetailProduct']);
 Route::get('/departure/{id}/detail', ['uses' => 'Inventory\DepartureController@getDetail']);
+Route::get('/departure/{id}/editExt', ['uses' => 'Inventory\DepartureController@getOrderExt']);
 Route::post('/departure/storeDetail', 'Inventory\DepartureController@storeDetail');
 Route::put('/departure/detail/{id}', 'Inventory\DepartureController@updateDetail');
 Route::delete('/departure/detail/{id}', 'Inventory\DepartureController@destroyDetail');
+Route::get('/departure/getOrder/{id}', 'Inventory\DepartureController@showOrder');
+Route::post('/departure/storeExt', 'Inventory\DepartureController@storeExtern');
 
+Route::resource('/order', 'Inventory\OrderController');
+Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);
+Route::get('/order/{id}/quantity', ['uses' => 'Inventory\OrderController@getQuantity']);
+Route::get('/order/{id}/getDetailProduct', ['uses' => 'Inventory\OrderController@getDetailProduct']);
+Route::get('/order/{id}/detail', ['uses' => 'Inventory\OrderController@getDetail']);
+Route::post('/order/storeDetail', 'Inventory\OrderController@storeDetail');
+Route::put('/order/detail/{id}', 'Inventory\OrderController@updateDetail');
+Route::delete('/order/detail/{id}', 'Inventory\OrderController@destroyDetail');
+Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getClient']);
 
-Route::resource('/service', 'Inventory\DepartureController');
-Route::get('/service/{id}/consecutive', ['uses' => 'Inventory\DepartureController@getConsecutive']);
-Route::get('/service/{id}/quantity', ['uses' => 'Inventory\DepartureController@getQuantity']);
-Route::get('/service/{id}/detail', ['uses' => 'Inventory\DepartureController@getDetail']);
-Route::post('/service/storeDetail', 'Inventory\DepartureController@storeDetail');
-Route::put('/service/detail/{id}', 'Inventory\DepartureController@updateDetail');
-Route::delete('/service/detail/{id}', 'Inventory\DepartureController@destroyDetail');
 
 Route::get('/api/listCategory', function() {
     return Datatables::eloquent(Models\Administration\Category::query())->make(true);
@@ -133,6 +138,10 @@ Route::get('/api/listEntry', function() {
 });
 Route::get('/api/listDeparture', function() {
     return Datatables::eloquent(Models\Inventory\Departure::query())->make(true);
+});
+
+Route::get('/api/listOrder', function() {
+    return Datatables::eloquent(Models\Inventory\Order::query())->make(true);
 });
 Route::get('/api/listCity', function() {
     return Datatables::eloquent(Models\Administration\City::query())->make(true);

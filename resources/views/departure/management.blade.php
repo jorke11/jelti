@@ -2,14 +2,18 @@
     <div class="page-title">
         <div class="row">
             <div class="col-lg-12 text-right">
-                <button class="btn btn-success btn-sm" id='new'>
+                <button class="btn btn-success btn-sm" id='btnNew'>
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-success btn-sm" id='btnSave'>
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
     </div>
     <div class="panel-body">
         {!! Form::open(['id'=>'frm']) !!}
+        <input id="id_orderext" type="hidden" value="{{isset($id)?$id:''}}">
         <input id="id" name="id" type="hidden" class="input-departure">
         <div class="row">
             <div class="col-lg-2">
@@ -48,7 +52,7 @@
                     </select>
                 </div>
             </div>
-            
+
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Status:</label>
@@ -73,21 +77,15 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Order:</label>
-                    <input type="text" class="form-control input-departure" id="order" name='order'>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Supplier:</label>
-                    <select class="form-control input-departure" id="supplier_id" name='supplier_id' data-api="/api/getSupplier">
+                    <label for="email">Client:</label>
+                    <select class="form-control input-departure" id="client_id" name='client_id' data-api="/api/getSupplier">
                     </select>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="email">Name or Business name :</label>
-                    <input type="text" class="form-control input-departure input-sm" id="name_supplier" readonly="">
+                    <input type="text" class="form-control input-departure input-sm" id="name_client" readonly="">
                 </div>
             </div>
 
@@ -97,13 +95,19 @@
                     <input type="text" class="form-control input-departure input-sm" id="address" name="address">
                 </div>
             </div>
-
-        </div>
-        <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Phone:</label>
                     <input type="text" class="form-control input-departure input-sm" id="phone" name="phone">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="email">Branch office:</label>
+                    <select class="form-control input-departure" id="branch_id" name='branch_id' data-api="/api/getSupplier">
+                    </select>
                 </div>
             </div>
         </div>

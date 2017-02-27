@@ -4,12 +4,13 @@ namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Departure extends Model {
-
-    protected $table = "departure";
+class Order extends Model
+{
+     protected $table = "order";
     protected $primaryKey = "id";
     protected $fillable = [
         "id",
+        "consecutive",
         "responsable_id", 
         "branch_id", 
         "city_id", 
@@ -20,5 +21,4 @@ class Departure extends Model {
         "address",
         "phone",
         "status_id"];
-
 }

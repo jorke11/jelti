@@ -20,6 +20,7 @@ class Supplier extends Model {
         "phone_contact",
         "term",
         "city_id",
+        "commercial_id",
         "web_site",
         "type_regime_id",
         "type_person_id"];

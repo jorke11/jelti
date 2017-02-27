@@ -2,7 +2,8 @@ function Sale() {
     var table, maxDeparture = 0;
     this.init = function () {
         table = this.table();
-        $("#new").click(this.save);
+        $("#btnNew").click(this.new);
+        $("#btnSave").click(this.save);
         $("#newDetail").click(this.saveDetail);
         $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
         $("#edit").click(this.edit);
@@ -11,15 +12,19 @@ function Sale() {
             $('#myTabs a[href="#management"]').tab('show');
         });
 
-        $("#supplier_id").change(function () {
+        $("#client_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getSupplier($(this).val());
             } else {
-                $("#frm #name_supplier").val("");
+                $("#frm #name_client").val("");
                 $("#frm #address_supplier").val("");
                 $("#frm #phone_supplier").val("");
             }
         });
+
+        if ($("#id_orderext").val() != '') {
+            obj.infomationExt($("#id_orderext").val(), true);
+        }
 
         $("#insideManagement").click(function () {
             $(".input-departure").cleanFields();
@@ -43,7 +48,7 @@ function Sale() {
             $("#modalDetail").modal("show");
             $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
             $(".input-detail").cleanFields();
-            
+
         });
 
         $("#frmDetail #product_id").change(function () {
@@ -69,21 +74,40 @@ function Sale() {
         });
 
 
-//        $("#quantity").blur(function () {
-//            if (maxDeparture < $(this).val()) {
-//                toastr.warning("No hay sufiente disponible");
-//                $(this).val("");
-//            }
-//        });
+        $("#quantity").blur(function () {
+            if (maxDeparture < $(this).val()) {
+                toastr.warning("No hay sufiente disponible");
+                $(this).val("");
+            }
+        });
     }
 
-    this.getSupplier = function (id) {
+    this.new = function () {
+        toastr.remove();
+        $(".input-departure").cleanFields();
+
+        $(".input-detail").cleanFields();
+        $(".input-fillable").prop("readonly", false);
+        $("#tblDetail tbody").empty();
+        $("#frm #status_id").val(1).trigger("change").prop("disabled", true);
+        $("#frm #supplier_id").prop("disabled", false);
+        $("#btnSave").prop("disabled", false);
+        $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
+        $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+        $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+    }
+    this.getSupplier = function (id, path) {
+        var url='entry/' + id + '/getSupplier';
+        if (path == undefined) {
+            url='../../entry/' + id + '/getSupplier';
+        }
+
         $.ajax({
-            url: 'entry/' + id + '/getSupplier',
+            url:url,
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
-                $("#frm #name_supplier").val(resp.response.name + " " + resp.response.last_name);
+                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.response.address);
                 $("#frm #phone").val(resp.response.phone);
             }
@@ -99,36 +123,56 @@ function Sale() {
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
-        if (id == '') {
-            method = 'POST';
-            url = "departure";
-            msg = "Created Record";
 
-        } else {
-            method = 'PUT';
-            url = "departure/" + id;
-            msg = "Edited Record";
-        }
+        if ($("#id_orderext").val() == '') {
+            if (id == '') {
+                method = 'POST';
+                url = "departure";
+                msg = "Created Record";
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    $("#frm #id").val(data.data.id);
-                    table.ajax.reload();
-                    toastr.success(msg);
-                    $("#btnmodalDetail").attr("disabled", false);
-
-                }
+            } else {
+                method = 'PUT';
+                url = "departure/" + id;
+                msg = "Edited Record";
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == 'true') {
+                        $("#frm #id").val(data.data.id);
+                        table.ajax.reload();
+                        toastr.success(msg);
+                        $("#btnmodalDetail").attr("disabled", false);
+
+                    }
+                }
+            })
+        } else {
+            var obj = {};
+            obj.id = $("#id_orderext").val();
+            $.ajax({
+                url: "../../departure/storeExt",
+                method: 'POST',
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == 'true') {
+                        $("#frm #id").val(data.data.id);
+                        table.ajax.reload();
+                        toastr.success(msg);
+                        $("#btnmodalDetail").attr("disabled", false);
+
+                    }
+                }
+            })
+        }
     }
 
     this.saveDetail = function () {
-
         $("#frmDetail #departure_id").val($("#frm #id").val());
         var frm = $("#frmDetail");
         var data = frm.serialize();
@@ -175,6 +219,29 @@ function Sale() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
+                $('#myTabs a[href="#management"]').tab('show');
+                $(".input-departure").setFields({data: data.header});
+
+                if (data.header.id != '') {
+                    $("#btnmodalDetail").attr("disabled", false);
+                }
+
+                obj.printDetail(data.detail);
+            }
+        })
+    }
+
+    this.infomationExt = function (id) {
+        var frm = $("#frmEdit");
+        var data = frm.serialize();
+        var url = "/departure/" + id + "/editExt";
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: data,
+            dataType: 'JSON',
+            success: function (data) {
+              
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header});
 
@@ -281,7 +348,7 @@ function Sale() {
             "ajax": "/api/listDeparture",
             columns: [
                 {data: "id"},
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "created"},
                 {data: "order"},
                 {data: "warehouse_id"},

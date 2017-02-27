@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use App\Models\Inventory\Departure;
+use App\Models\Inventory\Order;
 use App\Models\Inventory\DepartureDetail;
+use App\Models\Inventory\OrderDetail;
 use Session;
 
 class DepartureController extends Controller {
 
     public function index() {
+
         $responsable = DB::select('select id,name from users');
         $warehouse = \App\Models\Administration\Warehouse::all();
         $product = \App\Models\Administration\Product::all();
@@ -19,6 +22,17 @@ class DepartureController extends Controller {
         $supplier = \App\Models\Administration\Supplier::all();
         $category = \App\Models\Administration\Category::all();
         return view("departure.init", compact("responsable", "warehouse", "supplier", "product", "mark", "category"));
+    }
+
+    public function showOrder($id) {
+        return view("departure.init", compact("id"));
+    }
+
+    public function getOrderExt($id) {
+        $entry =Order::findOrFail($id);
+        $detail = DB::select("SELECT id,product_id,quantity-pending as quantity,value FROM order_detail where order_id=" . $id);
+
+        return response()->json(["header" => $entry, "detail" => $detail]);
     }
 
     public function getConsecutive($id) {
@@ -49,7 +63,7 @@ class DepartureController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
             $input["status_id"] = 1;
-            
+
             $result = Departure::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
@@ -58,6 +72,30 @@ class DepartureController extends Controller {
             } else {
                 return response()->json(['success' => 'false']);
             }
+        }
+    }
+
+    public function storeExtern(Request $request) {
+        if ($request->ajax()) {
+            $input = $request->all();
+            $order = Order::findOrFail($input["id"]);
+
+            dd($order);
+            exit;
+
+            $id = DB::table("departure")->insertGetId(
+                    ["order_id" => $input["id"], "warehouse_id" => $order["warehouse_id"], "responsable_id" => $order["responsable_id"],
+                        "client_id" => $order["client_id"], "city_id" => $order["city_id"], "destination_id" => $order["destination_id"],
+                        "status_id" => $order["status_id"], "created" => $order["created"], "address" => $order["address"], "phone" => $order["phone"],
+                        "branch_id" => $order["branch_id"],
+                    ]
+            );
+
+
+            $detail = DB::select("SELECT id,product_id,quantity-pending as quantity,value FROM order_detail where order_id=" . $input["id"]);
+
+            dd($detail);
+            exit;
         }
     }
 

@@ -16,13 +16,17 @@ class CreatePurchagedetailTable extends Migration {
             $table->increments('id');
             $table->integer('purchage_id');
             $table->integer('entry_id')->nullable();
-            $table->integer('product_id');
-            $table->integer('category_id');
-            $table->integer('quantity');
-            $table->dateTime('expiration_date');
+            $table->integer('account_id')->nullable();
+            $table->integer('product_id')->nullable();
+            $table->integer('category_id')->nullable();
+            $table->integer('voucher_id')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->dateTime('expiration_date')->nullable();
             $table->decimal('value', 15, 2);
-            $table->decimal('tax', 15, 2);
-            $table->string('lot');
+            $table->decimal('tax', 15, 2)->nullable();
+            $table->string('lot')->nullable();
+            $table->string('description')->nullable();
+            $table->integer("order");
             $table->timestamps();
         });
     }

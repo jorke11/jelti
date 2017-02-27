@@ -2,21 +2,44 @@ function Sale() {
     var table, maxDeparture = 0;
     this.init = function () {
         table = this.table();
-
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
+        $("#btnSend").click(this.send);
         $("#newDetail").click(this.saveDetail);
-
+        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
 //            $(".input-entry").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
 
+        $("#client_id").change(function () {
+            if ($(this).val() != 0) {
+                obj.getClient($(this).val());
+            } else {
+                $("#frm #name_supplier").val("");
+                $("#frm #address_supplier").val("");
+                $("#frm #phone_supplier").val("");
+            }
+        });
+
+        $("#generate").blur(function () {
+            $("#total").val($(this).val() * $("#value").val());
+        });
+
         $("#insideManagement").click(function () {
-//            $(".input-entry").val("");
+            $(".input-order").cleanFields();
+            $("#frm #consecutive").val(1);
+            $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
+            $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+            $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+            $("#frm #destination_id").getSeeker({default: false, api: '/api/getSupplier', disabled: false});
+            $("#frm #client_id").getSeeker({default: false, api: '/api/getSupplier', disabled: false});
+            $("#frm #branch_id").getSeeker({default: false, api: '/api/getSupplier', disabled: false});
+            $("#frm #status_id").val(1).trigger('change');
+            $("#frm #status_id").prop("disabled", true);
             $.ajax({
-                url: 'sale/1/consecutive',
+                url: 'order/1/consecutive',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
@@ -27,43 +50,79 @@ function Sale() {
 
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
-            $("#frmDetail #id").val("");
-            $("#frmDetail #quantity").val("");
-            $("#frmDetail #value").val("");
-            $("#frmDetail #lot").val("");
+            $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
+            $(".input-detail").cleanFields();
+
         });
 
-        $("#product_id").change(this.getQuantity);
+        $("#frmDetail #product_id").change(function () {
+            $.ajax({
+                url: 'order/' + $(this).val() + '/getDetailProduct',
+                method: 'GET',
+                dataType: 'JSON',
+                success: function (resp) {
+                    $("#frmDetail #category_id").val(resp.response.id).trigger('change');
+                    $("#frmDetail #value").val(resp.response.price_sf)
+
+                    $("#frmDetail #quantityMax").html(resp.quantity)
+                    if (resp.quantity > 0) {
+                        maxDeparture = resp.quantity;
+                        $("#frmDetail #quantity").attr("disabled", false);
+                        $("#newDetail").attr("disabled", false);
+                    } else {
+                        $("#newDetail").attr("disabled", true);
+                        $("#frmDetail #quantity").attr("disabled", true);
+                    }
+
+                }
+            })
+        });
+
+
         $("#quantity").blur(function () {
             if (maxDeparture < $(this).val()) {
-                toastr.warning("No hay sufiente disponible");
+                toastr.warning("Dont available");
                 $(this).val("");
+            } else {
+                $("#generate").val($(this).val());
             }
         });
     }
+    this.send = function () {
+        location.href = "departure/getOrder/" + $("#frm #id").val();
+    }
     this.new = function () {
-        $(".input-sale").cleanFields();
+        toastr.remove();
+//        $(".input-order").cleanFields();
+
+//        $(".input-detail").cleanFields();
+        $(".input-fillable").prop("readonly", false);
+        $("#tblDetail tbody").empty();
+//        $("#frm #status_id").val(1).trigger("change").prop("disabled", true);
+//        $("#frm #client_id").prop("disabled", false);
+        $("#btnSave").prop("disabled", false);
+//        $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
+//        $("#frm #responsable_id").getSeeker({default: false, api: '/api/getResponsable', disabled: true});
+//        $("#frm #city_id").getSeeker({default: false, api: '/api/getCity', disabled: true});
     }
 
-    this.getQuantity = function () {
-        const id = this.value;
+    this.getClient = function (id) {
         $.ajax({
-            url: 'sale/' + id + '/quantity',
+            url: 'order/' + id + '/getClient',
             method: 'GET',
             dataType: 'JSON',
-            success: function (data) {
-                if (data.response.quantity > 0) {
-                    maxDeparture = data.response.quantity;
-                    $("#quantity").prop("disabled", false);
-                    $("#quantityMax").html(data.response.quantity);
-                }
+            success: function (resp) {
+                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
+                $("#frm #address").val(resp.response.address);
+                $("#frm #phone").val(resp.response.phone);
             }
-
         })
-
     }
 
     this.save = function () {
+        $("#frm #warehouse_id").prop("disabled", false);
+        $("#frm #responsable_id").prop("disabled", false);
+        $("#frm #city_id").prop("disabled", false);
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
@@ -71,12 +130,12 @@ function Sale() {
         var msg = '';
         if (id == '') {
             method = 'POST';
-            url = "sale";
+            url = "order";
             msg = "Created Record";
 
         } else {
             method = 'PUT';
-            url = "sale/" + id;
+            url = "order/" + id;
             msg = "Edited Record";
         }
 
@@ -91,13 +150,15 @@ function Sale() {
                     table.ajax.reload();
                     toastr.success(msg);
                     $("#btnmodalDetail").attr("disabled", false);
+
                 }
             }
         })
     }
 
     this.saveDetail = function () {
-        $("#frmDetail #sale_id").val($("#frm #id").val());
+
+        $("#frmDetail #order_id").val($("#frm #id").val());
         var frm = $("#frmDetail");
         var data = frm.serialize();
         var url = "", method = "";
@@ -105,12 +166,12 @@ function Sale() {
         var msg = 'Record Detail';
         if (id == '') {
             method = 'POST';
-            url = "sale/storeDetail";
+            url = "order/storeDetail";
             msg = "Created " + msg;
 
         } else {
             method = 'PUT';
-            url = "sale/detail/" + id;
+            url = "order/detail/" + id;
             msg = "Edited " + msg;
         }
 
@@ -124,16 +185,19 @@ function Sale() {
                     toastr.success(msg);
                     $("#btnmodalDetail").attr("disabled", false);
                     obj.printDetail(data.data);
-                    $("#modalDetail").modal("hide");
+//                    $("#modalDetail").modal("hide");
+                    $("#newDetail").attr("disabled", true);
+                    $("#frmDetail #quantity").attr("disabled", true);
                 }
             }
         })
+
     }
 
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/sale/" + id + "/edit";
+        var url = "/order/" + id + "/edit";
         $.ajax({
             url: url,
             method: "GET",
@@ -141,16 +205,7 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $("#frm #id").val(data.header.id);
-                $("#frm #created").val(data.header.created);
-                $("#frm #responsable_id").val(data.header.responsable_id);
-                $("#frm #consecutive").val(data.header.consecutive);
-                $("#frm #description").val(data.header.description);
-                $("#frm #order").val(data.header.order);
-                $("#frm #warehouse_id").val(data.header.warehouse_id);
-                $("#frm #address").val(data.header.address);
-                $("#frm #description").val(data.header.description);
-                $("#frm #destination").val(data.header.destination);
+                $(".input-order").setFields({data: data.header});
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -163,7 +218,7 @@ function Sale() {
     this.editDetail = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/sale/" + id + "/detail";
+        var url = "/order/" + id + "/detail";
         $.ajax({
             url: url,
             method: "GET",
@@ -175,6 +230,7 @@ function Sale() {
                 $("#frmDetail #supplier_id").val(data.supplier_id);
                 $("#frmDetail #mark_id").val(1);
                 $("#frmDetail #quantity").val(data.quantity);
+                $("#frmDetail #generate").val(data.generate);
                 $("#frmDetail #value").val(data.value);
                 $("#frmDetail #lot").val(1);
                 $("#frmDetail #category_id").val(data.category_id);
@@ -189,14 +245,14 @@ function Sale() {
         $.each(data, function (i, val) {
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
-            html += "<td>Supplier</td>";
-//            html += "<td>" + val.supplier_id + "</td>";
+            html += "<td>Client</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.quantity + "</td>";
+            html += "<td>" + val.generate + "</td>";
             html += "<td>" + val.value + "</td>";
-//            html += "<td>" + val.expiration_date + "</td>";
             html += "<td>20/12/2001</td>";
+            html += "<td>New</td>";
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";
@@ -209,7 +265,7 @@ function Sale() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/sale/" + id;
+            var url = "/order/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -231,7 +287,7 @@ function Sale() {
         toastr.remove();
         if (confirm("Do you want delete this record?")) {
             var token = $("input[name=_token]").val();
-            var url = "/sale/detail/" + id;
+            var url = "/order/detail/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -249,60 +305,30 @@ function Sale() {
         }
     }
 
-    this.tableDetail = function () {
-        return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "/api/listSale",
-            columns: [
-                {data: "id"},
-                {data: "consecutive"},
-                {data: "date"},
-                {data: "bill"},
-                {data: "warehouse"},
-            ],
-            order: [[1, 'ASC']],
-            aoColumnDefs: [
-                {
-                    aTargets: [0, 1],
-                    mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
-                    }
-                },
-                {
-                    targets: [4],
-                    searchable: false,
-                    "mData": null,
-                    "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
-                    }
-                }
-            ],
-        });
-    }
     this.table = function () {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listSale",
+            "ajax": "/api/listOrder",
             columns: [
                 {data: "id"},
                 {data: "consecutive"},
-                {data: "description"},
                 {data: "created"},
                 {data: "order"},
                 {data: "warehouse_id"},
+                {data: "city_id"},
+                {data: "status_id"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4],
+                    aTargets: [0, 1, 2, 3, 4, 5, 6],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [6],
+                    targets: [7],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

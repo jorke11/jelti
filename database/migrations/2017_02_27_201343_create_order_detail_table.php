@@ -4,23 +4,23 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEntryDetailTable extends Migration {
+class CreateOrderDetailTable extends Migration { /**
+ * Run the migrations.
+ *
+ * @return void
+ */
 
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up() {
-        Schema::create('entry_detail', function (Blueprint $table) {
+        Schema::create('order_detail', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('entry_id');
+            $table->integer('order_id');
             $table->integer('product_id');
             $table->integer('category_id');
+            $table->integer('generate');
             $table->integer('quantity');
-            $table->dateTime('expiration_date');
             $table->decimal('value', 15, 2);
-            $table->string('lot');
+            $table->integer('status_id');
+            $table->integer('pending');
             $table->timestamps();
         });
     }
@@ -31,7 +31,7 @@ class CreateEntryDetailTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('entry_detail');
+        Schema::dropIfExists('order_detail');
     }
 
 }

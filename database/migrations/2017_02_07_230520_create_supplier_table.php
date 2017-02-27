@@ -17,6 +17,7 @@ class CreateSupplierTable extends Migration {
             $table->integer('type_regime_id');
             $table->integer('type_person_id');
             $table->integer('city_id');
+            $table->integer('commercial_id');
             $table->string('name');
             $table->string('last_name');
             $table->string('document');

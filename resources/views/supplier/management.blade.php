@@ -24,7 +24,7 @@
                             </select>
                         </div>
                     </div>
-                     <div class="col-lg-3">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="address">Type Regime</label>
                             <select id="type_person_id" name="type_person_id" class="form-control input-supplier">
@@ -47,7 +47,7 @@
                             <input type="text" class="form-control  input-supplier" id="last_name" name="last_name" placeholder="Last Name">
                         </div>
                     </div>
-                    
+
 
                 </div>
 
@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="row">
-                   <div class="col-lg-3">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="address">Phone Contact</label>
                             <input type="text" class="form-control input-supplier" id="phone_contact" name="phone_contact" placeholder="Phone Contact">
@@ -117,6 +117,14 @@
                         <div class="form-group">
                             <label for="address">Business name</label>
                             <input type="text" class="form-control input-supplier" id="bussines_name" name="bussines_name" placeholder="Bussines Name">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="address">Commecial</label>
+                            <select class="form-control input-supplier"  id="commercial_id" name="commercial_id">
+                                <option value="1">Commercial 1</option>
+                            </select>
                         </div>
                     </div>
                 </div>

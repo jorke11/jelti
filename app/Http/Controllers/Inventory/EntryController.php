@@ -11,6 +11,7 @@ use App\Models\Inventory\Entry;
 use App\Models\Inventory\EntryDetail;
 use App\Models\Administration\Category;
 use \App\Models\Invoicing\Purchage;
+use App\Models\Invoicing\PurchageDetail;
 use Session;
 
 class EntryController extends Controller {
@@ -64,32 +65,63 @@ class EntryController extends Controller {
 
     public function sendEntry(Request $request) {
         if ($request->ajax()) {
+
             $input = $request->all();
 
             $purchage = new \App\Models\Invoicing\Purchage();
             $entry = Entry::findOrFail($input["id"]);
 
+            $id = DB::table("purchage")->insertGetId(
+                    ["entry_id" => $entry["id"], "warehouse_id" => $entry["warehouse_id"], "responsable_id" => $entry["responsable_id"],
+                        "supplier_id" => $entry["supplier_id"], "city_id" => $entry["city_id"], "description" => $entry["description"],
+                        "avoice" => $entry["avoice"], "status_id" => $entry["status_id"], "created" => $entry["created"]
+                    ]
+            );
 
-//            dd($purchage->all());Exit;
-//            $user = Auth::User();
-//            $input["users_id"] = 1;
-            DB::transaction(function() {
-                $id = DB::table("purchage")->insertGetId(
-                        ["entry_id" => $entry->id, "warehouse_id" => $entry->warehouse_id, "responsable_id" => $entry->responsable_id,
-                            "supplier_id" => $entry->supplier_id, "city_id" => $entry->city_id, "description" => $entry->description,
-                            "avoice" => $entry->avoice, "status_id" => $entry->status_id, "created" => $entry->created]
-                );
-                $detail = EntryDetail::where()->get();
+            $detail = EntryDetail::where("entry_id", $input["id"])->get();
+            $total = 0;
+            $cont = 0;
+            $credit = 0;
+            $tax = 0;
+            $totalPar = 0;
+            foreach ($detail as $value) {
+                $pro = Product::findOrFail($value->product_id);
+                $totalPar = $value->quantity * $value->value;
+                $total += $totalPar;
+                PurchageDetail::insert([
+                    'purchage_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
+                    "category_id" => $value->category_id, "quantity" => $value->quantity,
+                    "expiration_date" => $value->expiration_date, "value" => $value->value, "tax" => $pro["tax"],
+                    "lot" => $value->lot, "account_id" => 1, "order" => $cont, "description" => "product"
+                ]);
 
-                foreach ($detail as $value) {
-                    $pro = Product::findOrFail($value->product_id);
-                    Purchage::insert([
-                        'purchage_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
-                        "category_id" => $value->category_id, "quantity" => $value->quantity,
-                        "expiration_date" => $value->expiration_date, "value" => $value->value, "tax" => $pro->tax
+                $credit += (double) $totalPar;
+                if ($pro["tax"] != '' && $pro["tax"] > 0) {
+                    $cont++;
+                    $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                    PurchageDetail::insert([
+                        "entry_id" => $input["id"], "account_id" => 1, "purchage_id" => $id, "value" => $tax,
+                        "order" => $cont, "description" => "iva"
                     ]);
                 }
-            });
+                $credit += (double) $tax;
+                $cont++;
+            }
+
+
+            if ($total > 860000) {
+                $rete = ($total * 0.025);
+                PurchageDetail::insert([
+                    "entry_id" => $input["id"], "account_id" => 2, "purchage_id" => $id, "value" => ($total * 0.025), "order" => $cont, "description" => "rete"
+                ]);
+                $credit -= $rete;
+                $cont++;
+            }
+
+            PurchageDetail::insert([
+                "entry_id" => $input["id"], "account_id" => 2, "purchage_id" => $id, "value" => $credit, "order" => $cont, "description" => "proveedores"
+            ]);
+            $credit = 0;
 
             $purchage = $entry;
             $entry->status_id = 2;

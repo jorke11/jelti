@@ -63,13 +63,14 @@
         {!!Html::script('/vendor/datetimepicker/js/bootstrap-datetimepicker.min.js')!!}
 
 
-        {!!Html::style('/css/edited.css')!!}
+
 
         {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
         {!!Html::style('/vendor/select2/css/select2.min.css')!!}
         {!!Html::script('/vendor/select2/js/select2.js')!!}
         {!!Html::script('/vendor/plugins.js')!!}
         {!!Html::script('/vendor/bootstrap-typeahead.js')!!}
+        {!!Html::style('/css/edited.css')!!}
     </head>
 
     <body class="nav-md">
@@ -208,7 +209,7 @@
                                     <li>
                                         <a href="{{ url('/logout') }}"
                                            onclick="event.preventDefault();
-                                                       document.getElementById('logout-form').submit();">
+                                                   document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
 

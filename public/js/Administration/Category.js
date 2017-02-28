@@ -29,7 +29,7 @@ function Category() {
         toastr.remove();
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "category/" + $("#frmEdit #id").val();
+        var url = "category/" + $("#frmEdit #category_id").val();
         $.ajax({
             url: url,
             method: "PUT",
@@ -56,7 +56,7 @@ function Category() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frmEdit #id").val(data.id);
+                $("#frmEdit #category_id").val(data.category_id);
                 $("#frmEdit #description").val(data.description);
             }
         })
@@ -90,7 +90,7 @@ function Category() {
             "serverSide": true,
             "ajax": "/api/listCategory",
             columns: [
-                {data: "id"},
+                {data: "category_id"},
                 {data: "description"}
             ],
             order: [[1, 'ASC']],
@@ -98,7 +98,7 @@ function Category() {
                 {
                     aTargets: [0, 1],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.category_id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -106,7 +106,7 @@ function Category() {
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.category_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

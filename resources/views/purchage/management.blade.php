@@ -35,7 +35,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Responsable:</label>
-                    <select class="form-control input-purchage input-sm" id="responsable_id" name='responsable_id' readonly data-api="/api/getResponsable">
+                    <select class="form-control input-purchage input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable">
                     </select>
 
                 </div>

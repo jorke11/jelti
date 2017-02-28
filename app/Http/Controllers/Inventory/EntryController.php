@@ -5,19 +5,19 @@ namespace App\Http\Controllers\Inventory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
-use App\Models\Administration\Warehouse;
-use App\Models\Administration\Product;
-use App\Models\Inventory\Entry;
-use App\Models\Inventory\EntryDetail;
-use App\Models\Administration\Category;
-use \App\Models\Invoicing\Purchage;
-use App\Models\Invoicing\PurchageDetail;
+use App\Models\Administration\Warehouses;
+use App\Models\Administration\Products;
+use App\Models\Inventory\Entries;
+use App\Models\Inventory\EntriesDetail;
+use App\Models\Administration\Categories;
+use App\Models\Invoicing\Purchases;
+use App\Models\Invoicing\PurchasesDetail;
 use Session;
 
 class EntryController extends Controller {
 
     public function index() {
-        $category = Category::all();
+        $category = Categories::all();
         return view("entry.init", compact("category"));
     }
 
@@ -26,22 +26,22 @@ class EntryController extends Controller {
     }
 
     public function getDetailProduct($id) {
-        $category = DB::table("product")
-                ->select("product.id", "product.title", "category.description as caterory", "product.price_sf")
-                ->join("category", "category.id", "=", "product.category_id")
-                ->where("product.id", $id)
+        $category = DB::table("products")
+                ->select("products.id", "products.title", "categories.description as caterory", "products.price_sf")
+                ->join("categories", "categories.id", "=", "products.id")
+                ->where("products.id", $id)
                 ->first();
 
         return response()->json(["response" => $category]);
     }
 
     public function getSupplier($id) {
-        $supplier = \App\Models\Administration\Supplier::findOrFail($id);
+        $supplier = \App\Models\Administration\Suppliers::findOrFail($id);
         return response()->json(["response" => $supplier]);
     }
 
     public function getProducts($id) {
-        $resp = \App\Models\Administration\Product::where("supplier_id", $id);
+        $resp = \App\Models\Administration\Products::where("supplier_id", $id);
         return response()->json(["response" => $resp]);
     }
 
@@ -52,10 +52,10 @@ class EntryController extends Controller {
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $input["status_id"] = 1;
-            $result = Entry::create($input);
+            $result = Entries::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = Entry::FindOrFail($result["attributes"]["id"]);
+                $resp = Entries::FindOrFail($result["attributes"]["id"]);
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);
@@ -67,29 +67,28 @@ class EntryController extends Controller {
         if ($request->ajax()) {
 
             $input = $request->all();
-
-            $purchage = new \App\Models\Invoicing\Purchage();
-            $entry = Entry::findOrFail($input["id"]);
-
-            $id = DB::table("purchage")->insertGetId(
-                    ["entry_id" => $entry["id"], "warehouse_id" => $entry["warehouse_id"], "responsable_id" => $entry["responsable_id"],
+            $purchage = new \App\Models\Invoicing\Purchases();
+            $entry = Entries::findOrFail($input["id"]);
+            
+            $id = DB::table("purchases")->insertGetId(
+                    ["entry_id" => $entry["entry_id"], "warehouse_id" => $entry["warehouse_id"], "responsible_id" => $entry["responsible_id"],
                         "supplier_id" => $entry["supplier_id"], "city_id" => $entry["city_id"], "description" => $entry["description"],
-                        "avoice" => $entry["avoice"], "status_id" => $entry["status_id"], "created" => $entry["created"]
+                        "invoice" => $entry["invoice"], "status_id" => $entry["status_id"], "created" => $entry["created"]
                     ]
             );
-
-            $detail = EntryDetail::where("entry_id", $input["id"])->get();
+          
+            $detail = \App\Models\Inventory\EntriesDetail::where("entry_id", $input["id"])->get();
             $total = 0;
             $cont = 0;
             $credit = 0;
             $tax = 0;
             $totalPar = 0;
             foreach ($detail as $value) {
-                $pro = Product::findOrFail($value->product_id);
+                $pro = Products::findOrFail($value->product_id);
                 $totalPar = $value->quantity * $value->value;
                 $total += $totalPar;
-                PurchageDetail::insert([
-                    'purchage_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
+                PurchasesDetail::insert([
+                    'purchase_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
                     "category_id" => $value->category_id, "quantity" => $value->quantity,
                     "expiration_date" => $value->expiration_date, "value" => $value->value, "tax" => $pro["tax"],
                     "lot" => $value->lot, "account_id" => 1, "order" => $cont, "description" => "product"
@@ -99,8 +98,8 @@ class EntryController extends Controller {
                 if ($pro["tax"] != '' && $pro["tax"] > 0) {
                     $cont++;
                     $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
-                    PurchageDetail::insert([
-                        "entry_id" => $input["id"], "account_id" => 1, "purchage_id" => $id, "value" => $tax,
+                    PurchasesDetail::insert([
+                        "entry_id" => $input["id"], "account_id" => 1, "purchase_id" => $id, "value" => $tax,
                         "order" => $cont, "description" => "iva"
                     ]);
                 }
@@ -111,15 +110,15 @@ class EntryController extends Controller {
 
             if ($total > 860000) {
                 $rete = ($total * 0.025);
-                PurchageDetail::insert([
-                    "entry_id" => $input["id"], "account_id" => 2, "purchage_id" => $id, "value" => ($total * 0.025), "order" => $cont, "description" => "rete"
+                PurchasesDetail::insert([
+                    "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => ($total * 0.025), "order" => $cont, "description" => "rete"
                 ]);
                 $credit -= $rete;
                 $cont++;
             }
 
-            PurchageDetail::insert([
-                "entry_id" => $input["id"], "account_id" => 2, "purchage_id" => $id, "value" => $credit, "order" => $cont, "description" => "proveedores"
+            PurchasesDetail::insert([
+                "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => $credit, "order" => $cont, "description" => "proveedores"
             ]);
             $credit = 0;
 
@@ -130,22 +129,22 @@ class EntryController extends Controller {
     }
 
     public function edit($id) {
-        $entry = Entry::FindOrFail($id);
-        $detail = DB::table("entry_detail")->where("entry_id", "=", $id)->get();
+        $entry = Entries::FindOrFail($id);
+        $detail = DB::table("entries_detail")->where("id", "=", $id)->get();
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 
     public function getDetail($id) {
-        $detail = EntryDetail::FindOrFail($id);
+        $detail = EntriesDetail::FindOrFail($id);
         return response()->json($detail);
     }
 
     public function update(Request $request, $id) {
-        $entry = Entry::FindOrFail($id);
+        $entry = Entries::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = Entry::FindOrFail($id);
+            $resp = Entries::FindOrFail($id);
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -154,7 +153,7 @@ class EntryController extends Controller {
     }
 
     public function updateDetail(Request $request, $id) {
-        $entry = EntryDetail::FindOrFail($id);
+        $entry = EntriesDetail::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
@@ -167,7 +166,7 @@ class EntryController extends Controller {
     }
 
     public function destroy($id) {
-        $entry = Entry::FindOrFail($id);
+        $entry = Entries::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
@@ -179,7 +178,7 @@ class EntryController extends Controller {
     }
 
     public function destroyDetail($id) {
-        $entry = EntryDetail::FindOrFail($id);
+        $entry = EntriesDetail::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
@@ -198,10 +197,11 @@ class EntryController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = EntryDetail::create($input);
+            $result = EntriesDetail::create($input);
+            
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = EntryDetail::where("entry_id", $input["entry_id"])->get();
+                $resp = EntriesDetail::where("entry_id", $input["entry_id"])->get();
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);

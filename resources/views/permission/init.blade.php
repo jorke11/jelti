@@ -22,13 +22,13 @@
                 <div class="row">
                    
                     <div class="col-lg-12 text-right">
-                        <button class="btn btn-success" type="button" id="btnNew">
+                        <button class="btn btn-success btn-sm" type="button" id="btnNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
-                        <button class="btn btn-success" type="button" id="btnSave">
+                        <button class="btn btn-success btn-sm" type="button" id="btnSave">
                             <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                         </button>
-                        <button class="btn btn-success" type="button" id="btnDelete">
+                        <button class="btn btn-success btn-sm" type="button" id="btnDelete">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -36,7 +36,7 @@
             </div>
             <div class="panel-body">
                 {!! Form::open(['id'=>'frm']) !!}
-                <input type="hidden" id="id" name="id" class="input-user">
+                <input type="hidden" id="permission_id" name="permission_id" class="input-user">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -56,7 +56,7 @@
                             <select class="form-control input-user" id="parent_id" name='parent_id'>
                                 <option value="0">Selection</option>
                                 @foreach($parents as $val)
-                                <option value="{{$val->id}}">{{$val->title}}</option>
+                                <option value="{{$val->permission_id}}">{{$val->title}}</option>
                                 @endforeach
                                 
                             </select>

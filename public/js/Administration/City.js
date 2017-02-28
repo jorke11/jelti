@@ -29,7 +29,7 @@ function City() {
         toastr.remove();
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "city/" + $("#frmEdit #id").val();
+        var url = "city/" + $("#frmEdit #city_id").val();
         $.ajax({
             url: url,
             method: "PUT",
@@ -56,7 +56,7 @@ function City() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frmEdit #id").val(data.id);
+                $("#frmEdit #city_id").val(data.city_id);
                 $("#frmEdit #description").val(data.description);
             }
         })
@@ -90,7 +90,7 @@ function City() {
             "serverSide": true,
             "ajax": "/api/listCity",
             columns: [
-                {data: "id"},
+                {data: "city_id"},
                 {data: "description"}
             ],
             order: [[1, 'ASC']],
@@ -98,7 +98,7 @@ function City() {
                 {
                     aTargets: [0, 1],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.city_id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -106,7 +106,7 @@ function City() {
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.city_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

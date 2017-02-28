@@ -17,8 +17,12 @@ class DashboardController extends Controller {
 
 
         $resp = DB::select("
-                        SELECT p.id = ANY (SELECT permission_id FROM permissionuser where users_id=" . Auth::user()->id . " and permission_id=p.id) allowed,p.*
-                        from permission p 
+                        SELECT id = ANY (
+                                                    SELECT id 
+                                                    FROM permissions_user 
+                                                    WHERE users_id=" . Auth::user()->id . " 
+                                                        AND permission_id=p.id) allowed,p.*
+                        from permissions p 
                         WHERE parent_id=0 
                         AND typemenu_id=0 
                         ORDER BY priority asc");
@@ -28,8 +32,8 @@ class DashboardController extends Controller {
             foreach ($resp as $key => $val) {
                 if ($val->allowed == true) {
                     $query = "
-                    SELECT p.id = ANY (SELECT permission_id FROM permissionuser where users_id=" . Auth::user()->id . " and permission_id=p.id) allowed,p.*
-                    from permission p 
+                    SELECT id = ANY (SELECT id FROM permissions_user where users_id=" . Auth::user()->id . " and id=p.id) allowed,p.*
+                    from permissions p 
                     WHERE parent_id=" . $val->id . "
                     ORDER BY priority asc";
 

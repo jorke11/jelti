@@ -1,11 +1,8 @@
 function formatRepo(data) {
-    return data.description;
+    return data.text;
 }
 
 function formatRepoSelection(data) {
-    if (data.text == '')
-        data.text = data.description
-    
     return data.text;
 }
 
@@ -31,8 +28,8 @@ jQuery.fn.getSeeker = function (param) {
                     dataType: 'JSON',
                     success: function (data) {
                         if (data.items.length > 0) {
-                            elem.append('<option value=' + data.items[0].id + '>' + data.items[0].description + '</option>');
-                            elem.select2({'data': [{'id': data.items[0].id, 'text': data.items[0].description}]});
+                            elem.append('<option value=' + data.items[0].id + '>' + data.items[0].text + '</option>');
+                            elem.select2({'data': [{'id': data.items[0].id, 'text': data.items[0].text}]});
                             elem.val(data.items[0].id).trigger('change');
                         }
                     }
@@ -47,7 +44,7 @@ jQuery.fn.getSeeker = function (param) {
                 elem.prop("disabled", false);
             }
         }
-       
+
         if (elem.data("api") != undefined) {
             elem.select2({
                 placeholder: "Select",
@@ -113,9 +110,9 @@ jQuery.fn.setFields = function (param) {
                         dataType: 'JSON',
                         success: function (data) {
                             if (data.items.length > 0) {
-                                elem.append('<option value=' + data.items[0].id + '>' + data.items[0].description + '</option>');
+                                elem.append('<option value=' + data.items[0].id + '>' + data.items[0].text + '</option>');
                                 elem.select2({'data': [{'id': data.items[0].id, 'text': data.items[0].text}]});
-                                elem.val(data.items[0].id).trigger('change');   
+                                elem.val(data.items[0].id).trigger('change');
                             }
                         }
                     })
@@ -213,70 +210,116 @@ jQuery.fn.currentDate = function (min, format) {
     return this;
 }
 
+//jQuery.fn.validate = function (param) {
+//    param = param || {};
+//    var arrData = []
+//    this.each(function () {
+//        var elem = $(this);
+//
+//        if (elem.attr('disabled') != 'disabled') {
+//
+//            if (elem.attr("required")) {
+//                if (elem.hasClass("Seeker")) {
+//                    var sel = elem.next("span")
+//                            .children('.selection')
+//                            .find('span.select2-selection--single');
+//                    if (elem.val() == "0" || elem.val() == null || elem.val() == "-1") {
+//                        arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
+//                        sel.css({'border': '1px solid red'});
+//                    } else {
+//                        sel.css({'border': '1px solid #aaaaaa'});
+//                    }
+//                } else {
+//                  console.log(elem.data("type"))
+//                    if (elem.data("type") != 'undefined') {
+//                        console.log("asdassss");  
+//                        if (elem.data("type") == 'number') {
+//                            if (isNaN(elem.val())) {
+//                                elem.addClass("error");
+//                                arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
+//                            } else {
+//                                elem.removeClass("error");
+//                            }
+//                        } else if (elem.data("type") == 'address') {
+//                            if (elem.val() == '') {
+//                                arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
+//                                elem.addClass("error");
+//                            } else {
+//                                elem.removeClass("error");
+//                            }
+//                        } else {
+//                            var sel = elem.next("span")
+//                                    .children('.selection')
+//                                    .find('span.select2-selection--single');
+//
+//
+//                            if (elem.get(0).tagName == 'SELECT') {
+//                                if (elem.val() == '0') {
+//                                    arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
+//
+//                                    sel.css({'border': '1px solid red'});
+//                                } else {
+//                                    sel.css({'border': '1px solid #aaaaaa'});
+//                                }
+//                            } else if (elem.get(0).tagName == 'INPUT') {
+//                                if (elem.val() == '') {
+//                                    arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
+//                                    elem.addClass("error");
+//                                } else {
+//                                    elem.removeClass("error");
+//                                }
+//                            }
+//
+//                        }
+//                    }else{
+//                      console.log("asda");  
+//                    }
+//                }
+//            }
+//
+//        }
+//    })
+//    return arrData;
+//}
+
+
 jQuery.fn.validate = function (param) {
     param = param || {};
     var arrData = []
     this.each(function () {
         var elem = $(this);
-
-        if (elem.attr('disabled') != 'disabled') {
-
-            if (elem.attr("required")) {
-                if (elem.hasClass("Seeker")) {
-                    var sel = elem.next("span")
-                            .children('.selection')
-                            .find('span.select2-selection--single');
-                    if (elem.val() == "0" || elem.val() == null || elem.val() == "-1") {
-                        arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
-                        sel.css({'border': '1px solid red'});
-                    } else {
-                        sel.css({'border': '1px solid #aaaaaa'});
-                    }
+        if (elem.attr("required") != undefined) {
+            $("#error_" + elem.attr("id")).remove();
+            elem.getSeeker();
+            if (elem.data("api") == undefined) {
+                if (elem.val() == '') {
+                    elem.after('<small class="help-block" id="error_' + elem.attr("id") + '" data-fv-validator="notEmpty" data-fv-for="firstName" data-fv-result="INVALID" style="">' + elem.attr("id") + ' is Required</small>')
+                    elem.parent().parent().addClass("has-error")
+                    arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
                 } else {
-
-                    if (elem.data("type") != 'undefined') {
-                        if (elem.data("type") == 'number') {
-                            if (isNaN(elem.val())) {
-                                elem.addClass("error");
-                                arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
-                            } else {
-                                elem.removeClass("error");
-                            }
-                        } else if (elem.data("type") == 'address') {
-                            if (elem.val() == '') {
-                                arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
-                                elem.addClass("error");
-                            } else {
-                                elem.removeClass("error");
-                            }
+                    if (elem.data("type") != undefined) {
+                        $("#error_" + elem.attr("id")).remove();
+                        if (isNaN(elem.val())) {
+                            elem.after('<small class="help-block" id="error_' + elem.attr("id") + '" data-fv-validator="notEmpty" data-fv-for="firstName" data-fv-result="INVALID" style="">' + elem.attr("id") + ' is not Numeric</small>')
+                            elem.parent().parent().addClass("has-error")
+                            arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
                         } else {
-                            var sel = elem.next("span")
-                                    .children('.selection')
-                                    .find('span.select2-selection--single');
-
-
-                            if (elem.get(0).tagName == 'SELECT') {
-                                if (elem.val() == '0') {
-                                    arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
-
-                                    sel.css({'border': '1px solid red'});
-                                } else {
-                                    sel.css({'border': '1px solid #aaaaaa'});
-                                }
-                            } else if (elem.get(0).tagName == 'INPUT') {
-                                if (elem.val() == '') {
-                                    arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
-                                    elem.addClass("error");
-                                } else {
-                                    elem.removeClass("error");
-                                }
-                            }
-
+                            elem.parent().parent().removeClass("has-error")
                         }
+                    } else {
+                        $("#error_" + elem.attr("id")).remove();
+                        elem.parent().parent().removeClass("has-error")
                     }
                 }
+            } else {
+                var cont = elem.next("span").children().children();
+                if (elem.val() == null) {
+                    cont.addClass("error");
+                    arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
+                } else {
+                    cont.removeClass("error");
+                }
             }
-
         }
     })
     return arrData;

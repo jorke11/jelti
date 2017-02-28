@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Administration;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Administration\Category;
+use App\Models\Administration\Categories;
 use Session;
 
 class CategoryController extends Controller {
@@ -24,10 +24,10 @@ class CategoryController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["id"]);
+            unset($input["category_id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Category::create($input);
+            $result = Categories::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -38,12 +38,12 @@ class CategoryController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Category::FindOrFail($id);
+        $suppliers = Categories::FindOrFail($id);
         return response()->json($suppliers);
     }
 
     public function update(Request $request, $id) {
-        $category = Category::FindOrFail($id);
+        $category = Categories::FindOrFail($id);
         $input = $request->all();
         $result = $category->fill($input)->save();
         if ($result) {
@@ -55,7 +55,7 @@ class CategoryController extends Controller {
     }
 
     public function destroy($id) {
-        $category = Category::FindOrFail($id);
+        $category = Categories::FindOrFail($id);
         $result = $category->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {

@@ -6,21 +6,21 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Session;
 use Illuminate\Support\Facades\DB;
-use App\Models\Administration\Warehouse;
-use App\Models\Invoicing\Purchage;
-use App\Models\Invoicing\PurchageDetail;
+use App\Models\Administration\Warehouses;
+use App\Models\Invoicing\Purchases;
+use App\Models\Invoicing\PurchasesDetail;
 use Illuminate\Support\Facades\Auth;
 
 class PurchageController extends Controller {
 
     public function index() {
         $responsable = DB::select('select id,name from users');
-        $warehouse = Warehouse::all();
-        $product = \App\Models\Administration\Product::all();
-        $city = \App\Models\Administration\City::all();
+        $warehouse = Warehouses::all();
+        $product = \App\Models\Administration\Products::all();
+        $city = \App\Models\Administration\Cities::all();
         $mark = \App\Models\Administration\Mark::all();
-        $supplier = \App\Models\Administration\Supplier::all();
-        $category = \App\Models\Administration\Category::all();
+        $supplier = \App\Models\Administration\Suppliers::all();
+        $category = \App\Models\Administration\Categories::all();
         return view("purchage.init", compact("responsable", "warehouse", "supplier", "product", "mark", "category","city"));
     }
 
@@ -28,11 +28,11 @@ class PurchageController extends Controller {
         echo response()->json(["response" => 'prueba']);
     }
     public function getSupplier($id) {
-        $supplier=\App\Models\Administration\Supplier::findOrFail($id);
+        $supplier=\App\Models\Administration\Suppliers::findOrFail($id);
         return response()->json(["response" => $supplier]);
     }
     public function getProducts($id) {
-        $resp = \App\Models\Administration\Product::where("supplier_id",$id);
+        $resp = \App\Models\Administration\Products::where("supplier_id",$id);
         return response()->json(["response" => $resp]);
     }
 
@@ -42,10 +42,10 @@ class PurchageController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Purchage::create($input);
+            $result = Purchases::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = Purchage::FindOrFail($result["attributes"]["id"]);
+                $resp = Purchases::FindOrFail($result["attributes"]["id"]);
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);
@@ -54,22 +54,22 @@ class PurchageController extends Controller {
     }
 
     public function edit($id) {
-        $entry = Purchage::FindOrFail($id);
-        $detail = DB::table("purchage_detail")->where("purchage_id", "=", $id)->orderBy('order', 'ASC')->get();
+        $entry = Purchases::FindOrFail($id);
+        $detail = DB::table("purchases_detail")->where("purchase_id", "=", $id)->orderBy('order', 'ASC')->get();
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 
     public function getDetail($id) {
-        $detail = PurchageDetail::FindOrFail($id);
+        $detail = PurchasesDetail::FindOrFail($id);
         return response()->json($detail);
     }
 
     public function update(Request $request, $id) {
-        $entry = Purchage::FindOrFail($id);
+        $entry = Purchases::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = Purchage::FindOrFail($id);
+            $resp = Purchases::FindOrFail($id);
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -78,7 +78,7 @@ class PurchageController extends Controller {
     }
 
     public function updateDetail(Request $request, $id) {
-        $entry = PurchageDetail::FindOrFail($id);
+        $entry = PurchasesDetail::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
@@ -91,7 +91,7 @@ class PurchageController extends Controller {
     }
 
     public function destroy($id) {
-        $entry = Purchage::FindOrFail($id);
+        $entry = Purchases::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {

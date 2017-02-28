@@ -30,7 +30,7 @@ function Sale() {
             $(".input-departure").cleanFields();
             $("#frm #consecutive").val(1);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
-            $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+            $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#frm #status_id").val(1).trigger('change');
             $("#frm #status_id").prop("disabled", true);
@@ -93,7 +93,7 @@ function Sale() {
         $("#frm #supplier_id").prop("disabled", false);
         $("#btnSave").prop("disabled", false);
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
-        $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+        $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
     }
     this.getSupplier = function (id, path) {
@@ -116,7 +116,7 @@ function Sale() {
 
     this.save = function () {
         $("#frm #warehouse_id").prop("disabled", false);
-        $("#frm #responsable_id").prop("disabled", false);
+        $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
         var frm = $("#frm");
         var data = frm.serialize();
@@ -163,9 +163,9 @@ function Sale() {
                     if (data.success == 'true') {
                         $("#frm #id").val(data.data.id);
                         table.ajax.reload();
-                        toastr.success(msg);
+                        toastr.success("ok");
                         $("#btnmodalDetail").attr("disabled", false);
-
+                        location.href="/";
                     }
                 }
             })
@@ -265,14 +265,7 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $("#modalDetail").modal("show");
-                $("#frmDetail #id").val(data.id);
-                $("#frmDetail #supplier_id").val(data.supplier_id);
-                $("#frmDetail #mark_id").val(1);
-                $("#frmDetail #quantity").val(data.quantity);
-                $("#frmDetail #value").val(data.value);
-                $("#frmDetail #lot").val(1);
-                $("#frmDetail #category_id").val(data.category_id);
-                $("#frmDetail #expiration_date").val(data.expiration_date);
+                $(".input-detail").setFiedls({data:data})
             }
         })
     }
@@ -283,12 +276,9 @@ function Sale() {
         $.each(data, function (i, val) {
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
-            html += "<td>Supplier</td>";
-            html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.value + "</td>";
-            html += "<td>20/12/2001</td>";
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";

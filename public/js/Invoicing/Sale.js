@@ -141,16 +141,8 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $("#frm #id").val(data.header.id);
-                $("#frm #created").val(data.header.created);
-                $("#frm #responsable_id").val(data.header.responsable_id);
-                $("#frm #consecutive").val(data.header.consecutive);
-                $("#frm #description").val(data.header.description);
-                $("#frm #order").val(data.header.order);
-                $("#frm #warehouse_id").val(data.header.warehouse_id);
-                $("#frm #address").val(data.header.address);
-                $("#frm #description").val(data.header.description);
-                $("#frm #destination").val(data.header.destination);
+                $(".input-sale").setFields({data:data.header});
+               
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }

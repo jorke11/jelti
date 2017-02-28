@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Security;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Security\User;
-use App\Models\Security\Permission;
-use App\Models\Security\PermissionUser;
-use App\Models\Security\Role;
-use App\Models\Administration\Supplier;
-use App\Models\Administration\City;
+use App\Models\Security\Users;
+use App\Models\Security\Permissions;
+use App\Models\Security\PermissionsUser;
+use App\Models\Security\Roles;
+use App\Models\Administration\Suppliers;
+use App\Models\Administration\Cities;
 use Session;
 use DB;
 
@@ -17,9 +17,9 @@ class UserController extends Controller {
 
     
     public function index() {
-        $profile = Role::all();
-        $supplier = Supplier::all();
-        $city = City::all();
+        $profile = Roles::all();
+        $supplier = Suppliers::all();
+        $city = Cities::all();
         return view("user.init", compact("profile", "supplier", "city"));
     }
 
@@ -49,14 +49,14 @@ class UserController extends Controller {
     }
 
     public function edit($id) {
-        $resp["header"] = User::FindOrFail($id);
+        $resp["header"] = Users::where("id",$id)->first();
         return response()->json($resp);
     }
 
     public function getPermission($id) {
         $resp["permission"] = DB::select("
-                                        SELECT p.id = ANY (SELECT permission_id FROM permissionuser where users_id=" . $id . " and permission_id=p.id) allowed,p.*
-                                        from permission p 
+                                        SELECT p.permission_id = ANY (SELECT permission_user_id FROM permissions_user where users_id=" . $id . " and permission_id=p.permission_id) allowed,p.*
+                                        from permissions p 
                                         WHERE parent_id=0 
                                         AND typemenu_id=0 
                                         ORDER BY priority asc");
@@ -64,9 +64,9 @@ class UserController extends Controller {
 
         foreach ($resp["permission"] as $key => $val) {
             $query = "
-                                        SELECT p.id = ANY (SELECT permission_id FROM permissionuser where users_id=" . $id . " and permission_id=p.id) allowed,p.*
-                                        from permission p 
-                                        WHERE parent_id=" . $val->id . "
+                                        SELECT p.permission_id = ANY (SELECT permission_id FROM permissions_user where users_id=" . $id . " and permission_id=p.permission_id) allowed,p.*
+                                        from permissions p 
+                                        WHERE parent_id=" . $val->permission_id . "
                                         ORDER BY priority asc";
 
             $children = DB::select($query);
@@ -79,7 +79,7 @@ class UserController extends Controller {
         }
 
 
-        $resp["permissionuser"] = PermissionUser::where("users_id", $id)->get();
+        $resp["permissionuser"] = PermissionsUser::where("users_id", $id)->get();
 
         return response()->json($resp);
     }

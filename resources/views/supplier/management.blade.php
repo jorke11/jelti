@@ -13,7 +13,7 @@
             <form id="frm">
                 {!! Form::open(['id'=>'frm']) !!}
                 <div class="row">
-                    <input type="hidden" id="id" name="id" class="input-supplier">
+                    <input type="hidden" id="supplier_id" name="supplier_id" class="input-supplier">
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label for="address">Type Persona</label>

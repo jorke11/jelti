@@ -29,7 +29,7 @@ function Role() {
         toastr.remove();
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "role/" + $("#frmEdit #id").val();
+        var url = "role/" + $("#frmEdit #role_id").val();
         $.ajax({
             url: url,
             method: "PUT",
@@ -56,7 +56,7 @@ function Role() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frmEdit #id").val(data.id);
+                $("#frmEdit #role_id").val(data.role_id);
                 $("#frmEdit #description").val(data.description);
             }
         })
@@ -90,7 +90,7 @@ function Role() {
             "serverSide": true,
             "ajax": "/api/listRole",
             columns: [
-                {data: "id"},
+                {data: "role_id"},
                 {data: "description"}
             ],
             order: [[1, 'ASC']],
@@ -98,7 +98,7 @@ function Role() {
                 {
                     aTargets: [0, 1],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.role_id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -106,7 +106,7 @@ function Role() {
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.role_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

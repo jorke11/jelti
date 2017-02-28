@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class PermissionTableSeeder extends Seeder
+class PermissionsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,7 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table("permission")->insert([
+        DB::table("permissions")->insert([
             'typemenu_id' => 0,
             'parent_id' => 0,
             'description' => 'Module security',
@@ -21,7 +21,7 @@ class PermissionTableSeeder extends Seeder
             'title' => 'security',
         ]);
         
-        DB::table("permission")->insert([
+        DB::table("permissions")->insert([
             'typemenu_id' => 1,
             'parent_id' => 1,
             'description' => 'form Users',
@@ -29,7 +29,7 @@ class PermissionTableSeeder extends Seeder
             'priority' => 1,
             'title' => 'Users',
         ]);
-        DB::table("permission")->insert([
+        DB::table("permissions")->insert([
             'typemenu_id' => 1,
             'parent_id' => 1,
             'description' => 'form Permission',

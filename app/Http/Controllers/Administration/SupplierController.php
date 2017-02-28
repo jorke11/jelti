@@ -7,23 +7,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Administration;
 use App\Models\Core;
 use Session;
+use App\Models\Administration\Suppliers;
 
 class SupplierController extends Controller {
 
     public function index() {
-        $type_person = Administration\TypePerson::all();
-        $type_regimen = Administration\TypeRegime::all();
+        $type_person = Administration\TypePersons::all();
+        $type_regimen = Administration\TypeRegimes::all();
         return view("supplier.init", compact('type_person', "type_regimen"));
     }
 
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["id"]);
+            unset($input["supplier_id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
 
-            $result = Administration\Supplier::create($input);
+            $result = Suppliers::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -34,13 +35,13 @@ class SupplierController extends Controller {
     }
 
     public function edit($id) {
-        $resp["header"] = Administration\Supplier::FindOrFail($id);
-        $resp["images"] = Administration\SupplierDocument::where("supplier_id", $id)->get();
+        $resp["header"] = Suppliers::FindOrFail($id);
+        $resp["images"] = Administration\SuppliersDocument::where("supplier_id", $id)->get();
         return response()->json($resp);
     }
 
     public function update(Request $request, $id) {
-        $supplier = Administration\Supplier::FindOrFail($id);
+        $supplier = Suppliers::FindOrFail($id);
         $input = $request->all();
         $result = $supplier->fill($input)->save();
         if ($result) {
@@ -52,7 +53,7 @@ class SupplierController extends Controller {
     }
 
     public function destroy($id) {
-        $supplier = Administration\Supplier::FindOrFail($id);
+        $supplier = Suppliers::FindOrFail($id);
         $result = $supplier->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
@@ -80,7 +81,7 @@ class SupplierController extends Controller {
 
     public function checkmain(Request $data, $id) {
         $input = $data->all();
-        $supplier = Administration\Supplier::find($input["supplier_id"]);
+        $supplier = Suppliers::find($input["supplier_id"]);
         \Illuminate\Support\Facades\DB::table("supplierdocument")->where("supplier_id", $input["supplier_id"])->update(['main' => false]);
         $image = Administration\SupplierDocument::where("id", $id)->update(['main' => true]);
         $image = Administration\SupplierDocument::find($id);

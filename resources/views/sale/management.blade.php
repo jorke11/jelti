@@ -30,7 +30,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Responsable:</label>
-            <select class="form-control input-departure" id="responsable_id" name='responsable_id' readonly>
+            <select class="form-control input-departure" id="responsible_id" name='responsible_id' readonly>
                 @if (isset($responsable))
                 @foreach($responsable as $res)
                 <option value="{{$res->id}}">{{$res->name}}</option>

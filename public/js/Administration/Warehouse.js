@@ -7,7 +7,7 @@ function Warehouse() {
         $("#btnOpenModal").click(function () {
             $("#modalEdit").modal("hide");
             $("#modalNew").modal("show");
-            $("#frm #id").val("");
+            $("#frm #warehouse_id").val("");
             $("#frm #description").val("");
             $("#frm #address").val("");
         });
@@ -18,7 +18,7 @@ function Warehouse() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frm #id").val();
+        var id = $("#frm #warehouse_id").val();
         var msg = '';
         if (id == '') {
             method = 'POST';
@@ -58,7 +58,7 @@ function Warehouse() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #id").val(data.id);
+                $("#frm #warehouse_id").val(data.warehouse_id);
                 $("#frm #description").val(data.description);
                 $("#frm #address").val(data.address);
             }
@@ -93,7 +93,7 @@ function Warehouse() {
             "serverSide": true,
             "ajax": "/api/listWarehouse",
             columns: [
-                {data: "id"},
+                {data: "warehouse_id"},
                 {data: "description"},
                 {data: "address"}
             ],
@@ -102,7 +102,7 @@ function Warehouse() {
                 {
                     aTargets: [0, 1, 2],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.warehouse_id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -110,7 +110,7 @@ function Warehouse() {
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.warehouse_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

@@ -21,7 +21,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Consecutive:</label>
-                    <input type="text" class="form-control input-entry input-sm" id="id" name='id' readonly="">
+                    <input type="text" class="form-control input-entry input-sm" id="consecutive" readonly="">
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Responsable:</label>
-                    <select class="form-control input-entry input-sm" id="responsable_id" name='responsable_id' readonly data-api="/api/getResponsable">
+                    <select class="form-control input-entry input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable">
                     </select>
 
                 </div>
@@ -98,8 +98,8 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Avoice:</label>
-                    <input type="text" class="form-control input-entry input-sm input-fillable" id="avoice" name='avoice' placeholder="Avoice" readonly>
+                    <label for="email">Invoice:</label>
+                    <input type="text" class="form-control input-entry input-sm input-fillable" id="invoice" name='invoice' placeholder="invoice" readonly>
                 </div>
             </div>
 

@@ -108,7 +108,7 @@ Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getCli
 
 
 Route::get('/api/listCategory', function() {
-    return Datatables::eloquent(Models\Administration\Category::query())->make(true);
+    return Datatables::eloquent(Models\Administration\Categories::query())->make(true);
 });
 
 Route::get('/api/listSupplier', function() {
@@ -117,10 +117,10 @@ Route::get('/api/listSupplier', function() {
             )->make(true);
 });
 Route::get('/api/listProduct', function() {
-    return Datatables::eloquent(Models\Administration\Product::query())->make(true);
+    return Datatables::eloquent(Models\Administration\Products::query())->make(true);
 });
 Route::get('/api/listWarehouse', function() {
-    return Datatables::eloquent(Models\Administration\Warehouse::query())->make(true);
+    return Datatables::eloquent(Models\Administration\Warehouses::query())->make(true);
 });
 
 Route::get('/api/listMark', function() {
@@ -128,30 +128,30 @@ Route::get('/api/listMark', function() {
 });
 
 Route::get('/api/listPurchage', function() {
-    return Datatables::eloquent(Models\Invoicing\Purchage::query())->make(true);
+    return Datatables::eloquent(Models\Invoicing\Purchases::query())->make(true);
 });
 Route::get('/api/listSale', function() {
-    return Datatables::eloquent(Models\Invoicing\Sale::query())->make(true);
+    return Datatables::eloquent(Models\Invoicing\Sales::query())->make(true);
 });
 Route::get('/api/listEntry', function() {
-    return Datatables::eloquent(Models\Inventory\Entry::query())->make(true);
+    return Datatables::eloquent(Models\Inventory\Entries::query())->make(true);
 });
 Route::get('/api/listDeparture', function() {
-    return Datatables::eloquent(Models\Inventory\Departure::query())->make(true);
+    return Datatables::eloquent(Models\Inventory\Departures::query())->make(true);
 });
 
 Route::get('/api/listOrder', function() {
-    return Datatables::eloquent(Models\Inventory\Order::query())->make(true);
+    return Datatables::eloquent(Models\Inventory\Orders::query())->make(true);
 });
 Route::get('/api/listCity', function() {
-    return Datatables::eloquent(Models\Administration\City::query())->make(true);
+    return Datatables::eloquent(Models\Administration\Cities::query())->make(true);
 });
 Route::get('/api/listRole', function() {
-    return Datatables::eloquent(Models\Security\Role::query())->make(true);
+    return Datatables::eloquent(Models\Security\Roles::query())->make(true);
 });
 
 Route::get('/api/listUser', function() {
-    return Datatables::eloquent(Models\Security\User::query())->make(true);
+    return Datatables::eloquent(Models\Security\Users::query())->make(true);
 });
 Route::get('/api/listPuc', function() {
     return Datatables::eloquent(Models\Administration\Puc::query())->make(true);
@@ -164,6 +164,7 @@ Route::get('/api/getSupplier', 'Administration\SeekController@getSupplier');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
+Route::get('/api/getCategory', 'Administration\SeekController@getCategory');
 
 
 

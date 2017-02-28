@@ -30,7 +30,7 @@ function Entry() {
             $("#frm #supplier_id").prop("disabled", true);
             $("#frm #status_id").prop("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
-            $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+            $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $.ajax({
                 url: 'entry/1/consecutive',
@@ -44,14 +44,15 @@ function Entry() {
 
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
-            $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
+            $("#frmDetail #product_id").val(0).getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
+           
             $("#frmDetail #id").val("");
             $("#frmDetail #quantity").val("");
             $("#frmDetail #value").val("");
             $("#frmDetail #lot").val("");
         })
 
-        $("#frmDetail #product_id").change(function () {
+        $("#frmDetail #product_id").on("change",function () {
             $.ajax({
                 url: 'entry/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
@@ -74,7 +75,7 @@ function Entry() {
         $("#frm #supplier_id").prop("disabled", false);
         $("#btnSave").prop("disabled", false);
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
-        $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+        $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
     }
 
@@ -87,7 +88,7 @@ function Entry() {
             data: obj,
             dataType: 'JSON',
             success: function (resp) {
-
+                toastr.success("Sended");
             }
         })
     }
@@ -107,7 +108,7 @@ function Entry() {
 
     this.save = function () {
         $("#frm #warehouse_id").prop("disabled", false);
-        $("#frm #responsable_id").prop("disabled", false);
+        $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
         var frm = $("#frm");
         var data = frm.serialize();
@@ -159,7 +160,7 @@ function Entry() {
             url += "detail/" + id;
             msg = "Edited " + msg;
         }
-
+     
         $.ajax({
             url: url,
             method: method,

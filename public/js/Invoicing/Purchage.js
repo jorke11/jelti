@@ -25,7 +25,7 @@ function Purchage() {
         $("#insideManagement").click(function () {
             $(".input-purchage").cleanFields();
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
-            $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+            $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#frm #branch_id").getSeeker({default: true, api: '/api/getSupplier', disabled: true});
             $.ajax({
@@ -71,7 +71,7 @@ function Purchage() {
 
     this.save = function () {
         $("#frm #warehouse_id").prop("disabled", false);
-        $("#frm #responsable_id").prop("disabled", false);
+        $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
         var frm = $("#frm");
         var data = frm.serialize();

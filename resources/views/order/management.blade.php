@@ -23,7 +23,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Consecutive:</label>
-                    <input type="text" class="form-control input-order" id="consecutive" name='consecutive' value="0001">
+                    <input type="text" class="form-control input-order" id="id" name='id' value="0001">
                 </div>
             </div>
             <div class="col-lg-2">
@@ -37,7 +37,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Responsable:</label>
-                    <select class="form-control input-order input-sm" id="responsable_id" name='responsable_id' readonly data-api="/api/getResponsable">
+                    <select class="form-control input-order input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable">
                     </select>
 
                 </div>

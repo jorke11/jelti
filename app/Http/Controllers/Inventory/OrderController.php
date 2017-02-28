@@ -5,19 +5,19 @@ namespace App\Http\Controllers\Inventory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
-use App\Models\Inventory\Order;
-use App\Models\Inventory\OrderDetail;
+use App\Models\Inventory\Orders;
+use App\Models\Inventory\OrdersDetail;
 use Session;
 
 class OrderController extends Controller {
 
     public function index() {
         $responsable = DB::select('select id,name from users');
-        $warehouse = \App\Models\Administration\Warehouse::all();
-        $product = \App\Models\Administration\Product::all();
+        $warehouse = \App\Models\Administration\Warehouses::all();
+        $product = \App\Models\Administration\Products::all();
         $mark = \App\Models\Administration\Mark::all();
-        $supplier = \App\Models\Administration\Supplier::all();
-        $category = \App\Models\Administration\Category::all();
+        $supplier = \App\Models\Administration\Suppliers::all();
+        $category = \App\Models\Administration\Categories::all();
         return view("order.init", compact("responsable", "warehouse", "supplier", "product", "mark", "category"));
     }
 
@@ -26,20 +26,20 @@ class OrderController extends Controller {
     }
 
     public function getDetailProduct($id) {
-        $response = DB::table("product")
-                ->select("product.id", "product.title", "category.description as caterory", "product.price_sf")
-                ->join("category", "category.id", "=", "product.category_id")
-                ->where("product.id", $id)
+        $response = DB::table("products")
+                ->select("products.id", "products.title", "categories.description as caterory", "products.price_sf")
+                ->join("categories", "categories.id", "=", "products.id")
+                ->where("products.id", $id)
                 ->first();
-        $entry = DB::table("entry_detail")->where("product_id", $id)->sum("quantity");
-        $order = DB::table("order_detail")->where("product_id", $id)->sum("quantity");
+        $entry = DB::table("entries_detail")->where("product_id", $id)->sum("quantity");
+        $order = DB::table("orders_detail")->where("product_id", $id)->sum("quantity");
         $quantity = $entry - $order;
 
         return response()->json(["response" => $response, "quantity" => $quantity]);
     }
 
     public function getQuantity($id) {
-        $product = \App\Models\Invoicing\PurchageDetail::where("product_id", $id)->first();
+        $product = \App\Models\Invoicing\PurchasesDetail::where("product_id", $id)->first();
         return response()->json(["response" => $product]);
     }
 
@@ -50,10 +50,10 @@ class OrderController extends Controller {
 //            $user = Auth::User();
             $input["status_id"] = 1;
 
-            $result = Order::create($input);
+            $result = Orders::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = Order::FindOrFail($result["attributes"]["id"]);
+                $resp = Orders::FindOrFail($result["attributes"]["id"]);
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);
@@ -62,22 +62,22 @@ class OrderController extends Controller {
     }
 
     public function edit($id) {
-        $entry = Order::FindOrFail($id);
-        $detail = DB::table("order_detail")->where("order_id", "=", $id)->get();
+        $entry = Orders::FindOrFail($id);
+        $detail = DB::table("orders_detail")->where("order_id", "=", $id)->get();
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 
     public function getDetail($id) {
-        $detail = OrderDetail::FindOrFail($id);
+        $detail = OrdersDetail::FindOrFail($id);
         return response()->json($detail);
     }
 
     public function update(Request $request, $id) {
-        $entry = Order::FindOrFail($id);
+        $entry = Orders::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = Order::FindOrFail($id);
+            $resp = Orders::FindOrFail($id);
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -86,16 +86,16 @@ class OrderController extends Controller {
     }
 
     public function getClient($id) {
-        $supplier = \App\Models\Administration\Supplier::findOrFail($id);
+        $supplier = \App\Models\Administration\Suppliers::findOrFail($id);
         return response()->json(["response" => $supplier]);
     }
 
     public function updateDetail(Request $request, $id) {
-        $entry = OrderDetail::FindOrFail($id);
+        $entry = OrdersDetail::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = DB::table("order_detail")->where("order_id", "=", $input["order_id"])->get();
+            $resp = DB::table("orders_detail")->where("order_id", "=", $input["order_id"])->get();
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -104,7 +104,7 @@ class OrderController extends Controller {
     }
 
     public function destroy($id) {
-        $entry = Order::FindOrFail($id);
+        $entry = Orders::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
@@ -116,11 +116,11 @@ class OrderController extends Controller {
     }
 
     public function destroyDetail($id) {
-        $entry = OrderDetail::FindOrFail($id);
+        $entry = OrdersDetail::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            $resp = DB::table("order_detail")->where("order_id", "=", $entry["order_id"])->get();
+            $resp = DB::table("ordersº_detail")->where("order_id", "=", $entry["order_id"])->get();
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -136,10 +136,10 @@ class OrderController extends Controller {
 //            $input["users_id"] = 1;
             $input["status_id"] = 1;
             $input["pending"] = $input["quantity"] - $input["generate"];
-            $result = OrderDetail::create($input);
+            $result = OrdersDetail::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = OrderDetail::where("order_id", $input["order_id"])->get();
+                $resp = OrdersDetail::where("order_id", $input["order_id"])->get();
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);

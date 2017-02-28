@@ -31,7 +31,7 @@ function Sale() {
             $(".input-order").cleanFields();
             $("#frm #consecutive").val(1);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
-            $("#frm #responsable_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+            $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#frm #destination_id").getSeeker({default: false, api: '/api/getSupplier', disabled: false});
             $("#frm #client_id").getSeeker({default: false, api: '/api/getSupplier', disabled: false});
@@ -55,28 +55,29 @@ function Sale() {
 
         });
 
-        $("#frmDetail #product_id").change(function () {
-            $.ajax({
-                url: 'order/' + $(this).val() + '/getDetailProduct',
-                method: 'GET',
-                dataType: 'JSON',
-                success: function (resp) {
-                    $("#frmDetail #category_id").val(resp.response.id).trigger('change');
-                    $("#frmDetail #value").val(resp.response.price_sf)
+        $("#frmDetail #product_id").on("change",
+                function () {
+                    $.ajax({
+                        url: 'order/' + $(this).val() + '/getDetailProduct',
+                        method: 'GET',
+                        dataType: 'JSON',
+                        success: function (resp) {
+                            $("#frmDetail #category_id").val(resp.response.id).trigger('change');
+                            $("#frmDetail #value").val(resp.response.price_sf)
 
-                    $("#frmDetail #quantityMax").html(resp.quantity)
-                    if (resp.quantity > 0) {
-                        maxDeparture = resp.quantity;
-                        $("#frmDetail #quantity").attr("disabled", false);
-                        $("#newDetail").attr("disabled", false);
-                    } else {
-                        $("#newDetail").attr("disabled", true);
-                        $("#frmDetail #quantity").attr("disabled", true);
-                    }
+                            $("#frmDetail #quantityMax").html(resp.quantity)
+                            if (resp.quantity > 0) {
+                                maxDeparture = resp.quantity;
+                                $("#frmDetail #quantity").attr("disabled", false);
+                                $("#newDetail").attr("disabled", false);
+                            } else {
+                                $("#newDetail").attr("disabled", true);
+                                $("#frmDetail #quantity").attr("disabled", true);
+                            }
 
-                }
-            })
-        });
+                        }
+                    })
+                });
 
 
         $("#quantity").blur(function () {
@@ -121,7 +122,7 @@ function Sale() {
 
     this.save = function () {
         $("#frm #warehouse_id").prop("disabled", false);
-        $("#frm #responsable_id").prop("disabled", false);
+        $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
         var frm = $("#frm");
         var data = frm.serialize();
@@ -226,15 +227,8 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $("#modalDetail").modal("show");
-                $("#frmDetail #id").val(data.id);
-                $("#frmDetail #supplier_id").val(data.supplier_id);
-                $("#frmDetail #mark_id").val(1);
-                $("#frmDetail #quantity").val(data.quantity);
-                $("#frmDetail #generate").val(data.generate);
-                $("#frmDetail #value").val(data.value);
-                $("#frmDetail #lot").val(1);
-                $("#frmDetail #category_id").val(data.category_id);
-                $("#frmDetail #expiration_date").val(data.expiration_date);
+                $(".input-detail").setFields({data: data})
+
             }
         })
     }
@@ -312,7 +306,7 @@ function Sale() {
             "ajax": "/api/listOrder",
             columns: [
                 {data: "id"},
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "created"},
                 {data: "order"},
                 {data: "warehouse_id"},

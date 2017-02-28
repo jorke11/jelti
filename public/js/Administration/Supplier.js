@@ -51,7 +51,7 @@ function Suppliers() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frm #id").val();
+        var id = $("#frm #supplier_id").val();
         var msg = '';
         if (id == '') {
             method = 'POST';
@@ -89,20 +89,9 @@ function Suppliers() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #id").val(data.header.id);
-                $("#frm #name").val(data.header.name);
-                $("#frm #last_name").val(data.header.last_name);
-                $("#frm #document").val(data.header.document);
-                $("#frm #phone").val(data.header.phone);
-                $("#frm #email").val(data.header.email);
-                $("#frm #address").val(data.header.address);
-                $("#frm #term").val(data.header.term);
-                $("#frm #city_id").val(data.header.city_id);
-                $("#frm #web_site").val(data.header.web_site);
-                $("#frm #contact").val(data.header.contact);
-                $("#frm #phone_contact").val(data.header.phone_contact);
-                $("#frm #type_regimen_id").val(data.header.type_regimen_id);
-                $("#frm #type_person_id").val(data.header.type_person_id);
+                
+                $(".input-supplier").setFields({data: data.header});
+
                 obj.printImages(data.images);
             }
         })
@@ -157,7 +146,7 @@ function Suppliers() {
             "serverSide": true,
             "ajax": "/api/listSupplier",
             columns: [
-                {data: "id"},
+                {data: "supplier_id"},
                 {data: "name"},
                 {data: "last_name"},
                 {data: "document"},
@@ -183,7 +172,7 @@ function Suppliers() {
                 {
                     aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.supplier_id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -191,7 +180,7 @@ function Suppliers() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.supplier_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

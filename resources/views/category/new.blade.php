@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frm','route'=>'category.store']) !!}
-                <input type="hidden" id="id" name="id">
+                <input type="hidden" id="category_id" name="category_id">
                 {!! Form::text('description',null,['id'=>'description','class'=>'form-control','placeholder'=>'Detail'])!!}<br>
                 {!!Form::close()!!}
             </div>

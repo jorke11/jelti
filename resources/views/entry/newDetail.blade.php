@@ -20,7 +20,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Category:</label>
-                            <select class="form-control input-detail input-sm" id="category_id" name='category_id' readonly>
+                            <select class="form-control input-detail input-sm" id="category_id" name='category_id'>
                                 <option value="0">Selection</option>
                                 @foreach($category as $val)
                                 <option value="{{$val->id}}">{{$val->description}}</option>

@@ -33,7 +33,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Responsable:</label>
-                    <select class="form-control input-departure input-sm" id="responsable_id" name='responsable_id' readonly data-api="/api/getResponsable">
+                    <select class="form-control input-departure input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable">
                     </select>
 
                 </div>
@@ -117,7 +117,7 @@
 
 
 <div class="row">
-    <div class="col-lg-8 col-lg-offset-2">
+    <div class="col-lg-6 col-lg-offset-3">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
@@ -134,12 +134,9 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Supplier</th>
                             <th>Product</th>
-                            <th>Mark</th>
                             <th>Quantity</th>
                             <th>Value</th>
-                            <th>Expiration</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

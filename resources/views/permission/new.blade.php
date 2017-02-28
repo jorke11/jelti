@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frm','route'=>'permission.store']) !!}
-                <input type="hidden" id="id" name="id">
+                <input type="hidden" id="permission_id" name="permission_id">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">

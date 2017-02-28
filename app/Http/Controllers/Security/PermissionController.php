@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Security;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Security\Permission;
+use App\Models\Security\Permissions;
 use Session;
 use DB;
 
@@ -12,7 +12,7 @@ class PermissionController extends Controller {
 
     public function index() {
 
-        $parents = Permission::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
+        $parents = Permissions::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
         return view("permission.init", compact("parents"));
     }
 
@@ -23,14 +23,14 @@ class PermissionController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["id"]);
+            unset($input["permission_id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
 
-            if (!isset($input["parent_id"])) {
+            if (!isset($input["parent_id"]) || $input["parent_id"] == '') {
                 $input["parent_id"] = 0;
             }
-            $result = Permission::create($input);
+            $result = Permissions::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true', 'data' => $this->getPermission()]);
@@ -41,12 +41,12 @@ class PermissionController extends Controller {
     }
 
     public function edit($id) {
-        $data = Permission::FindOrFail($id);
+        $data = Permissions::FindOrFail($id);
         return response()->json($data);
     }
 
     public function update(Request $request, $id) {
-        $data = Permission::FindOrFail($id);
+        $data = Permissions::FindOrFail($id);
         $input = $request->all();
         $result = $data->fill($input)->save();
         if ($result) {
@@ -58,7 +58,7 @@ class PermissionController extends Controller {
     }
 
     public function destroy($id) {
-        $data = Permission::FindOrFail($id);
+        $data = Permissions::FindOrFail($id);
         $result = $data->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
@@ -70,11 +70,11 @@ class PermissionController extends Controller {
     }
 
     public function getPermission() {
-        $data = Permission::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
+        $data = Permissions::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
         $resp = array();
 
         foreach ($data as $key => $val) {
-            $children = Permission::where("parent_id", $val->id)->get();
+            $children = Permissions::where("parent_id", $val->permission_id)->get();
 
 
             array_push($resp, $val);
@@ -91,7 +91,7 @@ class PermissionController extends Controller {
     }
 
     public function getMenu($id) {
-        $data = Permission::FindOrFail($id);
+        $data = Permissions::FindOrFail($id);
         return response()->json($data);
     }
 

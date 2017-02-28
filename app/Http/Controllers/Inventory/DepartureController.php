@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Inventory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
-use App\Models\Inventory\Departure;
-use App\Models\Inventory\Order;
-use App\Models\Inventory\DepartureDetail;
-use App\Models\Inventory\OrderDetail;
+use App\Models\Inventory\Departures;
+use App\Models\Inventory\Orders;
+use App\Models\Inventory\DeparturesDetail;
+use App\Models\Inventory\OrdersDetail;
+use App\Models\Invoicing\PurchasesDetail;
 use Session;
 
 class DepartureController extends Controller {
@@ -16,11 +17,11 @@ class DepartureController extends Controller {
     public function index() {
 
         $responsable = DB::select('select id,name from users');
-        $warehouse = \App\Models\Administration\Warehouse::all();
-        $product = \App\Models\Administration\Product::all();
+        $warehouse = \App\Models\Administration\Warehouses::all();
+        $product = \App\Models\Administration\Products::all();
         $mark = \App\Models\Administration\Mark::all();
-        $supplier = \App\Models\Administration\Supplier::all();
-        $category = \App\Models\Administration\Category::all();
+        $supplier = \App\Models\Administration\Suppliers::all();
+        $category = \App\Models\Administration\Categories::all();
         return view("departure.init", compact("responsable", "warehouse", "supplier", "product", "mark", "category"));
     }
 
@@ -29,8 +30,8 @@ class DepartureController extends Controller {
     }
 
     public function getOrderExt($id) {
-        $entry =Order::findOrFail($id);
-        $detail = DB::select("SELECT id,product_id,quantity-pending as quantity,value FROM order_detail where order_id=" . $id);
+        $entry = Orders::findOrFail($id);
+        $detail = DB::select("SELECT id,product_id,quantity-pending as quantity,value FROM orders_detail where order_id=" . $id);
 
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
@@ -46,7 +47,7 @@ class DepartureController extends Controller {
                 ->where("product.id", $id)
                 ->first();
         $entry = DB::table("entry_detail")->where("product_id", $id)->sum("quantity");
-        $departure = DB::table("departure_detail")->where("product_id", $id)->sum("quantity");
+        $departure = DB::table("departures_detail")->where("product_id", $id)->sum("quantity");
         $quantity = $entry - $departure;
 
         return response()->json(["response" => $response, "quantity" => $quantity]);
@@ -60,14 +61,14 @@ class DepartureController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["id"]);
+            unset($input["departure_id"]);
 //            $user = Auth::User();
             $input["status_id"] = 1;
 
-            $result = Departure::create($input);
+            $result = Departures::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = Departure::FindOrFail($result["attributes"]["id"]);
+                $resp = Departures::FindOrFail($result["attributes"]["id"]);
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);
@@ -78,44 +79,46 @@ class DepartureController extends Controller {
     public function storeExtern(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            $order = Order::findOrFail($input["id"]);
+            $order = Orders::findOrFail($input["id"]);
 
-            dd($order);
-            exit;
-
-            $id = DB::table("departure")->insertGetId(
-                    ["order_id" => $input["id"], "warehouse_id" => $order["warehouse_id"], "responsable_id" => $order["responsable_id"],
+            $id = DB::table("departures")->insertGetId(
+                    ["order_id" => $input["id"], "warehouse_id" => $order["warehouse_id"], "responsible_id" => $order["responsible_id"],
                         "client_id" => $order["client_id"], "city_id" => $order["city_id"], "destination_id" => $order["destination_id"],
                         "status_id" => $order["status_id"], "created" => $order["created"], "address" => $order["address"], "phone" => $order["phone"],
                         "branch_id" => $order["branch_id"],
                     ]
             );
 
+            $detail = DB::select("SELECT id,product_id,quantity-pending as quantity,value,category_id FROM orders_detail where order_id=" . $input["id"]);
 
-            $detail = DB::select("SELECT id,product_id,quantity-pending as quantity,value FROM order_detail where order_id=" . $input["id"]);
-
-            dd($detail);
-            exit;
+            foreach ($detail as $value) {
+                DeparturesDetail::insert([
+                    'departure_id' => $id, "value" => $value->value, "product_id" => $value->product_id, "category_id" => $value->category_id,
+                    "quantity" => $value->quantity
+                ]);
+            }
         }
+        $resp = Departures::FindOrFail($id);
+        return response()->json(["success" => 'true', "data" => $resp]);
     }
 
     public function edit($id) {
-        $entry = Departure::FindOrFail($id);
-        $detail = DB::table("departure_detail")->where("departure_id", "=", $id)->get();
+        $entry = Departures::FindOrFail($id);
+        $detail = DB::table("departures_detail")->where("id", "=", $id)->get();
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 
     public function getDetail($id) {
-        $detail = DepartureDetail::FindOrFail($id);
+        $detail = DeparturesDetail::FindOrFail($id);
         return response()->json($detail);
     }
 
     public function update(Request $request, $id) {
-        $entry = Departure::FindOrFail($id);
+        $entry = Departures::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = Departure::FindOrFail($id);
+            $resp = Departures::FindOrFail($id);
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -124,11 +127,11 @@ class DepartureController extends Controller {
     }
 
     public function updateDetail(Request $request, $id) {
-        $entry = DepartureDetail::FindOrFail($id);
+        $entry = DeparturesDetail::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = DB::table("departure_detail")->where("departure_id", "=", $input["departure_id"])->get();
+            $resp = DB::table("departures_detail")->where("departure_id", "=", $input["departure_id"])->get();
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -137,7 +140,7 @@ class DepartureController extends Controller {
     }
 
     public function destroy($id) {
-        $entry = Departure::FindOrFail($id);
+        $entry = Departures::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
@@ -149,11 +152,11 @@ class DepartureController extends Controller {
     }
 
     public function destroyDetail($id) {
-        $entry = DepartureDetail::FindOrFail($id);
+        $entry = DeparturesDetail::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            $resp = DB::table("departure_detail")->where("departure_id", "=", $entry["departure_id"])->get();
+            $resp = DB::table("departures_detail")->where("departure_id", "=", $entry["departure_id"])->get();
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -167,10 +170,10 @@ class DepartureController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = DepartureDetail::create($input);
+            $result = DeparturesDetail::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = DepartureDetail::where("departure_id", $input["departure_id"])->get();
+                $resp = DeparturesDetail::where("departure_id", $input["departure_id"])->get();
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);

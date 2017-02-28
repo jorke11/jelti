@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Administration;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Administration\City;
+use App\Models\Administration\Cities;
 use Session;
 
 class CityController extends Controller {
@@ -23,7 +23,7 @@ class CityController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = City::create($input);
+            $result = Cities::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -34,12 +34,12 @@ class CityController extends Controller {
     }
 
     public function edit($id) {
-        $city = City::FindOrFail($id);
+        $city = Cities::FindOrFail($id);
         return response()->json($city);
     }
 
     public function update(Request $request, $id) {
-        $city = City::FindOrFail($id);
+        $city = Cities::FindOrFail($id);
         $input = $request->all();
         $result = $city->fill($input)->save();
         if ($result) {
@@ -51,7 +51,7 @@ class CityController extends Controller {
     }
 
     public function destroy($id) {
-        $city = City::FindOrFail($id);
+        $city = Cities::FindOrFail($id);
         $result = $city->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {

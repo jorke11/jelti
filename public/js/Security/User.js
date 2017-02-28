@@ -165,11 +165,8 @@ function User() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $("#frm #id").val(data.header.id);
-                $("#frm #name").val(data.header.name);
-                $("#frm #email").val(data.header.email);
-                $("#frm #profile_id").val(data.header.profile_id);
-                $("#frm #city_id").val(data.header.city_id);
+                $(".input-user").setFields({data:data.header});
+                
                 if (data.header.status == true) {
                     $("#frm #status").prop("checked", true);
                 } else {

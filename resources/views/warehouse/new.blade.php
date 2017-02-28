@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <input type="hidden" id="id" name="id">
+                <input type="hidden" id="warehouse_id" name="warehouse_id">
                 {!!Form::close()!!}
             </div>
             <div class="modal-footer">

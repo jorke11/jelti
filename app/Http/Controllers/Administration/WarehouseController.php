@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Administration;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Administration\Warehouse;
+use App\Models\Administration\Warehouses;
 use Session;
 
 class WarehouseController extends Controller {
@@ -21,10 +21,10 @@ class WarehouseController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
 
-            unset($input["id"]);
+            unset($input["warehouse_id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Warehouse::create($input);
+            $result = Warehouses::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -35,12 +35,12 @@ class WarehouseController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Warehouse::FindOrFail($id);
+        $suppliers = Warehouses::FindOrFail($id);
         return response()->json($suppliers);
     }
 
     public function update(Request $request, $id) {
-        $warehouse = Warehouse::FindOrFail($id);
+        $warehouse = Warehouses::FindOrFail($id);
         $input = $request->all();
         $result = $warehouse->fill($input)->save();
         if ($result) {
@@ -52,7 +52,7 @@ class WarehouseController extends Controller {
     }
 
     public function destroy($id) {
-        $warehouse = Warehouse::FindOrFail($id);
+        $warehouse = Warehouses::FindOrFail($id);
         $result = $warehouse->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {

@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmEdit','url'=>'category.edit']) !!}
-                <input type="hidden" id="id" name="id">
+                <input type="hidden" id="city_id" name="city_id">
                 {!! Form::text('description',null,['id'=>'description','class'=>'form-control','placeholder'=>'Detail'])!!}<br>
                 {!!Form::close()!!}
             </div>

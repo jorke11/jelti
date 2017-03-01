@@ -44,10 +44,15 @@ jQuery.fn.getSeeker = function (param) {
                 elem.prop("disabled", false);
             }
         }
+        var multiple = false;
+        if (elem.attr("multiple") != undefined) {
+            multiple = true;
+        }
 
         if (elem.data("api") != undefined) {
             elem.select2({
                 placeholder: "Select",
+                multiple: multiple,
                 ajax: {
                     url: elem.data("api"),
                     dataType: 'json',
@@ -60,20 +65,14 @@ jQuery.fn.getSeeker = function (param) {
                         };
                     },
                     processResults: function (data, params) {
-                        // parse the results into the format expected by Select2
-                        // since we are using custom formatting functions we do not need to
-                        // alter the remote JSON data, except to indicate that infinite
-                        // scrolling can be used
                         params.page = params.page || 1;
-
                         return {
                             results: data.items,
                             pagination: {
                                 more: (params.page * 30) < data.total_count
                             }
                         };
-                    },
-
+                    }
                 },
                 escapeMarkup: function (markup) {
                     return markup;
@@ -110,9 +109,15 @@ jQuery.fn.setFields = function (param) {
                         dataType: 'JSON',
                         success: function (data) {
                             if (data.items.length > 0) {
-                                elem.append('<option value=' + data.items[0].id + '>' + data.items[0].text + '</option>');
-                                elem.select2({'data': [{'id': data.items[0].id, 'text': data.items[0].text}]});
-                                elem.val(data.items[0].id).trigger('change');
+                                var sel = [];
+                                elem.empty();
+                                $.each(data.items, function (i, val) {
+                                    elem.append('<option value=' + val.id + '>' + val.text + '</option>');
+                                    elem.select2({'data': [{'id': val.id, 'text': val.text}]});
+                                    sel.push(val.id);
+                                });
+
+                                elem.val(sel).trigger('change');
                             }
                         }
                     })

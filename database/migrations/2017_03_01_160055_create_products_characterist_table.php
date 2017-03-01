@@ -4,19 +4,17 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePricespecialTable extends Migration
-{
+class CreateProductsCharacteristTable extends Migration {
+
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up() {
-        Schema::create('prices_special', function (Blueprint $table) {
+        Schema::create('products_characteristic', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('client_id');
-            $table->integer('product_id');
-            $table->decimal('price',10,2);
+            $table->string('description');
             $table->timestamps();
         });
     }
@@ -27,6 +25,7 @@ class CreatePricespecialTable extends Migration
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('prices_special');
+        Schema::dropIfExists('products_characteristic');
     }
+
 }

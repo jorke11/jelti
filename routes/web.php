@@ -41,6 +41,7 @@ Route::resource('/warehouse', 'Administration\WarehouseController');
 Route::resource('/mark', 'Administration\MarkController');
 
 Route::resource('/city', 'Administration\CityController');
+Route::resource('/characteristic', 'Administration\CharacteristicController');
 
 Route::resource('/user', 'Security\UserController');
 Route::get('/user/getListPermission/{id}', 'Security\UserController@getPermission');
@@ -110,6 +111,9 @@ Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getCli
 Route::get('/api/listCategory', function() {
     return Datatables::eloquent(Models\Administration\Categories::query())->make(true);
 });
+Route::get('/api/listCharacterist', function() {
+    return Datatables::eloquent(Models\Administration\Characteristic::query())->make(true);
+});
 
 Route::get('/api/listSupplier', function() {
     return Datatables::queryBuilder(
@@ -161,6 +165,8 @@ Route::get('/api/listMenu', 'DashboardController@getMenu');
 
 Route::get('/api/getCity', 'Administration\SeekController@getCity');
 Route::get('/api/getSupplier', 'Administration\SeekController@getSupplier');
+Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacteristic');
+Route::get('/api/getClient', 'Administration\SeekController@getClient');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');

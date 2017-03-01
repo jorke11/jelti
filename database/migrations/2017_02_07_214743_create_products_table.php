@@ -33,7 +33,7 @@ class CreateProductsTable extends Migration {
             $table->string('meta_keywords', 100)->nullable();
             $table->string('meta_description', 100)->nullable();
             $table->integer('minimum_stock');
-
+            $table->json('characteristic')->nullable();
             $table->timestamps();
         });
     }

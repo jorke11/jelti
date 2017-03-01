@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Administration;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Administration\Categories;
+use App\Models\Administration\Characteristic;
 use Session;
 
-class CategoryController extends Controller {
-
-    public function __construct() {
+class CharacteristicController extends Controller
+{
+   public function __construct() {
         $this->middleware("auth");
     }
 
     public function index() {
-        return view("category.init");
+        return view("characteristic.init");
     }
 
     public function create() {
@@ -27,7 +27,7 @@ class CategoryController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Categories::create($input);
+            $result = Characteristic::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -38,12 +38,12 @@ class CategoryController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Categories::FindOrFail($id);
+        $suppliers = Characteristic::FindOrFail($id);
         return response()->json($suppliers);
     }
 
     public function update(Request $request, $id) {
-        $category = Categories::FindOrFail($id);
+        $category = Characteristic::FindOrFail($id);
         $input = $request->all();
         $result = $category->fill($input)->save();
         if ($result) {
@@ -55,7 +55,7 @@ class CategoryController extends Controller {
     }
 
     public function destroy($id) {
-        $category = Categories::FindOrFail($id);
+        $category = Characteristic::FindOrFail($id);
         $result = $category->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
@@ -65,5 +65,4 @@ class CategoryController extends Controller {
             return response()->json(['success' => 'false']);
         }
     }
-
 }

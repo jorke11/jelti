@@ -1,14 +1,17 @@
 @extends('layouts.dash')
 
 @section('content')
-@section('title','City')
+@section('title','Characteristic')
 @section('subtitle','Management')
+
+
+
 <div class="row">
     <div class="col-lg-6 col-lg-offset-3">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-lg-3">List City</div>
+                    <div class="col-lg-3">List Characteristic</div>
                     <div class="col-lg-9 text-right">
                         <button class="btn btn-success btn-sm" type="button" id="btnNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -33,6 +36,6 @@
         </div>
     </div>
 </div>
-@include('city.form')
-{!!Html::script('js/Administration/City.js')!!}
+@include('Characteristic.form')
+{!!Html::script('js/Administration/Characteristic.js')!!}
 @endsection

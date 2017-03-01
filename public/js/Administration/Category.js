@@ -4,60 +4,64 @@ function Category() {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
+        $("#btnNew").click(function () {
+            $(".input-category").cleanFields();
+            $("#modalNew").modal("show");
+        });
     }
 
     this.save = function () {
+        toastr.remove();
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = frm.attr("action");
-        $.ajax({
-            url: url,
-            method: "POST",
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    table.ajax.reload();
-                    $("#modalNew").modal("toggle");
-                    toastr.success("Ok");
-                }
-            }
-        })
-    }
+        var url = "", method = "";
+        var id = $("#frm #id").val();
+        var msg = '';
 
-    this.edit = function () {
-        toastr.remove();
-        var frm = $("#frmEdit");
-        var data = frm.serialize();
-        var url = "category/" + $("#frmEdit #category_id").val();
-        $.ajax({
-            url: url,
-            method: "PUT",
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    table.ajax.reload();
-                    toastr.success("Ok");
-                    $("#modalEdit").modal("toggle");
-                }
+        var validate = $(".input-category").validate();
+
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "category";
+                msg = "Created Record";
+            } else {
+                method = 'PUT';
+                url = "category/" + id;
+                msg = "Edited Record";
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == 'true') {
+                        $("#modalNew").modal("hide");
+                        table.ajax.reload();
+                        toastr.success(msg);
+                    }
+                }
+            })
+        } else {
+            toastr.error("Fields Required!");
+        }
     }
 
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
         var url = "/category/" + id + "/edit";
-        $("#modalEdit").modal("show");
+        $("#modalNew").modal("show");
         $.ajax({
             url: url,
             method: "GET",
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frmEdit #category_id").val(data.category_id);
-                $("#frmEdit #description").val(data.description);
+                $("#frm #id").val(data.id);
+                $("#frm #description").val(data.description);
             }
         })
     }
@@ -85,12 +89,12 @@ function Category() {
     }
 
     this.table = function () {
-        return $('#tbl').DataTable({ 
+        return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": "/api/listCategory",
             columns: [
-                {data: "category_id"},
+                {data: "id"},
                 {data: "description"}
             ],
             order: [[1, 'ASC']],
@@ -98,7 +102,7 @@ function Category() {
                 {
                     aTargets: [0, 1],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.category_id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -106,7 +110,7 @@ function Category() {
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.category_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

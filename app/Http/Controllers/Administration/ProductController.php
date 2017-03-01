@@ -14,17 +14,21 @@ use App\Models\Administration\ProductsImage;
 class ProductController extends Controller {
 
     public function index() {
-        $categories = Administration\Categories::all();
-        $suppliers = Administration\Suppliers::all();
-        return view("products.init", compact("categories", "suppliers"));
+        $characteristic = Administration\Characteristic::all();
+        return view("products.init", compact("characteristic"));
     }
 
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["product_id"]);
+            unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
+
+            if (isset($input["characteristic"])) {
+                $input["characteristic"] = json_encode($input["characteristic"]);
+            }
+
             $input["status"] = (isset($input["status"])) ? 1 : 0;
 
             $result = Products::create($input);
@@ -47,6 +51,11 @@ class ProductController extends Controller {
     public function update(Request $request, $id) {
         $product = Products::FindOrFail($id);
         $input = $request->all();
+
+        if (isset($input["characteristic"])) {
+            $input["characteristic"] = json_encode($input["characteristic"]);
+        }
+
         $input["status"] = (isset($input["status"])) ? 1 : 0;
 
         $result = $product->fill($input)->save();
@@ -74,16 +83,16 @@ class ProductController extends Controller {
         $data = $req->all();
         $file = array_get($data, 'kartik-input-700');
         $name = $file[0]->getClientOriginalName();
-        $file[0]->move("images/product/" . $data["product_id"], $name);
+        $file[0]->move("images/product/" . $data["id"], $name);
 
-        ProductsImage::where("product_id", $data["product_id"])->get();
+        ProductsImage::where("product_id", $data["id"])->get();
         $product = new ProductsImage();
-        $product->product_id = $data["product_id"];
-        $product->path = $data["product_id"] . "/" . $name;
+        $product->product_id = $data["id"];
+        $product->path = $data["id"] . "/" . $name;
         $product->main = true;
 
         $product->save();
-        return response()->json(["id" => $data["product_id"]]);
+        return response()->json(["id" => $data["id"]]);
     }
 
     public function checkmain(Request $data, $id) {

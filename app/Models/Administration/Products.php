@@ -29,6 +29,7 @@ class Products extends Model {
         "meta_keywords",
         "meta_description",
         "minimum_stock",
+        "characteristic"
     ];
     public $timestamp = false;
 

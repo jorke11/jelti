@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-lg-3">List Category</div>
                     <div class="col-lg-9 text-right">
-                        <button class="btn btn-success btn-sm" type="submit" data-toggle='modal' data-target="#modalNew">
+                        <button class="btn btn-success btn-sm" type="button" id="btnNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -36,7 +36,6 @@
         </div>
     </div>
 </div>
-@include('Category.new')
-@include('Category.edit')
+@include('Category.form')
 {!!Html::script('js/Administration/Category.js')!!}
 @endsection

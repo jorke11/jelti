@@ -1,13 +1,11 @@
-function City() {
+function Category() {
     var table;
     this.init = function () {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
-        
-        $("#btnNew").click(function(){
-            
-            $(".input-city").cleanFields();
+        $("#btnNew").click(function () {
+            $(".input-category").cleanFields();
             $("#modalNew").modal("show");
         });
     }
@@ -20,16 +18,16 @@ function City() {
         var id = $("#frm #id").val();
         var msg = '';
 
-        var validate = $(".input-city").validate();
+        var validate = $(".input-category").validate();
 
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "city";
+                url = "characteristic";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "city/" + id;
+                url = "characteristic/" + id;
                 msg = "Edited Record";
             }
 
@@ -54,7 +52,7 @@ function City() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/city/" + id + "/edit";
+        var url = "/characteristic/" + id + "/edit";
         $("#modalNew").modal("show");
         $.ajax({
             url: url,
@@ -72,7 +70,7 @@ function City() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/city/" + id;
+            var url = "/characteristic/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -94,7 +92,7 @@ function City() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listCity",
+            "ajax": "/api/listCharacterist",
             columns: [
                 {data: "id"},
                 {data: "description"}
@@ -121,5 +119,5 @@ function City() {
 
 }
 
-var obj = new City();
+var obj = new Category();
 obj.init();

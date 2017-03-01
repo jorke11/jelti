@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Models\Administration;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Categories extends Model {
+class Characteristic extends Model {
 
-    protected $table = "categories";
+    protected $table = "products_characteristic";
     protected $primaryKey = "id";
     protected $fillable = ["id", "description"];
 

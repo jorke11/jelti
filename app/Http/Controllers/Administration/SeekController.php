@@ -9,6 +9,7 @@ use App\Models\Administration\Suppliers;
 use App\Models\Administration\Warehouses;
 use App\Models\Administration\Products;
 use App\Models\Administration\Categories;
+use App\Models\Administration\Characteristic;
 use App\Models\Security\Users;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +31,21 @@ class SeekController extends Controller {
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
 
+    public function getClient(Request $req) {
+        $in = $req->all();
+        $query = Suppliers::select("id", "name as text");
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $query->where("id", Auth::user()->supplier_id)->get();
+        } else if (isset($in["id"])) {
+            $query->where("id", $in["id"])->get();
+        } else {
+            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+        }
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+
     public function getSupplier(Request $req) {
         $in = $req->all();
         $query = Suppliers::select("id", "name as text");
@@ -42,6 +58,27 @@ class SeekController extends Controller {
         }
         $result = $query->get();
 
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+
+    public function getCharacteristic(Request $req) {
+        $in = $req->all();
+        $query = Characteristic::select("id", "description as text");
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $query->where("id", Auth::user()->supplier_id)->get();
+        } else if (isset($in["id"])) {
+            if ($in["id"] != '') {
+                $in["id"] = json_decode($in["id"]);
+                $query->whereIn("id", $in["id"])->get();
+            }else{
+                $query->where("id", 0)->get();
+            }
+            
+        } else {
+            $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+        }
+        $result = $query->get();
+        
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
 
@@ -59,6 +96,7 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
+
     public function getCategory(Request $req) {
         $in = $req->all();
         $query = Categories::select("id", "description as text");

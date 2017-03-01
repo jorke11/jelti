@@ -15,12 +15,12 @@ function Product() {
                 maxFileCount: 5,
                 allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
                 uploadExtraData: {
-                    product_id: $("#frm #product_id").val()
+                    id: $("#frm #id").val()
                 },
             }).on('fileuploaded', function (event, data, id, index) {
                 $("#modalUpload").modal("hide");
 
-                obj.showImages(data.extra.product_id);
+                obj.showImages(data.extra.id);
             })
 
             $("#modalUpload").modal("show");
@@ -33,6 +33,10 @@ function Product() {
         $("#tabManagement").click(function () {
             $(".input-product").cleanFields();
         });
+
+        $("#tabSpecial").click(function () {
+            $(".input-special").cleanFields();
+        })
     }
     this.new = function () {
         $(".input-product").cleanFields();
@@ -53,13 +57,13 @@ function Product() {
         var html = '';
         $.each(data, function (i, val) {
 
-            html += '<div class="col-sm-6 col-lg-3" id="div_' + val.product_id + '">' +
+            html += '<div class="col-sm-6 col-lg-3" id="div_' + val.id + '">' +
                     '<div class="thumbnail">' +
                     '<img src="/images/product/' + val.path + '" alt="Product">' +
                     '<div class="caption">' +
-                    '<h4>Check Main <input type="radio" name="main[]" onclick=obj.checkMain(' + val.product_id + ',' + val.product_id + ')></h4>' +
+                    '<h4>Check Main <input type="radio" name="main[]" onclick=obj.checkMain(' + val.id + ',' + val.id + ')></h4>' +
                     '<p><button type="button" class="btn btn-primary btn-xs" aria-label="Left Align" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>' +
-                    '<button type="button" class="btn btn-danger btn-xs" onclick=obj.deleteImage(' + val.product_id + ',' + val.product_id + ')><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>' +
+                    '<button type="button" class="btn btn-danger btn-xs" onclick=obj.deleteImage(' + val.id + ',' + val.id + ')><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>' +
                     '</p>' +
                     '</div></div></div>';
         })
@@ -101,7 +105,7 @@ function Product() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frm #product_id").val();
+        var id = $("#frm #id").val();
         var msg = '';
 
         var validate = $(".input-product").validate();
@@ -130,7 +134,7 @@ function Product() {
                 }
             })
         } else {
-           
+
             toastr.error("Fields Required!");
         }
     }
@@ -146,6 +150,7 @@ function Product() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
+                $(".input-product").cleanFields();
                 $(".input-product").setFields({data: data.header});
 
 
@@ -185,7 +190,7 @@ function Product() {
             "serverSide": true,
             "ajax": "/api/listProduct",
             columns: [
-                {data: "product_id"},
+                {data: "id"},
                 {data: "title"},
                 {data: "description"},
                 {data: "reference"},
@@ -212,7 +217,7 @@ function Product() {
                 {
                     aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.product_id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -220,7 +225,7 @@ function Product() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + full.product_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

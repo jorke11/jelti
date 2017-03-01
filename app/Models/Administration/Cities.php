@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Cities extends Model
 {
     protected $table = "cities";
-    protected $primaryKey = "city_id";
-    protected $fillable = ["city_id", "description"];
+    protected $primaryKey = "id";
+    protected $fillable = ["id", "description"];
     public $timestamp = false;
 
 }

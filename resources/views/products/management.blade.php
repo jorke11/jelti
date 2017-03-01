@@ -14,7 +14,7 @@
     </div>
     <div class="panel-body">
         {!! Form::open(['id'=>'frm','files' => true]) !!}
-        <input id="product_id" name="product_id" type="hidden" class="input-product">
+        <input id="id" name="id" type="hidden" class="input-product">
         <div class="row">
             <div class="col-lg-6">
                 <div class="panel panel-info">
@@ -67,13 +67,8 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label for="email">status</label>
-                                    <input type="checkbox" class="form-control input-product" id="status" name='status'>
 
-                                </div>
-                            </div>
+
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="email">bar_code*</label>
@@ -86,7 +81,29 @@
                                     <input type="text" class="form-control input-product" id="url_part" name='url_part' required>
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email">status</label>
+                                    <input type="checkbox" class="form-control input-product" id="status" name='status'>
+                                </div>
+                            </div>
+                            
                         </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="email">Charateristic</label>
+                                    <select class="form-control input-product" id='characteristic' name="characteristic[]" data-api="/api/getCharacteristic" multiple>
+                                    </select>
+<!--                                    <select id='characteristic' name="characteristic[]" class="selectpicker" multiple>
+                                        @foreach($characteristic as $val)
+                                        <option value="{{$val->id}}">{{$val->description}}</option>
+                                        @endforeach
+                                    </select>-->
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="panel panel-info">
@@ -117,7 +134,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -151,7 +168,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="email" class="control-label">tax*</label>
-                                <input type="text" class="form-control input-product" id="tax" name='tax' required data-type="number">
+                                    <input type="text" class="form-control input-product" id="tax" name='tax' required data-type="number">
                                 </div>
                             </div>
                             <div class="col-lg-4">

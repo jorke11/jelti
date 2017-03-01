@@ -128,18 +128,29 @@
                                         <li><a href="/role">Profile</a></li>
                                         <li><a href="/permission">Permission</a></li>
                                         <li><a href="{{url("/register")}}">Register</a></li>
-
                                     </ul>
                                 </li>
                                 <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="/category">Category</a></li>                                    
-                                        <li><a href="/product">Products</a></li>
-                                        <li><a href="/supplier">Supplier</a></li>
-                                        <li><a href="/warehouse">Warehouse</a></li>
-                                        <li><a href="/mark">Mark</a></li>
-                                        <li><a href="/city">City</a></li>
-                                        <li><a href="/puc">PUC</a></li>
+                                        <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Products <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="/product">Product</a></li>
+                                                <li><a href="/category">Category</a></li> 
+                                                <li><a href="/characteristic">Characterist</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Suppliers <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="/supplier">Supplier</a></li>
+                                                <li><a href="/warehouse">Warehouse</a></li>
+                                                <li><a href="/city">City</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Accountant <span class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="/puc">PUC</a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Avoicing <span class="fa fa-chevron-down"></span></a>

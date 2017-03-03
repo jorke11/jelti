@@ -57,10 +57,11 @@ function Sale() {
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
-                    $("#frmDetail #category_id").val(resp.response.id).trigger('change');
+                    $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf)
 
                     $("#frmDetail #quantityMax").html(resp.quantity)
+                    maxDeparture = resp.quantity
                     if (resp.quantity > 0) {
                         $("#frmDetail #quantity").attr("disabled", false);
                         $("#newDetail").attr("disabled", false);
@@ -97,13 +98,13 @@ function Sale() {
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
     }
     this.getSupplier = function (id, path) {
-        var url='entry/' + id + '/getSupplier';
+        var url = 'entry/' + id + '/getSupplier';
         if (path == undefined) {
-            url='../../entry/' + id + '/getSupplier';
+            url = '../../entry/' + id + '/getSupplier';
         }
 
         $.ajax({
-            url:url,
+            url: url,
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
@@ -161,11 +162,11 @@ function Sale() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == 'true') {
-                        $("#frm #id").val(data.data.id);
-                        table.ajax.reload();
+                        $(".input-departure").setFields({data: data.header})
+
                         toastr.success("ok");
                         $("#btnmodalDetail").attr("disabled", false);
-                        location.href="/";
+                        location.href = "/departure";
                     }
                 }
             })
@@ -241,7 +242,7 @@ function Sale() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-              
+
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header});
 
@@ -265,7 +266,7 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $("#modalDetail").modal("show");
-                $(".input-detail").setFiedls({data:data})
+                $(".input-detail").setFiedls({data: data})
             }
         })
     }

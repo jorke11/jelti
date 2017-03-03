@@ -15,14 +15,8 @@ use Session;
 class DepartureController extends Controller {
 
     public function index() {
-
-        $responsable = DB::select('select id,name from users');
-        $warehouse = \App\Models\Administration\Warehouses::all();
-        $product = \App\Models\Administration\Products::all();
-        $mark = \App\Models\Administration\Mark::all();
-        $supplier = \App\Models\Administration\Suppliers::all();
         $category = \App\Models\Administration\Categories::all();
-        return view("departure.init", compact("responsable", "warehouse", "supplier", "product", "mark", "category"));
+        return view("departure.init", compact("category"));
     }
 
     public function showOrder($id) {
@@ -31,7 +25,7 @@ class DepartureController extends Controller {
 
     public function getOrderExt($id) {
         $entry = Orders::findOrFail($id);
-        $detail = DB::select("SELECT id,product_id,quantity-pending as quantity,value FROM orders_detail where order_id=" . $id);
+        $detail = DB::select("SELECT id,product_id,generate as quantity,value FROM orders_detail where order_id=" . $id);
 
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
@@ -40,13 +34,21 @@ class DepartureController extends Controller {
         echo response()->json(["response" => 'prueba']);
     }
 
+    public function pdf() {
+        $data = [
+            'foo' => 'bar'
+        ];
+        $pdf = PDF::loadView('departure.pdf', $data);
+        return $pdf->stream('document.pdf');
+    }
+
     public function getDetailProduct($id) {
-        $response = DB::table("product")
-                ->select("product.id", "product.title", "category.description as caterory", "product.price_sf")
-                ->join("category", "category.id", "=", "product.category_id")
-                ->where("product.id", $id)
+        $response = DB::table("products")
+                ->select("products.id", "products.title", "categories.description as caterory", "products.price_sf")
+                ->join("categories", "categories.id", "=", "products.category_id")
+                ->where("products.id", $id)
                 ->first();
-        $entry = DB::table("entry_detail")->where("product_id", $id)->sum("quantity");
+        $entry = DB::table("entries_detail")->where("product_id", $id)->sum("quantity");
         $departure = DB::table("departures_detail")->where("product_id", $id)->sum("quantity");
         $quantity = $entry - $departure;
 
@@ -61,7 +63,7 @@ class DepartureController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["departure_id"]);
+            unset($input["id"]);
 //            $user = Auth::User();
             $input["status_id"] = 1;
 
@@ -89,22 +91,35 @@ class DepartureController extends Controller {
                     ]
             );
 
-            $detail = DB::select("SELECT id,product_id,quantity-pending as quantity,value,category_id FROM orders_detail where order_id=" . $input["id"]);
+            $detail = DB::select("
+                    SELECT id,product_id,pending-generate as quantity,generate,value,category_id 
+                    FROM orders_detail 
+                    WHERE status_id = 1 and order_id=" . $input["id"]);
 
             foreach ($detail as $value) {
+                if ($value->quantity == 0) {
+                    OrdersDetail::where("id", $value->id)->update(["status_id" => 2]);
+                }
+
+
                 DeparturesDetail::insert([
                     'departure_id' => $id, "value" => $value->value, "product_id" => $value->product_id, "category_id" => $value->category_id,
-                    "quantity" => $value->quantity
+                    "quantity" => $value->generate
                 ]);
+
+
+                OrdersDetail::where("id", $value->id)->update(["generate" => $value->generate, "pending" => $value->quantity]);
             }
         }
         $resp = Departures::FindOrFail($id);
-        return response()->json(["success" => 'true', "data" => $resp]);
+        $detail = DeparturesDetail::where("departure_id", $id)->get();
+
+        return response()->json(["success" => true, "header" => $resp, "detail" => $detail]);
     }
 
     public function edit($id) {
         $entry = Departures::FindOrFail($id);
-        $detail = DB::table("departures_detail")->where("id", "=", $id)->get();
+        $detail = DB::table("departures_detail")->where("departure_id", $id)->get();
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 

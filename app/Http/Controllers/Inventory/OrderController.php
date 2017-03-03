@@ -14,7 +14,7 @@ class OrderController extends Controller {
     public function __construct() {
         $this->middleware("auth");
     }
-    
+
     public function index() {
         $responsable = DB::select('select id,name from users');
         $warehouse = \App\Models\Administration\Warehouses::all();
@@ -139,7 +139,7 @@ class OrderController extends Controller {
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $input["status_id"] = 1;
-            $input["pending"] = $input["quantity"] - $input["generate"];
+            $input["pending"] = $input["quantity"];
             $result = OrdersDetail::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');

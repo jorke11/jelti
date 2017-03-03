@@ -1,6 +1,6 @@
 @extends('layouts.dash')
 @section('content')
-@section('title','Purchage')
+@section('title','Purchase')
 @section('subtitle','Management')
 
 {!!Html::script('/vendor/inputmask/inputmask.js')!!}
@@ -18,18 +18,18 @@
             <div role="tabpanel" class="tab-pane active" id="list">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        @include('purchage.list')
+                        @include('purchase.list')
                     </div>
                 </div>
 
             </div>
             <div role="tabpanel" class="tab-pane " id="management">
-                @include('purchage.management')
+                @include('purchase.management')
             </div>
 
         </div>
     </div>
 </div>
-@include('purchage.newDetail')
-{!!Html::script('js/Invoicing/Purchage.js')!!}
+@include('purchase.newDetail')
+{!!Html::script('js/Invoicing/Purchase.js')!!}
 @endsection

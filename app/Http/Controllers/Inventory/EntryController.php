@@ -27,8 +27,8 @@ class EntryController extends Controller {
 
     public function getDetailProduct($id) {
         $category = DB::table("products")
-                ->select("products.id", "products.title", "categories.description as caterory", "products.price_sf")
-                ->join("categories", "categories.id", "=", "products.id")
+                ->select("products.id", "products.title","products.category_id" ,"categories.description as caterory", "products.price_sf")
+                ->join("categories", "categories.id", "=", "products.category_id")
                 ->where("products.id", $id)
                 ->first();
 
@@ -131,7 +131,7 @@ class EntryController extends Controller {
 
     public function edit($id) {
         $entry = Entries::FindOrFail($id);
-        $detail = DB::table("entries_detail")->where("id", "=", $id)->get();
+        $detail = DB::table("entries_detail")->where("entry_id", "=", $id)->get();
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 

@@ -146,7 +146,7 @@
                                 </li>
                                 <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Invoicing <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="/purchage">Purchage</a></li>
+                                        <li><a href="/purchase">Purchase</a></li>
                                         <li><a href="/sale">Sale</a></li>                                    
                                         <li><a href="/summary">Summary</a></li>                                    
                                     </ul>
@@ -154,8 +154,9 @@
                                 <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/entry">Entry</a></li>
-                                        <li><a href="/order">Order Service</a></li>                                    
+                                        <!--<li><a href="/order">Order Service</a></li>-->                                    
                                         <li><a href="/departure">Departure</a></li>                                    
+                                        <li><a href="/stock">Stock</a></li>                                    
                                     </ul>
                                 </li>
                             </ul>

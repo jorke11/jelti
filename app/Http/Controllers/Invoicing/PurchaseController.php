@@ -11,11 +11,11 @@ use App\Models\Invoicing\Purchases;
 use App\Models\Invoicing\PurchasesDetail;
 use Illuminate\Support\Facades\Auth;
 
-class PurchageController extends Controller {
+class PurchaseController extends Controller {
 
     public function index() {
         $category = \App\Models\Administration\Categories::all();
-        return view("purchage.init", compact("category"));
+        return view("purchase.init", compact("category"));
     }
 
     public function getConsecutive($id) {

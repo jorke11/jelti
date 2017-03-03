@@ -23,11 +23,9 @@
                         <div class="form-group">
                             <label for="email">Category:</label>
                             <select class="form-control input-detail" id="category_id" name='category_id'>
-                                @if(isset($mark))
                                 @foreach($category as $cat)
                                 <option value="{{$cat->id}}">{{$cat->description}}</option>
                                 @endforeach
-                                @endif
                             </select>
                         </div>
                     </div>

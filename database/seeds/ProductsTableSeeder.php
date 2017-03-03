@@ -10,24 +10,26 @@ class ProductsTableSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        DB::table("products")->insert([
-            'category_id' => 1,
-            'supplier_id' => 1,
-            'title' => 'product test',
-            'description' => 'product test desc',
-            'short_description' => 'sest',
-            'reference' => 232423,
-            'units_supplier' => 232423,
-            'units_sf' => 232423,
-            'cost_sf' => 232423,
-            'tax' => 19,
-            'price_sf' => 232423,
-            'price_cust' => 232423,
-            'url_part' => "232423",
-            'bar_code' => "232423",
-            'status' => true,
-            'minimum_stock' => 10,
-        ]);
+        for ($i = 0; $i < 3; $i++) {
+            DB::table("products")->insert([
+                'category_id' => 1,
+                'supplier_id' => 1,
+                'title' => 'product test ' . $i,
+                'description' => 'product test desc ' . $i,
+                'short_description' => 'sest',
+                'reference' => 232423 + $i,
+                'units_supplier' => 232423,
+                'units_sf' => 232423,
+                'cost_sf' => 232423,
+                'tax' => 19,
+                'price_sf' => 232423,
+                'price_cust' => 232423,
+                'url_part' => "232423",
+                'bar_code' => "232423",
+                'status' => true,
+                'minimum_stock' => 10,
+            ]);
+        }
     }
 
 }

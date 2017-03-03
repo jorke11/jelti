@@ -1,4 +1,4 @@
-function Purchage() {
+function Purchase() {
     var table;
     this.init = function () {
         table = this.table();
@@ -23,13 +23,13 @@ function Purchage() {
         });
 
         $("#insideManagement").click(function () {
-            $(".input-purchage").cleanFields();
+            $(".input-purchase").cleanFields();
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#frm #branch_id").getSeeker({default: true, api: '/api/getSupplier', disabled: true});
             $.ajax({
-                url: 'purchage/1/consecutive',
+                url: 'purchase/1/consecutive',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
@@ -40,7 +40,7 @@ function Purchage() {
 
         $("#btnmodalDetail").click(function () {
             $.ajax({
-                url: 'purchage/' + $("#frm #supplier_id").val() + '/getProducts',
+                url: 'purchase/' + $("#frm #supplier_id").val() + '/getProducts',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
@@ -58,7 +58,7 @@ function Purchage() {
 
     this.getSupplier = function (id) {
         $.ajax({
-            url: 'purchage/' + id + '/getSupplier',
+            url: 'purchase/' + id + '/getSupplier',
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
@@ -80,12 +80,12 @@ function Purchage() {
         var msg = '';
         if (id == '') {
             method = 'POST';
-            url = "purchage";
+            url = "purchase";
             msg = "Created Record";
 
         } else {
             method = 'PUT';
-            url = "purchage/" + id;
+            url = "purchase/" + id;
             msg = "Edited Record";
         }
 
@@ -115,12 +115,12 @@ function Purchage() {
         var msg = 'Record Detail';
         if (id == '') {
             method = 'POST';
-            url = "purchage/storeDetail";
+            url = "purchase/storeDetail";
             msg = "Created " + msg;
 
         } else {
             method = 'PUT';
-            url = "purchage/detail/" + id;
+            url = "purchase/detail/" + id;
             msg = "Edited " + msg;
         }
 
@@ -143,7 +143,7 @@ function Purchage() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/purchage/" + id + "/edit";
+        var url = "/purchase/" + id + "/edit";
         $.ajax({
             url: url,
             method: "GET",
@@ -151,7 +151,7 @@ function Purchage() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-purchage").setFields({data: data.header});
+                $(".input-purchase").setFields({data: data.header});
 
 
                 if (data.header.supplier_id != 0) {
@@ -169,7 +169,7 @@ function Purchage() {
     this.editDetail = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/purchage/" + id + "/detail";
+        var url = "/purchase/" + id + "/detail";
         $.ajax({
             url: url,
             method: "GET",
@@ -243,7 +243,7 @@ function Purchage() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/purchage/" + id;
+            var url = "/purchase/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -265,7 +265,7 @@ function Purchage() {
         toastr.remove();
         if (confirm("Do you want delete this record?")) {
             var token = $("input[name=_token]").val();
-            var url = "/purchage/detail/" + id;
+            var url = "/purchase/detail/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -288,7 +288,7 @@ function Purchage() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listPurchage",
+            "ajax": "/api/listPurchase",
             columns: [
                 {data: "id"},
                 {data: "id"},
@@ -321,5 +321,5 @@ function Purchage() {
 
 }
 
-var obj = new Purchage();
+var obj = new Purchase();
 obj.init();

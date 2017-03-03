@@ -62,14 +62,14 @@ Route::get('/api/listPermission', 'Security\PermissionController@getPermission')
 Route::get('/permission/{id}/getMenu', ['uses' => 'Security\PermissionController@getMenu']);
 
 
-Route::resource('/purchage', 'Invoicing\PurchageController');
-Route::get('/purchage/{id}/consecutive', ['uses' => 'Invoicing\PurchageController@getConsecutive']);
-Route::get('/purchage/{id}/detail', ['uses' => 'Invoicing\PurchageController@getDetail']);
-Route::get('/purchage/{id}/getSupplier', ['uses' => 'Invoicing\PurchageController@getSupplier']);
-Route::get('/purchage/{id}/getProducts', ['uses' => 'Invoicing\PurchageController@getProducts']);
-Route::post('/purchage/storeDetail', 'Invoicing\PurchageController@storeDetail');
-Route::put('/purchage/detail/{id}', 'Invoicing\PurchageController@updateDetail');
-Route::delete('/purchage/detail/{id}', 'Invoicing\PurchageController@destroyDetail');
+Route::resource('/purchase', 'Invoicing\PurchaseController');
+Route::get('/purchase/{id}/consecutive', ['uses' => 'Invoicing\PurchaseController@getConsecutive']);
+Route::get('/purchase/{id}/detail', ['uses' => 'Invoicing\PurchaseController@getDetail']);
+Route::get('/purchase/{id}/getSupplier', ['uses' => 'Invoicing\PurchaseController@getSupplier']);
+Route::get('/purchase/{id}/getProducts', ['uses' => 'Invoicing\PurchaseController@getProducts']);
+Route::post('/purchase/storeDetail', 'Invoicing\PurchaseController@storeDetail');
+Route::put('/purchase/detail/{id}', 'Invoicing\PurchaseController@updateDetail');
+Route::delete('/purchase/detail/{id}', 'Invoicing\PurchaseController@destroyDetail');
 
 
 Route::resource('/sale', 'Invoicing\SaleController');
@@ -139,7 +139,7 @@ Route::get('/api/listMark', function() {
     return Datatables::eloquent(Models\Administration\Mark::query())->make(true);
 });
 
-Route::get('/api/listPurchage', function() {
+Route::get('/api/listPurchase', function() {
     return Datatables::eloquent(Models\Invoicing\Purchases::query())->make(true);
 });
 Route::get('/api/listSale', function() {
@@ -168,6 +168,9 @@ Route::get('/api/listUser', function() {
 Route::get('/api/listPuc', function() {
     return Datatables::eloquent(Models\Administration\Puc::query())->make(true);
 });
+
+Route::get('/stock', 'Inventory\StockController@index');
+Route::get('/api/listStock', 'Inventory\StockController@getStock');
 
 Route::get('/api/listSpecial', 'Administration\SupplierController@getSpecial');
 Route::get('/api/listBranch', 'Administration\SupplierController@getBranch');

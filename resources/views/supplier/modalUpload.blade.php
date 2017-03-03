@@ -6,6 +6,7 @@
                 <h4 class="modal-title">Upload Image</h4>
             </div>
             <div class="modal-body">
+                {!! Form::open(['id'=>'frmFile','files' => true]) !!}
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -20,11 +21,13 @@
                     </div>
 
                 </div>
+
                 <div class="row">
                     <div class="col-lg-12">
                         <input id="input-700" name="kartik-input-700[]" type="file" multiple class="file-loading">
                     </div>
                 </div>
+                {!!Form::close()!!}
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

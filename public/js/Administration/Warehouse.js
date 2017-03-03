@@ -5,11 +5,8 @@ function Warehouse() {
         $("#new").click(this.save);
         $("#edit").click(this.edit);
         $("#btnOpenModal").click(function () {
-            $("#modalEdit").modal("hide");
             $("#modalNew").modal("show");
-            $("#frm #warehouse_id").val("");
-            $("#frm #description").val("");
-            $("#frm #address").val("");
+            $(".input-warehouse").cleanFields();
         });
 
     }
@@ -18,7 +15,7 @@ function Warehouse() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frm #warehouse_id").val();
+        var id = $("#frm #id").val();
         var msg = '';
         if (id == '') {
             method = 'POST';
@@ -58,9 +55,7 @@ function Warehouse() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #warehouse_id").val(data.warehouse_id);
-                $("#frm #description").val(data.description);
-                $("#frm #address").val(data.address);
+                $(".input-warehouse").setFields({data:data});
             }
         })
     }
@@ -93,7 +88,7 @@ function Warehouse() {
             "serverSide": true,
             "ajax": "/api/listWarehouse",
             columns: [
-                {data: "warehouse_id"},
+                {data: "id"},
                 {data: "description"},
                 {data: "address"}
             ],
@@ -102,7 +97,7 @@ function Warehouse() {
                 {
                     aTargets: [0, 1, 2],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.warehouse_id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -110,7 +105,7 @@ function Warehouse() {
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.warehouse_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

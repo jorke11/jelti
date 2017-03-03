@@ -28,7 +28,7 @@
                     <label for="email">Warehouse:</label>
                     <select class="form-control input-purchage" id="warehouse_id" name='warehouse_id' data-api="/api/getWarehouse">
                     </select>
-                    <!--<select class="form-control input-purchage" id="supplier_id" name='supplier_id' data-api="/api/getSupplier">-->
+                
                     </select>
                 </div>
             </div>
@@ -48,8 +48,8 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Avoice:</label>
-                    <input type="text" class="form-control input-purchage input-sm" id="avoice" name='avoice'>
+                    <label for="email">Invoice:</label>
+                    <input type="text" class="form-control input-purchage input-sm" id="invoice" name='invoice'>
                 </div>
             </div>
             <div class="col-lg-2">

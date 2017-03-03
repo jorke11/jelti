@@ -12,13 +12,7 @@ use Session;
 class SaleController extends Controller {
 
     public function index() {
-        $responsable = DB::select('select id,name from users');
-        $warehouse = \App\Models\Administration\Warehouse::all();
-        $product = \App\Models\Administration\Product::all();
-        $mark = \App\Models\Administration\Mark::all();
-        $supplier = \App\Models\Administration\Supplier::all();
-        $category = \App\Models\Administration\Category::all();
-        return view("sale.init", compact("responsable", "warehouse", "supplier", "product", "mark", "category"));
+        return view("sale.init");
     }
 
     public function getConsecutive($id) {

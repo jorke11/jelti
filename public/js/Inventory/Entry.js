@@ -59,7 +59,9 @@ function Entry() {
                 dataType: 'JSON',
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.id).trigger('change');
-                    $("#frmDetail #value").val(resp.response.price_sf)
+                    
+                    $("#frmDetail #value").val(resp.response.price_sf);
+                    $("#frmDetail #value").inputmask();
                 }
             })
         });
@@ -297,7 +299,7 @@ function Entry() {
                 {data: "id"},
                 {data: "description"},
                 {data: "created"},
-                {data: "avoice"},
+                {data: "invoice"},
                 {data: "warehouse_id"},
                 {data: "city_id"},
                 {data: "status_id"},

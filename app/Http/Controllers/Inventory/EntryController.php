@@ -126,6 +126,7 @@ class EntryController extends Controller {
             $entry->status_id = 2;
             $entry->save();
         }
+        return response()->json(["success"=>true]);
     }
 
     public function edit($id) {

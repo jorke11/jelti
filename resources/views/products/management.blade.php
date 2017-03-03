@@ -95,11 +95,7 @@
                                     <label for="email">Charateristic</label>
                                     <select class="form-control input-product" id='characteristic' name="characteristic[]" data-api="/api/getCharacteristic" multiple>
                                     </select>
-<!--                                    <select id='characteristic' name="characteristic[]" class="selectpicker" multiple>
-                                        @foreach($characteristic as $val)
-                                        <option value="{{$val->id}}">{{$val->description}}</option>
-                                        @endforeach
-                                    </select>-->
+
                                 </div>
                             </div>
                         </div>

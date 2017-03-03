@@ -29,11 +29,19 @@ Route::put('/product/checkmain/{id}', 'Administration\ProductController@checkMai
 Route::delete('/product/deleteImage/{id}', 'Administration\ProductController@deleteImage');
 Route::get('/product/getImages/{id}', 'Administration\ProductController@getImages');
 
+Route::post('/product/StoreSpecial', 'Administration\ProductController@storeSpecial');
+
+
 Route::resource('/supplier', 'Administration\SupplierController');
 Route::post('/supplier/upload', 'Administration\SupplierController@uploadImage');
 Route::put('/supplier/checkmain/{id}', 'Administration\SupplierController@checkMain');
 Route::delete('/supplier/deleteImage/{id}', 'Administration\SupplierController@deleteImage');
 Route::get('/supplier/getImages/{id}', 'Administration\SupplierController@getImages');
+
+Route::post('/supplier/StoreSpecial', 'Administration\SupplierController@storeSpecial');
+Route::put('/supplier/updatePrice/{id}', 'Administration\SupplierController@updatePrice');
+Route::post('/supplier/StoreBranch', 'Administration\SupplierController@storeBranch');
+Route::delete('/supplier/deleteBranch/{id}', 'Administration\SupplierController@deleteBranch');
 
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/puc', 'Administration\PucController');
@@ -161,6 +169,9 @@ Route::get('/api/listPuc', function() {
     return Datatables::eloquent(Models\Administration\Puc::query())->make(true);
 });
 
+Route::get('/api/listSpecial', 'Administration\SupplierController@getSpecial');
+Route::get('/api/listBranch', 'Administration\SupplierController@getBranch');
+
 Route::get('/api/listMenu', 'DashboardController@getMenu');
 
 Route::get('/api/getCity', 'Administration\SeekController@getCity');
@@ -171,6 +182,8 @@ Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
 Route::get('/api/getCategory', 'Administration\SeekController@getCategory');
+Route::get('/api/getCommercial', 'Administration\SeekController@getCommercial');
+Route::get('/api/getBranch', 'Administration\SeekController@getBranch');
 
 
 

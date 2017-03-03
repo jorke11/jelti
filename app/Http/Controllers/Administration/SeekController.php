@@ -12,6 +12,7 @@ use App\Models\Administration\Categories;
 use App\Models\Administration\Characteristic;
 use App\Models\Security\Users;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Administration\Branch;
 
 class SeekController extends Controller {
 
@@ -111,6 +112,20 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
+    public function getCommercial(Request $req) {
+        $in = $req->all();
+        $query = Users::select("id", "name as text");
+        if (isset($in["q"]) && $in["q"] == 0) {
+            $query->where("id", Auth::user()->warehouse_id)->get();
+        } else if (isset($in["id"])) {
+            $query->where("id", $in["id"]);
+        } else {
+            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+        }
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
 
     public function getResponsable(Request $req) {
         $in = $req->all();
@@ -139,6 +154,21 @@ class SeekController extends Controller {
             $query->where("id", $in["id"])->get();
         }
 
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+    
+    public function getBranch(Request $req) {
+        $in = $req->all();
+        $query = Branch::select("id", "address as text");
+        if (isset($in["q"]) && $in["q"] == 0) {
+            $query->where("id", Auth::user()->warehouse_id)->get();
+        } else if (isset($in["id"])) {
+            $query->where("id", $in["id"]);
+        } else {
+            $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+        }
         $result = $query->get();
 
         return response()->json(['items' => $result, "pages" => count($result)]);

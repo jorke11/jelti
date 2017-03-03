@@ -20,7 +20,7 @@ class RoleController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["role_id"]);
+            unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $result = Roles::create($input);

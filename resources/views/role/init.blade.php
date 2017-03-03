@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-lg-3">List Role</div>
                     <div class="col-lg-9 text-right">
-                        <button class="btn btn-success btn-sm" type="submit" data-toggle='modal' data-target="#modalNew">
+                        <button class="btn btn-success btn-sm" type="button" id="btnNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -34,7 +34,6 @@
         </div>
     </div>
 </div>
-@include('role.new')
-@include('role.edit')
+@include('role.form')
 {!!Html::script('js/Security/Role.js')!!}
 @endsection

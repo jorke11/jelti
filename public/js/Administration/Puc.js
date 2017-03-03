@@ -59,9 +59,8 @@ function Puc() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #id").val(data.id);
-                $("#frm #code").val(data.code);
-                $("#frm #account").val(data.account);
+                $(".input-puc").setFields({data:data});
+                
             }
         })
     }

@@ -2,6 +2,9 @@
 @section('content')
 @section('title','Entry')
 @section('subtitle','Management')
+{!!Html::script('/vendor/inputmask/inputmask.js')!!}
+{!!Html::script('/vendor/inputmask/jquery.inputmask.js')!!}
+
 <div class="row">
     <div>
         <!-- Nav tabs -->

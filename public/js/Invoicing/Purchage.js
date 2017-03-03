@@ -294,7 +294,7 @@ function Purchage() {
                 {data: "id"},
                 {data: "description"},
                 {data: "created"},
-                {data: "avoice"},
+                {data: "invoice"},
                 {data: "warehouse_id"},
                 {data: "city_id"},
                 {data: "status_id"},

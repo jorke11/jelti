@@ -21,7 +21,7 @@ class WarehouseController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
 
-            unset($input["warehouse_id"]);
+            unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $result = Warehouses::create($input);

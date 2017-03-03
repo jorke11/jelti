@@ -11,6 +11,10 @@ use Session;
 
 class OrderController extends Controller {
 
+    public function __construct() {
+        $this->middleware("auth");
+    }
+    
     public function index() {
         $responsable = DB::select('select id,name from users');
         $warehouse = \App\Models\Administration\Warehouses::all();

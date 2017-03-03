@@ -74,8 +74,7 @@ class PermissionController extends Controller {
         $resp = array();
 
         foreach ($data as $key => $val) {
-            $children = Permissions::where("parent_id", $val->permission_id)->get();
-
+            $children = Permissions::where("parent_id", $val->id)->get();
 
             array_push($resp, $val);
 

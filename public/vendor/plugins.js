@@ -98,6 +98,10 @@ jQuery.fn.setFields = function (param) {
         }
         $.each(param.data, function (i, val) {
             if (elem.attr("id") == i) {
+
+                $("#error_" + elem.attr("id")).remove();
+                elem.parent().parent().removeClass("has-error");
+                
                 if (elem.data("api") != undefined) {
                     var obj = {};
                     obj.id = val;
@@ -174,7 +178,8 @@ jQuery.fn.cleanFields = function (param) {
                 elem.val(0);
                 elem.getSeeker({api: elem.data("api")});
             } else {
-                elem.val(0).select2();
+//                elem.val(0).select2();
+                elem.val(0);
             }
         }
 
@@ -304,7 +309,7 @@ jQuery.fn.validate = function (param) {
                 } else {
                     if (elem.data("type") != undefined) {
                         $("#error_" + elem.attr("id")).remove();
-                        if (isNaN(elem.val())) {
+                        if (elem.data("type") == 'number' && isNaN(elem.val())) {
                             elem.after('<small class="help-block" id="error_' + elem.attr("id") + '" data-fv-validator="notEmpty" data-fv-for="firstName" data-fv-result="INVALID" style="">' + elem.attr("id") + ' is not Numeric</small>')
                             elem.parent().parent().addClass("has-error")
                             arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});

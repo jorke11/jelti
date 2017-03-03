@@ -69,7 +69,6 @@
         {!!Html::style('/vendor/select2/css/select2.min.css')!!}
         {!!Html::script('/vendor/select2/js/select2.js')!!}
         {!!Html::script('/vendor/plugins.js')!!}
-        {!!Html::script('/vendor/bootstrap-typeahead.js')!!}
         {!!Html::style('/css/edited.css')!!}
     </head>
 
@@ -98,9 +97,7 @@
                             </div>
                         </div>
                         <!-- /menu profile quick info -->
-
                         <br />
-
                         <!-- sidebar menu -->
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <!--                            <div class="menu_section">
@@ -114,12 +111,6 @@
                                 <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/sale">Sales</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-file"></i> Operation <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="/service">Request Service</a></li>
-                                        <li><a href="/order">Order Sale</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
@@ -153,7 +144,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Avoicing <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Invoicing <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/purchage">Purchage</a></li>
                                         <li><a href="/sale">Sale</a></li>                                    
@@ -163,7 +154,7 @@
                                 <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/entry">Entry</a></li>
-                                        <li><a href="/order">Request</a></li>                                    
+                                        <li><a href="/order">Order Service</a></li>                                    
                                         <li><a href="/departure">Departure</a></li>                                    
                                     </ul>
                                 </li>
@@ -230,7 +221,8 @@
                                     </li>
                                 </ul>
                             </li>
-
+                          
+                            
                             <li role="presentation" class="dropdown">
                                 <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                                     <i class="fa fa-envelope-o"></i>

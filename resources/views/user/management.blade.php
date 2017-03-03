@@ -17,11 +17,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Supplier:</label>
-            <select id="supplier_id" name="supplier_id" class="form-control input-user">
-                <option value="0">Seleccione</option>
-                @foreach($supplier as $pro)
-                <option value="{{$pro->id}}">{{$pro->name}}</option>
-                @endforeach
+            <select id="supplier_id" name="supplier_id" class="form-control input-user" data-api="/api/getSupplier">
             </select>
         </div>
     </div>
@@ -36,11 +32,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">City:</label>
-            <select id="city_id" name="city_id" class="form-control input-user">
-                <option value="0">Seleccione</option>
-                @foreach($city as $cit)
-                <option value="{{$cit->id}}">{{$cit->description}}</option>
-                @endforeach
+            <select id="city_id" name="city_id" class="form-control input-user" data-api="/api/getCity">
             </select>
         </div>
     </div>

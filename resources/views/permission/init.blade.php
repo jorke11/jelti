@@ -36,12 +36,12 @@
             </div>
             <div class="panel-body">
                 {!! Form::open(['id'=>'frm']) !!}
-                <input type="hidden" id="permission_id" name="permission_id" class="input-user">
+                <input type="hidden" id="id" name="id" class="input-permission">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Type Option:</label>
-                            <select  class="form-control input-user" id="typemenu_id" name='typemenu_id'>
+                            <select  class="form-control input-permission" id="typemenu_id" name='typemenu_id'>
                                 <option value="0">Main</option>
                                 <option value="1">Submain</option>
                                 <option value="2">Form</option>
@@ -53,7 +53,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Parent:</label>
-                            <select class="form-control input-user" id="parent_id" name='parent_id'>
+                            <select class="form-control input-permission" id="parent_id" name='parent_id'>
                                 <option value="0">Selection</option>
                                 @foreach($parents as $val)
                                 <option value="{{$val->permission_id}}">{{$val->title}}</option>
@@ -68,7 +68,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Description:</label>
-                            <input type="text" class="form-control input-user" id="description" name='description'>
+                            <input type="text" class="form-control input-permission" id="description" name='description'>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Controller:</label>
-                            <input type="text" class="form-control input-user" id="controller" name='controller'>
+                            <input type="text" class="form-control input-permission" id="controller" name='controller'>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Title:</label>
-                            <input type="text" class="form-control input-user" id="title" name='title'>
+                            <input type="text" class="form-control input-permission" id="title" name='title'>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Icon:</label>
-                            <input type="text" class="form-control input-user" id="icon" name='icon'>
+                            <input type="text" class="form-control input-permission" id="icon" name='icon'>
                         </div>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Priority:</label>
-                            <input type="text" class="form-control input-user" id="priority" name='priority'>
+                            <input type="text" class="form-control input-permission" id="priority" name='priority'>
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Alternative:</label>
-                            <input type="text" class="form-control input-user" id="alternative" name='alternative'>
+                            <input type="text" class="form-control input-permission" id="alternative" name='alternative'>
                         </div>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Event:</label>
-                            <input type="checkbox" class="form-control input-user" id="event" name='event'>
+                            <input type="checkbox" class="form-control input-permission" id="event" name='event'>
                         </div>
                     </div>
                 </div>

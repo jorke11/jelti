@@ -14,14 +14,8 @@ use Illuminate\Support\Facades\Auth;
 class PurchageController extends Controller {
 
     public function index() {
-        $responsable = DB::select('select id,name from users');
-        $warehouse = Warehouses::all();
-        $product = \App\Models\Administration\Products::all();
-        $city = \App\Models\Administration\Cities::all();
-        $mark = \App\Models\Administration\Mark::all();
-        $supplier = \App\Models\Administration\Suppliers::all();
         $category = \App\Models\Administration\Categories::all();
-        return view("purchage.init", compact("responsable", "warehouse", "supplier", "product", "mark", "category","city"));
+        return view("purchage.init", compact("category"));
     }
 
     public function getConsecutive($id) {

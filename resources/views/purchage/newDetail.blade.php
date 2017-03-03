@@ -14,20 +14,13 @@
                         <div class="form-group">
                             <label for="email">Account:</label>
                             <select class="form-control input-detail input-sm" id="account_id" name='account_id'>
-                                @foreach($product as $pro)
-                                <option value="{{$pro->id}}">{{$pro->description}}</option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Product:</label>
-                            <select class="form-control input-detail input-sm" id="product_id" name='product_id'>
-                                <option value="0">Selection</option>
-                                @foreach($product as $pro)
-                                <option value="{{$pro->id}}">{{$pro->description}}</option>
-                                @endforeach
+                            <select class="form-control input-detail input-sm" id="product_id" name='product_id' data-api="/api/getProduct">
                             </select>
                         </div>
                     </div>
@@ -47,7 +40,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Expiration Date:</label>
-                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail input-sm form-control">
+                            <input size="16" type="date" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail input-sm form-control">
                         </div>
                     </div>
 
@@ -56,7 +49,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Quantity:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity'>
+                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' >
                         </div>
                     </div>
                     <div class="col-lg-6">

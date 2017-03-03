@@ -23,7 +23,7 @@ function Permission() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frm #permission_id").val();
+        var id = $("#frm #id").val();
         var msg = '';
         if (id == '') {
             method = 'POST';
@@ -60,7 +60,7 @@ function Permission() {
 
     this.delete = function (id) {
         toastr.remove();
-        var id = $("#frm #permission_id").val();
+        var id = $("#frm #id").val();
         if (id != '') {
             if (confirm("Deseas eliminar")) {
                 var token = $("input[name=_token]").val();
@@ -90,14 +90,14 @@ function Permission() {
         var html = "<ul>";
         $.each(data, function (i, val) {
             if (val.nodes) {
-                html += '<li data-value="' + val.permission_id + '"><a href="#" onclick=objP.getMenuId(' + val.permission_id + ');javascript:void(0);> ' + val.title + "</a>";
+                html += '<li data-value="' + val.id + '"><a href="#" onclick=objP.getMenuId(' + val.id + ');javascript:void(0);> ' + val.title + "</a>";
                 html += "<ul>";
                 $.each(val.nodes, function (j, value) {
-                    html += '<li data-value="' + value.permission_id + '" ><a href="#" onclick=objP.getMenuId(' + value.permission_id + ');javascript:void(0);> ' + value.title + "</li>";
+                    html += '<li data-value="' + value.id + '" ><a href="#" onclick=objP.getMenuId(' + value.id + ');javascript:void(0);> ' + value.title + "</li>";
                 });
                 html += "</ul></li>";
             } else {
-                html += '<li><a href="#" onclick=objP.getMenuId(' + val.permission_id + ');javascript:void(0);> ' + val.title + '</li>';
+                html += '<li><a href="#" onclick=objP.getMenuId(' + val.id + ');javascript:void(0);> ' + val.title + '</li>';
             }
         });
         html += "</ul>";
@@ -117,7 +117,7 @@ function Permission() {
             dataType: 'JSON',
             success: function (data) {
                 $("#frm #id").val(data.id);
-                $(".input-permission").setFields({data: data.header});
+                $(".input-permission").setFields({data: data});
                 if (data.event == true) {
                     $("#frm #event").prop("checked", true);
                 } else {

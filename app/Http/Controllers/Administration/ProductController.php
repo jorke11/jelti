@@ -6,19 +6,22 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Session;
 use App\Models\Administration;
+use App\Models\Administration\PriceSpecial;
 use Input;
 use DB;
 use App\Models\Administration\Products;
 use App\Models\Administration\ProductsImage;
+use Datatables;
+use App\Http\Requests\Administration\ProductsCreateRequest;
+use \App\Http\Requests\Administration\ProductsUpdateRequest;
 
 class ProductController extends Controller {
 
     public function index() {
-        $characteristic = Administration\Characteristic::all();
-        return view("products.init", compact("characteristic"));
+        return view("products.init");
     }
 
-    public function store(Request $request) {
+    public function store(ProductsCreateRequest $request) {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
@@ -31,7 +34,23 @@ class ProductController extends Controller {
 
             $input["status"] = (isset($input["status"])) ? 1 : 0;
 
-            $result = Products::create($input);
+            $result = Products::create($input)->id;
+
+            if ($result) {
+                $product = Products::FindOrFail($result);
+                return response()->json(['success' => true, 'header' => $product]);
+            } else {
+                return response()->json(['success' => 'false']);
+            }
+        }
+    }
+
+    public function storeSpecial(Request $request) {
+        if ($request->ajax()) {
+            $input = $request->all();
+            unset($input["id"]);
+
+            $result = PriceSpecial::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -41,13 +60,19 @@ class ProductController extends Controller {
         }
     }
 
+    public function getSpecial(Request $req) {
+        $in = $req->all();
+        return Datatables::eloquent(PriceSpecial::where("product_id", $in["product_id"]))->make(true);
+    }
+
     public function edit($id) {
+
         $resp["header"] = Products::FindOrFail($id);
         $resp["images"] = ProductsImage::where("product_id", $id)->get();
-
         return response()->json($resp);
     }
 
+//    public function update(ProductsUpdateRequest $request, $id) {
     public function update(Request $request, $id) {
         $product = Products::FindOrFail($id);
         $input = $request->all();
@@ -60,8 +85,8 @@ class ProductController extends Controller {
 
         $result = $product->fill($input)->save();
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            $product = Products::FindOrFail($id);
+            return response()->json(['success' => true, 'header' => $product]);
         } else {
             return response()->json(['success' => 'false']);
         }

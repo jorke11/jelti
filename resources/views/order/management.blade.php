@@ -111,7 +111,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Branch office:</label>
-                    <select class="form-control input-order" id="branch_id" name='branch_id' data-api="/api/getSupplier">
+                    <select class="form-control input-order" id="branch_id" name='branch_id' data-api="/api/getBranch">
                     </select>
                 </div>
             </div>

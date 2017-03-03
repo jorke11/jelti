@@ -17,12 +17,12 @@
             </div>
             <div class="panel-body">
                 <input type="hidden" id="id" name="id" class="input-special">
-                <input type="hidden" id="product_id" name="product_id" class="input-special">
+                <input type="hidden" id="client_id" name="client_id" class="input-special">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Client</label>
-                            <select class="form-control input-special input-sm" id="client_id" name="client_id" data-api="/api/getClient">
+                            <label for="email">Product</label>
+                            <select class="form-control input-special input-sm" id="product_id" name="product_id" data-api="/api/getProduct">
                             </select>
                         </div>
                     </div>
@@ -54,7 +54,12 @@
                             <input class="form-control input-sm input-special" id="tax" name="tax">    
                         </div>
                     </div>
-
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Reset All</label>
+                            <input type="checkbox" class="form-control input-sm input-special" id="reset">    
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,7 +83,7 @@
                                     <th>margin</th>
                                     <th>margin_sf</th>
                                     <th>tax</th>
-                                    <th>All</th>
+                                    <th>all</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -18,8 +18,6 @@ class UserController extends Controller {
     
     public function index() {
         $profile = Roles::all();
-        $supplier = Suppliers::all();
-        $city = Cities::all();
         return view("user.init", compact("profile", "supplier", "city"));
     }
 
@@ -55,7 +53,7 @@ class UserController extends Controller {
 
     public function getPermission($id) {
         $resp["permission"] = DB::select("
-                                        SELECT p.permission_id = ANY (SELECT permission_user_id FROM permissions_user where users_id=" . $id . " and permission_id=p.permission_id) allowed,p.*
+                                        SELECT p.id = ANY (SELECT id FROM permissions_user where users_id=" . $id . " and permission_id=p.id) allowed,p.*
                                         from permissions p 
                                         WHERE parent_id=0 
                                         AND typemenu_id=0 
@@ -64,9 +62,9 @@ class UserController extends Controller {
 
         foreach ($resp["permission"] as $key => $val) {
             $query = "
-                                        SELECT p.permission_id = ANY (SELECT permission_id FROM permissions_user where users_id=" . $id . " and permission_id=p.permission_id) allowed,p.*
+                                        SELECT p.id = ANY (SELECT permission_id FROM permissions_user where users_id=" . $id . " and permission_id=p.id) allowed,p.*
                                         from permissions p 
-                                        WHERE parent_id=" . $val->permission_id . "
+                                        WHERE parent_id=" . $val->id . "
                                         ORDER BY priority asc";
 
             $children = DB::select($query);
@@ -104,10 +102,10 @@ class UserController extends Controller {
     public function savePermission(Request $request, $id) {
         $input = $request->all();
         $per = explode(",", $input["arr"]);
-        $del = PermissionUser::whereNotIn("permission_id", $per)->where("users_id", $id)->delete();
+        $del = PermissionsUser::whereNotIn("permission_id", $per)->where("users_id", $id)->delete();
 
         foreach ($per as $val) {
-            $us = PermissionUser::where("permission_id", $val)->where("users_id", $id)->get();
+            $us = PermissionsUser::where("permission_id", $val)->where("users_id", $id)->get();
             if (count($us) == 0) {
                 $per = new PermissionUser();
                 $per->users_id = $id;

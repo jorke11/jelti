@@ -1,5 +1,5 @@
 function Product() {
-    var table, product_id = 0;
+    var table, product_id = 0, tableSpecial;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -36,10 +36,17 @@ function Product() {
 
         $("#tabSpecial").click(function () {
             $(".input-special").cleanFields();
+            tableSpecial = obj.tableSpecial($("#frm #id").val());
         })
+
+        $("#btnNewSpecial").click(this.newSpecial);
+        $("#btnSaveSpecial").click(this.saveSpecial);
     }
     this.new = function () {
         $(".input-product").cleanFields();
+    }
+    this.newSpecial = function () {
+        $(".input-special").cleanFields();
     }
 
     this.showImages = function (id) {
@@ -102,7 +109,7 @@ function Product() {
 
     this.save = function () {
         toastr.remove();
-        var frm = $("#frm");
+        var frm = $("#frm"), elem;
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frm #id").val();
@@ -121,6 +128,58 @@ function Product() {
                 msg = "Edited Record";
             }
 
+            elem = $("#frm #reference");
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        table.ajax.reload();
+                        $(".input-product").setFields({data: data.header});
+                        $("#error_" + elem.attr("id")).remove();
+                        elem.removeClass("error");
+                        elem.parent().parent().removeClass("has-error")
+                        toastr.success(msg);
+                    }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    if (xhr.responseJSON.reference) {
+                        elem.addClass("error");
+                        elem.after('<small class="help-block" id="error_' + elem.attr("id") + '" data-fv-validator="notEmpty" data-fv-for="firstName" data-fv-result="INVALID" style="">' + elem.attr("id") + ' already exists</small>')
+                        elem.parent().parent().addClass("has-error")
+                    }
+                }
+            })
+        } else {
+
+            toastr.error("Fields Required!");
+        }
+    }
+    this.saveSpecial = function () {
+        toastr.remove();
+        var frm = $("#frmSpecial");
+        $("#frmSpecial #product_id").val($("#frm #id").val());
+        var data = frm.serialize();
+        var url = "", method = "";
+        var id = $("#frmSpecial #id").val();
+
+        var msg = '';
+
+        var validate = $(".input-special").validate();
+
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "product/StoreSpecial";
+                msg = "Created Record";
+            } else {
+                method = 'PUT';
+                url = "product/UpdateSpecial/" + id;
+                msg = "Edited Record";
+            }
+
             $.ajax({
                 url: url,
                 method: method,
@@ -128,7 +187,7 @@ function Product() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == 'true') {
-                        table.ajax.reload();
+                        tableSpecial.ajax.reload();
                         toastr.success(msg);
                     }
                 }
@@ -201,7 +260,7 @@ function Product() {
                 {data: "tax"},
                 {data: "price_sf"},
                 {data: "price_cust"},
-                {data: "image", width: 10, render: function (data, type, row) {
+                {data: "image", width: 10, searchable: false, render: function (data, type, row) {
 
                         if (data == null) {
                             data = "default.jpg";
@@ -226,6 +285,38 @@ function Product() {
                     mData: null,
                     mRender: function (data, type, full) {
                         return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                    }
+                }
+            ],
+        });
+    }
+    this.tableSpecial = function (id) {
+        var obj = {};
+        obj.product_id = id;
+        return $('#tblSpecial').DataTable({
+            "processing": true,
+            "serverSide": true,
+            destroy: true,
+            "ajax": {
+                url: "/api/listSpecial",
+                type: 'GET',
+                data: obj,
+            },
+            columns: [
+                {data: "id"},
+                {data: "client_id"},
+                {data: "product_id"},
+                {data: "price_sf"},
+                {data: "margin"},
+                {data: "margin_sf"},
+                {data: "tax"},
+            ],
+            order: [[1, 'ASC']],
+            aoColumnDefs: [
+                {
+                    aTargets: [0],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 }
             ],

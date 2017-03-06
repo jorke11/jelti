@@ -8,6 +8,12 @@
                 <button class="btn btn-success btn-sm" id='btnSave'>
                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                 </button>
+                <button class="btn btn-success btn-sm" id='btnSend'>
+                    <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-success btn-sm" id='btnDocument'>
+                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -47,9 +53,8 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">City Destination:</label>
-                    <select class="form-control input-departure" id="destination_id" name='destination_id' data-api="/api/getCity">
-                    </select>
+                    <label for="email">Date:</label>
+                    <input type="text" class="form-control input-departure form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>">
                 </div>
             </div>
 
@@ -71,10 +76,12 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Date:</label>
-                    <input type="text" class="form-control input-departure form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>">
+                    <label for="email">City Destination:</label>
+                    <select class="form-control input-departure" id="destination_id" name='destination_id' data-api="/api/getCity">
+                    </select>
                 </div>
             </div>
+
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Client:</label>

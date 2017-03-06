@@ -1,4 +1,4 @@
-<div class="modal fade" tabindex="-1" role="dialog" id='modalDetail'>
+<div class="modal fade" role="dialog" id='modalDetail'>
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,41 +12,8 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Supplier:</label>
-                            <select class="form-control input-detail" id="supplier_id" name='supplier_id'>
-                                @if(isset($responsable))
-                                @foreach($responsable as $res)
-                                <option value="{{$res->id}}">{{$res->name}}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Mark:</label>
-                            <select class="form-control input-detail" id="mark_id" name='mark_id'>
-                                <option value="0">Seleccione</option>
-                                @if(isset($mark))
-                                @foreach($mark as $mar)
-                                <option value="{{$mar->id}}">{{$mar->description}}</option>
-                                @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
                             <label for="email">Product:</label>
-                            <select class="form-control input-detail" id="product_id" name='product_id'>
-                                <option value="0">Seleccione</option>
-                                @if(isset($product))
-                                @foreach($product as $pro)
-                                <option value="{{$pro->id}}">{{$pro->description}}</option>
-                                @endforeach
-                                @endif
+                            <select class="form-control input-detail" id="product_id" name='product_id' data-api="/api/getProduct">
                             </select>
                         </div>
 
@@ -55,11 +22,11 @@
                         <div class="form-group">
                             <label for="email">Category:</label>
                             <select class="form-control input-detail" id="category_id" name='category_id'>
-                                @if(isset($mark))
+
                                 @foreach($category as $cat)
                                 <option value="{{$cat->id}}">{{$cat->description}}</option>
                                 @endforeach
-                                @endif
+
                             </select>
                         </div>
                     </div>

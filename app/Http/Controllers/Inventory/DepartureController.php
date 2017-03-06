@@ -10,6 +10,8 @@ use App\Models\Inventory\Orders;
 use App\Models\Inventory\DeparturesDetail;
 use App\Models\Inventory\OrdersDetail;
 use App\Models\Invoicing\PurchasesDetail;
+use App\Models\Invoicing\SaleDetail;
+use App\Models\Administration\Products;
 use Session;
 
 class DepartureController extends Controller {
@@ -41,10 +43,28 @@ class DepartureController extends Controller {
         $pdf = PDF::loadView('departure.pdf', $data);
         return $pdf->stream('document.pdf');
     }
+    
+    public function getInvoiceHtml(){
+        $data = [
+            'foo' => 'bar'
+        ];
+        
+        return view("departure.pdf", compact("data"));
+    }
+
+    public function getInvoice() {
+        $data = [
+            'foo' => 'bar'
+        ];
+        $pdf = \PDF::loadView('departure.pdf', [], $data, [
+                    'title' => 'Invoice']);
+
+        return $pdf->stream('document.pdf');
+    }
 
     public function getDetailProduct($id) {
         $response = DB::table("products")
-                ->select("products.id", "products.title", "categories.description as caterory", "products.price_sf")
+                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf")
                 ->join("categories", "categories.id", "=", "products.category_id")
                 ->where("products.id", $id)
                 ->first();
@@ -76,6 +96,73 @@ class DepartureController extends Controller {
                 return response()->json(['success' => 'false']);
             }
         }
+    }
+
+    public function setSale(Request $request) {
+        if ($request->ajax()) {
+            $input = $request->all();
+
+            $departure = Departures::findOrFail($input["id"]);
+
+
+            $id = DB::table("sales")->insertGetId(
+                    ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
+                        "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
+                        "address" => $departure["address"], "phone" => $departure["phone"],
+                        "status_id" => $departure["status_id"], "created" => $departure["created"]
+                    ]
+            );
+
+            $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
+
+            $total = 0;
+            $cont = 0;
+            $credit = 0;
+            $tax = 0;
+            $totalPar = 0;
+            foreach ($detail as $value) {
+                $pro = Products::findOrFail($value->product_id);
+                $totalPar = $value->quantity * $value->value;
+                $total += $totalPar;
+                SaleDetail::insert([
+                    "sale_id" => $id, "product_id" => $value->product_id,
+                    "category_id" => $value->category_id, "quantity" => $value->quantity,
+                    "value" => $value->value, "tax" => $pro["tax"],
+                    "account_id" => 1, "order" => $cont
+                ]);
+
+                $credit += (double) $totalPar;
+                if ($pro["tax"] != '' && $pro["tax"] > 0) {
+                    $cont++;
+                    $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                    SaleDetail::insert([
+                        "account_id" => 1, "sale_id" => $id, "value" => $tax,
+                        "order" => $cont, "description" => 'iva'
+                    ]);
+                }
+                $credit += (double) $tax;
+                $cont++;
+            }
+
+
+            if ($total > 860000) {
+                $rete = ($total * 0.025);
+                SaleDetail::insert([
+                    "sale_id" => $id, "account_id" => 2, "value" => ($total * 0.025), "order" => $cont, "description" => "rete"
+                ]);
+                $credit -= $rete;
+                $cont++;
+            }
+
+            SaleDetail::insert([
+                "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes"
+            ]);
+            $credit = 0;
+
+            $departure->status_id = 2;
+            $departure->save();
+        }
+        return response()->json(["success" => true]);
     }
 
     public function storeExtern(Request $request) {

@@ -14,9 +14,15 @@ function Sale() {
         });
 
         $("#insideManagement").click(function () {
-//            $(".input-entry").val("");
+            var created = $("#frm #created").val();
+            $(".input-sale").cleanFields();
+            $("#frm #created").val(created);
+            $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
+            $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+            $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+            $("#frm #branch_id").getSeeker({default: true, api: '/api/getSupplier', disabled: true});
             $.ajax({
-                url: 'sale/1/consecutive',
+                url: 'purchase/1/consecutive',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
@@ -25,15 +31,25 @@ function Sale() {
             })
         });
 
-        $("#btnmodalDetail").click(function () {
-            $("#modalDetail").modal("show");
-            $("#frmDetail #id").val("");
-            $("#frmDetail #quantity").val("");
-            $("#frmDetail #value").val("");
-            $("#frmDetail #lot").val("");
+        $("#client_id").change(function () {
+            if ($(this).val() != 0) {
+                obj.getSupplier($(this).val());
+            } else {
+                $("#frm #name_client").val("");
+                $("#frm #address_client").val("");
+                $("#frm #phone_client").val("");
+            }
         });
 
+        $("#btnmodalDetail").click(function () {
+            $("#modalDetail").modal("show");
+            $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #client_id").val()}});
+            $(".input-detail").cleanFields();
+        });
+
+
         $("#product_id").change(this.getQuantity);
+
         $("#quantity").blur(function () {
             if (maxDeparture < $(this).val()) {
                 toastr.warning("No hay sufiente disponible");
@@ -46,16 +62,23 @@ function Sale() {
     }
 
     this.getQuantity = function () {
-        const id = this.value;
+        var id = this.value;
         $.ajax({
-            url: 'sale/' + id + '/quantity',
+            url: 'sale/' + id + '/getDetailProduct',
             method: 'GET',
             dataType: 'JSON',
-            success: function (data) {
-                if (data.response.quantity > 0) {
-                    maxDeparture = data.response.quantity;
-                    $("#quantity").prop("disabled", false);
-                    $("#quantityMax").html(data.response.quantity);
+            success: function (resp) {
+                $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
+                $("#frmDetail #value").val(resp.response.price_sf)
+
+                $("#frmDetail #quantityMax").html(resp.quantity)
+                maxDeparture = resp.quantity
+                if (resp.quantity > 0) {
+                    $("#frmDetail #quantity").attr("disabled", false);
+                    $("#newDetail").attr("disabled", false);
+                } else {
+                    $("#newDetail").attr("disabled", true);
+                    $("#frmDetail #quantity").attr("disabled", true);
                 }
             }
 
@@ -63,7 +86,24 @@ function Sale() {
 
     }
 
+    this.getSupplier = function (id) {
+        $.ajax({
+            url: 'purchase/' + id + '/getSupplier',
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (resp) {
+                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
+                $("#frm #address").val(resp.response.address);
+                $("#frm #phone").val(resp.response.phone);
+            }
+        })
+    }
+
     this.save = function () {
+        $("#frm #warehouse_id").prop("disabled", false);
+        $("#frm #responsible_id").prop("disabled", false);
+        $("#frm #city_id").prop("disabled", false);
+
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
@@ -141,8 +181,8 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-sale").setFields({data:data.header});
-               
+                $(".input-sale").setFields({data: data.header});
+
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -163,38 +203,56 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $("#modalDetail").modal("show");
-                $("#frmDetail #id").val(data.id);
-                $("#frmDetail #supplier_id").val(data.supplier_id);
-                $("#frmDetail #mark_id").val(1);
-                $("#frmDetail #quantity").val(data.quantity);
-                $("#frmDetail #value").val(data.value);
-                $("#frmDetail #lot").val(1);
-                $("#frmDetail #category_id").val(data.category_id);
-                $("#frmDetail #expiration_date").val(data.expiration_date);
+                $(".input-sales").setFields({data: data});
             }
         })
     }
 
     this.printDetail = function (data) {
-        var html = "";
+        var html = "", total = 0, debt = 0, credit = 0, total = 0;
         $("#tblDetail tbody").empty();
         $.each(data, function (i, val) {
+            val.description = (val.description == null) ? '' : val.description;
+            val.product_id = (val.product_id == null) ? '' : val.product_id;
+            val.tax = (val.tax == null) ? '' : val.tax;
+            val.quantity = (val.quantity == null) ? '' : val.quantity;
+
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
-            html += "<td>Supplier</td>";
-//            html += "<td>" + val.supplier_id + "</td>";
+            html += "<td>" + val.description + "</td>";
+            html += "<td>" + val.account_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
-            html += "<td>" + val.product_id + "</td>";
+            html += "<td>" + val.tax + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.value + "</td>";
-//            html += "<td>" + val.expiration_date + "</td>";
-            html += "<td>20/12/2001</td>";
+            html += "<td>" + (val.value * val.quantity) + "</td>";
+
+            if (val.account_id == 1) {
+                val.quantity = (val.quantity == '') ? 1 : val.quantity;
+                html += "<td>" + 0 + "</td>";
+                html += "<td>" + val.value * val.quantity + "</td>";
+                credit += parseFloat((val.value * val.quantity));
+            } else {
+                if (val.product_id == '') {
+                    html += "<td>" + val.value + "</td>";
+                    html += "<td>" + 0 + "</td>";
+                    debt += parseFloat(val.value);
+
+                } else {
+                    debt += parseFloat(total);
+                    html += "<td>" + total + "</td>";
+                    html += "<td>" + 0 + "</td>";
+                }
+
+            }
+
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";
         });
 
         $("#tblDetail tbody").html(html);
+        $("#tblDetail tfoot").html('<tr><td colspan="8">Total</td><td>' + Math.round(debt) + '</td><td>' + Math.round(credit) + '</td></tr>');
     }
 
     this.delete = function (id) {
@@ -248,7 +306,7 @@ function Sale() {
             "ajax": "/api/listSale",
             columns: [
                 {data: "id"},
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "date"},
                 {data: "bill"},
                 {data: "warehouse"},
@@ -279,7 +337,7 @@ function Sale() {
             "ajax": "/api/listSale",
             columns: [
                 {data: "id"},
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "description"},
                 {data: "created"},
                 {data: "order"},

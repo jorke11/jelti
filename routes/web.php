@@ -43,6 +43,18 @@ Route::put('/supplier/updatePrice/{id}', 'Administration\SupplierController@upda
 Route::post('/supplier/StoreBranch', 'Administration\SupplierController@storeBranch');
 Route::delete('/supplier/deleteBranch/{id}', 'Administration\SupplierController@deleteBranch');
 
+
+Route::resource('/stakeholder', 'Administration\StakeholderController');
+Route::post('/stakeholder/upload', 'Administration\StakeholderController@uploadImage');
+Route::put('/stakeholder/checkmain/{id}', 'Administration\StakeholderController@checkMain');
+Route::delete('/stakeholder/deleteImage/{id}', 'Administration\StakeholderController@deleteImage');
+Route::get('/stakeholder/getImages/{id}', 'Administration\StakeholderController@getImages');
+
+Route::post('/stakeholder/StoreSpecial', 'Administration\StakeholderController@storeSpecial');
+Route::put('/stakeholder/updatePrice/{id}', 'Administration\StakeholderController@updatePrice');
+Route::post('/stakeholder/StoreBranch', 'Administration\StakeholderController@storeBranch');
+Route::delete('/stakeholder/deleteBranch/{id}', 'Administration\StakeholderController@deleteBranch');
+
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/puc', 'Administration\PucController');
 Route::resource('/warehouse', 'Administration\WarehouseController');
@@ -79,7 +91,7 @@ Route::get('/sale/{id}/detail', ['uses' => 'Invoicing\SaleController@getDetail']
 Route::post('/sale/storeDetail', 'Invoicing\SaleController@storeDetail');
 Route::put('/sale/detail/{id}', 'Invoicing\SaleController@updateDetail');
 Route::delete('/sale/detail/{id}', 'Invoicing\SaleController@destroyDetail');
-
+Route::get('/sale/{id}/getDetailProduct', ['uses' => 'Invoicing\SaleController@getDetailProduct']);
 
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
@@ -90,7 +102,7 @@ Route::get('/entry/{id}/getProducts', ['uses' => 'Inventory\EntryController@getP
 Route::post('/entry/storeDetail', 'Inventory\EntryController@storeDetail');
 Route::put('/entry/detail/{id}', 'Inventory\EntryController@updateDetail');
 Route::delete('/entry/detail/{id}', 'Inventory\EntryController@destroyDetail');
-Route::post('entry/setEntry/', 'Inventory\EntryController@sendEntry');
+Route::post('/entry/setPurchase/', 'Inventory\EntryController@sendPurchase');
 
 
 Route::resource('/departure', 'Inventory\DepartureController');
@@ -104,6 +116,10 @@ Route::put('/departure/detail/{id}', 'Inventory\DepartureController@updateDetail
 Route::delete('/departure/detail/{id}', 'Inventory\DepartureController@destroyDetail');
 Route::get('/departure/getOrder/{id}', 'Inventory\DepartureController@showOrder');
 Route::post('/departure/storeExt', 'Inventory\DepartureController@storeExtern');
+Route::post('/departure/setSale/', 'Inventory\DepartureController@setSale');
+Route::get('/departure/{id}/getInvoice', ['uses' => 'Inventory\DepartureController@getInvoice']);
+
+Route::get('/departure/{id}/getInvoiceHtml', ['uses' => 'Inventory\DepartureController@getInvoiceHtml']);
 
 Route::resource('/order', 'Inventory\OrderController');
 Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);
@@ -116,6 +132,7 @@ Route::delete('/order/detail/{id}', 'Inventory\OrderController@destroyDetail');
 Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getClient']);
 
 
+
 Route::get('/api/listCategory', function() {
     return Datatables::eloquent(Models\Administration\Categories::query())->make(true);
 });
@@ -126,6 +143,17 @@ Route::get('/api/listCharacterist', function() {
 Route::get('/api/listSupplier', function() {
     return Datatables::queryBuilder(
                     DB::table('vsupplier')
+            )->make(true);
+});
+
+Route::get('/api/listSupplier', function() {
+    return Datatables::queryBuilder(
+                    DB::table('vsupplier')
+            )->make(true);
+});
+Route::get('/api/listStakeholder', function() {
+    return Datatables::queryBuilder(
+                    DB::table('vstakeholder')
             )->make(true);
 });
 Route::get('/api/listProduct', function() {

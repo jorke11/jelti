@@ -10,7 +10,6 @@ function Entry() {
         $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
-//            $(".input-entry").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
 
@@ -25,7 +24,9 @@ function Entry() {
         });
 
         $("#insideManagement").click(function () {
+            var created = $("#frm #created").val();
             $(".input-entry").cleanFields();
+            $("#frm #created").val(created);
             $("#frm #consecutive").val(1);
             $("#frm #supplier_id").prop("disabled", true);
             $("#frm #status_id").prop("disabled", true);
@@ -44,22 +45,26 @@ function Entry() {
 
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
+            var expiration_date = $("#frmDetail #expiration_date").val();
+            console.log(expiration_date)
+            $(".input-detail").cleanFields();
+            $("#frmDetail #expiration_date").val(expiration_date);
             $("#frmDetail #product_id").val(0).getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
-           
+
             $("#frmDetail #id").val("");
             $("#frmDetail #quantity").val("");
             $("#frmDetail #value").val("");
             $("#frmDetail #lot").val("");
         })
 
-        $("#frmDetail #product_id").on("change",function () {
+        $("#frmDetail #product_id").on("change", function () {
             $.ajax({
                 url: 'entry/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.id).trigger('change');
-                    
+
                     $("#frmDetail #value").val(resp.response.price_sf);
                     $("#frmDetail #value").inputmask();
                 }
@@ -69,8 +74,10 @@ function Entry() {
     }
     this.new = function () {
         toastr.remove();
+        var created = $("#frm #created").val();
         $(".input-entry").cleanFields();
-        $(".input-detail").cleanFields();
+
+        $("#frm #created").val(created);
         $(".input-fillable").prop("readonly", false);
         $("#tblDetail tbody").empty();
         $("#frm #status_id").val(1).trigger("change").prop("disabled", true);
@@ -85,7 +92,7 @@ function Entry() {
         var obj = {};
         obj.id = $("#frm #id").val()
         $.ajax({
-            url: 'entry/setEntry',
+            url: 'entry/setPurchase',
             method: 'POST',
             data: obj,
             dataType: 'JSON',
@@ -162,7 +169,7 @@ function Entry() {
             url += "detail/" + id;
             msg = "Edited " + msg;
         }
-     
+
         $.ajax({
             url: url,
             method: method,
@@ -230,7 +237,7 @@ function Entry() {
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.product_id + "</td>";
-             html += "<td>" + val.expiration_date + "</td>";
+            html += "<td>" + val.expiration_date + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.value + "</td>";
             html += "<td>" + (calc) + "</td>";

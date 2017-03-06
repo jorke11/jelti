@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administration\Cities;
 use App\Models\Administration\Suppliers;
+use App\Models\Administration\Stakeholder;
 use App\Models\Administration\Warehouses;
 use App\Models\Administration\Products;
 use App\Models\Administration\Categories;
@@ -49,13 +50,16 @@ class SeekController extends Controller {
 
     public function getSupplier(Request $req) {
         $in = $req->all();
-        $query = Suppliers::select("id", "name as text");
+        $query = Stakeholder::select("id", "name as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"])->get();
         } else {
-            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+            $query
+                    ->where("name", "ilike", "%" . $in["q"] . "%")
+                    ->where("type_stakeholder",1)
+                    ->get();
         }
         $result = $query->get();
 

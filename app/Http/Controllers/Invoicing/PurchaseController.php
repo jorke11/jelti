@@ -22,8 +22,8 @@ class PurchaseController extends Controller {
         echo response()->json(["response" => 'prueba']);
     }
     public function getSupplier($id) {
-        $supplier=\App\Models\Administration\Suppliers::findOrFail($id);
-        return response()->json(["response" => $supplier]);
+        $stakeholder= \App\Models\Administration\Stakeholder::findOrFail($id);
+        return response()->json(["response" => $stakeholder]);
     }
     public function getProducts($id) {
         $resp = \App\Models\Administration\Products::where("supplier_id",$id);

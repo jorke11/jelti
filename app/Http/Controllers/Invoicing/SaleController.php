@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Invoicing;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Invoicing\Sale;
+use App\Models\Invoicing\Sales;
 use App\Models\Invoicing\SaleDetail;
 use \Illuminate\Support\Facades\DB;
 use Session;
@@ -12,7 +12,8 @@ use Session;
 class SaleController extends Controller {
 
     public function index() {
-        return view("sale.init");
+        $category = \App\Models\Administration\Categories::all();
+        return view("sale.init", compact("category"));
     }
 
     public function getConsecutive($id) {
@@ -28,12 +29,9 @@ class SaleController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
-//            $user = Auth::User();
-            $input["city_id"] = 1;
-            $result = Sale::create($input);
+            $result = Sales::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                $resp = Sale::FindOrFail($result["attributes"]["id"]);
+                $resp = Sales::FindOrFail($result["attributes"]["id"]);
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);
@@ -42,14 +40,27 @@ class SaleController extends Controller {
     }
 
     public function edit($id) {
-        $entry = Sale::FindOrFail($id);
-        $detail = DB::table("saledetail")->where("sale_id", "=", $id)->get();
+        $entry = Sales::FindOrFail($id);
+        $detail = DB::table("sales_detail")->where("sale_id", "=", $id)->orderBy("order", "asc")->get();
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 
     public function getDetail($id) {
         $detail = SaleDetail::FindOrFail($id);
         return response()->json($detail);
+    }
+
+    public function getDetailProduct($id) {
+        $response = DB::table("products")
+                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf")
+                ->join("categories", "categories.id", "=", "products.category_id")
+                ->where("products.id", $id)
+                ->first();
+        $entry = DB::table("entries_detail")->where("product_id", $id)->sum("quantity");
+        $departure = DB::table("departures_detail")->where("product_id", $id)->sum("quantity");
+        $quantity = $entry - $departure;
+
+        return response()->json(["response" => $response, "quantity" => $quantity]);
     }
 
     public function update(Request $request, $id) {
@@ -109,10 +120,12 @@ class SaleController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
+            $input["account_id"] = 1;
+            $input["order"] = 1;
             $result = SaleDetail::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                $resp = SaleDetail::where("sale_id",$input["sale_id"])->get();
+                $resp = SaleDetail::where("sale_id", $input["sale_id"])->get();
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);

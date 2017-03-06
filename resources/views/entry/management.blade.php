@@ -24,8 +24,6 @@
                     <input type="text" class="form-control input-entry input-sm" id="id" readonly="">
                 </div>
             </div>
-
-
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Warehouse:</label>

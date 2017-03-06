@@ -1,6 +1,6 @@
 @extends('layouts.dash')
 @section('content')
-@section('title','Departure')
+@section('title','Sale')
 @section('subtitle','Management')
 <div class="row">
     <div>
@@ -21,25 +21,13 @@
 
             </div>
             <div role="tabpanel" class="tab-pane " id="management">
-                <div class="panel panel-default">
-                    <div class="page-title">
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <button class="btn btn-success" id='new'>
-                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        @include('sale.management')
-                    </div>
-                </div>
+                @include('sale.management')
             </div>
-
         </div>
     </div>
+
 </div>
+
 @include('sale.newDetail')
 {!!Html::script('js/Invoicing/Sale.js')!!}
 @endsection

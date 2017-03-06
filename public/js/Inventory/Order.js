@@ -92,6 +92,7 @@ function Sale() {
     this.send = function () {
         location.href = "departure/getOrder/" + $("#frm #id").val();
     }
+    
     this.new = function () {
         toastr.remove();
 //        $(".input-order").cleanFields();

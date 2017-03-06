@@ -36,7 +36,7 @@ class EntryController extends Controller {
     }
 
     public function getSupplier($id) {
-        $supplier = \App\Models\Administration\Suppliers::findOrFail($id);
+        $supplier = \App\Models\Administration\Stakeholder::findOrFail($id);
         return response()->json(["response" => $supplier]);
     }
 
@@ -63,7 +63,7 @@ class EntryController extends Controller {
         }
     }
 
-    public function sendEntry(Request $request) {
+    public function sendPurchase(Request $request) {
         if ($request->ajax()) {
 
             $input = $request->all();
@@ -71,7 +71,7 @@ class EntryController extends Controller {
             $entry = Entries::findOrFail($input["id"]);
             
             $id = DB::table("purchases")->insertGetId(
-                    ["entry_id" => $entry["entry_id"], "warehouse_id" => $entry["warehouse_id"], "responsible_id" => $entry["responsible_id"],
+                    ["entry_id" => $entry["id"], "warehouse_id" => $entry["warehouse_id"], "responsible_id" => $entry["responsible_id"],
                         "supplier_id" => $entry["supplier_id"], "city_id" => $entry["city_id"], "description" => $entry["description"],
                         "invoice" => $entry["invoice"], "status_id" => $entry["status_id"], "created" => $entry["created"]
                     ]

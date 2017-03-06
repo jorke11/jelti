@@ -15,9 +15,14 @@ class CreateSalesDetailTable extends Migration {
         Schema::create('sales_detail', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sale_id');
-            $table->integer('product_id');
-            $table->integer('quantity');
+            $table->integer('product_id')->nullable();
+            $table->integer('category_id')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->decimal('tax', 15, 2)->nullable();
+            $table->integer('account_id');
+            $table->integer('order');
             $table->decimal('value', 15, 2);
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

@@ -5,10 +5,10 @@ function Sale() {
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#newDetail").click(this.saveDetail);
+        $("#btnSend").click(this.send);
         $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
-//            $(".input-entry").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
 
@@ -27,7 +27,10 @@ function Sale() {
         }
 
         $("#insideManagement").click(function () {
+
+            var created = $("#frm #created").val();
             $(".input-departure").cleanFields();
+            $("#frm #created").val(created);
             $("#frm #consecutive").val(1);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
@@ -74,6 +77,10 @@ function Sale() {
             })
         });
 
+        $("#btnDocument").click(function () {
+            window.open("departure/" + $("#frm #id").val()+ "/getInvoice");
+        });
+
 
         $("#quantity").blur(function () {
             if (maxDeparture < $(this).val()) {
@@ -111,6 +118,20 @@ function Sale() {
                 $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.response.address);
                 $("#frm #phone").val(resp.response.phone);
+            }
+        })
+    }
+
+    this.send = function () {
+        var obj = {};
+        obj.id = $("#frm #id").val()
+        $.ajax({
+            url: 'departure/setSale',
+            method: 'POST',
+            data: obj,
+            dataType: 'JSON',
+            success: function (resp) {
+                toastr.success("Sended");
             }
         })
     }

@@ -7,21 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class Sales extends Model {
 
     protected $table = "sales";
-    protected $primaryKey = 'sale_id';
+    protected $primaryKey = 'id';
     protected $fillable = [
-        "sale_id",
-        "sale_id",
+        "id",
         "warehouse_id",
-        "supplier_id",
+        "client_id",
         "product_id",
         "category_id",
         "responsible_id",
         "city_id",
-        "consecutive",
-        "destination",
+        "destination_id",
         "order",
         "address",
+        "phone",
         "description",
+        "status_id",
         "created",
     ];
 

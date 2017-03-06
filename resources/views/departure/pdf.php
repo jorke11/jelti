@@ -1,1 +1,167 @@
-<h1>prueba</h1>
+<style>
+    body{
+        font-size: 11px;
+    }
+    .space-title{
+        font-size: 10px;
+        width: 350px;
+    }
+  
+    .font-subtitle{
+        font-size: 11px;
+        font-weight: bold;
+        padding-bottom: 15px;
+    }
+    .font-detail{
+        font-size: 12px;
+    }
+    .font-detail-cont{
+        font-size: 12px;
+        font-weight: bold;
+    }
+</style>
+<br>
+<table align='center'  width='100%'>
+    <tr>
+        <td class="space-title"></td>
+        <td>SUPERFUDS SAS</td>
+    </tr>
+    <tr>
+        <td class="space-title"></td>
+        <td>NIT 900 703 907-7</td>
+    </tr>
+    <tr>
+        <td class="space-title"></td>
+        <td>BARRANQUILLA COLOMBIA</td>
+    </tr>
+    <tr>
+        <td class="space-title"></td>
+        <td>E-mail: info@superfuds.com.co</td>
+    </tr>
+</table>
+<br>
+<table align='center' >
+    <tr>
+        <td class="font-title">Resolución Dian 320001359848</td>
+    </tr>
+    <tr>
+        <td class="font-title">del 29.02 de 2016</td>
+    </tr>
+    <tr>
+        <td class="font-title">Numeración Autorizada</td>
+    </tr>
+</table>
+<br>
+
+<table width='100%'>
+    <tr>
+        <td class="font-subtitle" width='50%'>Factura a nombre de:</td>
+        <td class="font-subtitle" width='50%'>Factura de venta: 000031</td>
+    </tr>
+    <tr>
+        <td>
+            <table border='0'>
+                <tr>
+                    <td class="font-detail">Cliente</td>
+                    <td class="font-detail-cont">Cliente Prueba</td>
+                </tr>
+                <tr>
+                    <td class="font-detail">Nit</td>
+                    <td class="font-detail-cont">000000000000</td>
+                </tr>
+                <tr>
+                    <td class="font-detail">Dirección</td>
+                    <td class="font-detail-cont">Cra 98a 10001 - 4</td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td class="font-detail">Emisión</td>
+                    <td class="font-detail-cont">03 de Marzo de 2017</td>
+                </tr>
+                <tr>
+                    <td class="font-detail">Vencimiento</td>
+                    <td class="font-detail-cont">3 de Abril de 2017</td>
+                </tr>
+                <tr>
+                    <td class="font-detail">Vendedor</td>
+                    <td class="font-detail-cont">Vendedor de Prueba</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<br>
+<table width='100%'>
+    <thead>
+        <tr>
+            <th>Cantidad</th>
+            <th>Descripción</th>
+            <th>% Iva</th>
+            <th>Precio</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        for ($i = 0; $i < 11; $i++) {
+            ?>
+            <tr>
+                <td><?php echo ($i+1) ?></td>
+                <td>Descripción <?php echo ($i+1) ?></td>
+                <td>19</td>
+                <td><?php echo 10000*$i?></td>
+                <td>Total</td>
+            </tr>
+            <?php
+        }
+        ?>
+    </tbody>
+
+</table>
+<br>
+<table border='1' width='100%'>
+        <tr>
+            <td width='50%' >Notas</td>
+            <td >
+                <table>
+                    <tr>
+                        <td width='230px'>Total Factura</td>
+                        <td>$10000</td>
+                    </tr>
+                    <tr>
+                        <td width='230px'>Descuento</td>
+                        <td>$ 0</td>
+                    </tr>
+                    <tr>
+                        <td width='230px'>Flete</td>
+                        <td>$ 230</td>
+                    </tr>
+                    <tr>
+                        <td width='230px'>Iva 5%</td>
+                        <td>$ 200</td>
+                    </tr>
+                    <tr>
+                        <td width='230px'>Iva 16%</td>
+                        <td>$ 24400</td>
+                    </tr>
+                    <tr>
+                        <td width='230px'>Exento</td>
+                        <td>$ 111100</td>
+                    </tr>
+                    <tr>
+                        <td width='230px'>Monto</td>
+                        <td>$ 111100</td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    
+</table>
+
+<?php // echo $foo ?>
+<!--<img src="/images/product/default.jpg">-->
+

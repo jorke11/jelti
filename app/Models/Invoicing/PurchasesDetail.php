@@ -17,7 +17,10 @@ class PurchasesDetail extends Model {
         "quantity", 
         "lot", 
         "expiration_date", 
-        "value"
+        "value",
+        "order",
+        "type_nature",
+        "parent_id"
         ];
 
 }

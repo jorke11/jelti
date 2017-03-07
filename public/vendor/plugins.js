@@ -101,7 +101,7 @@ jQuery.fn.setFields = function (param) {
 
                 $("#error_" + elem.attr("id")).remove();
                 elem.parent().parent().removeClass("has-error");
-                
+
                 if (elem.data("api") != undefined) {
                     var obj = {};
                     obj.id = val;
@@ -201,6 +201,7 @@ jQuery.fn.cleanFields = function (param) {
 
 
 jQuery.fn.currentDate = function (min, format) {
+    var day;
     this.each(function () {
         min = min || false;
         format = format || false;
@@ -208,7 +209,9 @@ jQuery.fn.currentDate = function (min, format) {
         minutos = (d.getMinutes() <= 9) ? '0' + d.getMinutes() : d.getMinutes();
         mes = (mes <= 9) ? '0' + mes : mes;
         if (format == false) {
-            fecha = d.getFullYear() + "-" + mes + "-" + d.getDate();
+            day = d.getDate();
+            day = (day <= 9) ? '0' + day : day;
+            fecha = d.getFullYear() + "-" + mes + "-" + day;
             fecha += (min == false) ? " " + d.getHours() + ':' + minutos : '';
         } else {
             fecha = d.getDate() + "-" + mes + "-" + d.getFullYear();

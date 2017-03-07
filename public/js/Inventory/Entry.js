@@ -80,6 +80,7 @@ function Entry() {
         $("#frm #created").val(created);
         $(".input-fillable").prop("readonly", false);
         $("#tblDetail tbody").empty();
+        $("#tblDetail tfoot").empty();
         $("#frm #status_id").val(1).trigger("change").prop("disabled", true);
         $("#frm #supplier_id").prop("disabled", false);
         $("#btnSave").prop("disabled", false);
@@ -97,7 +98,12 @@ function Entry() {
             data: obj,
             dataType: 'JSON',
             success: function (resp) {
-                toastr.success("Sended");
+                if (resp.response == true) {
+                    toastr.success("Sended");
+                    $(".input-entry").setFields({data: resp.header});
+                }else{
+                    toastr.warning(resp.msg);
+                }
             }
         })
     }
@@ -176,11 +182,13 @@ function Entry() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                if (data.success == 'true') {
+                if (data.response == true) {
                     toastr.success(msg);
                     $("#btnmodalDetail").attr("disabled", false);
-                    obj.printDetail(data.data);
+                    obj.printDetail(data);
                     $("#modalDetail").modal("hide");
+                }else{
+                    toastr.warning("Wrong");
                 }
             }
         })
@@ -206,7 +214,7 @@ function Entry() {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
 
-                obj.printDetail(data.detail);
+                obj.printDetail(data);
             }
         })
     }
@@ -231,23 +239,21 @@ function Entry() {
         var html = "";
         $("#tblDetail tbody").empty();
         var total = 0, calc = 0;
-        $.each(data, function (i, val) {
-            calc = val.quantity * val.value;
+        $.each(data.detail, function (i, val) {
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
-            html += "<td>" + val.product_id + "</td>";
-            html += "<td>" + val.product_id + "</td>";
+            html += "<td>" + val.product + "</td>";
             html += "<td>" + val.expiration_date + "</td>";
             html += "<td>" + val.quantity + "</td>";
-            html += "<td>" + val.value + "</td>";
-            html += "<td>" + (calc) + "</td>";
+            html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + val.totalFormated + "</td>";
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";
-            total += calc;
         });
+       
         $("#tblDetail tbody").html(html);
-        $("#tblDetail tfoot").html('<tr><td colspan="6">Total</td><td>' + total + '</td></tr>');
+        $("#tblDetail tfoot").html('<tr><td colspan="5">Total</td><td>' + data.total + '</td></tr>');
 
     }
 

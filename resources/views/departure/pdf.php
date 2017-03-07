@@ -6,7 +6,7 @@
         font-size: 10px;
         width: 350px;
     }
-  
+
     .font-subtitle{
         font-size: 11px;
         font-weight: bold;
@@ -21,6 +21,8 @@
     }
 </style>
 <br>
+<br>
+
 <table align='center'  width='100%'>
     <tr>
         <td class="space-title"></td>
@@ -40,6 +42,7 @@
     </tr>
 </table>
 <br>
+<br>
 <table align='center' >
     <tr>
         <td class="font-title">Resolución Dian 320001359848</td>
@@ -52,7 +55,7 @@
     </tr>
 </table>
 <br>
-
+<br>
 <table width='100%'>
     <tr>
         <td class="font-subtitle" width='50%'>Factura a nombre de:</td>
@@ -63,15 +66,15 @@
             <table border='0'>
                 <tr>
                     <td class="font-detail">Cliente</td>
-                    <td class="font-detail-cont">Cliente Prueba</td>
+                    <td class="font-detail-cont"><?php echo $client["name"] . " " . $client["last_name"]; ?></td>
                 </tr>
                 <tr>
                     <td class="font-detail">Nit</td>
-                    <td class="font-detail-cont">000000000000</td>
+                    <td class="font-detail-cont"><?php echo $client["document"]; ?></td>
                 </tr>
                 <tr>
                     <td class="font-detail">Dirección</td>
-                    <td class="font-detail-cont">Cra 98a 10001 - 4</td>
+                    <td class="font-detail-cont"><?php echo $client["address"]; ?></td>
                 </tr>
             </table>
         </td>
@@ -94,9 +97,10 @@
     </tr>
 </table>
 <br>
+<br>
 <table width='100%'>
     <thead>
-        <tr>
+        <tr border='1'>
             <th>Cantidad</th>
             <th>Descripción</th>
             <th>% Iva</th>
@@ -104,16 +108,34 @@
             <th>Total</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody> 
         <?php
-        for ($i = 0; $i < 11; $i++) {
+        $totalSum = 0;
+        $rest = 15 - count($detail);
+        for ($i = 0; $i < count($detail); $i++) {
+            $desc = ($detail[$i]->product_id == '') ? $detail[$i]->description : $detail[$i]->product;
+            $total = number_format(($detail[$i]->value * $detail[$i]->quantity), 2, ',', '.');
+            $valueUnit = number_format(($detail[$i]->value), 2, ',', '.');
+            $totalSum += $detail[$i]->value * $detail[$i]->quantity;
             ?>
-            <tr>
-                <td><?php echo ($i+1) ?></td>
-                <td>Descripción <?php echo ($i+1) ?></td>
-                <td>19</td>
-                <td><?php echo 10000*$i?></td>
-                <td>Total</td>
+            <tr >
+                <td align='center'><?php echo $detail[$i]->quantity; ?></td>
+                <td><?php echo $desc; ?></td>
+                <td align='center'><?php echo $detail[$i]->tax; ?></td>
+                <td align='right'><?php echo "$ " . $valueUnit; ?></td>
+                <td align='right'><?php echo "$ " . ($total) ?></td>
+            </tr>
+            <?php
+        }
+
+        for ($i = 0; $i < $rest; $i++) {
+            ?>
+            <tr >
+                <td><?php echo "&nbsp;"; ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <?php
         }
@@ -123,45 +145,45 @@
 </table>
 <br>
 <table border='1' width='100%'>
-        <tr>
-            <td width='50%' >Notas</td>
-            <td >
-                <table>
-                    <tr>
-                        <td width='230px'>Total Factura</td>
-                        <td>$10000</td>
-                    </tr>
-                    <tr>
-                        <td width='230px'>Descuento</td>
-                        <td>$ 0</td>
-                    </tr>
-                    <tr>
-                        <td width='230px'>Flete</td>
-                        <td>$ 230</td>
-                    </tr>
-                    <tr>
-                        <td width='230px'>Iva 5%</td>
-                        <td>$ 200</td>
-                    </tr>
-                    <tr>
-                        <td width='230px'>Iva 16%</td>
-                        <td>$ 24400</td>
-                    </tr>
-                    <tr>
-                        <td width='230px'>Exento</td>
-                        <td>$ 111100</td>
-                    </tr>
-                    <tr>
-                        <td width='230px'>Monto</td>
-                        <td>$ 111100</td>
-                    </tr>
-                    
-                </table>
-            </td>
-        </tr>
-    
+    <tr>
+        <td width='50%' >Notas</td>
+        <td >
+            <table>
+                <tr>
+                    <td width='240px' >Total Factura</td>
+                    <td align='right'><?php echo "$ ".number_format(($totalSum), 2, ',', '.'); ?></td>
+                </tr>
+                <tr>
+                    <td>Descuento</td>
+                    <td>$ 0</td>
+                </tr>
+                <tr>
+                    <td>Flete</td>
+                    <td>$ 230</td>
+                </tr>
+                <tr>
+                    <td>Iva 5%</td>
+                    <td>$ 200</td>
+                </tr>
+                <tr>
+                    <td>Iva 16%</td>
+                    <td>$ 24400</td>
+                </tr>
+                <tr>
+                    <td>Exento</td>
+                    <td>$ 111100</td>
+                </tr>
+                <tr>
+                    <td>Monto</td>
+                    <td>$ 111100</td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+
 </table>
 
-<?php // echo $foo ?>
+<?php // echo $foo  ?>
 <!--<img src="/images/product/default.jpg">-->
 

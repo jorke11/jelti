@@ -21,6 +21,8 @@ class CreatePurchasesdetailTable extends Migration {
             $table->integer('category_id')->nullable();
             $table->integer('voucher_id')->nullable();
             $table->integer('quantity')->nullable();
+            $table->integer('parent_id')->nullable();
+            $table->integer('type_nature');
             $table->dateTime('expiration_date')->nullable();
             $table->decimal('value', 15, 2);
             $table->decimal('tax', 15, 2)->nullable();

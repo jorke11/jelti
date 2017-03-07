@@ -14,6 +14,7 @@ use App\Models\Administration\Characteristic;
 use App\Models\Security\Users;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Administration\Branch;
+use App\Models\Administration\Puc;
 
 class SeekController extends Controller {
 
@@ -172,6 +173,21 @@ class SeekController extends Controller {
             $query->where("id", $in["id"]);
         } else {
             $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+        }
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+    
+    public function getAccount(Request $req) {
+        $in = $req->all();
+        $query = Puc::select("id", "account as text");
+        if (isset($in["q"]) && $in["q"] == 0) {
+            $query->where("id", Auth::user()->warehouse_id)->get();
+        } else if (isset($in["id"])) {
+            $query->where("id", $in["id"]);
+        } else {
+            $query->where("account", "ilike", "%" . $in["q"] . "%")->get();
         }
         $result = $query->get();
 

@@ -134,7 +134,6 @@
                         <tr>
                             <th>#</th>
                             <th>Product</th>
-                            <th>Mark</th>
                             <th>Expiration</th>
                             <th>Quantity</th>
                             <th>Value</th>

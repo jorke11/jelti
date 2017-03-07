@@ -215,6 +215,7 @@ Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
 Route::get('/api/getCategory', 'Administration\SeekController@getCategory');
 Route::get('/api/getCommercial', 'Administration\SeekController@getCommercial');
 Route::get('/api/getBranch', 'Administration\SeekController@getBranch');
+Route::get('/api/getAccount', 'Administration\SeekController@getAccount');
 
 
 

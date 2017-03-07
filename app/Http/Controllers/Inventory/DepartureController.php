@@ -12,6 +12,8 @@ use App\Models\Inventory\OrdersDetail;
 use App\Models\Invoicing\PurchasesDetail;
 use App\Models\Invoicing\SaleDetail;
 use App\Models\Administration\Products;
+use App\Models\Administration\Stakeholder;
+use App\Models\Invoicing\Sales;
 use Session;
 
 class DepartureController extends Controller {
@@ -36,25 +38,45 @@ class DepartureController extends Controller {
         echo response()->json(["response" => 'prueba']);
     }
 
-    public function pdf() {
+    public function pdf($id) {
         $data = [
             'foo' => 'bar'
         ];
         $pdf = PDF::loadView('departure.pdf', $data);
         return $pdf->stream('document.pdf');
     }
-    
-    public function getInvoiceHtml(){
-        $data = [
-            'foo' => 'bar'
+
+    public function getInvoiceHtml($id) {
+        $sale = Sales::where("departure_id",$id)->first();
+        $detail= SaleDetail::select("quantity,tax,description,product_id,products.title product")
+                ->join("products","Sales.product_id","products_id")
+                ->where("sale_id",$sale["id"])
+                ->get();
+        $cli = Stakeholder::findOrFail($sale["client_id"]);        $data = [
+            'client' => $cli,
+            'detail' => $detail,
         ];
         
+        dd($detail);exit;
+
         return view("departure.pdf", compact("data"));
     }
 
-    public function getInvoice() {
+    public function getInvoice($id) {
+        $sale = Sales::where("departure_id",$id)->first();
+        $detail= DB::table("sales_detail")
+                ->select("quantity","sales_detail.tax","sales_detail.description","products.title as product","products.id as product_id","sales_detail.value")
+                ->join("products","sales_detail.product_id","products.id")
+                ->where("sale_id",$sale["id"])
+                ->orderBy("order","asc")
+                ->get();
+        
+        
+        
+        $cli = Stakeholder::findOrFail($sale["client_id"]);        
         $data = [
-            'foo' => 'bar'
+            'client' => $cli,
+            'detail' => $detail,
         ];
         $pdf = \PDF::loadView('departure.pdf', [], $data, [
                     'title' => 'Invoice']);
@@ -76,7 +98,7 @@ class DepartureController extends Controller {
     }
 
     public function getQuantity($id) {
-        $product = \App\Models\Invoicing\PurchageDetail::where("product_id", $id)->first();
+        $product = \App\Models\Invoicing\PurchaseDetail::where("product_id", $id)->first();
         return response()->json(["response" => $product]);
     }
 

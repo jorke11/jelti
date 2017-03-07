@@ -27,7 +27,7 @@ class EntryController extends Controller {
 
     public function getDetailProduct($id) {
         $category = DB::table("products")
-                ->select("products.id", "products.title","products.category_id" ,"categories.description as caterory", "products.price_sf")
+                ->select("products.id", "products.title", "products.category_id", "categories.description as caterory", "products.price_sf")
                 ->join("categories", "categories.id", "=", "products.category_id")
                 ->where("products.id", $id)
                 ->first();
@@ -67,72 +67,98 @@ class EntryController extends Controller {
         if ($request->ajax()) {
 
             $input = $request->all();
-            $purchage = new \App\Models\Invoicing\Purchases();
+            $purchase = new \App\Models\Invoicing\Purchases();
             $entry = Entries::findOrFail($input["id"]);
-            
-            $id = DB::table("purchases")->insertGetId(
-                    ["entry_id" => $entry["id"], "warehouse_id" => $entry["warehouse_id"], "responsible_id" => $entry["responsible_id"],
-                        "supplier_id" => $entry["supplier_id"], "city_id" => $entry["city_id"], "description" => $entry["description"],
-                        "invoice" => $entry["invoice"], "status_id" => $entry["status_id"], "created" => $entry["created"]
-                    ]
-            );
-          
-            $detail = \App\Models\Inventory\EntriesDetail::where("entry_id", $input["id"])->get();
-            $total = 0;
-            $cont = 0;
-            $credit = 0;
-            $tax = 0;
-            $totalPar = 0;
-            foreach ($detail as $value) {
-                $pro = Products::findOrFail($value->product_id);
-                $totalPar = $value->quantity * $value->value;
-                $total += $totalPar;
-                PurchasesDetail::insert([
-                    'purchase_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
-                    "category_id" => $value->category_id, "quantity" => $value->quantity,
-                    "expiration_date" => $value->expiration_date, "value" => $value->value, "tax" => $pro["tax"],
-                    "lot" => $value->lot, "account_id" => 1, "order" => $cont, "description" => "product"
-                ]);
 
-                $credit += (double) $totalPar;
-                if ($pro["tax"] != '' && $pro["tax"] > 0) {
-                    $cont++;
-                    $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
-                    PurchasesDetail::insert([
-                        "entry_id" => $input["id"], "account_id" => 1, "purchase_id" => $id, "value" => $tax,
-                        "order" => $cont, "description" => "iva"
+
+            $exist = Purchases::where("entry_id", $entry["id"])->first();
+
+            if (count($exist) == 0) {
+                $id = DB::table("purchases")->insertGetId(
+                        ["entry_id" => $entry["id"], "warehouse_id" => $entry["warehouse_id"], "responsible_id" => $entry["responsible_id"],
+                            "supplier_id" => $entry["supplier_id"], "city_id" => $entry["city_id"], "description" => $entry["description"],
+                            "invoice" => $entry["invoice"], "status_id" => $entry["status_id"], "created" => $entry["created"]
+                        ]
+                );
+
+                $detail = \App\Models\Inventory\EntriesDetail::where("entry_id", $input["id"])->get();
+                $total = 0;
+                $cont = 0;
+                $credit = 0;
+                $tax = 0;
+                $totalPar = 0;
+                foreach ($detail as $value) {
+                    $pro = Products::findOrFail($value->product_id);
+                    $totalPar = $value->quantity * $value->value;
+                    $total += $totalPar;
+                    $idDetail = PurchasesDetail::insertGetId([
+                        'purchase_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
+                        "category_id" => $value->category_id, "quantity" => $value->quantity,
+                        "expiration_date" => $value->expiration_date, "value" => $value->value, "tax" => $pro["tax"],
+                        "lot" => $value->lot, "account_id" => 1, "order" => $cont, "description" => "product", "type_nature" => 1
                     ]);
+
+                    $credit += (double) $totalPar;
+                    if ($pro["tax"] != '' && $pro["tax"] > 0) {
+                        $cont++;
+                        $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                        PurchasesDetail::insert([
+                            "entry_id" => $input["id"], "account_id" => 1, "purchase_id" => $id, "value" => $tax,
+                            "order" => $cont, "description" => "iva", "type_nature" => 1,"parent_id"=>$idDetail
+                        ]);
+                    }
+                    $credit += (double) $tax;
+                    $cont++;
                 }
-                $credit += (double) $tax;
-                $cont++;
-            }
 
 
-            if ($total > 860000) {
-                $rete = ($total * 0.025);
+                if ($total > 860000) {
+                    $rete = ($total * 0.025);
+                    PurchasesDetail::insert([
+                        "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => ($total * 0.025), "order" => $cont, "description" => "rete",
+                        "type_nature" => 2
+                    ]);
+                    $credit -= $rete;
+                    $cont++;
+                }
+
                 PurchasesDetail::insert([
-                    "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => ($total * 0.025), "order" => $cont, "description" => "rete"
+                    "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => $credit, "order" => $cont, "description" => "proveedores",
+                    "type_nature" => 2
                 ]);
-                $credit -= $rete;
-                $cont++;
+                $credit = 0;
+
+                $purchase = $entry;
+                $entry->status_id = 2;
+                $entry->save();
+
+                $entry = Entries::findOrFail($entry["id"]);
+
+                return response()->json(["response" => true, "header" => $entry]);
+            } else {
+                return response()->json(["response" => false, "msg" => "Entry is already generate"]);
             }
-
-            PurchasesDetail::insert([
-                "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => $credit, "order" => $cont, "description" => "proveedores"
-            ]);
-            $credit = 0;
-
-            $purchage = $entry;
-            $entry->status_id = 2;
-            $entry->save();
+        } else {
+            return response()->json(["response" => false, "msg" => "Wrong"]);
         }
-        return response()->json(["success"=>true]);
     }
 
     public function edit($id) {
         $entry = Entries::FindOrFail($id);
-        $detail = DB::table("entries_detail")->where("entry_id", "=", $id)->get();
-        return response()->json(["header" => $entry, "detail" => $detail]);
+        $detail = DB::table("entries_detail")
+                        ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
+                        ->join("products", "entries_detail.product_id", "products.id")
+                        ->where("entry_id", $id)->get();
+        $total = 0;
+        foreach ($detail as $i => $val) {
+            $detail[$i]->valueFormated = "$ " . number_format($val->value, 2, ',', '.');
+            $detail[$i]->total = $detail[$i]->value * $detail[$i]->quantity;
+            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ',', '.');
+            $total += $detail[$i]->total;
+        }
+        $total = "$ " . number_format($total, 2, ',', '.');
+
+        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);
     }
 
     public function getDetail($id) {
@@ -146,7 +172,6 @@ class EntryController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = Entries::FindOrFail($id);
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
             return response()->json(['success' => 'false']);
@@ -159,7 +184,6 @@ class EntryController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = DB::table("entry_detail")->where("entry_id", "=", $input["entry_id"])->get();
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
             return response()->json(['success' => 'false']);
@@ -171,7 +195,6 @@ class EntryController extends Controller {
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true']);
         } else {
             return response()->json(['success' => 'false']);
@@ -184,7 +207,6 @@ class EntryController extends Controller {
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             $resp = DB::table("entry_detail")->where("entry_id", "=", $entry["entry_id"])->get();
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
             return response()->json(['success' => 'false']);
@@ -199,13 +221,23 @@ class EntryController extends Controller {
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $result = EntriesDetail::create($input);
-            
+
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                $resp = EntriesDetail::where("entry_id", $input["entry_id"])->get();
-                return response()->json(['success' => 'true', "data" => $resp]);
+                $detail = DB::table("entries_detail")
+                                ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
+                                ->join("products", "entries_detail.product_id", "products.id")
+                                ->where("entry_id", $input["entry_id"])->get();
+                $total = 0;
+                foreach ($detail as $i => $val) {
+                    $detail[$i]->valueFormated = "$ " . number_format($val->value, 2, ',', '.');
+                    $detail[$i]->total = $detail[$i]->value * $detail[$i]->quantity;
+                    $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ',', '.');
+                    $total += $detail[$i]->total;
+                }
+                $total = "$ " . number_format($total, 2, ',', '.');
+                return response()->json(['response' => true, "detail" => $detail, "total" => $total]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['response' => false]);
             }
         }
     }

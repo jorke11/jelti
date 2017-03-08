@@ -78,7 +78,7 @@ function Sale() {
         });
 
         $("#btnDocument").click(function () {
-            window.open("departure/" + $("#frm #id").val()+ "/getInvoice");
+            window.open("departure/" + $("#frm #id").val() + "/getInvoice");
         });
 
 
@@ -88,14 +88,19 @@ function Sale() {
                 $(this).val("");
             }
         });
+        $("#tabList").click(function () {
+            table.ajax.reload();
+        })
     }
 
     this.new = function () {
         toastr.remove();
+        var created = $("#frm #created").val();
         $(".input-departure").cleanFields();
-
+        $("#frm #created").val(created);
         $(".input-detail").cleanFields();
         $(".input-fillable").prop("readonly", false);
+        $("#btnSave").prop("disabled", false);
         $("#tblDetail tbody").empty();
         $("#frm #status_id").val(1).trigger("change").prop("disabled", true);
         $("#frm #supplier_id").prop("disabled", false);
@@ -123,6 +128,7 @@ function Sale() {
     }
 
     this.send = function () {
+        toastr.remove();
         var obj = {};
         obj.id = $("#frm #id").val()
         $.ajax({
@@ -131,7 +137,11 @@ function Sale() {
             data: obj,
             dataType: 'JSON',
             success: function (resp) {
-                toastr.success("Sended");
+                if (resp.success == true) {
+                    toastr.success("Sended");
+                } else {
+                    toastr.warning(resp.msg);
+                }
             }
         })
     }
@@ -165,7 +175,9 @@ function Sale() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == 'true') {
+                        $("#btnSend").attr("disabled",false);
                         $("#frm #id").val(data.data.id);
+                        $(".input-departure").setFields({data: data.data});
                         table.ajax.reload();
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
@@ -248,6 +260,14 @@ function Sale() {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
 
+                if (data.header.status_id == 2) {
+                    $("#btnSend, #btnmodalDetail").attr("disabled",true);
+                    $("#btnDocument").attr("disabled",false);
+                }else{
+                    $("#btnSend,#btnmodalDetail").attr("disabled",false);
+                    
+                }
+
                 obj.printDetail(data.detail);
             }
         })
@@ -300,7 +320,8 @@ function Sale() {
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.product_id + "</td>";
             html += "<td>" + val.quantity + "</td>";
-            html += "<td>" + val.value + "</td>";
+            html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + val.totalFormated + "</td>";
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
             html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";

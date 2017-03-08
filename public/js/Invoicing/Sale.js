@@ -17,6 +17,8 @@ function Sale() {
             var created = $("#frm #created").val();
             $(".input-sale").cleanFields();
             $("#frm #created").val(created);
+            $("#tblDetail tbody").empty();
+            $("#tblDetail tfoot").empty();
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
@@ -58,7 +60,12 @@ function Sale() {
         });
     }
     this.new = function () {
+        var created = $("#frm #created").val();
         $(".input-sale").cleanFields();
+        $("#frm #created").val(created);
+        $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
+        $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
+        $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
     }
 
     this.getQuantity = function () {
@@ -163,7 +170,7 @@ function Sale() {
                 if (data.success == 'true') {
                     toastr.success(msg);
                     $("#btnmodalDetail").attr("disabled", false);
-                    obj.printDetail(data.data);
+                    obj.printDetail(data);
                     $("#modalDetail").modal("hide");
                 }
             }
@@ -187,7 +194,7 @@ function Sale() {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
 
-                obj.printDetail(data.detail);
+                obj.printDetail(data);
             }
         })
     }
@@ -211,36 +218,37 @@ function Sale() {
     this.printDetail = function (data) {
         var html = "", total = 0, debt = 0, credit = 0, total = 0;
         $("#tblDetail tbody").empty();
-        $.each(data, function (i, val) {
+        $.each(data.detail, function (i, val) {
             val.description = (val.description == null) ? '' : val.description;
-            val.product_id = (val.product_id == null) ? '' : val.product_id;
+            val.product = (val.product == null) ? '' : val.product;
             val.tax = (val.tax == null) ? '' : val.tax;
             val.quantity = (val.quantity == null) ? '' : val.quantity;
 
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.description + "</td>";
-            html += "<td>" + val.account_id + "</td>";
-            html += "<td>" + val.product_id + "</td>";
+            html += "<td>" + val.product + "</td>";
             html += "<td>" + val.tax + "</td>";
             html += "<td>" + val.quantity + "</td>";
-            html += "<td>" + val.value + "</td>";
-            html += "<td>" + (val.value * val.quantity) + "</td>";
+            if (val.product != '') {
+                html += "<td>" + val.valueFormated + "</td>";
+                html += "<td>" + val.totalFormated + "</td>";
+            } else {
+                html += "<td>" + 0 + "</td>";
+                html += "<td>" + val.valueFormated + "</td>";
+            }
 
-            if (val.account_id == 1) {
+
+            if (val.type_nature == 2) {
                 val.quantity = (val.quantity == '') ? 1 : val.quantity;
                 html += "<td>" + 0 + "</td>";
-                html += "<td>" + val.value * val.quantity + "</td>";
-                credit += parseFloat((val.value * val.quantity));
+                html += "<td>" + val.totalFormated + "</td>";
             } else {
-                if (val.product_id == '') {
-                    html += "<td>" + val.value + "</td>";
+                if (val.product == '') {
+                    html += "<td>" + val.valueFormated + "</td>";
                     html += "<td>" + 0 + "</td>";
-                    debt += parseFloat(val.value);
-
                 } else {
-                    debt += parseFloat(total);
-                    html += "<td>" + total + "</td>";
+                    html += "<td>" + val.totalFormated + "</td>";
                     html += "<td>" + 0 + "</td>";
                 }
 
@@ -252,7 +260,7 @@ function Sale() {
         });
 
         $("#tblDetail tbody").html(html);
-        $("#tblDetail tfoot").html('<tr><td colspan="8">Total</td><td>' + Math.round(debt) + '</td><td>' + Math.round(credit) + '</td></tr>');
+        $("#tblDetail tfoot").html('<tr><td colspan="7">Total</td><td>' + data.debt + '</td><td>' + data.credit + '</td></tr>');
     }
 
     this.delete = function (id) {

@@ -59,8 +59,22 @@ class SeekController extends Controller {
         } else {
             $query
                     ->where("name", "ilike", "%" . $in["q"] . "%")
-                    ->where("type_stakeholder",1)
+                    ->where("type_stakeholder", 1)
                     ->get();
+        }
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+    public function getStakeholder(Request $req) {
+        $in = $req->all();
+        $query = Stakeholder::select("id", "name as text");
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $query->where("id", Auth::user()->supplier_id)->get();
+        } else if (isset($in["id"])) {
+            $query->where("id", $in["id"])->get();
+        } else {
+            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
         }
         $result = $query->get();
 
@@ -76,15 +90,14 @@ class SeekController extends Controller {
             if ($in["id"] != '') {
                 $in["id"] = json_decode($in["id"]);
                 $query->whereIn("id", $in["id"])->get();
-            }else{
+            } else {
                 $query->where("id", 0)->get();
             }
-            
         } else {
             $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
         }
         $result = $query->get();
-        
+
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
 
@@ -117,6 +130,7 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
+
     public function getCommercial(Request $req) {
         $in = $req->all();
         $query = Users::select("id", "name as text");
@@ -163,7 +177,7 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
-    
+
     public function getBranch(Request $req) {
         $in = $req->all();
         $query = Branch::select("id", "address as text");
@@ -178,14 +192,16 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
-    
+
     public function getAccount(Request $req) {
         $in = $req->all();
         $query = Puc::select("id", "account as text");
-        if (isset($in["q"]) && $in["q"] == 0) {
+        if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
         } else if (isset($in["id"])) {
-            $query->where("id", $in["id"]);
+            if ($in["id"] != '') {
+                $query->where("id", $in["id"]);
+            }
         } else {
             $query->where("account", "ilike", "%" . $in["q"] . "%")->get();
         }

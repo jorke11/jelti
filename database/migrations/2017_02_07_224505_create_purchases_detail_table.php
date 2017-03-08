@@ -29,6 +29,7 @@ class CreatePurchasesdetailTable extends Migration {
             $table->string('lot')->nullable();
             $table->string('description')->nullable();
             $table->integer("order");
+            $table->boolean("payed")->nullable();
             $table->timestamps();
         });
     }

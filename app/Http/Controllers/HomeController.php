@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Session;
-use App\Http\Controllers\Auth;
+//use App\Http\Controllers\Auth;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller {
 
@@ -23,7 +24,20 @@ class HomeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return view('dashboard');
+        switch (Auth::user()->role_id) {
+            case 1: {
+                    return view('dashboard');
+                    break;
+                }
+            case 2: {
+                    return view('client');
+                    break;
+                }
+            case 3: {
+                    return view('supplier');
+                    break;
+                }
+        }
     }
 
 }

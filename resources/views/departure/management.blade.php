@@ -3,16 +3,16 @@
         <div class="row">
             <div class="col-lg-12 text-right">
                 <button class="btn btn-success btn-sm" id='btnNew'>
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"> New</span>
                 </button>
-                <button class="btn btn-success btn-sm" id='btnSave'>
-                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                <button class="btn btn-success btn-sm" id='btnSave' disabled>
+                    <span class="glyphicon glyphicon-save" aria-hidden="true" > Save</span>
                 </button>
                 <button class="btn btn-success btn-sm" id='btnSend'>
-                    <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-send" aria-hidden="true"> Send</span>
                 </button>
                 <button class="btn btn-success btn-sm" id='btnDocument'>
-                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Pdf</span>
                 </button>
             </div>
         </div>
@@ -63,7 +63,7 @@
                     <label for="email">Status:</label>
                     <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly>
                         <option value="1">New</option>
-                        <option value="2">Created</option>
+                        <option value="2">Checked</option>
                         <option value="3">Closed</option>
                         <option value="4">Canceled</option>
                     </select>
@@ -113,7 +113,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Branch office:</label>
-                    <select class="form-control input-departure" id="branch_id" name='branch_id' data-api="/api/getSupplier">
+                    <select class="form-control input-departure" id="branch_id" name='branch_id' data-api="/api/getBranch">
                     </select>
                 </div>
             </div>
@@ -143,7 +143,8 @@
                             <th>#</th>
                             <th>Product</th>
                             <th>Quantity</th>
-                            <th>Value</th>
+                            <th>Unit</th>
+                            <th>Total</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

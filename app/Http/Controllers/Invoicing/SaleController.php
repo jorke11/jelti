@@ -8,8 +8,19 @@ use App\Models\Invoicing\Sales;
 use App\Models\Invoicing\SaleDetail;
 use \Illuminate\Support\Facades\DB;
 use Session;
+use App\Models\Administration\Products;
 
 class SaleController extends Controller {
+
+    public $total;
+    public $debt;
+    public $credit;
+
+    public function __construct() {
+        $this->total = 0;
+        $this->debt = 0;
+        $this->credit = 0;
+    }
 
     public function index() {
         $category = \App\Models\Administration\Categories::all();
@@ -41,8 +52,36 @@ class SaleController extends Controller {
 
     public function edit($id) {
         $entry = Sales::FindOrFail($id);
-        $detail = DB::table("sales_detail")->where("sale_id", "=", $id)->orderBy("order", "asc")->get();
-        return response()->json(["header" => $entry, "detail" => $detail]);
+
+        $detail = $this->formatDetail($id);
+
+        $debt = "$ " . number_format($this->debt, 2, ",", ".");
+        $cred = "$ " . number_format($this->credit, 2, ",", ".");
+
+        return response()->json(["header" => $entry, "detail" => $detail, "debt" => $debt, "credit" => $cred]);
+    }
+
+    public function formatDetail($id) {
+
+        $detail = DB::
+                        table("sales_detail")
+                        ->select("sales_detail.id", "sales_detail.description", "products.title as product", "sales_detail.tax", "sales_detail.quantity", "sales_detail.value", "sales_detail.type_nature")
+                        ->where("sale_id", "=", $id)
+                        ->leftjoin("products", "sales_detail.product_id", "products.id")
+                        ->orderBy("order", "asc")->get();
+
+        foreach ($detail as $i => $value) {
+            $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
+            $value->quantity = ($value->quantity == '') ? 1 : $value->quantity;
+            $detail[$i]->total = $value->value * $value->quantity;
+            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
+            if ($detail[$i]->type_nature == 1) {
+                $this->debt += $detail[$i]->total;
+            } else {
+                $this->credit += $detail[$i]->total;
+            }
+        }
+        return $detail;
     }
 
     public function getDetail($id) {
@@ -82,7 +121,6 @@ class SaleController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = DB::table("saledetail")->where("sale_id", "=", $input["sale_id"])->get();
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
             return response()->json(['success' => 'false']);
@@ -94,7 +132,6 @@ class SaleController extends Controller {
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true']);
         } else {
             return response()->json(['success' => 'false']);
@@ -107,7 +144,6 @@ class SaleController extends Controller {
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             $resp = DB::table("saledetail")->where("sale_id", "=", $entry["sale_id"])->get();
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
             return response()->json(['success' => 'false']);
@@ -120,13 +156,66 @@ class SaleController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $input["account_id"] = 1;
+
+
+            $pro = Products::FindOrfail($input["product_id"]);
+
+            $input["account_id"] = $pro["account_id"];
+            $input["tax"] = $pro["tax"];
             $input["order"] = 1;
+            $input["description"] = "product";
+            $input["type_nature"] = 1;
+
+            $result = SaleDetail::create($input)->id;
+            
+            $value = $input["value"];
+            $sale_id = $input["sale_id"];
+            $input = array();
+            $input["account_id"] = 1;
+            $input["sale_id"] = $sale_id;
+            $input["product_id"] = null;
+            $input["parent_id"] = $result;
+            $input["tax"] = null;
+            $input["order"] = 2;
+            $input["category_id"] = null;
+            $input["quantity"] = null;
+            $input["value"] = ($pro["tax"] / 100.0) * $value;
+            $input["type_nature"] = 1;
+
             $result = SaleDetail::create($input);
+
+
+            $saleDetail = SaleDetail::where("sale_id", $input["sale_id"])->get();
+            $totalSale = 0;
+            foreach ($saleDetail as $value) {
+                $totalSale += $value->value * $value->quantity;
+            }
+
+            if ($totalSale > 860000) {
+                $input = array();
+                $input["product_id"] = null;
+                $input["sale_id"] = $sale_id;
+                $input["account_id"] = 1;
+                $input["parent_id"] = $result;
+                $input["tax"] = null;
+                $input["order"] = 3;
+                $input["category_id"] = null;
+                $input["quantity"] = null;
+                $input["value"] = $totalSale * 0.025;
+                $input["type_nature"] = 2;
+
+                $result = SaleDetail::create($input);
+            }
+
+
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                $resp = SaleDetail::where("sale_id", $input["sale_id"])->get();
-                return response()->json(['success' => 'true', "data" => $resp]);
+
+                $detail = $this->formatDetail($input["sale_id"]);
+
+                $debt = "$ " . number_format($this->debt, 2, ",", ".");
+                $cred = "$ " . number_format($this->credit, 2, ",", ".");
+
+                return response()->json(['success' => 'true', "detail" => $detail, "debt" => $debt, "credit" => $cred]);
             } else {
                 return response()->json(['success' => 'false']);
             }

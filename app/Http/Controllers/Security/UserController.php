@@ -12,10 +12,10 @@ use App\Models\Administration\Suppliers;
 use App\Models\Administration\Cities;
 use Session;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller {
 
-    
     public function index() {
         $profile = Roles::all();
         return view("user.init", compact("profile", "supplier", "city"));
@@ -32,11 +32,11 @@ class UserController extends Controller {
             if (!isset($input["status"])) {
                 $input["status"] = false;
             }
-            
-            $input["password"] = bcrypt($input["password"]); 
+
+            $input["password"] = bcrypt($input["password"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = User::create($input);
+            $result = Users::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => 'true']);
@@ -47,7 +47,7 @@ class UserController extends Controller {
     }
 
     public function edit($id) {
-        $resp["header"] = Users::where("id",$id)->first();
+        $resp["header"] = Users::where("id", $id)->first();
         return response()->json($resp);
     }
 
@@ -83,16 +83,15 @@ class UserController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $user = User::FindOrFail($id);
+        $user = Users::FindOrFail($id);
         $input = $request->all();
         if (!isset($input["status"])) {
             $input["status"] = false;
         }
-        
-      
+
+
         $result = $user->fill($input)->save();
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true']);
         } else {
             return response()->json(['success' => 'false']);
@@ -113,21 +112,23 @@ class UserController extends Controller {
                 $per->save();
             }
         }
-
-        Session::flash('save', 'Se ha creado correctamente');
         return response()->json(['success' => 'true']);
     }
 
     public function destroy($id) {
-        $user = User::FindOrFail($id);
+        $user = Users::FindOrFail($id);
         $result = $user->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true']);
         } else {
             return response()->json(['success' => 'false']);
         }
+    }
+
+    public function logOut() {
+        Auth::logout();
+//         return Redirect::to('/')->with('msg', 'Gracias por visitarnos!.');
+        return \Redirect::to('/');
     }
 
 }

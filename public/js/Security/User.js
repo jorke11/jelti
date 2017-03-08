@@ -5,9 +5,13 @@ function User() {
         $("#new").click(this.save);
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
-            $(".input-user").val("");
+
             $('#myTabs a[href="#management"]').tab('show');
         });
+
+        $("#tabManagement").click(function () {
+            $(".input-user").cleanFields();
+        })
 
         $("#tabPermission").click(function () {
             obj.getListPermission();
@@ -165,8 +169,8 @@ function User() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-user").setFields({data:data.header});
-                
+                $(".input-user").setFields({data: data.header});
+
                 if (data.header.status == true) {
                     $("#frm #status").prop("checked", true);
                 } else {

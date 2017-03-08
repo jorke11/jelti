@@ -20,7 +20,8 @@ class PurchasesDetail extends Model {
         "value",
         "order",
         "type_nature",
-        "parent_id"
+        "parent_id",
+        "payed"
         ];
 
 }

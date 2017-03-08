@@ -114,11 +114,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Description</th>
-                                    <th>Account</th>
                                     <th>Product</th>
                                     <th>Tax</th>
                                     <th>Quantity</th>
-                                    <th>Value</th>
+                                    <th>Unit</th>
                                     <th>Total</th>
                                     <th>Debt</th>
                                     <th>Credit</th>

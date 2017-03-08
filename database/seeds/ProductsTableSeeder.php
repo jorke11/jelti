@@ -28,6 +28,7 @@ class ProductsTableSeeder extends Seeder {
                 'bar_code' => "232423",
                 'status' => true,
                 'minimum_stock' => 10,
+                "account_id" => 1
             ]);
         }
     }

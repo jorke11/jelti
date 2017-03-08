@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Users extends Model {
 
     protected $table = "users";
-    protected $primaryKey = "user_id";
-    protected $fillable = ["user_id", "name","email","city_id","supplier_id","profile_id","status","password","remember_token"];
+    protected $primaryKey = "id";
+    protected $fillable = ["id", "name","email","city_id","stakeholder_id","warehouse_id","role_id","status","password","remember_token"];
 
 }

@@ -18,6 +18,12 @@ use Session;
 
 class DepartureController extends Controller {
 
+    protected $total;
+
+    public function __construct() {
+        $this->total = 0;
+    }
+
     public function index() {
         $category = \App\Models\Administration\Categories::all();
         return view("departure.init", compact("category"));
@@ -47,33 +53,35 @@ class DepartureController extends Controller {
     }
 
     public function getInvoiceHtml($id) {
-        $sale = Sales::where("departure_id",$id)->first();
-        $detail= SaleDetail::select("quantity,tax,description,product_id,products.title product")
-                ->join("products","Sales.product_id","products_id")
-                ->where("sale_id",$sale["id"])
+        $sale = Sales::where("departure_id", $id)->first();
+        $detail = SaleDetail::select("quantity,tax,description,product_id,products.title product")
+                ->join("products", "Sales.product_id", "products_id")
+                ->where("sale_id", $sale["id"])
                 ->get();
-        $cli = Stakeholder::findOrFail($sale["client_id"]);        $data = [
+        $cli = Stakeholder::findOrFail($sale["client_id"]);
+        $data = [
             'client' => $cli,
             'detail' => $detail,
         ];
-        
-        dd($detail);exit;
+
+        dd($detail);
+        exit;
 
         return view("departure.pdf", compact("data"));
     }
 
     public function getInvoice($id) {
-        $sale = Sales::where("departure_id",$id)->first();
-        $detail= DB::table("sales_detail")
-                ->select("quantity","sales_detail.tax","sales_detail.description","products.title as product","products.id as product_id","sales_detail.value")
-                ->join("products","sales_detail.product_id","products.id")
-                ->where("sale_id",$sale["id"])
-                ->orderBy("order","asc")
+        $sale = Sales::where("departure_id", $id)->first();
+        $detail = DB::table("sales_detail")
+                ->select("quantity", "sales_detail.tax", "sales_detail.description", "products.title as product", "products.id as product_id", "sales_detail.value")
+                ->join("products", "sales_detail.product_id", "products.id")
+                ->where("sale_id", $sale["id"])
+                ->orderBy("order", "asc")
                 ->get();
-        
-        
-        
-        $cli = Stakeholder::findOrFail($sale["client_id"]);        
+
+
+
+        $cli = Stakeholder::findOrFail($sale["client_id"]);
         $data = [
             'client' => $cli,
             'detail' => $detail,
@@ -126,71 +134,77 @@ class DepartureController extends Controller {
 
             $departure = Departures::findOrFail($input["id"]);
 
+            $dep = Sales::where("departure_id",$input["id"])->get();
 
-            $id = DB::table("sales")->insertGetId(
-                    ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
-                        "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
-                        "address" => $departure["address"], "phone" => $departure["phone"],
-                        "status_id" => $departure["status_id"], "created" => $departure["created"]
-                    ]
-            );
+            if (count($dep) == 0) {
+                $id = DB::table("sales")->insertGetId(
+                        ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
+                            "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
+                            "address" => $departure["address"], "phone" => $departure["phone"],
+                            "status_id" => $departure["status_id"], "created" => $departure["created"]
+                        ]
+                );
 
-            $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
+                $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
-            $total = 0;
-            $cont = 0;
-            $credit = 0;
-            $tax = 0;
-            $totalPar = 0;
-            foreach ($detail as $value) {
-                $pro = Products::findOrFail($value->product_id);
-                $totalPar = $value->quantity * $value->value;
-                $total += $totalPar;
-                SaleDetail::insert([
-                    "sale_id" => $id, "product_id" => $value->product_id,
-                    "category_id" => $value->category_id, "quantity" => $value->quantity,
-                    "value" => $value->value, "tax" => $pro["tax"],
-                    "account_id" => 1, "order" => $cont
-                ]);
-
-                $credit += (double) $totalPar;
-                if ($pro["tax"] != '' && $pro["tax"] > 0) {
-                    $cont++;
-                    $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                $total = 0;
+                $cont = 0;
+                $credit = 0;
+                $tax = 0;
+                $totalPar = 0;
+                foreach ($detail as $value) {
+                    $pro = Products::findOrFail($value->product_id);
+                    $totalPar = $value->quantity * $value->value;
+                    $total += $totalPar;
                     SaleDetail::insert([
-                        "account_id" => 1, "sale_id" => $id, "value" => $tax,
-                        "order" => $cont, "description" => 'iva'
+                        "sale_id" => $id, "product_id" => $value->product_id,
+                        "category_id" => $value->category_id, "quantity" => $value->quantity,
+                        "value" => $value->value, "tax" => $pro["tax"],
+                        "account_id" => 1, "order" => $cont,"type_nature"=>1
                     ]);
+
+                    $credit += (double) $totalPar;
+                    if ($pro["tax"] != '' && $pro["tax"] > 0) {
+                        $cont++;
+                        $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                        SaleDetail::insert([
+                            "account_id" => 1, "sale_id" => $id, "value" => $tax,
+                            "order" => $cont, "description" => 'iva',"type_nature"=>1
+                        ]);
+                    }
+                    $credit += (double) $tax;
+                    $cont++;
                 }
-                $credit += (double) $tax;
-                $cont++;
-            }
 
 
-            if ($total > 860000) {
-                $rete = ($total * 0.025);
+                if ($total > 860000) {
+                    $rete = ($total * 0.025);
+                    SaleDetail::insert([
+                        "sale_id" => $id, "account_id" => 2, "value" => ($total * 0.025), "order" => $cont, "description" => "rete","type_nature"=>2
+                    ]);
+                    $credit -= $rete;
+                    $cont++;
+                }
+
                 SaleDetail::insert([
-                    "sale_id" => $id, "account_id" => 2, "value" => ($total * 0.025), "order" => $cont, "description" => "rete"
+                    "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes","type_nature"=>2 
                 ]);
-                $credit -= $rete;
-                $cont++;
+                $credit = 0;
+
+                $departure->status_id = 2;
+                $departure->save();
+                return response()->json(["success" => true]);
+            } else {
+                return response()->json(["success" => false, "msg" => 'Already sended']);
             }
-
-            SaleDetail::insert([
-                "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes"
-            ]);
-            $credit = 0;
-
-            $departure->status_id = 2;
-            $departure->save();
         }
-        return response()->json(["success" => true]);
     }
 
     public function storeExtern(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
             $order = Orders::findOrFail($input["id"]);
+
 
             $id = DB::table("departures")->insertGetId(
                     ["order_id" => $input["id"], "warehouse_id" => $order["warehouse_id"], "responsible_id" => $order["responsible_id"],
@@ -228,8 +242,20 @@ class DepartureController extends Controller {
 
     public function edit($id) {
         $entry = Departures::FindOrFail($id);
-        $detail = DB::table("departures_detail")->where("departure_id", $id)->get();
+        $detail = $this->formatDetail(DB::table("departures_detail")->where("departure_id", $id)->get());
+
         return response()->json(["header" => $entry, "detail" => $detail]);
+    }
+
+    public function formatDetail($detail) {
+        $this->total = 0;
+        foreach ($detail as $i => $value) {
+            $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
+            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value;
+            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
+            $this->total += $detail[$i]->total;
+        }
+        return $detail;
     }
 
     public function getDetail($id) {
@@ -296,8 +322,8 @@ class DepartureController extends Controller {
 //            $input["users_id"] = 1;
             $result = DeparturesDetail::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
                 $resp = DeparturesDetail::where("departure_id", $input["departure_id"])->get();
+                $resp = $this->formatDetail($resp);
                 return response()->json(['success' => 'true', "data" => $resp]);
             } else {
                 return response()->json(['success' => 'false']);

@@ -204,9 +204,13 @@ Route::get('/api/listSpecial', 'Administration\SupplierController@getSpecial');
 Route::get('/api/listBranch', 'Administration\SupplierController@getBranch');
 
 Route::get('/api/listMenu', 'DashboardController@getMenu');
+Route::get('/user/savePermission/{id}', 'Security\UserController@savePermission');
+Route::get('/logout', 'Security\UserController@logOut');
+
 
 Route::get('/api/getCity', 'Administration\SeekController@getCity');
-Route::get('/api/getSupplier', 'Administration\SeekController@getSupplier');
+Route::get('/api/getSupplier', 'Administration\SeekController@getStakeholder');
+Route::get('/api/getStakeholder', 'Administration\SeekController@getSupplier');
 Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacteristic');
 Route::get('/api/getClient', 'Administration\SeekController@getClient');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');

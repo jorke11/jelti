@@ -98,6 +98,14 @@
 
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email">Account</label>
+                                    <select class="form-control input-product" id='account_id' name="account_id" data-api="/api/getAccount">
+                                    </select>
+
+                                </div>
+                            </div>
                         </div>
 
                     </div>

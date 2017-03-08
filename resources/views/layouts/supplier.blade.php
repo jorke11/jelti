@@ -113,53 +113,6 @@
                                         <li><a href="/sale">Sales</a></li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="/user">Users</a></li>
-                                        <li><a href="/role">Role</a></li>
-                                        <li><a href="/permission">Permission</a></li>
-                                        <li><a href="{{url("/register")}}">Register</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Products <span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="/product">Product</a></li>
-                                                <li><a href="/category">Category</a></li> 
-                                                <li><a href="/characteristic">Characterist</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Stake Holders <span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="/supplier">Supplier</a></li>
-                                                <li><a href="/stakeholder">Stake Holder</a></li>
-                                                <li><a href="/warehouse">Warehouse</a></li>
-                                                <li><a href="/city">City</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Accountant <span class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                                <li><a href="/puc">PUC</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Invoicing <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="/purchase">Purchase</a></li>
-                                        <li><a href="/sale">Sale</a></li>                                    
-                                        <li><a href="/summary">Summary</a></li>                                    
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="/entry">Entry</a></li>
-                                        <!--<li><a href="/order">Order Service</a></li>-->                                    
-                                        <li><a href="/departure">Departure</a></li>                                    
-                                        <li><a href="/stock">Stock</a></li>                                    
-                                    </ul>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -176,7 +129,7 @@
                         <a data-toggle="tooltip" data-placement="top" title="Lock">
                             <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                         </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="/logout">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>
                     </div>

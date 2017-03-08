@@ -15,8 +15,13 @@ class SaleDetail extends Model {
         "quantity",
         "tax",
         "account_id",
+        "category_id",
         "order",
-        "value"
+        "value",
+        "payed",
+        "account_id",
+        "type_nature",
+        "parent_id"
     ];
 
 }

@@ -16,6 +16,7 @@ class CreateProductsTable extends Migration {
             $table->increments('id');
             $table->integer('category_id');
             $table->integer('supplier_id');
+            $table->integer('account_id')->nullable();
             $table->string('title', 120);
             $table->string('description', 100);
             $table->string('short_description', 100);

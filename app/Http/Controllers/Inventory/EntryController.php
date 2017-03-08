@@ -16,6 +16,12 @@ use Session;
 
 class EntryController extends Controller {
 
+    public $total;
+
+    public function __construct() {
+        $this->total = 0;
+    }
+
     public function index() {
         $category = Categories::all();
         return view("entry.init", compact("category"));
@@ -92,10 +98,10 @@ class EntryController extends Controller {
                     $totalPar = $value->quantity * $value->value;
                     $total += $totalPar;
                     $idDetail = PurchasesDetail::insertGetId([
-                        'purchase_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
-                        "category_id" => $value->category_id, "quantity" => $value->quantity,
-                        "expiration_date" => $value->expiration_date, "value" => $value->value, "tax" => $pro["tax"],
-                        "lot" => $value->lot, "account_id" => 1, "order" => $cont, "description" => "product", "type_nature" => 1
+                                'purchase_id' => $id, "entry_id" => $input["id"], "product_id" => $value->product_id,
+                                "category_id" => $value->category_id, "quantity" => $value->quantity,
+                                "expiration_date" => $value->expiration_date, "value" => $value->value, "tax" => $pro["tax"],
+                                "lot" => $value->lot, "account_id" => 1, "order" => $cont, "description" => "product", "type_nature" => 1
                     ]);
 
                     $credit += (double) $totalPar;
@@ -104,7 +110,7 @@ class EntryController extends Controller {
                         $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
                         PurchasesDetail::insert([
                             "entry_id" => $input["id"], "account_id" => 1, "purchase_id" => $id, "value" => $tax,
-                            "order" => $cont, "description" => "iva", "type_nature" => 1,"parent_id"=>$idDetail
+                            "order" => $cont, "description" => "iva", "type_nature" => 1, "parent_id" => $idDetail
                         ]);
                     }
                     $credit += (double) $tax;
@@ -143,20 +149,27 @@ class EntryController extends Controller {
         }
     }
 
+    protected function formatDetail($detail) {
+        $this->total = 0;
+        foreach ($detail as $i => $val) {
+            $detail[$i]->valueFormated = "$ " . number_format($val->value, 2, ',', '.');
+            $detail[$i]->total = $detail[$i]->value * $detail[$i]->quantity;
+            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ',', '.');
+            $this->total += $detail[$i]->total;
+        }
+        
+        
+        return $detail;
+    }
+
     public function edit($id) {
         $entry = Entries::FindOrFail($id);
         $detail = DB::table("entries_detail")
                         ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
                         ->join("products", "entries_detail.product_id", "products.id")
                         ->where("entry_id", $id)->get();
-        $total = 0;
-        foreach ($detail as $i => $val) {
-            $detail[$i]->valueFormated = "$ " . number_format($val->value, 2, ',', '.');
-            $detail[$i]->total = $detail[$i]->value * $detail[$i]->quantity;
-            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ',', '.');
-            $total += $detail[$i]->total;
-        }
-        $total = "$ " . number_format($total, 2, ',', '.');
+        
+        $total = "$ " . number_format($this->total, 2, ',', '.');
 
         return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);
     }
@@ -228,13 +241,8 @@ class EntryController extends Controller {
                                 ->join("products", "entries_detail.product_id", "products.id")
                                 ->where("entry_id", $input["entry_id"])->get();
                 $total = 0;
-                foreach ($detail as $i => $val) {
-                    $detail[$i]->valueFormated = "$ " . number_format($val->value, 2, ',', '.');
-                    $detail[$i]->total = $detail[$i]->value * $detail[$i]->quantity;
-                    $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ',', '.');
-                    $total += $detail[$i]->total;
-                }
-                $total = "$ " . number_format($total, 2, ',', '.');
+                $this->formatDetail($detail);
+                $total = "$ " . number_format($this->total, 2, ',', '.');
                 return response()->json(['response' => true, "detail" => $detail, "total" => $total]);
             } else {
                 return response()->json(['response' => false]);

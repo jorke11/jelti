@@ -13,14 +13,14 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Product:</label>
-                            <select class="form-control input-detail input-sm" id="product_id" name='product_id' data-api="/api/getProduct">
+                            <select class="form-control input-detail input-sm" id="product_id" name='product_id' data-api="/api/getProduct" required>
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Category:</label>
-                            <select class="form-control input-detail input-sm" id="category_id" name='category_id'>
+                            <select class="form-control input-detail input-sm" id="category_id" name='category_id' required>
                                 <option value="0">Selection</option>
                                 @foreach($category as $val)
                                 <option value="{{$val->id}}">{{$val->description}}</option>
@@ -33,13 +33,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Expiration Date:</label>
-                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail input-sm form-control">
+                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail input-sm form-control" required>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Lot:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="lot" name='lot'>
+                            <input type="text" class="form-control input-detail input-sm" id="lot" name='lot' required>
                         </div>
                     </div>
                 </div>
@@ -47,13 +47,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Quantity:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity'>
+                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' required>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Value:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="value" name='value'>
+                            <input type="text" class="form-control input-detail input-sm" id="value" name='value' readonly="" required>
                         </div>
                     </div>
 

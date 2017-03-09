@@ -175,38 +175,44 @@ function Entry() {
     this.saveDetail = function () {
         $("#frmDetail #entry_id").val($("#frm #id").val());
 
-        var frm = $("#frmDetail");
-        var data = frm.serialize();
-        var url = "entry/", method = "";
-        var id = $("#frmDetail #id").val();
-        var msg = 'Record Detail';
-        if (id == '') {
-            method = 'POST';
-            url += "storeDetail";
-            msg = "Created " + msg;
+        var validate = $(".input-detail").validate();
 
-        } else {
-            method = 'PUT';
-            url += "detail/" + id;
-            msg = "Edited " + msg;
-        }
+        if (validate.length == 0) {
+            var frm = $("#frmDetail");
+            var data = frm.serialize();
+            var url = "entry/", method = "";
+            var id = $("#frmDetail #id").val();
+            var msg = 'Record Detail';
+            if (id == '') {
+                method = 'POST';
+                url += "storeDetail";
+                msg = "Created " + msg;
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.response == true) {
-                    toastr.success(msg);
-                    $("#btnmodalDetail").attr("disabled", false);
-                    obj.printDetail(data);
-                    $("#modalDetail").modal("hide");
-                } else {
-                    toastr.warning("Wrong");
-                }
+            } else {
+                method = 'PUT';
+                url += "detail/" + id;
+                msg = "Edited " + msg;
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.response == true) {
+                        toastr.success(msg);
+                        $("#btnmodalDetail").attr("disabled", false);
+                        obj.printDetail(data);
+                        $("#modalDetail").modal("hide");
+                    } else {
+                        toastr.warning("Wrong");
+                    }
+                }
+            })
+        } else {
+            toastr.warning("Input required");
+        }
     }
 
     this.showModal = function (id) {
@@ -236,7 +242,7 @@ function Entry() {
                     $("#btnmodalDetail").prop("disabled", true);
                     $(".btnEditClass").prop("disabled", true);
                     $(".btnDeleteClass").prop("disabled", true);
-                }else{
+                } else {
                     $(".btnEditClass").prop("disabled", false);
                     $(".btnDeleteClass").prop("disabled", false);
                     $("#btnmodalDetail").prop("disabled", false);

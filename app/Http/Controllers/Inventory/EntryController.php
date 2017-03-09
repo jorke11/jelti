@@ -168,7 +168,7 @@ class EntryController extends Controller {
                         ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
                         ->join("products", "entries_detail.product_id", "products.id")
                         ->where("entry_id", $id)->get();
-        
+        $detail = $this->formatDetail($detail);
         $total = "$ " . number_format($this->total, 2, ',', '.');
 
         return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);

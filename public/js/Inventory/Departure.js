@@ -32,6 +32,8 @@ function Sale() {
             $(".input-departure").cleanFields();
             $("#frm #created").val(created);
             $("#frm #consecutive").val(1);
+            $("#btnSend").attr("disabled", true);
+            $("#btnDocument").attr("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
@@ -78,7 +80,11 @@ function Sale() {
         });
 
         $("#btnDocument").click(function () {
-            window.open("departure/" + $("#frm #id").val() + "/getInvoice");
+            if ($("#frm #status_id").val() != 1) {
+                window.open("departure/" + $("#frm #id").val() + "/getInvoice");
+            }else{
+                toastr.error("error")
+            }
         });
 
 
@@ -96,6 +102,7 @@ function Sale() {
     this.new = function () {
         toastr.remove();
         var created = $("#frm #created").val();
+        $("#btnSave").attr("disabled",false);
         $(".input-departure").cleanFields();
         $("#frm #created").val(created);
         $(".input-detail").cleanFields();
@@ -139,8 +146,11 @@ function Sale() {
             success: function (resp) {
                 if (resp.success == true) {
                     toastr.success("Sended");
+                    $(".input-departure").setFields({data:resp.data});
+                    $("#btnDocument").attr("disabled",false);
                 } else {
                     toastr.warning(resp.msg);
+                    $("#btnDocument").attr("disabled",true);
                 }
             }
         })
@@ -156,53 +166,59 @@ function Sale() {
         var id = $("#frm #id").val();
         var msg = '';
 
-        if ($("#id_orderext").val() == '') {
-            if (id == '') {
-                method = 'POST';
-                url = "departure";
-                msg = "Created Record";
+        var validate = $(".input-departure").validate();
 
+        if (validate.length == 0) {
+            if ($("#id_orderext").val() == '') {
+                if (id == '') {
+                    method = 'POST';
+                    url = "departure";
+                    msg = "Created Record";
+
+                } else {
+                    method = 'PUT';
+                    url = "departure/" + id;
+                    msg = "Edited Record";
+                }
+
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: data,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success == 'true') {
+                            $("#btnSend").attr("disabled", false);
+                            $("#frm #id").val(data.data.id);
+                            $(".input-departure").setFields({data: data.data});
+                            table.ajax.reload();
+                            toastr.success(msg);
+                            $("#btnmodalDetail").attr("disabled", false);
+
+                        }
+                    }
+                })
             } else {
-                method = 'PUT';
-                url = "departure/" + id;
-                msg = "Edited Record";
+                var obj = {};
+                obj.id = $("#id_orderext").val();
+                $.ajax({
+                    url: "../../departure/storeExt",
+                    method: 'POST',
+                    data: data,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success == 'true') {
+                            $(".input-departure").setFields({data: data.header})
+
+                            toastr.success("ok");
+                            $("#btnmodalDetail").attr("disabled", false);
+                            location.href = "/departure";
+                        }
+                    }
+                })
             }
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: data,
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == 'true') {
-                        $("#btnSend").attr("disabled",false);
-                        $("#frm #id").val(data.data.id);
-                        $(".input-departure").setFields({data: data.data});
-                        table.ajax.reload();
-                        toastr.success(msg);
-                        $("#btnmodalDetail").attr("disabled", false);
-
-                    }
-                }
-            })
         } else {
-            var obj = {};
-            obj.id = $("#id_orderext").val();
-            $.ajax({
-                url: "../../departure/storeExt",
-                method: 'POST',
-                data: data,
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == 'true') {
-                        $(".input-departure").setFields({data: data.header})
-
-                        toastr.success("ok");
-                        $("#btnmodalDetail").attr("disabled", false);
-                        location.href = "/departure";
-                    }
-                }
-            })
+            toastr.error("input required");
         }
     }
 
@@ -213,34 +229,41 @@ function Sale() {
         var url = "", method = "";
         var id = $("#frmDetail #id").val();
         var msg = 'Record Detail';
-        if (id == '') {
-            method = 'POST';
-            url = "departure/storeDetail";
-            msg = "Created " + msg;
 
-        } else {
-            method = 'PUT';
-            url = "departure/detail/" + id;
-            msg = "Edited " + msg;
-        }
+        var validate = $(".input-detail").validate();
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    toastr.success(msg);
-                    $("#btnmodalDetail").attr("disabled", false);
-                    obj.printDetail(data.data);
-//                    $("#modalDetail").modal("hide");
-                    $("#newDetail").attr("disabled", true);
-                    $("#frmDetail #quantity").attr("disabled", true);
-                }
+        if (validate.length == 0) {
+
+            if (id == '') {
+                method = 'POST';
+                url = "departure/storeDetail";
+                msg = "Created " + msg;
+
+            } else {
+                method = 'PUT';
+                url = "departure/detail/" + id;
+                msg = "Edited " + msg;
             }
-        })
 
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == 'true') {
+                        toastr.success(msg);
+                        $("#btnmodalDetail").attr("disabled", false);
+                        obj.printDetail(data.data);
+//                    $("#modalDetail").modal("hide");
+                        $("#newDetail").attr("disabled", true);
+                        $("#frmDetail #quantity").attr("disabled", true);
+                    }
+                }
+            })
+        } else {
+            toastr.error("input required");
+        }
     }
 
     this.showModal = function (id) {
@@ -261,11 +284,11 @@ function Sale() {
                 }
 
                 if (data.header.status_id == 2) {
-                    $("#btnSend, #btnmodalDetail").attr("disabled",true);
-                    $("#btnDocument").attr("disabled",false);
-                }else{
-                    $("#btnSend,#btnmodalDetail").attr("disabled",false);
-                    
+                    $("#btnSend, #btnmodalDetail").attr("disabled", true);
+                    $("#btnDocument").attr("disabled", false);
+                } else {
+                    $("#btnSend,#btnmodalDetail").attr("disabled", false);
+
                 }
 
                 obj.printDetail(data.detail);

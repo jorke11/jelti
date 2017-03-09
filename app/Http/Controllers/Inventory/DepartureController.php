@@ -134,7 +134,7 @@ class DepartureController extends Controller {
 
             $departure = Departures::findOrFail($input["id"]);
 
-            $dep = Sales::where("departure_id",$input["id"])->get();
+            $dep = Sales::where("departure_id", $input["id"])->get();
 
             if (count($dep) == 0) {
                 $id = DB::table("sales")->insertGetId(
@@ -160,7 +160,7 @@ class DepartureController extends Controller {
                         "sale_id" => $id, "product_id" => $value->product_id,
                         "category_id" => $value->category_id, "quantity" => $value->quantity,
                         "value" => $value->value, "tax" => $pro["tax"],
-                        "account_id" => 1, "order" => $cont,"type_nature"=>1
+                        "account_id" => 1, "order" => $cont, "type_nature" => 1
                     ]);
 
                     $credit += (double) $totalPar;
@@ -169,7 +169,7 @@ class DepartureController extends Controller {
                         $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
                         SaleDetail::insert([
                             "account_id" => 1, "sale_id" => $id, "value" => $tax,
-                            "order" => $cont, "description" => 'iva',"type_nature"=>1
+                            "order" => $cont, "description" => 'iva', "type_nature" => 1
                         ]);
                     }
                     $credit += (double) $tax;
@@ -180,20 +180,21 @@ class DepartureController extends Controller {
                 if ($total > 860000) {
                     $rete = ($total * 0.025);
                     SaleDetail::insert([
-                        "sale_id" => $id, "account_id" => 2, "value" => ($total * 0.025), "order" => $cont, "description" => "rete","type_nature"=>2
+                        "sale_id" => $id, "account_id" => 2, "value" => ($total * 0.025), "order" => $cont, "description" => "rete", "type_nature" => 2
                     ]);
                     $credit -= $rete;
                     $cont++;
                 }
 
                 SaleDetail::insert([
-                    "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes","type_nature"=>2 
+                    "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes", "type_nature" => 2
                 ]);
                 $credit = 0;
 
                 $departure->status_id = 2;
                 $departure->save();
-                return response()->json(["success" => true]);
+
+                return response()->json(["success" => true, "data" => $departure]);
             } else {
                 return response()->json(["success" => false, "msg" => 'Already sended']);
             }

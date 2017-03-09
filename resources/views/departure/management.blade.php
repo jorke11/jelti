@@ -31,7 +31,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Warehouse:</label>
-                    <select class="form-control input-departure" id="warehouse_id" name='warehouse_id' data-api="/api/getWarehouse">
+                    <select class="form-control input-departure" id="warehouse_id" name='warehouse_id' data-api="/api/getWarehouse" required="">
                     </select>
 
                 </div>
@@ -39,7 +39,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Responsable:</label>
-                    <select class="form-control input-departure input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable">
+                    <select class="form-control input-departure input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable" required>
                     </select>
 
                 </div>
@@ -47,21 +47,21 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">City Origin:</label>
-                    <select class="form-control input-departure" id="city_id" name='city_id' width="100%" data-api="/api/getCity">
+                    <select class="form-control input-departure" id="city_id" name='city_id' width="100%" data-api="/api/getCity" required>
                     </select>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Date:</label>
-                    <input type="text" class="form-control input-departure form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>">
+                    <input type="text" class="form-control input-departure form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required>
                 </div>
             </div>
 
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Status:</label>
-                    <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly>
+                    <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly required>
                         <option value="1">New</option>
                         <option value="2">Checked</option>
                         <option value="3">Closed</option>
@@ -77,7 +77,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">City Destination:</label>
-                    <select class="form-control input-departure" id="destination_id" name='destination_id' data-api="/api/getCity">
+                    <select class="form-control input-departure" id="destination_id" name='destination_id' data-api="/api/getCity" required>
                     </select>
                 </div>
             </div>
@@ -85,7 +85,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Client:</label>
-                    <select class="form-control input-departure" id="client_id" name='client_id' data-api="/api/getSupplier">
+                    <select class="form-control input-departure" id="client_id" name='client_id' data-api="/api/getSupplier" required> 
                     </select>
                 </div>
             </div>
@@ -99,13 +99,13 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Address:</label>
-                    <input type="text" class="form-control input-departure input-sm" id="address" name="address">
+                    <input type="text" class="form-control input-departure input-sm" id="address" name="address" required>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Phone:</label>
-                    <input type="text" class="form-control input-departure input-sm" id="phone" name="phone">
+                    <input type="text" class="form-control input-departure input-sm" id="phone" name="phone" required>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Branch office:</label>
-                    <select class="form-control input-departure" id="branch_id" name='branch_id' data-api="/api/getBranch">
+                    <select class="form-control input-departure" id="branch_id" name='branch_id' data-api="/api/getBranch" required>
                     </select>
                 </div>
             </div>

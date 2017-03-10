@@ -215,8 +215,8 @@ function User() {
                 {data: "id"},
                 {data: "name"},
                 {data: "email"},
-                {data: "profile_id"},
-                {data: "supplier_id"},
+                {data: "role_id"},
+                {data: "stakeholder_id"},
                 {data: "city_id"},
                 {data: "status"},
             ],
@@ -233,7 +233,7 @@ function User() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        var html = '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        var html = '<button class="close" aria-label="Close" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                         html += '<button class="btn btn-primary btn-xs" onclick="obj.showPermission()"><i class="fa fa-unlock-alt" aria-hidden="true"></i></button>';
                         return html;
                     }

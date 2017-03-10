@@ -20,7 +20,9 @@
                             <th>Date</th>
                             <th>Product</th>
                             <th>Entry</th>
+                            <th>Purchases</th>
                             <th>Departure</th>
+                            <th>Sales</th>
                             <th>Available</th>
                         </tr>
                     </thead>

@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::get('/dash', 'DashboardController@index');
-Route::get('/summary', 'Billing\SummaryController@index');
+Route::get('/summary', 'Invoicing\SummaryController@index');
 
 Route::resource('/product', 'Administration\ProductController');
 Route::post('/product/upload', 'Administration\ProductController@uploadImage');
@@ -91,11 +91,11 @@ Route::get('/sale/{id}/detail', ['uses' => 'Invoicing\SaleController@getDetail']
 Route::post('/sale/storeDetail', 'Invoicing\SaleController@storeDetail');
 Route::put('/sale/detail/{id}', 'Invoicing\SaleController@updateDetail');
 Route::delete('/sale/detail/{id}', 'Invoicing\SaleController@destroyDetail');
-Route::get('/sale/{id}/getDetailProduct', ['uses' => 'Invoicing\SaleController@getDetailProduct']);
+Route::get('/sale/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
 
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
-Route::get('/entry/{id}/getDetailProduct', ['uses' => 'Inventory\EntryController@getDetailProduct']);
+Route::get('/entry/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
 Route::get('/entry/{id}/detail', ['uses' => 'Inventory\EntryController@getDetail']);
 Route::get('/entry/{id}/getSupplier', ['uses' => 'Inventory\EntryController@getSupplier']);
 Route::get('/entry/{id}/getProducts', ['uses' => 'Inventory\EntryController@getProducts']);
@@ -108,7 +108,7 @@ Route::post('/entry/setPurchase/', 'Inventory\EntryController@sendPurchase');
 Route::resource('/departure', 'Inventory\DepartureController');
 Route::get('/departure/{id}/consecutive', ['uses' => 'Inventory\DepartureController@getConsecutive']);
 Route::get('/departure/{id}/quantity', ['uses' => 'Inventory\DepartureController@getQuantity']);
-Route::get('/departure/{id}/getDetailProduct', ['uses' => 'Inventory\DepartureController@getDetailProduct']);
+Route::get('/departure/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
 Route::get('/departure/{id}/detail', ['uses' => 'Inventory\DepartureController@getDetail']);
 Route::get('/departure/{id}/editExt', ['uses' => 'Inventory\DepartureController@getOrderExt']);
 Route::post('/departure/storeDetail', 'Inventory\DepartureController@storeDetail');
@@ -124,7 +124,7 @@ Route::get('/departure/{id}/getInvoiceHtml', ['uses' => 'Inventory\DepartureCont
 Route::resource('/order', 'Inventory\OrderController');
 Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);
 Route::get('/order/{id}/quantity', ['uses' => 'Inventory\OrderController@getQuantity']);
-Route::get('/order/{id}/getDetailProduct', ['uses' => 'Inventory\OrderController@getDetailProduct']);
+Route::get('/order/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
 Route::get('/order/{id}/detail', ['uses' => 'Inventory\OrderController@getDetail']);
 Route::post('/order/storeDetail', 'Inventory\OrderController@storeDetail');
 Route::put('/order/detail/{id}', 'Inventory\OrderController@updateDetail');

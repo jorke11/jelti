@@ -17,6 +17,8 @@ function Sale() {
             var created = $("#frm #created").val();
             $(".input-sale").cleanFields();
             $("#frm #created").val(created);
+            $("#btnSave").attr("disabled",true);
+            $("#btnmodalDetail").attr("disabled",true);
             $("#tblDetail tbody").empty();
             $("#tblDetail tfoot").empty();
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
@@ -239,7 +241,7 @@ function Sale() {
             }
 
 
-            if (val.type_nature == 2) {
+            if (val.type_nature == 1) {
                 val.quantity = (val.quantity == '') ? 1 : val.quantity;
                 html += "<td>" + 0 + "</td>";
                 html += "<td>" + val.totalFormated + "</td>";
@@ -254,8 +256,13 @@ function Sale() {
 
             }
 
-            html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
-            html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
+            if (val.description == 'product') {
+                html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
+                html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
+            }else{
+                html += '<td></td>';
+            }
+            
             html += "</tr>";
         });
 

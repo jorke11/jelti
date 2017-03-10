@@ -25,7 +25,7 @@ function Purchase() {
         $("#insideManagement").click(function () {
             var created = $("#frm #created").val();
             $(".input-purchase").cleanFields();
-            $("#frm #created").val(created);
+            $("#frm #btnSave").attr("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
@@ -48,9 +48,7 @@ function Purchase() {
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf)
-
-                    $("#frmDetail #quantityMax").html(resp.quantity)
-                    maxDeparture = resp.quantity
+                    
                     if (resp.quantity > 0) {
                         $("#frmDetail #quantity").attr("disabled", false);
                         $("#newDetail").attr("disabled", false);
@@ -81,11 +79,13 @@ function Purchase() {
     this.new = function () {
 
         $(".input-purchase").cleanFields();
-        $("#btnNew").attr("disabled", false);
+        $("#btnSave").attr("disabled", false);
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
         $("#frm #created").currentDate();
+        $("#tblDetail tbody").empty();
+        $("#tblDetail tfoot").empty();
     }
 
     this.getSupplier = function (id) {
@@ -110,36 +110,46 @@ function Purchase() {
 
     this.save = function () {
         obj.fieldDisabled();
+        $("#frm #warehouse_id").prop("disabled", false);
+        $("#frm #responsible_id").prop("disabled", false);
+        $("#frm #city_id").prop("disabled", false);
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
+        $("#frm #btnSave").attr("disabled", true);
         var id = $("#frm #id").val();
         var msg = '';
-        if (id == '') {
-            method = 'POST';
-            url = "purchase";
-            msg = "Created Record";
+        var validate = $(".input-purchase").validate();
 
-        } else {
-            method = 'PUT';
-            url = "purchase/" + id;
-            msg = "Edited Record";
-        }
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "purchase";
+                msg = "Created Record";
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    $("#frm #id").val(data.data.id);
-                    table.ajax.reload();
-                    toastr.success(msg);
-                    $("#btnmodalDetail").attr("disabled", false);
-                }
+            } else {
+                method = 'PUT';
+                url = "purchase/" + id;
+                msg = "Edited Record";
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == 'true') {
+                        $("#frm #id").val(data.data.id);
+                        table.ajax.reload();
+                        toastr.success(msg);
+                        $("#btnmodalDetail").attr("disabled", false);
+                    }
+                }
+            })
+        } else {
+            toastr.error("input required");
+        }
     }
 
     this.saveDetail = function () {
@@ -150,31 +160,39 @@ function Purchase() {
         var url = "", method = "";
         var id = $("#frmDetail #id").val();
         var msg = 'Record Detail';
-        if (id == '') {
-            method = 'POST';
-            url = "purchase/storeDetail";
-            msg = "Created " + msg;
 
-        } else {
-            method = 'PUT';
-            url = "purchase/detail/" + id;
-            msg = "Edited " + msg;
-        }
+        var validate = $(".input-detail").validate();
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    toastr.success(msg);
-                    $("#btnmodalDetail").attr("disabled", false);
-                    obj.printDetail(data.data);
-                    $("#modalDetail").modal("hide");
-                }
+        if (validate.length == 0) {
+
+            if (id == '') {
+                method = 'POST';
+                url = "purchase/storeDetail";
+                msg = "Created " + msg;
+
+            } else {
+                method = 'PUT';
+                url = "purchase/detail/" + id;
+                msg = "Edited " + msg;
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == 'true') {
+                        toastr.success(msg);
+                        $("#btnmodalDetail").attr("disabled", false);
+                        obj.printDetail(data);
+                        $("#modalDetail").modal("hide");
+                    }
+                }
+            })
+        } else {
+            toastr.error("input required");
+        }
     }
 
     this.showModal = function (id) {
@@ -214,14 +232,7 @@ function Purchase() {
             dataType: 'JSON',
             success: function (data) {
                 $("#modalDetail").modal("show");
-                $("#frmDetail #id").val(data.id);
-                $("#frmDetail #supplier_id").val(data.supplier_id);
-                $("#frmDetail #mark_id").val(1);
-                $("#frmDetail #quantity").val(data.quantity);
-                $("#frmDetail #value").val(data.value);
-                $("#frmDetail #lot").val(1);
-                $("#frmDetail #category_id").val(data.category_id);
-                $("#frmDetail #expiration_date").val(data.expiration_date);
+                $(".input-detail").setFields({data:data});
             }
         })
     }
@@ -235,7 +246,7 @@ function Purchase() {
             val.product = (val.product == null) ? '' : val.product
             val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date
             val.tax = (val.tax == null) ? '' : val.tax
-            val.quantity = (val.quantity == null) ? '' : val.tax
+            val.quantity = (val.quantity == null) ? '' : val.quantity
 
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
@@ -268,8 +279,13 @@ function Purchase() {
 
             }
 
-            html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
-            html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
+            if (val.description == 'product') {
+                html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
+                html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
+            }else{
+                html += '<td></td>';
+            }
+
             html += "</tr>";
         });
 

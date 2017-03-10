@@ -21,7 +21,8 @@ class SaleDetail extends Model {
         "payed",
         "account_id",
         "type_nature",
-        "parent_id"
+        "parent_id",
+        "description"
     ];
 
 }

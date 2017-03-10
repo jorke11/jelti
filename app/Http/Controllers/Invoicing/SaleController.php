@@ -9,6 +9,8 @@ use App\Models\Invoicing\SaleDetail;
 use \Illuminate\Support\Facades\DB;
 use Session;
 use App\Models\Administration\Products;
+use App\Models\Administration\Puc;
+use Log;
 
 class SaleController extends Controller {
 
@@ -70,17 +72,22 @@ class SaleController extends Controller {
                         ->leftjoin("products", "sales_detail.product_id", "products.id")
                         ->orderBy("order", "asc")->get();
 
+        $this->debt = 0;
+        $this->credit = 0;
+
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
-            $value->quantity = ($value->quantity == '') ? 1 : $value->quantity;
-            $detail[$i]->total = $value->value * $value->quantity;
+            $value->quantity = ($value->quantity == '') ? '' : $value->quantity;
+            $detail[$i]->total = $value->value * (($value->quantity == '') ? 1 : $value->quantity);
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
+
             if ($detail[$i]->type_nature == 1) {
                 $this->debt += $detail[$i]->total;
             } else {
                 $this->credit += $detail[$i]->total;
             }
         }
+
         return $detail;
     }
 
@@ -89,25 +96,12 @@ class SaleController extends Controller {
         return response()->json($detail);
     }
 
-    public function getDetailProduct($id) {
-        $response = DB::table("products")
-                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf")
-                ->join("categories", "categories.id", "=", "products.category_id")
-                ->where("products.id", $id)
-                ->first();
-        $entry = DB::table("entries_detail")->where("product_id", $id)->sum("quantity");
-        $departure = DB::table("departures_detail")->where("product_id", $id)->sum("quantity");
-        $quantity = $entry - $departure;
-
-        return response()->json(["response" => $response, "quantity" => $quantity]);
-    }
-
     public function update(Request $request, $id) {
-        $entry = Sale::FindOrFail($id);
+        $entry = Sales::FindOrFail($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = Sale::FindOrFail($id);
+            $resp = Sales::FindOrFail($id);
             Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
@@ -128,7 +122,7 @@ class SaleController extends Controller {
     }
 
     public function destroy($id) {
-        $entry = Sale::FindOrFail($id);
+        $entry = Sales::FindOrFail($id);
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
@@ -156,55 +150,60 @@ class SaleController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-
+            $saleDetail = SaleDetail::where("sale_id", $input["sale_id"])->get();
 
             $pro = Products::FindOrfail($input["product_id"]);
+            $account = Puc::where("code", "413501")->first();
 
-            $input["account_id"] = $pro["account_id"];
+            $input["account_id"] = $account["id"];
             $input["tax"] = $pro["tax"];
-            $input["order"] = 1;
+            $input["order"] = (count($saleDetail) == 0) ? 1 : count($saleDetail) + 1;
             $input["description"] = "product";
             $input["type_nature"] = 1;
 
             $result = SaleDetail::create($input)->id;
-            
+
+            $account = Puc::where("code", "240801")->first();
+
             $value = $input["value"];
+            $quantity = $input["quantity"];
             $sale_id = $input["sale_id"];
             $input = array();
-            $input["account_id"] = 1;
+            $input["account_id"] = $account["id"];
             $input["sale_id"] = $sale_id;
             $input["product_id"] = null;
             $input["parent_id"] = $result;
             $input["tax"] = null;
-            $input["order"] = 2;
+            $input["order"] = (count($saleDetail) == 0) ? 2 : count($saleDetail) + 2;
             $input["category_id"] = null;
             $input["quantity"] = null;
-            $input["value"] = ($pro["tax"] / 100.0) * $value;
+            $input["value"] = ($pro["tax"] / 100.0) * ($value * $quantity);
             $input["type_nature"] = 1;
-
-            $result = SaleDetail::create($input);
-
+            $input["description"] = "tax";
+            SaleDetail::create($input);
 
             $saleDetail = SaleDetail::where("sale_id", $input["sale_id"])->get();
-            $totalSale = 0;
+
+            $total = 0;
             foreach ($saleDetail as $value) {
-                $totalSale += $value->value * $value->quantity;
+                if ($value->type_nature == 1)
+                    $total += $value->value * (($value->quantity == '') ? 1 : $value->quantity);
             }
 
-            if ($totalSale > 860000) {
-                $input = array();
-                $input["product_id"] = null;
-                $input["sale_id"] = $sale_id;
-                $input["account_id"] = 1;
-                $input["parent_id"] = $result;
-                $input["tax"] = null;
-                $input["order"] = 3;
-                $input["category_id"] = null;
-                $input["quantity"] = null;
-                $input["value"] = $totalSale * 0.025;
-                $input["type_nature"] = 2;
+            $account = Puc::where("code", "220501")->first();
+            $client = SaleDetail::where("sale_id", $input["sale_id"])->where("account_id", $account["id"])->first();
 
-                $result = SaleDetail::create($input);
+            if (count($client) > 0) {
+                $client->value = $total;
+                $client->order = count($saleDetail) + 1;
+                $client->save();
+            } else {
+                $input["order"] = count($saleDetail) + 1;
+                $input["account_id"] = $account["id"];
+                $input["description"] = "Supplier";
+                $input["type_nature"] = $account["nature"];
+                $input["value"] = $total;
+                SaleDetail::create($input);
             }
 
 

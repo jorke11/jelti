@@ -116,7 +116,7 @@
                                 <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/user">Users</a></li>
-                                        <li><a href="/role">Role</a></li>
+                                        <li><a href="/role">Roles</a></li>
                                         <li><a href="/permission">Permission</a></li>
                                         <li><a href="{{url("/register")}}">Register</a></li>
                                     </ul>

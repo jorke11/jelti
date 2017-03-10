@@ -19,4 +19,18 @@ class StockController extends Controller {
         return Datatables::queryBuilder(DB::table("vstock"))->make(true);
     }
 
+    public function getDetailProduct($id) {
+        $response = DB::table("products")
+                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf")
+                ->join("categories", "categories.id", "=", "products.category_id")
+                ->where("products.id", $id)
+                ->first();
+        $entry = DB::table("entries_detail")->where("product_id", $id)->sum("quantity");
+        $departure = DB::table("departures_detail")->where("product_id", $id)->sum("quantity");
+        $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");
+        $quantity = ($entry + $purchase) - $departure;
+
+        return response()->json(["response" => $response, "quantity" => $quantity]);
+    }
+
 }

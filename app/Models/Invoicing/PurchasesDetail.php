@@ -21,7 +21,10 @@ class PurchasesDetail extends Model {
         "order",
         "type_nature",
         "parent_id",
-        "payed"
+        "payed",
+        "type_nature",
+        "account_id",
+        "description"
         ];
 
 }

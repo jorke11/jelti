@@ -10,10 +10,19 @@ use App\Models\Administration\Warehouses;
 use App\Models\Invoicing\Purchases;
 use App\Models\Invoicing\PurchasesDetail;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Administration\Products;
+use App\Models\Administration\Puc;
 
 class PurchaseController extends Controller {
 
+    public $total;
+    public $debt;
+    public $credit;
+
     public function __construct() {
+        $this->total = 0;
+        $this->debt = 0;
+        $this->credit = 0;
         $this->middleware("auth");
     }
 
@@ -84,7 +93,7 @@ class PurchaseController extends Controller {
         }
 
         return response()->json(["header" => $entry, "detail" => $detail, "totalCredt" => "$ " . number_format($creditTotal, 2, ',', '.'),
-            "totalDebt" => "$ " . number_format($debtTotal, 2, ',', '.')]);
+                    "totalDebt" => "$ " . number_format($debtTotal, 2, ',', '.')]);
     }
 
     public function getDetail($id) {
@@ -107,11 +116,34 @@ class PurchaseController extends Controller {
     public function updateDetail(Request $request, $id) {
         $entry = PurchasesDetail::FindOrFail($id);
         $input = $request->all();
+        $pro = Products::findOrFail($input["product_id"]);
+
+
+        $input["value"] = $request["quantity"] * $request["value"];
         $result = $entry->fill($input)->save();
+
+        $tax = PurchasesDetail::where("parent_id", $input["purchase_id"])->where("type_nature", 1)->first();
+        $tax->value = ($pro["tax"] / 100.0) * $input["value"];
+        $tax->save();
+
+
+        $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->get();
+        $total = 0;
+        foreach ($detail as $value) {
+            $total += ($value->value * $value->quantity);
+        }
+        
+        $client = PurchasesDetail::where("parent_id", $input["purchase_id"])->where("type_nature", 2)->first();
+        $client->value = $total;
+        $client->save();
+
         if ($result) {
-            $resp = DB::table("purchases_detail")
-                    ->where("purchase_id", "=", $input["entry_id"])
-                    ->get();
+            $detail = $this->formatDetail($input["purchase_id"]);
+            $debt = "$ " . number_format($this->debt, 2, ",", ".");
+            $cred = "$ " . number_format($this->credit, 2, ",", ".");
+            return response()->json(['success' => 'true', "detail" => $detail, "totalDebt" => $debt, "totalDebt" => $cred]);
+
+
             return response()->json(['success' => 'true', "data" => $resp]);
         } else {
             return response()->json(['success' => 'false']);
@@ -130,6 +162,10 @@ class PurchaseController extends Controller {
 
     public function destroyDetail($id) {
         $entry = PurchasesDetail::FindOrFail($id);
+
+        dd($entry);
+        exit;
+
         $result = $entry->delete();
         if ($result) {
             $resp = DB::table("purchases_detail")->where("purchase_id", "=", $entry["purchage_id"])->get();
@@ -146,18 +182,91 @@ class PurchaseController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $input["order"] = 1;
-            $result = PurchasesDetail::create($input);
-            if ($result) {
 
-                $resp = DB::table("purchases_detail")
-                        ->where("purchase_id", $input["purchase_id"])
-                        ->get();
-                return response()->json(['success' => 'true', "data" => $resp]);
+            $saleDetail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->get();
+
+            $pro = Products::findOrFail($input["product_id"]);
+            $account = Puc::where("code", "143501")->first();
+            $input["account_id"] = $account["id"];
+            $input["type_nature"] = 1;
+            $input["order"] = (count($saleDetail) == 0) ? 1 : count($saleDetail) + 1;
+            $input["description"] = "product";
+
+            $result = PurchasesDetail::create($input)->id;
+            
+            $account = Puc::where("code", "240802")->first();
+            $value = $input["value"];
+            $purchase_id = $input["purchase_id"];
+            $input = array();
+            $input["account_id"] = $account["id"];
+            $input["purchase_id"] = $purchase_id;
+            $input["product_id"] = null;
+            $input["parent_id"] = $result;
+            $input["tax"] = null;
+            $input["order"] = (count($saleDetail) == 0) ? 2 : count($saleDetail) + 2;
+            $input["category_id"] = null;
+            $input["quantity"] = null;
+            $input["value"] = ($pro["tax"] / 100.0) * $value;
+            $input["type_nature"] = 1;
+            $input["description"] = "tax";
+
+            PurchasesDetail::create($input);
+            
+            $saleDetail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->get();
+
+            $total = 0;
+            foreach ($saleDetail as $value) {
+                $total += $value->value;
+            }
+
+            $account = Puc::where("code", "220501")->first();
+
+            $client = PurchasesDetail::where("purchase_id", $input["purchase_id"])->where("account_id", $account["id"])->first();
+
+            if (count($client) > 0) {
+                $client->value = $total;
+                $client->order = count($saleDetail) + 1;
+                $client->save();
+            } else {
+                $input["order"] = count($saleDetail) + 1;
+                $input["account_id"] = $account["id"];
+                $input["description"] = "Client";
+                $input["type_nature"] = $account["nature"];
+                $input["value"] = $total;
+
+                PurchasesDetail::create($input);
+            }
+
+            if ($result) {
+                $detail = $this->formatDetail($input["purchase_id"]);
+                $debt = "$ " . number_format($this->debt, 2, ",", ".");
+                $cred = "$ " . number_format($this->credit, 2, ",", ".");
+                return response()->json(['success' => 'true', "detail" => $detail, "totalDebt" => $debt, "totalDebt" => $cred]);
             } else {
                 return response()->json(['success' => 'false']);
             }
         }
+    }
+
+    public function formatDetail($id) {
+        $detail = DB::table("purchases_detail")
+                        ->select("purchases_detail.id", "purchases_detail.description", "products.title as product", "purchases_detail.tax", "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description")
+                        ->where("purchase_id", "=", $id)
+                        ->leftjoin("products", "purchases_detail.product_id", "products.id")
+                        ->orderBy("order", "asc")->get();
+
+        foreach ($detail as $i => $value) {
+            $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
+            $value->quantity = ($value->quantity == '') ? 1 : $value->quantity;
+            $detail[$i]->total = $value->value * (($value->quantity == '') ? 1 : $value->quantity);
+            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
+            if ($detail[$i]->type_nature == 1) {
+                $this->debt += $detail[$i]->total;
+            } else {
+                $this->credit += $detail[$i]->total;
+            }
+        }
+        return $detail;
     }
 
 }

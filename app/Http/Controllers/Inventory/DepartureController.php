@@ -92,18 +92,7 @@ class DepartureController extends Controller {
         return $pdf->stream('document.pdf');
     }
 
-    public function getDetailProduct($id) {
-        $response = DB::table("products")
-                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf")
-                ->join("categories", "categories.id", "=", "products.category_id")
-                ->where("products.id", $id)
-                ->first();
-        $entry = DB::table("entries_detail")->where("product_id", $id)->sum("quantity");
-        $departure = DB::table("departures_detail")->where("product_id", $id)->sum("quantity");
-        $quantity = $entry - $departure;
-
-        return response()->json(["response" => $response, "quantity" => $quantity]);
-    }
+    
 
     public function getQuantity($id) {
         $product = \App\Models\Invoicing\PurchaseDetail::where("product_id", $id)->first();

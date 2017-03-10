@@ -25,7 +25,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Warehouse:</label>
-                    <select class="form-control input-purchase" id="warehouse_id" name='warehouse_id' data-api="/api/getWarehouse">
+                    <select class="form-control input-purchase" id="warehouse_id" name='warehouse_id' data-api="/api/getWarehouse" required="">
                     </select>
 
                     </select>
@@ -33,8 +33,8 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Responsable:</label>
-                    <select class="form-control input-purchase input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable">
+                    <label for="email">Responsible:</label>
+                    <select class="form-control input-purchase input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable" required>
                     </select>
 
                 </div>
@@ -42,13 +42,13 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Date:</label>
-                    <input type="text" class="form-control input-purchase input-sm form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" >
+                    <input type="text" class="form-control input-purchase input-sm form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required >
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">City:</label>
-                    <select class="form-control input-purchase" id="city_id" name='city_id' data-api="/api/getCity">                  
+                    <select class="form-control input-purchase" id="city_id" name='city_id' data-api="/api/getCity" required>                  
                     </select>
                 </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Status:</label>
-                    <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly>
+                    <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly required>
                         <option value="1">New</option>
                         <option value="2">Created</option>
                         <option value="3">Closed</option>
@@ -71,7 +71,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Supplier:</label>
-                    <select class="form-control input-purchase" id="supplier_id" name='supplier_id' data-api="/api/getSupplier"  autofocus="">
+                    <select class="form-control input-purchase" id="supplier_id" name='supplier_id' data-api="/api/getSupplier"  autofocus="" required>
                     </select>
                 </div>
             </div>
@@ -85,13 +85,13 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Address:</label>
-                    <input type="text" class="form-control input-purchase input-sm" id="address_supplier" readonly="">
+                    <input type="text" class="form-control input-purchase input-sm" id="address_supplier" readonly="" required>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Phone:</label>
-                    <input type="text" class="form-control input-purchase input-sm" id="phone_supplier" readonly="">
+                    <input type="text" class="form-control input-purchase input-sm" id="phone_supplier" readonly="" required>
                 </div>
             </div>
             <div class="col-lg-2">

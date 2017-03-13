@@ -10,7 +10,7 @@ class ProductsTableSeeder extends Seeder {
      * @return void
      */
     public function run() {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             DB::table("products")->insert([
                 'category_id' => 1,
                 'supplier_id' => 1,
@@ -28,7 +28,8 @@ class ProductsTableSeeder extends Seeder {
                 'bar_code' => "232423",
                 'status' => true,
                 'minimum_stock' => 10,
-                "account_id" => 1
+                "account_id" => 1,
+                "packaging" => 5
             ]);
         }
     }

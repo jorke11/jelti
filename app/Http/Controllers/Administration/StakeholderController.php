@@ -16,6 +16,10 @@ use DB;
 
 class StakeholderController extends Controller {
 
+    public function __construct() {
+        $this->middleware("auth");
+    }
+    
     public function index() {
         $type_person = Administration\TypePersons::all();
         $type_regimen = Administration\TypeRegimes::all();

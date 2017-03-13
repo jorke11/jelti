@@ -131,12 +131,15 @@ Route::put('/order/detail/{id}', 'Inventory\OrderController@updateDetail');
 Route::delete('/order/detail/{id}', 'Inventory\OrderController@destroyDetail');
 Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getClient']);
 
-Route::get('/shop', 'Shop\ShopController@index');
+Route::get('/shopping', 'Shopping\ShoppingController@index');
+Route::get('/shopping/{id}', 'Shopping\ShoppingController@getDetailProduct');
+Route::get('/getCategories', 'Shopping\ShoppingController@getCategories');
+Route::get('/productDetail/{id}', 'Shopping\ShoppingController@getProduct');
 
 
 
 Route::get('/api/listCategory', function() {
-    return Datatables::eloquent(Models\Administration\Categories::query())->make(true);
+    return Datatables::queryBuilder(DB::table("categories")->orderBy("order","asc"))->make(true);
 });
 Route::get('/api/listCharacterist', function() {
     return Datatables::eloquent(Models\Administration\Characteristic::query())->make(true);

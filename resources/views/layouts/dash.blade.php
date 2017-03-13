@@ -299,7 +299,7 @@
                             </li>
 
                             <li role="presentation">
-                                <a href="/shop" class="dropdown-toggle info-number" aria-expanded="false">
+                                <a href="/shopping" class="dropdown-toggle info-number" aria-expanded="false">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span class="badge bg-green">0</span>
                                 </a>

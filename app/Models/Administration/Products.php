@@ -31,6 +31,8 @@ class Products extends Model {
         "minimum_stock",
         "characteristic",
         "account_id",
+        "packaging",
+        
     ];
     public $timestamp = false;
 

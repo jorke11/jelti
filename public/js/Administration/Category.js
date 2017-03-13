@@ -39,6 +39,7 @@ function Category() {
                 success: function (data) {
                     if (data.success == 'true') {
                         $("#modalNew").modal("hide");
+                        $(".input-category").setFields({data: data});
                         table.ajax.reload();
                         toastr.success(msg);
                     }
@@ -60,8 +61,7 @@ function Category() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #id").val(data.id);
-                $("#frm #description").val(data.description);
+                $(".input-category").setFields({data: data});
             }
         })
     }
@@ -90,26 +90,28 @@ function Category() {
 
     this.table = function () {
         return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "/api/listCategory",
+            processing: true,
+            serverSide: true,
+            ajax: "/api/listCategory",
             columns: [
                 {data: "id"},
-                {data: "description"}
+                {data: "description"},
+                {data: "short_description"},
+                {data: "order"}
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1],
+                    aTargets: [0, 1, 3],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [2],
+                    targets: [4],
                     searchable: false,
-                    "mData": null,
-                    "mRender": function (data, type, full) {
+                    mData: null,
+                    mRender: function (data, type, full) {
                         return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }

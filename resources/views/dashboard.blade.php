@@ -59,15 +59,15 @@
                 </a>
             </div>
             <div class="col-md-3 col-sm-3">
-                <div class="panel panel-green" style="margin-bottom: 0px;">
+                <div class="panel panel-yellow" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">
                         <div class="row">
                             <div class="col-md-3 col-sm-3">
-                                <i class="fa fa-tasks fa-5x"></i>
+                                <i class="fa fa-star fa-5x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">100</div>
-                                <div> Points</div>
+                                <div class="huge">Aceite</div>
+                                <div> Best Product</div>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                 </a>
             </div>
             <div class="col-md-3 col-sm-3">
-                <div class="panel panel-yellow" style="margin-bottom: 0px;">
+                <div class="panel panel-green" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">
                         <div class="row">
                             <div class="col-md-3 col-sm-3">
@@ -91,7 +91,7 @@
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
                                 <div class="huge">250</div>
-                                <div> Shops</div>
+                                <div> Shopping</div>
                             </div>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                                 <i class="fa fa-support fa-5x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">250</div>
+                                <div class="huge">50</div>
                                 <div> Alerts</div>
                             </div>
                         </div>

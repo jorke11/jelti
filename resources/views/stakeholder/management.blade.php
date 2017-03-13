@@ -155,6 +155,13 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="address" class="control-label">Contract Expiration</label>
+                        <input type="text" class="form-control input-stakeholder" id="contract_expiration" name="contract_expiration" placeholder="contract_expiration Name" 
+                               value="{{date("Y-m-d H:i")}}">
+                    </div>
+                </div>
             </div>
             {!!Form::close()!!}
             <div class="row">

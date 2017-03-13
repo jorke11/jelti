@@ -1,6 +1,6 @@
 .col-center{float: none;margin: 0 auto;}
 table>thead>tr{background:#2a3f54;color:white;border-color: #2a3f54}
-.thumbnail{height: 250px;}
+.thumbnail{height: 300px;}
 .panel-heading{height: 45px;}
 .modal-footer {padding: 5px;}
 .page-title{height:0 !important;}
@@ -13,6 +13,11 @@ table>thead>tr{background:#2a3f54;color:white;border-color: #2a3f54}
 
 .has-error .checkbox, .has-error .checkbox-inline, .has-error .control-label, .has-error .help-block, .has-error .radio, .has-error .radio-inline, .has-error.checkbox label, .has-error.checkbox-inline label, .has-error.radio label, .has-error.radio-inline label {
     color: #a94442;
+}
+
+.ratings {
+    padding-right: 10px;
+    color: #d17581;
 }
 
 /*.select2-container--default .select2-selection--single {*/

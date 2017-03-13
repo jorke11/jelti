@@ -26,6 +26,8 @@
                         <tr>
                             <th></th>
                             <th>Description</th>
+                            <th>Short Description</th>
+                            <th>Order</th>
                             <th>Action</th>
                         </tr>
                     </thead>

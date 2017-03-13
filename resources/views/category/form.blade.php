@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Products</h4>
+                <h4 class="modal-title">Category</h4>
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frm']) !!}
@@ -13,6 +13,22 @@
                         <div class="form-group">
                             <label for="email">Description</label>
                             <input type="text" class="form-control input-category" id="description" name='description'>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Short Description</label>
+                            <input type="text" class="form-control input-category" id="short_description" name='short_description'>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Order</label>
+                            <input type="text" class="form-control input-category" id="order" name='order'>
                         </div>
                     </div>
                 </div>

@@ -10,8 +10,6 @@
         <title>Superfuds</title>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
 
-
-
         {!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/ColReorder/js/dataTables.colReorder.min.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js')!!}
@@ -61,9 +59,6 @@
 
         {!!Html::style('/vendor/datetimepicker/css/bootstrap-datetimepicker.min.css')!!}
         {!!Html::script('/vendor/datetimepicker/js/bootstrap-datetimepicker.min.js')!!}
-
-
-
 
         {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
         {!!Html::style('/vendor/select2/css/select2.min.css')!!}
@@ -191,7 +186,6 @@
                         <div class="nav toggle">
                             <a id="menu_toggle"><i class="fa fa-bars"></i></a>
                         </div>
-
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -223,8 +217,10 @@
                                     </li>
                                 </ul>
                             </li>
-                          
-                            
+
+
+
+
                             <li role="presentation" class="dropdown">
                                 <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                                     <i class="fa fa-envelope-o"></i>
@@ -300,6 +296,13 @@
                                         </div>
                                     </li>
                                 </ul>
+                            </li>
+
+                            <li role="presentation">
+                                <a href="/shop" class="dropdown-toggle info-number" aria-expanded="false">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span class="badge bg-green">0</span>
+                                </a>
                             </li>
                         </ul>
                     </nav>

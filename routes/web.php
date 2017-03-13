@@ -131,6 +131,8 @@ Route::put('/order/detail/{id}', 'Inventory\OrderController@updateDetail');
 Route::delete('/order/detail/{id}', 'Inventory\OrderController@destroyDetail');
 Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getClient']);
 
+Route::get('/shop', 'Shop\ShopController@index');
+
 
 
 Route::get('/api/listCategory', function() {

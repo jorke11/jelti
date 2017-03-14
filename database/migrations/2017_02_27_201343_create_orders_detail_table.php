@@ -15,12 +15,9 @@ class CreateOrdersDetailTable extends Migration { /**
             $table->increments('id');
             $table->integer('order_id');
             $table->integer('product_id');
-            $table->integer('category_id');
-            $table->integer('generate');
             $table->integer('quantity');
+            $table->decimal('tax', 15, 2);
             $table->decimal('value', 15, 2);
-            $table->integer('status_id');
-            $table->integer('pending');
             $table->timestamps();
         });
     }

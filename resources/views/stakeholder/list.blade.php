@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-lg-3">List Stake Holder</div>
                 <div class="col-lg-9 text-right">
-                    <button class="btn btn-success" id="tabManagement">
+                    <button class="btn btn-success btn-sm" id="tabManagement">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </button>
                 </div>

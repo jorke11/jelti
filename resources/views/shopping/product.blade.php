@@ -6,19 +6,60 @@
 
 <div class="row">
     <div class="col-lg-12">
-        {{$product["title"]}}
+        {{ucwords($product["title"])}}
     </div>
 </div>
 <div class="row">
     <div class="col-lg-2">
-
+        <div class="row">
+            <div class="thumbnail" style="height: 120px;width:120px">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=120&h=120">
+                <div class="caption">
+                    <p><a href="#" class="btn btn-success" role="button">
+                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
+                        </a>
+                        <a href="#" class="btn btn-default" role="button">
+                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span><span class="badge">0</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="thumbnail" style="height: 120px;width:120px">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=120&h=120">
+                <div class="caption">
+                    <p><a href="#" class="btn btn-success" role="button">
+                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
+                        </a>
+                        <a href="#" class="btn btn-default" role="button">
+                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span><span class="badge">0</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="thumbnail" style="height: 120px;width:120px">
+                    <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=120&h=120">
+                    <div class="caption">
+                        <p><a href="#" class="btn btn-success" role="button">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
+                            </a>
+                            <a href="#" class="btn btn-default" role="button">
+                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span><span class="badge">0</span>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
     </div>
     <div class="col-lg-6">
         <div class="thumbnail" style="height: 420px;width:710px">
             <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=700&h=350">
             <div class="caption">
                 <p><a href="#" class="btn btn-success" role="button">
-                      <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
+                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
                     </a>
                     <a href="#" class="btn btn-default" role="button">
                         <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span><span class="badge">0</span>
@@ -36,6 +77,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
+                <input type="hidden" id="product_id" name="product_id" value="{{$product["id"]}}">
                 {{$product["short_description"]}}
             </div>
         </div>
@@ -77,7 +119,7 @@
         <br>
         <div class="row">
             <div class="col-lg-12">
-                <button class="btn btn-success form-control">Add</button>
+                <button class="btn btn-success form-control" id="AddProduct">Add</button>
             </div>
         </div>
     </div>
@@ -88,15 +130,19 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-8">
-        <textarea type="text" class="form-control" placeholder="Your comment!"></textarea>
+    <div class="col-lg-7">
+        <textarea type="text" class="form-control" placeholder="Your comment!" id="txtComment"></textarea>
+    </div>
+    <div class="col-lg-1">
+        <button class="btn btn-success" type="button" id="addComment">Submit</button>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-8">
-        
+        <div class="list-group" id="contentComment">
+        </div>
     </div>
 </div>
 
-
+{!!Html::script('js/Shopping/detailProduct.js')!!}
 @endsection

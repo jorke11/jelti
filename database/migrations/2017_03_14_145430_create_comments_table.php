@@ -4,20 +4,19 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrdersTable extends Migration
+class CreateCommentsTable extends Migration
 {
-     /**
+    /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() {
-        Schema::create('orders', function (Blueprint $table) {
+   public function up() {
+        Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('product_id');
             $table->integer('stakeholder_id');
-            $table->string('address')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('status_id');
+            $table->string('description');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateOrdersTable extends Migration
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('comments');
     }
 }

@@ -105,7 +105,7 @@
                             <ul class="nav side-menu">
                                 <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="/sale">Sales</a></li>
+                                        <li><a href="/shopping">Shopping</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
@@ -299,9 +299,9 @@
                             </li>
 
                             <li role="presentation">
-                                <a href="/shopping" class="dropdown-toggle info-number" aria-expanded="false">
+                                <a href="/payment" class="dropdown-toggle info-number" aria-expanded="false">
                                     <i class="fa fa-shopping-cart"></i>
-                                    <span class="badge bg-green">0</span>
+                                    <span class="badge bg-green" id="quantityOrders">0</span>
                                 </a>
                             </li>
                         </ul>
@@ -491,6 +491,7 @@
     <!-- Custom Theme Scripts -->
     <!--<script src="../build/js/custom.min.js"></script>-->
     {!!Html::script('vendor/template/build/js/custom.min.js')!!}
+    {!!Html::script('/js/autoload.js')!!}
 
 
 </body>

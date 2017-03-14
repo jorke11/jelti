@@ -130,11 +130,21 @@ Route::post('/order/storeDetail', 'Inventory\OrderController@storeDetail');
 Route::put('/order/detail/{id}', 'Inventory\OrderController@updateDetail');
 Route::delete('/order/detail/{id}', 'Inventory\OrderController@destroyDetail');
 Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getClient']);
-
+/**
+ * Shopping cart
+ */
 Route::get('/shopping', 'Shopping\ShoppingController@index');
 Route::get('/shopping/{id}', 'Shopping\ShoppingController@getDetailProduct');
 Route::get('/getCategories', 'Shopping\ShoppingController@getCategories');
 Route::get('/productDetail/{id}', 'Shopping\ShoppingController@getProduct');
+Route::post('/addComment', 'Shopping\ShoppingController@addComment');
+Route::get('/getComment/{id}', 'Shopping\ShoppingController@getComment');
+Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
+Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
+
+Route::get('/payment', 'Shopping\PaymentController@index');
+Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
+Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
 
 

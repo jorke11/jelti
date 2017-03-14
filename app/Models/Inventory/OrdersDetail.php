@@ -12,12 +12,8 @@ class OrdersDetail extends Model {
         "id",
         "order_id",
         "product_id",
-        "category_id",
-        "mark_id",
         "quantity",
-        "generate",
-        "status_id",
-        "pending",
+        "tax",
         "value"
     ];
 

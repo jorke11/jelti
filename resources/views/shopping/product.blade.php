@@ -13,7 +13,7 @@
     <div class="col-lg-2">
         <div class="row">
             <div class="thumbnail" style="height: 120px;width:120px">
-                <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=120&h=120">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Pro1&w=120&h=120">
                 <div class="caption">
                     <p><a href="#" class="btn btn-success" role="button">
                             <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             <div class="thumbnail" style="height: 120px;width:120px">
-                <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=120&h=120">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Pro2&w=120&h=120">
                 <div class="caption">
                     <p><a href="#" class="btn btn-success" role="button">
                             <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
@@ -41,7 +41,7 @@
         </div>
             <div class="row">
                 <div class="thumbnail" style="height: 120px;width:120px">
-                    <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=120&h=120">
+                    <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Pro3&w=120&h=120">
                     <div class="caption">
                         <p><a href="#" class="btn btn-success" role="button">
                                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
@@ -108,7 +108,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <h4>Quantity</h4>
+                <h4>Quantity X{{$product["packaging"]}}</h4>
             </div>
         </div>
         <div class="row">

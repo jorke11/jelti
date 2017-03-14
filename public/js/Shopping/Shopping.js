@@ -1,8 +1,6 @@
 function Shop() {
     this.init = function () {
-
         $("#addComment").click(this.addComment);
-
         var html = "";
         $.ajax({
             url: 'getCategories/',
@@ -12,7 +10,7 @@ function Shop() {
                 html = '<div class="row">';
                 $.each(data, function (i, val) {
                     html += '<div class="col-sm-3 col-lg-3 col-md-3">'
-                    html += '<div class="thumbnail">'
+                    html += '<div class="thumbnail" style="height:290px">'
                     html += '<img src="/' + val.image + '">'
                     html += '<div class="caption">'
                     html += '<h4><a href="/shopping/' + val.id + '">' + val.description + '</a></h4>'

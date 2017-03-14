@@ -93,7 +93,8 @@ function Entry() {
     }
 
     this.send = function () {
-
+        toastr.remove();
+        
         var obj = {};
         obj.id = $("#frm #id").val()
         $.ajax({
@@ -102,7 +103,7 @@ function Entry() {
             data: obj,
             dataType: 'JSON',
             success: function (resp) {
-                if (resp.response == true) {
+                if (resp.success == true) {
                     toastr.success("Sended");
                     $(".input-entry").setFields({data: resp.header});
                     $("#btnmodalDetail").attr("disabled", true);
@@ -156,7 +157,7 @@ function Entry() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         $("#frm #id").val(data.data.id);
                         table.ajax.reload();
                         toastr.success(msg);
@@ -200,7 +201,7 @@ function Entry() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.response == true) {
+                    if (data.success == true) {
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
                         obj.printDetail(data);
@@ -300,9 +301,10 @@ function Entry() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
+                        obj.printDetail(data);
                     }
                 }, error: function (err) {
                     toastr.error("No se puede borrra Este registro");
@@ -322,9 +324,9 @@ function Entry() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         toastr.warning("Record deleted");
-                        obj.printDetail(data.data);
+                        obj.printDetail(data);
                     }
                 }, error: function (err) {
                     toastr.error("No se puede borrra Este registro");
@@ -336,9 +338,9 @@ function Entry() {
 
     this.table = function () {
         return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "/api/listEntry",
+            processing: true,
+            serverSide: true,
+            ajax: "/api/listEntry",
             columns: [
                 {data: "id"},
                 {data: "id"},
@@ -360,8 +362,8 @@ function Entry() {
                 {
                     targets: [8],
                     searchable: false,
-                    "mData": null,
-                    "mRender": function (data, type, full) {
+                    mData: null,
+                    mRender: function (data, type, full) {
                         return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }

@@ -62,9 +62,9 @@ class EntryController extends Controller {
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
                 $resp = Entries::FindOrFail($result["attributes"]["id"]);
-                return response()->json(['success' => 'true', "data" => $resp]);
+                return response()->json(['success' => true, "data" => $resp]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -140,12 +140,12 @@ class EntryController extends Controller {
 
                 $entry = Entries::findOrFail($entry["id"]);
 
-                return response()->json(["response" => true, "header" => $entry]);
+                return response()->json(["success" => true, "header" => $entry]);
             } else {
-                return response()->json(["response" => false, "msg" => "Entry is already generate"]);
+                return response()->json(["success" => false, "msg" => "Entry is already generate"]);
             }
         } else {
-            return response()->json(["response" => false, "msg" => "Wrong"]);
+            return response()->json(["success" => false, "msg" => "Wrong"]);
         }
     }
 
@@ -157,8 +157,8 @@ class EntryController extends Controller {
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ',', '.');
             $this->total += $detail[$i]->total;
         }
-        
-        
+
+
         return $detail;
     }
 
@@ -185,9 +185,9 @@ class EntryController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = Entries::FindOrFail($id);
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -196,10 +196,17 @@ class EntryController extends Controller {
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = DB::table("entry_detail")->where("entry_id", "=", $input["entry_id"])->get();
-            return response()->json(['success' => 'true', "data" => $resp]);
+
+            $detail = DB::table("entries_detail")
+                            ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
+                            ->join("products", "entries_detail.product_id", "products.id")
+                            ->where("entry_id", $input["entry_id"])->get();
+            $detail = $this->formatDetail($detail);
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+
+            return response()->json(['success' => true, "detail" => $detail, "total" => $total]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -208,21 +215,27 @@ class EntryController extends Controller {
         $result = $entry->delete();
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroyDetail($id) {
         $entry = EntriesDetail::FindOrFail($id);
+        $entry_id = $entry["entry_id"];
         $result = $entry->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            $resp = DB::table("entry_detail")->where("entry_id", "=", $entry["entry_id"])->get();
-            return response()->json(['success' => 'true', "data" => $resp]);
+            $detail = DB::table("entries_detail")
+                            ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
+                            ->join("products", "entries_detail.product_id", "products.id")
+                            ->where("entry_id", $entry_id)->get();
+            $detail = $this->formatDetail($detail);
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+
+            return response()->json(['success' => true, "detail" => $detail, "total" => $total]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -243,9 +256,9 @@ class EntryController extends Controller {
                 $total = 0;
                 $this->formatDetail($detail);
                 $total = "$ " . number_format($this->total, 2, ',', '.');
-                return response()->json(['response' => true, "detail" => $detail, "total" => $total]);
+                return response()->json(['success' => true, "detail" => $detail, "total" => $total]);
             } else {
-                return response()->json(['response' => false]);
+                return response()->json(['success' => false]);
             }
         }
     }

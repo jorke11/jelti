@@ -25,6 +25,7 @@ function Purchase() {
         $("#insideManagement").click(function () {
             var created = $("#frm #created").val();
             $(".input-purchase").cleanFields();
+            $("#frm #created").val(created);
             $("#frm #btnSave").attr("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
@@ -48,7 +49,7 @@ function Purchase() {
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf)
-                    
+
                     if (resp.quantity > 0) {
                         $("#frmDetail #quantity").attr("disabled", false);
                         $("#newDetail").attr("disabled", false);
@@ -182,7 +183,7 @@ function Purchase() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
                         obj.printDetail(data);
@@ -232,7 +233,7 @@ function Purchase() {
             dataType: 'JSON',
             success: function (data) {
                 $("#modalDetail").modal("show");
-                $(".input-detail").setFields({data:data});
+                $(".input-detail").setFields({data: data});
             }
         })
     }
@@ -282,7 +283,7 @@ function Purchase() {
             if (val.description == 'product') {
                 html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
                 html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
-            }else{
+            } else {
                 html += '<td></td>';
             }
 

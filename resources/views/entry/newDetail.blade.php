@@ -7,8 +7,8 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmDetail']) !!}
-                <input type="hidden" id="id" name="id">
-                <input type="hidden" id="entry_id" name="entry_id">
+                <input type="hidden" id="id" name="id" class="input-detail">
+                <input type="hidden" id="entry_id" name="entry_id" class="input-detail">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -47,7 +47,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Quantity:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' required>
+                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' required data-type='number'>
                         </div>
                     </div>
                     <div class="col-lg-6">

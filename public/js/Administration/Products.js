@@ -65,7 +65,7 @@ function Product() {
         $.each(data, function (i, val) {
 
             html += '<div class="col-sm-6 col-lg-3" id="div_' + val.id + '">' +
-                    '<div class="thumbnail">' +
+                    '<div class="thumbnail" style="height:180px">' +
                     '<img src="/images/product/' + val.path + '" alt="Product">' +
                     '<div class="caption">' +
                     '<h4>Check Main <input type="radio" name="main[]" onclick=obj.checkMain(' + val.id + ',' + val.id + ')></h4>' +

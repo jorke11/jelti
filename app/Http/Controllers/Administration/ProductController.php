@@ -123,7 +123,7 @@ class ProductController extends Controller {
     public function checkmain(Request $data, $id) {
         $input = $data->all();
         $product = Products::find($input["product_id"]);
-        DB::table("productimage")->where("product_id", $input["product_id"])->update(['main' => false]);
+        DB::table("products_image")->where("product_id", $input["product_id"])->update(['main' => false]);
         $image = ProductsImage::where("id", $id)->update(['main' => true]);
         $image = ProductsImage::find($id);
         $product->image = $image->path;

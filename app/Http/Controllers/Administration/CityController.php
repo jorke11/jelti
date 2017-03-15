@@ -10,7 +10,7 @@ use Session;
 class CityController extends Controller {
 
     public function index() {
-        return view("city.init");
+        return view("Administration.city.init");
     }
 
     public function create() {

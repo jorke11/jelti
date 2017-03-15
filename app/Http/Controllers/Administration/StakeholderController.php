@@ -23,7 +23,7 @@ class StakeholderController extends Controller {
     public function index() {
         $type_person = Administration\TypePersons::all();
         $type_regimen = Administration\TypeRegimes::all();
-        return view("stakeholder.init", compact('type_person', "type_regimen"));
+        return view("Administration.stakeholder.init", compact('type_person', "type_regimen"));
     }
 
     public function store(Request $request) {

@@ -16,12 +16,12 @@ use DB;
 class ShoppingController extends Controller {
 
     public function index() {
-        return view("shopping.init");
+        return view("Ecommerce.shopping.init");
     }
 
     public function getDetailProduct($id) {
         $products = Products::where("category_id", $id)->get();
-        return view("shopping.detail", compact("products"));
+        return view("Ecommerce.shopping.detail", compact("products"));
     }
 
     public function getCategories() {
@@ -31,7 +31,7 @@ class ShoppingController extends Controller {
     public function getProduct($id) {
         $product = Products::findOrFail($id);
         $detail = ProductsImage::where("product_id", $id)->get();
-        return view("shopping.product", compact("product", "detail"));
+        return view("Ecommerce.shopping.product", compact("product", "detail"));
     }
 
     public function addComment(Request $req) {

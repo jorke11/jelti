@@ -14,7 +14,7 @@ class CharacteristicController extends Controller
     }
 
     public function index() {
-        return view("characteristic.init");
+        return view("Administration.characteristic.init");
     }
 
     public function create() {

@@ -10,7 +10,7 @@ use Session;
 class RoleController extends Controller {
 
     public function index() {
-        return view("role.init");
+        return view("Security.role.init");
     }
 
     public function create() {

@@ -26,7 +26,7 @@ class SaleController extends Controller {
 
     public function index() {
         $category = \App\Models\Administration\Categories::all();
-        return view("sale.init", compact("category"));
+        return view("Invoicing.sale.init", compact("category"));
     }
 
     public function getConsecutive($id) {

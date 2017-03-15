@@ -12,7 +12,7 @@ use DB;
 class PaymentController extends Controller {
 
     public function index() {
-        return view("payment.init");
+        return view("Ecommerce.payment.init");
     }
 
     public function getDetail() {

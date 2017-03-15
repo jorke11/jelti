@@ -18,7 +18,7 @@ class UserController extends Controller {
 
     public function index() {
         $profile = Roles::all();
-        return view("user.init", compact("profile", "supplier", "city"));
+        return view("Security.user.init", compact("profile", "supplier", "city"));
     }
 
     public function create() {

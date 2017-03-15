@@ -14,7 +14,7 @@ class CategoryController extends Controller {
     }
 
     public function index() {
-        return view("category.init");
+        return view("Administration.category.init");
     }
 
     public function create() {

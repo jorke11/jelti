@@ -147,6 +147,8 @@ Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
 Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
 
+Route::get('/prospects', 'Seller\ProspectsController@index');
+
 
 Route::get('/api/listCategory', function() {
     return Datatables::queryBuilder(DB::table("categories")->orderBy("order","asc"))->make(true);

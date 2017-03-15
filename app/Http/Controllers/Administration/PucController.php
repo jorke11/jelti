@@ -14,7 +14,7 @@ class PucController extends Controller
     }
 
     public function index() {
-        return view("puc.init");
+        return view("Administration.puc.init");
     }
 
     public function create() {

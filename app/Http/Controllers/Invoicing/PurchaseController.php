@@ -28,7 +28,7 @@ class PurchaseController extends Controller {
 
     public function index() {
         $category = \App\Models\Administration\Categories::all();
-        return view("purchase.init", compact("category"));
+        return view("Invoicing.purchase.init", compact("category"));
     }
 
     public function getConsecutive($id) {

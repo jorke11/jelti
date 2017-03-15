@@ -26,7 +26,7 @@ class DepartureController extends Controller {
 
     public function index() {
         $category = \App\Models\Administration\Categories::all();
-        return view("departure.init", compact("category"));
+        return view("Inventory.departure.init", compact("category"));
     }
 
     public function showOrder($id) {
@@ -86,7 +86,7 @@ class DepartureController extends Controller {
             'client' => $cli,
             'detail' => $detail,
         ];
-        $pdf = \PDF::loadView('departure.pdf', [], $data, [
+        $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
 
         return $pdf->stream('document.pdf');

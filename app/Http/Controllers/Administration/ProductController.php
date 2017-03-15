@@ -18,7 +18,7 @@ use \App\Http\Requests\Administration\ProductsUpdateRequest;
 class ProductController extends Controller {
 
     public function index() {
-        return view("products.init");
+        return view("Administration.products.init");
     }
 
     public function store(ProductsCreateRequest $request) {

@@ -10,7 +10,7 @@ use Session;
 class MarkController extends Controller
 {
        public function index() {
-        return view("mark.init");
+        return view("Administration.mark.init");
     }
 
     public function store(Request $request) {

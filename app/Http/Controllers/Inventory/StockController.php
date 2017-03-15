@@ -12,7 +12,7 @@ use PDF;
 class StockController extends Controller {
 
     public function index() {
-        return view("stock.init");
+        return view("Inventory.stock.init");
     }
 
     public function getStock() {

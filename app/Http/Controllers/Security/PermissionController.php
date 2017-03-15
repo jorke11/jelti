@@ -13,7 +13,7 @@ class PermissionController extends Controller {
     public function index() {
 
         $parents = Permissions::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
-        return view("permission.init", compact("parents"));
+        return view("Security.permission.init", compact("parents"));
     }
 
     public function create() {

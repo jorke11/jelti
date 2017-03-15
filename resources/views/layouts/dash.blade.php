@@ -108,6 +108,16 @@
                                         <li><a href="/shopping">Shopping</a></li>
                                     </ul>
                                 </li>
+                                <li><a><i class="fa fa-home"></i> Sellers <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="/activity">Activities</a></li>
+                                        <li><a href="/prospects">Posibles clientes</a></li>
+                                        <li><a href="/activity">Cuenta</a></li>
+                                        <li><a href="/activity">Contacto</a></li>
+                                        <li><a href="/activity">Previsiones</a></li>
+                                        <li><a href="/activity">Tickets</a></li>
+                                    </ul>
+                                </li>
                                 <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/user">Users</a></li>

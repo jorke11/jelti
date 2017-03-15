@@ -10,7 +10,7 @@ use Session;
 class WarehouseController extends Controller {
 
     public function index() {
-        return view("warehouse.init");
+        return view("Administration.warehouse.init");
     }
 
     public function create() {

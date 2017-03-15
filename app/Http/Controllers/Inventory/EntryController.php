@@ -24,7 +24,7 @@ class EntryController extends Controller {
 
     public function index() {
         $category = Categories::all();
-        return view("entry.init", compact("category"));
+        return view("Inventory.entry.init", compact("category"));
     }
 
     public function getConsecutive($id) {

@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Seller;
+namespace App\Http\Controllers\Administration;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Seller\Prospect;
-use Session;
+use App\Models\Administration\Contact;
 
-class ProspectsController extends Controller {
+class ContactController extends Controller {
 
     public function __construct() {
         $this->middleware("auth");
     }
 
     public function index() {
-        return view("Sellers.prospect.init");
+        return view("Administration.contact.init");
     }
 
     public function store(Request $request) {
@@ -23,9 +22,9 @@ class ProspectsController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Prospect::create($input);
+
+            $result = Contact::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
                 return response()->json(['success' => true]);
             } else {
                 return response()->json(['success' => false]);
@@ -34,12 +33,12 @@ class ProspectsController extends Controller {
     }
 
     public function edit($id) {
-        $record = Prospect::FindOrFail($id);
+        $record = Activity::FindOrFail($id);
         return response()->json($record);
     }
 
     public function update(Request $request, $id) {
-        $record = Prospect::FindOrFail($id);
+        $record = Activity::FindOrFail($id);
         $input = $request->all();
         $result = $record->fill($input)->save();
         if ($result) {
@@ -52,9 +51,9 @@ class ProspectsController extends Controller {
     }
 
     public function destroy($id) {
-        $record = Prospect::FindOrFail($id);
+        $record = Activity::FindOrFail($id);
         $result = $record->delete();
-        
+
         if ($result) {
             return response()->json(['success' => 'true']);
         } else {

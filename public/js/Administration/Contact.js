@@ -1,4 +1,4 @@
-function Activity() {
+function Contact() {
     var table;
     this.init = function () {
         table = this.table();
@@ -96,7 +96,7 @@ function Activity() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listActivity",
+            "ajax": "/api/listContact",
             columns: [
                 {data: "id"},
                 {data: "subject"},
@@ -105,7 +105,6 @@ function Activity() {
                 {data: "priority_id"},
                 {data: "status_id"},
                 {data: "client_id"},
-                
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
@@ -129,5 +128,5 @@ function Activity() {
 
 }
 
-var obj = new Activity();
+var obj = new Contact();
 obj.init();

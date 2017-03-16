@@ -8,6 +8,7 @@ function Product() {
             $(".input-product").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
+        
         $("#modalImage").click(function () {
             $("#input-700").fileinput({
                 uploadUrl: "product/upload", // server upload action

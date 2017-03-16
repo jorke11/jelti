@@ -111,9 +111,7 @@
                                 <li><a><i class="fa fa-home"></i> Sellers <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/activity">Activities</a></li>
-                                        <li><a href="/prospects">Posibles clientes</a></li>
-                                        <li><a href="/activity">Cuenta</a></li>
-                                        <li><a href="/activity">Contacto</a></li>
+                                        <li><a href="/prospect">Posibles clientes</a></li>
                                         <li><a href="/activity">Previsiones</a></li>
                                         <li><a href="/activity">Tickets</a></li>
                                     </ul>
@@ -137,7 +135,8 @@
                                         </li>
                                         <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Stake Holders <span class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
-                                                <li><a href="/supplier">Supplier</a></li>
+                                                <!--<li><a href="/supplier">Supplier</a></li>-->
+                                                  <li><a href="/contact">Contact</a></li>
                                                 <li><a href="/stakeholder">Stake Holder</a></li>
                                                 <li><a href="/warehouse">Warehouse</a></li>
                                                 <li><a href="/city">City</a></li>

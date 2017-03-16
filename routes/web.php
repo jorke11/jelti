@@ -147,7 +147,9 @@ Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
 Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
 
-Route::get('/prospects', 'Seller\ProspectsController@index');
+Route::resource('/prospect', 'Seller\ProspectsController');
+Route::resource('/activity', 'Seller\ActivityController');
+Route::resource('/contact', 'Administration\ContactController');
 
 
 Route::get('/api/listCategory', function() {
@@ -163,11 +165,6 @@ Route::get('/api/listSupplier', function() {
             )->make(true);
 });
 
-Route::get('/api/listSupplier', function() {
-    return Datatables::queryBuilder(
-                    DB::table('vsupplier')
-            )->make(true);
-});
 Route::get('/api/listStakeholder', function() {
     return Datatables::queryBuilder(
                     DB::table('vstakeholder')
@@ -182,6 +179,18 @@ Route::get('/api/listWarehouse', function() {
 
 Route::get('/api/listMark', function() {
     return Datatables::eloquent(Models\Administration\Mark::query())->make(true);
+});
+
+Route::get('/api/listProspect', function() {
+    return Datatables::eloquent(Models\Seller\Prospect::query())->make(true);
+});
+
+Route::get('/api/listActivity', function() {
+    return Datatables::eloquent(Models\Seller\Activity::query())->make(true);
+});
+
+Route::get('/api/listContact', function() {
+    return Datatables::eloquent(Models\Administration\Contact::query())->make(true);
 });
 
 Route::get('/api/listPurchase', function() {
@@ -230,10 +239,12 @@ Route::get('/api/getSupplier', 'Administration\SeekController@getStakeholder');
 Route::get('/api/getStakeholder', 'Administration\SeekController@getSupplier');
 Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacteristic');
 Route::get('/api/getClient', 'Administration\SeekController@getClient');
+Route::get('/api/getContact', 'Administration\SeekController@getClient');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
 Route::get('/api/getCategory', 'Administration\SeekController@getCategory');
+Route::get('/api/getNotification', 'Administration\SeekController@getCategory');
 Route::get('/api/getCommercial', 'Administration\SeekController@getCommercial');
 Route::get('/api/getBranch', 'Administration\SeekController@getBranch');
 Route::get('/api/getAccount', 'Administration\SeekController@getAccount');

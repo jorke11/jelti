@@ -170,7 +170,11 @@ jQuery.fn.cleanFields = function (param) {
         elem.removeClass("error2");
 
         if (elem.get(0).tagName == 'INPUT') {
-            elem.val('')
+            if (elem.attr("type") == 'datetime') {
+                elem.currentDate();
+            } else {
+                elem.val('');
+            }
         }
 
         if (elem.get(0).tagName == 'SELECT') {

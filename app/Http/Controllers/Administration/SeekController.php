@@ -39,10 +39,11 @@ class SeekController extends Controller {
         $query = Suppliers::select("id", "name as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
-        } else if (isset($in["id"])) {
+        } else if (isset($in["id"]) && $in["id"] != '') {
             $query->where("id", $in["id"])->get();
         } else {
-            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+            if (isset($in["q"]))
+                $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
         }
         $result = $query->get();
 
@@ -66,6 +67,7 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
+
     public function getStakeholder(Request $req) {
         $in = $req->all();
         $query = Stakeholder::select("id", "name as text");
@@ -89,7 +91,11 @@ class SeekController extends Controller {
         } else if (isset($in["id"])) {
             if ($in["id"] != '') {
                 $in["id"] = json_decode($in["id"]);
-                $query->whereIn("id", $in["id"])->get();
+                if (count($in["id"]) > 1) {
+                    $query->whereIn("id", $in["id"])->get();
+                }else{
+                    $query->where("id", $in["id"])->get();
+                }
             } else {
                 $query->where("id", 0)->get();
             }

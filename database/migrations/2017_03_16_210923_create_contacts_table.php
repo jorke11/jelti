@@ -14,21 +14,19 @@ class CreateContactsTable extends Migration {
     public function up() {
         Schema::create('contacts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('status_id')->nullable();
-            $table->integer('source_id')->nullable();
-            $table->integer('sector_id')->nullable();
-            $table->integer('city_id');
-            $table->integer('departament_id');
+            $table->integer('stakeholder_id');
             $table->integer('commercial_id');
+            
+            $table->integer('source_id')->nullable();
+            $table->integer('city_id');
 
             $table->string('name');
             $table->string('last_name');
-            $table->string('business')->nullable();
-            $table->string('business_name')->nullable();
             $table->string('email')->nullable();
             $table->string('position')->nullable();
             $table->string('phone')->nullable();
             $table->string('mobile')->nullable();
+            $table->dateTime('birth_date')->nullable();
             $table->string('web_site')->nullable();
             $table->string('id_skype')->nullable();
             $table->string('id_twitter')->nullable();

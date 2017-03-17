@@ -43,7 +43,7 @@ class ActivityController extends Controller {
         $result = $record->fill($input)->save();
         if ($result) {
 
-            $data = Prospect::FindOrFail($id);
+            $data = Activity::FindOrFail($id);
             return response()->json(['success' => true, "data" => $data]);
         } else {
             return response()->json(['success' => false]);

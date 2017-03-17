@@ -150,6 +150,7 @@ Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 Route::resource('/prospect', 'Seller\ProspectsController');
 Route::resource('/activity', 'Seller\ActivityController');
 Route::resource('/contact', 'Administration\ContactController');
+Route::resource('/fulfillment', 'Seller\FulfillmentController');
 
 
 Route::get('/api/listCategory', function() {

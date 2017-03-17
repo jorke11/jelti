@@ -22,7 +22,7 @@
                     <th>Client</th>
                     <th>Commercial</th>
                     <th>Mobil</th>
-                    <th>Actions</th>
+                    <th>Birth Date</th>
                     <th>Actions</th>
                 </tr>
             </thead>

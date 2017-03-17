@@ -1,11 +1,12 @@
-function Contact() {
+function Activity() {
     var table;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#tabManagement").click(function () {
-            $(".input-contact").cleanFields();
+            var expirate = $("#frm #expiration_date").val();
+            $(".input-activity").cleanFields();
         });
     }
 
@@ -24,11 +25,11 @@ function Contact() {
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "contact";
+                url = "activity";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "contact/" + id;
+                url = "activity/" + id;
                 msg = "Edited Record";
             }
 
@@ -40,7 +41,7 @@ function Contact() {
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
-                        $(".input-contact").setFields({data: data.header});
+                        $(".input-product").setFields({data: data.header});
                         toastr.success(msg);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
@@ -55,7 +56,7 @@ function Contact() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/contact/" + id + "/edit";
+        var url = "/activity/" + id + "/edit";
         
         $.ajax({
             url: url,
@@ -64,7 +65,7 @@ function Contact() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-contact").setFields({data:data})
+                $(".input-activity").setFields({data:data})
             }
         })
     }
@@ -73,7 +74,7 @@ function Contact() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/contact/" + id;
+            var url = "/activity/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -95,15 +96,16 @@ function Contact() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listContact",
+            "ajax": "/api/listActivity",
             columns: [
                 {data: "id"},
-                {data: "name"},
-                {data: "last_name"},
-                {data: "stakeholder_id"},
-                {data: "commercial_id"},
-                {data: "mobile"},
-                {data: "birth_date"},
+                {data: "subject"},
+                {data: "created_at"},
+                {data: "expiration_date"},
+                {data: "priority_id"},
+                {data: "status_id"},
+                {data: "client_id"},
+                
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
@@ -127,5 +129,5 @@ function Contact() {
 
 }
 
-var obj = new Contact();
+var obj = new Activity();
 obj.init();

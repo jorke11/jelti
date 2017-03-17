@@ -96,5 +96,5 @@
 
 
 
-{!!Html::script('js/Seller/Provision.js')!!}
+{!!Html::script('js/Seller/Fulfillment.js')!!}
 @endsection

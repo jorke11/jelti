@@ -151,6 +151,7 @@ Route::resource('/prospect', 'Seller\ProspectsController');
 Route::resource('/activity', 'Seller\ActivityController');
 Route::resource('/contact', 'Administration\ContactController');
 Route::resource('/fulfillment', 'Seller\FulfillmentController');
+Route::get('/fulfillment/getInfo/{year}/{month}', 'Seller\FulfillmentController@getInfo');
 
 
 Route::get('/api/listCategory', function() {

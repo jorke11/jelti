@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Seller;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Session;
+use App\Models\Seller\Fulfillment;
 
 class FulfillmentController extends Controller {
 
@@ -13,14 +15,24 @@ class FulfillmentController extends Controller {
 
     public function index() {
         $meses = array(
-            '01'=>'enero', 
-            '02'=>'febrero', '03'=>'marzo','04'=> 'abril','05'=> 'mayo','06'=> 'junio','07'=> 'julio',
-            '08'=>'agosto','09'=> 'septiembre', '10'=>'octubre', '11'=>'noviembre', '12'=>'diciembre');
-        return view("Sellers.provision.init", compact("meses"));
+            '01' => 'enero',
+            '02' => 'febrero', '03' => 'marzo', '04' => 'abril', '05' => 'mayo', '06' => 'junio', '07' => 'julio',
+            '08' => 'agosto', '09' => 'septiembre', '10' => 'octubre', '11' => 'noviembre', '12' => 'diciembre');
+        return view("Sellers.fulfillment.init", compact("meses"));
     }
 
-    public function create() {
-        return "create";
+    public function getInfo($year, $month) {
+        $data = Fulfillment::where("year", $year)->where("month", $month)->first();
+        if (count($data) == 0) {
+            return response()->json(["response" => false]);
+        } else {
+            return response()->json(["response" => false, "data" => $data]);
+        }
+    }
+
+    public function addInfo(Request $req) {
+
+        dd($req);
     }
 
     public function store(Request $request) {

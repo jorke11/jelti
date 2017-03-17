@@ -1,7 +1,7 @@
-function Activity() {
+function Fulfillment() {
     var table;
     this.init = function () {
-        table = this.table();
+        table = this.loadInfo();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#tabManagement").click(function () {
@@ -12,8 +12,8 @@ function Activity() {
 
     this.save = function () {
         toastr.remove();
-        
-        
+
+
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
@@ -57,7 +57,7 @@ function Activity() {
         var frm = $("#frmEdit");
         var data = frm.serialize();
         var url = "/activity/" + id + "/edit";
-        
+
         $.ajax({
             url: url,
             method: "GET",
@@ -65,7 +65,7 @@ function Activity() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-activity").setFields({data:data})
+                $(".input-activity").setFields({data: data})
             }
         })
     }
@@ -92,42 +92,27 @@ function Activity() {
         }
     }
 
-    this.table = function () {
-        return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "/api/listActivity",
-            columns: [
-                {data: "id"},
-                {data: "subject"},
-                {data: "created_at"},
-                {data: "expiration_date"},
-                {data: "priority_id"},
-                {data: "status_id"},
-                {data: "client_id"},
-                
-            ],
-            order: [[1, 'ASC']],
-            aoColumnDefs: [
-                {
-                    aTargets: [0, 1, 2],
-                    mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
-                    }
-                },
-                {
-                    targets: [7],
-                    searchable: false,
-                    "mData": null,
-                    "mRender": function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
-                    }
+    this.loadInfo = function () {
+        $.ajax({
+            url: '/fulfillment/getInfo/' + $("#year").val() + "/" + $("#month").val(),
+            method: "GET",
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.response == false) {
+                    $("#btnNew").attr("disabled", false);
+                    $("#txtTarget").html("$ 0");
+                    $("#txtFulfillment").html("$ 0");
+                    $("#txtDeficit").html("0 %");
+                } else {
+                    $("#btnNew").attr("disabled", true);
                 }
-            ],
-        });
+            }, error: function (err) {
+                toastr.error("No se puede borrra Este registro");
+            }
+        })
     }
 
 }
 
-var obj = new Activity();
+var obj = new Fulfillment();
 obj.init();

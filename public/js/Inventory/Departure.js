@@ -255,7 +255,7 @@ function Sale() {
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
                         obj.printDetail(data.data);
-//                    $("#modalDetail").modal("hide");
+                    $("#modalDetail").modal("hide");
                         $("#newDetail").attr("disabled", true);
                         $("#frmDetail #quantity").attr("disabled", true);
                     }

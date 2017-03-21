@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->integer('warehouse_id');
             $table->integer('city_id');
             $table->string('name');
+            $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('status');

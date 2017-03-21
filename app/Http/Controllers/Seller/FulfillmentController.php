@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Session;
 use App\Models\Seller\Fulfillment;
+use App\Models\Seller\FulfillmentDetail;
+use DB;
 
 class FulfillmentController extends Controller {
 
@@ -23,16 +25,37 @@ class FulfillmentController extends Controller {
 
     public function getInfo($year, $month) {
         $data = Fulfillment::where("year", $year)->where("month", $month)->first();
+
         if (count($data) == 0) {
             return response()->json(["response" => false]);
         } else {
-            return response()->json(["response" => false, "data" => $data]);
+            $data["valueFormated"] = "$ " . number_format($data["value"], 2, ",", ".");
+
+            $detail = DB::table("fulfillment_detail")
+                            ->select("fulfillment_detail.value", "users.name", "users.last_name", "fulfillment_detail.id")
+                            ->join("users", "users.id", "fulfillment_detail.commercial_id")
+                            ->where("fulfillment_id", $data["id"])->get();
+
+            foreach ($detail as $i => $value) {
+                $detail[$i]->progress = 50;
+                $detail[$i]->tarjet = 100;
+            }
+
+            return response()->json(["response" => true, "data" => $data, "detail" => $detail]);
         }
     }
 
-    public function addInfo(Request $req) {
+    public function dataDetail() {
+        
+    }
 
-        dd($req);
+    public function setTarjet(Request $req) {
+        $input = $req->all();
+        unset($input["id"]);
+        $id = Fulfillment::create($input)->id;
+        $input["id"] = $id;
+        $input["valueFormated"] = "$ " . number_format($input["value"], 2, ",", ".");
+        return response()->json(["response" => true, "data" => $input]);
     }
 
     public function store(Request $request) {
@@ -41,12 +64,13 @@ class FulfillmentController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Categories::create($input);
+
+            $result = FulfillmentDetail::create($input);
             if ($result) {
                 Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -61,7 +85,6 @@ class FulfillmentController extends Controller {
         $input = $request->all();
         $result = $category->fill($input)->save();
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true']);
         } else {
             return response()->json(['success' => 'false']);
@@ -71,9 +94,7 @@ class FulfillmentController extends Controller {
     public function destroy($id) {
         $category = Categories::FindOrFail($id);
         $result = $category->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
             return response()->json(['success' => 'true']);
         } else {
             return response()->json(['success' => 'false']);

@@ -4,20 +4,33 @@ function Fulfillment() {
         table = this.loadInfo();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
+        $("#btnSaveTarjet").click(this.saveTarjet);
         $("#tabManagement").click(function () {
             var expirate = $("#frm #expiration_date").val();
             $(".input-activity").cleanFields();
         });
+
+        $("#frmMain #month").change(this.loadInfo);
+
+        $("#btnShowModal").click(function () {
+            $("#frmModalAdd").modal("show");
+            $(".input-commercial").cleanFields();
+        });
     }
 
-    this.save = function () {
+    this.new = function () {
+        $("#frmModal").modal("show");
+    }
+
+    this.saveTarjet = function () {
         toastr.remove();
+        $("#frmTarjet #year").val($("#frmMain #year").val());
+        $("#frmTarjet #month").val($("#frmMain #month").val());
 
-
-        var frm = $("#frm");
+        var frm = $("#frmTarjet");
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frm #id").val();
+        var id = $("#frmTarjet #id").val();
         var msg = '';
 
         var validate = $(".input-activity").validate();
@@ -25,11 +38,11 @@ function Fulfillment() {
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "activity";
+                url = "fulfillment/addTarjet";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "activity/" + id;
+                url = "fulfillment/" + id;
                 msg = "Edited Record";
             }
 
@@ -39,10 +52,14 @@ function Fulfillment() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == true) {
-                        table.ajax.reload();
-                        $(".input-product").setFields({data: data.header});
-                        toastr.success(msg);
+                    if (data.response == true) {
+                        toastr.success("Point ok");
+                        $("#frmModal").modal("hide");
+                        $("#frmMain #id").val(data.data.id);
+                        $("#btnNew").attr("disabled", true);
+                        $("#btnShowModal").attr("disabled", false);
+                        $("#txtTarget").html(data.data.valueFormated);
+
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
 
@@ -53,21 +70,44 @@ function Fulfillment() {
         }
     }
 
-    this.showModal = function (id) {
-        var frm = $("#frmEdit");
+    this.save = function () {
+        toastr.remove();
+        $("#frm #fulfillment_id").val($("#frmMain #id").val())
+        var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/activity/" + id + "/edit";
+        var url = "", method = "";
+        var id = $("#frm #id").val();
+        var msg = '';
 
-        $.ajax({
-            url: url,
-            method: "GET",
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                $('#myTabs a[href="#management"]').tab('show');
-                $(".input-activity").setFields({data: data})
+        var validate = $(".input-commercial").validate();
+
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "fulfillment";
+                msg = "Created Record";
+            } else {
+                method = 'PUT';
+                url = "fulfillment/" + id;
+                msg = "Edited Record";
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        toastr.success(msg);
+                    }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            })
+        } else {
+            toastr.error("Fields Required!");
+        }
     }
 
     this.delete = function (id) {
@@ -93,6 +133,7 @@ function Fulfillment() {
     }
 
     this.loadInfo = function () {
+        var html = "";
         $.ajax({
             url: '/fulfillment/getInfo/' + $("#year").val() + "/" + $("#month").val(),
             method: "GET",
@@ -100,11 +141,23 @@ function Fulfillment() {
             success: function (data) {
                 if (data.response == false) {
                     $("#btnNew").attr("disabled", false);
+                    $("#btnShowModal").attr("disabled", true);
                     $("#txtTarget").html("$ 0");
-                    $("#txtFulfillment").html("$ 0");
-                    $("#txtDeficit").html("0 %");
+                    $("#progress_all").css("width", 0).html("0 %");
+                    $("#tbl tbody").empty();
                 } else {
+                    $("#frmMain #id").val(data.data.id);
                     $("#btnNew").attr("disabled", true);
+                    $("#btnShowModal").attr("disabled", false);
+                    $("#txtTarget").html(data.data.valueFormated);
+
+                    $("#progress_all").css("width", "10%").html("10 %");
+
+                    $.each(data.detail, function (i, val) {
+                        html += "<tr><td>" + val.name + "</td><td>" + val.last_name + "</td>";
+                        html += '<td><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:' + val.progress + '%;">' + val.progress + '%</div></div></td></tr>';
+                    })
+                    $("#tbl tbody").html(html);
                 }
             }, error: function (err) {
                 toastr.error("No se puede borrra Este registro");

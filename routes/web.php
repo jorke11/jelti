@@ -152,6 +152,7 @@ Route::resource('/activity', 'Seller\ActivityController');
 Route::resource('/contact', 'Administration\ContactController');
 Route::resource('/fulfillment', 'Seller\FulfillmentController');
 Route::get('/fulfillment/getInfo/{year}/{month}', 'Seller\FulfillmentController@getInfo');
+Route::post('/fulfillment/addTarjet', 'Seller\FulfillmentController@setTarjet');
 
 
 Route::get('/api/listCategory', function() {

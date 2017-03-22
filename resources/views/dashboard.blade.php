@@ -43,12 +43,12 @@
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
                                 <div class="huge">26</div>
-                                <div> coments</div>
+                                <div> Coments</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <a href="#">
+                <a href="/comments">
                     <div class="panel-footer" style="background-color:#fff;border-color: blue;">
                         <span class="pull-left">View Details</span>
                         <span class="pull-right">

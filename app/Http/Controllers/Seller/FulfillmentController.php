@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Session;
 use App\Models\Seller\Fulfillment;
 use App\Models\Seller\FulfillmentDetail;
+use App\Models\Administration\Stakeholder;
+use App\Models\Inventory\Departures;
+use App\Models\Inventory\DeparturesDetail;
 use DB;
 
 class FulfillmentController extends Controller {
@@ -30,23 +33,64 @@ class FulfillmentController extends Controller {
             return response()->json(["response" => false]);
         } else {
             $data["valueFormated"] = "$ " . number_format($data["value"], 2, ",", ".");
-
-            $detail = DB::table("fulfillment_detail")
-                            ->select("fulfillment_detail.value", "users.name", "users.last_name", "fulfillment_detail.id")
-                            ->join("users", "users.id", "fulfillment_detail.commercial_id")
-                            ->where("fulfillment_id", $data["id"])->get();
-
-            foreach ($detail as $i => $value) {
-                $detail[$i]->progress = 50;
-                $detail[$i]->tarjet = 100;
-            }
-
+            $res = DB::select("select sum(quantity*value) as total from departures_detail WHERE created_at between '" . $year . "-" . $month . "-01 00:00' and '2017-03-31 23:59'");
+            $data["valueFormatedPending"] = number_format((100 * $res[0]->total) / $data["value"], 2, ".", ",");
+            $detail = $this->dataDetail($data["id"]);
             return response()->json(["response" => true, "data" => $data, "detail" => $detail]);
         }
     }
 
-    public function dataDetail() {
-        
+    public function getSales($user_id) {
+        $stake = Stakeholder::where("commercial_id", $user_id)->get();
+
+        foreach ($stake as $value) {
+            $dep = Departures::where("client_id", $value->id)->get();
+            foreach ($dep as $val) {
+                $resp[] = DeparturesDetail::where("departure_id", $val->id)->get();
+            }
+        }
+
+        return $resp;
+    }
+
+    public function getMax($id) {
+        $header = Fulfillment::findOrFail($id);
+        $total = FulfillmentDetail::where("fulfillment_id", $id)->sum("value");
+        $format = "$ " . number_format($header["value"] - $total, 2, ",", ".");
+        return response()->json(["response" => true, "max" => $format]);
+    }
+
+    public function dataDetail($id) {
+        $detail = DB::table("fulfillment_detail")
+                        ->select("fulfillment_detail.value", "users.name", "users.last_name", "users.id as user_id", "fulfillment_detail.id")
+                        ->join("users", "users.id", "fulfillment_detail.commercial_id")
+                        ->where("fulfillment_id", $id)->get();
+
+        foreach ($detail as $i => $value) {
+            $detail[$i]->progress = number_format(((100 * $this->getValueDetail($value->user_id))) / $value->value, 2, ".", ",");
+            $detail[$i]->valueTotal = $this->getValueDetail($value->user_id);
+            $detail[$i]->valueTotalFormated = "$ " . number_format($this->getValueDetail($value->user_id), 2, ",", ".");
+            $detail[$i]->tarjet = $value->value;
+            $detail[$i]->value = "$ " . number_format($value->value, 2, ",", ".");
+        }
+
+        return $detail;
+    }
+
+    public function getValueDetail($id) {
+        $stake = Stakeholder::where("commercial_id", $id)->get();
+
+        $quantity = 0;
+        foreach ($stake as $value) {
+            $dep = Departures::where("client_id", $value->id)->get();
+
+            foreach ($dep as $val) {
+                $res = DB::select("select sum(quantity*value) as total from departures_detail where departure_id=" . $val->id);
+                $quantity += (float) str_replace(".", ",", $res[0]->total);
+            }
+        }
+
+        return $quantity;
     }
 
     public function setTarjet(Request $req) {
@@ -64,13 +108,30 @@ class FulfillmentController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
+            $val = FulfillmentDetail::where("fulfillment_id", $input["fulfillment_id"])->where("commercial_id", $input["commercial_id"])->get();
 
-            $result = FulfillmentDetail::create($input);
-            if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => true]);
+            if (count($val) == 0) {
+                $val = Fulfillment::findOrFail($input["fulfillment_id"]);
+                $det = FulfillmentDetail::where("fulfillment_id", $input["fulfillment_id"])->sum("value");
+                $max = $val["value"] - $det;
+//                dd($det);
+//            dd($val);
+
+                if ($max >= $input["value"]) {
+
+                    $result = FulfillmentDetail::create($input);
+                    if ($result) {
+                        $detail = $this->dataDetail($input["fulfillment_id"]);
+                        return response()->json(['success' => true, "detail" => $detail]);
+                    } else {
+                        return response()->json(['success' => false], 409);
+                    }
+                } else {
+                    $number = "$ " . number_format($max, 2, ",", ".");
+                    return response()->json(['success' => false, "msg" => "The value must be less than " . $number], 409);
+                }
             } else {
-                return response()->json(['success' => false]);
+                return response()->json(['success' => false, "msg" => "Commercial already exist"], 409);
             }
         }
     }

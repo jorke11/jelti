@@ -9,6 +9,7 @@
         <link rel="shortcut icon" href="{{{ asset('assets/images/icon.png') }}}">
         <title>Superfuds</title>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
+        {!!Html::script('/vendor/jquery-ui.js')!!}
 
         {!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/extensions/ColReorder/js/dataTables.colReorder.min.js')!!}

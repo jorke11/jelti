@@ -5,10 +5,12 @@ function Prospect() {
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#tabManagement").click(function () {
-            $(".input-prospect").cleanFields();
+            $(".input-prospect").cleanFields({disabled: true});
         });
     }
-
+    this.new = function () {
+        $(".input-prospect").cleanFields({disabled: false});
+    }
     this.save = function () {
         toastr.remove();
         var frm = $("#frm");
@@ -38,7 +40,7 @@ function Prospect() {
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
-                        $(".input-product").setFields({data: data.header});
+                        $(".input-product").setFields({data: data.header, disabled: true});
                         toastr.success(msg);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
@@ -54,7 +56,7 @@ function Prospect() {
         var frm = $("#frmEdit");
         var data = frm.serialize();
         var url = "/prospect/" + id + "/edit";
-        
+
         $.ajax({
             url: url,
             method: "GET",
@@ -62,7 +64,7 @@ function Prospect() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-prospect").setFields({data:data})
+                $(".input-prospect").setFields({data: data})
             }
         })
     }

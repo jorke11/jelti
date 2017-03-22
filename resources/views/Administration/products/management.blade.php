@@ -17,7 +17,7 @@
         <input id="id" name="id" type="hidden" class="input-product">
         <div class="row">
             <div class="col-lg-6">
-                <div class="panel panel-info">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">Information</h4>
                     </div>
@@ -110,7 +110,7 @@
 
                     </div>
                 </div>
-                <div class="panel panel-info">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">Meta</h4>
                     </div>
@@ -143,7 +143,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="panel panel-info">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">Values</h4>
                     </div>
@@ -204,7 +204,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-info">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">Images</h4>
                     </div>

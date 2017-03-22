@@ -29,11 +29,14 @@ function Sale() {
         $("#insideManagement").click(function () {
 
             var created = $("#frm #created").val();
-            $(".input-departure").cleanFields();
+            $(".input-departure").cleanFields({disabled: true});
             $("#frm #created").val(created);
             $("#frm #consecutive").val(1);
             $("#btnSend").attr("disabled", true);
+            $("#btnSave").attr("disabled", true);
             $("#btnDocument").attr("disabled", true);
+            $(".input-fillable").attr("disabled", true);
+
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
@@ -82,7 +85,7 @@ function Sale() {
         $("#btnDocument").click(function () {
             if ($("#frm #status_id").val() != 1) {
                 window.open("departure/" + $("#frm #id").val() + "/getInvoice");
-            }else{
+            } else {
                 toastr.error("error")
             }
         });
@@ -102,7 +105,7 @@ function Sale() {
     this.new = function () {
         toastr.remove();
         var created = $("#frm #created").val();
-        $("#btnSave").attr("disabled",false);
+        $("#btnSave").attr("disabled", false);
         $(".input-departure").cleanFields();
         $("#frm #created").val(created);
         $(".input-detail").cleanFields();
@@ -146,11 +149,11 @@ function Sale() {
             success: function (resp) {
                 if (resp.success == true) {
                     toastr.success("Sended");
-                    $(".input-departure").setFields({data:resp.data});
-                    $("#btnDocument").attr("disabled",false);
+                    $(".input-departure").setFields({data: resp.data, disabled: true});
+                    $("#btnDocument").attr("disabled", false);
                 } else {
                     toastr.warning(resp.msg);
-                    $("#btnDocument").attr("disabled",true);
+                    $("#btnDocument").attr("disabled", true);
                 }
             }
         })
@@ -190,11 +193,10 @@ function Sale() {
                         if (data.success == 'true') {
                             $("#btnSend").attr("disabled", false);
                             $("#frm #id").val(data.data.id);
-                            $(".input-departure").setFields({data: data.data});
+                            $(".input-departure").setFields({data: data.data, disabled: true});
                             table.ajax.reload();
                             toastr.success(msg);
                             $("#btnmodalDetail").attr("disabled", false);
-
                         }
                     }
                 })
@@ -255,7 +257,7 @@ function Sale() {
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
                         obj.printDetail(data.data);
-                    $("#modalDetail").modal("hide");
+                        $("#modalDetail").modal("hide");
                         $("#newDetail").attr("disabled", true);
                         $("#frmDetail #quantity").attr("disabled", true);
                     }

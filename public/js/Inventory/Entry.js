@@ -94,7 +94,7 @@ function Entry() {
 
     this.send = function () {
         toastr.remove();
-        
+
         var obj = {};
         obj.id = $("#frm #id").val()
         $.ajax({
@@ -105,7 +105,7 @@ function Entry() {
             success: function (resp) {
                 if (resp.success == true) {
                     toastr.success("Sended");
-                    $(".input-entry").setFields({data: resp.header});
+                    $(".input-entry").setFields({data: resp.header, disabled: true});
                     $("#btnmodalDetail").attr("disabled", true);
                 } else {
                     toastr.warning(resp.msg);

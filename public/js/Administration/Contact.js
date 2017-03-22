@@ -5,14 +5,19 @@ function Contact() {
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#tabManagement").click(function () {
-            $(".input-contact").cleanFields();
+            $(".input-contact").cleanFields({disabled: true});
         });
+    }
+
+    this.new = function () {
+        $("#btnSave").attr("disabled", false);
+        $(".input-contact").cleanFields({disabled: false});
     }
 
     this.save = function () {
         toastr.remove();
-        
-        
+
+
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
@@ -40,11 +45,11 @@ function Contact() {
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
-                        $(".input-contact").setFields({data: data.header});
+                        $(".input-contact").setFields({data: data.header, disabled: true});
                         toastr.success(msg);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
-
+                    toastr.error("Wrong");
                 }
             })
         } else {
@@ -56,7 +61,7 @@ function Contact() {
         var frm = $("#frmEdit");
         var data = frm.serialize();
         var url = "/contact/" + id + "/edit";
-        
+
         $.ajax({
             url: url,
             method: "GET",
@@ -64,7 +69,7 @@ function Contact() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-contact").setFields({data:data})
+                $(".input-contact").setFields({data: data})
             }
         })
     }

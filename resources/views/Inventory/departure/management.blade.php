@@ -25,7 +25,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Consecutive:</label>
-                    <input type="text" class="form-control input-departure" id="consecutive" name='consecutive' value="0001">
+                    <input type="text" class="form-control input-departure" id="consecutive" name='consecutive' value="0001" readonly="">
                 </div>
             </div>
             <div class="col-lg-2">
@@ -54,7 +54,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Date:</label>
-                    <input type="text" class="form-control input-departure form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required>
+                    <input type="text" class="form-control input-departure form_datetime input-fillable" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required>
                 </div>
             </div>
 
@@ -77,7 +77,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">City Destination:</label>
-                    <select class="form-control input-departure" id="destination_id" name='destination_id' data-api="/api/getCity" required>
+                    <select class="form-control input-departure input-fillable" id="destination_id" name='destination_id' data-api="/api/getCity" required>
                     </select>
                 </div>
             </div>
@@ -85,7 +85,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Client:</label>
-                    <select class="form-control input-departure" id="client_id" name='client_id' data-api="/api/getSupplier" required> 
+                    <select class="form-control input-departure input-fillable" id="client_id" name='client_id' data-api="/api/getClient" required> 
                     </select>
                 </div>
             </div>
@@ -99,13 +99,13 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Address:</label>
-                    <input type="text" class="form-control input-departure input-sm" id="address" name="address" required>
+                    <input type="text" class="form-control input-departure input-sm input-fillable" id="address" name="address" required>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Phone:</label>
-                    <input type="text" class="form-control input-departure input-sm" id="phone" name="phone" required>
+                    <input type="text" class="form-control input-departure input-sm input-fillable" id="phone" name="phone" required>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Branch office:</label>
-                    <select class="form-control input-departure" id="branch_id" name='branch_id' data-api="/api/getBranch" required>
+                    <select class="form-control input-departure input-fillable" id="branch_id" name='branch_id' data-api="/api/getBranch" required>
                     </select>
                 </div>
             </div>

@@ -139,6 +139,8 @@ Route::get('/getCategories', 'Shopping\ShoppingController@getCategories');
 Route::get('/productDetail/{id}', 'Shopping\ShoppingController@getProduct');
 Route::post('/addComment', 'Shopping\ShoppingController@addComment');
 Route::get('/getComment/{id}', 'Shopping\ShoppingController@getComment');
+
+
 Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
 Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 
@@ -152,11 +154,15 @@ Route::resource('/activity', 'Seller\ActivityController');
 Route::resource('/contact', 'Administration\ContactController');
 Route::resource('/fulfillment', 'Seller\FulfillmentController');
 Route::get('/fulfillment/getInfo/{year}/{month}', 'Seller\FulfillmentController@getInfo');
+Route::get('/fulfillment/getMax/{id}', 'Seller\FulfillmentController@getMax');
+Route::get('/fulfillment/getSales/{id}', 'Seller\FulfillmentController@getSales');
 Route::post('/fulfillment/addTarjet', 'Seller\FulfillmentController@setTarjet');
+
+Route::get('/comments', 'MainController@getcomments');
 
 
 Route::get('/api/listCategory', function() {
-    return Datatables::queryBuilder(DB::table("categories")->orderBy("order","asc"))->make(true);
+    return Datatables::queryBuilder(DB::table("categories")->orderBy("order", "asc"))->make(true);
 });
 Route::get('/api/listCharacterist', function() {
     return Datatables::eloquent(Models\Administration\Characteristic::query())->make(true);
@@ -242,7 +248,7 @@ Route::get('/api/getSupplier', 'Administration\SeekController@getStakeholder');
 Route::get('/api/getStakeholder', 'Administration\SeekController@getSupplier');
 Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacteristic');
 Route::get('/api/getClient', 'Administration\SeekController@getClient');
-Route::get('/api/getContact', 'Administration\SeekController@getClient');
+Route::get('/api/getContact', 'Administration\SeekController@getContact');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');

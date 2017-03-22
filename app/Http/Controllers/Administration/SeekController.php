@@ -15,6 +15,7 @@ use App\Models\Security\Users;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Administration\Branch;
 use App\Models\Administration\Puc;
+use App\Models\Administration\Contact;
 
 class SeekController extends Controller {
 
@@ -36,14 +37,14 @@ class SeekController extends Controller {
 
     public function getClient(Request $req) {
         $in = $req->all();
-        $query = Suppliers::select("id", "name as text");
+        $query = Stakeholder::select("id", "name as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"]) && $in["id"] != '') {
             $query->where("id", $in["id"])->get();
         } else {
             if (isset($in["q"]))
-                $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+                $query->where("name", "ilike", "%" . $in["q"] . "%")->where("type_stakeholder", 1)->get();
         }
         $result = $query->get();
 
@@ -93,7 +94,7 @@ class SeekController extends Controller {
                 $in["id"] = json_decode($in["id"]);
                 if (count($in["id"]) > 1) {
                     $query->whereIn("id", $in["id"])->get();
-                }else{
+                } else {
                     $query->where("id", $in["id"])->get();
                 }
             } else {
@@ -140,12 +141,12 @@ class SeekController extends Controller {
     public function getCommercial(Request $req) {
         $in = $req->all();
         $query = Users::select("id", "name as text");
-        if (isset($in["q"]) && $in["q"] == 0) {
+        if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"]);
         } else {
-            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+            $query->where("name", "ilike", "%" . $in["q"] . "%")->where("role_id", 4)->get();
         }
         $result = $query->get();
 
@@ -155,6 +156,21 @@ class SeekController extends Controller {
     public function getResponsable(Request $req) {
         $in = $req->all();
         $query = Users::select("id", "name as text");
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $city = $query->where("id", Auth::user()->id)->get();
+        } else if (isset($in["id"])) {
+            $query->where("id", $in["id"])->get();
+        } else {
+            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+        }
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+
+    public function getContact(Request $req) {
+        $in = $req->all();
+        $query = Contact::select("id", "name as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $city = $query->where("id", Auth::user()->id)->get();
         } else if (isset($in["id"])) {

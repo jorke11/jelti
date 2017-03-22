@@ -33,12 +33,12 @@ class ContactController extends Controller {
     }
 
     public function edit($id) {
-        $record = Activity::FindOrFail($id);
+        $record = Contact::FindOrFail($id);
         return response()->json($record);
     }
 
     public function update(Request $request, $id) {
-        $record = Activity::FindOrFail($id);
+        $record = Contact::FindOrFail($id);
         $input = $request->all();
         $result = $record->fill($input)->save();
         if ($result) {
@@ -51,13 +51,13 @@ class ContactController extends Controller {
     }
 
     public function destroy($id) {
-        $record = Activity::FindOrFail($id);
+        $record = Contact::FindOrFail($id);
         $result = $record->delete();
 
         if ($result) {
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 

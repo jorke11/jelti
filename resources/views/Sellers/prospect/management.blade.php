@@ -75,7 +75,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="address" class="control-label">Status Prospect</label>
-                        <select id="sector_id" name="sector_id" class="form-control">
+                        <select id="sector_id" name="sector_id" class="form-control input-prospect">
                             <option value="0">Selection</option>
                             <option value="1">Contactado</option>
                             <option value="2">No Contactado</option>
@@ -87,7 +87,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="address" class="control-label">Source Prospect</label>
-                        <select id="sector_id" name="sector_id" class="form-control">
+                        <select id="sector_id" name="sector_id" class="form-control input-prospect">
                             <option value="0">Selection</option>
                             <option value="1">Chat</option>
                             <option value="2">Correo</option>
@@ -105,7 +105,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="address" class="control-label">Sector</label>
-                        <select id="sector_id" name="sector_id" class="form-control">
+                        <select id="sector_id" name="sector_id" class="form-control input-prospect">
                             <option value="0">Selection</option>
                             <option value="1">Aerolineas</option>
                             <option value="2">Centros de salud</option>

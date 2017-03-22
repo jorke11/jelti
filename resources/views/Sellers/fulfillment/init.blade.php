@@ -1,6 +1,6 @@
 @extends('layouts.dash')
 @section('content')
-@section('title','Provision')
+@section('title','Cumplimiento')
 @section('subtitle','Management')
 
 <div class="panel panel-default">
@@ -71,29 +71,32 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-<!--                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:10%;" id="progress_all">
-                                    10%
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:0%;" id="progress_all">
+                                    0%
                                 </div>
-                            </div>-->
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <table class="table table-bordered" id="tbl">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Last Name</th>
-                                        <th>Progress</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5 col-lg-offset-3">
+                        <table class="table table-bordered" id="tbl">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Last Name</th>
+                                    <th>Tarjet</th>
+                                    <th>Sold</th>
+                                    <th>Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -130,6 +133,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" role="dialog" id="frmModalAdd" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -153,9 +157,41 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="email">Value</label>
-                            <input type="text" class="form-control input-tarjet" id="value" name='value' placeholder="$">
+                            <label for="email">Value max (<span id="txtMax"></span>)</label>
+                            <input type="text" class="form-control input-commercial" id="value" name='value' placeholder="$">
                         </div>
+                    </div>
+                </div>
+                {!!Form::close()!!}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="btnSave">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="frmModalDetail" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Detail Sales</h4>
+            </div>
+            <div class="modal-body">
+                {!! Form::open(['id'=>'frm']) !!}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-condensed table-bordered" id="tblModal">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Quantity</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
                 {!!Form::close()!!}

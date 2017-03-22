@@ -15,11 +15,21 @@ function Fulfillment() {
         $("#btnShowModal").click(function () {
             $("#frmModalAdd").modal("show");
             $(".input-commercial").cleanFields();
+            $("#txtMax").empty();
+            $.ajax({
+                url: "fulfillment/getMax/" + $("#frmMain #id").val(),
+                method: "get",
+                dataType: 'JSON',
+                success: function (data) {
+                    $("#txtMax").html(data.max)
+                }
+            })
         });
     }
 
     this.new = function () {
         $("#frmModal").modal("show");
+        $("#frmTarjet #value").empty();
     }
 
     this.saveTarjet = function () {
@@ -62,7 +72,9 @@ function Fulfillment() {
 
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
-
+                    console.log(xhr)
+                    console.log(ajaxOptions)
+                    console.log(thrownError)
                 }
             })
         } else {
@@ -100,9 +112,10 @@ function Fulfillment() {
                 success: function (data) {
                     if (data.success == true) {
                         toastr.success(msg);
+                        obj.setTable(data.detail);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
-
+                    toastr.error(xhr.responseJSON.msg)
                 }
             })
         } else {
@@ -132,8 +145,30 @@ function Fulfillment() {
         }
     }
 
-    this.loadInfo = function () {
+    this.setTable = function (detail) {
         var html = "";
+        $.each(detail, function (i, val) {
+            html += "<tr style='cursor:pointer' onclick=obj.showDetail(" + val.user_id + ")>";
+            html += "<td>" + val.name + "</td><td>" + val.last_name + "</td><td>" + val.value + "</td><td>" + val.valueTotalFormated + "</td>";
+            html += '<td><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:' + val.progress + '%;">' + val.progress + '%</div></div></td></tr>';
+        })
+        $("#tbl tbody").html(html);
+    }
+
+    this.showDetail = function (user_id) {
+        $("#frmModalDetail").modal("show");
+        $.ajax({
+            url: "/fulfillment/getSales/" + user_id,
+            method: 'get',
+            dataType: "json",
+            success: function (data) {
+
+            }
+        })
+    }
+
+    this.loadInfo = function () {
+
         $.ajax({
             url: '/fulfillment/getInfo/' + $("#year").val() + "/" + $("#month").val(),
             method: "GET",
@@ -150,14 +185,9 @@ function Fulfillment() {
                     $("#btnNew").attr("disabled", true);
                     $("#btnShowModal").attr("disabled", false);
                     $("#txtTarget").html(data.data.valueFormated);
+                    $("#progress_all").css("width", data.data.valueFormatedPending + "%").html(data.data.valueFormatedPending + " %");
 
-                    $("#progress_all").css("width", "10%").html("10 %");
-
-                    $.each(data.detail, function (i, val) {
-                        html += "<tr><td>" + val.name + "</td><td>" + val.last_name + "</td>";
-                        html += '<td><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:' + val.progress + '%;">' + val.progress + '%</div></div></td></tr>';
-                    })
-                    $("#tbl tbody").html(html);
+                    obj.setTable(data.detail);
                 }
             }, error: function (err) {
                 toastr.error("No se puede borrra Este registro");

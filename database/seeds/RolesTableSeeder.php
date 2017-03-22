@@ -19,6 +19,9 @@ class RolesTableSeeder extends Seeder {
         DB::table("roles")->insert([
             'description' => 'Supplier'
         ]);
+        DB::table("roles")->insert([
+            'description' => 'Commercial'
+        ]);
     }
 
 }

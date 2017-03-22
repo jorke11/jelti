@@ -19,7 +19,13 @@ table>thead>tr{background:#2a3f54;color:white;border-color: #2a3f54}
     padding-right: 10px;
     color: #d17581;
 }
+.caption {
+    background-color: #FFF;
+}
 
+.thumbnail{
+    border: 1px solid #182914;
+}
 /*.select2-container--default .select2-selection--single {*/
 /*    border:1px solid #a94442;
 }*/

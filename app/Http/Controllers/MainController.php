@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Administration\Products;
 use App\Models\Administration\Comment;
 use Illuminate\Support\Facades\Auth;
-
+//use DB;
 class MainController extends Controller {
 
     public function __construct() {
@@ -19,9 +19,10 @@ class MainController extends Controller {
     }
 
     public function listComments() {
-        return Comment::all();
+        return \DB::table("comments")
+                ->join("products","products.id","comments.product_id")->get();
     }
     
-    public function 
+   
 
 }

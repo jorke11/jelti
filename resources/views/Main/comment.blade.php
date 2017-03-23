@@ -15,7 +15,7 @@
 <br>
 <div class="row">
     <div class="col-lg-8">
-        <table class="table table-condensed table-bordered">
+        <table class="table table-condensed table-bordered" id="tbl">
             <thead>
                 <tr>
                     <td>Product</td>
@@ -24,6 +24,7 @@
                     <td>Date</td>
                 </tr>
             </thead>
+            <tbody></tbody>
         </table>
     </div>
 </div>

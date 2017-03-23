@@ -25,6 +25,7 @@
                 </div>
             </div>
         </div>
+        <br>
         <div class="row">
             <div class="thumbnail" style="height: 120px;width:120px">
                 <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Pro2&w=120&h=120">

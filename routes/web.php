@@ -159,6 +159,7 @@ Route::get('/fulfillment/getSales/{id}', 'Seller\FulfillmentController@getSales'
 Route::post('/fulfillment/addTarjet', 'Seller\FulfillmentController@setTarjet');
 
 Route::get('/comments', 'MainController@getcomments');
+Route::get('/comments/list', 'MainController@listComments');
 
 
 Route::get('/api/listCategory', function() {

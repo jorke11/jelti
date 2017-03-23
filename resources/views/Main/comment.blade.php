@@ -28,5 +28,5 @@
     </div>
 </div>
 
-{!!Html::script('js/Main.js')!!}
+{!!Html::script('js/Main/Comments.js')!!}
 @endsection

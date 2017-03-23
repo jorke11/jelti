@@ -24,7 +24,7 @@ function Contact() {
         var id = $("#frm #id").val();
         var msg = '';
 
-        var validate = $(".input-activity").validate();
+        var validate = $(".input-contact").validate();
 
         if (validate.length == 0) {
             if (id == '') {

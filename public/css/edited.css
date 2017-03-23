@@ -24,7 +24,13 @@ table>thead>tr{background:#2a3f54;color:white;border-color: #2a3f54}
 }
 
 .thumbnail{
-    border: 1px solid #182914;
+    border: 1px solid #FFF;
+}
+
+.thumbnail a>img, .thumbnail>img {
+    -webkit-box-shadow: 9px 11px 7px -8px rgba(0,0,0,0.75);
+    -moz-box-shadow: 9px 11px 7px -8px rgba(0,0,0,0.75);
+    box-shadow: 9px 11px 7px -8px rgba(0,0,0,0.75);
 }
 /*.select2-container--default .select2-selection--single {*/
 /*    border:1px solid #a94442;

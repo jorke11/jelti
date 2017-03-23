@@ -15,6 +15,10 @@ use DB;
 
 class ShoppingController extends Controller {
 
+    public function __construct() {
+        $this->middleware("auth");
+    }
+
     public function index() {
         return view("Ecommerce.shopping.init");
     }
@@ -53,14 +57,14 @@ class ShoppingController extends Controller {
             $new["status_id"] = 1;
             $order_id = Orders::create($new)->id;
         }
-        
-        
+
+
         $pro = Products::findOrFail($data["product_id"]);
         $data["order_id"] = $order_id;
         $data["tax"] = $pro["tax"];
         $data["value"] = $pro["price_cust"];
         OrdersDetail::create($data);
-        
+
         return $this->getCountOrders();
     }
 

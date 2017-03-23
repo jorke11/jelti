@@ -6,7 +6,7 @@
                     <button class="btn btn-success btn-sm" id='btnNew'>
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </button>
-                    <button class="btn btn-success btn-sm" id='btnSave'>
+                    <button class="btn btn-success btn-sm" id='btnSave' disabled>
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                     </button>
                 </div>

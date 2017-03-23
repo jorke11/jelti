@@ -13,7 +13,7 @@ class ProductsTableSeeder extends Seeder {
         for ($i = 0; $i < 10; $i++) {
             DB::table("products")->insert([
                 'category_id' => 1,
-                'supplier_id' => 1,
+                'supplier_id' => rand(1, 2),
                 'title' => 'product test ' . $i,
                 'description' => 'product test desc ' . $i,
                 'short_description' => 'sest',

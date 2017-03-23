@@ -6,10 +6,12 @@ function Prospect() {
         $("#btnSave").click(this.save);
         $("#tabManagement").click(function () {
             $(".input-prospect").cleanFields({disabled: true});
+            $("#btnSave").attr("disabled", true);
         });
     }
     this.new = function () {
         $(".input-prospect").cleanFields({disabled: false});
+        $("#btnSave").attr("disabled", false);
     }
     this.save = function () {
         toastr.remove();

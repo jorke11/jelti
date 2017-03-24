@@ -8,7 +8,7 @@ function Product() {
             $(".input-product").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
-        
+
         $("#modalImage").click(function () {
             $("#input-700").fileinput({
                 uploadUrl: "product/upload", // server upload action
@@ -66,15 +66,17 @@ function Product() {
         $.each(data, function (i, val) {
 
             html += '<div class="col-sm-6 col-lg-3" id="div_' + val.id + '">' +
-                    '<div class="thumbnail" style="height:180px">' +
+                    '<div class="thumbnail" style="height:auto">' +
                     '<img src="/images/product/' + val.path + '" alt="Product">' +
                     '<div class="caption">' +
                     '<h4>Check Main <input type="radio" name="main[]" onclick=obj.checkMain(' + val.id + ',' + val.id + ')></h4>' +
-                    '<p><button type="button" class="btn btn-primary btn-xs" aria-label="Left Align" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>' +
+//                    '<p><button type="button" class="btn btn-primary btn-xs" aria-label="Left Align" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>' +
+                    '<p>' +
                     '<button type="button" class="btn btn-danger btn-xs" onclick=obj.deleteImage(' + val.id + ',' + val.id + ')><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button>' +
                     '</p>' +
                     '</div></div></div>';
         })
+
         $("#contentImages").html(html);
     }
 

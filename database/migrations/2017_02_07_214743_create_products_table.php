@@ -36,6 +36,7 @@ class CreateProductsTable extends Migration {
             $table->integer('minimum_stock');
             $table->integer('packaging');
             $table->json('characteristic')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

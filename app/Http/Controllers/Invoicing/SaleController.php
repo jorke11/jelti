@@ -138,9 +138,9 @@ class SaleController extends Controller {
         Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             $resp = DB::table("saledetail")->where("sale_id", "=", $entry["sale_id"])->get();
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false], 409);
         }
     }
 
@@ -150,75 +150,93 @@ class SaleController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $saleDetail = SaleDetail::where("sale_id", $input["sale_id"])->get();
+            if ($this->getQuantityProduct($input["product_id"]) > $input["quantity"]) {
+                $saleDetail = SaleDetail::where("sale_id", $input["sale_id"])->get();
 
-            $pro = Products::FindOrfail($input["product_id"]);
-            $account = Puc::where("code", "413501")->first();
+                $pro = Products::FindOrfail($input["product_id"]);
+                $account = Puc::where("code", "413501")->first();
 
-            $input["account_id"] = $account["id"];
-            $input["tax"] = $pro["tax"];
-            $input["order"] = (count($saleDetail) == 0) ? 1 : count($saleDetail) + 1;
-            $input["description"] = "product";
-            $input["type_nature"] = 1;
-
-            $result = SaleDetail::create($input)->id;
-
-            $account = Puc::where("code", "240801")->first();
-
-            $value = $input["value"];
-            $quantity = $input["quantity"];
-            $sale_id = $input["sale_id"];
-            $input = array();
-            $input["account_id"] = $account["id"];
-            $input["sale_id"] = $sale_id;
-            $input["product_id"] = null;
-            $input["parent_id"] = $result;
-            $input["tax"] = null;
-            $input["order"] = (count($saleDetail) == 0) ? 2 : count($saleDetail) + 2;
-            $input["category_id"] = null;
-            $input["quantity"] = null;
-            $input["value"] = ($pro["tax"] / 100.0) * ($value * $quantity);
-            $input["type_nature"] = 1;
-            $input["description"] = "tax";
-            SaleDetail::create($input);
-
-            $saleDetail = SaleDetail::where("sale_id", $input["sale_id"])->get();
-
-            $total = 0;
-            foreach ($saleDetail as $value) {
-                if ($value->type_nature == 1)
-                    $total += $value->value * (($value->quantity == '') ? 1 : $value->quantity);
-            }
-
-            $account = Puc::where("code", "220501")->first();
-            $client = SaleDetail::where("sale_id", $input["sale_id"])->where("account_id", $account["id"])->first();
-
-            if (count($client) > 0) {
-                $client->value = $total;
-                $client->order = count($saleDetail) + 1;
-                $client->save();
-            } else {
-                $input["order"] = count($saleDetail) + 1;
                 $input["account_id"] = $account["id"];
-                $input["description"] = "Supplier";
-                $input["type_nature"] = $account["nature"];
-                $input["value"] = $total;
+                $input["tax"] = $pro["tax"];
+                $input["order"] = (count($saleDetail) == 0) ? 1 : count($saleDetail) + 1;
+                $input["description"] = "product";
+                $input["type_nature"] = 1;
+
+                $result = SaleDetail::create($input)->id;
+
+                $account = Puc::where("code", "240801")->first();
+
+                $value = $input["value"];
+                $quantity = $input["quantity"];
+                $sale_id = $input["sale_id"];
+                $input = array();
+                $input["account_id"] = $account["id"];
+                $input["sale_id"] = $sale_id;
+                $input["product_id"] = null;
+                $input["parent_id"] = $result;
+                $input["tax"] = null;
+                $input["order"] = (count($saleDetail) == 0) ? 2 : count($saleDetail) + 2;
+                $input["category_id"] = null;
+                $input["quantity"] = null;
+                $input["value"] = ($pro["tax"] / 100.0) * ($value * $quantity);
+                $input["type_nature"] = 1;
+                $input["description"] = "tax";
                 SaleDetail::create($input);
-            }
+
+                $saleDetail = SaleDetail::where("sale_id", $input["sale_id"])->get();
+
+                $total = 0;
+                foreach ($saleDetail as $value) {
+                    if ($value->type_nature == 1)
+                        $total += $value->value * (($value->quantity == '') ? 1 : $value->quantity);
+                }
+
+                $account = Puc::where("code", "220501")->first();
+                $client = SaleDetail::where("sale_id", $input["sale_id"])->where("account_id", $account["id"])->first();
+
+                if (count($client) > 0) {
+                    $client->value = $total;
+                    $client->order = count($saleDetail) + 1;
+                    $client->save();
+                } else {
+                    $input["order"] = count($saleDetail) + 1;
+                    $input["account_id"] = $account["id"];
+                    $input["description"] = "Supplier";
+                    $input["type_nature"] = $account["nature"];
+                    $input["value"] = $total;
+                    SaleDetail::create($input);
+                }
 
 
-            if ($result) {
+                if ($result) {
 
-                $detail = $this->formatDetail($input["sale_id"]);
+                    $detail = $this->formatDetail($input["sale_id"]);
 
-                $debt = "$ " . number_format($this->debt, 2, ",", ".");
-                $cred = "$ " . number_format($this->credit, 2, ",", ".");
+                    $debt = "$ " . number_format($this->debt, 2, ",", ".");
+                    $cred = "$ " . number_format($this->credit, 2, ",", ".");
 
-                return response()->json(['success' => 'true', "detail" => $detail, "debt" => $debt, "credit" => $cred]);
+                    return response()->json(['success' => true, "detail" => $detail, "debt" => $debt, "credit" => $cred]);
+                } else {
+                    return response()->json(['success' => false]);
+                }
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false, "msg" => "Quantity no available"], 409);
             }
         }
+    }
+
+    public function getQuantityProduct($id) {
+        $response = DB::table("products")
+                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf")
+                ->join("categories", "categories.id", "=", "products.category_id")
+                ->where("products.id", $id)
+                ->first();
+        $entry = DB::table("entries_detail")->where("product_id", $id)->sum("quantity");
+        $departure = DB::table("departures_detail")->where("product_id", $id)->sum("quantity");
+        $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");
+        $sales = DB::table("sales_detail")->where("product_id", $id)->sum("quantity");
+        $quantity = ($entry + $purchase) - ($departure + $sales);
+        return $quantity;
     }
 
 }

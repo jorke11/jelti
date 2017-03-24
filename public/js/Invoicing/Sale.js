@@ -9,18 +9,17 @@ function Sale() {
 
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
-//            $(".input-entry").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
 
         $("#insideManagement").click(function () {
-            var created = $("#frm #created").val();
-            $(".input-sale").cleanFields();
-            $("#frm #created").val(created);
-            $("#btnSave").attr("disabled",true);
-            $("#btnmodalDetail").attr("disabled",true);
+            $(".input-sale").cleanFields({disabled: true});
+
+            $("#btnSave").attr("disabled", true);
+            $("#btnmodalDetail").attr("disabled", true);
             $("#tblDetail tbody").empty();
             $("#tblDetail tfoot").empty();
+
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
@@ -49,22 +48,23 @@ function Sale() {
             $("#modalDetail").modal("show");
             $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #client_id").val()}});
             $(".input-detail").cleanFields();
+
         });
 
 
         $("#product_id").change(this.getQuantity);
 
-        $("#quantity").blur(function () {
-            if (maxDeparture < $(this).val()) {
-                toastr.warning("No hay sufiente disponible");
-                $(this).val("");
-            }
-        });
+//        $("#quantity").blur(function () {
+//            if (maxDeparture < $(this).val()) {
+//                toastr.warning("No hay sufiente disponible");
+//                $(this).val("");
+//            }
+//        });
     }
     this.new = function () {
-        var created = $("#frm #created").val();
-        $(".input-sale").cleanFields();
-        $("#frm #created").val(created);
+        $(".input-sale").cleanFields({disabled: false});
+        $("#btnSave").attr("disabled", false);
+
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
@@ -118,31 +118,38 @@ function Sale() {
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
-        if (id == '') {
-            method = 'POST';
-            url = "sale";
-            msg = "Created Record";
 
-        } else {
-            method = 'PUT';
-            url = "sale/" + id;
-            msg = "Edited Record";
-        }
+        var validate = $(".input-sale").validate();
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    $("#frm #id").val(data.data.id);
-                    table.ajax.reload();
-                    toastr.success(msg);
-                    $("#btnmodalDetail").attr("disabled", false);
-                }
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "sale";
+                msg = "Created Record";
+
+            } else {
+                method = 'PUT';
+                url = "sale/" + id;
+                msg = "Edited Record";
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == 'true') {
+                        $("#frm #id").val(data.data.id);
+                        table.ajax.reload();
+                        toastr.success(msg);
+                        $("#btnmodalDetail").attr("disabled", false);
+                    }
+                }
+            })
+        } else {
+            toastr.error("input required");
+        }
     }
 
     this.saveDetail = function () {
@@ -152,31 +159,39 @@ function Sale() {
         var url = "", method = "";
         var id = $("#frmDetail #id").val();
         var msg = 'Record Detail';
-        if (id == '') {
-            method = 'POST';
-            url = "sale/storeDetail";
-            msg = "Created " + msg;
 
-        } else {
-            method = 'PUT';
-            url = "sale/detail/" + id;
-            msg = "Edited " + msg;
-        }
+        var validate = $(".input-detail").validate();
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "sale/storeDetail";
+                msg = "Created " + msg;
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    toastr.success(msg);
-                    $("#btnmodalDetail").attr("disabled", false);
-                    obj.printDetail(data);
-                    $("#modalDetail").modal("hide");
-                }
+            } else {
+                method = 'PUT';
+                url = "sale/detail/" + id;
+                msg = "Edited " + msg;
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        toastr.success(msg);
+                        $("#btnmodalDetail").attr("disabled", false);
+                        obj.printDetail(data);
+                        $("#modalDetail").modal("hide");
+                    }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                }
+            })
+        } else {
+            toastr.error("input required");
+        }
     }
 
     this.showModal = function (id) {
@@ -259,10 +274,10 @@ function Sale() {
             if (val.description == 'product') {
                 html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
                 html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
-            }else{
+            } else {
                 html += '<td></td>';
             }
-            
+
             html += "</tr>";
         });
 

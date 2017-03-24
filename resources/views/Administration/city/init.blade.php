@@ -11,7 +11,7 @@
                     <div class="col-lg-3">List City</div>
                     <div class="col-lg-9 text-right">
                         <button class="btn btn-success btn-sm" type="button" id="btnNew">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"> New</span>
                         </button>
                     </div>
                 </div>

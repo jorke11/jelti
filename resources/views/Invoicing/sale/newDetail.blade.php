@@ -13,7 +13,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Product:</label>
-                            <select class="form-control input-detail" id="product_id" name='product_id' data-api="/api/getProduct">
+                            <select class="form-control input-detail" id="product_id" name='product_id' data-api="/api/getProduct" required>
                             </select>
                         </div>
 
@@ -21,7 +21,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Category:</label>
-                            <select class="form-control input-detail" id="category_id" name='category_id'>
+                            <select class="form-control input-detail" id="category_id" name='category_id' required>
 
                                 @foreach($category as $cat)
                                 <option value="{{$cat->id}}">{{$cat->description}}</option>
@@ -36,13 +36,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Quantity Max (<span id="quantityMax"></span>):</label>
-                            <input type="text" class="form-control input-detail" id="quantity" name='quantity' min='0' disabled="">
+                            <input type="text" class="form-control input-detail" id="quantity" name='quantity' min='0' disabled="" required>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Value:</label>
-                            <input type="text" class="form-control input-detail" id="value" name='value'>
+                            <input type="text" class="form-control input-detail" id="value" name='value' required data-type="number">
                         </div>
                     </div>
 

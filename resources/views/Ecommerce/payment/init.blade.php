@@ -13,11 +13,12 @@
 </div>
 <br>
 <div class="row">
-    <div class="col-lg-6">
-        <table class="table table-condensed table-bordered table-hover" id="tblReview">
+    <div class="col-lg-6 col-lg-offset-3">
+        <table class="table table-condensed table-hover" id="tblReview">
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Image</th>
                     <th>Description</th>
                     <th>Quantity</th>
                     <th>Price</th>

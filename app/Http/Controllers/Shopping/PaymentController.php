@@ -18,11 +18,11 @@ class PaymentController extends Controller {
     public function getDetail() {
         $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
         $detail = DB::select('
-                            SELECT p.title product,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total
+                            SELECT p.title product,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image
                             FROM orders_detail d
                             JOIN products p ON p.id=d.product_id
                             WHERE order_id=1 
-                            GROUP BY 1,2,3,product_id'
+                            GROUP BY 1,2,3,product_id,p.image'
         );
 
         $total = 0;

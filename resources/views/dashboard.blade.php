@@ -42,7 +42,7 @@
                                 <i class="fa fa-comments fa-5x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">26</div>
+                                <div class="huge">{{$comment}}</div>
                                 <div> Coments</div>
                             </div>
                         </div>

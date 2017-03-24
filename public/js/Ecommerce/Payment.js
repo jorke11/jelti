@@ -5,7 +5,7 @@ function Payment() {
     }
 
     this.getDetail = function () {
-        var html = "";
+        var html = "", image = "";
         $.ajax({
             url: 'getDetail/',
             method: 'GET',
@@ -13,24 +13,28 @@ function Payment() {
             success: function (data) {
 
                 $.each(data.detail, function (i, val) {
-                    html += "<tr><td>" + (i + 1) + "</td><td>" + val.product + "</td><td>" + val.quantity + "</td><td>" + val.formateTotal + "</td>";
+                    image = (val.image == null) ? "default.jpg" : val.image;
+                    console.log(image)
+                    html += "<tr><td>" + (i + 1) + "</td>";
+                    html += '<td><img src="/images/product/' + image + '" width="25px"></td>'
+                    html += "<td>" + val.product + "</td><td>" + val.quantity + "</td><td>" + val.formateTotal + "</td>";
                     html += '<td><button type="button" class="close" aria-label="Close" onclick=obj.deleteItem(' + val.product_id + ',' + val.order_id + ')><span aria-hidden="true">&times;</span></button></td></tr>';
                 })
                 html += '</div>';
 
                 $("#tblReview tbody").html(html);
-                $("#tblReview tfoot").html('<tr><td colspan="3">Total</td><td>' + data.total + '</td></tr>');
+                $("#tblReview tfoot").html('<tr><td colspan="4"><strong>Total</td><td>' + data.total + '</strong></td></tr>');
             }
         })
     }
 
     this.deleteItem = function (product_id, order_id) {
-        var obj={};
+        var obj = {};
         obj.product_id = product_id;
         $.ajax({
             url: 'deleteDetail/' + order_id,
             method: 'DELETE',
-            data:obj,
+            data: obj,
             dataType: 'JSON',
             success: function (data) {
                 obj.getDetail();

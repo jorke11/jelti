@@ -4,10 +4,13 @@
             <div class="row">
                 <div class="col-lg-12 text-right">
                     <button class="btn btn-success btn-sm" id='btnNew'>
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true">New</span>
                     </button>
                     <button class="btn btn-success btn-sm" id='btnSave' disabled>
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true">Save</span>
+                    </button>
+                    <button class="btn btn-success btn-sm" id='btnConvert' disabled>
+                        <span class="glyphicon glyphicon-retweet" aria-hidden="true">Convert</span>
                     </button>
                 </div>
             </div>

@@ -28,7 +28,8 @@ class StockController extends Controller {
         $entry = DB::table("entries_detail")->where("product_id", $id)->sum("quantity");
         $departure = DB::table("departures_detail")->where("product_id", $id)->sum("quantity");
         $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");
-        $quantity = ($entry + $purchase) - $departure;
+        $sales = DB::table("sales_detail")->where("product_id", $id)->sum("quantity");
+        $quantity = ($entry + $purchase) - ($departure + $sales);
 
         return response()->json(["response" => $response, "quantity" => $quantity]);
     }

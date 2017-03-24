@@ -24,7 +24,7 @@ function Purchase() {
 
         $("#insideManagement").click(function () {
             var created = $("#frm #created").val();
-            $(".input-purchase").cleanFields();
+            $(".input-purchase").cleanFields({disabled: true});
             $("#frm #created").val(created);
             $("#frm #btnSave").attr("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
@@ -141,7 +141,7 @@ function Purchase() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == 'true') {
-                        $("#frm #id").val(data.data.id);
+                        $(".input-purchase").setFields({data: data, disabled: true});
                         table.ajax.reload();
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
@@ -208,6 +208,7 @@ function Purchase() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-purchase").setFields({data: data.header});
+                $("#btnSave").attr("disabled", false);
 
 
                 if (data.header.supplier_id != 0) {

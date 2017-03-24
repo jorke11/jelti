@@ -7,6 +7,7 @@ function detailProduct() {
     }
 
     this.addProduct = function () {
+        toastr.remove()
         var obj = {};
         obj.product_id = $("#product_id").val();
         obj.quantity = $("#quantity").val();
@@ -17,6 +18,7 @@ function detailProduct() {
             dataType: 'JSON',
             success: function (data) {
                $("#quantityOrders").html(data);
+               toastr.success("Item add")
             }
         })
     }

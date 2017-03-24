@@ -8,7 +8,16 @@ function Prospect() {
             $(".input-prospect").cleanFields({disabled: true});
             $("#btnSave").attr("disabled", true);
         });
+
+        $("#btnConvert").click(this.convert);
     }
+
+    this.convert = function () {
+        if(confirm("Are you sure to convert this prospectus?")){
+            console.log("ingreso");
+        }
+    }
+
     this.new = function () {
         $(".input-prospect").cleanFields({disabled: false});
         $("#btnSave").attr("disabled", false);
@@ -44,6 +53,7 @@ function Prospect() {
                         table.ajax.reload();
                         $(".input-product").setFields({data: data.header, disabled: true});
                         toastr.success(msg);
+                        $("#btnConvert").attr("disabled", false);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
 
@@ -67,6 +77,8 @@ function Prospect() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-prospect").setFields({data: data})
+                $("#btnConvert").attr("disabled", false);
+                $("#btnSave").attr("disabled", false);
             }
         })
     }

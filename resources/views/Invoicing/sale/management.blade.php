@@ -3,10 +3,10 @@
         <div class="row">
             <div class="col-lg-12 text-right">
                 <button class="btn btn-success btn-sm" id='btnNew'>
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"> New</span>
                 </button>
                 <button class="btn btn-success btn-sm" id='btnSave'>
-                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"> Save</span>
                 </button>
             </div>
         </div>
@@ -45,7 +45,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Date:</label>
-                    <input type="text" class="form-control input-sale" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" readonly="">
+                    <input type="datetime" class="form-control input-sale" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" readonly="">
                 </div>
             </div>
             <div class="col-lg-2">
@@ -135,4 +135,5 @@
 
         {!!Form::close()!!}
     </div>
+</div>
 </div>

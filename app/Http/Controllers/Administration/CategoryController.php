@@ -29,10 +29,9 @@ class CategoryController extends Controller {
 //            $input["users_id"] = 1;
             $result = Categories::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -47,22 +46,19 @@ class CategoryController extends Controller {
         $input = $request->all();
         $result = $category->fill($input)->save();
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroy($id) {
         $category = Categories::FindOrFail($id);
         $result = $category->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 

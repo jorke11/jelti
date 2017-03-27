@@ -12,7 +12,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Description</label>
-                            <input type="text" class="form-control input-category" id="description" name='description'>
+                            <input type="text" class="form-control input-category" id="description" name='description' required="">
                         </div>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Short Description</label>
-                            <input type="text" class="form-control input-category" id="short_description" name='short_description'>
+                            <input type="text" class="form-control input-category" id="short_description" name='short_description' required>
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Order</label>
-                            <input type="text" class="form-control input-category" id="order" name='order'>
+                            <input type="text" class="form-control input-category" id="order" name='order' required>
                         </div>
                     </div>
                 </div>

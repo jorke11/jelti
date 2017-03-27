@@ -37,7 +37,7 @@ function Category() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         $("#modalNew").modal("hide");
                         $(".input-category").setFields({data: data});
                         table.ajax.reload();
@@ -77,7 +77,7 @@ function Category() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }

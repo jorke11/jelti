@@ -7,12 +7,12 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frm']) !!}
-                <input type="hidden" id="id" name="id" class="input-category">
+                <input type="hidden" id="id" name="id" class="input-characteristc">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Description</label>
-                            <input type="text" class="form-control input-category" id="description" name='description'>
+                            <input type="text" class="form-control input-characteristc" id="description" name='description' required>
                         </div>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id='new'>Save</button>
+                <button type="button" class="btn btn-success" id='btnSave'>Save</button>
             </div>
         </div>
     </div>

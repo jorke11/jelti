@@ -2,12 +2,16 @@ function Category() {
     var table;
     this.init = function () {
         table = this.table();
-        $("#new").click(this.save);
-        $("#edit").click(this.edit);
+        $("#btnNew").click(this.new);
+        $("#btnSave").click(this.save);
         $("#btnNew").click(function () {
             $(".input-category").cleanFields();
             $("#modalNew").modal("show");
         });
+    }
+
+    this.new = function () {
+        $(".input-characteristc").cleanFields();
     }
 
     this.save = function () {
@@ -18,7 +22,7 @@ function Category() {
         var id = $("#frm #id").val();
         var msg = '';
 
-        var validate = $(".input-category").validate();
+        var validate = $(".input-characteristic").validate();
 
         if (validate.length == 0) {
             if (id == '') {
@@ -37,7 +41,7 @@ function Category() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         $("#modalNew").modal("hide");
                         table.ajax.reload();
                         toastr.success(msg);
@@ -77,7 +81,7 @@ function Category() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }

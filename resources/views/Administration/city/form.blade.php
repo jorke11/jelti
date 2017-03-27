@@ -12,7 +12,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Description</label>
-                            <input type="text" class="form-control input-city" id="description" name='description'>
+                            <input type="text" class="form-control input-city" id="description" name='description' required>
                         </div>
                     </div>
                 </div>

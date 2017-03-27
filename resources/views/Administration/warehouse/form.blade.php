@@ -12,7 +12,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Description</label>
-                            <input type="text" class="form-control input-warehouse" id="description" name='description'>
+                            <input type="text" class="form-control input-warehouse" id="description" name='description' required >
                         </div>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Address</label>
-                            <input type="text" class="form-control input-warehouse" id="address" name='address'>
+                            <input type="text" class="form-control input-warehouse" id="address" name='address' required>
                         </div>
                     </div>
                 </div>

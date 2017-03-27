@@ -183,6 +183,7 @@ jQuery.fn.cleanFields = function (param) {
                 elem.getSeeker({api: elem.data("api")});
             } else {
 //                elem.val(0).select2();
+                console.log(elem.attr("id"));
                 elem.val(0);
             }
         }
@@ -314,7 +315,9 @@ jQuery.fn.validate = function (param) {
                     elem.parent().parent().addClass("has-error")
                     arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
                 } else {
+
                     if (elem.data("type") != undefined) {
+
                         $("#error_" + elem.attr("id")).remove();
                         if (elem.data("type") == 'number' && isNaN(elem.val())) {
                             elem.after('<small class="help-block" id="error_' + elem.attr("id") + '" data-fv-validator="notEmpty" data-fv-for="firstName" data-fv-result="INVALID" style="">' + elem.attr("id") + ' is not Numeric</small>')
@@ -325,7 +328,14 @@ jQuery.fn.validate = function (param) {
                         }
                     } else {
                         $("#error_" + elem.attr("id")).remove();
-                        elem.parent().parent().removeClass("has-error")
+                        if (elem.val() != null && elem.val() != 0) {
+                            elem.parent().parent().removeClass("has-error")
+                        } else {
+                            elem.after('<small class="help-block" id="error_' + elem.attr("id") + '" data-fv-validator="notEmpty" data-fv-for="firstName" data-fv-result="INVALID" style="">' + elem.attr("id") + ' is Required</small>')
+                            elem.parent().parent().addClass("has-error")
+                            arrData.push({id: elem.attr("id"), value: elem.val(), element: elem.get(0).tagName});
+
+                        }
                     }
                 }
             } else {

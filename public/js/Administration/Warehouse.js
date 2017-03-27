@@ -12,36 +12,44 @@ function Warehouse() {
     }
 
     this.save = function () {
+        toastr.remove();
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
-        if (id == '') {
-            method = 'POST';
-            url = "warehouse";
-            msg = "Created Record";
 
-        } else {
-            method = 'PUT';
-            url = "warehouse/" + id;
-            msg = "Edited Record";
-        }
+        var validate = $(".input-warehouse").validate();
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    table.ajax.reload();
-                    toastr.success(msg);
-                    $("#modalNew").modal("hide");
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "warehouse";
+                msg = "Created Record";
 
-                }
+            } else {
+                method = 'PUT';
+                url = "warehouse/" + id;
+                msg = "Edited Record";
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        table.ajax.reload();
+                        toastr.success(msg);
+                        $("#modalNew").modal("hide");
+
+                    }
+                }
+            })
+        } else {
+            toastr.error("Fields Required!");
+        }
     }
 
     this.showModal = function (id) {
@@ -55,7 +63,7 @@ function Warehouse() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $(".input-warehouse").setFields({data:data});
+                $(".input-warehouse").setFields({data: data});
             }
         })
     }
@@ -71,7 +79,7 @@ function Warehouse() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }

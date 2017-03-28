@@ -165,7 +165,7 @@ Route::put('/fulfillment/editTarjet/{id}', 'Seller\FulfillmentController@updateT
 Route::get('/fulfillment/getDetail/{id}', 'Seller\FulfillmentController@getDetail');
 
 Route::put('/fulfillment/updateDetail/{id}', 'Seller\FulfillmentController@updateDetail');
-Route::post('/fulfillment/addCommercial', 'Seller\FulfillmentController@store');
+Route::post('/fulfillment/addCommercial', 'Seller\FulfillmentController@addDetail');
 
 
 Route::get('/comments', 'MainController@getcomments');

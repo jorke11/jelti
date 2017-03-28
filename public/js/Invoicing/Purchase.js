@@ -140,7 +140,7 @@ function Purchase() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         $(".input-purchase").setFields({data: data, disabled: true});
                         table.ajax.reload();
                         toastr.success(msg);
@@ -330,7 +330,7 @@ function Purchase() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         toastr.warning("Record deleted");
                         obj.printDetail(data.data);
                     }

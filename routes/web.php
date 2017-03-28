@@ -150,6 +150,9 @@ Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
 
 Route::resource('/prospect', 'Seller\ProspectsController');
+Route::post('/prospect/convert', 'Seller\ProspectsController@convertToClient');
+
+
 Route::resource('/activity', 'Seller\ActivityController');
 Route::resource('/contact', 'Administration\ContactController');
 Route::resource('/fulfillment', 'Seller\FulfillmentController');
@@ -157,6 +160,13 @@ Route::get('/fulfillment/getInfo/{year}/{month}', 'Seller\FulfillmentController@
 Route::get('/fulfillment/getMax/{id}', 'Seller\FulfillmentController@getMax');
 Route::get('/fulfillment/getSales/{id}', 'Seller\FulfillmentController@getSales');
 Route::post('/fulfillment/addTarjet', 'Seller\FulfillmentController@setTarjet');
+Route::put('/fulfillment/editTarjet/{id}', 'Seller\FulfillmentController@updateTarjet');
+
+Route::get('/fulfillment/getDetail/{id}', 'Seller\FulfillmentController@getDetail');
+
+Route::put('/fulfillment/updateDetail/{id}', 'Seller\FulfillmentController@updateDetail');
+Route::post('/fulfillment/addCommercial', 'Seller\FulfillmentController@store');
+
 
 Route::get('/comments', 'MainController@getcomments');
 Route::get('/comments/list/{id}', 'MainController@listComments');
@@ -177,7 +187,14 @@ Route::get('/api/listSupplier', function() {
 
 Route::get('/api/listStakeholder', function() {
     return Datatables::queryBuilder(
-                    DB::table('vstakeholder')
+                    DB::table('stakeholder')
+                            ->select("stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", 
+                                    "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", 
+                                    "cities.description as city", "stakeholder.web_site", "typepersons.description as typeperson", 
+                                    "typeregimes.description as typeregime", "stakeholder.type_stakeholder", "stakeholder.status_id")
+                            ->join("cities", "cities.id", "stakeholder.city_id")
+                            ->leftjoin("typepersons", "typepersons.id", "stakeholder.type_person_id")
+                            ->leftjoin("typeregimes", "typeregimes.id", "stakeholder.type_regime_id")
             )->make(true);
 });
 Route::get('/api/listProduct', function() {

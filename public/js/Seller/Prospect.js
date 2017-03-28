@@ -13,8 +13,18 @@ function Prospect() {
     }
 
     this.convert = function () {
-        if(confirm("Are you sure to convert this prospectus?")){
-            console.log("ingreso");
+        var obj = {};
+        obj.id = $("#frm #id").val();
+        if (confirm("Are you sure to convert this prospectus?")) {
+            $.ajax({
+                url: "/prospect/convert",
+                method: 'POST',
+                data: obj,
+                dataType: 'JSON',
+                success: function (data) {
+                    console.log(data)
+                }
+            })
         }
     }
 
@@ -22,6 +32,7 @@ function Prospect() {
         $(".input-prospect").cleanFields({disabled: false});
         $("#btnSave").attr("disabled", false);
     }
+
     this.save = function () {
         toastr.remove();
         var frm = $("#frm");
@@ -51,7 +62,7 @@ function Prospect() {
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
-                        $(".input-product").setFields({data: data.header, disabled: true});
+                        $(".input-prospect").setFields({data: data.header, disabled: true});
                         toastr.success(msg);
                         $("#btnConvert").attr("disabled", false);
                     }
@@ -113,8 +124,11 @@ function Prospect() {
             columns: [
                 {data: "id"},
                 {data: "name"},
+                {data: "last_name"},
                 {data: "business"},
+                {data: "business_name"},
                 {data: "email"},
+                {data: "position"},
                 {data: "commercial_id"},
                 {data: "sector_id"},
                 {data: "city_id"},
@@ -129,7 +143,7 @@ function Prospect() {
                     }
                 },
                 {
-                    targets: [8],
+                    targets: [11],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

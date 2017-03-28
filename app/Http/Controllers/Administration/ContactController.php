@@ -43,7 +43,7 @@ class ContactController extends Controller {
         $result = $record->fill($input)->save();
         if ($result) {
 
-            $data = Prospect::FindOrFail($id);
+            $data = Contact::FindOrFail($id);
             return response()->json(['success' => true, "data" => $data]);
         } else {
             return response()->json(['success' => false]);

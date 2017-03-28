@@ -19,6 +19,7 @@ class SaleController extends Controller {
     public $credit;
 
     public function __construct() {
+        $this->middleware("auth");
         $this->total = 0;
         $this->debt = 0;
         $this->credit = 0;
@@ -45,9 +46,9 @@ class SaleController extends Controller {
             $result = Sales::create($input);
             if ($result) {
                 $resp = Sales::FindOrFail($result["attributes"]["id"]);
-                return response()->json(['success' => 'true', "data" => $resp]);
+                return response()->json(['success' => true, "data" => $resp]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -102,10 +103,9 @@ class SaleController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = Sales::FindOrFail($id);
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -115,9 +115,9 @@ class SaleController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = DB::table("saledetail")->where("sale_id", "=", $input["sale_id"])->get();
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -135,7 +135,6 @@ class SaleController extends Controller {
     public function destroyDetail($id) {
         $entry = SaleDetail::FindOrFail($id);
         $result = $entry->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             $resp = DB::table("saledetail")->where("sale_id", "=", $entry["sale_id"])->get();
             return response()->json(['success' => true, "data" => $resp]);

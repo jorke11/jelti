@@ -7,9 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Administration\Puc;
 use Session;
 
-class PucController extends Controller
-{
-      public function __construct() {
+class PucController extends Controller {
+
+    public function __construct() {
         $this->middleware("auth");
     }
 
@@ -29,10 +29,9 @@ class PucController extends Controller
 //            $input["users_id"] = 1;
             $result = Puc::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -47,22 +46,20 @@ class PucController extends Controller
         $input = $request->all();
         $result = $category->fill($input)->save();
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroy($id) {
         $category = Puc::FindOrFail($id);
         $result = $category->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
+
 }

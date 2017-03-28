@@ -35,3 +35,7 @@ table>thead>tr{background:#2a3f54;color:white;border-color: #2a3f54}
 /*.select2-container--default .select2-selection--single {*/
 /*    border:1px solid #a94442;
 }*/
+
+.table-condensed>tbody>tr>td, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>td, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>thead>tr>th {
+    padding: 3px;
+}

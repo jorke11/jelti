@@ -38,10 +38,9 @@ class UserController extends Controller {
 //            $input["users_id"] = 1;
             $result = Users::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -92,9 +91,9 @@ class UserController extends Controller {
 
         $result = $user->fill($input)->save();
         if ($result) {
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -112,16 +111,16 @@ class UserController extends Controller {
                 $per->save();
             }
         }
-        return response()->json(['success' => 'true']);
+        return response()->json(['success' => true]);
     }
 
     public function destroy($id) {
         $user = Users::FindOrFail($id);
         $result = $user->delete();
         if ($result) {
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => Ffalse]);
         }
     }
 

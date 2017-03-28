@@ -25,6 +25,12 @@ function Fulfillment() {
                 }
             })
         });
+
+        $("#btnEdit").click(function () {
+            $("#frmModal").modal("show");
+            $("#frmTarjet #value").val($("#tarjet_value").val());
+            $("#frmTarjet #id").val($("#tarjet_id").val());
+        });
     }
 
     this.new = function () {
@@ -62,7 +68,7 @@ function Fulfillment() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.response == true) {
+                    if (data.success == true) {
                         toastr.success("Point ok");
                         $("#frmModal").modal("hide");
                         $("#frmMain #id").val(data.data.id);
@@ -96,11 +102,11 @@ function Fulfillment() {
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "fulfillment";
+                url = "fulfillment/addCommercial";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "fulfillment/" + id;
+                url = "fulfillment/updateDetail/" + id;
                 msg = "Edited Record";
             }
 
@@ -112,6 +118,7 @@ function Fulfillment() {
                 success: function (data) {
                     if (data.success == true) {
                         toastr.success(msg);
+//                        $("#txtTarget").html(data.data.valueFormated);
                         obj.setTable(data.detail);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
@@ -148,11 +155,26 @@ function Fulfillment() {
     this.setTable = function (detail) {
         var html = "";
         $.each(detail, function (i, val) {
-            html += "<tr style='cursor:pointer' onclick=obj.showDetail(" + val.user_id + ")>";
-            html += "<td>" + val.name + "</td><td>" + val.last_name + "</td><td>" + val.value + "</td><td>" + val.valueTotalFormated + "</td>";
-            html += '<td><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:' + val.progress + '%;">' + val.progress + '%</div></div></td></tr>';
+            html += "<tr >";
+            html += "<td style='cursor:pointer' onclick=obj.showDetail(" + val.user_id + ")>" + val.name + "</td><td>" + val.last_name + "</td><td>" + val.value + "</td><td>" + val.valueTotalFormated + "</td>";
+            html += '<td><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60"';
+            html += ' aria-valuemin="0" aria-valuemax="100" style="width:' + val.progress + '%;">' + val.progress + '%</div></div></td>';
+            html += '<td><button type="button" class="btn btn-xs btn-warning">Delete</button> ';
+            html += ' <button type="button" class="btn btn-xs btn-info" onclick=obj.edit(' + val.id + ')>Edit</button></td></tr>';
         })
         $("#tbl tbody").html(html);
+    }
+
+    this.edit = function (id) {
+        $.ajax({
+            url: "/fulfillment/getDetail/" + id,
+            method: 'get',
+            dataType: "json",
+            success: function (data) {
+                $("#frmModalAdd").modal("show");
+                $(".input-commercial").setFields({data: data.data});
+            }
+        })
     }
 
     this.showDetail = function (user_id) {
@@ -180,11 +202,15 @@ function Fulfillment() {
                     $("#txtTarget").html("$ 0");
                     $("#progress_all").css("width", 0).html("0 %");
                     $("#tbl tbody").empty();
+                    $("#tarjet_id").val("");
+                    $("#tarjet_value").val("");
                 } else {
                     $("#frmMain #id").val(data.data.id);
                     $("#btnNew").attr("disabled", true);
                     $("#btnShowModal").attr("disabled", false);
                     $("#txtTarget").html(data.data.valueFormated);
+                    $("#tarjet_id").val(data.data.id);
+                    $("#tarjet_value").val(data.data.value);
                     $("#progress_all").css("width", data.data.valueFormatedPending + "%").html(data.data.valueFormatedPending + " %");
 
                     obj.setTable(data.detail);

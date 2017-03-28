@@ -183,7 +183,6 @@ jQuery.fn.cleanFields = function (param) {
                 elem.getSeeker({api: elem.data("api")});
             } else {
 //                elem.val(0).select2();
-                console.log(elem.attr("id"));
                 elem.val(0);
             }
         }

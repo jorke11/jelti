@@ -60,7 +60,6 @@ class EntryController extends Controller {
             $input["status_id"] = 1;
             $result = Entries::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
                 $resp = Entries::FindOrFail($result["attributes"]["id"]);
                 return response()->json(['success' => true, "data" => $resp]);
             } else {
@@ -213,7 +212,6 @@ class EntryController extends Controller {
     public function destroy($id) {
         $entry = Entries::FindOrFail($id);
         $result = $entry->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             return response()->json(['success' => true]);
         } else {

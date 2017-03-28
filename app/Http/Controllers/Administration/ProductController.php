@@ -17,6 +17,10 @@ use \App\Http\Requests\Administration\ProductsUpdateRequest;
 
 class ProductController extends Controller {
 
+    public function __construct() {
+        $this->middleware("auth");
+    }
+
     public function index() {
         return view("Administration.products.init");
     }
@@ -40,7 +44,7 @@ class ProductController extends Controller {
                 $product = Products::FindOrFail($result);
                 return response()->json(['success' => true, 'header' => $product]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -52,10 +56,9 @@ class ProductController extends Controller {
 
             $result = PriceSpecial::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -72,7 +75,6 @@ class ProductController extends Controller {
         return response()->json($resp);
     }
 
-//    public function update(ProductsUpdateRequest $request, $id) {
     public function update(Request $request, $id) {
         $product = Products::FindOrFail($id);
         $input = $request->all();
@@ -88,19 +90,17 @@ class ProductController extends Controller {
             $product = Products::FindOrFail($id);
             return response()->json(['success' => true, 'header' => $product]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroy($id) {
         $product = Products::FindOrFail($id);
         $result = $product->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 

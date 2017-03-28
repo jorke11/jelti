@@ -19,7 +19,7 @@ class StakeholderController extends Controller {
     public function __construct() {
         $this->middleware("auth");
     }
-    
+
     public function index() {
         $type_person = Administration\TypePersons::all();
         $type_regimen = Administration\TypeRegimes::all();
@@ -30,24 +30,24 @@ class StakeholderController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
-
+            $input["status_id"] = 1;
             $result = Stakeholder::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
 
     public function getSpecial(Request $req) {
         $in = $req->all();
-        return Datatables::eloquent(PricesSpecial::where("client_id", $in["client_id"])->orderBy("id","asc"))->make(true);
+        return Datatables::eloquent(PricesSpecial::where("client_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
     }
+
     public function getBranch(Request $req) {
         $in = $req->all();
-        return Datatables::eloquent(Branch::where("client_id", $in["client_id"])->orderBy("id","asc"))->make(true);
+        return Datatables::eloquent(Branch::where("client_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
     }
 
     public function updatePrice(Request $data, $id) {
@@ -58,7 +58,7 @@ class StakeholderController extends Controller {
         } else {
             PricesSpecial::where("client_id", $id)->update(['priority' => false]);
         }
-        
+
         return response()->json(["success" => true]);
     }
 
@@ -69,14 +69,13 @@ class StakeholderController extends Controller {
 
             $result = PricesSpecial::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
-    
+
     public function storeBranch(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
@@ -84,10 +83,9 @@ class StakeholderController extends Controller {
 
             $result = Branch::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -103,26 +101,21 @@ class StakeholderController extends Controller {
         $input = $request->all();
         $result = $stakeholder->fill($input)->save();
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroy($id) {
         $stakeholder = Stakeholder::FindOrFail($id);
         $result = $stakeholder->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
-    
-  
 
     public function uploadImage(Request $req) {
         $data = $req->all();
@@ -158,7 +151,7 @@ class StakeholderController extends Controller {
         StakeholderDocument::where("stakeholder_id", $data["stakeholder_id"]);
         return response()->json(["response" => true, "path" => $data->all()]);
     }
-    
+
     public function deleteBranch(Request $data, $id) {
         $image = Branch::find($id);
         $image->delete();

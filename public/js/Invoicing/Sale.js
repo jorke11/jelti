@@ -139,7 +139,7 @@ function Sale() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         $("#frm #id").val(data.data.id);
                         table.ajax.reload();
                         toastr.success(msg);
@@ -296,7 +296,7 @@ function Sale() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }
@@ -318,7 +318,7 @@ function Sale() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         toastr.warning("Record deleted");
                         obj.printDetail(data.data);
                     }
@@ -360,6 +360,7 @@ function Sale() {
             ],
         });
     }
+    
     this.table = function () {
         return $('#tbl').DataTable({
             "processing": true,

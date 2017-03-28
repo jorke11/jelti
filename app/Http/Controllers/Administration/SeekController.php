@@ -143,10 +143,11 @@ class SeekController extends Controller {
         $query = Users::select("id", "name as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
-        } else if (isset($in["id"])) {
+        } else if (isset($in["id"]) && $in["id"] != '') {
             $query->where("id", $in["id"]);
         } else {
-            $query->where("name", "ilike", "%" . $in["q"] . "%")->where("role_id", 4)->get();
+            if (isset($in["q"]))
+                $query->where("name", "ilike", "%" . $in["q"] . "%")->where("role_id", 4)->get();
         }
         $result = $query->get();
 

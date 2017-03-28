@@ -32,10 +32,9 @@ class PermissionController extends Controller {
             }
             $result = Permissions::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true', 'data' => $this->getPermission()]);
+                return response()->json(['success' => true, 'data' => $this->getPermission()]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -51,21 +50,19 @@ class PermissionController extends Controller {
         $result = $data->fill($input)->save();
         if ($result) {
             Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', 'data' => $this->getPermission()]);
+            return response()->json(['success' => true, 'data' => $this->getPermission()]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroy($id) {
         $data = Permissions::FindOrFail($id);
         $result = $data->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', 'data' => $this->getPermission()]);
+            return response()->json(['success' => true, 'data' => $this->getPermission()]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 

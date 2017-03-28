@@ -51,7 +51,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="last_name" class="control-label">Email</label>
-                        <input type="text" class="form-control  input-prospect" id="position" name="email" placeholder="email">
+                        <input type="text" class="form-control  input-prospect" id="email" name="email" placeholder="email">
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -78,7 +78,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="address" class="control-label">Status Prospect</label>
-                        <select id="sector_id" name="sector_id" class="form-control input-prospect">
+                        <select id="status_prospect_id" name="status_prospect_id" class="form-control input-prospect">
                             <option value="0">Selection</option>
                             <option value="1">Contactado</option>
                             <option value="2">No Contactado</option>
@@ -90,7 +90,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="address" class="control-label">Source Prospect</label>
-                        <select id="sector_id" name="sector_id" class="form-control input-prospect">
+                        <select id="source_id" name="source_id" class="form-control input-prospect">
                             <option value="0">Selection</option>
                             <option value="1">Chat</option>
                             <option value="2">Correo</option>
@@ -141,7 +141,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="address">ID twitter</label>
-                        <input type="text" class="form-control input-prospect" id="id_skype" name="id_skype" placeholder="@user">
+                        <input type="text" class="form-control input-prospect" id="id_twitter" name="id_twitter" placeholder="@user">
                     </div>
                 </div>
                 <div class="col-lg-3">

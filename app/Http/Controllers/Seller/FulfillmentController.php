@@ -66,8 +66,14 @@ class FulfillmentController extends Controller {
                         ->join("users", "users.id", "fulfillment_detail.commercial_id")
                         ->where("fulfillment_id", $id)->get();
 
+
         foreach ($detail as $i => $value) {
-            $detail[$i]->progress = number_format(((100 * $this->getValueDetail($value->user_id))) / $value->value, 2, ".", ",");
+            if ($value->value != 0) {
+                $detail[$i]->progress = number_format(((100 * $this->getValueDetail($value->user_id))) / $value->value, 2, ".", ",");
+            } else {
+                $detail[$i]->progress = 0;
+            }
+
             $detail[$i]->valueTotal = $this->getValueDetail($value->user_id);
             $detail[$i]->valueTotalFormated = "$ " . number_format($this->getValueDetail($value->user_id), 2, ",", ".");
             $detail[$i]->tarjet = $value->value;
@@ -99,7 +105,7 @@ class FulfillmentController extends Controller {
         $id = Fulfillment::create($input)->id;
         $input["id"] = $id;
         $input["valueFormated"] = "$ " . number_format($input["value"], 2, ",", ".");
-        return response()->json(["response" => true, "data" => $input]);
+        return response()->json(["success" => true, "data" => $input]);
     }
 
     public function store(Request $request) {
@@ -118,7 +124,6 @@ class FulfillmentController extends Controller {
 //            dd($val);
 
                 if ($max >= $input["value"]) {
-
                     $result = FulfillmentDetail::create($input);
                     if ($result) {
                         $detail = $this->dataDetail($input["fulfillment_id"]);
@@ -142,13 +147,36 @@ class FulfillmentController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $category = Categories::FindOrFail($id);
+        $record = Fulfillment::FindOrFail($id);
         $input = $request->all();
-        $result = $category->fill($input)->save();
+        $result = $record->fill($input)->save();
         if ($result) {
-            return response()->json(['success' => 'true']);
+            $response = Fulfillment::FindOrFail($id);
+            $response["valueFormated"] = "$ " . number_format($response["value"], 2, ",", ".");
+            return response()->json(['success' => true, "data" => $response]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function updateDetail(Request $request, $id) {
+        $record = FulfillmentDetail::FindOrFail($id);
+        $input = $request->all();
+        $result = $record->fill($input)->save();
+        if ($result) {
+            $data = $this->dataDetail($record["fulfillment_id"]);
+            return response()->json(['success' => true, "detail" => $data]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function getDetail($id) {
+        $record = FulfillmentDetail::FindOrFail($id);
+        if ($record) {
+            return response()->json(['success' => true, "data" => $record]);
+        } else {
+            return response()->json(['success' => false]);
         }
     }
 
@@ -156,9 +184,9 @@ class FulfillmentController extends Controller {
         $category = Categories::FindOrFail($id);
         $result = $category->delete();
         if ($result) {
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 

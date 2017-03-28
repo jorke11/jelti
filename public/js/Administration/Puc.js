@@ -15,7 +15,7 @@ function Puc() {
     }
 
     this.new = function () {
-        $(".input-puc").val("");
+        $(".input-puc").cleanFields();
     }
 
     this.save = function () {
@@ -25,28 +25,35 @@ function Puc() {
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
-        if (id == '') {
-            method = 'POST';
-            url = "puc";
-            msg = "Created Record";
-        } else {
-            method = 'PUT';
-            url = "puc/" + id;
-            msg = "Edited Record";
-        }
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    table.ajax.reload();
-                    toastr.success(msg);
-                }
+        var validate = $(".input-puc").validate();
+
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "puc";
+                msg = "Created Record";
+            } else {
+                method = 'PUT';
+                url = "puc/" + id;
+                msg = "Edited Record";
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        table.ajax.reload();
+                        toastr.success(msg);
+                    }
+                }
+            })
+        } else {
+            toastr.error("Fields Required!");
+        }
     }
 
     this.showModal = function (id) {
@@ -59,8 +66,8 @@ function Puc() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $(".input-puc").setFields({data:data});
-                
+                $(".input-puc").setFields({data: data});
+
             }
         })
     }
@@ -77,7 +84,7 @@ function Puc() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }

@@ -38,7 +38,7 @@ function Role() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         $("#modalNew").modal("hide");
                         table.ajax.reload();
                         toastr.success(msg);
@@ -78,7 +78,7 @@ function Role() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }

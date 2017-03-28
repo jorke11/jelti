@@ -54,9 +54,9 @@ class PurchaseController extends Controller {
             $result = Purchases::create($input);
             if ($result) {
                 $resp = Purchases::FindOrFail($result["attributes"]["id"]);
-                return response()->json(['success' => 'true', "data" => $resp]);
+                return response()->json(['success' => true, "data" => $resp]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -107,9 +107,9 @@ class PurchaseController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = Purchases::FindOrFail($id);
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -132,7 +132,7 @@ class PurchaseController extends Controller {
         foreach ($detail as $value) {
             $total += ($value->value * $value->quantity);
         }
-        
+
         $client = PurchasesDetail::where("parent_id", $input["purchase_id"])->where("type_nature", 2)->first();
         $client->value = $total;
         $client->save();
@@ -144,9 +144,9 @@ class PurchaseController extends Controller {
             return response()->json(['success' => 'true', "detail" => $detail, "totalDebt" => $debt, "totalDebt" => $cred]);
 
 
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -154,9 +154,9 @@ class PurchaseController extends Controller {
         $entry = Purchases::FindOrFail($id);
         $result = $entry->delete();
         if ($result) {
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -169,9 +169,9 @@ class PurchaseController extends Controller {
         $result = $entry->delete();
         if ($result) {
             $resp = DB::table("purchases_detail")->where("purchase_id", "=", $entry["purchage_id"])->get();
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -193,7 +193,7 @@ class PurchaseController extends Controller {
             $input["description"] = "product";
 
             $result = PurchasesDetail::create($input)->id;
-            
+
             $account = Puc::where("code", "240802")->first();
             $value = $input["value"];
             $purchase_id = $input["purchase_id"];
@@ -211,7 +211,7 @@ class PurchaseController extends Controller {
             $input["description"] = "tax";
 
             PurchasesDetail::create($input);
-            
+
             $saleDetail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->get();
 
             $total = 0;
@@ -241,9 +241,9 @@ class PurchaseController extends Controller {
                 $detail = $this->formatDetail($input["purchase_id"]);
                 $debt = "$ " . number_format($this->debt, 2, ",", ".");
                 $cred = "$ " . number_format($this->credit, 2, ",", ".");
-                return response()->json(['success' => 'true', "detail" => $detail, "totalDebt" => $debt, "totalDebt" => $cred]);
+                return response()->json(['success' => true, "detail" => $detail, "totalDebt" => $debt, "totalDebt" => $cred]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }

@@ -20,10 +20,7 @@
         <form id="frmMain">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-4">
-                    <div class="row">
-                        <div class="col-lg-2">Objetivo</div>
-                    </div>
-                    <br>
+
                     <input type="hidden" id="id" name="id" class="">
                     <div class="row">
                         <div class="col-lg-2">
@@ -57,8 +54,15 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="panel panel-default">
+
+
                                 <div class="panel-body">
+                                    <button type="button" class="btn btn-xs btn-info" id="btnEdit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    </button>
                                     <div class="row">
+                                        <input type="hidden" id="tarjet_id">
+                                        <input type="hidden" id="tarjet_value">
+                                        
                                         <div class="col-lg-12"><h2 class="text-center">Objetivo</h2></div>
                                     </div>
                                     <div class="row">
@@ -83,7 +87,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-5 col-lg-offset-3">
-                        <table class="table table-bordered" id="tbl">
+                        <table class="table table-hover " id="tbl">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -91,6 +95,7 @@
                                     <th>Tarjet</th>
                                     <th>Sold</th>
                                     <th>Progress</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -109,7 +114,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Tarjet</h4>
+                <h4 class="modal-title">Target</h4>
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmTarjet']) !!}

@@ -56,11 +56,10 @@ class OrderController extends Controller {
 
             $result = Orders::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
                 $resp = Orders::FindOrFail($result["attributes"]["id"]);
-                return response()->json(['success' => 'true', "data" => $resp]);
+                return response()->json(['success' => true, "data" => $resp]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -82,10 +81,9 @@ class OrderController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = Orders::FindOrFail($id);
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -100,35 +98,31 @@ class OrderController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = DB::table("orders_detail")->where("order_id", "=", $input["order_id"])->get();
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', "data" => $resp]);
+
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroy($id) {
         $entry = Orders::FindOrFail($id);
         $result = $entry->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroyDetail($id) {
         $entry = OrdersDetail::FindOrFail($id);
         $result = $entry->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             $resp = DB::table("ordersº_detail")->where("order_id", "=", $entry["order_id"])->get();
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -142,11 +136,11 @@ class OrderController extends Controller {
             $input["pending"] = $input["quantity"];
             $result = OrdersDetail::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
+
                 $resp = OrdersDetail::where("order_id", $input["order_id"])->get();
-                return response()->json(['success' => 'true', "data" => $resp]);
+                return response()->json(['success' => true, "data" => $resp]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }

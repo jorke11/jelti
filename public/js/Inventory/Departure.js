@@ -190,7 +190,7 @@ function Sale() {
                     data: data,
                     dataType: 'JSON',
                     success: function (data) {
-                        if (data.success == 'true') {
+                        if (data.success == true) {
                             $("#btnSend").attr("disabled", false);
                             $("#frm #id").val(data.data.id);
                             $(".input-departure").setFields({data: data.data, disabled: true});
@@ -209,7 +209,7 @@ function Sale() {
                     data: data,
                     dataType: 'JSON',
                     success: function (data) {
-                        if (data.success == 'true') {
+                        if (data.success == true) {
                             $(".input-departure").setFields({data: data.header})
 
                             toastr.success("ok");
@@ -253,7 +253,7 @@ function Sale() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
                         obj.printDetail(data.data);
@@ -366,7 +366,7 @@ function Sale() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }
@@ -388,7 +388,7 @@ function Sale() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         toastr.warning("Record deleted");
                         obj.printDetail(data.data);
                     }

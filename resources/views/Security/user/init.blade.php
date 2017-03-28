@@ -31,7 +31,10 @@
                     <div class="page-title">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <button class="btn btn-success" id='new'>
+                                <button class="btn btn-success btn-sm" id='btnNew'>
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                                <button class="btn btn-success btn-sm" id='btnSave' disabled>
                                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                                 </button>
                             </div>

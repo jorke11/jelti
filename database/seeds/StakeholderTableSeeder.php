@@ -29,6 +29,7 @@ class StakeholderTableSeeder extends Seeder {
             'term' => 45,
             'web_site' => "asdasd",
             'type_stakeholder' => 2,
+            "status_id"=>1
         ]);
         DB::table("stakeholder")->insert([
             'type_regime_id' => 1,
@@ -48,6 +49,7 @@ class StakeholderTableSeeder extends Seeder {
             'term' => 45,
             'web_site' => "asdasd",
             'type_stakeholder' => 1,
+            "status_id"=>1
         ]);
         DB::table("stakeholder")->insert([
             'type_regime_id' => 1,
@@ -67,6 +69,7 @@ class StakeholderTableSeeder extends Seeder {
             'term' => 45,
             'web_site' => "asdasd",
             'type_stakeholder' => 1,
+            "status_id"=>1
         ]);
         DB::table("stakeholder")->insert([
             'type_regime_id' => 1,
@@ -86,6 +89,7 @@ class StakeholderTableSeeder extends Seeder {
             'term' => 45,
             'web_site' => "asdasd",
             'type_stakeholder' => 2,
+            "status_id"=>1
         ]);
     }
 

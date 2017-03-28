@@ -2,15 +2,14 @@ function User() {
     var table, product_id = 0, $checkableTree;
     this.init = function () {
         table = this.table();
-        $("#new").click(this.save);
-        $("#edit").click(this.edit);
+        $("#btnNew").click(this.new);
+        $("#btnSave").click(this.save);
         $("#tabManagement").click(function () {
-
             $('#myTabs a[href="#management"]').tab('show');
         });
 
         $("#tabManagement").click(function () {
-            $(".input-user").cleanFields();
+            $(".input-user").cleanFields({disabled: true});
         })
 
         $("#tabPermission").click(function () {
@@ -18,6 +17,11 @@ function User() {
         });
 
 
+    }
+
+    this.new = function () {
+        $("#btnSave").attr("disabled", false);
+        $(".input-user").cleanFields({disabled: false});
     }
 
     this.getTree = function (permission) {
@@ -133,29 +137,36 @@ function User() {
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frm #id").val();
-        var msg = '';
-        if (id == '') {
-            method = 'POST';
-            url = "user";
-            msg = "Created Record";
-        } else {
-            method = 'PUT';
-            url = "user/" + id;
-            msg = "Edited Record";
-        }
 
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.success == 'true') {
-                    table.ajax.reload();
-                    toastr.success(msg);
-                }
+        var validate = $(".input-user").validate();
+
+        if (validate.length == 0) {
+            var msg = '';
+            if (id == '') {
+                method = 'POST';
+                url = "user";
+                msg = "Created Record";
+            } else {
+                method = 'PUT';
+                url = "user/" + id;
+                msg = "Edited Record";
             }
-        })
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        table.ajax.reload();
+                        toastr.success(msg);
+                    }
+                }
+            })
+        } else {
+            toastr.error("Fields Required!");
+        }
     }
 
     this.showModal = function (id) {
@@ -169,8 +180,8 @@ function User() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-user").setFields({data: data.header});
-
+                $(".input-user").setFields({data: data.header, disabled: false});
+                $("#btnSave").attr("disabled", false);
                 if (data.header.status == true) {
                     $("#frm #status").prop("checked", true);
                 } else {
@@ -191,7 +202,7 @@ function User() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }

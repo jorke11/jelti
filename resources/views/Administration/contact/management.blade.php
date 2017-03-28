@@ -66,7 +66,7 @@
                     <div class="form-group">
                         <label for="address" class="control-label">birth Date</label>
                         <input type="datetime" class="form-control input-contact" id="birth_date" name="birth_date" placeholder="birth date" 
-                               value="{{date("Y-m-d H:i")}}">
+                               value="<?php echo date("Y-m-d H:i"); ?>">
                     </div>
                 </div>
             </div>

@@ -7,9 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Administration\Mark;
 use Session;
 
-class MarkController extends Controller
-{
-       public function index() {
+class MarkController extends Controller {
+
+    public function index() {
         return view("Administration.mark.init");
     }
 
@@ -21,10 +21,9 @@ class MarkController extends Controller
 //            $input["users_id"] = 1;
             $result = Mark::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
-                return response()->json(['success' => 'true']);
+                return response()->json(['success' => true]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -39,22 +38,20 @@ class MarkController extends Controller
         $input = $request->all();
         $result = $product->fill($input)->save();
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroy($id) {
         $product = Mark::FindOrFail($id);
         $result = $product->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
+
 }

@@ -16,6 +16,7 @@ class CreateProspectsTable extends Migration
         Schema::create('prospects', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('status_id')->nullable();
+            $table->integer('status_prospect_id')->nullable();
             $table->integer('source_id')->nullable();
             $table->integer('sector_id')->nullable();
             $table->integer('city_id');

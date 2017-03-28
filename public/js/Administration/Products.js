@@ -32,7 +32,7 @@ function Product() {
         });
 
         $("#tabManagement").click(function () {
-            $(".input-product").cleanFields();
+            $(".input-product").cleanFields({disabled:true});
         });
 
         $("#tabSpecial").click(function () {

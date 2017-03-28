@@ -69,7 +69,8 @@ function Contact() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-contact").setFields({data: data})
+                $(".input-contact").setFields({data: data});
+                $("#btnSave").attr("disabled",false);
             }
         })
     }

@@ -1,17 +1,17 @@
 function Stakeholder() {
-    var table, document_id, tableSpecial,tableBranch;
+    var table, document_id, tableSpecial, tableBranch;
     this.init = function () {
-        
+
         table = this.table();
         $("#btnSave").click(this.save);
         $("#btnNew").click(this.new);
-        
+
         $("#btnNewSpecial").click(this.newSpecial);
         $("#btnSaveSpecial").click(this.saveSpecial);
-        
+
         $("#btnNewBranch").click(this.newBranch);
         $("#btnSaveBranch").click(this.saveBranch);
-        
+
         $("#tabManagement").click(function () {
             $(".input-stakeholder").val("");
             $('#myTabs a[href="#management"]').tab('show');
@@ -43,7 +43,9 @@ function Stakeholder() {
             tableSpecial = obj.tableSpecial($("#frm #id").val());
         })
         $("#tabManagement").click(function () {
-            $(".input-stakeholder").cleanFields();
+            $(".input-stakeholder").cleanFields({disabled: true});
+            $("#tabBranch").addClass("hide");
+            $("#tabSpecial").addClass("hide");
         })
         $("#tabList").click(function () {
             $("#tabSpecial").addClass("hide");
@@ -62,11 +64,11 @@ function Stakeholder() {
     this.newSpecial = function () {
         $(".input-special").cleanFields();
     }
-    
+
     this.newBranch = function () {
         $(".input-branch").cleanFields();
     }
-    
+
     this.new = function () {
         $(".input-stakeholder").cleanFields();
     }
@@ -101,7 +103,7 @@ function Stakeholder() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         tableSpecial.ajax.reload();
                         toastr.success(msg);
                     }
@@ -112,7 +114,7 @@ function Stakeholder() {
             toastr.error("Fields Required!");
         }
     }
-    
+
     this.saveBranch = function () {
         toastr.remove();
         var frm = $("#frmBranch");
@@ -142,7 +144,7 @@ function Stakeholder() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         tableBranch.ajax.reload();
                         toastr.success(msg);
                     }
@@ -199,7 +201,7 @@ function Stakeholder() {
                 data: data,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.success(msg);
                     }
@@ -256,7 +258,7 @@ function Stakeholder() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }
@@ -266,7 +268,7 @@ function Stakeholder() {
             })
         }
     }
-    
+
     this.deleteBranch = function (id) {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
@@ -328,11 +330,12 @@ function Stakeholder() {
                 {data: "contact"},
                 {data: "phone_contact"},
                 {data: "term"},
-                {data: "city_id"},
+                {data: "city"},
                 {data: "web_site"},
                 {data: "typeperson"},
                 {data: "typeregime"},
                 {data: "type_stakeholder"},
+                {data: "status_id"},
             ],
             buttons: [
                 'copyHtml5',
@@ -349,7 +352,7 @@ function Stakeholder() {
                     }
                 },
                 {
-                    targets: [15],
+                    targets: [16],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -404,7 +407,7 @@ function Stakeholder() {
             ],
         });
     }
-    
+
     this.tableBranch = function (id) {
         var obj = {}, checked = false;
         obj.client_id = id;
@@ -439,7 +442,7 @@ function Stakeholder() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.deleteBranch(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';                        
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.deleteBranch(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

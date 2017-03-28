@@ -55,9 +55,9 @@ class ActivityController extends Controller {
         $result = $record->delete();
 
         if ($result) {
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 

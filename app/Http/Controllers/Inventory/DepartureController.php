@@ -92,8 +92,6 @@ class DepartureController extends Controller {
         return $pdf->stream('document.pdf');
     }
 
-    
-
     public function getQuantity($id) {
         $product = \App\Models\Invoicing\PurchaseDetail::where("product_id", $id)->first();
         return response()->json(["response" => $product]);
@@ -108,11 +106,10 @@ class DepartureController extends Controller {
 
             $result = Departures::create($input);
             if ($result) {
-                Session::flash('save', 'Se ha creado correctamente');
                 $resp = Departures::FindOrFail($result["attributes"]["id"]);
-                return response()->json(['success' => 'true', "data" => $resp]);
+                return response()->json(['success' => true, "data" => $resp]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }
@@ -259,10 +256,9 @@ class DepartureController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = Departures::FindOrFail($id);
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -272,35 +268,30 @@ class DepartureController extends Controller {
         $result = $entry->fill($input)->save();
         if ($result) {
             $resp = DB::table("departures_detail")->where("departure_id", "=", $input["departure_id"])->get();
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroy($id) {
         $entry = Departures::FindOrFail($id);
         $result = $entry->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true']);
+            return response()->json(['success' => true]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
     public function destroyDetail($id) {
         $entry = DeparturesDetail::FindOrFail($id);
         $result = $entry->delete();
-        Session::flash('delete', 'Se ha eliminado correctamente');
         if ($result) {
             $resp = DB::table("departures_detail")->where("departure_id", "=", $entry["departure_id"])->get();
-            Session::flash('save', 'Se ha creado correctamente');
-            return response()->json(['success' => 'true', "data" => $resp]);
+            return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => 'false']);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -314,9 +305,9 @@ class DepartureController extends Controller {
             if ($result) {
                 $resp = DeparturesDetail::where("departure_id", $input["departure_id"])->get();
                 $resp = $this->formatDetail($resp);
-                return response()->json(['success' => 'true', "data" => $resp]);
+                return response()->json(['success' => true, "data" => $resp]);
             } else {
-                return response()->json(['success' => 'false']);
+                return response()->json(['success' => false]);
             }
         }
     }

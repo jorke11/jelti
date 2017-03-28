@@ -20,6 +20,7 @@ class Stakeholder extends Model
         "phone_contact",
         "term",
         "city_id",
+        "status_id",
         "commercial_id",
         "web_site",
         "type_regime_id",

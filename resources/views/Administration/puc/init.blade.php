@@ -34,7 +34,7 @@
                         <button class="btn btn-success btn-sm" type="button" id="btnNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
-                        <button class="btn btn-success btn-sm" type="button" id="btnSave">
+                        <button class="btn btn-success btn-sm" type="button" id="btnSave" >
                             <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -47,7 +47,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Level:</label>
-                            <select class="form-control input-puc" id="level" name="level">
+                            <select class="form-control input-puc" id="level" name="level" required>
                                 <option value="0">Selection</option>
                                 <option value="1">Class Account</option>
                                 <option value="2">Group</option>
@@ -62,7 +62,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Nature:</label>
-                            <select class="form-control input-puc" id="nature" name="nature">
+                            <select class="form-control input-puc" id="nature" name="nature" required>
                                 <option value="0">Select</option>
                                 <option value="1">Debt</option>
                                 <option value="2">Credit</option>
@@ -75,7 +75,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Number:</label>
-                            <input type="text" class="form-control input-puc" id="code" name='code' placeholder="Code"> 
+                            <input type="text" class="form-control input-puc" id="code" name='code' placeholder="Code" required> 
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Account:</label>
-                            <input type="text" class="form-control input-puc" id="account" name='account' placeholder="Account">
+                            <input type="text" class="form-control input-puc" id="account" name='account' placeholder="Account" required>
                         </div>
                     </div>
                 </div>

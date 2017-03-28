@@ -61,7 +61,7 @@ class SeekController extends Controller {
         } else {
             $query
                     ->where("name", "ilike", "%" . $in["q"] . "%")
-                    ->where("type_stakeholder", 1)
+                    ->where("type_stakeholder", 2)
                     ->get();
         }
         $result = $query->get();

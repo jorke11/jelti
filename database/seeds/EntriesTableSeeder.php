@@ -2,15 +2,14 @@
 
 use Illuminate\Database\Seeder;
 
-class EntriesTableSeeder extends Seeder
-{
+class EntriesTableSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
+    public function run() {
         DB::table("entries")->insert([
             'warehouse_id' => 1,
             'responsible_id' => 1,
@@ -20,6 +19,8 @@ class EntriesTableSeeder extends Seeder
             'description' => "entries seeder",
             'invoice' => "entries invoice",
             'created' => date("Y-m-d H:i"),
+            "consecutive" => "ent001"
         ]);
     }
+
 }

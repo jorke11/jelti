@@ -7,21 +7,31 @@
 
         </div>
         <div class="panel-body">
-            <table class="table table-condensed table-bordered table-striped table-hover" id="tbl" width='100%'>
+            <table class="table table-condensed  table-hover" id="tbl" width='100%'>
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Consecutive</th>
                         <th>Date</th>
-                        <th>Order</th>
+                        <th>Client</th>
                         <th>Warehouse</th>
                         <th>City</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th tipo="prueba">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Warehouse</th>
+                        <th>City</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

@@ -95,6 +95,8 @@ function Sale() {
             if (maxDeparture < $(this).val()) {
                 toastr.warning("No hay sufiente disponible");
                 $(this).val("");
+            } else {
+                $("#quantityTotal").html($("#quantity").val() * $("#value").val());
             }
         });
         $("#tabList").click(function () {
@@ -153,6 +155,7 @@ function Sale() {
                     $("#btnDocument").attr("disabled", false);
                 } else {
                     toastr.warning(resp.msg);
+                    $("#btnDocument").attr("disabled", false);
                     $("#btnDocument").attr("disabled", true);
                 }
             }
@@ -406,30 +409,66 @@ function Sale() {
             "ajax": "/api/listDeparture",
             columns: [
                 {data: "id"},
-                {data: "id"},
-                {data: "created"},
-                {data: "order"},
-                {data: "warehouse_id"},
-                {data: "city_id"},
-                {data: "status_id"},
+                {data: "created_at"},
+                {data: "client"},
+                {data: "warehouse"},
+                {data: "city"},
+                {data: "status"
+                },
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6],
+                    aTargets: [0, 1, 2, 3, 4, 5],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [6],
                     searchable: false,
-                    "mData": null,
-                    "mRender": function (data, type, full) {
+                    mData: null,
+                    mRender: function (data, type, full) {
                         return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],
+
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+
+                    var type = $(column.header()).attr('rowspan');
+
+                    
+                    if (type != undefined) {
+                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                            );
+                                    column
+//                                            .search(val ? val : '', true, false)
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                });
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    }
+                });
+
+            },
+            createdRow: function (row, data, index) {
+                if (data.status_id == 1) {
+                    $('td', row).eq(5).addClass('color-new');
+                } else if (data.status_id == 2) {
+                    $('td', row).eq(5).addClass('color-pending');
+                } else if (data.status_id == 3) {
+                    $('td', row).eq(5).addClass('color-checked');
+                }
+            }
         });
     }
 

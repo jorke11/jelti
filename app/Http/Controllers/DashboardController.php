@@ -14,29 +14,31 @@ class DashboardController extends Controller {
     }
 
     public function getMenu() {
-
-
-        $resp = DB::select("
+        $sql = "
                         SELECT id = ANY (
-                                                    SELECT id 
+                                                    SELECT permission_id 
                                                     FROM permissions_user 
                                                     WHERE users_id=" . Auth::user()->id . " 
                                                         AND permission_id=p.id) allowed,p.*
                         from permissions p 
                         WHERE parent_id=0 
                         AND typemenu_id=0 
-                        ORDER BY priority asc");
+                        ORDER BY priority asc";
+        $resp = DB::select($sql);
+
+
         $arr = array();
 
         if (count($resp)) {
+
             foreach ($resp as $key => $val) {
                 if ($val->allowed == true) {
                     $query = "
-                    SELECT id = ANY (SELECT id FROM permissions_user where users_id=" . Auth::user()->id . " and id=p.id) allowed,p.*
+                    SELECT id = ANY (SELECT permission_id FROM permissions_user where users_id=" . Auth::user()->id . " and permission_id=p.id) allowed,p.*
                     from permissions p 
                     WHERE parent_id=" . $val->id . "
                     ORDER BY priority asc";
-
+                    
                     $children = DB::select($query);
                     array_push($arr, $val);
                     if (count($children) > 0) {
@@ -45,10 +47,12 @@ class DashboardController extends Controller {
                                 $arr[$key]->nodes[] = $v;
                         }
                     }
+//                }
                 }
             }
+
+            return $arr;
         }
-        return $arr;
     }
 
 }

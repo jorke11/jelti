@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Administration;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\models\Administration\Consecutives;
 
-class TicketController extends Controller {
-
-    public function __construct() {
+class ConsecutiveController extends Controller
+{
+     public function __construct() {
         $this->middleware("auth");
     }
 
     public function index() {
-        return view("Administration.ticket.init");
+        return view("Administration.consecutive.init");
     }
 
     public function create() {
@@ -25,7 +26,7 @@ class TicketController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Categories::create($input);
+            $result = Consecutives::create($input);
             if ($result) {
                 return response()->json(['success' => true]);
             } else {
@@ -35,12 +36,12 @@ class TicketController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Categories::FindOrFail($id);
+        $suppliers = Consecutives::FindOrFail($id);
         return response()->json($suppliers);
     }
 
     public function update(Request $request, $id) {
-        $category = Categories::FindOrFail($id);
+        $category = Consecutives::FindOrFail($id);
         $input = $request->all();
         $result = $category->fill($input)->save();
         if ($result) {
@@ -51,7 +52,7 @@ class TicketController extends Controller {
     }
 
     public function destroy($id) {
-        $category = Categories::FindOrFail($id);
+        $category = Consecutives::FindOrFail($id);
         $result = $category->delete();
         if ($result) {
             return response()->json(['success' => true]);
@@ -59,5 +60,4 @@ class TicketController extends Controller {
             return response()->json(['success' => false]);
         }
     }
-
 }

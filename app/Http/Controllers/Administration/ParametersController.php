@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Administration;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Administration\Parameters;
 
-class TicketController extends Controller {
+class ParametersController extends Controller {
 
     public function __construct() {
         $this->middleware("auth");
     }
 
     public function index() {
-        return view("Administration.ticket.init");
+        return view("Administration.parameter.init");
     }
 
     public function create() {
@@ -25,7 +26,7 @@ class TicketController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $result = Categories::create($input);
+            $result = Parameters::create($input);
             if ($result) {
                 return response()->json(['success' => true]);
             } else {
@@ -35,12 +36,12 @@ class TicketController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Categories::FindOrFail($id);
+        $suppliers = Parameters::FindOrFail($id);
         return response()->json($suppliers);
     }
 
     public function update(Request $request, $id) {
-        $category = Categories::FindOrFail($id);
+        $category = Parameters::FindOrFail($id);
         $input = $request->all();
         $result = $category->fill($input)->save();
         if ($result) {
@@ -51,7 +52,7 @@ class TicketController extends Controller {
     }
 
     public function destroy($id) {
-        $category = Categories::FindOrFail($id);
+        $category = Parameters::FindOrFail($id);
         $result = $category->delete();
         if ($result) {
             return response()->json(['success' => true]);

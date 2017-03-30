@@ -35,24 +35,35 @@ class UsersTableSeeder extends Seeder {
         DB::table("users")->insert([
             'name' => 'commercial 1',
             'last_name' => 'commercial 1',
-            'email' => 'comercial1@hotmail.com',
+            'email' => 'c@hotmail.com',
             'role_id' => 4,
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
             'city_id' => 1,
             'status' => true,
-            'password' => bcrypt('123456')
+            'password' => bcrypt('123')
         ]);
         DB::table("users")->insert([
             'name' => 'commercial 2',
             'last_name' => 'commercial 2',
-            'email' => 'comercial2@hotmail.com',
+            'email' => 'c2@hotmail.com',
             'role_id' => 4,
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
             'city_id' => 1,
             'status' => true,
-            'password' => bcrypt('123456')
+            'password' => bcrypt('123')
+        ]);
+        DB::table("users")->insert([
+            'name' => 'Jorge',
+            'last_name' => 'Rojas',
+            'email' => 'w@hotmail.com',
+            'role_id' => 5,
+            'warehouse_id' => 1,
+            'stakeholder_id' => 1,
+            'city_id' => 1,
+            'status' => true,
+            'password' => bcrypt('123')
         ]);
     }
 

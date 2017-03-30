@@ -13,20 +13,25 @@ use App\Models\Invoicing\PurchasesDetail;
 use App\Models\Invoicing\SaleDetail;
 use App\Models\Administration\Products;
 use App\Models\Administration\Stakeholder;
+use App\Models\Administration\Parameters;
+use App\models\Administration\Consecutives;
 use App\Models\Invoicing\Sales;
 use Session;
+use Illuminate\Support\Facades\Auth;
 
 class DepartureController extends Controller {
 
     protected $total;
 
     public function __construct() {
+        $this->middleware("auth");
         $this->total = 0;
     }
 
     public function index() {
         $category = \App\Models\Administration\Categories::all();
-        return view("Inventory.departure.init", compact("category"));
+        $status = Parameters::where("group", "entry")->get();
+        return view("Inventory.departure.init", compact("category", "status"));
     }
 
     public function showOrder($id) {
@@ -117,7 +122,8 @@ class DepartureController extends Controller {
     public function setSale(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-
+            $basetax = Parameters::where("group", "tax")->where("code", 2)->first();
+            $tax = Parameters::where("group", "tax")->where("code", 1)->first();
             $departure = Departures::findOrFail($input["id"]);
 
             $dep = Sales::where("departure_id", $input["id"])->get();
@@ -163,10 +169,10 @@ class DepartureController extends Controller {
                 }
 
 
-                if ($total > 860000) {
-                    $rete = ($total * 0.025);
+                if ($total > $basetax["base"]) {
+                    $rete = ($total * $tax["base"]);
                     SaleDetail::insert([
-                        "sale_id" => $id, "account_id" => 2, "value" => ($total * 0.025), "order" => $cont, "description" => "rete", "type_nature" => 2
+                        "sale_id" => $id, "account_id" => 2, "value" => ($total * $tax["base"]), "order" => $cont, "description" => "rete", "type_nature" => 2
                     ]);
                     $credit -= $rete;
                     $cont++;
@@ -177,14 +183,34 @@ class DepartureController extends Controller {
                 ]);
                 $credit = 0;
 
+                $departure->invoice = $this->createConsecutive(1);
                 $departure->status_id = 2;
                 $departure->save();
+                $this->updateConsecutive(1);
 
                 return response()->json(["success" => true, "data" => $departure]);
             } else {
                 return response()->json(["success" => false, "msg" => 'Already sended']);
             }
         }
+    }
+
+    public function createConsecutive($id) {
+        $con = Consecutives::where("type_form", $id)->first();
+
+        $con->current = ($con->current == null) ? 1 : $con->current;
+        $res = "";
+        $con->pronoun = ($con->pronoun == null) ? '' : $con->pronoun;
+        for ($i = strlen($con->pronoun); $i <= ($con->large - strlen($con->current)); $i++) {
+            $res .= '0';
+        }
+        return $con->pronoun . $res . $con->current;
+    }
+
+    public function updateConsecutive($id) {
+        $con = Consecutives::where("type_form", $id)->first();
+        $con->current = (($con->current == null) ? 1 : $con->current) + 1;
+        $con->save();
     }
 
     public function storeExtern(Request $request) {

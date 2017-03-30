@@ -10,6 +10,8 @@ use App\Models\Administration\Products;
 use App\Models\Inventory\Entries;
 use App\Models\Inventory\EntriesDetail;
 use App\Models\Administration\Categories;
+use App\Models\Administration\Parameters;
+use App\models\Administration\Consecutives;
 use App\Models\Invoicing\Purchases;
 use App\Models\Invoicing\PurchasesDetail;
 use Session;
@@ -24,11 +26,30 @@ class EntryController extends Controller {
 
     public function index() {
         $category = Categories::all();
-        return view("Inventory.entry.init", compact("category"));
+        $status = Parameters::where("group", "entry")->get();
+        return view("Inventory.entry.init", compact("category", "status"));
+    }
+
+    public function createConsecutive($id) {
+        $con = Consecutives::where("type_form", $id)->first();
+
+        $con->current = ($con->current == null) ? 1 : $con->current;
+        $res = "";
+        for ($i = strlen($con->pronoun); $i <= ($con->large - strlen($con->current)); $i++) {
+            $res .= '0';
+        }
+        return $con->pronoun . $res . $con->current;
+    }
+
+    public function updateConsecutive($id) {
+        $con = Consecutives::where("type_form", $id)->first();
+        $con->current = (($con->current == null) ? 1 : $con->current) + 1;
+        $con->save();
     }
 
     public function getConsecutive($id) {
-        return response()->json(["response" => 'prueba']);
+
+        return response()->json(["response" => $this->createConsecutive(2)]);
     }
 
     public function getDetailProduct($id) {
@@ -58,9 +79,13 @@ class EntryController extends Controller {
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $input["status_id"] = 1;
+            $input["consecutive"] = $this->createConsecutive(2);
             $result = Entries::create($input);
             if ($result) {
+
+                $this->updateConsecutive(2);
                 $resp = Entries::FindOrFail($result["attributes"]["id"]);
+
                 return response()->json(['success' => true, "data" => $resp]);
             } else {
                 return response()->json(['success' => false]);

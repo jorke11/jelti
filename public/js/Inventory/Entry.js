@@ -36,14 +36,7 @@ function Entry() {
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-            $.ajax({
-                url: 'entry/1/consecutive',
-                method: 'GET',
-                dataType: 'JSON',
-                success: function (resp) {
-
-                }
-            })
+            obj.consecutive();
         });
 
         $("#btnmodalDetail").click(function () {
@@ -75,6 +68,18 @@ function Entry() {
         });
 
     }
+
+    this.consecutive = function () {
+        $.ajax({
+            url: 'entry/1/consecutive',
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (resp) {
+                $("#frm #consecutive").val(resp.response);
+            }
+        })
+    }
+
     this.new = function () {
         toastr.remove();
         var created = $("#frm #created").val();
@@ -90,6 +95,7 @@ function Entry() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+        obj.consecutive();
     }
 
     this.send = function () {
@@ -343,13 +349,13 @@ function Entry() {
             ajax: "/api/listEntry",
             columns: [
                 {data: "id"},
-                {data: "id"},
+                {data: "consecutive"},
                 {data: "description"},
-                {data: "created"},
+                {data: "created_at"},
                 {data: "invoice"},
-                {data: "warehouse_id"},
-                {data: "city_id"},
-                {data: "status_id"},
+                {data: "warehouse"},
+                {data: "city"},
+                {data: "status"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [

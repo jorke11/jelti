@@ -12,6 +12,8 @@ function Sale() {
             $('#myTabs a[href="#management"]').tab('show');
         });
 
+        $("#btnChecked").click(this.checked);
+
         $("#insideManagement").click(function () {
             $(".input-sale").cleanFields({disabled: true});
 
@@ -61,6 +63,20 @@ function Sale() {
 //            }
 //        });
     }
+
+    this.checked = function () {
+        $.ajax({
+            url: "/checkedSale/" + $("#frm #id").val(),
+            method: "PUT",
+            dataType: 'JSON',
+            success: function (data) {
+                if(data.success==true){
+                    toastr.success("Checked");
+                }
+            }
+        })
+    }
+
     this.new = function () {
         $(".input-sale").cleanFields({disabled: false});
         $("#btnSave").attr("disabled", false);
@@ -360,7 +376,7 @@ function Sale() {
             ],
         });
     }
-    
+
     this.table = function () {
         return $('#tbl').DataTable({
             "processing": true,

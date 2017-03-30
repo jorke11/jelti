@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Invoicing\Sales;
 use App\Models\Invoicing\SaleDetail;
-use \Illuminate\Support\Facades\DB;
+use DB;
 use Session;
 use App\Models\Administration\Products;
 use App\Models\Administration\Puc;
 use Log;
+use App\Models\Inventory\Departures;
 
 class SaleController extends Controller {
 
@@ -236,6 +237,16 @@ class SaleController extends Controller {
         $sales = DB::table("sales_detail")->where("product_id", $id)->sum("quantity");
         $quantity = ($entry + $purchase) - ($departure + $sales);
         return $quantity;
+    }
+
+    public function checkedSale(Request $req, $id) {
+        $sale = Sales::findOrFail($id);
+        $dep = Departures::findOrFail($sale["departure_id"]);
+        $sale->status_id = 3;
+        $dep->status_id = 3;
+        $sale->save();
+        $dep->save();
+        return response()->json(["success" => true]);
     }
 
 }

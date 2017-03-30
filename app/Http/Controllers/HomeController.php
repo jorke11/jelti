@@ -27,8 +27,6 @@ class HomeController extends Controller {
     public function index() {
         $comment = Comment::whereBetween('created_at', array(date("Y-m") . "-01 00:00", date("Y-m") . "-31 23:59"));
         $comment = count($comment) + 1;
-        
-        
 
         switch (Auth::user()->role_id) {
             case 1: {
@@ -36,11 +34,23 @@ class HomeController extends Controller {
                     break;
                 }
             case 2: {
-                    return view('client');
+                return view('dashboard', compact("comment"));
+//                    return view('client');
                     break;
                 }
             case 3: {
-                    return view('supplier');
+                return view('dashboard', compact("comment"));
+//                    return view('supplier');
+                    break;
+                }
+            case 4: {
+                return view('dashboard', compact("comment"));
+//                    return view('supplier');
+                    break;
+                }
+            case 5: {
+                return view('dashboard', compact("comment"));
+//                    return view('supplier');
                     break;
                 }
         }

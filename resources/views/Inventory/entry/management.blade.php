@@ -21,7 +21,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Consecutive:</label>
-                    <input type="text" class="form-control input-entry input-sm" id="id" readonly="">
+                    <input type="text" class="form-control input-entry input-sm" id="consecutive" readonly="" name="consecutive">
                 </div>
             </div>
             <div class="col-lg-2">
@@ -51,11 +51,9 @@
                 <div class="form-group">
                     <label for="email">Status:</label>
                     <select class="form-control input-entry" id="status_id" name="status_id" required>
-                        <option value="0">Selection</option>
-                        <option value="1">New</option>
-                        <option value="2">Pending</option>
-                        <option value="3">validate</option>
-                        <option value="4">Canceled</option>
+                        @foreach($status as $val)
+                        <option value="{{$val->code}}">{{$val->description}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>

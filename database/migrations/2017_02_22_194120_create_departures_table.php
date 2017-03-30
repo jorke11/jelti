@@ -24,7 +24,8 @@ class CreateDeparturesTable extends Migration {
             $table->string('address');
             $table->string('phone');
             $table->dateTime('created');
-            $table->string('status_id');
+            $table->integer('status_id');
+            $table->string('invoice')->nullable();
             $table->timestamps();
         });
     }

@@ -8,6 +8,9 @@
                 <button class="btn btn-success btn-sm" id='btnSave'>
                     <span class="glyphicon glyphicon-save" aria-hidden="true"> Save</span>
                 </button>
+                <button class="btn btn-success btn-sm" id='btnChecked'>
+                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> Check</span>
+                </button>
             </div>
         </div>
     </div>

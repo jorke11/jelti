@@ -4,21 +4,18 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateParametersTable extends Migration
+class CreateTicketsDetailTable extends Migration
 {
-    
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() {
-        Schema::create('parameters', function (Blueprint $table) {
+     public function up() {
+        Schema::create('tickets_detail', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description');
-            $table->string('value')->nullable();
-            $table->string('group');
-            $table->integer('code')->nullable();
+            $table->integer('ticket_id');
+            $table->string('document');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ class CreateParametersTable extends Migration
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('parameters');
+        Schema::dropIfExists('tickets_detail');
     }
 }

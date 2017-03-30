@@ -23,6 +23,9 @@ Route::get('/home', 'HomeController@index');
 Route::get('/dash', 'DashboardController@index');
 Route::get('/summary', 'Invoicing\SummaryController@index');
 
+Route::resource('/consecutive', 'Administration\ConsecutiveController');
+
+
 Route::resource('/product', 'Administration\ProductController');
 Route::post('/product/upload', 'Administration\ProductController@uploadImage');
 Route::put('/product/checkmain/{id}', 'Administration\ProductController@checkMain');
@@ -92,6 +95,8 @@ Route::post('/sale/storeDetail', 'Invoicing\SaleController@storeDetail');
 Route::put('/sale/detail/{id}', 'Invoicing\SaleController@updateDetail');
 Route::delete('/sale/detail/{id}', 'Invoicing\SaleController@destroyDetail');
 Route::get('/sale/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
+
+Route::put('/checkedSale/{id}', 'Invoicing\SaleController@checkedSale');
 
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
@@ -172,6 +177,10 @@ Route::get('/comments', 'MainController@getcomments');
 Route::get('/comments/list/{id}', 'MainController@listComments');
 
 
+Route::resource('/ticket', 'Administration\TicketController');
+Route::resource('/parameter', 'Administration\ParametersController');
+
+
 Route::get('/api/listCategory', function() {
     return Datatables::queryBuilder(DB::table("categories")->orderBy("order", "asc"))->make(true);
 });
@@ -184,14 +193,21 @@ Route::get('/api/listSupplier', function() {
                     DB::table('vsupplier')
             )->make(true);
 });
+Route::get('/api/listParameter', function() {
+    return Datatables::queryBuilder(
+                    DB::table('parameters')->orderBy("id","asc")
+            )->make(true);
+});
+Route::get('/api/listTicket', function() {
+    return Datatables::queryBuilder(
+                    DB::table('tickets')
+            )->make(true);
+});
 
 Route::get('/api/listStakeholder', function() {
     return Datatables::queryBuilder(
                     DB::table('stakeholder')
-                            ->select("stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", 
-                                    "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", 
-                                    "cities.description as city", "stakeholder.web_site", "typepersons.description as typeperson", 
-                                    "typeregimes.description as typeregime", "stakeholder.type_stakeholder", "stakeholder.status_id")
+                            ->select("stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typepersons.description as typeperson", "typeregimes.description as typeregime", "stakeholder.type_stakeholder", "stakeholder.status_id")
                             ->join("cities", "cities.id", "stakeholder.city_id")
                             ->leftjoin("typepersons", "typepersons.id", "stakeholder.type_person_id")
                             ->leftjoin("typeregimes", "typeregimes.id", "stakeholder.type_regime_id")
@@ -199,6 +215,9 @@ Route::get('/api/listStakeholder', function() {
 });
 Route::get('/api/listProduct', function() {
     return Datatables::eloquent(Models\Administration\Products::query())->make(true);
+});
+Route::get('/api/listConsecutive', function() {
+    return Datatables::eloquent(models\Administration\Consecutives::query())->make(true);
 });
 Route::get('/api/listWarehouse', function() {
     return Datatables::eloquent(Models\Administration\Warehouses::query())->make(true);
@@ -227,10 +246,39 @@ Route::get('/api/listSale', function() {
     return Datatables::eloquent(Models\Invoicing\Sales::query())->make(true);
 });
 Route::get('/api/listEntry', function() {
-    return Datatables::eloquent(Models\Inventory\Entries::query())->make(true);
+    return Datatables::queryBuilder(
+                    DB::table('entries')
+                            ->select("entries.id", "entries.consecutive","entries.description", "entries.created_at", "entries.invoice", "warehouses.description as warehouse", "cities.description as city", DB::raw("coalesce(parameters.description,'') as status"))
+                            ->join("warehouses", "warehouses.id", "entries.warehouse_id")
+                            ->leftjoin("cities", "cities.id", "entries.city_id")
+                            ->leftjoin("parameters", "parameters.code", "entries.status_id")
+                            ->where("parameters.group", "entry")
+            )->make(true);
 });
+
 Route::get('/api/listDeparture', function() {
-    return Datatables::eloquent(Models\Inventory\Departures::query())->make(true);
+
+    $query = DB::table('departures')
+            ->select("departures.id", "departures.created_at", DB::raw("stakeholder.name || stakeholder.last_name as client")
+                    , "warehouses.description as warehouse", "cities.description as city"
+                    , DB::raw("coalesce(parameters.description,'') as status"),"departures.status_id")
+            ->join("stakeholder", "stakeholder.id", "departures.client_id")
+            ->leftjoin("cities", "cities.id", "departures.city_id")
+            ->leftjoin("warehouses", "warehouses.id", "departures.warehouse_id")
+            ->leftjoin("parameters", "parameters.code", "departures.status_id")
+            ->where("parameters.group", "entry");
+
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("departures.responsible_id", Auth::user()->id);
+    }
+    
+//    $query = DB::table('vdepartures');
+//            
+//    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+//        $query->where("responsible_id", Auth::user()->id);
+//    }
+    
+    return Datatables::queryBuilder($query)->make(true);
 });
 
 Route::get('/api/listOrder', function() {

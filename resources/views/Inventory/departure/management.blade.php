@@ -8,12 +8,15 @@
                 <button class="btn btn-success btn-sm" id='btnSave' disabled>
                     <span class="glyphicon glyphicon-save" aria-hidden="true" > Save</span>
                 </button>
+                @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                 <button class="btn btn-success btn-sm" id='btnSend'>
                     <span class="glyphicon glyphicon-send" aria-hidden="true"> Send</span>
                 </button>
+
                 <button class="btn btn-success btn-sm" id='btnDocument'>
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Pdf</span>
                 </button>
+                @endif
             </div>
         </div>
     </div>
@@ -62,10 +65,9 @@
                 <div class="form-group">
                     <label for="email">Status:</label>
                     <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly required>
-                        <option value="1">New</option>
-                        <option value="2">Checked</option>
-                        <option value="3">Closed</option>
-                        <option value="4">Canceled</option>
+                        @foreach($status as $val)
+                        <option value="{{$val->id}}">{{$val->description}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -115,6 +117,12 @@
                     <label for="email">Branch office:</label>
                     <select class="form-control input-departure input-fillable" id="branch_id" name='branch_id' data-api="/api/getBranch" required>
                     </select>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="email">Invoice generated:</label>
+                    <input type="text" class="form-control input-departure" id="invoice_generated" readonly>
                 </div>
             </div>
         </div>

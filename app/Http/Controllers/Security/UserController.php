@@ -105,7 +105,7 @@ class UserController extends Controller {
         foreach ($per as $val) {
             $us = PermissionsUser::where("permission_id", $val)->where("users_id", $id)->get();
             if (count($us) == 0) {
-                $per = new PermissionUser();
+                $per = new PermissionsUser();
                 $per->users_id = $id;
                 $per->permission_id = $val;
                 $per->save();

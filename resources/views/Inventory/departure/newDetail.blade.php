@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <label for="email">Product:</label>
                             <select class="form-control input-detail" id="product_id" name='product_id' data-api="/api/getProduct" required>
-                                
+
                             </select>
                         </div>
 
@@ -45,6 +45,13 @@
                         </div>
                     </div>
 
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Total <span id="quantityTotal"></span></label>
+                        </div>
+                    </div>
                 </div>
                 {!!Form::close()!!}
             </div>

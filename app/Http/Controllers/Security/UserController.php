@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller {
 
+    public $resp;
+    public $cont;
+
+    public function __construct() {
+        $this->resp = array();
+        $this->cont = 0;
+    }
+
     public function index() {
         $profile = Roles::all();
         return view("Security.user.init", compact("profile", "supplier", "city"));
@@ -51,15 +59,27 @@ class UserController extends Controller {
     }
 
     public function getPermission($id) {
-        $resp["permission"] = DB::select("
-                                        SELECT p.id = ANY (SELECT id FROM permissions_user where users_id=" . $id . " and permission_id=p.id) allowed,p.*
+        $sql = "
+                                        SELECT p.id = ANY (SELECT permission_id FROM permissions_user where users_id=" . $id . " and permission_id=p.id) allowed,p.*
                                         from permissions p 
                                         WHERE parent_id=0 
                                         AND typemenu_id=0 
-                                        ORDER BY priority asc");
-        $resp["tree"] = array();
+                                        ORDER BY priority asc";
 
-        foreach ($resp["permission"] as $key => $val) {
+        $this->resp["permission"] = DB::select($sql);
+
+        $this->recursivePermission($this->resp["permission"], $id);
+
+        $resp["tree"] = $this->resp["tree"];
+
+        $resp["permissionuser"] = PermissionsUser::where("users_id", $id)->get();
+
+        return response()->json($resp);
+    }
+
+    public function recursivePermission($param, $id) {
+        $cont = 0;
+        foreach ($param as $key => $val) {
             $query = "
                                         SELECT p.id = ANY (SELECT permission_id FROM permissions_user where users_id=" . $id . " and permission_id=p.id) allowed,p.*
                                         from permissions p 
@@ -67,18 +87,17 @@ class UserController extends Controller {
                                         ORDER BY priority asc";
 
             $children = DB::select($query);
-            array_push($resp["tree"], $val);
+
+
             if (count($children) > 0) {
-                foreach ($children as $k => $v) {
-                    $resp["tree"][$key]->nodes[] = $v;
-                }
+                $this->resp["tree"][$cont] = $val;
+                $this->resp["tree"][$cont]->nodes = $children;
+                $this->recursivePermission($children, $id);
+            } else {
+//                $this->resp["tree"][] = $val;
             }
+            $cont++;
         }
-
-
-        $resp["permissionuser"] = PermissionsUser::where("users_id", $id)->get();
-
-        return response()->json($resp);
     }
 
     public function update(Request $request, $id) {
@@ -100,6 +119,7 @@ class UserController extends Controller {
     public function savePermission(Request $request, $id) {
         $input = $request->all();
         $per = explode(",", $input["arr"]);
+
         $del = PermissionsUser::whereNotIn("permission_id", $per)->where("users_id", $id)->delete();
 
         foreach ($per as $val) {

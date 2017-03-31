@@ -58,8 +58,8 @@
         <!-- Custom styling plus plugins -->
         <!--<link href="../build/css/custom.min.css" rel="stylesheet">-->
 
-        {!!Html::style('/vendor/datetimepicker/css/bootstrap-datetimepicker.min.css')!!}
-        {!!Html::script('/vendor/datetimepicker/js/bootstrap-datetimepicker.min.js')!!}
+        {!!Html::style('/vendor/datetimepicker/css/jquery.datetimepicker.css')!!}
+        {!!Html::script('/vendor/datetimepicker/js/jquery.datetimepicker.full.min.js')!!}
 
         {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
         {!!Html::style('/vendor/select2/css/select2.min.css')!!}

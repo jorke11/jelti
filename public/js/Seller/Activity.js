@@ -41,7 +41,7 @@ function Activity() {
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
-                        $(".input-product").setFields({data: data.header});
+                        $(".input-activity").setFields({data: data.header});
                         toastr.success(msg);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {

@@ -19,7 +19,6 @@ function Dash() {
                     html += '</li>';
                 });
                 
-                console.log(html);
                 
                 $("#addMenu").html(html);
 

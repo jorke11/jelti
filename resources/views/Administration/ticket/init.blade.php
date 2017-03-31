@@ -1,42 +1,37 @@
 @extends('layouts.dash')
-
 @section('content')
 @section('title','Tickets')
 @section('subtitle','Management')
+
+
 <div class="row">
-    <div class="col-lg-6 col-lg-offset-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-lg-3">List Ticket</div>
-                    <div class="col-lg-9 text-right">
-                        <button class="btn btn-success btn-sm" type="button" id="btnNew">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"> New</span>
-                        </button>
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" id='myTabs'>
+            <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">List</a></li>
+            <li role="presentation" id="tabManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Management</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="list">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        @include('Administration.ticket.list')
                     </div>
                 </div>
-            </div>
-            <div class="panel-body">
 
-                <table class="table table-bordered table-condensed" id="tbl">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Description</th>
-                            <th>User</th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Assigned</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane " id="management">
+                @include('Administration.ticket.management')
             </div>
         </div>
     </div>
 </div>
-@include('Administration.Ticket.form')
+
+
+
+
+
 {!!Html::script('js/Administration/Ticket.js')!!}
 @endsection

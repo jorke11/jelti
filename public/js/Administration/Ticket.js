@@ -4,7 +4,6 @@ function Ticket() {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
-
     }
 
     this.new = function () {

@@ -11,6 +11,7 @@ use App\Models\Administration\Stakeholder;
 use App\Models\Administration\StakeholderDocument;
 use App\Models\Administration\PricesSpecial;
 use App\Models\Administration\Branch;
+use App\Models\Administration\Parameters;
 use Datatables;
 use DB;
 
@@ -21,9 +22,11 @@ class StakeholderController extends Controller {
     }
 
     public function index() {
-        $type_person = Administration\TypePersons::all();
-        $type_regimen = Administration\TypeRegimes::all();
-        return view("Administration.stakeholder.init", compact('type_person', "type_regimen"));
+        $type_person = Parameters::where("group", "typeperson")->get();
+        $type_regimen = Parameters::where("group", "typeregimen")->get();
+        $type_document = Parameters::where("group", "typedocument")->get();
+        $type_stakeholder = Parameters::where("group", "typestakeholder")->get();
+        return view("Administration.stakeholder.init", compact('type_person', "type_regimen", "type_document", "type_stakeholder"));
     }
 
     public function store(Request $request) {
@@ -92,7 +95,7 @@ class StakeholderController extends Controller {
 
     public function edit($id) {
         $resp["header"] = Stakeholder::FindOrFail($id);
-        $resp["images"] = StakeholderDocument::where("stakeholder_id", $id)->get();
+        $resp["images"] = $this->getImages($id)->getData();
         return response()->json($resp);
     }
 
@@ -119,18 +122,22 @@ class StakeholderController extends Controller {
 
     public function uploadImage(Request $req) {
         $data = $req->all();
-        $file = array_get($data, 'kartik-input-700');
-        $name = $file[0]->getClientOriginalName();
-//        dd($data);exit;
-        $file[0]->move("images/stakeholder/" . $data["id"], $name);
 
-        Administration\StakeholderDocument::where("stakeholder_id", $data["id"])->get();
+        $file = array_get($data, 'document_file');
+
+//        $name = $file[0]->getClientOriginalName();
+        $name = $file->getClientOriginalName();
+//        $file[0]->move("images/stakeholder/" . $data["stakeholder_id"], $name);
+        $file->move("images/stakeholder/" . $data["stakeholder_id"], $name);
+
+        Administration\StakeholderDocument::where("stakeholder_id", $data["stakeholder_id"])->get();
         $stakeholder = new StakeholderDocument();
-        $stakeholder->stakeholder_id = $data["id"];
+        $stakeholder->stakeholder_id = $data["stakeholder_id"];
         $stakeholder->document_id = $data["document_id"];
-        $stakeholder->path = $data["id"] . "/" . $name;
+        $stakeholder->path = $data["stakeholder_id"] . "/" . $name;
+        $stakeholder->name = $name;
         $stakeholder->save();
-        return response()->json(["id" => $data["id"]]);
+        return $this->getImages($data["stakeholder_id"]);
     }
 
     public function checkmain(Request $data, $id) {
@@ -146,10 +153,11 @@ class StakeholderController extends Controller {
     }
 
     public function deleteImage(Request $data, $id) {
+        $in = $data->all();
         $image = StakeholderDocument::find($id);
         $image->delete();
-        StakeholderDocument::where("stakeholder_id", $data["stakeholder_id"]);
-        return response()->json(["response" => true, "path" => $data->all()]);
+        $list = $this->getImages($in["stakeholder_id"]);
+        return response()->json(["response" => true, "images" => $list]);
     }
 
     public function deleteBranch(Request $data, $id) {
@@ -159,7 +167,10 @@ class StakeholderController extends Controller {
     }
 
     public function getImages($id) {
-        $image = StakeholderDocument::where("stakeholder_id", $id)->get();
+        $image = DB::table("stakeholder_document")
+                        ->select("stakeholder_document.id", "stakeholder_document.stakeholder_id", "stakeholder_document.document_id", "parameters.description as document", "stakeholder_document.path", "stakeholder_document.name")
+                        ->join("parameters", "parameters.code", DB::raw("stakeholder_document.document_id and parameters.group='typedocument'"))
+                        ->where("stakeholder_id", $id)->get();
         return response()->json($image);
     }
 

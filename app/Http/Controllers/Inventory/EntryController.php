@@ -22,6 +22,7 @@ class EntryController extends Controller {
 
     public function __construct() {
         $this->total = 0;
+        $this->middleware("auth");
     }
 
     public function index() {

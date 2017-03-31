@@ -4,11 +4,27 @@ function Role() {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
+        $("#btnSavePermission").click(this.savePermission);
     }
 
     this.new = function () {
         $(".input-role").cleanFields();
         $("#modalNew").modal("show");
+    }
+
+    this.savePermission = function () {
+        toastr.remove();
+        var data = {};
+        data.arr = ($('#treeview-container').treeview('selectedValues')).join();
+        $.ajax({
+            url: 'role/savePermission/' + $("#frm #id").val(),
+            method: 'PUT',
+            data: data,
+            dataType: 'JSON',
+            success: function (data) {
+                toastr.success("Process Ok");
+            }
+        })
     }
 
     this.save = function () {
@@ -89,7 +105,55 @@ function Role() {
         }
     }
 
+    this.showPermission = function (id) {
+        $("#frm #id").val(id);
+        $.ajax({
+            url: "/getPermissionRole/" + id,
+            method: "GET",
+            dataType: 'json',
+            success: function (data) {
+
+                obj.getTree(data.tree);
+            }
+        })
+    }
+
+    this.getTree = function (permission) {
+        $("#treeview-container").html("");
+        var html = "<ul>", checked = "", check = "";
+        $.each(permission, function (i, val) {
+
+            checked = (val.allowed == true) ? "data-checked=true" : '';
+
+            if (val.nodes) {
+                html += '<li data-value="' + val.id + '" ' + checked + '> ' + val.title;
+                html += "<ul>";
+                $.each(val.nodes, function (i, value) {
+                    check = (value.allowed == true) ? "data-checked=true" : ''
+                    html += '<li data-value="' + value.id + '"  ' + check + '> ' + value.title + "</li>";
+                });
+                html += "</ul></li>";
+
+            } else {
+                html += '<li data-value="' + val.id + '" ' + checked + '> ' + val.title + '</li>';
+            }
+        });
+        html += "</ul>";
+
+        $("#treeview-container").html(html);
+
+        $('#treeview-container').treeview({
+            debug: false,
+            data: ['3.2', '2.2.3']
+        });
+
+        $('#btnPermission').on('click', function () {
+            obj.savePermission();
+        });
+    }
+
     this.table = function () {
+        var html = "";
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
@@ -109,9 +173,11 @@ function Role() {
                 {
                     targets: [2],
                     searchable: false,
-                    "mData": null,
-                    "mRender": function (data, type, full) {
-                        return '<button type="button" class="close" aria-label="Close" onclick="obj.delete(' + data.id + ')"><span aria-hidden="true">&times;</span></button>';
+                    mData: null,
+                    mRender: function (data, type, full) {
+                        html = '<button type="button" class="close" aria-label="Close" onclick="obj.delete(' + data.id + ')"><span aria-hidden="true">&times;</span></button>';
+                        html += '<button class="btn btn-primary btn-xs" onclick="obj.showPermission(' + data.id + ')"><i class="fa fa-unlock-alt" aria-hidden="true"></i></button>';
+                        return html;
                     }
                 }
             ],

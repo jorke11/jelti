@@ -16,6 +16,9 @@ function User() {
             obj.getListPermission();
         });
 
+        $('#btnPermission').on('click', function () {
+            obj.savePermission();
+        });
 
     }
 
@@ -53,9 +56,7 @@ function User() {
             data: ['3.2', '2.2.3']
         });
 
-        $('#btnPermission').on('click', function () {
-            obj.savePermission();
-        });
+
     }
 
     this.savePermission = function () {
@@ -80,7 +81,8 @@ function User() {
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {
-                obj.getTree(data.permission)
+
+                obj.getTree(data.tree)
             }
         })
     }

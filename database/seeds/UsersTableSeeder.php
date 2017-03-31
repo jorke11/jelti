@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder {
             'stakeholder_id' => 1,
             'city_id' => 1,
             'status' => true,
-            'password' => bcrypt('123456')
+            'password' => bcrypt('123')
         ]);
         DB::table("users")->insert([
             'name' => 'commercial 1',

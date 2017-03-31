@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Administration\Branch;
 use App\Models\Administration\Puc;
 use App\Models\Administration\Contact;
+use App\Models\Administration\Parameters;
 
 class SeekController extends Controller {
 
@@ -108,6 +109,31 @@ class SeekController extends Controller {
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
 
+    public function getNotification(Request $req) {
+        $in = $req->all();
+        $query = Parameters::select("id", "description as text");
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $query->where("id", Auth::user()->supplier_id)->get();
+        } else if (isset($in["id"])) {
+            if ($in["id"] != '') {
+                $in["id"] = json_decode($in["id"]);
+                if (count($in["id"]) > 1) {
+                    $query->whereIn("id", $in["id"])->get();
+                } else {
+                    $query->where("id", $in["id"])->get();
+                }
+            } else {
+                $query->where("id", 0)->get();
+            }
+        } else {
+            $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+        }
+        $query->where("group", "notification");
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+
     public function getWarehouse(Request $req) {
         $in = $req->all();
         $query = Warehouses::select("id", "description as text");
@@ -175,7 +201,9 @@ class SeekController extends Controller {
         if (isset($in["q"]) && $in["q"] == "0") {
             $city = $query->where("id", Auth::user()->id)->get();
         } else if (isset($in["id"])) {
-            $query->where("id", $in["id"])->get();
+            if ($in["id"] != '') {
+                $query->where("id", $in["id"]);
+            }
         } else {
             $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
         }

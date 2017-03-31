@@ -18,24 +18,52 @@ function Stakeholder() {
         });
 
         $("#modalImage").click(function () {
+//
+//            $("#input-700").fileinput({
+//                uploadUrl: "stakeholder/upload", // server upload action
+//                uploadAsync: true,
+//                maxFileCount: 5,
+//                uploadExtraData: {
+//                    id: $("#frm #id").val(),
+//                    document_id: document_id,
+//
+//                },
+//            }).on('fileuploaded', function (event, data, id, index) {
+//                $("#modalUpload").modal("hide");
+//                obj.showImages(data.extra.stakeholder_id);
+//            }).on('filebrowse', function (event) {
+//                document_id = $("#frmFile #document_id").val()
+//            });
+//
+            $("#frmFile #stakeholder_id").val($("#frm #id").val());
+            $("#modalUpload").modal("show");
+        })
 
-            $("#input-700").fileinput({
-                uploadUrl: "stakeholder/upload", // server upload action
-                uploadAsync: true,
-                maxFileCount: 5,
-                uploadExtraData: {
-                    id: $("#frm #id").val(),
-                    document_id: document_id,
+        $("#btnUpload").click(function () {
 
+            var formData = new FormData($("#frmFile")[0]);
+
+            $.ajax({
+                url: 'stakeholder/upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                dataType: 'JSON',
+                beforeSend: function () {
+                    $(".cargando").removeClass("hidden");
                 },
-            }).on('fileuploaded', function (event, data, id, index) {
-                $("#modalUpload").modal("hide");
-                obj.showImages(data.extra.stakeholder_id);
-            }).on('filebrowse', function (event) {
-                document_id = $("#frmFile #document_id").val()
+                success: function (data) {
+                    obj.printImages(data)
+                }, error: function () {
+                    //clearInterval(intervalo);
+                    $(".cargando").addClass("hidden");
+                    alert("Problemas con el archivo, informar a sistemas");
+                }
             });
 
-            $("#modalUpload").modal("show");
+
         })
 
         $("#tabSpecial").click(function () {
@@ -59,10 +87,15 @@ function Stakeholder() {
         $("#reset").click(function () {
             obj.MarkPrice(null, $("#frm #id").val());
         });
+
+        $("#contract_expiration").datetimepicker({
+            format: 'Y-m-d H:i',
+        });
     }
 
     this.newSpecial = function () {
         $(".input-special").cleanFields();
+
     }
 
     this.newBranch = function () {
@@ -71,6 +104,7 @@ function Stakeholder() {
 
     this.new = function () {
         $(".input-stakeholder").cleanFields();
+
     }
 
 
@@ -169,8 +203,8 @@ function Stakeholder() {
     this.printImages = function (data) {
         var html = '';
         $.each(data, function (i, val) {
-            html += '<tr><td>' + val.id + '</td><td><a href="images/stakeholder/' + val.path + '" target="_blank">See</a></td>';
-            html += '<td><button class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>';
+            html += '<tr><td>' + val.document + '</td><td>' + val.name + '</td><td><a href="images/stakeholder/' + val.path + '" target="_blank">See</a></td>';
+            html += '<td><button class="btn btn-xs btn-warning" onclick=obj.deleteImage(' + val.id + ',' + val.stakeholder_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>';
         })
         $("#contentAttach tbody").html(html);
     }
@@ -231,10 +265,10 @@ function Stakeholder() {
         })
     }
 
-    this.deleteImage = function (id, product_id) {
+    this.deleteImage = function (id, stakeholder_id) {
         $("#div_" + id).remove();
         var obj = {};
-        obj.product_id = product_id;
+        obj.stakeholder_id = stakeholder_id;
         $.ajax({
             url: 'stakeholder/deleteImage/' + id,
             method: 'DELETE',

@@ -21,8 +21,8 @@
                         <label for="address" class="control-label">Type Persona*</label>
                         <select class="form-control input-stakeholder"  id="type_regime_id" name="type_regime_id" required>
                             <option value="0">Selection</option>
-                            @foreach($type_person as $category)
-                            <option value="{{$category->id}}">{{$category->description}}</option>
+                            @foreach($type_person as $val)
+                            <option value="{{$val->code}}">{{$val->description}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -32,8 +32,8 @@
                         <label for="address" class="control-label">Type Regime*</label>
                         <select id="type_person_id" name="type_person_id" class="form-control input-stakeholder" required>
                             <option value="0">Selection</option>
-                            @foreach($type_regimen as $category)
-                            <option value="{{$category->id}}">{{$category->description}}</option>
+                            @foreach($type_regimen as $val)
+                            <option value="{{$val->code}}">{{$val->description}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -61,9 +61,9 @@
                         <label for="address" class="control-label">Type Document*</label>
                         <select id="type_document" name="type_document" class="form-control input-stakeholder" required>
                             <option value="0">Selection</option>
-                            <option value="1">Nit</option>
-                            <option value="2">Cedula</option>
-                            <option value="3">Cedula extrageria</option>
+                            @foreach($type_document as $val)
+                            <option value="{{$val->code}}">{{$val->description}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -150,15 +150,16 @@
                         <label for="address" class="control-label">Stakeholder type</label>
                         <select id="type_stakeholder" name="type_stakeholder" class="form-control input-stakeholder" required>
                             <option value="0">Selection</option>
-                            <option value="1">Client</option>
-                            <option value="2">Supplier</option>
+                             @foreach($type_stakeholder as $val)
+                            <option value="{{$val->code}}">{{$val->description}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="address" class="control-label">Contract Expiration</label>
-                        <input type="text" class="form-control input-stakeholder" id="contract_expiration" name="contract_expiration" placeholder="contract_expiration Name" 
+                        <input type="datetime" class="form-control input-stakeholder" id="contract_expiration" name="contract_expiration" placeholder="contract_expiration Name" 
                                value="{{date("Y-m-d H:i")}}">
                     </div>
                 </div>
@@ -168,12 +169,13 @@
                 <div class="col-lg-1">
                     <button class="btn btn-success" type="button" id="modalImage"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-5">
                     <div class="row" i>
                         <table class="table table-condensed table-striped" id="contentAttach">
                             <thead>
                                 <tr>
                                     <th>Document</th>
+                                    <th>File</th>
                                     <th>See</th>
                                     <th>Action</th>
                                 </tr>

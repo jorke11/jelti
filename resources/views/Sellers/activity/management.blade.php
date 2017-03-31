@@ -51,7 +51,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="last_name" class="control-label">Type Notification*</label>
-                        <select class="form-control input-activity"  id="notification" name="notification" data-api="/api/getCharacteristic" multiple="">
+                        <select class="form-control input-activity"  id="notification" name="notification" data-api="/api/getNotification" multiple="">
                         </select>
                     </div>
                 </div>

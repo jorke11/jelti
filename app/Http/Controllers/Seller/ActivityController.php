@@ -22,10 +22,12 @@ class ActivityController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            
-            $result = Activity::create($input);
+            $input["status_id"] = 1;
+
+            $result = Activity::create($input)->id;
             if ($result) {
-                return response()->json(['success' => true]);
+                $header = Activity::FindOrFail($result);
+                return response()->json(['success' => true, "header" => $header]);
             } else {
                 return response()->json(['success' => false]);
             }

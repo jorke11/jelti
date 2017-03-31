@@ -71,6 +71,9 @@ Route::get('/user/getListPermission/{id}', 'Security\UserController@getPermissio
 Route::put('/user/savePermission/{id}', 'Security\UserController@savePermission');
 
 Route::resource('/role', 'Security\RoleController');
+Route::put('/role/savePermission/{id}', 'Security\RoleController@savePermissionRole');
+
+Route::get('/getPermissionRole/{id}', 'Security\RoleController@getPermissionRole');
 
 Route::resource('/permission', 'Security\PermissionController');
 Route::get('/api/listPermission', 'Security\PermissionController@getPermission');
@@ -170,7 +173,7 @@ Route::put('/fulfillment/editTarjet/{id}', 'Seller\FulfillmentController@updateT
 Route::get('/fulfillment/getDetail/{id}', 'Seller\FulfillmentController@getDetail');
 
 Route::put('/fulfillment/updateDetail/{id}', 'Seller\FulfillmentController@updateDetail');
-Route::post('/fulfillment/addCommercial', 'Seller\FulfillmentController@addDetail');
+Route::post('/fulfillment/addCommercial', 'Seller\FulfillmentController@store');
 
 
 Route::get('/comments', 'MainController@getcomments');
@@ -195,7 +198,7 @@ Route::get('/api/listSupplier', function() {
 });
 Route::get('/api/listParameter', function() {
     return Datatables::queryBuilder(
-                    DB::table('parameters')->orderBy("id","asc")
+                    DB::table('parameters')->orderBy("id", "asc")
             )->make(true);
 });
 Route::get('/api/listTicket', function() {
@@ -207,10 +210,16 @@ Route::get('/api/listTicket', function() {
 Route::get('/api/listStakeholder', function() {
     return Datatables::queryBuilder(
                     DB::table('stakeholder')
-                            ->select("stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typepersons.description as typeperson", "typeregimes.description as typeregime", "stakeholder.type_stakeholder", "stakeholder.status_id")
+                            ->select(
+                                    "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", 
+                                    "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", 
+                                    "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", 
+                                    "status.description as status_id")
                             ->join("cities", "cities.id", "stakeholder.city_id")
-                            ->leftjoin("typepersons", "typepersons.id", "stakeholder.type_person_id")
-                            ->leftjoin("typeregimes", "typeregimes.id", "stakeholder.type_regime_id")
+                            ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
+                            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
+                            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
+                            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"))
             )->make(true);
 });
 Route::get('/api/listProduct', function() {
@@ -248,7 +257,7 @@ Route::get('/api/listSale', function() {
 Route::get('/api/listEntry', function() {
     return Datatables::queryBuilder(
                     DB::table('entries')
-                            ->select("entries.id", "entries.consecutive","entries.description", "entries.created_at", "entries.invoice", "warehouses.description as warehouse", "cities.description as city", DB::raw("coalesce(parameters.description,'') as status"))
+                            ->select("entries.id", "entries.consecutive", "entries.description", "entries.created_at", "entries.invoice", "warehouses.description as warehouse", "cities.description as city", DB::raw("coalesce(parameters.description,'') as status"))
                             ->join("warehouses", "warehouses.id", "entries.warehouse_id")
                             ->leftjoin("cities", "cities.id", "entries.city_id")
                             ->leftjoin("parameters", "parameters.code", "entries.status_id")
@@ -261,7 +270,7 @@ Route::get('/api/listDeparture', function() {
     $query = DB::table('departures')
             ->select("departures.id", "departures.created_at", DB::raw("stakeholder.name || stakeholder.last_name as client")
                     , "warehouses.description as warehouse", "cities.description as city"
-                    , DB::raw("coalesce(parameters.description,'') as status"),"departures.status_id")
+                    , DB::raw("coalesce(parameters.description,'') as status"), "departures.status_id")
             ->join("stakeholder", "stakeholder.id", "departures.client_id")
             ->leftjoin("cities", "cities.id", "departures.city_id")
             ->leftjoin("warehouses", "warehouses.id", "departures.warehouse_id")
@@ -271,13 +280,13 @@ Route::get('/api/listDeparture', function() {
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
         $query->where("departures.responsible_id", Auth::user()->id);
     }
-    
+
 //    $query = DB::table('vdepartures');
 //            
 //    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
 //        $query->where("responsible_id", Auth::user()->id);
 //    }
-    
+
     return Datatables::queryBuilder($query)->make(true);
 });
 
@@ -319,7 +328,7 @@ Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
 Route::get('/api/getCategory', 'Administration\SeekController@getCategory');
-Route::get('/api/getNotification', 'Administration\SeekController@getCategory');
+Route::get('/api/getNotification', 'Administration\SeekController@getNotification');
 Route::get('/api/getCommercial', 'Administration\SeekController@getCommercial');
 Route::get('/api/getBranch', 'Administration\SeekController@getBranch');
 Route::get('/api/getAccount', 'Administration\SeekController@getAccount');

@@ -7,14 +7,16 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmFile','files' => true]) !!}
+                <input type="hidden" id="stakeholder_id" name="stakeholder_id">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Type Document:</label>
                             <select class="form-control" id="document_id" name="document_id">
-                                <option value="0">Seleccione</option>
-                                <option value="1">Cedula</option>
-                                <option value="2">Nit</option>
+                                <option value="0">Selection</option>
+                                @foreach($type_document as $val)
+                                <option value="{{$val->code}}">{{$val->description}}</option>
+                                @endforeach
                             </select>
 
                         </div>
@@ -24,10 +26,14 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <input id="input-700" name="kartik-input-700[]" type="file" multiple class="file-loading">
+                        <input id="document_file" name="document_file" type="file">
                     </div>
                 </div>
                 {!!Form::close()!!}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="btnUpload">Upload</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

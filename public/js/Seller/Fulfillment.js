@@ -35,7 +35,7 @@ function Fulfillment() {
 
     this.new = function () {
         $("#frmModal").modal("show");
-        $("#frmTarjet #value").empty();
+        $("#frmTarjet #value").val("");
     }
 
     this.saveTarjet = function () {

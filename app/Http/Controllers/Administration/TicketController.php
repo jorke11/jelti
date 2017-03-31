@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Administration;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Administration\Ticket;
+use App\Models\Administration\Parameters;
+use App\Models\Security\Users;
 
 class TicketController extends Controller {
 
@@ -12,7 +15,11 @@ class TicketController extends Controller {
     }
 
     public function index() {
-        return view("Administration.ticket.init");
+        $depart = Parameters::where("group", "department")->get();
+        $status = Parameters::where("group", "ticket")->get();
+        $priority = Parameters::where("group", "priority")->get();
+        $user = Users::all();
+        return view("Administration.ticket.init", compact("depart", "priority","user"));
     }
 
     public function create() {
@@ -24,8 +31,8 @@ class TicketController extends Controller {
             $input = $request->all();
             unset($input["id"]);
 //            $user = Auth::User();
-//            $input["users_id"] = 1;
-            $result = Categories::create($input);
+            $input["status_id"] = 1;
+            $result = Ticket::create($input);
             if ($result) {
                 return response()->json(['success' => true]);
             } else {
@@ -35,12 +42,12 @@ class TicketController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Categories::FindOrFail($id);
+        $suppliers = Ticket::FindOrFail($id);
         return response()->json($suppliers);
     }
 
     public function update(Request $request, $id) {
-        $category = Categories::FindOrFail($id);
+        $category = Ticket::FindOrFail($id);
         $input = $request->all();
         $result = $category->fill($input)->save();
         if ($result) {
@@ -51,7 +58,7 @@ class TicketController extends Controller {
     }
 
     public function destroy($id) {
-        $category = Categories::FindOrFail($id);
+        $category = Ticket::FindOrFail($id);
         $result = $category->delete();
         if ($result) {
             return response()->json(['success' => true]);

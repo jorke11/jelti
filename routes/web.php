@@ -181,6 +181,7 @@ Route::get('/comments/list/{id}', 'MainController@listComments');
 
 
 Route::resource('/ticket', 'Administration\TicketController');
+Route::resource('/ticket/addComment', 'Administration\TicketController@addComment');
 Route::resource('/parameter', 'Administration\ParametersController');
 
 

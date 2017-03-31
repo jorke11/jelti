@@ -4,6 +4,28 @@ function Ticket() {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
+
+        $("#btnComment").click(function(){
+            $("#modalComment").modal("show");
+        });
+        $("#btnCommentSave").click(this.addComment);
+    }
+
+    this.addComment = function () {
+        var obj = {};
+        obj.comment = $("#frmComment #comment").val();
+        obj.ticket_id = $("#frm #id").val();
+        $.ajax({
+            url: '/ticket/addComment',
+            method: 'POST',
+            data: obj,
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.success == true) {
+                    $("#modalComment").modal("hide");
+                }
+            }
+        })
     }
 
     this.new = function () {
@@ -60,6 +82,7 @@ function Ticket() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
+                $('#myTabs a[href="#management"]').tab('show');
                 $(".input-ticket").setFields({data: data});
             }
         })
@@ -94,10 +117,10 @@ function Ticket() {
             ajax: "/api/listTicket",
             columns: [
                 {data: "id"},
-                {data: "description"},
-                {data: "user_created_id"},
-                {data: "status_id"},
+                {data: "subject"},
+                {data: "created_at"},
                 {data: "priority_id"},
+                {data: "status_id"},
                 {data: "assigned_id"},
                 {data: "assigned_id"},
             ],
@@ -110,7 +133,7 @@ function Ticket() {
                     }
                 },
                 {
-                    targets: [4],
+                    targets: [7],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

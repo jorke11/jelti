@@ -28,28 +28,17 @@ function Sale() {
 
         $("#insideManagement").click(function () {
 
-            var created = $("#frm #created").val();
             $(".input-departure").cleanFields({disabled: true});
-            $("#frm #created").val(created);
-            $("#frm #consecutive").val(1);
             $("#btnSend").attr("disabled", true);
             $("#btnSave").attr("disabled", true);
             $("#btnDocument").attr("disabled", true);
             $(".input-fillable").attr("disabled", true);
-
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#frm #status_id").val(1).trigger('change');
             $("#frm #status_id").prop("disabled", true);
-            $.ajax({
-                url: 'departure/1/consecutive',
-                method: 'GET',
-                dataType: 'JSON',
-                success: function (resp) {
-
-                }
-            })
+            obj.consecutive();
         });
 
         $("#btnmodalDetail").click(function () {
@@ -104,12 +93,22 @@ function Sale() {
         })
     }
 
+    this.consecutive = function () {
+        $.ajax({
+            url: 'departure/1/consecutive',
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (resp) {
+                $("#frm #consecutive").val(resp.response);
+            }
+        })
+    }
+
     this.new = function () {
         toastr.remove();
-        var created = $("#frm #created").val();
+
         $("#btnSave").attr("disabled", false);
         $(".input-departure").cleanFields();
-        $("#frm #created").val(created);
         $(".input-detail").cleanFields();
         $(".input-fillable").prop("readonly", false);
         $("#btnSave").prop("disabled", false);
@@ -120,6 +119,8 @@ function Sale() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+
+        obj.consecutive();
     }
     this.getSupplier = function (id, path) {
         var url = 'entry/' + id + '/getSupplier';
@@ -440,7 +441,7 @@ function Sale() {
 
                     var type = $(column.header()).attr('rowspan');
 
-                    
+
                     if (type != undefined) {
                         var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
                                 .appendTo($(column.footer()).empty())

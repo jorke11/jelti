@@ -20,7 +20,7 @@ class CreateStakeholderTable extends Migration
             $table->integer('city_id');
             $table->integer('status_id');
             $table->integer('type_document')->nullable();
-            $table->integer('commercial_id')->nullable();
+            $table->integer('responsible_id')->nullable();
             $table->string('name');
             $table->string('last_name');
             $table->string('document')->nullable();

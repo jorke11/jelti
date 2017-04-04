@@ -137,8 +137,8 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
-                        <label for="address" class="control-label">Commecial</label>
-                        <select class="form-control input-stakeholder"  id="commercial_id" name="commercial_id" data-api="/api/getCommercial" required>
+                        <label for="address" class="control-label">Responsible</label>
+                        <select class="form-control input-stakeholder"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
                         </select>
                     </div>
                 </div>

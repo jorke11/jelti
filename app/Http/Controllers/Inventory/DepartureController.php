@@ -30,7 +30,7 @@ class DepartureController extends Controller {
 
     public function index() {
         $category = \App\Models\Administration\Categories::all();
-        $status = Parameters::where("group", "entry")->get();
+        $status = Parameters::where("group", "departure")->get();
         return view("Inventory.departure.init", compact("category", "status"));
     }
 
@@ -46,7 +46,7 @@ class DepartureController extends Controller {
     }
 
     public function getConsecutive($id) {
-        echo response()->json(["response" => 'prueba']);
+        return response()->json(["response" => $this->createConsecutive(3)]);
     }
 
     public function pdf($id) {
@@ -109,9 +109,12 @@ class DepartureController extends Controller {
 //            $user = Auth::User();
             $input["status_id"] = 1;
 
-            $result = Departures::create($input);
+            $input["consecutive"] = $this->createConsecutive(3);
+            $result = Departures::create($input)->id;
+
             if ($result) {
-                $resp = Departures::FindOrFail($result["attributes"]["id"]);
+                $this->updateConsecutive(2);
+                $resp = Departures::FindOrFail($result);
                 return response()->json(['success' => true, "data" => $resp]);
             } else {
                 return response()->json(['success' => false]);

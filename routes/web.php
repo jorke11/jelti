@@ -212,16 +212,19 @@ Route::get('/api/listTicket', function() {
 });
 
 Route::get('/api/listStakeholder', function() {
-    return Datatables::queryBuilder(
-                    DB::table('stakeholder')
-                            ->select(
-                                    "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", "status.description as status_id")
-                            ->join("cities", "cities.id", "stakeholder.city_id")
-                            ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
-                            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
-                            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
-                            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"))
-            )->make(true);
+    $query = DB::table('stakeholder')
+            ->select(
+                    "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", "status.description as status_id")
+            ->join("cities", "cities.id", "stakeholder.city_id")
+            ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
+            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
+            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
+            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("stakeholder.responsible_id", Auth::user()->id);
+    }
+
+    return Datatables::queryBuilder($query)->make(true);
 });
 Route::get('/api/listProduct', function() {
     return Datatables::eloquent(Models\Administration\Products::query())->make(true);
@@ -250,28 +253,37 @@ Route::get('/api/listContact', function() {
 });
 
 Route::get('/api/listPurchase', function() {
-    return Datatables::queryBuilder(
-                    DB::table("purchases")
-                            ->select("purchases.id", "purchases.consecutive", "purchases.description", "purchases.created_at", "stakeholder.name as stakeholder", "purchases.created_at", "warehouses.description as warehouse", "cities.description as city",
-                                    "parameters.description as status")
-                            ->join("stakeholder", "stakeholder.id", "purchases.supplier_id")
-                            ->join("warehouses", "warehouses.id", "purchases.warehouse_id")
-                            ->join("cities", "cities.id", "purchases.city_id")
-                            ->join("parameters", "parameters.id", DB::raw("purchases.status_id and parameters.group='entry'"))
-            )->make(true);
+
+    $query = DB::table("purchases")
+            ->select("purchases.id", "purchases.consecutive", "purchases.description", "purchases.created_at", "stakeholder.name as stakeholder", "purchases.created_at", "warehouses.description as warehouse", "cities.description as city", "parameters.description as status")
+            ->join("stakeholder", "stakeholder.id", "purchases.supplier_id")
+            ->join("warehouses", "warehouses.id", "purchases.warehouse_id")
+            ->join("cities", "cities.id", "purchases.city_id")
+            ->join("parameters", "parameters.id", DB::raw("purchases.status_id and parameters.group='entry'"));
+
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("purchases.responsible_id", Auth::user()->id);
+    }
+
+    return Datatables::queryBuilder($query)->make(true);
 });
 Route::get('/api/listSale', function() {
     return Datatables::eloquent(Models\Invoicing\Sales::query())->make(true);
 });
 Route::get('/api/listEntry', function() {
-    return Datatables::queryBuilder(
-                    DB::table('entries')
-                            ->select("entries.id", "entries.consecutive", "entries.description", "entries.created_at", "entries.invoice", "warehouses.description as warehouse", "cities.description as city", DB::raw("coalesce(parameters.description,'') as status"))
-                            ->join("warehouses", "warehouses.id", "entries.warehouse_id")
-                            ->leftjoin("cities", "cities.id", "entries.city_id")
-                            ->leftjoin("parameters", "parameters.code", "entries.status_id")
-                            ->where("parameters.group", "entry")
-            )->make(true);
+
+    $query = DB::table('entries')
+            ->select("entries.id", "entries.consecutive", "entries.description", "entries.created_at", "entries.invoice", "warehouses.description as warehouse", "cities.description as city", DB::raw("coalesce(parameters.description,'') as status"))
+            ->join("warehouses", "warehouses.id", "entries.warehouse_id")
+            ->leftjoin("cities", "cities.id", "entries.city_id")
+            ->leftjoin("parameters", "parameters.code", "entries.status_id")
+            ->where("parameters.group", "entry");
+
+//    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+//        $query->where("entries.responsible_id", Auth::user()->id);
+//    }
+
+    return Datatables::queryBuilder($query)->make(true);
 });
 
 Route::get('/api/listDeparture', function() {
@@ -283,7 +295,7 @@ Route::get('/api/listDeparture', function() {
             ->join("stakeholder", "stakeholder.id", "departures.client_id")
             ->leftjoin("cities", "cities.id", "departures.city_id")
             ->leftjoin("warehouses", "warehouses.id", "departures.warehouse_id")
-            ->leftjoin("parameters", "parameters.code", "departures.status_id")
+            ->leftjoin("parameters", "parameters.code", DB::raw("departures.status_id and parameters.group='departure'"))
             ->where("parameters.group", "entry");
 
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {

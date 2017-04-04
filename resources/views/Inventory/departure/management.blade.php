@@ -57,7 +57,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Date:</label>
-                    <input type="text" class="form-control input-departure form_datetime input-fillable" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required>
+                    <input type="datetime" class="form-control input-departure form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required readonly="">
                 </div>
             </div>
 
@@ -65,8 +65,9 @@
                 <div class="form-group">
                     <label for="email">Status:</label>
                     <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly required>
+                        <option value="0">Selection</option>
                         @foreach($status as $val)
-                        <option value="{{$val->id}}">{{$val->description}}</option>
+                        <option value="{{$val->code}}">{{$val->description}}</option>
                         @endforeach
                     </select>
                 </div>

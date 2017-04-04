@@ -123,7 +123,7 @@ class ParameterTableSeeder extends Seeder {
             'group' => "ticket",
             'code' => 2,
         ]);
-        
+
         DB::table("parameters")->insert([
             'description' => "technology",
             'group' => "department",
@@ -153,6 +153,17 @@ class ParameterTableSeeder extends Seeder {
             'description' => "Bajo",
             'group' => "priority",
             'code' => 3,
+        ]);
+
+        DB::table("parameters")->insert([
+            'description' => "order",
+            'group' => "departure",
+            'code' => 1,
+        ]);
+        DB::table("parameters")->insert([
+            'description' => "dispached",
+            'group' => "departure",
+            'code' => 2,
         ]);
     }
 

@@ -39,7 +39,7 @@
         <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/dataTables.bootstrap.css')!!}--> 
         <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}--> 
 
-        {!!Html::script('js/Administration/Dash.js')!!}
+        {!!Html::script('js/Administration/dash.js')!!}
         <!-- Bootstrap -->
         <!--<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">-->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}

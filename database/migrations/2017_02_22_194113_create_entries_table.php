@@ -12,6 +12,7 @@ class CreateEntriesTable extends Migration
             $table->integer('warehouse_id');
             $table->integer('responsible_id');
             $table->integer('supplier_id');
+            $table->integer('purchase_id');
             $table->integer('city_id');
             $table->string('description');
             $table->string('consecutive');

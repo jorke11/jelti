@@ -16,11 +16,12 @@ class CreateEntriesDetailTable extends Migration {
             $table->increments('id');
             $table->integer('entry_id');
             $table->integer('product_id');
-            $table->integer('category_id');
             $table->integer('quantity');
-            $table->dateTime('expiration_date');
+            $table->integer('real_quantity')->nullable();
+            $table->dateTime('expiration_date')->nullable();
             $table->decimal('value', 15, 2);
-            $table->string('lot');
+            $table->string('lot')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

@@ -64,12 +64,27 @@ class EntryController extends Controller {
 
     public function getSupplier($id) {
         $supplier = \App\Models\Administration\Stakeholder::findOrFail($id);
-        return response()->json(["response" => $supplier]);
+        $purc = Purchases::where("supplier_id", $supplier["id"])->where("status_id", 2)->get();
+        return response()->json(["response" => $supplier, "purchases" => $purc]);
     }
 
     public function getProducts($id) {
         $resp = \App\Models\Administration\Products::where("supplier_id", $id);
         return response()->json(["response" => $resp]);
+    }
+
+    public function getPurchase($id) {
+
+        $detail = DB::table("purchases_detail")
+                        ->select("purchases_detail.id", "purchases_detail.quantity", "purchases_detail.value", "products.title as product")
+                        ->join("products", "purchases_detail.product_id", "products.id")
+                        ->where("purchase_id", $id)->whereNotNull('product_id')->get();
+
+        $resp = $this->formatDetail($detail);
+
+        $total = "$ " . number_format($this->total, 2, ',', '.');
+
+        return response()->json(["success" => true, "detail" => $resp, "total" => $total]);
     }
 
     public function store(Request $request) {
@@ -79,14 +94,37 @@ class EntryController extends Controller {
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $input["status_id"] = 1;
+
             $input["consecutive"] = $this->createConsecutive(2);
-            $result = Entries::create($input);
+            $result = Entries::create($input)->id;
             if ($result) {
-
                 $this->updateConsecutive(2);
-                $resp = Entries::FindOrFail($result["attributes"]["id"]);
+                $resp = Entries::FindOrFail($result);
 
-                return response()->json(['success' => true, "data" => $resp]);
+                $purc = Purchases::findOrFail($input["purchase_id"]);
+                $purc->status_id = 3;
+                $purc->save();
+
+                $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->whereNotNull('product_id')->get();
+
+                foreach ($detail as $value) {
+                    EntriesDetail::insert([
+                        "entry_id" => $result, "product_id" => $value->product_id, "quantity" => $value->quantity, "value" => $value->value
+                    ]);
+                }
+
+
+                $detail = DB::table("entries_detail")
+                                ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product", "entries_detail.description")
+                                ->join("products", "entries_detail.product_id", "products.id")
+                                ->where("entry_id", $result)->get();
+                $detail = $this->formatDetail($detail);
+
+                $total = "$ " . number_format($this->total, 2, ',', '.');
+
+
+
+                return response()->json(['success' => true, "header" => $resp, "detail" => $detail, "total" => $total]);
             } else {
                 return response()->json(['success' => false]);
             }
@@ -95,15 +133,39 @@ class EntryController extends Controller {
 
     public function sendPurchase(Request $request) {
         if ($request->ajax()) {
+            $input = $request->all();
+            $entry = Entries::findOrFail($input["id"]);
+
+
+            $exist = Purchases::findOrFail($entry["purchase_id"]);
+
+            if ($entry["status_id"] != 2) {
+                $entry->status_id = 2;
+                $entry->save();
+                $exist->status_id = 4;
+                $exist->save();
+                return response()->json(["success" => true, "header" => $entry]);
+            } else {
+                return response()->json(["success" => false, "msg" => "Entry is already generate"]);
+            }
+        } else {
+            return response()->json(["success" => false, "msg" => "Wrong"]);
+        }
+    }
+
+    public function sendPurchase2(Request $request) {
+        if ($request->ajax()) {
 
             $input = $request->all();
             $purchase = new \App\Models\Invoicing\Purchases();
             $entry = Entries::findOrFail($input["id"]);
 
-
             $exist = Purchases::where("entry_id", $entry["id"])->first();
 
             if (count($exist) == 0) {
+
+
+
                 $id = DB::table("purchases")->insertGetId(
                         ["entry_id" => $entry["id"], "warehouse_id" => $entry["warehouse_id"], "responsible_id" => $entry["responsible_id"],
                             "supplier_id" => $entry["supplier_id"], "city_id" => $entry["city_id"], "description" => $entry["description"],
@@ -141,11 +203,13 @@ class EntryController extends Controller {
                     $cont++;
                 }
 
+                $rete = Parameters::where("group", "tax")->where("code", 1)->first();
+                $iva = Parameters::where("group", "tax")->where("code", 2)->first();
 
-                if ($total > 860000) {
-                    $rete = ($total * 0.025);
+                if ($total > $iva["value"]) {
+                    $rete = ($total * $rete["value"]);
                     PurchasesDetail::insert([
-                        "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => ($total * 0.025), "order" => $cont, "description" => "rete",
+                        "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => ($total * $rete["value"]), "order" => $cont, "description" => "rete",
                         "type_nature" => 2
                     ]);
                     $credit -= $rete;
@@ -156,9 +220,10 @@ class EntryController extends Controller {
                     "entry_id" => $input["id"], "account_id" => 2, "purchase_id" => $id, "value" => $credit, "order" => $cont, "description" => "proveedores",
                     "type_nature" => 2
                 ]);
-                $credit = 0;
 
+                $credit = 0;
                 $purchase = $entry;
+
                 $entry->status_id = 2;
                 $entry->save();
 
@@ -189,13 +254,17 @@ class EntryController extends Controller {
     public function edit($id) {
         $entry = Entries::FindOrFail($id);
         $detail = DB::table("entries_detail")
-                        ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
+                        ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product", "entries_detail.description")
                         ->join("products", "entries_detail.product_id", "products.id")
                         ->where("entry_id", $id)->get();
         $detail = $this->formatDetail($detail);
+
+        $cons = Purchases::findOrfail($entry["purchase_id"]);
+
         $total = "$ " . number_format($this->total, 2, ',', '.');
 
-        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);
+
+        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "consecutive" => $cons]);
     }
 
     public function getDetail($id) {

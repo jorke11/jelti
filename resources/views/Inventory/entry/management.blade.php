@@ -60,7 +60,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Date:</label>
-                    <input type="text" class="form-control input-entry input-sm form_datetime input-fillable" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" readonly="" required>
+                    <input type="datetime" class="form-control input-entry input-sm form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" readonly="">
                 </div>
             </div>
         </div>
@@ -95,12 +95,20 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Invoice:</label>
-                    <input type="text" class="form-control input-entry input-sm input-fillable" id="invoice" name='invoice' placeholder="invoice" readonly>
+                    <input type="text" class="form-control input-entry input-sm input-fillable" id="invoice" name='invoice' placeholder="invoice" required>
                 </div>
             </div>
 
         </div>
         <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="email">Purchase(Order):</label>
+                    <select class="form-control input-entry input-sm" id="purchase_id" name="purchase_id" required>
+                        <option value="0">Selection</option>
+                    </select>
+                </div>
+            </div>
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="email">Description:</label>

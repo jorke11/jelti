@@ -1,5 +1,5 @@
 <div class="modal fade" role="dialog" id='modalDetail'>
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -10,53 +10,65 @@
                 <input type="hidden" id="id" name="id" class="input-detail">
                 <input type="hidden" id="entry_id" name="entry_id" class="input-detail">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Product:</label>
                             <select class="form-control input-detail input-sm" id="product_id" name='product_id' data-api="/api/getProduct" required>
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Category:</label>
-                            <select class="form-control input-detail input-sm" id="category_id" name='category_id' required>
-                                <option value="0">Selection</option>
-                                @foreach($category as $val)
-                                <option value="{{$val->id}}">{{$val->description}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Expiration Date:</label>
-                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail input-sm form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Lot:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="lot" name='lot' required>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Quantity:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' required data-type='number'>
+                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' required data-type='number' readonly="">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Value:</label>
                             <input type="text" class="form-control input-detail input-sm" id="value" name='value' readonly="" required>
                         </div>
                     </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Quantity Real:</label>
+                            <input type="text" class="form-control input-detail input-sm" id="real_quantity" name='real_quantity' required data-type='number'>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Expiration Date:</label>
+                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail input-sm form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Lot:</label>
+                            <input type="text" class="form-control input-detail input-sm" id="lot" name='lot' required>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Description:</label>
+                            <textarea class="form-control input-detail input-sm" id="description" name="description"></textarea>
+                        </div>
+                    </div>
                 </div>
                 {!!Form::close()!!}
             </div>

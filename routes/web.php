@@ -108,6 +108,8 @@ Route::get('/entry/{id}/getDetailProduct', ['uses' => 'Inventory\StockController
 Route::get('/entry/{id}/detail', ['uses' => 'Inventory\EntryController@getDetail']);
 Route::get('/entry/{id}/getSupplier', ['uses' => 'Inventory\EntryController@getSupplier']);
 Route::get('/entry/{id}/getProducts', ['uses' => 'Inventory\EntryController@getProducts']);
+Route::get('/entry/{id}/getDetailPurchase', ['uses' => 'Inventory\EntryController@getPurchase']);
+
 Route::post('/entry/storeDetail', 'Inventory\EntryController@storeDetail');
 Route::put('/entry/detail/{id}', 'Inventory\EntryController@updateDetail');
 Route::delete('/entry/detail/{id}', 'Inventory\EntryController@destroyDetail');

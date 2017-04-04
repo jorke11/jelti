@@ -50,15 +50,13 @@ function Purchase() {
         });
 
         $("#btnmodalDetail").click(function () {
-            var expiration_date = $("#frmDetail #expiration_date").val();
             $(".input-detail").cleanFields();
-            $("#frmDetail #expiration_date").val(expiration_date);
             $("#modalDetail").modal("show");
             $("#frmDetail #id").val("");
+            $("#frmDetail #purchase_id").val($("#frm #id").val());
             $("#frmDetail #quantity").val("");
             $("#frmDetail #value").val("");
             $("#frmDetail #packaging").html("");
-
         })
 
 
@@ -161,7 +159,7 @@ function Purchase() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
-                        $(".input-purchase").setFields({data: data, disabled: true});
+                        $(".input-purchase").setFields({data: data.data, disabled: true});
                         table.ajax.reload();
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);

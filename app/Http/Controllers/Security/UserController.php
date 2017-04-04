@@ -55,6 +55,7 @@ class UserController extends Controller {
 
     public function edit($id) {
         $resp["header"] = Users::where("id", $id)->first();
+        unset($resp["header"]["password"]);
         return response()->json($resp);
     }
 

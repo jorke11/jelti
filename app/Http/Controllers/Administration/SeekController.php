@@ -62,10 +62,10 @@ class SeekController extends Controller {
         } else {
             $query
                     ->where("name", "ilike", "%" . $in["q"] . "%")
-                    ->where("type_stakeholder", 2)
                     ->get();
         }
-        $result = $query->get();
+        
+        $result = $query->where("type_stakeholder", 2)->get();
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }

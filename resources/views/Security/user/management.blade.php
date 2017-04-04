@@ -19,16 +19,17 @@
             <input type="text" class="form-control input-user" id="email" name='email' required>
         </div>
     </div>
-
     <div class="col-lg-3">
         <div class="form-group">
-            <label for="email">Stakeholder:</label>
-            <select id="stakeholder_id" name="stakeholder_id" class="form-control input-user" data-api="/api/getStakeholder" required>
+            <label for="email">Role:</label>
+            <select id="role_id" name="role_id" class="form-control input-user" required>
+                <option value="0">Seleccione</option>
+                @foreach($profile as $rol)
+                <option value="{{$rol->id}}">{{$rol->description}}</option>
+                @endforeach
             </select>
         </div>
     </div>
-
-
 </div>
 <div class="row">
     <div class="col-lg-3">
@@ -45,7 +46,7 @@
             </select>
         </div>
     </div>
-    
+
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Password:</label>
@@ -54,7 +55,7 @@
     </div>
     <div class="col-lg-3">
         <div class="form-group">
-            <label for="email">Confirmation:</label>
+            <label for="email">Confirmation (password):</label>
             <input type="password" class="form-control input-user" id="confirmation" name='confirmation' required>
         </div>
     </div>
@@ -62,15 +63,12 @@
 <div class="row">
     <div class="col-lg-3">
         <div class="form-group">
-            <label for="email">Role:</label>
-            <select id="role_id" name="role_id" class="form-control input-user" required>
-                <option value="0">Seleccione</option>
-                @foreach($profile as $rol)
-                <option value="{{$rol->id}}">{{$rol->description}}</option>
-                @endforeach
+            <label for="email">Stakeholder:</label>
+            <select id="stakeholder_id" name="stakeholder_id" class="form-control input-user" data-api="/api/getStakeholder" required>
             </select>
         </div>
     </div>
+
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Status</label>

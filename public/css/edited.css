@@ -70,8 +70,8 @@ table>thead>tr{
 
 .panel-default>.panel-heading {
     /*background-color: #65cea7;*/
-    /*background-color: #6bafbd;*/
-    background-color: #2a3f54;
+    background-color: #6bafbd;
+    /*background-color: #2a3f54;*/
 }
 .panel-default>.panel-heading>.row {
     color: white;

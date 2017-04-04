@@ -23,10 +23,8 @@ class CreatePurchasesdetailTable extends Migration {
             $table->integer('quantity')->nullable();
             $table->integer('parent_id')->nullable();
             $table->integer('type_nature');
-            $table->dateTime('expiration_date')->nullable();
             $table->decimal('value', 15, 2);
             $table->decimal('tax', 15, 2)->nullable();
-            $table->string('lot')->nullable();
             $table->string('description')->nullable();
             $table->integer("order");
             $table->boolean("payed")->nullable();

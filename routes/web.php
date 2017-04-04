@@ -88,7 +88,8 @@ Route::get('/purchase/{id}/getProducts', ['uses' => 'Invoicing\PurchaseControlle
 Route::post('/purchase/storeDetail', 'Invoicing\PurchaseController@storeDetail');
 Route::put('/purchase/detail/{id}', 'Invoicing\PurchaseController@updateDetail');
 Route::delete('/purchase/detail/{id}', 'Invoicing\PurchaseController@destroyDetail');
-
+Route::get('/purchase/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
+Route::post('/purchase/sendPurchase', 'Invoicing\PurchaseController@sendPurchase');
 
 Route::resource('/sale', 'Invoicing\SaleController');
 Route::get('/sale/{id}/consecutive', ['uses' => 'Invoicing\SaleController@getConsecutive']);
@@ -212,10 +213,7 @@ Route::get('/api/listStakeholder', function() {
     return Datatables::queryBuilder(
                     DB::table('stakeholder')
                             ->select(
-                                    "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", 
-                                    "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", 
-                                    "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", 
-                                    "status.description as status_id")
+                                    "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", "status.description as status_id")
                             ->join("cities", "cities.id", "stakeholder.city_id")
                             ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
                             ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
@@ -250,7 +248,15 @@ Route::get('/api/listContact', function() {
 });
 
 Route::get('/api/listPurchase', function() {
-    return Datatables::eloquent(Models\Invoicing\Purchases::query())->make(true);
+    return Datatables::queryBuilder(
+                    DB::table("purchases")
+                            ->select("purchases.id", "purchases.consecutive", "purchases.description", "purchases.created_at", "stakeholder.name as stakeholder", "purchases.created_at", "warehouses.description as warehouse", "cities.description as city",
+                                    "parameters.description as status")
+                            ->join("stakeholder", "stakeholder.id", "purchases.supplier_id")
+                            ->join("warehouses", "warehouses.id", "purchases.warehouse_id")
+                            ->join("cities", "cities.id", "purchases.city_id")
+                            ->join("parameters", "parameters.id", DB::raw("purchases.status_id and parameters.group='entry'"))
+            )->make(true);
 });
 Route::get('/api/listSale', function() {
     return Datatables::eloquent(Models\Invoicing\Sales::query())->make(true);
@@ -302,7 +308,15 @@ Route::get('/api/listRole', function() {
 });
 
 Route::get('/api/listUser', function() {
-    return Datatables::eloquent(Models\Security\Users::query())->make(true);
+
+    return Datatables::queryBuilder(
+                    DB::table("users")
+                            ->select("users.id", "users.name", "users.email", "roles.description as role", "stakeholder.name as stakeholder", "cities.description as city", "parameters.description as status")
+                            ->join("roles", "roles.id", "users.role_id")
+                            ->join("stakeholder", "stakeholder.id", "users.stakeholder_id")
+                            ->join("cities", "cities.id", "users.city_id")
+                            ->join("parameters", "parameters.code", DB::raw("users.status_id and parameters.group='generic'"))
+            )->make(true);
 });
 Route::get('/api/listPuc', function() {
     return Datatables::eloquent(Models\Administration\Puc::query())->make(true);
@@ -320,7 +334,7 @@ Route::get('/logout', 'Security\UserController@logOut');
 
 
 Route::get('/api/getCity', 'Administration\SeekController@getCity');
-Route::get('/api/getSupplier', 'Administration\SeekController@getStakeholder');
+Route::get('/api/getSupplier', 'Administration\SeekController@getSupplier');
 Route::get('/api/getStakeholder', 'Administration\SeekController@getSupplier');
 Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacteristic');
 Route::get('/api/getClient', 'Administration\SeekController@getClient');

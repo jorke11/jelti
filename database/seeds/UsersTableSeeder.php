@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder {
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
             'city_id' => 1,
-            'status' => true,
+            'status_id' => 1,
             'password' => bcrypt('admin')
         ]);
         DB::table("users")->insert([
@@ -29,7 +29,7 @@ class UsersTableSeeder extends Seeder {
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
             'city_id' => 1,
-            'status' => true,
+            'status_id' => 1,
             'password' => bcrypt('123')
         ]);
         DB::table("users")->insert([
@@ -40,7 +40,7 @@ class UsersTableSeeder extends Seeder {
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
             'city_id' => 1,
-            'status' => true,
+            'status_id' => 1,
             'password' => bcrypt('123')
         ]);
         DB::table("users")->insert([
@@ -51,7 +51,7 @@ class UsersTableSeeder extends Seeder {
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
             'city_id' => 1,
-            'status' => true,
+            'status_id' => 1,
             'password' => bcrypt('123')
         ]);
         DB::table("users")->insert([
@@ -62,7 +62,7 @@ class UsersTableSeeder extends Seeder {
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
             'city_id' => 1,
-            'status' => true,
+            'status_id' => 1,
             'password' => bcrypt('123')
         ]);
     }

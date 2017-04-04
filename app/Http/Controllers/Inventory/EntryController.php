@@ -49,7 +49,6 @@ class EntryController extends Controller {
     }
 
     public function getConsecutive($id) {
-
         return response()->json(["response" => $this->createConsecutive(2)]);
     }
 

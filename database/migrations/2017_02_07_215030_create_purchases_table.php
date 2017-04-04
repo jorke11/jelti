@@ -20,8 +20,8 @@ class CreatePurchasesTable extends Migration {
             $table->integer('supplier_id');
             $table->integer('city_id');
             $table->integer('entry_id')->nullable();
+            $table->string('consecutive');
             $table->string('description');
-            $table->string('invoice');
             $table->dateTime('created');
             $table->integer('status_id');
             $table->timestamps();

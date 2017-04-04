@@ -228,12 +228,12 @@ function User() {
                 {data: "id"},
                 {data: "name"},
                 {data: "email"},
-                {data: "role_id"},
-                {data: "stakeholder_id"},
-                {data: "city_id"},
+                {data: "role"},
+                {data: "stakeholder"},
+                {data: "city"},
                 {data: "status"},
             ],
-            order: [[1, 'ASC']],
+            order: [[0, 'ASC']],
             aoColumnDefs: [
                 {
                     aTargets: [0, 1, 2, 3, 4, 5, 6],

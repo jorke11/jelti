@@ -4,8 +4,9 @@ function Purchase() {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
+        $("#btnSend").click(this.send);
         $("#newDetail").click(this.saveDetail);
-        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+        $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
         $("#edit").click(this.edit);
 
         $("#tabManagement").click(function () {
@@ -31,36 +32,21 @@ function Purchase() {
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#frm #branch_id").getSeeker({default: true, api: '/api/getSupplier', disabled: true});
-            $.ajax({
-                url: 'purchase/1/consecutive',
-                method: 'GET',
-                dataType: 'JSON',
-                success: function (resp) {
 
-                }
-            })
+            obj.consecutive();
         });
 
         $("#frmDetail #product_id").change(function () {
             $.ajax({
-                url: 'departure/' + $(this).val() + '/getDetailProduct',
+                url: 'purchase/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
-                    $("#frmDetail #value").val(resp.response.price_sf)
-
-                    if (resp.quantity > 0) {
-                        $("#frmDetail #quantity").attr("disabled", false);
-                        $("#newDetail").attr("disabled", false);
-                    } else {
-                        $("#newDetail").attr("disabled", true);
-                        $("#frmDetail #quantity").attr("disabled", true);
-                    }
-
+                    $("#frmDetail #value").val(resp.response.cost_sf)
+                    $("#frmDetail #packaging").html("Packaging X" + resp.response.packaging)
                 }
             })
-            $("#frm #invoice").select();
         });
 
         $("#btnmodalDetail").click(function () {
@@ -71,14 +57,48 @@ function Purchase() {
             $("#frmDetail #id").val("");
             $("#frmDetail #quantity").val("");
             $("#frmDetail #value").val("");
-            $("#frmDetail #lot").val("");
+            $("#frmDetail #packaging").html("");
 
+        })
+
+
+        $("#frmDetail #quantity").blur(function () {
+            $("#frmDetail #total").val($(this).val() * $("#frmDetail #value").val());
         })
 
     }
 
-    this.new = function () {
+    this.consecutive = function () {
+        $.ajax({
+            url: 'purchase/1/consecutive',
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (resp) {
+                $("#frm #consecutive").val(resp.response);
+            }
+        })
+    }
 
+    this.send = function () {
+        if (confirm("do you want send purchase the supplier?")) {
+            var obj = {};
+            obj.id = $("#frm #id").val();
+            $.ajax({
+                url: 'purchase/sendPurchase',
+                method: 'POST',
+                data: obj,
+                dataType: 'JSON',
+                success: function (resp) {
+                    $(".input-purchase").setFields({data: resp.header, disabled: true});
+                    toastr.success("Purchase sended");
+                    table.ajax.reload();
+                }
+            })
+        }
+    }
+
+    this.new = function () {
+        obj.consecutive();
         $(".input-purchase").cleanFields();
         $("#btnSave").attr("disabled", false);
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
@@ -207,7 +227,7 @@ function Purchase() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-purchase").setFields({data: data.header});
+                $(".input-purchase").setFields({data: data.header, disabled: true});
                 $("#btnSave").attr("disabled", false);
 
 
@@ -349,13 +369,13 @@ function Purchase() {
             "ajax": "/api/listPurchase",
             columns: [
                 {data: "id"},
-                {data: "id"},
+                {data: "consecutive"},
                 {data: "description"},
-                {data: "created"},
-                {data: "invoice"},
-                {data: "warehouse_id"},
-                {data: "city_id"},
-                {data: "status_id"},
+                {data: "created_at"},
+                {data: "stakeholder"},
+                {data: "warehouse"},
+                {data: "city"},
+                {data: "status"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [

@@ -8,6 +8,9 @@
                 <button class="btn btn-success btn-sm" id='btnSave' disabled>
                     <span class="glyphicon glyphicon-save" aria-hidden="true"> Save</span>
                 </button>
+                <button class="btn btn-success btn-sm" id='btnSend'>
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"> Send</span>
+                </button>
             </div>
         </div>
     </div>
@@ -18,7 +21,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Consecutive:</label>
-                    <input type="text" class="form-control input-purchase input-sm" id="id" readonly="">
+                    <input type="text" class="form-control input-purchase input-sm" id="consecutive" readonly="">
                 </div>
             </div>
 
@@ -42,7 +45,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Date:</label>
-                    <input type="text" class="form-control input-purchase input-sm form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required >
+                    <input type="text" class="form-control input-purchase input-sm form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required readonly="" >
                 </div>
             </div>
             <div class="col-lg-2">
@@ -52,15 +55,15 @@
                     </select>
                 </div>
             </div>
-            
+
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Status:</label>
-                    <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly required>
-                        <option value="1">New</option>
-                        <option value="2">Created</option>
-                        <option value="3">Closed</option>
-                        <option value="4">Canceled</option>
+                    <select class="form-control input-purchase input-sm" id="status_id" name='status_id' readonly>
+                        <option value="0">Selection</option>
+                        @foreach($status as $val)
+                        <option value="{{$val->code}}">{{$val->description}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -96,21 +99,11 @@
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Invoice:</label>
-                    <input type="text" class="form-control input-purchase input-sm" id="invoice" name='invoice'>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            
-            <div class="col-lg-2">
-                <div class="form-group">
                     <label for="email">Description:</label>
                     <input type="text" class="form-control input-purchase input-sm" id="description" name='description'>
                 </div>
             </div>
         </div>
-
         {!!Form::close()!!}
     </div>
 </div>

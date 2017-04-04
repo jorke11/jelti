@@ -20,7 +20,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Category:</label>
-                            <select class="form-control input-detail input-sm" id="category_id" name='category_id' required>
+                            <select class="form-control input-detail input-sm" id="category_id" name='category_id' required readonly>
                                 <option value="0">Selection</option>
                                 @foreach($category as $cat)
                                 <option value="{{$cat->id}}">{{$cat->description}}</option>
@@ -30,38 +30,27 @@
                     </div>
                 </div>
                 <div class="row">
-
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Expiration Date:</label>
-                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail input-sm form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Lot:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="lot" name='lot' autofocus="" required>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Quantity:</label>
+                            <label for="email">Quantity (<span id="packaging" style="color:red;"></span>) :</label>
                             <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' required>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Value:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="value" name='value'>
+                            <input type="text" class="form-control input-detail input-sm" id="value" name='value' readonly="">
                         </div>
                     </div>
 
                 </div>
                 <div class="row">
-
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Total:</label>
+                            <input type="text" class="form-control input-detail input-sm" id="total" readonly="">
+                        </div>
+                    </div>
 
                 </div>
                 {!!Form::close()!!}

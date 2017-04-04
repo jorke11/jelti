@@ -12,6 +12,8 @@ use App\Models\Invoicing\PurchasesDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Administration\Products;
 use App\Models\Administration\Puc;
+use App\models\Administration\Consecutives;
+use App\Models\Administration\Parameters;
 
 class PurchaseController extends Controller {
 
@@ -28,11 +30,30 @@ class PurchaseController extends Controller {
 
     public function index() {
         $category = \App\Models\Administration\Categories::all();
-        return view("Invoicing.purchase.init", compact("category"));
+        $status = Parameters::where("group", "entry")->get();
+        
+        return view("Invoicing.purchase.init", compact("category","status"));
+    }
+
+    public function createConsecutive($id) {
+        $con = Consecutives::where("type_form", $id)->first();
+
+        $con->current = ($con->current == null) ? 1 : $con->current;
+        $res = "";
+        for ($i = strlen($con->pronoun); $i <= ($con->large - strlen($con->current)); $i++) {
+            $res .= '0';
+        }
+        return $con->pronoun . $res . $con->current;
     }
 
     public function getConsecutive($id) {
-        echo response()->json(["response" => 'prueba']);
+        return response()->json(["response" => $this->createConsecutive(4)]);
+    }
+
+    public function updateConsecutive($id) {
+        $con = Consecutives::where("type_form", $id)->first();
+        $con->current = (($con->current == null) ? 1 : $con->current) + 1;
+        $con->save();
     }
 
     public function getSupplier($id) {
@@ -50,15 +71,26 @@ class PurchaseController extends Controller {
             $input = $request->all();
             unset($input["id"]);
 //            $user = Auth::User();
-//            $input["users_id"] = 1;
-            $result = Purchases::create($input);
+            $input["status_id"] = 1;
+            $input["consecutive"] = $this->createConsecutive(4);
+            $result = Purchases::create($input)->id;
             if ($result) {
-                $resp = Purchases::FindOrFail($result["attributes"]["id"]);
+                $resp = Purchases::FindOrFail($result);
+                $this->updateConsecutive(4);
                 return response()->json(['success' => true, "data" => $resp]);
             } else {
                 return response()->json(['success' => false]);
             }
         }
+    }
+
+    public function sendPurchase(Request $req) {
+        $in = $req->all();
+        $pur = Purchases::findOrFail($in["id"]);
+        $pur->status_id = 2;
+        $pur->save();
+        $pur = Purchases::findOrFail($in["id"]);
+        return response()->json(["success" => true, "header" => $pur]);
     }
 
     public function edit($id) {

@@ -34,6 +34,14 @@ class ConsecutiveTableSeeder extends Seeder {
             "pronoun" => "dep",
             "large" => 6
         ]);
+        DB::table("consecutives")->insert([
+            'description' => 'consecutive purchase',
+            'type_form' => 4,
+            'initial' => 1,
+            'final' => 100,
+            "pronoun" => "purc",
+            "large" => 6
+        ]);
     }
 
 }

@@ -14,7 +14,7 @@
                         <th>Consecutive</th>
                         <th>Description</th>
                         <th>Date</th>
-                        <th>Invoice</th>
+                        <th>Stakeholder</th>
                         <th>Warehouse</th>
                         <th>City</th>
                         <th>Status</th>

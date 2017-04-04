@@ -8,5 +8,5 @@ class Purchases extends Model
 {
     protected $table='purchases';
     protected $primaryKey="id";
-    protected $fillable=["id","description","warehouse_id","city_id","supplier_id","avoice","created","status_id","responsible_id","invoice"];
+    protected $fillable=["id","description","warehouse_id","city_id","supplier_id","avoice","created","status_id","responsible_id","consecutive"];
 }

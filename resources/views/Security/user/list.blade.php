@@ -14,7 +14,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Profile</th>
-                        <th>Supplier</th>
+                        <th>Stakeholder</th>
                         <th>City</th>
                         <th>Status</th>
                         <th>Action</th>

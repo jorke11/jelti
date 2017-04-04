@@ -31,5 +31,5 @@
     </div>
 </div>
 @include('Inventory.entry.newDetail')
-{!!Html::script('js/Inventory/entry.js')!!}
+{!!Html::script('js/Inventory/Entry.js')!!}
 @endsection

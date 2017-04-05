@@ -11,7 +11,6 @@ function Sale() {
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
         });
-
         $("#client_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getSupplier($(this).val());
@@ -21,13 +20,11 @@ function Sale() {
                 $("#frm #phone_supplier").val("");
             }
         });
-
         if ($("#id_orderext").val() != '') {
             obj.infomationExt($("#id_orderext").val(), true);
         }
 
         $("#insideManagement").click(function () {
-
             $(".input-departure").cleanFields({disabled: true});
             $("#btnSend").attr("disabled", true);
             $("#btnSave").attr("disabled", true);
@@ -40,14 +37,16 @@ function Sale() {
             $("#frm #status_id").prop("disabled", true);
             obj.consecutive();
         });
-
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
             $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
             $(".input-detail").cleanFields();
+            if ($("#frm #status_id").val() == 1) {
+                $("#frmDetail #real_quantity").attr("disabled", true);
+                $("#frmDetail #description").attr("disabled", true);
+            }
 
         });
-
         $("#frmDetail #product_id").change(function () {
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
@@ -56,36 +55,15 @@ function Sale() {
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf)
-
-                    $("#frmDetail #quantityMax").html(resp.quantity)
-                    maxDeparture = resp.quantity
-                    if (resp.quantity > 0) {
-                        $("#frmDetail #quantity").attr("disabled", false);
-                        $("#newDetail").attr("disabled", false);
-                    } else {
-                        $("#newDetail").attr("disabled", true);
-                        $("#frmDetail #quantity").attr("disabled", true);
-                    }
-
+                    $("#frmDetail #quantityMax").html("Available: ("+resp.quantity+")")
                 }
             })
         });
-
         $("#btnDocument").click(function () {
             if ($("#frm #status_id").val() != 1) {
                 window.open("departure/" + $("#frm #id").val() + "/getInvoice");
             } else {
                 toastr.error("error")
-            }
-        });
-
-
-        $("#quantity").blur(function () {
-            if (maxDeparture < $(this).val()) {
-                toastr.warning("No hay sufiente disponible");
-                $(this).val("");
-            } else {
-                $("#quantityTotal").html($("#quantity").val() * $("#value").val());
             }
         });
         $("#tabList").click(function () {
@@ -106,7 +84,6 @@ function Sale() {
 
     this.new = function () {
         toastr.remove();
-
         $("#btnSave").attr("disabled", false);
         $(".input-departure").cleanFields();
         $(".input-detail").cleanFields();
@@ -119,7 +96,6 @@ function Sale() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-
         obj.consecutive();
     }
     this.getSupplier = function (id, path) {
@@ -142,23 +118,31 @@ function Sale() {
 
     this.send = function () {
         toastr.remove();
-        var obj = {};
-        obj.id = $("#frm #id").val()
+        var data = {}, btnEdit = true, btnDel = true;
+        data.id = $("#frm #id").val()
         $.ajax({
             url: 'departure/setSale',
             method: 'POST',
-            data: obj,
+            data: data,
             dataType: 'JSON',
             success: function (resp) {
                 if (resp.success == true) {
                     toastr.success("Sended");
-                    $(".input-departure").setFields({data: resp.data, disabled: true});
+                    $(".input-departure").setFields({data: resp.header, disabled: true});
                     $("#btnDocument").attr("disabled", false);
+                    if (resp.header.status_id == 2) {
+                        btnEdit = false;
+                        btnDel = false;
+                    }
+
+                    obj.printDetail(resp.detail, btnEdit, btnDel);
                 } else {
                     toastr.warning(resp.msg);
                     $("#btnDocument").attr("disabled", false);
                     $("#btnDocument").attr("disabled", true);
                 }
+            }, error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(xhr.responseJSON.msg);
             }
         })
     }
@@ -172,16 +156,13 @@ function Sale() {
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
-
         var validate = $(".input-departure").validate();
-
         if (validate.length == 0) {
             if ($("#id_orderext").val() == '') {
                 if (id == '') {
                     method = 'POST';
                     url = "departure";
                     msg = "Created Record";
-
                 } else {
                     method = 'PUT';
                     url = "departure/" + id;
@@ -228,23 +209,24 @@ function Sale() {
         }
     }
 
+
+
     this.saveDetail = function () {
+        toastr.remove();
         $("#frmDetail #departure_id").val($("#frm #id").val());
         var frm = $("#frmDetail");
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frmDetail #id").val();
         var msg = 'Record Detail';
-
         var validate = $(".input-detail").validate();
-
+        
         if (validate.length == 0) {
 
             if (id == '') {
                 method = 'POST';
                 url = "departure/storeDetail";
                 msg = "Created " + msg;
-
             } else {
                 method = 'PUT';
                 url = "departure/detail/" + id;
@@ -262,9 +244,10 @@ function Sale() {
                         $("#btnmodalDetail").attr("disabled", false);
                         obj.printDetail(data.data);
                         $("#modalDetail").modal("hide");
-                        $("#newDetail").attr("disabled", true);
                         $("#frmDetail #quantity").attr("disabled", true);
                     }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg)
                 }
             })
         } else {
@@ -273,7 +256,7 @@ function Sale() {
     }
 
     this.showModal = function (id) {
-        var frm = $("#frmEdit");
+        var frm = $("#frmEdit"), btnEdit = true, btnDel = true;
         var data = frm.serialize();
         var url = "/departure/" + id + "/edit";
         $.ajax({
@@ -284,7 +267,6 @@ function Sale() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header});
-
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -292,12 +274,13 @@ function Sale() {
                 if (data.header.status_id == 2) {
                     $("#btnSend, #btnmodalDetail").attr("disabled", true);
                     $("#btnDocument").attr("disabled", false);
+                    btnEdit = false;
+                    btnDel = false;
                 } else {
                     $("#btnSend,#btnmodalDetail").attr("disabled", false);
-
                 }
 
-                obj.printDetail(data.detail);
+                obj.printDetail(data.detail, btnEdit, btnDel);
             }
         })
     }
@@ -315,7 +298,6 @@ function Sale() {
 
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header});
-
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -336,26 +318,43 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $("#modalDetail").modal("show");
-                $(".input-detail").setFiedls({data: data})
+                $(".input-detail").setFields({data: data})
+            }, error(xhr, responseJSON, thrown) {
+                console.log(responseJSON)
             }
         })
     }
 
-    this.printDetail = function (data) {
-        var html = "";
+    this.printDetail = function (data, btnEdit = true, btnDel = true) {
+        var html = "", htmlEdit = "", htmlDel = "";
         $("#tblDetail tbody").empty();
         $.each(data, function (i, val) {
+            
+            if (btnEdit == true && val.status_id != 3) {
+                htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
+            } else {
+                htmlEdit = '';
+            }
+            if (btnDel == true && val.status_id != 3) {
+                htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ',' + val.status_id + ')>Delete</button>'
+            } else {
+                htmlDel = '';
+            }
+
+            val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
-            html += "<td>" + val.product_id + "</td>";
+            html += "<td>" + val.product + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
-            html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
-            html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
+            html += "<td>" + val.real_quantity + "</td>";
+            html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + val.totalFormated_real + "</td>";
+            html += '<td>' + val.status + "</td>";
+            html += '<td>' + htmlEdit + htmlDel + "</td>";
             html += "</tr>";
         });
-
         $("#tblDetail tbody").html(html);
     }
 
@@ -379,48 +378,59 @@ function Sale() {
                 }
             })
         }
+
     }
 
-    this.deleteDetail = function (id) {
+    this.deleteDetail = function (id, status_id) {
         toastr.remove();
-        if (confirm("Do you want delete this record?")) {
-            var token = $("input[name=_token]").val();
-            var url = "/departure/detail/" + id;
-            $.ajax({
-                url: url,
-                headers: {'X-CSRF-TOKEN': token},
-                method: "DELETE",
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == true) {
-                        toastr.warning("Record deleted");
-                        obj.printDetail(data.data);
+        if (status_id == 1) {
+            if (confirm("Do you want delete this record?")) {
+                var token = $("input[name=_token]").val();
+                var url = "/departure/detail/" + id;
+                $.ajax({
+                    url: url,
+                    headers: {'X-CSRF-TOKEN': token},
+                    method: "DELETE",
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success == true) {
+                            toastr.warning("Record deleted");
+                            obj.printDetail(data.data);
+                        }
+                    }, error: function (err) {
+                        toastr.error("No se puede borrra Este registro");
                     }
-                }, error: function (err) {
-                    toastr.error("No se puede borrra Este registro");
-                }
-            })
+                })
+            }
+        } else {
+            toastr.error("No se puede borrra Este registro");
         }
     }
 
     this.table = function () {
-        return $('#tbl').DataTable({
+        table = $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": "/api/listDeparture",
             columns: [
-                {data: "id"},
+                {
+                    className: 'details-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    searchable: false,
+                },
+//                {data: "id"},
                 {data: "created_at"},
                 {data: "client"},
                 {data: "warehouse"},
                 {data: "city"},
-                {data: "status"
-                },
+                {data: "status"},
             ],
-            order: [[1, 'ASC']],
+            order: [[2, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5],
+                    aTargets: [1, 2, 3, 4, 5],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
@@ -434,14 +444,10 @@ function Sale() {
                     }
                 }
             ],
-
             initComplete: function () {
                 this.api().columns().every(function () {
                     var column = this;
-
                     var type = $(column.header()).attr('rowspan');
-
-
                     if (type != undefined) {
                         var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
                                 .appendTo($(column.footer()).empty())
@@ -459,7 +465,6 @@ function Sale() {
                         });
                     }
                 });
-
             },
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
@@ -471,6 +476,51 @@ function Sale() {
                 }
             }
         });
+        $('#tbl tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+
+                row.child(obj.format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+        return table;
+    }
+
+    this.format = function (d) {
+        var url = "/departure/" + d.id + "/detailAll";
+        var html = '<br><table class="table-detail">';
+        html += '<thead><tr><th colspan="2">Information</th><th colspan="3" class="center-rowspan">Order</th>'
+        html += '<th colspan="3" class="center-rowspan">Dispatched</th></tr>'
+        html += '<tr><th>#</th><th>Product</th><th>Quantity</th><th>Unit</th><th>Total</th><th>Quantity</th><th>Unit</th><th>Total</th></tr></thead>';
+        $.ajax({
+            url: url,
+            method: "GET",
+            dataType: 'JSON',
+            async: false,
+            success: function (data) {
+                html += "<tbody>";
+                $.each(data, function (i, val) {
+                    val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+                    html += "<tr>";
+                    html += "<td>" + val.id + "</td>";
+                    html += "<td>" + val.product + "</td>";
+                    html += "<td>" + val.quantity + "</td>";
+                    html += "<td>" + val.valueFormated + "</td>";
+                    html += "<td>" + val.totalFormated + "</td>";
+                    html += "<td>" + val.real_quantity + "</td>";
+                    html += "<td>" + val.valueFormated + "</td>";
+                    html += "<td>" + val.totalFormated_real + "</td>";
+                    html += "</tr>";
+                });
+                html += "</tbody></table><br>";
+            }
+        })
+        return html;
     }
 
 }

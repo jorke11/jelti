@@ -78,6 +78,7 @@ function Purchase() {
     }
 
     this.send = function () {
+        toastr.remove();
         if (confirm("do you want send purchase the supplier?")) {
             var obj = {};
             obj.id = $("#frm #id").val();
@@ -90,9 +91,12 @@ function Purchase() {
                     $(".input-purchase").setFields({data: resp.header, disabled: true});
                     toastr.success("Purchase sended");
                     table.ajax.reload();
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
                 }
             })
         }
+
     }
 
     this.new = function () {
@@ -172,6 +176,7 @@ function Purchase() {
     }
 
     this.saveDetail = function () {
+        toastr.remove();
         $("#frmDetail #purchase_id").val($("#frm #id").val());
 
         var frm = $("#frmDetail");

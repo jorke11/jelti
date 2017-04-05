@@ -67,7 +67,7 @@ function Entry() {
                     method: 'GET',
                     dataType: 'JSON',
                     success: function (resp) {
-                        obj.printDetail(resp);
+                        obj.printDetail(resp, false, false);
                     }
                 })
         })
@@ -81,19 +81,21 @@ function Entry() {
         var total = 0, calc = 0;
 
         $.each(data.detail, function (i, val) {
-            if (btnEdit == true) {
+            if (btnEdit == true && val.status_id != 3) {
                 htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
             } else {
                 htmlEdit = '';
             }
 
-            if (btnDel == true) {
+            if (btnDel == true && val.status_id != 3) {
                 htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
             } else {
                 htmlDel = '';
             }
 
             val.expiration_date = (val.expiration_date != undefined) ? val.expiration_date : ''
+            val.real_quantity = (val.real_quantity != null) ? val.real_quantity : ''
+            val.status = (val.status != undefined) ? val.status : 'new'
 
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
@@ -105,6 +107,7 @@ function Entry() {
             html += "<td>" + val.real_quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
             html += "<td>" + val.totalFormated_real + "</td>";
+            html += "<td>" + val.status + "</td>";
             html += '<td>' + htmlEdit + htmlDel + "</td>";
             html += '</td>';
             html += "</tr>";
@@ -161,6 +164,8 @@ function Entry() {
                 } else {
                     toastr.warning(resp.msg);
                 }
+            }, error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(xhr.responseJSON.msg);
             }
         })
 
@@ -244,6 +249,7 @@ function Entry() {
         var validate = $(".input-detail").validate();
 
         if (validate.length == 0) {
+            
             var frm = $("#frmDetail");
             var data = frm.serialize();
             var url = "entry/", method = "";
@@ -274,6 +280,9 @@ function Entry() {
                     } else {
                         toastr.warning("Wrong");
                     }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
                 }
             })
         } else {
@@ -309,6 +318,7 @@ function Entry() {
                     $("#btnmodalDetail").prop("disabled", true);
                     $(".btnEditClass").prop("disabled", true);
                     $(".btnDeleteClass").prop("disabled", true);
+                    $("#btnSend").prop("disabled", true);
                 } else {
                     $(".btnEditClass").prop("disabled", false);
                     $(".btnDeleteClass").prop("disabled", false);

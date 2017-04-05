@@ -12,9 +12,11 @@ class DeparturesDetail extends Model
         "id", 
         "departure_id", 
         "product_id", 
-        "category_id", 
+        "status_id", 
         "mark_id", 
         "quantity", 
-        "value"
+        "value",
+        "real_quantity",
+        "description",
         ];
 }

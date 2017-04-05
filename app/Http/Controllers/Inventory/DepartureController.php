@@ -18,14 +18,17 @@ use App\models\Administration\Consecutives;
 use App\Models\Invoicing\Sales;
 use Session;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Inventory\StockController;
 
 class DepartureController extends Controller {
 
     protected $total;
+    public $total_real;
 
     public function __construct() {
         $this->middleware("auth");
         $this->total = 0;
+        $this->total_real = 0;
     }
 
     public function index() {
@@ -129,71 +132,87 @@ class DepartureController extends Controller {
             $tax = Parameters::where("group", "tax")->where("code", 1)->first();
             $departure = Departures::findOrFail($input["id"]);
 
+            $val = DeparturesDetail::where("departure_id", $departure["id"])->count();
+
             $dep = Sales::where("departure_id", $input["id"])->get();
 
-            if (count($dep) == 0) {
-                $id = DB::table("sales")->insertGetId(
-                        ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
-                            "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
-                            "address" => $departure["address"], "phone" => $departure["phone"],
-                            "status_id" => $departure["status_id"], "created" => $departure["created"]
-                        ]
-                );
 
-                $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
+            if ($val > 0) {
+                $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
+                if ($val == 0) {
+                    if (count($dep) == 0) {
+                        $cons = $this->createConsecutive(5);
+                        $id = DB::table("sales")->insertGetId(
+                                ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
+                                    "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
+                                    "address" => $departure["address"], "phone" => $departure["phone"],
+                                    "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons
+                                ]
+                        );
+                        $this->updateConsecutive(5);
 
-                $total = 0;
-                $cont = 0;
-                $credit = 0;
-                $tax = 0;
-                $totalPar = 0;
-                foreach ($detail as $value) {
-                    $pro = Products::findOrFail($value->product_id);
-                    $totalPar = $value->quantity * $value->value;
-                    $total += $totalPar;
-                    SaleDetail::insert([
-                        "sale_id" => $id, "product_id" => $value->product_id,
-                        "category_id" => $value->category_id, "quantity" => $value->quantity,
-                        "value" => $value->value, "tax" => $pro["tax"],
-                        "account_id" => 1, "order" => $cont, "type_nature" => 1
-                    ]);
+                        $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
-                    $credit += (double) $totalPar;
-                    if ($pro["tax"] != '' && $pro["tax"] > 0) {
-                        $cont++;
-                        $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                        $total = 0;
+                        $cont = 0;
+                        $credit = 0;
+                        $tax = 0;
+                        $totalPar = 0;
+                        foreach ($detail as $value) {
+                            $pro = Products::findOrFail($value->product_id);
+                            $totalPar = $value->quantity * $value->value;
+                            $total += $totalPar;
+                            SaleDetail::insert([
+                                "sale_id" => $id, "product_id" => $value->product_id,
+                                "category_id" => $value->category_id, "quantity" => $value->quantity,
+                                "value" => $value->value, "tax" => $pro["tax"],
+                                "account_id" => 1, "order" => $cont, "type_nature" => 1
+                            ]);
+
+                            $credit += (double) $totalPar;
+                            if ($pro["tax"] != '' && $pro["tax"] > 0) {
+                                $cont++;
+                                $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                                SaleDetail::insert([
+                                    "account_id" => 1, "sale_id" => $id, "value" => $tax,
+                                    "order" => $cont, "description" => 'iva', "type_nature" => 1
+                                ]);
+                            }
+                            $credit += (double) $tax;
+                            $cont++;
+                        }
+
+
+                        if ($total > $basetax["base"]) {
+                            $rete = ($total * $tax["base"]);
+                            SaleDetail::insert([
+                                "sale_id" => $id, "account_id" => 2, "value" => ($total * $tax["base"]), "order" => $cont, "description" => "rete", "type_nature" => 2
+                            ]);
+                            $credit -= $rete;
+                            $cont++;
+                        }
+
                         SaleDetail::insert([
-                            "account_id" => 1, "sale_id" => $id, "value" => $tax,
-                            "order" => $cont, "description" => 'iva', "type_nature" => 1
+                            "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes", "type_nature" => 2
                         ]);
+                        $credit = 0;
+
+                        $departure->invoice = $this->createConsecutive(1);
+                        $departure->status_id = 2;
+                        $departure->save();
+                        $this->updateConsecutive(1);
+
+                        $detail = $this->formatDetail($input["id"]);
+                        return response()->json(["success" => true, "header" => $departure, "detail" => $detail]);
+                    } else {
+                        return response()->json(["success" => false, "msg" => 'Already sended']);
                     }
-                    $credit += (double) $tax;
-                    $cont++;
+                } else {
+                    return response()->json(["success" => false, "msg" => 'All item detail must be checked'], 409);
                 }
-
-
-                if ($total > $basetax["base"]) {
-                    $rete = ($total * $tax["base"]);
-                    SaleDetail::insert([
-                        "sale_id" => $id, "account_id" => 2, "value" => ($total * $tax["base"]), "order" => $cont, "description" => "rete", "type_nature" => 2
-                    ]);
-                    $credit -= $rete;
-                    $cont++;
-                }
-
-                SaleDetail::insert([
-                    "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes", "type_nature" => 2
-                ]);
-                $credit = 0;
-
-                $departure->invoice = $this->createConsecutive(1);
-                $departure->status_id = 2;
-                $departure->save();
-                $this->updateConsecutive(1);
-
-                return response()->json(["success" => true, "data" => $departure]);
             } else {
-                return response()->json(["success" => false, "msg" => 'Already sended']);
+
+                return response()->json(["success" => false, "msg" => 'Detail empty'], 409);
             }
         }
     }
@@ -258,24 +277,40 @@ class DepartureController extends Controller {
 
     public function edit($id) {
         $entry = Departures::FindOrFail($id);
-        $detail = $this->formatDetail(DB::table("departures_detail")->where("departure_id", $id)->get());
+        $detail = $this->formatDetail($id);
 
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 
-    public function formatDetail($detail) {
+    public function formatDetail($id) {
+        $detail = DB::table("departures_detail")
+                        ->select("departures_detail.id", "departures_detail.status_id", "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", "products.title as product", "departures_detail.description", "parameters.description as status")
+                        ->join("products", "departures_detail.product_id", "products.id")
+                        ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
+                        ->where("departure_id", $id)->get();
+
         $this->total = 0;
+
         foreach ($detail as $i => $value) {
+            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value;
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
+            $detail[$i]->total_real = $detail[$i]->real_quantity * $detail[$i]->value;
+            $detail[$i]->totalFormated_real = "$ " . number_format($detail[$i]->total_real, 2, ",", ".");
             $this->total += $detail[$i]->total;
+            $this->total_real += $detail[$i]->total_real;
         }
         return $detail;
     }
 
     public function getDetail($id) {
         $detail = DeparturesDetail::FindOrFail($id);
+        return response()->json($detail);
+    }
+
+    public function getAllDetail($departue_id) {
+        $detail = $this->formatDetail($departue_id);
         return response()->json($detail);
     }
 
@@ -294,12 +329,27 @@ class DepartureController extends Controller {
     public function updateDetail(Request $request, $id) {
         $entry = DeparturesDetail::FindOrFail($id);
         $input = $request->all();
-        $result = $entry->fill($input)->save();
-        if ($result) {
-            $resp = DB::table("departures_detail")->where("departure_id", "=", $input["departure_id"])->get();
-            return response()->json(['success' => true, "data" => $resp]);
+        $input["status_id"] = 3;
+        $stock = new StockController();
+        $available = $stock->getDetailProduct($input["product_id"]);
+        $available = $available->getData(true);
+
+        if ($input["real_quantity"] != 0) {
+
+            if ($available["quantity"] >= $input["real_quantity"]) {
+                $result = $entry->fill($input)->save();
+                if ($result) {
+                    $resp = $this->formatDetail($input["departure_id"]);
+                    return response()->json(['success' => true, "data" => $resp]);
+                } else {
+                    return response()->json(['success' => false]);
+                }
+            } else {
+                $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];
+                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]], 409);
+            }
         } else {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, "msg" => "Zero is not allowed "], 409);
         }
     }
 
@@ -317,7 +367,8 @@ class DepartureController extends Controller {
         $entry = DeparturesDetail::FindOrFail($id);
         $result = $entry->delete();
         if ($result) {
-            $resp = DB::table("departures_detail")->where("departure_id", "=", $entry["departure_id"])->get();
+
+            $resp = $this->formatDetail($entry["departure_id"]);
             return response()->json(['success' => true, "data" => $resp]);
         } else {
             return response()->json(['success' => false]);
@@ -329,11 +380,12 @@ class DepartureController extends Controller {
             $input = $request->all();
             unset($input["id"]);
 //            $user = Auth::User();
-//            $input["users_id"] = 1;
+            $input["status_id"] = 1;
+            $input["real_quantity"] = (!isset($input["real_quantity"]) || $input["real_quantity"] == '') ? null : $input["real_quantity"];
+
             $result = DeparturesDetail::create($input);
             if ($result) {
-                $resp = DeparturesDetail::where("departure_id", $input["departure_id"])->get();
-                $resp = $this->formatDetail($resp);
+                $resp = $this->formatDetail($input["departure_id"]);
                 return response()->json(['success' => true, "data" => $resp]);
             } else {
                 return response()->json(['success' => false]);

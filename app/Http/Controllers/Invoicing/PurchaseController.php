@@ -31,8 +31,8 @@ class PurchaseController extends Controller {
     public function index() {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
-        
-        return view("Invoicing.purchase.init", compact("category","status"));
+
+        return view("Invoicing.purchase.init", compact("category", "status"));
     }
 
     public function createConsecutive($id) {
@@ -87,10 +87,20 @@ class PurchaseController extends Controller {
     public function sendPurchase(Request $req) {
         $in = $req->all();
         $pur = Purchases::findOrFail($in["id"]);
-        $pur->status_id = 2;
-        $pur->save();
-        $pur = Purchases::findOrFail($in["id"]);
-        return response()->json(["success" => true, "header" => $pur]);
+        $val = PurchasesDetail::where("purchase_id", $pur["id"])->count();
+
+        if ($val > 0) {
+            if ($pur["status_id"] == 2) {
+                return response()->json(["success" => false, "msg" => "Already sended"], 409);
+            } else {
+                $pur->status_id = 2;
+                $pur->save();
+                $pur = Purchases::findOrFail($in["id"]);
+                return response()->json(["success" => true, "header" => $pur]);
+            }
+        } else {
+            return response()->json(["success" => false, "msg" => "Detail empty"], 409);
+        }
     }
 
     public function edit($id) {
@@ -148,6 +158,7 @@ class PurchaseController extends Controller {
     public function updateDetail(Request $request, $id) {
         $entry = PurchasesDetail::FindOrFail($id);
         $input = $request->all();
+        
         $pro = Products::findOrFail($input["product_id"]);
 
 

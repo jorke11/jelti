@@ -129,8 +129,8 @@ Route::get('/departure/getOrder/{id}', 'Inventory\DepartureController@showOrder'
 Route::post('/departure/storeExt', 'Inventory\DepartureController@storeExtern');
 Route::post('/departure/setSale/', 'Inventory\DepartureController@setSale');
 Route::get('/departure/{id}/getInvoice', ['uses' => 'Inventory\DepartureController@getInvoice']);
-
 Route::get('/departure/{id}/getInvoiceHtml', ['uses' => 'Inventory\DepartureController@getInvoiceHtml']);
+Route::get('/departure/{id}/detailAll/', 'Inventory\DepartureController@getAllDetail');
 
 Route::resource('/order', 'Inventory\OrderController');
 Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);

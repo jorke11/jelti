@@ -12,6 +12,7 @@ class EntriesDetail extends Model {
         "id",
         "entry_id",
         "product_id",
+        "status_id",
         "expiration_date",
         "lot",
         "quantity",

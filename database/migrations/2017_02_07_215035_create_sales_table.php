@@ -19,7 +19,7 @@ class CreateSalesTable extends Migration {
             $table->integer('departure_id')->nullable();
             $table->integer('city_id');
             $table->integer('client_id');
-//            $table->integer('branch_id');
+            $table->string('consecutive');
             $table->integer('destination_id');
             $table->string('phone');
             $table->string('status_id');

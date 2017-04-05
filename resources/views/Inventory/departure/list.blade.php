@@ -10,7 +10,7 @@
             <table class="table table-condensed  table-hover" id="tbl" width='100%'>
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th></th>
                         <th>Date</th>
                         <th>Client</th>
                         <th>Warehouse</th>

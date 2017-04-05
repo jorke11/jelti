@@ -16,9 +16,12 @@ class CreateDeparturesDetailTable extends Migration {
             $table->increments('id');
             $table->integer('departure_id');
             $table->integer('product_id');
-            $table->integer('category_id');
+            $table->integer('status_id');
             $table->integer('quantity');
+            $table->integer('real_quantity')->nullable();
             $table->decimal('value', 15, 2);
+            $table->string('description')->nullable();
+
             $table->timestamps();
         });
     }

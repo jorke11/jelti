@@ -22,6 +22,7 @@ class CreateEntriesDetailTable extends Migration {
             $table->decimal('value', 15, 2);
             $table->string('lot')->nullable();
             $table->string('description')->nullable();
+            $table->integer('status_id');
             $table->timestamps();
         });
     }

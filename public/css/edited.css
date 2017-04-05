@@ -2,7 +2,8 @@
 table>thead>tr{
     /*background:#2a3f54;*/
     background:#1b2733;
-    color:white;border-color: #2a3f54
+    color:white;
+    border-color: #2a3f54
 }
 .thumbnail{height: 300px;}
 .panel-heading{height: 45px;}
@@ -80,4 +81,21 @@ table>thead>tr{
 .center-rowspan{
     text-align: center;
     vertical-align: middle !important;
+}
+
+td.details-control {
+    background: url('/images/datatables/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('/images/datatables/details_close.png') no-repeat center center;
+}
+
+.table-detail > thead >tr >th{
+    background-color: #53708e;
+    padding: 3px;
+}
+.table-detail > tbody >tr >td{
+    border: 1px solid #999999;
+    padding: 3px;
 }

@@ -141,6 +141,7 @@
                             <th colspan="3" class="center-rowspan">Information</th>
                             <th colspan="3" class="center-rowspan">Order</th>
                             <th colspan="3" class="center-rowspan">Real</th>
+                            <th rowspan="2" class="center-rowspan">Status</th>
                             <th rowspan="2" class="center-rowspan">Actions</th>
                         </tr>
                         <tr>

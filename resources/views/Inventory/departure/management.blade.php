@@ -149,12 +149,21 @@
                 <table class="table table-bordered table-condensed" id="tblDetail">
                     <thead>
                         <tr>
+                            <th colspan="2" class="center-rowspan">Information</th>
+                            <th colspan="3" class="center-rowspan">Order</th>
+                            <th colspan="3" class="center-rowspan">Dispatched</th>
+                            <th rowspan="2" class="center-rowspan">Status</th>
+                            <th rowspan="2" class="center-rowspan">Actions</th>
+                        </tr>
+                        <tr>
                             <th>#</th>
                             <th>Product</th>
                             <th>Quantity</th>
                             <th>Unit</th>
                             <th>Total</th>
-                            <th>Actions</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

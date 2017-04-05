@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\models\Administration\Consecutives;
 
-class ConsecutiveController extends Controller
-{
-     public function __construct() {
+class ConsecutiveController extends Controller {
+
+    public function __construct() {
         $this->middleware("auth");
     }
 
@@ -25,7 +25,7 @@ class ConsecutiveController extends Controller
             $input = $request->all();
             unset($input["id"]);
 //            $user = Auth::User();
-//            $input["users_id"] = 1;
+            $input["current"] = ($input["current"] == '') ? 0 : $input["current"];
             $result = Consecutives::create($input);
             if ($result) {
                 return response()->json(['success' => true]);
@@ -60,4 +60,5 @@ class ConsecutiveController extends Controller
             return response()->json(['success' => false]);
         }
     }
+
 }

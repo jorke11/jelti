@@ -165,6 +165,11 @@ class ParameterTableSeeder extends Seeder {
             'group' => "departure",
             'code' => 2,
         ]);
+        DB::table("parameters")->insert([
+            'description' => "invoiced",
+            'group' => "departure",
+            'code' => 3,
+        ]);
     }
 
 }

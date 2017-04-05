@@ -16,6 +16,7 @@ class Departures extends Model {
         "client_id",
         "warehouse_id",
         "created",
+        "consecutive",
         "destination_id",
         "address",
         "phone",

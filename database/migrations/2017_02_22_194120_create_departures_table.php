@@ -22,10 +22,12 @@ class CreateDeparturesTable extends Migration {
             $table->integer('order_id')->nullable();
             $table->integer('branch_id');
             $table->string('address');
+            $table->string('consecutive');
             $table->string('phone');
             $table->dateTime('created');
             $table->integer('status_id');
             $table->string('invoice')->nullable();
+            $table->boolean('pdf_create')->nullable();
             $table->timestamps();
         });
     }

@@ -295,12 +295,12 @@ Route::get('/api/listDeparture', function() {
             ->join("stakeholder", "stakeholder.id", "departures.client_id")
             ->leftjoin("cities", "cities.id", "departures.city_id")
             ->leftjoin("warehouses", "warehouses.id", "departures.warehouse_id")
-            ->leftjoin("parameters", "parameters.code", DB::raw("departures.status_id and parameters.group='departure'"))
+            ->leftjoin("parameters", "parameters.code", DB::raw("departures.status_id and parameters.group='entry'"))
             ->where("parameters.group", "entry");
 
-    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-        $query->where("departures.responsible_id", Auth::user()->id);
-    }
+//    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+//        $query->where("departures.responsible_id", Auth::user()->id);
+//    }
 
 //    $query = DB::table('vdepartures');
 //            

@@ -74,27 +74,23 @@ function Entry() {
 
     }
 
-    this.printDetail = function (data) {
+    this.printDetail = function (data, btnEdit = true, btnDel = true) {
 
-        var html = "", btnEdit = "", btnDel = "";
+        var html = "", htmlEdit = "", htmlDel = "";
         $("#tblDetail tbody").empty();
         var total = 0, calc = 0;
 
-        data.buttons = data.buttons || false;
-
         $.each(data.detail, function (i, val) {
+            if (btnEdit == true) {
+                htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
+            } else {
+                htmlEdit = '';
+            }
 
-            if (data.buttons != false) {
-                if (typeof data.buttons.edit !== "undefined") {
-                    btnEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
-                } else {
-                    btnEdit = '';
-                }
-                if (typeof data.buttons.delete !== "undefined") {
-                    btnDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
-                } else {
-                    btnDel = '';
-                }
+            if (btnDel == true) {
+                htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
+            } else {
+                htmlDel = '';
             }
 
             val.expiration_date = (val.expiration_date != undefined) ? val.expiration_date : ''
@@ -106,13 +102,16 @@ function Entry() {
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
-            html += '<td>' + btnEdit + btnDel + "</td>";
+            html += "<td>" + val.real_quantity + "</td>";
+            html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + val.totalFormated_real + "</td>";
+            html += '<td>' + htmlEdit + htmlDel + "</td>";
             html += '</td>';
             html += "</tr>";
         });
 
         $("#tblDetail tbody").html(html);
-        $("#tblDetail tfoot").html('<tr><td colspan="5">Total</td><td>' + data.total + '</td></tr>');
+        $("#tblDetail tfoot").html('<tr><td colspan="5">Total</td><td>' + data.total + '</td><td colspan="2"></td><td>' + data.total_real + '</td></tr>');
 
     }
 
@@ -223,11 +222,8 @@ function Entry() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
-
                         $(".input-entry").setFields({data: data.header, disabled: true});
-                        $("#frm #id").val(data.header.id);
                         table.ajax.reload();
-                        data.buttons = {edit: true, delete: true};
                         obj.printDetail(data);
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
@@ -306,8 +302,8 @@ function Entry() {
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
-                data.buttons = {edit: true, delete: true};
-                obj.printDetail(data);
+
+                obj.printDetail(data, true, true);
 
                 if (data.header.status_id != 1) {
                     $("#btnmodalDetail").prop("disabled", true);
@@ -323,13 +319,10 @@ function Entry() {
     }
 
     this.editDetail = function (id) {
-        var frm = $("#frm");
-        var data = frm.serialize();
         var url = "/entry/" + id + "/detail";
         $.ajax({
             url: url,
             method: "GET",
-            data: data,
             dataType: 'JSON',
             success: function (data) {
                 $("#modalDetail").modal("show");

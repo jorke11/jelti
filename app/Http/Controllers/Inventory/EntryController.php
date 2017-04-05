@@ -19,9 +19,11 @@ use Session;
 class EntryController extends Controller {
 
     public $total;
+    public $total_real;
 
     public function __construct() {
         $this->total = 0;
+        $this->total_real = 0;
         $this->middleware("auth");
     }
 
@@ -114,17 +116,11 @@ class EntryController extends Controller {
                 }
 
 
-                $detail = DB::table("entries_detail")
-                                ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product", "entries_detail.description")
-                                ->join("products", "entries_detail.product_id", "products.id")
-                                ->where("entry_id", $result)->get();
-                $detail = $this->formatDetail($detail);
+                $detailEntry = $this->formatDetail($result);
 
                 $total = "$ " . number_format($this->total, 2, ',', '.');
 
-
-
-                return response()->json(['success' => true, "header" => $resp, "detail" => $detail, "total" => $total]);
+                return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total]);
             } else {
                 return response()->json(['success' => false]);
             }
@@ -238,33 +234,37 @@ class EntryController extends Controller {
         }
     }
 
-    protected function formatDetail($detail) {
+    protected function formatDetail($id) {
+
+        $detail = DB::table("entries_detail")
+                        ->select("entries_detail.id", "entries_detail.real_quantity", "expiration_date", "quantity", "value", "products.title as product", "entries_detail.description")
+                        ->join("products", "entries_detail.product_id", "products.id")
+                        ->where("entry_id", $id)->get();
         $this->total = 0;
+        $this->total_real = 0;
         foreach ($detail as $i => $val) {
             $detail[$i]->valueFormated = "$ " . number_format($val->value, 2, ',', '.');
             $detail[$i]->total = $detail[$i]->value * $detail[$i]->quantity;
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ',', '.');
-            $this->total += $detail[$i]->total;
-        }
 
+            $detail[$i]->total_real = $detail[$i]->value * $detail[$i]->real_quantity;
+            $detail[$i]->totalFormated_real = "$ " . number_format($detail[$i]->total_real, 2, ',', '.');
+            $this->total += $detail[$i]->total;
+            $this->total_real += $detail[$i]->total_real;
+        }
 
         return $detail;
     }
 
     public function edit($id) {
         $entry = Entries::FindOrFail($id);
-        $detail = DB::table("entries_detail")
-                        ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product", "entries_detail.description")
-                        ->join("products", "entries_detail.product_id", "products.id")
-                        ->where("entry_id", $id)->get();
-        $detail = $this->formatDetail($detail);
-
+        $detail = $this->formatDetail($id);
         $cons = Purchases::findOrfail($entry["purchase_id"]);
 
         $total = "$ " . number_format($this->total, 2, ',', '.');
+        $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
 
-
-        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "consecutive" => $cons]);
+        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "total_real" => $total_real,"consecutive" => $cons]);
     }
 
     public function getDetail($id) {
@@ -289,15 +289,11 @@ class EntryController extends Controller {
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-
-            $detail = DB::table("entries_detail")
-                            ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
-                            ->join("products", "entries_detail.product_id", "products.id")
-                            ->where("entry_id", $input["entry_id"])->get();
-            $detail = $this->formatDetail($detail);
+            $detail = $this->formatDetail($input["entry_id"]);
             $total = "$ " . number_format($this->total, 2, ',', '.');
+            $real = "$ " . number_format($this->total_real, 2, ',', '.');
 
-            return response()->json(['success' => true, "detail" => $detail, "total" => $total]);
+            return response()->json(['success' => true, "detail" => $detail, "total" => $total, "total_real" => $real]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -341,12 +337,8 @@ class EntryController extends Controller {
             $result = EntriesDetail::create($input);
 
             if ($result) {
-                $detail = DB::table("entries_detail")
-                                ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
-                                ->join("products", "entries_detail.product_id", "products.id")
-                                ->where("entry_id", $input["entry_id"])->get();
                 $total = 0;
-                $this->formatDetail($detail);
+                $detail = $this->formatDetail($input["entry_id"]);
                 $total = "$ " . number_format($this->total, 2, ',', '.');
                 return response()->json(['success' => true, "detail" => $detail, "total" => $total]);
             } else {

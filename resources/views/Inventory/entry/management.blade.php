@@ -104,7 +104,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Purchase(Order):</label>
-                    <select class="form-control input-entry input-sm" id="purchase_id" name="purchase_id" required>
+                    <select class="form-control input-sm" id="purchase_id" name="purchase_id" required>
                         <option value="0">Selection</option>
                     </select>
                 </div>
@@ -138,13 +138,22 @@
                 <table class="table table-bordered table-condensed" id="tblDetail">
                     <thead>
                         <tr>
+                            <th colspan="3" class="center-rowspan">Information</th>
+                            <th colspan="3" class="center-rowspan">Order</th>
+                            <th colspan="3" class="center-rowspan">Real</th>
+                            <th rowspan="2" class="center-rowspan">Actions</th>
+                        </tr>
+                        <tr>
                             <th>#</th>
                             <th>Product</th>
                             <th>Expiration</th>
                             <th>Quantity</th>
                             <th>Value</th>
                             <th>Total</th>
-                            <th>Actions</th>
+                            <th>Quantity</th>
+                            <th>Value</th>
+                            <th>Total</th>
+
                         </tr>
                     </thead>
                     <tbody></tbody>

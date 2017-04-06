@@ -32,7 +32,7 @@ function Product() {
         });
 
         $("#tabManagement").click(function () {
-            $(".input-product").cleanFields({disabled:true});
+            $(".input-product").cleanFields({disabled: true});
         });
 
         $("#tabSpecial").click(function () {
@@ -42,7 +42,28 @@ function Product() {
 
         $("#btnNewSpecial").click(this.newSpecial);
         $("#btnSaveSpecial").click(this.saveSpecial);
+
+        $("#btnUpload").click(this.uploadExcel)
     }
+
+    this.uploadExcel = function () {
+        var formData = new FormData($("#frmFile")[0]);
+
+        $.ajax({
+            url: 'product/uploadExcel',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data);
+            }
+        })
+
+    }
+
     this.new = function () {
         $(".input-product").cleanFields();
     }

@@ -13,12 +13,19 @@ use App\Models\Administration\Products;
 use App\Models\Administration\ProductsImage;
 use Datatables;
 use App\Http\Requests\Administration\ProductsCreateRequest;
-use \App\Http\Requests\Administration\ProductsUpdateRequest;
+use App\Http\Requests\Administration\ProductsUpdateRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Uploads\Base;
 
 class ProductController extends Controller {
 
+    public $name;
+    public $path;
+
     public function __construct() {
         $this->middleware("auth");
+        $this->name = '';
+        $this->path = '';
     }
 
     public function index() {
@@ -60,6 +67,32 @@ class ProductController extends Controller {
             } else {
                 return response()->json(['success' => false]);
             }
+        }
+    }
+
+    public function storeExcel(Request $request) {
+        if ($request->ajax()) {
+            $input = $request->all();
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($input, 'file_excel');
+            $this->name = $file->getClientOriginalName();
+            $this->name = str_replace(" ", "_", $this->name);
+            $this->path = "uploads/products/" . date("Y-m-d") . "/" . $this->name;
+
+//            $file->move("uploads/products/" . date("Y-m-d"), $name);
+            Excel::load($this->path, function($reader) {
+                $in["name"] = $this->name;
+                $in["path"] = $this->path;
+                $in["quantity"] = count($reader->get());
+
+                $base_id = Base::create($in)->id;
+
+                foreach ($reader->get() as $book) {
+                    dd($book);
+                }
+            });
+            dd($path);
         }
     }
 

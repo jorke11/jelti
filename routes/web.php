@@ -23,6 +23,8 @@ Route::get('/home', 'HomeController@index');
 Route::get('/dash', 'DashboardController@index');
 Route::get('/summary', 'Invoicing\SummaryController@index');
 
+Route::get('/resize', 'ToolController@index');
+
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
 
 
@@ -31,8 +33,8 @@ Route::post('/product/upload', 'Administration\ProductController@uploadImage');
 Route::put('/product/checkmain/{id}', 'Administration\ProductController@checkMain');
 Route::delete('/product/deleteImage/{id}', 'Administration\ProductController@deleteImage');
 Route::get('/product/getImages/{id}', 'Administration\ProductController@getImages');
-
 Route::post('/product/StoreSpecial', 'Administration\ProductController@storeSpecial');
+Route::post('/product/uploadExcel', 'Administration\ProductController@storeExcel');
 
 
 Route::resource('/supplier', 'Administration\SupplierController');

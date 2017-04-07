@@ -56,14 +56,38 @@ function Stakeholder() {
                 },
                 success: function (data) {
                     obj.printImages(data)
-                }, error: function () {
+                }, error: function (xhr, ajaxOptions, thrownError) {
                     //clearInterval(intervalo);
-                    $(".cargando").addClass("hidden");
+                    console.log(thrownError)
                     alert("Problemas con el archivo, informar a sistemas");
                 }
             });
+        })
+        $("#btnUploadExcel").click(function () {
 
+            var formData = new FormData($("#frmExcel")[0]);
 
+            $.ajax({
+                url: 'stakeholder/uploadExcel',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                dataType: 'JSON',
+                beforeSend: function () {
+                    $(".cargando").removeClass("hidden");
+                },
+                success: function (data) {
+                    obj.printImages(data)
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    //clearInterval(intervalo);
+                    console.log(xhr)
+                    console.log(ajaxOptions)
+                    console.log(thrownError)
+                    alert("Problemas con el archivo, informar a sistemas");
+                }
+            });
         })
 
         $("#tabSpecial").click(function () {

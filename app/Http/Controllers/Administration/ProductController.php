@@ -72,27 +72,32 @@ class ProductController extends Controller {
 
     public function storeExcel(Request $request) {
         if ($request->ajax()) {
+            
             $input = $request->all();
             $this->name = '';
             $this->path = '';
             $file = array_get($input, 'file_excel');
             $this->name = $file->getClientOriginalName();
             $this->name = str_replace(" ", "_", $this->name);
-            $this->path = "uploads/products/" . date("Y-m-d") . "/" . $this->name;
+            $this->path = "uploads/products/" . date("Y-m-06") . "/" . $this->name;
 
 //            $file->move("uploads/products/" . date("Y-m-d"), $name);
             Excel::load($this->path, function($reader) {
-                $in["name"] = $this->name;
-                $in["path"] = $this->path;
-                $in["quantity"] = count($reader->get());
-
-                $base_id = Base::create($in)->id;
-
-                foreach ($reader->get() as $book) {
-                    dd($book);
-                }
-            });
-            dd($path);
+//                $in["name"] = $this->name;
+//                $in["path"] = $this->path;
+//                $in["quantity"] = count($reader->get());
+//
+//                $base_id = Base::create($in)->id;
+                
+//                dd($reader->get());
+                var_dump($reader->get());
+                
+//                foreach ($reader->get() as $book) {
+//                    dd($book);
+//                }
+            })->get();
+     
+           echo "fin";exit;
         }
     }
 

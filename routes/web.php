@@ -51,6 +51,7 @@ Route::delete('/supplier/deleteBranch/{id}', 'Administration\SupplierController@
 
 Route::resource('/stakeholder', 'Administration\StakeholderController');
 Route::post('/stakeholder/upload', 'Administration\StakeholderController@uploadImage');
+Route::post('/stakeholder/uploadExcel', 'Administration\StakeholderController@uploadExcel');
 Route::put('/stakeholder/checkmain/{id}', 'Administration\StakeholderController@checkMain');
 Route::delete('/stakeholder/deleteImage/{id}', 'Administration\StakeholderController@deleteImage');
 Route::get('/stakeholder/getImages/{id}', 'Administration\StakeholderController@getImages');

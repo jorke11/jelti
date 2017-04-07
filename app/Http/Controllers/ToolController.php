@@ -3,31 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
 
 class ToolController extends Controller {
 
     public function index() {
-
-        $path = public_path() . '/images/resize';
-
-        $this->readFile($path);
+        $this->readFile();
     }
 
-    public function readFile($path) {
-        $archivo = '';
-        if (is_dir($path)) {
+    public function readFile() {
 
-            if ($aux = opendir($path)) {
+        $list = shell_exec('find  ' . public_path() . '/images/resize/ -name "*.png"');
+        $list = explode("\n", $list);
 
-                while (($archivo = readdir($aux)) !== false) {
 
-                    if ($archivo != '.' && $archivo != '..' && $archivo[0] != '.') {
-                        echo $archivo . "<br>";
-                        $this->readFile($path . "/" . $archivo);
-                    }
-                }
-//                return "asdsa";
-//                exit;
+
+        foreach ($list as $value) {
+            if (is_file($value)) {
+                $manager = new ImageManager(array('driver' => 'imagick'));
+
+// to finally create image instances
+                $image = $manager->make($value)->resize(300, 200);
             }
         }
     }

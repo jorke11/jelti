@@ -28,6 +28,8 @@ class Stakeholder extends Model
         "type_stakeholder",
         "type_document",
         "type_stakeholder",
-        "bussines_name"
+        "business_name",
+        "business",
+        "lead_time",
         ];
 }

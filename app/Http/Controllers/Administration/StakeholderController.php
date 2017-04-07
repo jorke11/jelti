@@ -14,11 +14,16 @@ use App\Models\Administration\Branch;
 use App\Models\Administration\Parameters;
 use Datatables;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Uploads\Base;
 
 class StakeholderController extends Controller {
 
+    public $name;
+
     public function __construct() {
         $this->middleware("auth");
+        $this->name = '';
     }
 
     public function index() {
@@ -138,6 +143,69 @@ class StakeholderController extends Controller {
         $stakeholder->name = $name;
         $stakeholder->save();
         return $this->getImages($data["stakeholder_id"]);
+    }
+
+    public function uploadExcel(Request $req) {
+        $data = $req->all();
+
+        $file = array_get($data, 'file_excel');
+
+        $this->name = $file->getClientOriginalName();
+        $this->name = str_replace(" ", "_", $this->name);
+        $this->path = "uploads/stakeholder/" . date("Y-m-d") . "/" . $this->name;
+
+        $file->move("uploads/stakeholder/" . date("Y-m-d") . "/", $this->name);
+
+//        if (is_file($this->path) === true) {
+        Excel::load($this->path, function($reader) {
+            $in["name"] = $this->name;
+            $in["path"] = $this->path;
+            $in["quantity"] = count($reader->get());
+            $base_id = Base::create($in)->id;
+
+
+//                 "estado" => "Activo"
+//        "nombre" => "Gel Going "
+//        "razon_social" => "JQ Asociados SAS"
+//        "nit_rut" => "900594785-6"
+//        "contacto" => "Alejandro Quiroz"
+//        "celular" => 3214521514.0
+//        "correo" => "alejandro@productosgoing.com"
+//        "plazo" => 60.0
+//        "lead_time" => 2.0
+//        "productos" => "Geles energetico pre entreno "
+//        "ciudad" => "Bogota"
+//        "sitio_web" => null
+
+
+            foreach ($reader->get() as $book) {
+                list($number, $verify) = explode("-", $book->nit_rut);
+                $stake = Stakeholder::where("document", $number)->first();
+
+                $insert["phone"] = (int) $book->celular;
+                $insert["lead_time"] = (int) $book->lead_time;
+                $insert["document"] = $number;
+                $insert["business"] = $book->nombre;
+                $insert["business_name"] = $book->razon_social;
+                $insert["email"] = $book->sitio_web;
+
+                if (count($stake) > 0) {
+                    
+                    
+                    
+                } else {
+                    $insert["type_stakeholder"] = 2;
+                    $insert["city_id"] = null;
+                    $insert["status_id"] = 2;
+                    $insert["type_document"] = null;
+                    $insert["resposible_id"] = 1;
+
+                    dd($insert);
+                }
+                dd($stake);
+                exit;
+            }
+        })->get();
     }
 
     public function checkmain(Request $data, $id) {

@@ -29,14 +29,14 @@ class CreateProductsTable extends Migration {
             $table->decimal('price_cust', 15, 2);
             $table->string('url_part', 60);
             $table->string('bar_code', 30);
-            $table->boolean('status');
+            $table->integer('status_id');
             $table->string('meta_title', 100)->nullable();
             $table->string('meta_keywords', 100)->nullable();
             $table->string('meta_description', 100)->nullable();
             $table->integer('minimum_stock');
-            $table->integer('packaging');
             $table->json('characteristic')->nullable();
             $table->string('image')->nullable();
+            $table->integer('margin_sf')->nullable();
             $table->timestamps();
         });
     }

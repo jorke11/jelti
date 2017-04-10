@@ -24,9 +24,9 @@ class CreateStakeholderTable extends Migration
             $table->string('name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('document')->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('address')->nullable();
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->string('business_name')->nullable();
             $table->string('business')->nullable();
             $table->string('contact')->nullable();

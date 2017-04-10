@@ -164,48 +164,49 @@ class StakeholderController extends Controller {
             $base_id = Base::create($in)->id;
 
 
-//                 "estado" => "Activo"
-//        "nombre" => "Gel Going "
-//        "razon_social" => "JQ Asociados SAS"
-//        "nit_rut" => "900594785-6"
-//        "contacto" => "Alejandro Quiroz"
-//        "celular" => 3214521514.0
-//        "correo" => "alejandro@productosgoing.com"
-//        "plazo" => 60.0
-//        "lead_time" => 2.0
-//        "productos" => "Geles energetico pre entreno "
-//        "ciudad" => "Bogota"
-//        "sitio_web" => null
-
 
             foreach ($reader->get() as $book) {
-                list($number, $verify) = explode("-", $book->nit_rut);
+
+                if (stripos($book->nit_rut, "-") !== false) {
+                    list($number, $verify) = explode("-", $book->nit_rut);
+                } else {
+                    $number = $book->nit_rut;
+                }
+
                 $stake = Stakeholder::where("document", $number)->first();
 
-                $insert["phone"] = (int) $book->celular;
                 $insert["lead_time"] = (int) $book->lead_time;
                 $insert["document"] = $number;
                 $insert["business"] = $book->nombre;
                 $insert["business_name"] = $book->razon_social;
-                $insert["email"] = $book->sitio_web;
+                $insert["email"] = $book->correo;
+                $insert["web_site"] = $book->sitio_web;
+                $insert["type_stakeholder"] = 2;
+                $insert["term"] = $book->plazo;
 
                 if (count($stake) > 0) {
-                    
-                    
-                    
+                    if ((int) $stake->phone == '') {
+                        $insert["phone_contact"] = (int) $book->celular;
+                    }
+                    if ($stake->contacto == '') {
+                        $insert["contact"] = $book->contacto;
+                    }
+
+                    $stake->fill($insert)->save();
                 } else {
+                    $insert["phone_contact"] = (int) $book->celular;
+                    $insert["contact"] = $book->contacto;
                     $insert["type_stakeholder"] = 2;
                     $insert["city_id"] = null;
                     $insert["status_id"] = 2;
                     $insert["type_document"] = null;
                     $insert["resposible_id"] = 1;
-
-                    dd($insert);
+                    Stakeholder::create($insert);
                 }
-                dd($stake);
-                exit;
             }
         })->get();
+
+        return response()->json(["success" => true]);
     }
 
     public function checkmain(Request $data, $id) {

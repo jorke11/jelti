@@ -72,32 +72,105 @@ class ProductController extends Controller {
 
     public function storeExcel(Request $request) {
         if ($request->ajax()) {
-            
+
             $input = $request->all();
             $this->name = '';
             $this->path = '';
             $file = array_get($input, 'file_excel');
             $this->name = $file->getClientOriginalName();
             $this->name = str_replace(" ", "_", $this->name);
-            $this->path = "uploads/products/" . date("Y-m-06") . "/" . $this->name;
+            $this->path = "uploads/products/" . date("Y-m-d") . "/" . $this->name;
 
-//            $file->move("uploads/products/" . date("Y-m-d"), $name);
+            $file->move("uploads/products/" . date("Y-m-d") . "/", $this->name);
+
+//              "category" => "Snacks"
+//    "supplier" => "Granolitas"
+//    "sf_code" => 100001.0
+//    "ean" => 7708991332065.0
+//    "title" => "Granolitas Horneadas 30 g (10 unidades)"
+//    "supplier_packing" => 50.0
+//    "sf_packing" => 1.0
+//    "catalog" => true
+//    "tax" => 0.19
+//    "unit_cost" => 16000.0
+//    "cost_tax" => 19040.0
+//    "sf_price" => 19700.0
+//    "sp_price_tax" => 23443.0
+//    "sf_margin" => 0.1878172588832487
+//    "pvp_sugerido_sin_iva" => 25210.08403361345
+//    "iva" => 0.19
+//    "pvp_sugerido_iva" => 30000.0
+//    "margen" => 0.2185666666666667
+//    "" => null
+//    "farmatodo_costo_con_iva" => 22500.0
+//    "pvp_farmatodo_con_iva" => 30000.0
+//    "margen_farmatodo" => 0.25
+//    "sf_recibe" => 22050.0
+//    "margen_sf_farmatodo" => 0.1365079365079365
+//    "farmatodo_catalogo" => "Activo"
+//    "megatiendas_costo" => 23443.0
+//    "pvp_megatiendas" => 31500.0
+//    "margen_megatiendas" => 0.2557777777777778
+//    "margen_sf_megatiendas" => 0.1878172588832487
+//    "megatiendas_catalogo" => "Activo"
+//    "cruz_verde_costo" => 23626.05
+//    "pvp_cruz_verde" => 31500.0
+//    "margen_cruz_verde" => 0.2499666666666667
+//    "margen_sf_cruz_verde" => 0.1941098914122336
+//    "cruz_verde_catalogo" => null
+//    "locatel" => 23330
+//    "locatel_iva" => 27762.7
+//    "margen_locatel" => 0.07457666666666662
+//    "margen_sf_locatel" => 0.3141877411058723
+//    "paleo" => null
+//    "gluten_free" => null
+//    "vegan" => "X"
+//    "non_gmo" => null
+//    "organico" => null
+//    "sin_grasa_trans" => "X"
+//    "sin_azucar_added" => "X"
+//    "delante" => "http://i.imgur.com/CBmZemt.jpg"
+//    "atras" => "http://i.imgur.com/TosagWK.jpg"
+
+
+
             Excel::load($this->path, function($reader) {
-//                $in["name"] = $this->name;
-//                $in["path"] = $this->path;
-//                $in["quantity"] = count($reader->get());
-//
-//                $base_id = Base::create($in)->id;
-                
-//                dd($reader->get());
-                var_dump($reader->get());
-                
-//                foreach ($reader->get() as $book) {
-//                    dd($book);
-//                }
+                $in["name"] = $this->name;
+                $in["path"] = $this->path;
+                $in["quantity"] = count($reader->get());
+
+                $base_id = Base::create($in)->id;
+
+                foreach ($reader->get() as $book) {
+                    $sup = Administration\Stakeholder::where("business", "like", $book->supplier)->first();
+                    $cat = Administration\Categories::where("description", "like", $book->category)->first();
+
+                    if (count($sup) > 0) {
+                        
+//                        dd($book);exit;
+                        $product["category_id"] = $cat->id;
+                        $product["stakeholder_id"] = $sup->id;
+                        $product["account_id"] = 1;
+                        $product["title"] = $book->title;
+                        $product["short_description"] = $book->title;
+                        $product["reference"] = (int) $book->sf_code;
+                        $product["bar_code"] = (int) $book->ean;
+                        $product["tax"] = $book->tax;
+                        $product["units_supplier"] = (int) $book->supplier_packing;
+                        $product["units_sf"] = (int) $book->sf_packing;
+                        $product["cost_sf"] = (double) $book->unit_cost;
+                        $product["price_cust"] = (double) $book->sf_price;
+                        $product["status_id"] = 2;
+                        $product["margin_sf"] = (double) $book->sf_margin;
+                        $product["margin"] = $book->margen;
+
+                        dd($product);
+                    }
+                }
             })->get();
-     
-           echo "fin";exit;
+
+            echo "fin";
+            exit;
         }
     }
 

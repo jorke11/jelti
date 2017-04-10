@@ -79,7 +79,10 @@ function Stakeholder() {
                     $(".cargando").removeClass("hidden");
                 },
                 success: function (data) {
-                    obj.printImages(data)
+                    if (data.success == true) {
+                        table.ajax.reload();
+                        toastr.success("file uploaded");    
+                    }
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     //clearInterval(intervalo);
                     console.log(xhr)

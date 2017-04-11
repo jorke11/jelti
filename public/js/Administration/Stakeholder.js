@@ -63,6 +63,8 @@ function Stakeholder() {
                 }
             });
         })
+        
+  
         $("#btnUploadExcel").click(function () {
 
             var formData = new FormData($("#frmExcel")[0]);
@@ -81,10 +83,11 @@ function Stakeholder() {
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
-                        toastr.success("file uploaded");    
+                        obj.resultTableUpload(data.data);
+                        toastr.success("file uploaded");
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
-                    //clearInterval(intervalo);
+                    //clearInte4rval(intervalo);
                     console.log(xhr)
                     console.log(ajaxOptions)
                     console.log(thrownError)
@@ -119,6 +122,17 @@ function Stakeholder() {
             format: 'Y-m-d H:i',
         });
     }
+
+    this.resultTableUpload = function (detail) {
+        var html="";
+       $.each(detail, function (i, val) {
+            html+="<tr><td>"+val.business+"</td><td>"+val.business_name+"</td>";
+            html+="<td>"+val.document+"</td><td>"+val.contact+"</td><td>"+val.phone_contact+"</td>";
+            html+="<td>"+val.email+"</td></tr>";
+        })
+        $("#tblUpload tbody").html(html)
+    }
+
 
     this.newSpecial = function () {
         $(".input-special").cleanFields();

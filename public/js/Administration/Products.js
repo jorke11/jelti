@@ -63,6 +63,14 @@ function Product() {
         })
 
     }
+    
+    this.setDetailExcel=function(detail){
+        var html="";
+       $.each(detail,function(i,val){
+           html+="<tr><td>"+val.description+"</td></tr>";
+       })
+       $("#tblUpload tbody").html(html);
+    }
 
     this.new = function () {
         $(".input-product").cleanFields();

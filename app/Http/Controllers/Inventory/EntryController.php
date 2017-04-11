@@ -12,9 +12,13 @@ use App\Models\Inventory\EntriesDetail;
 use App\Models\Administration\Categories;
 use App\Models\Administration\Parameters;
 use App\models\Administration\Consecutives;
+use App\Models\Administration\Stakeholder;
 use App\Models\Invoicing\Purchases;
 use App\Models\Invoicing\PurchasesDetail;
 use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Uploads\Base;
+use Auth;
 
 class EntryController extends Controller {
 
@@ -139,6 +143,68 @@ class EntryController extends Controller {
         }
     }
 
+    public function storeExcel(Request $request) {
+        if ($request->ajax()) {
+
+            $input = $request->all();
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($input, 'file_excel');
+            $this->name = $file->getClientOriginalName();
+            $this->name = str_replace(" ", "_", $this->name);
+            $this->path = "uploads/entry/" . date("Y-m-d") . "/" . $this->name;
+
+            $file->move("uploads/entry/" . date("Y-m-d") . "/", $this->name);
+
+            Excel::load($this->path, function($reader) {
+                $in["name"] = $this->name;
+                $in["path"] = $this->path;
+                $in["quantity"] = count($reader->get());
+
+                $base_id = Base::create($in)->id;
+
+
+                foreach ($reader->get() as $book) {
+                    if ((int) $book->unidades != 0) {
+                        $sup = Stakeholder::where("business", $book->proveedor)->first();
+                        $pro = Products::where("reference", (int) $book->codigo)->first();
+
+                        if (count($pro) > 0 && count($sup) > 0) {
+                            $new["warehouse_id"] = Auth::user()->warehouse_id;
+                            $new["responsible_id"] = Auth::user()->id;
+                            $new["supplier_id"] = $sup->id;
+                            $new["purchase_id"] = 0;
+                            $new["city_id"] = Auth::user()->city_id;
+                            $new["consecutive"] = $this->createConsecutive(2);
+                            $new["description"] = "Initial inventory";
+                            $new["invoice"] = "system";
+                            $new["status_id"] = 2;
+                            $new["created"] = date("Y-m-d H:i");
+                            $entry_id = Entries::create($new)->id;
+                            $this->updateConsecutive(2);
+
+
+                            $detail["entry_id"] = $entry_id;
+                            $detail["product_id"] = $pro->id;
+                            $detail["quantity"] = $book->unidades;
+                            $detail["real_quantity"] = $book->unidades;
+                            $detail["value"] = $pro->price_cust;
+                            $detail["lot"] = $pro->lote;
+                            $detail["description"] = 'Initial inventory';
+                            $detail["status_id"] = 1;
+                            $detail["expiration_date"] = $pro->vencimiento;
+//                            dd($detail);
+//                            exit;
+                            EntriesDetail::create($detail);
+                        }
+                    }
+                }
+            })->get();
+
+            return response()->json(["success" => true]);
+        }
+    }
+
     public function sendPurchase(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
@@ -251,7 +317,7 @@ class EntryController extends Controller {
         }
     }
 
-    protected function formatDetail($id) {
+    public function formatDetail($id) {
 
         $detail = DB::table("entries_detail")
                         ->select("entries_detail.id", "entries_detail.status_id", "entries_detail.real_quantity", "expiration_date", "quantity", "entries_detail.value", "products.title as product", "entries_detail.description", "parameters.description as status")
@@ -277,7 +343,14 @@ class EntryController extends Controller {
     public function edit($id) {
         $entry = Entries::FindOrFail($id);
         $detail = $this->formatDetail($id);
-        $cons = Purchases::findOrfail($entry["purchase_id"]);
+        $cons = array();
+
+        if (count($detail) > 0) {
+
+            if ($entry["purchase_id"] != 0) {
+                $cons = Purchases::findOrfail($entry["purchase_id"]);
+            }
+        }
 
         $total = "$ " . number_format($this->total, 2, ',', '.');
         $total_real = "$ " . number_format($this->total_real, 2, ',', '.');

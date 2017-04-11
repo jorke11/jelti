@@ -72,6 +72,25 @@ function Entry() {
                 })
         })
 
+        $("#btnUpload").click(this.upload);
+
+    }
+
+    this.upload = function () {
+        var formData = new FormData($("#frmFile")[0]);
+
+        $.ajax({
+            url: 'entry/uploadExcel',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data);
+            }
+        })
     }
 
     this.printDetail = function (data, btnEdit = true, btnDel = true) {
@@ -249,7 +268,7 @@ function Entry() {
         var validate = $(".input-detail").validate();
 
         if (validate.length == 0) {
-            
+
             var frm = $("#frmDetail");
             var data = frm.serialize();
             var url = "entry/", method = "";

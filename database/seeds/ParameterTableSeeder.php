@@ -114,6 +114,11 @@ class ParameterTableSeeder extends Seeder {
             'code' => 2,
         ]);
         DB::table("parameters")->insert([
+            'description' => "pending",
+            'group' => "generic",
+            'code' => 3,
+        ]);
+        DB::table("parameters")->insert([
             'description' => "open",
             'group' => "ticket",
             'code' => 1,

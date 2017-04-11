@@ -116,7 +116,8 @@ Route::get('/entry/{id}/getDetailPurchase', ['uses' => 'Inventory\EntryControlle
 Route::post('/entry/storeDetail', 'Inventory\EntryController@storeDetail');
 Route::put('/entry/detail/{id}', 'Inventory\EntryController@updateDetail');
 Route::delete('/entry/detail/{id}', 'Inventory\EntryController@destroyDetail');
-Route::post('/entry/setPurchase/', 'Inventory\EntryController@sendPurchase');
+Route::post('/entry/setPurchase', 'Inventory\EntryController@sendPurchase');
+Route::post('/entry/uploadExcel', 'Inventory\EntryController@storeExcel');
 
 
 Route::resource('/departure', 'Inventory\DepartureController');
@@ -222,7 +223,7 @@ Route::get('/api/listStakeholder', function() {
             ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
             ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
             ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
-            ->join("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
+            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
         $query->where("stakeholder.responsible_id", Auth::user()->id);
     }

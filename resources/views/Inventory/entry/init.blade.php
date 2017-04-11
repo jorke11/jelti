@@ -11,6 +11,8 @@
         <ul class="nav nav-tabs" role="tablist" id='myTabs'>
             <li role="presentation" class="active"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">List</a></li>
             <li role="presentation" id="insideManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Management</a></li>
+            <!--<li role="presentation"><a href="#uploadFile" aria-controls="profile" role="tab" data-toggle="tab">Upload</a></li>-->
+             <li role="presentation" id="tabUpload"><a href="#upload" aria-controls="special" role="tab" data-toggle="tab">Upload</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -23,8 +25,12 @@
                 </div>
 
             </div>
-            <div role="tabpanel" class="tab-pane " id="management">
+            <div role="tabpanel" class="tab-pane" id="management">
                 @include('Inventory.entry.management')
+            </div>
+            
+            <div role="tabpanel" class="tab-pane" id="upload">
+              @include('Inventory.entry.upload')
             </div>
 
         </div>

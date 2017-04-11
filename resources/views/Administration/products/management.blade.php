@@ -195,12 +195,6 @@
                                     <input type="text" class="form-control input-product" id="minimum_stock" name='minimum_stock' required  data-type="number">
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label for="email" class="control-label">Packaging*</label>
-                                    <input type="text" class="form-control input-product" id="packaging" name='packaging' required  data-type="number">
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

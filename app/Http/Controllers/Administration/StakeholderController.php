@@ -20,10 +20,14 @@ use App\Models\Uploads\Base;
 class StakeholderController extends Controller {
 
     public $name;
+    public $updated;
+    public $inserted;
 
     public function __construct() {
         $this->middleware("auth");
         $this->name = '';
+        $this->updated = 0;
+        $this->inserted = 0;
     }
 
     public function index() {
@@ -163,50 +167,50 @@ class StakeholderController extends Controller {
             $in["quantity"] = count($reader->get());
             $base_id = Base::create($in)->id;
 
-
-
             foreach ($reader->get() as $book) {
 
                 if (stripos($book->nit_rut, "-") !== false) {
                     list($number, $verify) = explode("-", $book->nit_rut);
                 } else {
-                    $number = $book->nit_rut;
+                    $number = trim($book->nit_rut);
                 }
 
-                $stake = Stakeholder::where("document", $number)->first();
-
-                $insert["lead_time"] = (int) $book->lead_time;
-                $insert["document"] = $number;
-                $insert["business"] = $book->nombre;
-                $insert["business_name"] = $book->razon_social;
-                $insert["email"] = $book->correo;
-                $insert["web_site"] = $book->sitio_web;
+                $stake = Stakeholder::where("document", trim($number))->first();
+                $insert["status_id"] = 3;
+                $insert["lead_time"] = (int) trim($book->lead_time);
+                $insert["document"] = trim($number);
+                $insert["business"] = trim($book->nombre);
+                $insert["business_name"] = trim($book->razon_social);
+                $insert["email"] = trim($book->correo);
+                $insert["web_site"] = trim($book->sitio_web);
                 $insert["type_stakeholder"] = 2;
-                $insert["term"] = $book->plazo;
+                $insert["term"] = (trim($book->plazo)) == '' ? 0 : trim($book->plazo);
 
                 if (count($stake) > 0) {
                     if ((int) $stake->phone == '') {
-                        $insert["phone_contact"] = (int) $book->celular;
+                        $insert["phone_contact"] = (int) trim($book->celular);
                     }
                     if ($stake->contacto == '') {
-                        $insert["contact"] = $book->contacto;
+                        $insert["contact"] = trim($book->contacto);
                     }
 
                     $stake->fill($insert)->save();
+                    $this->updated++;
                 } else {
-                    $insert["phone_contact"] = (int) $book->celular;
-                    $insert["contact"] = $book->contacto;
+                    $insert["phone_contact"] = (int) trim($book->celular);
+                    $insert["contact"] = trim($book->contacto);
                     $insert["type_stakeholder"] = 2;
                     $insert["city_id"] = null;
-                    $insert["status_id"] = 2;
+
                     $insert["type_document"] = null;
                     $insert["resposible_id"] = 1;
                     Stakeholder::create($insert);
+                    $this->inserted++;
                 }
             }
         })->get();
 
-        return response()->json(["success" => true]);
+        return response()->json(["success" => true, "updates" => $this->updated, "insert" => $this->inserted]);
     }
 
     public function checkmain(Request $data, $id) {

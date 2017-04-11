@@ -18,8 +18,8 @@ class CreateProductsTable extends Migration {
             $table->integer('supplier_id');
             $table->integer('account_id')->nullable();
             $table->string('title', 120);
-            $table->string('description', 100);
-            $table->string('short_description', 100);
+            $table->text('description');
+            $table->text('short_description');
             $table->integer('reference');
             $table->decimal('units_supplier', 15, 2);
             $table->decimal('units_sf', 15, 2);

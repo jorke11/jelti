@@ -77,9 +77,33 @@ class CategoriesTableSeeder extends Seeder {
             'image'=>'images/categories/11.png'
         ]);
         DB::table("categories")->insert([
-            'description' => 'Chocolateria',
-            'short_description' => 'Chocolateria',
+            'description' => 'Chocolatería',
+            'short_description' => 'Chocolatería',
             'order' => 12,
+            'image'=>'images/categories/12.png'
+        ]);
+        DB::table("categories")->insert([
+            'description' => 'Frutos Secos y Deshidratados',
+            'short_description' => 'Frutos Secos y Deshidratados',
+            'order' => 13,
+            'image'=>'images/categories/12.png'
+        ]);
+        DB::table("categories")->insert([
+            'description' => 'Tés / Infusiones',
+            'short_description' => 'Tés / Infusiones',
+            'order' => 14,
+            'image'=>'images/categories/12.png'
+        ]);
+        DB::table("categories")->insert([
+            'description' => 'Galletería',
+            'short_description' => 'Galletería',
+            'order' => 15,
+            'image'=>'images/categories/12.png'
+        ]);
+        DB::table("categories")->insert([
+            'description' => 'Despensa',
+            'short_description' => 'Despensa',
+            'order' => 16,
             'image'=>'images/categories/12.png'
         ]);
     }

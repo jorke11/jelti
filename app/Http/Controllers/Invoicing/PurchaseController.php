@@ -87,6 +87,7 @@ class PurchaseController extends Controller {
     public function sendPurchase(Request $req) {
         $in = $req->all();
         $pur = Purchases::findOrFail($in["id"]);
+        
         $val = PurchasesDetail::where("purchase_id", $pur["id"])->count();
 
         if ($val > 0) {
@@ -105,6 +106,7 @@ class PurchaseController extends Controller {
 
     public function edit($id) {
         $entry = Purchases::FindOrFail($id);
+        
         $detail = DB::table("purchases_detail")
                 ->select("purchases_detail.id", "products.title as product", "purchases_detail.tax", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.quantity", "purchases_detail.description")
                 ->leftjoin("products", "purchases_detail.product_id", "products.id")

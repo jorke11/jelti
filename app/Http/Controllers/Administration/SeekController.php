@@ -54,14 +54,14 @@ class SeekController extends Controller {
 
     public function getSupplier(Request $req) {
         $in = $req->all();
-        $query = Stakeholder::select("id", "name as text");
+        $query = Stakeholder::select("id", "business as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"])->get();
         } else {
             $query
-                    ->where("name", "ilike", "%" . $in["q"] . "%")
+                    ->where("business", "ilike", "%" . $in["q"] . "%")
                     ->get();
         }
         

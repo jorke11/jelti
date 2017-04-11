@@ -27,13 +27,13 @@ class CreateProductsTable extends Migration {
             $table->decimal('tax', 15, 2);
             $table->decimal('price_sf', 15, 2);
             $table->decimal('price_cust', 15, 2);
-            $table->string('url_part', 60);
+            $table->string('url_part', 60)->nullable();
             $table->string('bar_code', 30);
             $table->integer('status_id');
             $table->string('meta_title', 100)->nullable();
             $table->string('meta_keywords', 100)->nullable();
             $table->string('meta_description', 100)->nullable();
-            $table->integer('minimum_stock');
+            $table->integer('minimum_stock')->nullable();
             $table->json('characteristic')->nullable();
             $table->string('image')->nullable();
             $table->integer('margin_sf')->nullable();

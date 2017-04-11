@@ -24,7 +24,7 @@ class Products extends Model {
         "price_cust",
         "url_part",
         "bar_code",
-        "status",
+        "status_id",
         "meta_title",
         "meta_keywords",
         "meta_description",

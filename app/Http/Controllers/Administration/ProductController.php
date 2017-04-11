@@ -141,36 +141,50 @@ class ProductController extends Controller {
 
                 $base_id = Base::create($in)->id;
 
+
                 foreach ($reader->get() as $book) {
-                    $sup = Administration\Stakeholder::where("business", "like", $book->supplier)->first();
-                    $cat = Administration\Categories::where("description", "like", $book->category)->first();
 
-                    if (count($sup) > 0) {
-                        
-//                        dd($book);exit;
-                        $product["category_id"] = $cat->id;
-                        $product["stakeholder_id"] = $sup->id;
-                        $product["account_id"] = 1;
-                        $product["title"] = $book->title;
-                        $product["short_description"] = $book->title;
-                        $product["reference"] = (int) $book->sf_code;
-                        $product["bar_code"] = (int) $book->ean;
-                        $product["tax"] = $book->tax;
-                        $product["units_supplier"] = (int) $book->supplier_packing;
-                        $product["units_sf"] = (int) $book->sf_packing;
-                        $product["cost_sf"] = (double) $book->unit_cost;
-                        $product["price_cust"] = (double) $book->sf_price;
-                        $product["status_id"] = 2;
-                        $product["margin_sf"] = (double) $book->sf_margin;
-                        $product["margin"] = $book->margen;
+                    if ($book->supplier != '' && $book->category != '') {
+                        $sup = Administration\Stakeholder::where("business", "like", $book->supplier)->first();
+                        $cat = Administration\Categories::where("description", "like", $book->category)->first();
+                        if (count($sup) > 0) {
+                            $product["category_id"] = $cat->id;
+                            $product["supplier_id"] = $sup->id;
+                            $product["stakeholder_id"] = $sup->id;
+                            $product["account_id"] = 1;
+                            $product["title"] = $book->title;
+                            $product["short_description"] = $book->title;
+                            $product["description"] = $book->title;
+                            $product["reference"] = (int) $book->sf_code;
+                            $product["bar_code"] = (int) $book->ean;
+                            $product["tax"] = $book->tax;
+                            $product["units_supplier"] = (int) $book->supplier_packing;
+                            $product["units_sf"] = (int) $book->sf_packing;
+                            $product["cost_sf"] = $book->unit_cost;
+                            $product["price_sf"] = $book->sf_price;
+                            $product["price_cust"] = $book->pvp_sugerido_sin_iva;
+                            $product["status_id"] = 2;
+                            $product["margin_sf"] = (double) $book->sf_margin;
+                            $product["margin"] = $book->margen;
+                            $product["status_id"] = 2;
 
-                        dd($product);
+                            $pro = Products::where("reference", $product["reference"])->first();
+
+                            if (count($pro) > 0) {
+                                $pro->fill($product)->save();
+                            } else {
+                                Products::create($product);
+                            }
+                            var_dump($product);
+                        } else {
+                            echo "<br>else<br>";
+                            var_dump($book->supplier);
+                        }
                     }
                 }
             })->get();
 
-            echo "fin";
-            exit;
+            return response()->json(["success" => true, "data" => Products::all()]);
         }
     }
 

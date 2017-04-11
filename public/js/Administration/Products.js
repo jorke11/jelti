@@ -292,7 +292,7 @@ function Product() {
                         return '<img src="/images/product/' + data + '" width="25px">';
                     }
                 },
-                {data: "status"},
+                {data: "status_id"},
                 {data: "id"},
             ],
             order: [[1, 'ASC']],

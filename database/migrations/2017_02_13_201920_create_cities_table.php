@@ -17,6 +17,7 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->string('description');
             $table->integer('department_id');
+            $table->string('code');
             $table->timestamps();
         });
     }

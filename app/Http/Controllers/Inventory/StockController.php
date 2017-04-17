@@ -21,10 +21,11 @@ class StockController extends Controller {
 
     public function getDetailProduct($id) {
         $response = DB::table("products")
-                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf")
+                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf","products.units_sf")
                 ->join("categories", "categories.id", "=", "products.category_id")
                 ->where("products.id", $id)
                 ->first();
+        
         $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 3)->sum("quantity");
         $departure = DB::table("departures_detail")->where("product_id", $id)->where("status_id", 3)->sum("quantity");
         $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");

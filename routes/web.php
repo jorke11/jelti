@@ -67,6 +67,7 @@ Route::resource('/warehouse', 'Administration\WarehouseController');
 Route::resource('/mark', 'Administration\MarkController');
 
 Route::resource('/city', 'Administration\CityController');
+Route::post('/city/uploadExcel', 'Administration\CityController@storeExcel');
 
 Route::resource('/department', 'Administration\DepartmentController');
 Route::post('/department/uploadExcel', 'Administration\DepartmentController@storeExcel');

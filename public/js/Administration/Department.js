@@ -27,6 +27,7 @@ function Department() {
             contentType: false,
             success: function (data) {
 //                obj.setDetailExcel(data.data)
+                toastr.success("ok");
                 table.ajax.reload();
             }
         })

@@ -4,12 +4,34 @@ function City() {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
-        
-        $("#btnNew").click(function(){
-            
+
+        $("#btnNew").click(function () {
+
             $(".input-city").cleanFields();
             $("#modalNew").modal("show");
         });
+        $("#btnUpload").click(this.uploadExcel)
+
+    }
+
+    this.uploadExcel = function () {
+        var formData = new FormData($("#frmFile")[0]);
+
+        $.ajax({
+            url: 'city/uploadExcel',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+//                obj.setDetailExcel(data.data)
+                toastr.success("ok");
+                table.ajax.reload();
+            }
+        })
+
     }
 
     this.save = function () {

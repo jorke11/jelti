@@ -8,6 +8,6 @@ class Cities extends Model {
 
     protected $table = "cities";
     protected $primaryKey = "id";
-    protected $fillable = ["id", "description", "department_id"];
+    protected $fillable = ["id", "description", "department_id","code"];
 
 }

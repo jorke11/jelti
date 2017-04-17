@@ -44,7 +44,7 @@ function Purchase() {
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.cost_sf)
-                    $("#frmDetail #packaging").html("Packaging X" + resp.response.packaging)
+                    $("#frmDetail #packaging").html("Packaging X" + resp.response.units_sf)
                 }
             })
         });

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administration\Cities;
 use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Uploads\Base;
+use App\Models\Administration\Department;
 
 class CityController extends Controller {
 
@@ -29,6 +32,47 @@ class CityController extends Controller {
             } else {
                 return response()->json(['success' => false]);
             }
+        }
+    }
+
+    public function storeExcel(Request $request) {
+        if ($request->ajax()) {
+
+            $input = $request->all();
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($input, 'file_excel');
+            $this->name = $file->getClientOriginalName();
+            $this->name = str_replace(" ", "_", $this->name);
+            $this->path = "uploads/city/" . date("Y-m-d") . "/" . $this->name;
+
+            $file->move("uploads/city/" . date("Y-m-d") . "/", $this->name);
+
+            Excel::load($this->path, function($reader) {
+                $in["name"] = $this->name;
+                $in["path"] = $this->path;
+                $in["quantity"] = count($reader->get());
+
+                $base_id = Base::create($in)->id;
+
+                foreach ($reader->get() as $book) {
+                    $dep = Department::where("code", $book->codigo)->first();
+
+                    $input["department_id"] = $dep->id;
+                    $input["code"] = $book->codigo_municipio;
+                    $input["description"] = $book->nombre_municipio;
+
+                    $city = Cities::where("code", $book->codigo_municipio)->where("department_id", $dep->id)->first();
+
+                    if (count($city) > 0) {
+                        $city->save();
+                    } else {
+                        Cities::create($input);
+                    }
+                }
+            })->get();
+
+            return response()->json(["success" => true, "data" => Cities::all()]);
         }
     }
 

@@ -4,35 +4,30 @@
 @section('title','City')
 @section('subtitle','Management')
 <div class="row">
-    <div class="col-lg-6 col-lg-offset-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-lg-3">List City</div>
-                    <div class="col-lg-9 text-right">
-                        <button class="btn btn-success btn-sm" type="button" id="btnNew">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"> New</span>
-                        </button>
-                    </div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist" id='myTabs'>
+        <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">List</a></li>
+        <li role="presentation" id="tabUplod"><a href="#upload" aria-controls="special" role="tab" data-toggle="tab">Load</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="list">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @include('Administration.city.list')
                 </div>
             </div>
-            <div class="panel-body">
-
-                <table class="table table-bordered table-condensed" id="tbl">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Description</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
         </div>
+        <div role="tabpanel" class="tab-pane " id="upload">
+            @include('Administration.city.upload')
+        </div>
+
     </div>
 </div>
+
+
+
 @include('Administration.city.form')
 {!!Html::script('js/Administration/City.js')!!}
 @endsection

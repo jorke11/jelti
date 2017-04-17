@@ -2,17 +2,18 @@
 
 use Illuminate\Database\Seeder;
 
-class CitiesTableSeeder extends Seeder
-{
+class CitiesTableSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
+    public function run() {
         DB::table("cities")->insert([
-            'description' => 'city test'
+            'department_id' => 1,
+            'description' => 'Bogota'
         ]);
     }
+
 }

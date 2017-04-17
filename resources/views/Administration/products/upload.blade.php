@@ -12,3 +12,21 @@
     </div>
 </div>
 {!!Form::close()!!}
+
+<div class="row">
+    <div class="col-lg-8">
+        <table class="table table-bordered" id="tblUpload">
+            <thead>
+                <tr>
+                    <th>Bar Code</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>contact</th>
+                    <th>Telefono contact</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

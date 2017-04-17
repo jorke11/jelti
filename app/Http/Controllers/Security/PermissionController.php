@@ -67,11 +67,13 @@ class PermissionController extends Controller {
     }
 
     public function getPermission() {
-        $data = Permissions::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
+        $data = Permissions::where("typemenu_id", "=", 0)
+                        ->where("parent_id", "=", 0)
+                        ->orderBy('priority', 'asc')->get();
         $resp = array();
 
         foreach ($data as $key => $val) {
-            $children = Permissions::where("parent_id", $val->id)->get();
+            $children = Permissions::where("parent_id", $val->id)->orderBy('priority', 'asc')->get();
 
             array_push($resp, $val);
 

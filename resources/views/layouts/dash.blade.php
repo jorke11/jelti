@@ -110,6 +110,7 @@
                                             <li><a href="/shopping">Shopping</a></li>
                                         </ul>
                                     </li>
+                                    @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
                                     <li><a><i class="fa fa-home"></i> Sellers <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/activity">Activities</a></li>
@@ -118,6 +119,7 @@
                                             <li><a href="/ticket">Tickets</a></li>
                                         </ul>
                                     </li>
+                                    @if(Auth::user()->role_id == 1)
                                     <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/user">Users</a></li>
@@ -126,6 +128,8 @@
                                             <li><a href="{{url("/register")}}">Register</a></li>
                                         </ul>
                                     </li>
+                                   
+
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Products <span class="fa fa-chevron-down"></span></a>
@@ -142,6 +146,7 @@
                                                     <li><a href="/stakeholder">Stake Holder</a></li>
                                                     <li><a href="/warehouse">Warehouse</a></li>
                                                     <li><a href="/city">City</a></li>
+                                                    <li><a href="/department">Department</a></li>
                                                 </ul>
                                             </li>
                                             <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Accountant <span class="fa fa-chevron-down"></span></a>
@@ -153,6 +158,9 @@
                                             <li><a href="/consecutive">Consecutives</a></li>
                                         </ul>
                                     </li>
+                                     @endif
+                                    @endif
+                                    @if(Auth::user()->role_id==1)
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Invoicing <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/purchase">Purchase</a></li>
@@ -160,14 +168,19 @@
                                             <li><a href="/summary">Summary</a></li>                                    
                                         </ul>
                                     </li>
+                                    @endif
+
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
+                                            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
                                             <li><a href="/entry">Entry</a></li>
+                                            @endif
                                             <!--<li><a href="/order">Order Service</a></li>-->                                    
                                             <li><a href="/departure">Departure</a></li>                                    
                                             <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>
+
                                 </ul>
                             </div>
                         </div>

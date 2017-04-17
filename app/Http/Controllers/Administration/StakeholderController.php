@@ -202,6 +202,7 @@ class StakeholderController extends Controller {
                     $insert["type_stakeholder"] = 2;
                     $insert["city_id"] = null;
 
+                
                     $insert["type_document"] = null;
                     $insert["resposible_id"] = 1;
                     Stakeholder::create($insert);
@@ -210,7 +211,7 @@ class StakeholderController extends Controller {
             }
         })->get();
 
-        return response()->json(["success" => true, "updates" => $this->updated, "insert" => $this->inserted]);
+        return response()->json(["success" => true, "data" => Stakeholder::where("status_id", 3)->get(), "updates" => $this->updated, "insert" => $this->inserted]);
     }
 
     public function checkmain(Request $data, $id) {

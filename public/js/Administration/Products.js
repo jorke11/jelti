@@ -59,9 +59,18 @@ function Product() {
             contentType: false,
             success: function (data) {
                 console.log(data);
+                obj.setDetailExcel(data.data)
             }
         })
 
+    }
+    
+    this.setDetailExcel=function(detail){
+        var html="";
+       $.each(detail,function(i,val){
+           html+="<tr><td>"+val.description+"</td></tr>";
+       })
+       $("#tblUpload tbody").html(html);
     }
 
     this.new = function () {

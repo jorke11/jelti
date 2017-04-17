@@ -6,9 +6,9 @@ function Dash() {
             method: "GET",
             async: true,
             dataType: 'JSON',
-            success: function (data) {                
+            success: function (data) {
                 $.each(data, function (i, val) {
-                    html += '<li><a><i class="fa ' + val.icon + '"></i> ' + $.capital(val.title) + ' <span class="fa fa-chevron-down"></span></a>'
+                    html += '<li><a><i class="fa ' + val.icon + '"></i> ' + val.title + ' <span class="fa fa-chevron-down"></span></a>'
                     if (val.nodes) {
                         html += '<ul class="nav child_menu">'
                         $.each(val.nodes, function (j, v) {
@@ -18,9 +18,10 @@ function Dash() {
                     }
                     html += '</li>';
                 });
+
                 
-                
-                $("#addMenu").html(html);
+
+//                $("#addMenu").html(html);
 
             }
         })

@@ -67,6 +67,7 @@ Route::resource('/warehouse', 'Administration\WarehouseController');
 Route::resource('/mark', 'Administration\MarkController');
 
 Route::resource('/city', 'Administration\CityController');
+Route::resource('/department', 'Administration\DepartmentController');
 Route::resource('/characteristic', 'Administration\CharacteristicController');
 
 Route::resource('/user', 'Security\UserController');
@@ -319,6 +320,9 @@ Route::get('/api/listOrder', function() {
 });
 Route::get('/api/listCity', function() {
     return Datatables::eloquent(Models\Administration\Cities::query())->make(true);
+});
+Route::get('/api/listDepartment', function() {
+    return Datatables::eloquent(Models\Administration\Department::query())->make(true);
 });
 Route::get('/api/listRole', function() {
     return Datatables::eloquent(Models\Security\Roles::query())->make(true);

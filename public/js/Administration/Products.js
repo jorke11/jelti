@@ -59,6 +59,7 @@ function Product() {
             contentType: false,
             success: function (data) {
                 console.log(data);
+                obj.setDetailExcel(data.data)
             }
         })
 

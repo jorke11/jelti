@@ -88,7 +88,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Address:</label>
-                    <input type="text" class="form-control input-purchase input-sm" id="address_supplier" readonly="" required>
+                    <input type="text" class="form-control input-purchase input-sm" id="address_supplier">
                 </div>
             </div>
             <div class="col-lg-2">

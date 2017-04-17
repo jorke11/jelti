@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Administration;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administration\Department;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Uploads\Base;
 
 class DepartmentController extends Controller {
 
@@ -28,6 +30,45 @@ class DepartmentController extends Controller {
             } else {
                 return response()->json(['success' => false]);
             }
+        }
+    }
+
+    public function storeExcel(Request $request) {
+        if ($request->ajax()) {
+
+            $input = $request->all();
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($input, 'file_excel');
+            $this->name = $file->getClientOriginalName();
+            $this->name = str_replace(" ", "_", $this->name);
+            $this->path = "uploads/department/" . date("Y-m-d") . "/" . $this->name;
+
+            $file->move("uploads/department/" . date("Y-m-d") . "/", $this->name);
+
+            Excel::load($this->path, function($reader) {
+                $in["name"] = $this->name;
+                $in["path"] = $this->path;
+                $in["quantity"] = count($reader->get());
+
+                $base_id = Base::create($in)->id;
+
+                foreach ($reader->get() as $book) {
+
+                    $dep = Department::where("code", $book->codigo)->first();
+
+                    $department["code"] = $book->codigo;
+                    $department["description"] = $book->nombre;
+
+                    if (count($dep) > 0) {
+                        $dep->save();
+                    } else {
+                        Department::create($department);
+                    }
+                }
+            })->get();
+
+            return response()->json(["success" => true, "data" => Department::all()]);
         }
     }
 

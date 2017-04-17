@@ -4,12 +4,33 @@ function Department() {
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
-        
-        $("#btnNew").click(function(){
-            
+
+        $("#btnNew").click(function () {
+
             $(".input-department").cleanFields();
             $("#modalNew").modal("show");
         });
+
+        $("#btnUpload").click(this.uploadExcel)
+    }
+
+    this.uploadExcel = function () {
+        var formData = new FormData($("#frmFile")[0]);
+
+        $.ajax({
+            url: 'department/uploadExcel',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+//                obj.setDetailExcel(data.data)
+                table.ajax.reload();
+            }
+        })
+
     }
 
     this.save = function () {

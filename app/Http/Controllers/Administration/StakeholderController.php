@@ -186,6 +186,8 @@ class StakeholderController extends Controller {
                 $insert["type_stakeholder"] = 2;
                 $insert["term"] = (trim($book->plazo)) == '' ? 0 : trim($book->plazo);
 
+                $insert["phone"] = (int) trim($book->celular);
+
                 if (count($stake) > 0) {
                     if ((int) $stake->phone == '') {
                         $insert["phone_contact"] = (int) trim($book->celular);
@@ -202,7 +204,7 @@ class StakeholderController extends Controller {
                     $insert["type_stakeholder"] = 2;
                     $insert["city_id"] = null;
 
-                
+
                     $insert["type_document"] = null;
                     $insert["resposible_id"] = 1;
                     Stakeholder::create($insert);

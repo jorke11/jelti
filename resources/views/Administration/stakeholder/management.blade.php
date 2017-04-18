@@ -266,7 +266,8 @@
                 </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
+</div>
 
 
-    @include('Administration.stakeholder.modalUpload')
+@include('Administration.stakeholder.modalUpload')

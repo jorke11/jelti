@@ -31,5 +31,7 @@ class Stakeholder extends Model
         "business_name",
         "business",
         "lead_time",
+        "user_insert",
+        "user_update",
         ];
 }

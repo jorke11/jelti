@@ -17,6 +17,7 @@ use Datatables;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Uploads\Base;
+use Auth;
 
 class StakeholderController extends Controller {
 
@@ -208,6 +209,7 @@ class StakeholderController extends Controller {
                     $insert["city_id"] = null;
                 }
 
+                $insert["user_insert"] = Auth::user()->id;
                 $insert["status_id"] = 3;
                 $insert["lead_time"] = (int) trim($book->lead_time);
                 $insert["document"] = trim($number);
@@ -226,7 +228,7 @@ class StakeholderController extends Controller {
                         $cont = Contact::where("phone", $book->celular)->first();
 
                         $contact["stakeholder_id"] = $stake->id;
-                        $contact["city_id"] = $city->id;
+                        $contact["city_id"] = $insert["city_id"];
                         $contact["name"] = trim($book->contacto);
                         $contact["email"] = trim($book->correo);
                         $contact["mobile"] = trim($book->celular);

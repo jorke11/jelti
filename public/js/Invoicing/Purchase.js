@@ -51,6 +51,7 @@ function Purchase() {
 
         $("#btnmodalDetail").click(function () {
             $(".input-detail").cleanFields();
+            $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
             $("#modalDetail").modal("show");
             $("#frmDetail #id").val("");
             $("#frmDetail #purchase_id").val($("#frm #id").val());

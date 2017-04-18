@@ -197,7 +197,12 @@ function Entry() {
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
-                    $("#frm #name_supplier").val(resp.response.name + " " + resp.response.last_name);
+
+                    resp.response.name = (resp.response.name == null) ? '' : resp.response.name + " ";
+                    resp.response.last_name = (resp.response.last_name == null) ? '' : resp.response.last_name + " ";
+                    $("#frm #name_supplier").val(resp.response.name + resp.response.last_name + resp.response.business_name);
+
+//                    $("#frm #name_supplier").val(resp.response.name + " " + resp.response.last_name);
                     $("#frm #address_supplier").val(resp.response.address);
                     $("#frm #phone_supplier").val(resp.response.phone);
 

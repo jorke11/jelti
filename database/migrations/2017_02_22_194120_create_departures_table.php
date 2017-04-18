@@ -20,7 +20,7 @@ class CreateDeparturesTable extends Migration {
             $table->integer('city_id');
             $table->integer('destination_id');
             $table->integer('order_id')->nullable();
-            $table->integer('branch_id');
+            $table->integer('branch_id')->nullable();
             $table->string('address');
             $table->string('consecutive');
             $table->string('phone');

@@ -116,7 +116,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Branch office:</label>
-                    <select class="form-control input-departure input-fillable" id="branch_id" name='branch_id' data-api="/api/getBranch" required>
+                    <select class="form-control input-departure input-fillable" id="branch_id" name='branch_id' data-api="/api/getBranch">
                     </select>
                 </div>
             </div>

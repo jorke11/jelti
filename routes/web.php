@@ -264,7 +264,7 @@ Route::get('/api/listPurchase', function() {
 
     $query = DB::table("purchases")
             ->select("purchases.id", "purchases.consecutive", "purchases.description", "purchases.created_at", "stakeholder.name as stakeholder", "purchases.created_at", "warehouses.description as warehouse", "cities.description as city", "parameters.description as status")
-            ->join("stakeholder", "stakeholder.id", "purchases.supplier_id")
+            ->join("stakeholder", "stakeholder.id", DB::raw("purchases.supplier_id and stakeholder.type_stakeholder=2"))
             ->join("warehouses", "warehouses.id", "purchases.warehouse_id")
             ->join("cities", "cities.id", "purchases.city_id")
             ->join("parameters", "parameters.id", DB::raw("purchases.status_id and parameters.group='entry'"));

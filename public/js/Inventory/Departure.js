@@ -6,7 +6,7 @@ function Sale() {
         $("#btnSave").click(this.save);
         $("#newDetail").click(this.saveDetail);
         $("#btnSend").click(this.send);
-        $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+        $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
@@ -39,6 +39,7 @@ function Sale() {
         });
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
+            
             $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
             $(".input-detail").cleanFields();
             if ($("#frm #status_id").val() == 1) {
@@ -47,6 +48,7 @@ function Sale() {
             }
 
         });
+
         $("#frmDetail #product_id").change(function () {
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
@@ -55,7 +57,7 @@ function Sale() {
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf)
-                    $("#frmDetail #quantityMax").html("Available: ("+resp.quantity+")")
+                    $("#frmDetail #quantityMax").html("Available: (" + resp.quantity + ")")
                 }
             })
         });
@@ -220,7 +222,7 @@ function Sale() {
         var id = $("#frmDetail #id").val();
         var msg = 'Record Detail';
         var validate = $(".input-detail").validate();
-        
+
         if (validate.length == 0) {
 
             if (id == '') {
@@ -329,7 +331,7 @@ function Sale() {
         var html = "", htmlEdit = "", htmlDel = "";
         $("#tblDetail tbody").empty();
         $.each(data, function (i, val) {
-            
+
             if (btnEdit == true && val.status_id != 3) {
                 htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
             } else {

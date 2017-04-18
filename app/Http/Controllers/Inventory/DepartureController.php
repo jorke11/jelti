@@ -292,7 +292,7 @@ class DepartureController extends Controller {
         $this->total = 0;
 
         foreach ($detail as $i => $value) {
-            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
+//            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value;
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
@@ -329,10 +329,30 @@ class DepartureController extends Controller {
     public function updateDetail(Request $request, $id) {
         $entry = DeparturesDetail::FindOrFail($id);
         $input = $request->all();
-        $input["status_id"] = 3;
+
+
+        if (Auth::user()->role_id == 4) {
+            unset($input["real_quantity"]);
+            $result = $entry->fill($input)->save();
+            $resp = $this->formatDetail($input["departure_id"]);
+            return response()->json(['success' => true, "data" => $resp]);
+        }
+
+
+
         $stock = new StockController();
         $available = $stock->getDetailProduct($input["product_id"]);
         $available = $available->getData(true);
+
+        $input["status_id"] = 3;
+        if ($available["quantity"] == 0 && Auth::user()->role_id != 4) {
+            $input["real_quantity"] = 0;
+            $entry->fill($input)->save();
+            $resp = $this->formatDetail($input["departure_id"]);
+            return response()->json(['success' => true, "data" => $resp, "msg" => "No se puede agregar se deja en 0"]);
+        }
+
+
 
         if ($input["real_quantity"] != 0) {
 

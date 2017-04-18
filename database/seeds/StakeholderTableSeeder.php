@@ -30,7 +30,8 @@ class StakeholderTableSeeder extends Seeder {
             'term' => 45,
             'web_site' => "www.superfuds.com",
             'type_stakeholder' => 2,
-            "status_id" => 1
+            "status_id" => 1,
+            "user_insert" => 1
         ]);
     }
 

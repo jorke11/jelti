@@ -9,11 +9,11 @@
                     <span class="glyphicon glyphicon-save" aria-hidden="true" > Save</span>
                 </button>
                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
-                <button class="btn btn-success btn-sm" id='btnSend'>
+                <button class="btn btn-success btn-sm" id='btnSend' disabled>
                     <span class="glyphicon glyphicon-send" aria-hidden="true"> Send</span>
                 </button>
 
-                <button class="btn btn-success btn-sm" id='btnDocument'>
+                <button class="btn btn-success btn-sm" id='btnDocument' disabled>
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Pdf</span>
                 </button>
                 @endif
@@ -102,13 +102,13 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Address:</label>
-                    <input type="text" class="form-control input-departure input-sm input-fillable" id="address" name="address" required>
+                    <input type="text" class="form-control input-departure input-sm input-fillable" id="address" name="address">
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Phone:</label>
-                    <input type="text" class="form-control input-departure input-sm input-fillable" id="phone" name="phone" required>
+                    <input type="text" class="form-control input-departure input-sm input-fillable" id="phone" name="phone">
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Invoice generated:</label>
-                    <input type="text" class="form-control input-departure" id="invoice_generated" readonly>
+                    <input type="text" class="form-control input-departure" id="invoice" readonly>
                 </div>
             </div>
         </div>
@@ -133,7 +133,7 @@
 
 
 <div class="row">
-    <div class="col-lg-6 col-lg-offset-3">
+    <div class="col-lg-10 col-lg-offset-1">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
@@ -149,7 +149,7 @@
                 <table class="table table-bordered table-condensed" id="tblDetail">
                     <thead>
                         <tr>
-                            <th colspan="2" class="center-rowspan">Information</th>
+                            <th colspan="3" class="center-rowspan">Information</th>
                             <th colspan="3" class="center-rowspan">Order</th>
                             <th colspan="3" class="center-rowspan">Dispatched</th>
                             <th rowspan="2" class="center-rowspan">Status</th>
@@ -158,6 +158,7 @@
                         <tr>
                             <th>#</th>
                             <th>Product</th>
+                            <th>Comment</th>
                             <th>Quantity</th>
                             <th>Unit</th>
                             <th>Total</th>

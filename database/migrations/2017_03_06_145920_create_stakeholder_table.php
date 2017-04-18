@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStakeholderTable extends Migration
-{
+class CreateStakeholderTable extends Migration {
+
     /**
      * Run the migrations.
      *
@@ -24,6 +24,7 @@ class CreateStakeholderTable extends Migration
             $table->string('name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('document')->nullable();
+            $table->integer('verification')->nullable();
             $table->string('email')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
@@ -34,7 +35,8 @@ class CreateStakeholderTable extends Migration
             $table->integer('term')->nullable();
             $table->string('web_site')->nullable();
             $table->integer('lead_time')->nullable();
-            
+            $table->integer("user_insert");
+            $table->integer("user_update");
             $table->timestamps();
         });
     }
@@ -47,4 +49,5 @@ class CreateStakeholderTable extends Migration
     public function down() {
         Schema::dropIfExists('stakeholder');
     }
+
 }

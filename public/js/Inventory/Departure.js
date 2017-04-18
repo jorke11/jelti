@@ -39,9 +39,8 @@ function Sale() {
         });
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
-            
-            $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
             $(".input-detail").cleanFields();
+
             if ($("#frm #status_id").val() == 1) {
                 $("#frmDetail #real_quantity").attr("disabled", true);
                 $("#frmDetail #description").attr("disabled", true);
@@ -63,6 +62,20 @@ function Sale() {
         });
         $("#btnDocument").click(function () {
             if ($("#frm #status_id").val() != 1) {
+
+                $.ajax({
+                    url: 'departure/generateInvoice/' + $("#frm #id").val(),
+                    method: 'PUT',
+                    dataType: 'JSON',
+                    success: function (resp) {
+                        if (resp.success == true) {
+                            $("#frm #invoice").val(resp.consecutive);
+                            $("#btnDocument").attr("disabled", true);
+                        }
+
+                    }
+                })
+
                 window.open("departure/" + $("#frm #id").val() + "/getInvoice");
             } else {
                 toastr.error("error")
@@ -111,7 +124,12 @@ function Sale() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
-                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
+
+                resp.response.name = (resp.response.name == null) ? '' : resp.response.name + " ";
+                resp.response.last_name = (resp.response.last_name == null) ? '' : resp.response.last_name + " ";
+                $("#frm #name_client").val(resp.response.name + resp.response.last_name + resp.response.business_name);
+
+//                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.response.address);
                 $("#frm #phone").val(resp.response.phone);
             }
@@ -132,6 +150,7 @@ function Sale() {
                     toastr.success("Sended");
                     $(".input-departure").setFields({data: resp.header, disabled: true});
                     $("#btnDocument").attr("disabled", false);
+
                     if (resp.header.status_id == 2) {
                         btnEdit = false;
                         btnDel = false;
@@ -268,14 +287,17 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-departure").setFields({data: data.header});
+                $(".input-departure").setFields({data: data.header,disabled:true});
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
 
+                if (data.header.invoice == '') {
+                    $("#btnDocument").attr("disabled", false);
+                }
+
                 if (data.header.status_id == 2) {
                     $("#btnSend, #btnmodalDetail").attr("disabled", true);
-                    $("#btnDocument").attr("disabled", false);
                     btnEdit = false;
                     btnDel = false;
                 } else {
@@ -347,6 +369,7 @@ function Sale() {
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.product + "</td>";
+            html += "<td>" + val.comment + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
             html += "<td>" + val.totalFormated + "</td>";

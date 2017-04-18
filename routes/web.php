@@ -60,6 +60,7 @@ Route::post('/stakeholder/StoreSpecial', 'Administration\StakeholderController@s
 Route::put('/stakeholder/updatePrice/{id}', 'Administration\StakeholderController@updatePrice');
 Route::post('/stakeholder/StoreBranch', 'Administration\StakeholderController@storeBranch');
 Route::delete('/stakeholder/deleteBranch/{id}', 'Administration\StakeholderController@deleteBranch');
+Route::post('/stakeholder/addChage', 'Administration\StakeholderController@addChanges');
 
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/puc', 'Administration\PucController');
@@ -140,6 +141,7 @@ Route::post('/departure/setSale/', 'Inventory\DepartureController@setSale');
 Route::get('/departure/{id}/getInvoice', ['uses' => 'Inventory\DepartureController@getInvoice']);
 Route::get('/departure/{id}/getInvoiceHtml', ['uses' => 'Inventory\DepartureController@getInvoiceHtml']);
 Route::get('/departure/{id}/detailAll/', 'Inventory\DepartureController@getAllDetail');
+Route::put('/departure/generateInvoice/{id}', 'Inventory\DepartureController@generateInvoice');
 
 Route::resource('/order', 'Inventory\OrderController');
 Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);
@@ -221,21 +223,27 @@ Route::get('/api/listTicket', function() {
 });
 
 Route::get('/api/listStakeholder', function() {
-    $query = DB::table('stakeholder')
-            ->select(
-                    "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", "status.description as status_id")
-            ->leftjoin("cities", "cities.id", "stakeholder.city_id")
-            ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
-            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
-            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
-            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
+
+    $query = DB::table('vstakeholder');
+
+//    $query = DB::table('stakeholder')
+//            ->select(
+//                    "stakeholder.business_name", "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", "status.description as status_id")
+//            ->leftjoin("cities", "cities.id", "stakeholder.city_id")
+//            ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
+//            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
+//            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
+//            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-        $query->where("stakeholder.responsible_id", Auth::user()->id);
+        $query->where("responsible_id", Auth::user()->id);
     }
+
+
     return Datatables::queryBuilder($query)->make(true);
 });
 Route::get('/api/listProduct', function() {
-    return Datatables::eloquent(Models\Administration\Products::query())->make(true);
+    $query = DB::table('vproducts');
+    return Datatables::queryBuilder($query)->make(true);
 });
 Route::get('/api/listConsecutive', function() {
     return Datatables::eloquent(models\Administration\Consecutives::query())->make(true);
@@ -309,7 +317,6 @@ Route::get('/api/listDeparture', function() {
 //    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
 //        $query->where("departures.responsible_id", Auth::user()->id);
 //    }
-
 //    $query = DB::table('vdepartures');
 //            
 //    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {

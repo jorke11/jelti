@@ -67,6 +67,8 @@ function Purchase() {
 
     }
 
+
+
     this.consecutive = function () {
         $.ajax({
             url: 'purchase/1/consecutive',
@@ -91,6 +93,7 @@ function Purchase() {
                 success: function (resp) {
                     $(".input-purchase").setFields({data: resp.header, disabled: true});
                     toastr.success("Purchase sended");
+                    $("#btnSend").attr("disabled", true);
                     table.ajax.reload();
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error(xhr.responseJSON.msg);
@@ -120,6 +123,7 @@ function Purchase() {
             success: function (resp) {
                 resp.response.name = (resp.response.name == null) ? '' : resp.response.name + " ";
                 resp.response.last_name = (resp.response.last_name == null) ? '' : resp.response.last_name + " ";
+
                 $("#frm #name_supplier").val(resp.response.name + resp.response.last_name + resp.response.business_name);
                 $("#frm #address_supplier").val(resp.response.address);
                 $("#frm #phone_supplier").val(resp.response.phone);
@@ -170,6 +174,7 @@ function Purchase() {
                         table.ajax.reload();
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
+                        $("#btnSend").attr("disabled", false);
                     }
                 }
             })
@@ -234,15 +239,17 @@ function Purchase() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-purchase").setFields({data: data.header, disabled: true});
-                $("#btnSave").attr("disabled", false);
-
 
                 if (data.header.supplier_id != 0) {
                     obj.getSupplier(data.header.supplier_id);
                 }
-                if (data.header.id != '') {
+
+                if (data.header.status_id == 1) {
+                    $("#btnSend").attr("disabled", false);
+                    $("#btnSave").attr("disabled", false);
                     $("#btnmodalDetail").attr("disabled", false);
                 }
+
 
                 obj.printDetail(data);
             }

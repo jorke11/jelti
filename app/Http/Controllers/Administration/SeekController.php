@@ -17,6 +17,7 @@ use App\Models\Administration\Branch;
 use App\Models\Administration\Puc;
 use App\Models\Administration\Contact;
 use App\Models\Administration\Parameters;
+use DB;
 
 class SeekController extends Controller {
 
@@ -38,14 +39,17 @@ class SeekController extends Controller {
 
     public function getClient(Request $req) {
         $in = $req->all();
-        $query = Stakeholder::select("id", "name as text");
+        $query = Stakeholder::select("id", DB::raw("coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"]) && $in["id"] != '') {
             $query->where("id", $in["id"])->get();
         } else {
             if (isset($in["q"]))
-                $query->where("name", "ilike", "%" . $in["q"] . "%")->where("type_stakeholder", 1)->get();
+                $query->where("business", "ILIKE", "%" . $in["q"] . "%")
+                        ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
+//                    ->where("type_stakeholder", 1)
+                        ->get();
         }
         $result = $query->get();
 
@@ -54,7 +58,7 @@ class SeekController extends Controller {
 
     public function getSupplier(Request $req) {
         $in = $req->all();
-        $query = Stakeholder::select("id", "business as text");
+        $query = Stakeholder::select("id", DB::raw("coalesce(business,'') || ' - '||coalesce(business_name,'') as text"));
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"])) {
@@ -62,10 +66,11 @@ class SeekController extends Controller {
         } else {
             $query
                     ->where("business", "ilike", "%" . $in["q"] . "%")
+                    ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
                     ->get();
         }
 
-        $result = $query->where("type_stakeholder", 2)->get();
+        $result = $query->where("type_stakeholder", 2)->where("status_id", 1)->get();
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }

@@ -284,7 +284,7 @@ class DepartureController extends Controller {
 
     public function formatDetail($id) {
         $detail = DB::table("departures_detail")
-                        ->select("departures_detail.id", "departures_detail.status_id", "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", "products.title as product", "departures_detail.description", "parameters.description as status")
+                        ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", "products.title as product", "departures_detail.description", "parameters.description as status")
                         ->join("products", "departures_detail.product_id", "products.id")
                         ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
                         ->where("departure_id", $id)->get();
@@ -411,6 +411,14 @@ class DepartureController extends Controller {
                 return response()->json(['success' => false]);
             }
         }
+    }
+
+    public function generateInvoice($id) {
+        $dep = Departures::findOrfail($id);
+        $dep->invoice = $this->createConsecutive(1);
+        $dep->save();
+        $this->updateConsecutive(1);
+        return response()->json(["success" => true, "consecutive" => $dep->invoice]);
     }
 
 }

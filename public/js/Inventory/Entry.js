@@ -119,6 +119,7 @@ function Entry() {
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.product + "</td>";
+            html += "<td>" + val.comment + "</td>";
             html += "<td>" + val.expiration_date + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
@@ -180,6 +181,8 @@ function Entry() {
                     toastr.success("Sended");
                     $(".input-entry").setFields({data: resp.header, disabled: true});
                     $("#btnmodalDetail").attr("disabled", true);
+                    $("#btnSend").attr("disabled", true);
+
                 } else {
                     toastr.warning(resp.msg);
                 }

@@ -39,6 +39,8 @@ function Stakeholder() {
             $("#modalUpload").modal("show");
         })
 
+        $("#addJustify").click(this.addJustify);
+
         $("#btnUpload").click(function () {
 
             var formData = new FormData($("#frmFile")[0]);
@@ -63,8 +65,8 @@ function Stakeholder() {
                 }
             });
         })
-        
-  
+
+
         $("#btnUploadExcel").click(function () {
 
             var formData = new FormData($("#frmExcel")[0]);
@@ -123,20 +125,46 @@ function Stakeholder() {
         });
     }
 
+    this.addJustify = function () {
+        var valid = $(".input-justify").validate();
+        $("#frmJustify #stakeholder_id").val($("#frm #id").val());
+        
+        var data = $("#frmJustify").serialize();
+        
+        if (valid.length == 0) {
+            $.ajax({
+                url: 'stakeholder/addChage',
+                method: 'post',
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        $("#modelActive").modal("hide");
+                    }
+                }
+            })
+        } else {
+            toastr.error("Fields Required")
+        }
+
+    }
+
     this.resultTableUpload = function (detail) {
-        var html="";
-       $.each(detail, function (i, val) {
-            html+="<tr><td>"+val.business+"</td><td>"+val.business_name+"</td>";
-            html+="<td>"+val.document+"</td><td>"+val.contact+"</td><td>"+val.phone_contact+"</td>";
-            html+="<td>"+val.email+"</td></tr>";
+        var html = "";
+        $.each(detail, function (i, val) {
+            html += "<tr><td>" + val.business + "</td><td>" + val.business_name + "</td>";
+            html += "<td>" + val.document + "</td><td>" + val.contact + "</td><td>" + val.phone_contact + "</td>";
+            html += "<td>" + val.email + "</td></tr>";
         })
         $("#tblUpload tbody").html(html)
     }
 
+    this.showModalJustif = function () {
+        $("#modelActive").modal("show");
+    }
 
     this.newSpecial = function () {
         $(".input-special").cleanFields();
-
     }
 
     this.newBranch = function () {
@@ -145,9 +173,7 @@ function Stakeholder() {
 
     this.new = function () {
         $(".input-stakeholder").cleanFields();
-
     }
-
 
     this.saveSpecial = function () {
         toastr.remove();
@@ -396,6 +422,7 @@ function Stakeholder() {
             "ajax": "/api/listStakeholder",
             columns: [
                 {data: "id"},
+                {data: "business_name"},
                 {data: "name"},
                 {data: "last_name"},
                 {data: "document"},
@@ -409,8 +436,8 @@ function Stakeholder() {
                 {data: "web_site"},
                 {data: "typeperson"},
                 {data: "typeregime"},
-                {data: "type_stakeholder"},
-                {data: "status_id"},
+                {data: "typestakeholder"},
+                {data: "status"},
             ],
             buttons: [
                 'copyHtml5',
@@ -427,7 +454,7 @@ function Stakeholder() {
                     }
                 },
                 {
-                    targets: [16],
+                    targets: [17],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

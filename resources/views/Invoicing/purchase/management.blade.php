@@ -8,7 +8,7 @@
                 <button class="btn btn-success btn-sm" id='btnSave' disabled>
                     <span class="glyphicon glyphicon-save" aria-hidden="true"> Save</span>
                 </button>
-                <button class="btn btn-success btn-sm" id='btnSend'>
+                <button class="btn btn-success btn-sm" id='btnSend' disabled>
                     <span class="glyphicon glyphicon-save" aria-hidden="true"> Send</span>
                 </button>
             </div>
@@ -73,7 +73,7 @@
 
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Supplier:</label>
+                    <label for="email">Supplier*:</label>
                     <select class="form-control input-purchase" id="supplier_id" name='supplier_id' data-api="/api/getSupplier"  autofocus="" required>
                     </select>
                 </div>
@@ -94,7 +94,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Phone:</label>
-                    <input type="text" class="form-control input-purchase input-sm" id="phone_supplier" readonly="" required>
+                    <input type="text" class="form-control input-purchase input-sm" id="phone_supplier">
                 </div>
             </div>
             <div class="col-lg-2">

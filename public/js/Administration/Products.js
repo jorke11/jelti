@@ -301,7 +301,7 @@ function Product() {
                         return '<img src="/images/product/' + data + '" width="25px">';
                     }
                 },
-                {data: "status_id"},
+                {data: "status"},
                 {data: "id"},
             ],
             order: [[1, 'ASC']],

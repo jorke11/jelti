@@ -89,7 +89,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Phone:</label>
-                    <input type="text" class="form-control input-entry input-sm" id="phone_supplier"  placeholder="Phone" readonly="" required>
+                    <input type="text" class="form-control input-entry input-sm" id="phone_supplier"  placeholder="Phone">
                 </div>
             </div>
             <div class="col-lg-2">
@@ -122,7 +122,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-8 col-lg-offset-2">
+    <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
@@ -138,7 +138,7 @@
                 <table class="table table-bordered table-condensed" id="tblDetail">
                     <thead>
                         <tr>
-                            <th colspan="3" class="center-rowspan">Information</th>
+                            <th colspan="4" class="center-rowspan">Information</th>
                             <th colspan="3" class="center-rowspan">Order</th>
                             <th colspan="3" class="center-rowspan">Real</th>
                             <th rowspan="2" class="center-rowspan">Status</th>
@@ -147,6 +147,7 @@
                         <tr>
                             <th>#</th>
                             <th>Product</th>
+                            <th>Comment</th>
                             <th>Expiration</th>
                             <th>Quantity</th>
                             <th>Value</th>

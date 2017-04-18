@@ -320,7 +320,7 @@ class EntryController extends Controller {
     public function formatDetail($id) {
 
         $detail = DB::table("entries_detail")
-                        ->select("entries_detail.id", "entries_detail.status_id", "entries_detail.real_quantity", "expiration_date", "quantity", "entries_detail.value", "products.title as product", "entries_detail.description", "parameters.description as status")
+                        ->select("entries_detail.id", "entries_detail.status_id", "entries_detail.real_quantity", "expiration_date", "quantity", "entries_detail.value", "products.title as product", "entries_detail.description as comment", "parameters.description as status")
                         ->join("products", "entries_detail.product_id", "products.id")
                         ->join("parameters", "entries_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
                         ->where("entry_id", $id)->get();
@@ -382,6 +382,7 @@ class EntryController extends Controller {
         $input["status_id"] = 3;
 
         if ($input["real_quantity"] <= $input["quantity"]) {
+            
             $result = $entry->fill($input)->save();
 
             if ($result) {

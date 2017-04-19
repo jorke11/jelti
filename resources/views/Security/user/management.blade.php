@@ -50,17 +50,23 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Password:</label>
-            <input type="password" class="form-control input-user" id="password" name='password' required>
+            <input type="password" class="form-control input-user" id="password" name='password'>
         </div>
     </div>
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Confirmation (password):</label>
-            <input type="password" class="form-control input-user" id="confirmation" name='confirmation' required>
+            <input type="password" class="form-control input-user" id="confirmation" name='confirmation'>
         </div>
     </div>
 </div>
 <div class="row">
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label for="email">Document:</label>
+            <input type="text" class="form-control input-user" id="document" name='document'>
+        </div>
+    </div>
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Stakeholder:</label>

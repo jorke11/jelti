@@ -13,6 +13,7 @@
                         <th>Id</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Document</th>
                         <th>Profile</th>
                         <th>Stakeholder</th>
                         <th>City</th>

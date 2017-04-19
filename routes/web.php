@@ -343,7 +343,8 @@ Route::get('/api/listUser', function() {
 
     return Datatables::queryBuilder(
                     DB::table("users")
-                            ->select("users.id", "users.name", "users.email", "roles.description as role", "stakeholder.name as stakeholder", "cities.description as city", "parameters.description as status")
+                            ->select("users.id", "users.name", "users.email", DB::raw("coalesce(users.document::text,'') as document"),"roles.description as role", 
+                                    "stakeholder.business_name as stakeholder", "cities.description as city", "parameters.description as status")
                             ->join("roles", "roles.id", "users.role_id")
                             ->join("stakeholder", "stakeholder.id", "users.stakeholder_id")
                             ->join("cities", "cities.id", "users.city_id")

@@ -228,6 +228,7 @@ function User() {
                 {data: "id"},
                 {data: "name"},
                 {data: "email"},
+                {data: "document"},
                 {data: "role"},
                 {data: "stakeholder"},
                 {data: "city"},
@@ -242,7 +243,7 @@ function User() {
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [8],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

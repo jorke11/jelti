@@ -41,7 +41,11 @@ class UserController extends Controller {
                 $input["status"] = false;
             }
 
-            $input["password"] = bcrypt($input["password"]);
+            if ($input["password"] != '') {
+                $input["password"] = bcrypt($input["password"]);
+            } else {
+                unset($input["password"]);
+            }
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $result = Users::create($input);
@@ -104,10 +108,16 @@ class UserController extends Controller {
     public function update(Request $request, $id) {
         $user = Users::FindOrFail($id);
         $input = $request->all();
+
         if (!isset($input["status"])) {
             $input["status"] = false;
         }
 
+        if ($input["password"] != '') {
+            $input["password"] = bcrypt($input["password"]);
+        } else {
+            unset($input["password"]);
+        }
 
         $result = $user->fill($input)->save();
         if ($result) {

@@ -235,8 +235,6 @@ class StakeholderController extends Controller {
                         $contact["web_site"] = trim($book->sitio_web);
 
                         if (count($cont) > 0) {
-
-
                             $cont->fill($contact)->save();
                         } else {
                             Contact::create($contact);

@@ -19,6 +19,7 @@ use Session;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Uploads\Base;
 use Auth;
+use App;
 
 class EntryController extends Controller {
 
@@ -26,6 +27,7 @@ class EntryController extends Controller {
     public $total_real;
 
     public function __construct() {
+        App::setLocale("en");
         $this->total = 0;
         $this->total_real = 0;
         $this->middleware("auth");

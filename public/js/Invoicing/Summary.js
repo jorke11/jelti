@@ -27,7 +27,8 @@ function Summary() {
                 hip: hip * 500,
                 pasos: 0,
                 aleatorio2: ale2,
-                hipotenusa: hip});
+                hipotenusa: hip,
+                angulo: 0});
         }
 
 
@@ -47,13 +48,16 @@ function Summary() {
 
         for (i = 0; i < quantity; i++) {
             ctx.lineTo(data[i].x, 500 - data[i].y);
+            ctx.fillText("(" + (data[i].aleatorio).toFixed(2) + " , " + data[i].aleatorio2.toFixed(2) + ")", (data[i].x + -1).toFixed(2), (500 - 1 - data[i].y).toFixed(2));
         }
         ctx.closePath();
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(0, 500);
         ctx.lineTo(data[quantity - 1].x, 500 - data[quantity - 1].y);
-        ctx.lineWidth=5;
+
+
+        ctx.lineWidth = 5;
         ctx.strokeStyle = '#FF0000';
         ctx.stroke();
 

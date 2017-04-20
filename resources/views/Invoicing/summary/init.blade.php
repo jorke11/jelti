@@ -26,11 +26,12 @@
                         <table class="table table-condensed table-bordered" id="data">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Aleatorio</th>
-                                    <th>Frecuencia</th>
+                                    <th>Pasos</th>
                                     <th>Aleatorio</th>
                                     <th>Angulo</th>
-                                    <th>Longitud</th>
+                                    <th>Distancia</th>
                                 </tr>
                             </thead>
                             <tbody>

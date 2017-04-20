@@ -47,16 +47,18 @@ function Summary() {
 
         for (i = 0; i < quantity; i++) {
             ctx.lineTo(data[i].x, 500 - data[i].y);
-            ctx.fillText("(" + (data[i].aleatorio).toFixed(2) + " , " + data[i].aleatorio2.toFixed(2) + ")", (data[i].x + -1).toFixed(2), (500 - 1 - data[i].y).toFixed(2));
+            ctx.fillText(i + " (" + (data[i].aleatorio).toFixed(2) + " , " + data[i].aleatorio2.toFixed(2) + ")", (data[i].x + -1).toFixed(2), (500 - 1 - data[i].y).toFixed(2));
         }
-        
-        
+
+
         ctx.closePath();
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(0, 500);
         ctx.lineTo(data[quantity - 1].x, 500 - data[quantity - 1].y);
-        data[quantity - 1].angulo = ((Math.atan((data[quantity - 1].aleatorio2/data[quantity - 1].aleatorio)))*100).toFixed(1);
+        data[quantity - 1].angulo = ((Math.atan((data[quantity - 1].aleatorio2 / data[quantity - 1].aleatorio))) * 100).toFixed(1);
+
+        ctx.fillText("Longitud T: "+data[quantity - 1].hipotenusa.toFixed(2), ((data[quantity - 1].x + 15) / 2), (500 - data[quantity - 1].y / 2));
 
 
         ctx.lineWidth = 5;
@@ -66,8 +68,8 @@ function Summary() {
         var html = "";
         $("#data tbody").empty();
         for (i = 0; i < quantity; i++) {
-            html += '<tr><td>' + data[i].aleatorio + '</td><td>' + data[i].pasos + '</td><td>' + data[i].aleatorio2 + '</td><td>'+ data[i].angulo +'</td>';
-            html+='<td>'+ data[i].hipotenusa +'</td></tr>';
+            html += '<tr><td>' + i + '</td><td>' + data[i].aleatorio + '</td><td>' + data[i].pasos + '</td><td>' + data[i].aleatorio2 + '</td><td>' + data[i].angulo + '</td>';
+            html += '<td>' + data[i].hipotenusa + '</td></tr>';
         }
         $("#data tbody").html(html);
     }

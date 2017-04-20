@@ -58,11 +58,13 @@ class PurchaseController extends Controller {
 
     public function getSupplier($id) {
         $stakeholder = \App\Models\Administration\Stakeholder::findOrFail($id);
-        return response()->json(["response" => $stakeholder]);
+        $products = Products::where("supplier_id", $stakeholder->id)->get();
+        return response()->json(["response" => $stakeholder, "products" => $products]);
     }
 
     public function getProducts($id) {
         $resp = \App\Models\Administration\Products::where("supplier_id", $id);
+
         return response()->json(["response" => $resp]);
     }
 

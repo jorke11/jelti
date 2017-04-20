@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administration\Categories;
 use Session;
+use Mail;
 
 class CategoryController extends Controller {
 
@@ -14,6 +15,12 @@ class CategoryController extends Controller {
     }
 
     public function index() {
+        $input["jorge"] = "jorge";
+        Mail::send("Notifications.test", $input, function($msj) {
+            $msj->subject("Notificaciones superfuds");
+            $msj->to("jpinedom@hotmail.com");
+        });
+
         return view("Administration.category.init");
     }
 

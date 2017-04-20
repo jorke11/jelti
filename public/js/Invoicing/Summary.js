@@ -1,27 +1,77 @@
-//function Kardex() {
-//    var table;
-//    
-//    this.init = function () {
-//        
-//    }
-//
-//
-//}
-//
-//var obj = new Kardex();
-//obj.init();
+function Summary() {
+    var table;
+    var canvas = document.getElementById("micanvas");
+    var ctx = canvas.getContext("2d");
 
-var canvas = document.getElementById("micanvas");
-var ctx = canvas.getContext("2d");
+    this.init = function () {
+        $("#btnPrint").click(function () {
+            obj.printGraph($("#quantity").val());
+        });
+    }
 
-ctx.moveTo(10, 10);
-ctx.lineTo(180, 180);
+    this.printGraph = function (quantity = 10) {
 
-ctx.strokeStyle = "#f00";
-ctx.stroke();
+        quantity = quantity || $("#quantity").val();
 
-ctx.moveTo(0, 0);
-ctx.lineTo(100, 600);
+        var data = [];
+        var ale = 0, ale2 = 0, pasos = 0, hip = 0;
 
-ctx.strokeStyle = "#000";
-ctx.stroke();
+        for (var i = 0; i < quantity; i++) {
+            ale = Math.random() * (1 - 0) + 0;
+            ale2 = Math.random() * (1 - 0) + 0;
+            hip = Math.sqrt(Math.pow(ale, 2) + Math.pow(ale2, 2));
+            data.push({
+                aleatorio: ale,
+                x: ale * 500,
+                y: ale2 * 500,
+                hip: hip * 500,
+                pasos: 0,
+                aleatorio2: ale2,
+                hipotenusa: hip});
+        }
+
+
+        for (var j = 0; j < quantity; j++) {
+            if (data[j].aleatorio >= 0 && data[j].aleatorio <= 0.25) {
+                data[j].pasos = 1;
+            } else if (data[j].aleatorio > 0.25 && data[j].aleatorio <= 0.50) {
+                data[j].pasos = 2;
+            } else if (data[j].aleatorio > 0.50 && data[j].aleatorio <= 0.75) {
+                data[j].pasos = 3;
+            } else {
+                data[j].pasos = 4;
+            }
+        }
+
+        ctx.moveTo(0, 500);
+
+        for (i = 0; i < quantity; i++) {
+            ctx.lineTo(data[i].x, 500 - data[i].y);
+        }
+
+        ctx.stroke();
+
+        var html = "";
+        $("#data tbody").empty();
+        for (i = 0; i < quantity; i++) {
+            html += '<tr><td>' + data[i].aleatorio + '</td><td>' + data[i].pasos + '</td><td>' + data[i].aleatorio2 + '</td><td>0</td></tr>';
+        }
+
+        $("#data tbody").html(html);
+    }
+
+    this.printLine = function (x1, y1, x2, y2) {
+        var canvas = document.getElementById("micanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, 500 - y2);
+        ctx.stroke();
+    }
+
+
+}
+
+var obj = new Summary();
+obj.init();
+
+

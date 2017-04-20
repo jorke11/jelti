@@ -127,8 +127,22 @@ function Purchase() {
                 $("#frm #name_supplier").val(resp.response.name + resp.response.last_name + resp.response.business_name);
                 $("#frm #address_supplier").val(resp.response.address);
                 $("#frm #phone_supplier").val(resp.response.phone);
+
+
             }
         })
+    }
+
+    this.loadProducts = function (data) {
+        var html = "";
+
+        $("#tblDetail tbody").empty();
+
+        $.each(data, function (i, val) {
+            html += "<tr></tr>";
+        })
+        $("#tblDetail tbody").html(html);
+
     }
 
     this.fieldDisabled = function (status) {

@@ -35,6 +35,6 @@
         </div>
     </div>
 </div>
-@include('Administration.Category.form')
+@include('Administration.category.form')
 {!!Html::script('js/Administration/Category.js')!!}
 @endsection

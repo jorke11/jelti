@@ -13,12 +13,14 @@ function Summary() {
 
         quantity = quantity || $("#quantity").val();
         var data = [];
-        var ale = 0, ale2 = 0, pasos = 0, hip = 0;
+        var ale = 0, ale2 = 0, pasos = 0, hip = 0,angulo;
 
         for (var i = 0; i < quantity; i++) {
             ale = Math.random() * (1 - 0) + 0;
             ale2 = Math.random() * (1 - 0) + 0;
             hip = Math.sqrt(Math.pow(ale, 2) + Math.pow(ale2, 2));
+            
+            angulo = ((Math.atan((ale2 / ale))) * 100).toFixed(1);
             data.push({
                 aleatorio: ale,
                 x: ale * 500,
@@ -27,7 +29,7 @@ function Summary() {
                 pasos: 0,
                 aleatorio2: ale2,
                 hipotenusa: hip,
-                angulo: 0});
+                angulo: angulo});
         }
 
 

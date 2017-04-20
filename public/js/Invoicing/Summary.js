@@ -48,7 +48,13 @@ function Summary() {
         for (i = 0; i < quantity; i++) {
             ctx.lineTo(data[i].x, 500 - data[i].y);
         }
-
+        ctx.closePath();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, 500);
+        ctx.lineTo(data[quantity - 1].x, 500 - data[quantity - 1].y);
+        ctx.lineWidth=5;
+        ctx.strokeStyle = '#FF0000';
         ctx.stroke();
 
         var html = "";

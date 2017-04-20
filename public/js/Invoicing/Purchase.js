@@ -127,7 +127,7 @@ function Purchase() {
                 $("#frm #name_supplier").val(resp.response.name + resp.response.last_name + resp.response.business_name);
                 $("#frm #address_supplier").val(resp.response.address);
                 $("#frm #phone_supplier").val(resp.response.phone);
-
+                obj.loadProducts(resp.products);
 
             }
         })
@@ -139,7 +139,7 @@ function Purchase() {
         $("#tblDetail tbody").empty();
 
         $.each(data, function (i, val) {
-            html += "<tr></tr>";
+            html += "<tr><td>" + i + "</td><td>" + val.description + "</td><td>" + val.title + "</td></tr>";
         })
         $("#tblDetail tbody").html(html);
 

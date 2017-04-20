@@ -12,7 +12,6 @@ function Summary() {
     this.printGraph = function (quantity = 10) {
 
         quantity = quantity || $("#quantity").val();
-
         var data = [];
         var ale = 0, ale2 = 0, pasos = 0, hip = 0;
 
@@ -50,6 +49,8 @@ function Summary() {
             ctx.lineTo(data[i].x, 500 - data[i].y);
             ctx.fillText("(" + (data[i].aleatorio).toFixed(2) + " , " + data[i].aleatorio2.toFixed(2) + ")", (data[i].x + -1).toFixed(2), (500 - 1 - data[i].y).toFixed(2));
         }
+        
+        
         ctx.closePath();
         ctx.stroke();
         ctx.beginPath();
@@ -65,9 +66,9 @@ function Summary() {
         var html = "";
         $("#data tbody").empty();
         for (i = 0; i < quantity; i++) {
-            html += '<tr><td>' + data[i].aleatorio + '</td><td>' + data[i].pasos + '</td><td>' + data[i].aleatorio2 + '</td><td>'+ data[i].angulo +'</td></tr>';
+            html += '<tr><td>' + data[i].aleatorio + '</td><td>' + data[i].pasos + '</td><td>' + data[i].aleatorio2 + '</td><td>'+ data[i].angulo +'</td>';
+            html+='<td>'+ data[i].hipotenusa +'</td></tr>';
         }
-
         $("#data tbody").html(html);
     }
 

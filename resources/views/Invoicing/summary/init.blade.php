@@ -30,6 +30,7 @@
                                     <th>Frecuencia</th>
                                     <th>Aleatorio</th>
                                     <th>Angulo</th>
+                                    <th>Longitud</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -103,6 +103,7 @@
                                 </ul>
                             </div>                                                       
                             <div class="menu_section">
+                                @if(Auth::user()->status_id != 3)
                                 <h3>General</h3>
                                 <ul class="nav side-menu">
                                     <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
@@ -128,7 +129,7 @@
                                             <li><a href="{{url("/register")}}">Register</a></li>
                                         </ul>
                                     </li>
-                                   
+
 
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
@@ -158,7 +159,7 @@
                                             <li><a href="/consecutive">Consecutives</a></li>
                                         </ul>
                                     </li>
-                                     @endif
+                                    @endif
                                     @endif
                                     @if(Auth::user()->role_id==1)
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Invoicing <span class="fa fa-chevron-down"></span></a>
@@ -182,6 +183,7 @@
                                     </li>
 
                                 </ul>
+                                @endif
                             </div>
                         </div>
                         <!-- /sidebar menu -->

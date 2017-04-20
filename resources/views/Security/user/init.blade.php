@@ -13,7 +13,8 @@
             <li role="presentation" class="active"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">List</a></li>
             <li role="presentation" id="tabManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Management</a></li>
             <li role="presentation" id="tabPermission"><a href="#permission" aria-controls="profile" role="tab" data-toggle="tab">Permission</a></li>
-            
+            <li role="presentation" id="tabUplod"><a href="#upload" aria-controls="special" role="tab" data-toggle="tab">Load</a></li>
+
         </ul>
 
         <!-- Tab panes -->
@@ -60,6 +61,9 @@
                         @include('Security.user.permission')
                     </div>
                 </div>
+            </div>
+            <div role="tabpanel" class="tab-pane " id="upload">
+                @include('Security.user.upload')
             </div>
 
         </div>

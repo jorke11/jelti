@@ -13,6 +13,8 @@ use App\Models\Administration\Cities;
 use Session;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Uploads\Base;
 
 class UserController extends Controller {
 
@@ -20,6 +22,7 @@ class UserController extends Controller {
     public $cont;
 
     public function __construct() {
+        $this->middleware("auth");
         $this->resp = array();
         $this->cont = 0;
     }
@@ -31,6 +34,55 @@ class UserController extends Controller {
 
     public function create() {
         return "create";
+    }
+
+    public function storeExcel(Request $request) {
+        if ($request->ajax()) {
+
+            $input = $request->all();
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($input, 'file_excel');
+            $this->name = $file->getClientOriginalName();
+            $this->name = str_replace(" ", "_", $this->name);
+            $this->path = "uploads/users/" . date("Y-m-d") . "/" . $this->name;
+
+            $file->move("uploads/users/" . date("Y-m-d") . "/", $this->name);
+
+            Excel::load($this->path, function($reader) {
+                $in["name"] = $this->name;
+                $in["path"] = $this->path;
+                $in["quantity"] = count($reader->get());
+
+                $base_id = Base::create($in)->id;
+
+                foreach ($reader->get() as $book) {
+                    $rol = Roles::where("description", "ILIKE", "%" . $book->perfil . "%")->first();
+
+                    if (count($rol) > 0) {
+                        $input["role_id"] = $rol->id;
+                    } else {
+                        $rol = Roles::where("description", "ILIKE", "%operations%")->first();
+                        $input["role_id"] = $rol->id;
+                    }
+
+                    $input["status_id"] = 3;
+
+                    $pos = strpos($book->correo, "@");
+                    $input["password"] = bcrypt(substr($book->correo, 0, $pos));
+                    $input["email"] = $book->correo;
+
+                    $user = Users::where("email", "ILIKE", "%" . $book->correo . "%")->first();
+                    if (count($user) > 0) {
+                        $user->fill($input)->save();
+                    } else {
+                        Users::create($input);
+                    }
+                }
+            })->get();
+
+            return response()->json(["success" => true, "data" => Cities::all()]);
+        }
     }
 
     public function store(Request $request) {
@@ -109,8 +161,11 @@ class UserController extends Controller {
         $user = Users::FindOrFail($id);
         $input = $request->all();
 
-        if (!isset($input["status"])) {
-            $input["status"] = false;
+
+        if (!isset($input["status_id"])) {
+            $input["status_id"] = false;
+        } else {
+            $input["status_id"] = 1;
         }
 
         if ($input["password"] != '') {

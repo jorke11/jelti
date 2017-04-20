@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder {
         DB::table("users")->insert([
             'name' => 'admin',
             'last_name' => 'admin',
-            'email' => 'admin@admin.com',
+            'email' => 'admin@superfuds.com.co',
             'role_id' => 1,
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
@@ -25,44 +25,8 @@ class UsersTableSeeder extends Seeder {
         DB::table("users")->insert([
             'name' => 'jorge',
             'last_name' => 'pinedo',
-            'email' => 'jpinedom@hotmail.com',
+            'email' => 'tech@superfuds.com.co',
             'role_id' => 1,
-            'warehouse_id' => 1,
-            'stakeholder_id' => 1,
-            'city_id' => 1,
-            'status_id' => 1,
-            'document' => 1,
-            'password' => bcrypt('123')
-        ]);
-        DB::table("users")->insert([
-            'name' => 'commercial 1',
-            'last_name' => 'commercial 1',
-            'email' => 'c@hotmail.com',
-            'role_id' => 4,
-            'warehouse_id' => 1,
-            'stakeholder_id' => 1,
-            'city_id' => 1,
-            'status_id' => 1,
-            'document' => 1,
-            'password' => bcrypt('123')
-        ]);
-        DB::table("users")->insert([
-            'name' => 'commercial 2',
-            'last_name' => 'commercial 2',
-            'email' => 'c2@hotmail.com',
-            'role_id' => 4,
-            'warehouse_id' => 1,
-            'stakeholder_id' => 1,
-            'city_id' => 1,
-            'status_id' => 1,
-            'document' => 1,
-            'password' => bcrypt('123')
-        ]);
-        DB::table("users")->insert([
-            'name' => 'Jorge',
-            'last_name' => 'Rojas',
-            'email' => 'w@hotmail.com',
-            'role_id' => 5,
             'warehouse_id' => 1,
             'stakeholder_id' => 1,
             'city_id' => 1,

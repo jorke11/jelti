@@ -73,6 +73,9 @@ Route::post('/city/uploadExcel', 'Administration\CityController@storeExcel');
 Route::resource('/department', 'Administration\DepartmentController');
 Route::post('/department/uploadExcel', 'Administration\DepartmentController@storeExcel');
 
+Route::post('/user/uploadExcel', 'Security\UserController@storeExcel');
+Route::put('/user', 'Security\UserController@store');
+
 Route::resource('/characteristic', 'Administration\CharacteristicController');
 
 Route::resource('/user', 'Security\UserController');

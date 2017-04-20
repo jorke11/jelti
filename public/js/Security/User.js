@@ -20,6 +20,27 @@ function User() {
             obj.savePermission();
         });
 
+        $("#btnUpload").click(this.uploadExcel)
+
+    }
+
+    this.uploadExcel = function () {
+        var formData = new FormData($("#frmFile")[0]);
+
+        $.ajax({
+            url: 'user/uploadExcel',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+                toastr.success("ok");
+                table.ajax.reload();
+            }
+        })
+
     }
 
     this.new = function () {

@@ -55,6 +55,7 @@ function Summary() {
         ctx.beginPath();
         ctx.moveTo(0, 500);
         ctx.lineTo(data[quantity - 1].x, 500 - data[quantity - 1].y);
+        data[quantity - 1].angulo = ((Math.atan((data[quantity - 1].aleatorio2/data[quantity - 1].aleatorio)))*100).toFixed(1);
 
 
         ctx.lineWidth = 5;
@@ -64,7 +65,7 @@ function Summary() {
         var html = "";
         $("#data tbody").empty();
         for (i = 0; i < quantity; i++) {
-            html += '<tr><td>' + data[i].aleatorio + '</td><td>' + data[i].pasos + '</td><td>' + data[i].aleatorio2 + '</td><td>0</td></tr>';
+            html += '<tr><td>' + data[i].aleatorio + '</td><td>' + data[i].pasos + '</td><td>' + data[i].aleatorio2 + '</td><td>'+ data[i].angulo +'</td></tr>';
         }
 
         $("#data tbody").html(html);

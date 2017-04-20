@@ -33,6 +33,6 @@
         </div>
     </div>
 </div>
-@include('Administration.Characteristic.form')
+@include('Administration.characteristic.form')
 {!!Html::script('js/Administration/Characteristic.js')!!}
 @endsection

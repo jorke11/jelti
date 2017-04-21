@@ -38,13 +38,20 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
+                            <label for="email">Quantity Total:</label>
+                            <input type="text" class="form-control input-detail input-sm" id="quantity_total" readonly="">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label for="email">Value:</label>
                             <input type="text" class="form-control input-detail input-sm" id="value" name='value' readonly="">
                         </div>
                     </div>
-
-                </div>
-                <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Total:</label>

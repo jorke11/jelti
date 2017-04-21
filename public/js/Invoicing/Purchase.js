@@ -1,5 +1,5 @@
 function Purchase() {
-    var table;
+    var table, listProduct = [], row = {}, rowItem;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -44,7 +44,7 @@ function Purchase() {
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.cost_sf)
-                    $("#frmDetail #packaging").html("Packaging X" + resp.response.units_sf)
+                    $("#frmDetail #packaging").html("Packaging X" + resp.response.units_supplier)
                 }
             })
         });
@@ -62,7 +62,8 @@ function Purchase() {
 
 
         $("#frmDetail #quantity").blur(function () {
-            $("#frmDetail #total").val($(this).val() * $("#frmDetail #value").val());
+            $("#frmDetail #total").val(($(this).val() * row.units_supplier) * $("#frmDetail #value").val());
+            $("#frmDetail #quantity_total").val($(this).val() * row.units_supplier);
         })
 
     }
@@ -75,7 +76,7 @@ function Purchase() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
-                $("#frm #consecutive").val(resp.response);
+                $("#frm #consecutive").html(resp.response);
             }
         })
     }
@@ -105,9 +106,9 @@ function Purchase() {
 
     this.new = function () {
         obj.consecutive();
+
         $(".input-purchase").cleanFields();
         $("#btnSave").attr("disabled", false);
-        $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
         $("#frm #created").currentDate();
@@ -120,6 +121,7 @@ function Purchase() {
             url: 'purchase/' + id + '/getSupplier',
             method: 'GET',
             dataType: 'JSON',
+            async: false,
             success: function (resp) {
                 resp.response.name = (resp.response.name == null) ? '' : resp.response.name + " ";
                 resp.response.last_name = (resp.response.last_name == null) ? '' : resp.response.last_name + " ";
@@ -127,22 +129,75 @@ function Purchase() {
                 $("#frm #name_supplier").val(resp.response.name + resp.response.last_name + resp.response.business_name);
                 $("#frm #address_supplier").val(resp.response.address);
                 $("#frm #phone_supplier").val(resp.response.phone);
-                obj.loadProducts(resp.products);
+                $("#frm #delivery").val(resp.response.delivery);
+                listProducts = resp.products;
+                obj.loadProducts();
 
             }
         })
     }
 
-    this.loadProducts = function (data) {
+    this.loadProducts = function () {
         var html = "";
 
         $("#tblDetail tbody").empty();
 
-        $.each(data, function (i, val) {
-            html += "<tr><td>" + i + "</td><td>" + val.description + "</td><td>" + val.title + "</td></tr>";
+        $.each(listProducts, function (i, val) {
+
+            if (val.quantity == undefined) {
+                listProducts[i].quantity = 0;
+            }
+            if (val.total == undefined) {
+                listProducts[i].total = 0;
+            }
+
+            if (val.debt == undefined) {
+                listProducts[i].debt = 0;
+            }
+
+            if (val.credit == undefined) {
+                listProducts[i].credit = 0;
+            }
+
+            html += '<tr id="row_' + val.product_id + '">';
+            html += "<td>" + i + "</td><td>" + val.description + "</td><td>" + val.title + "</td>";
+            html += "<td>" + val.tax + "</td><td>" + val.quantity + "</td>";
+            html += "<td>" + val.cost_sf + "</td><td>" + val.total + "</td>";
+            html += "<td>" + val.debt + "</td><td>" + val.credit + "</td>";
+            html += '<td ><button class="btn btn-info btn-xs" onclick=obj.edit(' + val.product_id + ')><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>';
+            html += '<button class="btn btn-danger btn-xs" onclick=obj.deleteNew(' + val.product_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>';
+            html += "</tr>";
         })
+
         $("#tblDetail tbody").html(html);
 
+    }
+
+    this.edit = function (product_id) {
+        $("#modalDetail").modal("show");
+        obj.getItem(product_id)
+        $(".input-detail").setFields({data: row});
+        toastr.success("Register edited");
+    }
+
+    this.getItem = function (product_id) {
+
+        $.each(listProducts, function (i, val) {
+            if (val.product_id == product_id) {
+                rowItem = i;
+                row = val;
+            }
+        })
+    }
+
+    this.deleteNew = function (product_id) {
+
+        $("#row_" + product_id).remove();
+        $.each(listProducts, function (i, val) {
+            if (val.product_id == product_id) {
+                delete listProducts[i];
+            }
+        })
     }
 
     this.fieldDisabled = function (status) {
@@ -157,15 +212,21 @@ function Purchase() {
         $("#frm #warehouse_id").prop("disabled", false);
         $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
-        var frm = $("#frm");
-        var data = frm.serialize();
+
+
         var url = "", method = "";
         $("#frm #btnSave").attr("disabled", true);
         var id = $("#frm #id").val();
         var msg = '';
         var validate = $(".input-purchase").validate();
 
+        var data = {};
+
+
         if (validate.length == 0) {
+            data.header = $(".input-purchase").getData();
+            data.detail = listProducts;
+
             if (id == '') {
                 method = 'POST';
                 url = "purchase";
@@ -176,6 +237,7 @@ function Purchase() {
                 url = "purchase/" + id;
                 msg = "Edited Record";
             }
+
 
             $.ajax({
                 url: url,
@@ -199,43 +261,18 @@ function Purchase() {
 
     this.saveDetail = function () {
         toastr.remove();
-        $("#frmDetail #purchase_id").val($("#frm #id").val());
-
-        var frm = $("#frmDetail");
-        var data = frm.serialize();
-        var url = "", method = "";
-        var id = $("#frmDetail #id").val();
-        var msg = 'Record Detail';
-
         var validate = $(".input-detail").validate();
 
         if (validate.length == 0) {
-
-            if (id == '') {
-                method = 'POST';
-                url = "purchase/storeDetail";
-                msg = "Created " + msg;
-
-            } else {
-                method = 'PUT';
-                url = "purchase/detail/" + id;
-                msg = "Edited " + msg;
-            }
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: data,
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == true) {
-                        toastr.success(msg);
-                        $("#btnmodalDetail").attr("disabled", false);
-                        obj.printDetail(data);
-                        $("#modalDetail").modal("hide");
-                    }
+            $.each(listProducts, function (i, val) {
+                if (val.product_id == row.product_id) {
+                    listProducts[i].quantity = $("#frmDetail #quantity").val()
+                    $("#modalDetail").modal("hide");
+                    obj.loadProducts();
+                    toastr.success("Register Edited");
                 }
-            })
+            });
+
         } else {
             toastr.error("input required");
         }
@@ -263,7 +300,6 @@ function Purchase() {
                     $("#btnSave").attr("disabled", false);
                     $("#btnmodalDetail").attr("disabled", false);
                 }
-
 
                 obj.printDetail(data);
             }

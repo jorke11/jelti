@@ -58,7 +58,9 @@ class PurchaseController extends Controller {
 
     public function getSupplier($id) {
         $stakeholder = \App\Models\Administration\Stakeholder::findOrFail($id);
-        $products = Products::where("supplier_id", $stakeholder->id)->get();
+        $stakeholder->delivery = date('Y-m-d', strtotime('+' . $stakeholder->lead_time . ' days', strtotime(date('Y-m-d'))));
+        $products = Products::select("id as product_id", "tax", "description", "title", "cost_sf", "units_supplier")
+                        ->where("supplier_id", $stakeholder->id)->get();
         return response()->json(["response" => $stakeholder, "products" => $products]);
     }
 
@@ -71,14 +73,32 @@ class PurchaseController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
+            $input["header"]["status_id"] = 1;
+
             unset($input["id"]);
 //            $user = Auth::User();
-            $input["status_id"] = 1;
-            $input["consecutive"] = $this->createConsecutive(4);
+            $input["header"]["consecutive"] = $this->createConsecutive(4);
+
+            foreach ($input["detail"] as $i => $val) {
+                
+                if ($val["quantity"] != 0) {
+                    $input["detail"][$i]["value"] = $val["cost_sf"];
+                    dd($input["detail"][$i]);
+                }
+            }
+            echo "termino";
+            exit;
+            dd($input["detail"]);
+
             $result = Purchases::create($input)->id;
             if ($result) {
                 $resp = Purchases::FindOrFail($result);
                 $this->updateConsecutive(4);
+
+
+
+
+
                 return response()->json(['success' => true, "data" => $resp]);
             } else {
                 return response()->json(['success' => false]);

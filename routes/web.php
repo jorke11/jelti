@@ -252,7 +252,10 @@ Route::get('/api/listConsecutive', function() {
     return Datatables::eloquent(models\Administration\Consecutives::query())->make(true);
 });
 Route::get('/api/listWarehouse', function() {
-    return Datatables::eloquent(Models\Administration\Warehouses::query())->make(true);
+    $query = DB::table("warehouses")
+            ->select("warehouses.id", "warehouses.description", "warehouses.address", "users.name as responsible")
+            ->leftjoin("users", "users.id", "warehouses.responsible_id");
+    return Datatables::queryBuilder($query)->make(true);
 });
 
 Route::get('/api/listMark', function() {
@@ -346,8 +349,7 @@ Route::get('/api/listUser', function() {
 
     return Datatables::queryBuilder(
                     DB::table("users")
-                            ->select("users.id", "users.name", "users.email", DB::raw("coalesce(users.document::text,'') as document"),"roles.description as role", 
-                                    "stakeholder.business_name as stakeholder", "cities.description as city", "parameters.description as status")
+                            ->select("users.id", "users.name", "users.email", DB::raw("coalesce(users.document::text,'') as document"), "roles.description as role", "stakeholder.business_name as stakeholder", "cities.description as city", "parameters.description as status")
                             ->join("roles", "roles.id", "users.role_id")
                             ->join("stakeholder", "stakeholder.id", "users.stakeholder_id")
                             ->join("cities", "cities.id", "users.city_id")

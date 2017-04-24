@@ -1,4 +1,4 @@
-<div class="modal fade" tabindex="-1" role="dialog" id='modalNew'>
+<div class="modal fade" role="dialog" id='modalNew'>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -21,6 +21,15 @@
                         <div class="form-group">
                             <label for="email">Address</label>
                             <input type="text" class="form-control input-warehouse" id="address" name='address' required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Responsible</label>
+                            <select class="form-control input-warehouse"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
+                            </select>
                         </div>
                     </div>
                 </div>

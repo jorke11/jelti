@@ -24,6 +24,7 @@
                             <th></th>
                             <th>Description</th>
                             <th>Address</th>
+                            <th>Responsible</th>
                             <th>Action</th>
                         </tr>
                     </thead>

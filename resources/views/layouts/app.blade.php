@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SUperfuds') }}</title>
+    <title>Superfus(Jelti)</title>
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">

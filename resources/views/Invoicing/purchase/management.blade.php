@@ -8,13 +8,13 @@
                     Consecutive: <label><span id="consecutive" class="input-purchase"></span></label>
                 </div>
                 <div class="col-lg-2 text-right">
-                    <button class="btn btn-success btn-sm" id='btnNew'>
+                    <button type="button" class="btn btn-success btn-sm" id='btnNew'>
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"> New</span>
                     </button>
-                    <button class="btn btn-success btn-sm" id='btnSave' disabled>
+                    <button type="button" class="btn btn-success btn-sm" id='btnSave' disabled>
                         <span class="glyphicon glyphicon-save" aria-hidden="true"> Save</span>
                     </button>
-                    <button class="btn btn-success btn-sm" id='btnSend' disabled>
+                    <button type="button" class="btn btn-success btn-sm" id='btnSend' disabled>
                         <span class="glyphicon glyphicon-save" aria-hidden="true"> Send</span>
                     </button>
                 </div>

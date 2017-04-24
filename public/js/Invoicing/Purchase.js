@@ -1,5 +1,5 @@
 function Purchase() {
-    var table, listProduct = [], row = {}, rowItem;
+    var table, listProduct = [], row = {}, rowItem, countDetail = 0;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -49,16 +49,16 @@ function Purchase() {
             })
         });
 
-        $("#btnmodalDetail").click(function () {
-            $(".input-detail").cleanFields();
-            $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
-            $("#modalDetail").modal("show");
-            $("#frmDetail #id").val("");
-            $("#frmDetail #purchase_id").val($("#frm #id").val());
-            $("#frmDetail #quantity").val("");
-            $("#frmDetail #value").val("");
-            $("#frmDetail #packaging").html("");
-        })
+//        $("#btnmodalDetail").click(function () {
+//            $(".input-detail").cleanFields();
+//            $("#frmDetail #product_id").getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
+//            $("#modalDetail").modal("show");
+//            $("#frmDetail #id").val("");
+//            $("#frmDetail #purchase_id").val($("#frm #id").val());
+//            $("#frmDetail #quantity").val("");
+//            $("#frmDetail #value").val("");
+//            $("#frmDetail #packaging").html("");
+//        })
 
 
         $("#frmDetail #quantity").blur(function () {
@@ -112,6 +112,7 @@ function Purchase() {
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
         $("#frm #created").currentDate();
+        $("#frm #status_id").val(1);
         $("#tblDetail tbody").empty();
         $("#tblDetail tfoot").empty();
     }
@@ -177,7 +178,6 @@ function Purchase() {
         $("#modalDetail").modal("show");
         obj.getItem(product_id)
         $(".input-detail").setFields({data: row});
-        toastr.success("Register edited");
     }
 
     this.getItem = function (product_id) {
@@ -215,47 +215,56 @@ function Purchase() {
 
 
         var url = "", method = "";
-        $("#frm #btnSave").attr("disabled", true);
+
         var id = $("#frm #id").val();
         var msg = '';
         var validate = $(".input-purchase").validate();
 
         var data = {};
 
+        if ($("#frm #status_id").val() == 1) {
+            if (countDetail > 0) {
 
-        if (validate.length == 0) {
-            data.header = $(".input-purchase").getData();
-            data.detail = listProducts;
+                if (validate.length == 0) {
+                    $("#frm #btnSave").attr("disabled", true);
+                    data.header = $(".input-purchase").getData();
+                    data.detail = listProducts;
 
-            if (id == '') {
-                method = 'POST';
-                url = "purchase";
-                msg = "Created Record";
+                    if (id == '') {
+                        method = 'POST';
+                        url = "purchase";
+                        msg = "Created Record";
 
-            } else {
-                method = 'PUT';
-                url = "purchase/" + id;
-                msg = "Edited Record";
-            }
-
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: data,
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == true) {
-                        $(".input-purchase").setFields({data: data.data, disabled: true});
-                        table.ajax.reload();
-                        toastr.success(msg);
-                        $("#btnmodalDetail").attr("disabled", false);
-                        $("#btnSend").attr("disabled", false);
+                    } else {
+                        method = 'PUT';
+                        url = "purchase/" + id;
+                        msg = "Edited Record";
                     }
+
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: data,
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if (data.success == true) {
+                                $(".input-purchase").setFields({data: data.header, disabled: true});
+                                table.ajax.reload();
+                                toastr.success(msg);
+                                obj.printDetail(data);
+//                            $("#btnmodalDetail").attr("disabled", false);
+                                $("#btnSend").attr("disabled", false);
+                            }
+                        }
+                    })
+                } else {
+                    toastr.error("input required");
                 }
-            })
+            } else {
+                toastr.error("Detail Empty");
+            }
         } else {
-            toastr.error("input required");
+            toastr.error("No se puede ejecutar");
         }
     }
 
@@ -270,6 +279,7 @@ function Purchase() {
                     $("#modalDetail").modal("hide");
                     obj.loadProducts();
                     toastr.success("Register Edited");
+                    countDetail++;
                 }
             });
 
@@ -290,7 +300,7 @@ function Purchase() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-purchase").setFields({data: data.header, disabled: true});
-
+                $("#consecutive").html(data.header.consecutive);
                 if (data.header.supplier_id != 0) {
                     obj.getSupplier(data.header.supplier_id);
                 }
@@ -298,7 +308,7 @@ function Purchase() {
                 if (data.header.status_id == 1) {
                     $("#btnSend").attr("disabled", false);
                     $("#btnSave").attr("disabled", false);
-                    $("#btnmodalDetail").attr("disabled", false);
+//                    $("#btnmodalDetail").attr("disabled", false);
                 }
 
                 obj.printDetail(data);
@@ -337,11 +347,10 @@ function Purchase() {
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.description + "</td>";
             html += "<td>" + val.product + "</td>";
-            html += "<td>" + val.expiration_date + "</td>";
             html += "<td>" + val.tax + "</td>";
             html += "<td>" + val.quantity + "</td>";
             if (val.product_id == null) {
-                html += "<td>" + val.totalFormated + "</td>";
+                html += "<td>" + val.valueFormated + "</td>";
             } else {
                 html += "<td>0</td>";
             }
@@ -375,7 +384,7 @@ function Purchase() {
         });
 
         $("#tblDetail tbody").html(html);
-        $("#tblDetail tfoot").html('<tr><td colspan="8">Total</td><td>' + data.totalDebt + '</td><td>' + data.totalDebt + '</td></tr>');
+        $("#tblDetail tfoot").html('<tr><td colspan="7">Total</td><td>' + data.totalDebt + '</td><td>' + data.totalDebt + '</td></tr>');
 
 
     }

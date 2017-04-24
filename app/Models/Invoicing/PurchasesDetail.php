@@ -13,18 +13,19 @@ class PurchasesDetail extends Model {
         "purchase_id", 
         "product_id", 
         "category_id", 
-        "mark_id", 
         "quantity", 
         "lot", 
         "expiration_date", 
         "value",
         "order",
         "type_nature",
-        "parent_id",
         "payed",
         "type_nature",
         "account_id",
-        "description"
+        "description",
+        "units_supplier",
+        "tax",
+        "parent_id",
         ];
 
 }

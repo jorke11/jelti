@@ -17,6 +17,7 @@ class CreateWarehousesTable extends Migration
             $table->increments('id');
             $table->string('description');
             $table->string('address');
+            $table->integer('responsible_id')->nullable();
             $table->timestamps();
         });
     }

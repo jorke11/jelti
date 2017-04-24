@@ -19,11 +19,11 @@ class CreatePurchasesdetailTable extends Migration {
             $table->integer('account_id')->nullable();
             $table->integer('product_id')->nullable();
             $table->integer('category_id')->nullable();
-            $table->integer('voucher_id')->nullable();
             $table->integer('quantity')->nullable();
-            $table->integer('parent_id')->nullable();
-            $table->integer('type_nature');
             $table->decimal('value', 15, 2);
+            $table->integer('units_supplier')->nullable();
+            $table->integer('type_nature');
+            $table->integer('parent_id');
             $table->decimal('tax', 15, 2)->nullable();
             $table->string('description')->nullable();
             $table->integer("order");

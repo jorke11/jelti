@@ -208,6 +208,7 @@ function Purchase() {
     }
 
     this.save = function () {
+        toastr.remove();
         obj.fieldDisabled();
         $("#frm #warehouse_id").prop("disabled", false);
         $("#frm #responsible_id").prop("disabled", false);
@@ -374,8 +375,13 @@ function Purchase() {
             }
 
             if (val.description == 'product') {
-                html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
-                html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
+                if (data.header.status_id == 1) {
+                    html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
+                    html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
+                }else{
+                    html += '<td></td>';
+                }
+
             } else {
                 html += '<td></td>';
             }
@@ -400,7 +406,7 @@ function Purchase() {
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }

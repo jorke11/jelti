@@ -4,10 +4,10 @@
     <div class="page-title" style="height: 0;">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-9 col-md-6">
                     Consecutive: <label><span id="consecutive" class="input-purchase"></span></label>
                 </div>
-                <div class="col-lg-2 text-right">
+                <div class="col-lg-3 col-md-6 text-right">
                     <button type="button" class="btn btn-success btn-sm" id='btnNew'>
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"> New</span>
                     </button>
@@ -32,7 +32,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label for="email">Supplier*:</label>
-                                    <select class="form-control input-purchase" id="supplier_id" name='supplier_id' data-api="/api/getSupplier" required>
+                                    <select class="form-control input-purchase  input-sm" id="supplier_id" name='supplier_id' data-api="/api/getSupplier" required>
                                     </select>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label for="email">Warehouse:</label>
-                                    <select class="form-control input-purchase" id="warehouse_id" name='warehouse_id' data-api="/api/getWarehouse" required="">
+                                    <select class="form-control input-purchase  input-sm" id="warehouse_id" name='warehouse_id' data-api="/api/getWarehouse" required="">
                                     </select>
 
                                     </select>
@@ -123,9 +123,6 @@
                 <div class="row">
                     <div class="col-lg-4">List Detail</div>
                     <div class="col-lg-8 text-right">
-                        <button class="btn btn-success btn-sm" type="button" id="btnmodalCont">
-                            <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
-                        </button>
                         <button class="btn btn-success btn-sm" type="button" id="btnmodalDetail" disabled>
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>

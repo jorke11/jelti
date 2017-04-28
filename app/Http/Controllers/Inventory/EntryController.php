@@ -119,35 +119,43 @@ class EntryController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            $input["status_id"] = 1;
-            $input["consecutive"] = $this->createConsecutive(2);
-            $result = Entries::create($input)->id;
 
-            if ($result) {
-                $this->updateConsecutive(2);
-                $resp = Entries::FindOrFail($result);
+            $purc = Purchases::find($input["purchase_id"]);
 
-                $purc = Purchases::findOrFail($input["purchase_id"]);
+            if (count($purc) > 0) {
                 $purc->status_id = 3;
                 $purc->save();
 
-                $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->whereNotNull('product_id')->get();
 
-                foreach ($detail as $value) {
-                    EntriesDetail::insert([
-                        "entry_id" => $result, "product_id" => $value->product_id, "quantity" => $value->quantity, "value" => $value->value, "status_id" => 1
-                    ]);
+                $input["status_id"] = 1;
+                $input["consecutive"] = $this->createConsecutive(2);
+                $result = Entries::create($input)->id;
+
+                if ($result) {
+                    $this->updateConsecutive(2);
+                    $resp = Entries::FindOrFail($result);
+
+
+
+                    $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->whereNotNull('product_id')->get();
+
+                    foreach ($detail as $value) {
+                        EntriesDetail::insert([
+                            "entry_id" => $result, "product_id" => $value->product_id, "quantity" => $value->quantity, "value" => $value->value, "status_id" => 1
+                        ]);
+                    }
+
+                    $detailEntry = $this->formatDetail($result);
+
+                    $total = "$ " . number_format($this->total, 2, ',', '.');
+                    $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+
+                    return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
+                } else {
+                    return response()->json(['success' => false]);
                 }
-
-
-                $detailEntry = $this->formatDetail($result);
-
-                $total = "$ " . number_format($this->total, 2, ',', '.');
-                $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
-
-                return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
             } else {
-                return response()->json(['success' => false]);
+                return response()->json(['success' => false, "msg" => "Requied Purchase(Order)"], 409);
             }
         }
     }

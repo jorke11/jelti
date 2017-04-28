@@ -88,10 +88,10 @@ function Entry() {
             cache: false,
             contentType: false,
             success: function (data) {
-                if(data.success==true){
+                if (data.success == true) {
                     table.ajax.reload();
                 }
-                
+
             }
         })
     }
@@ -228,6 +228,7 @@ function Entry() {
     }
 
     this.save = function () {
+        toastr.remove();
         $("#frm #warehouse_id").prop("disabled", false);
         $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
@@ -266,6 +267,8 @@ function Entry() {
                         $(".btnEditClass").prop("disabled", false);
 
                     }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
                 }
             })
         } else {

@@ -196,7 +196,6 @@ class UserController extends Controller {
         }
         
         
-//        dd($input);exit;
 
         $result = $user->fill($input)->save();
         if ($result) {

@@ -36,7 +36,11 @@ class HomeController extends Controller {
             $users = Auth::user();
             $roles = Roles::where("id", $users->role_id)->get();
             $warehouses = Warehouses::all();
-            return view('activation', compact("users", "roles","warehouses"));
+            if ($users->status_id == 3) {
+                return view('activation', compact("users", "roles", "warehouses"));
+            } else {
+                return \Redirect::to('/');
+            }
         } else {
             return view('dashboard', compact("comment"));
         }

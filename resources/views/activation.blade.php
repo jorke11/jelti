@@ -93,7 +93,7 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">Status</label>
-                    <input type="checkbox" class="form-control" id="status_id" name='status_id' checked>
+                    <input type="checkbox" class="form-control" id="status_id" name='status_id' checked disabled>
                 </div>
             </div>
         </div>

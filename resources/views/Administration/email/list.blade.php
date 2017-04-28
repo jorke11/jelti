@@ -1,8 +1,8 @@
-<div class="col-lg-8 col-lg-offset-2">
+<div class="col-lg-5 col-lg-offset-3">
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-lg-3">List Activities</div>
+                <div class="col-lg-3">List Email</div>
             </div>
         </div>
         <div class="panel-body">
@@ -11,12 +11,7 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Subject</th>
-                        <th>Date</th>
-                        <th>Expiration</th>
-                        <th>Status</th>
-                        <th>Priority</th>
-                        <th>Relation with</th>
+                        <th>Group</th>
                         <th>Action</th>
                     </tr>
                 </thead>

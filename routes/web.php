@@ -36,22 +36,10 @@ Route::get('/product/getImages/{id}', 'Administration\ProductController@getImage
 Route::post('/product/StoreSpecial', 'Administration\ProductController@storeSpecial');
 Route::post('/product/uploadExcel', 'Administration\ProductController@storeExcel');
 
-
-Route::resource('/supplier', 'Administration\SupplierController');
-Route::post('/supplier/upload', 'Administration\SupplierController@uploadImage');
-Route::put('/supplier/checkmain/{id}', 'Administration\SupplierController@checkMain');
-Route::delete('/supplier/deleteImage/{id}', 'Administration\SupplierController@deleteImage');
-Route::get('/supplier/getImages/{id}', 'Administration\SupplierController@getImages');
-
-Route::post('/supplier/StoreSpecial', 'Administration\SupplierController@storeSpecial');
-Route::put('/supplier/updatePrice/{id}', 'Administration\SupplierController@updatePrice');
-Route::post('/supplier/StoreBranch', 'Administration\SupplierController@storeBranch');
-Route::delete('/supplier/deleteBranch/{id}', 'Administration\SupplierController@deleteBranch');
-
-
 Route::resource('/stakeholder', 'Administration\StakeholderController');
 Route::post('/stakeholder/upload', 'Administration\StakeholderController@uploadImage');
 Route::post('/stakeholder/uploadExcel', 'Administration\StakeholderController@uploadExcel');
+Route::post('/stakeholder/uploadClient', 'Administration\StakeholderController@uploadclient');
 Route::put('/stakeholder/checkmain/{id}', 'Administration\StakeholderController@checkMain');
 Route::delete('/stakeholder/deleteImage/{id}', 'Administration\StakeholderController@deleteImage');
 Route::get('/stakeholder/getImages/{id}', 'Administration\StakeholderController@getImages');
@@ -62,10 +50,15 @@ Route::post('/stakeholder/StoreBranch', 'Administration\StakeholderController@st
 Route::delete('/stakeholder/deleteBranch/{id}', 'Administration\StakeholderController@deleteBranch');
 Route::post('/stakeholder/addChage', 'Administration\StakeholderController@addChanges');
 
+
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/puc', 'Administration\PucController');
 Route::resource('/warehouse', 'Administration\WarehouseController');
 Route::resource('/mark', 'Administration\MarkController');
+Route::resource('/email', 'Administration\EmailController');
+Route::post('/email/detail', 'Administration\EmailController@storeDetail');
+Route::put('/email/detail/{id}', 'Administration\EmailController@updateDetail');
+Route::get('/email/detail/{id}/edit', 'Administration\EmailController@editDetail');
 
 Route::resource('/city', 'Administration\CityController');
 Route::post('/city/uploadExcel', 'Administration\CityController@storeExcel');
@@ -261,6 +254,9 @@ Route::get('/api/listWarehouse', function() {
 Route::get('/api/listMark', function() {
     return Datatables::eloquent(Models\Administration\Mark::query())->make(true);
 });
+Route::get('/api/listEmail', function() {
+    return Datatables::eloquent(Models\Administration\Email::query())->make(true);
+});
 
 Route::get('/api/listProspect', function() {
     return Datatables::eloquent(Models\Seller\Prospect::query())->make(true);
@@ -351,8 +347,8 @@ Route::get('/api/listUser', function() {
                     DB::table("users")
                             ->select("users.id", "users.name", "users.email", DB::raw("coalesce(users.document::text,'') as document"), "roles.description as role", "stakeholder.business_name as stakeholder", "cities.description as city", "parameters.description as status")
                             ->join("roles", "roles.id", "users.role_id")
-                            ->join("stakeholder", "stakeholder.id", "users.stakeholder_id")
-                            ->join("cities", "cities.id", "users.city_id")
+                            ->leftjoin("stakeholder", "stakeholder.id", "users.stakeholder_id")
+                            ->leftjoin("cities", "cities.id", "users.city_id")
                             ->join("parameters", "parameters.code", DB::raw("users.status_id and parameters.group='generic'"))
             )->make(true);
 });
@@ -363,8 +359,8 @@ Route::get('/api/listPuc', function() {
 Route::get('/stock', 'Inventory\StockController@index');
 Route::get('/api/listStock', 'Inventory\StockController@getStock');
 
-Route::get('/api/listSpecial', 'Administration\SupplierController@getSpecial');
-Route::get('/api/listBranch', 'Administration\SupplierController@getBranch');
+Route::get('/api/listSpecial', 'Administration\StakeholderController@getSpecial');
+Route::get('/api/listBranch', 'Administration\StakeholderController@getBranch');
 
 Route::get('/api/listMenu', 'DashboardController@getMenu');
 Route::get('/user/savePermission/{id}', 'Security\UserController@savePermission');

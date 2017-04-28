@@ -177,7 +177,7 @@ class StakeholderController extends Controller {
         $this->name = $file->getClientOriginalName();
         $this->name = str_replace(" ", "_", $this->name);
         $this->path = "uploads/stakeholder/" . date("Y-m-d") . "/" . $this->name;
-        $this->typestakeholder = $data["typestakeholder"];
+        $this->typestakeholder = 2;
         $file->move("uploads/stakeholder/" . date("Y-m-d") . "/", $this->name);
 
 //        if (is_file($this->path) === true) {
@@ -226,7 +226,94 @@ class StakeholderController extends Controller {
 
                     if ($stake->phone != $book->celular) {
                         $cont = Contact::where("phone", $book->celular)->first();
+                        $contact["stakeholder_id"] = $stake->id;
+                        $contact["city_id"] = $insert["city_id"];
+                        $contact["name"] = trim($book->contacto);
+                        $contact["email"] = trim($book->correo);
+                        $contact["mobile"] = trim($book->celular);
+                        $contact["web_site"] = trim($book->sitio_web);
 
+                        if (count($cont) > 0) {
+                            $cont->fill($contact)->save();
+                        } else {
+                            Contact::create($contact);
+                        }
+                    } else {
+                        $stake->fill($insert)->save();
+                        $this->updated++;
+                    }
+                } else {
+
+                    $insert["phone_contact"] = (int) trim($book->celular);
+                    $insert["contact"] = trim($book->contacto);
+                    $insert["type_stakeholder"] = 2;
+                    $insert["type_document"] = null;
+                    $insert["resposible_id"] = 1;
+
+                    Stakeholder::create($insert);
+                    $this->inserted++;
+                }
+            }
+        })->get();
+
+        return response()->json(["success" => true, "data" => Stakeholder::where("status_id", 3)->get(), "updates" => $this->updated, "insert" => $this->inserted]);
+    }
+
+    public function uploadClient(Request $req) {
+        $data = $req->all();
+
+        $file = array_get($data, 'file_excel');
+
+        $this->name = $file->getClientOriginalName();
+        $this->name = str_replace(" ", "_", $this->name);
+        $this->path = "uploads/stakeholder/" . date("Y-m-d") . "/" . $this->name;
+        $this->typestakeholder = 2;
+        $file->move("uploads/stakeholder/" . date("Y-m-d") . "/", $this->name);
+
+//        if (is_file($this->path) === true) {
+        Excel::load($this->path, function($reader) {
+//            $in["name"] = $this->name;
+//            $in["path"] = $this->path;
+//            $in["quantity"] = count($reader->get());
+//            $base_id = Base::create($in)->id;
+
+            $verify = '';
+            foreach ($reader->get() as $book) {
+
+//                dd($book);
+                $number = $book->nit;
+                $verify = $book->codigo_de_verificacion;
+                
+                
+
+                $stake = Stakeholder::where("document", trim($number))->first();
+
+                dd($stake);
+
+                $city = Administration\Cities::where("description", "ILIKE", "%" . $book->ciudad . "%")->first();
+                if (count($city) > 0) {
+                    $insert["city_id"] = $city->id;
+                } else {
+                    $insert["city_id"] = null;
+                }
+
+                $insert["user_insert"] = Auth::user()->id;
+                $insert["status_id"] = 3;
+                $insert["lead_time"] = (int) trim($book->lead_time);
+                $insert["document"] = trim($number);
+                $insert["business"] = trim($book->nombre);
+                $insert["business_name"] = trim($book->razon_social);
+                $insert["email"] = trim($book->correo);
+                $insert["web_site"] = trim($book->sitio_web);
+                $insert["type_stakeholder"] = $this->typestakeholder;
+                $insert["term"] = (trim($book->plazo)) == '' ? 0 : trim($book->plazo);
+                $insert["phone"] = (int) trim($book->celular);
+                $insert["name"] = trim($book->contact);
+
+                if (count($stake) > 0) {
+
+                    if ($stake->phone != $book->celular) {
+                        $cont = Contact::where("phone", $book->celular)->first();
                         $contact["stakeholder_id"] = $stake->id;
                         $contact["city_id"] = $insert["city_id"];
                         $contact["name"] = trim($book->contacto);

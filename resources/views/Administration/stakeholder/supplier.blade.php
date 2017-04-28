@@ -18,19 +18,6 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="email">Type StakeHolder</label>
-                            <select class="form-control" id="typestakeholder" name="typestakeholder">
-                                <option value="0">Selection</option>
-                                @foreach($type_stakeholder as $val)
-                                <option value="{{$val->code}}">{{$val->description}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
                             <label for="email">File</label>
                             <input type="file" name="file_excel" name="file_excel">
                         </div>

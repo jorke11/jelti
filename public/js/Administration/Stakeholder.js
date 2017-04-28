@@ -65,6 +65,31 @@ function Stakeholder() {
                 }
             });
         })
+        $("#btnUploadClient").click(function () {
+
+            var formData = new FormData($("#frmClient")[0]);
+
+            $.ajax({
+                url: 'stakeholder/uploadClient',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                dataType: 'JSON',
+                beforeSend: function () {
+                    $(".cargando").removeClass("hidden");
+                },
+                success: function (data) {
+                    console.log(data)
+//                    obj.printImages(data)
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    //clearInterval(intervalo);
+                    console.log(thrownError)
+                    alert("Problemas con el archivo, informar a sistemas");
+                }
+            });
+        })
 
 
         $("#btnUploadExcel").click(function () {

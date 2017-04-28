@@ -101,7 +101,6 @@ function Purchase() {
                 }
             })
         }
-
     }
 
     this.new = function () {

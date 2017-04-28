@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->integer('warehouse_id')->nullable();
             $table->integer('city_id')->nullable();
             $table->string('name');
-            $table->string('last_name');
+            $table->string('last_name')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('status_id');

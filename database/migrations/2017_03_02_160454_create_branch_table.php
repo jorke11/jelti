@@ -14,11 +14,20 @@ class CreateBranchTable extends Migration {
     public function up() {
         Schema::create('branch_office', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('client_id');
+            $table->integer('stakeholder_id');
             $table->integer('city_id');
-            $table->string('address');
+            $table->string('web_site');
             $table->string('name');
-            $table->string('phone');
+            $table->string('address_invoice');
+            $table->string('address_send');
+            $table->integer('invoice_city_id');
+            $table->integer('send_city_id');
+            $table->string('email');
+            $table->string('term');
+            $table->string('mobile');
+            $table->text('businnes_name');
+            $table->string('nit');
+            $table->integer('verifcation');
             $table->timestamps();
         });
     }

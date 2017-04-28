@@ -157,6 +157,7 @@
                                             </li>
                                             <li><a href="/parameter">Parameters</a></li>
                                             <li><a href="/consecutive">Consecutives</a></li>
+                                            <li><a href="/email">Email</a></li>
                                         </ul>
                                     </li>
                                     @endif

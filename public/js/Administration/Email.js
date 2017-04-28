@@ -1,35 +1,89 @@
-function Activity() {
+function Email() {
     var table;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#tabManagement").click(function () {
-            var expirate = $("#frm #expiration_date").val();
-            $(".input-activity").cleanFields();
+            $(".input-email").cleanFields({disabled: true});
         });
+
+        $("#btnModal").click(function () {
+            $(".input-detail").cleanFields();
+            $("#modalDetail").modal("show");
+        })
+
+        $("#newDetail").click(this.saveDetail)
+
+
     }
 
+    this.new = function () {
+        $(".input-email").cleanFields();
+        $("#tblDetail tbody").empty();
+    }
+
+    this.saveDetail = function () {
+        toastr.remove();
+        $("#frmDetail #email_id").val($("#frm #id").val())
+
+        var frm = $("#frmDetail");
+        var data = frm.serialize();
+        var url = "", method = "";
+        var id = $("#frmDetail #id").val();
+        var msg = '';
+
+        var validate = $(".input-email").validate();
+
+        if (validate.length == 0) {
+            if (id == '') {
+                method = 'POST';
+                url = "email/detail";
+                msg = "Created Record";
+            } else {
+                method = 'PUT';
+                url = "email/detail/" + id;
+                msg = "Edited Record";
+            }
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        obj.loadDetail(data.detail);
+                        toastr.success(msg);
+                    }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            })
+        } else {
+            toastr.error("Fields Required!");
+        }
+    }
     this.save = function () {
         toastr.remove();
-        
-        
+
+
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
 
-        var validate = $(".input-activity").validate();
+        var validate = $(".input-email").validate();
 
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "activity";
+                url = "email";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "activity/" + id;
+                url = "email/" + id;
                 msg = "Edited Record";
             }
 
@@ -41,7 +95,7 @@ function Activity() {
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
-                        $(".input-activity").setFields({data: data.header});
+                        $(".input-email").setFields({data: data.header, disabled: true});
                         toastr.success(msg);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
@@ -56,8 +110,8 @@ function Activity() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/activity/" + id + "/edit";
-        
+        var url = "/email/" + id + "/edit";
+
         $.ajax({
             url: url,
             method: "GET",
@@ -65,7 +119,39 @@ function Activity() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-activity").setFields({data:data})
+                $(".input-email").setFields({data: data.header})
+                obj.loadDetail(data.detail);
+            }
+        })
+    }
+
+    this.loadDetail = function (data) {
+        var html = "";
+
+        $.each(data, function (i, val) {
+            html += "<tr><td width=80%>" + val.description + '</td>'
+            html += '<td ><button class="btn btn-info btn-xs" onclick=obj.editDetail(' + val.id + ')><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>';
+            html += '<button class="btn btn-danger btn-xs" onclick=obj.deleteDetail(' + val.id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>';
+            html += '</tr>';
+        });
+        $("#tblDetail tbody").html(html);
+    }
+
+    this.editDetail = function (id) {
+        $("#modalDetail").modal("show");
+
+        var frm = $("#frmEdit");
+        var data = frm.serialize();
+        var url = "/email/detail/" + id + "/edit";
+
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: data,
+            dataType: 'JSON',
+            success: function (data) {
+                $(".input-detail").setFields({data: data})
+
             }
         })
     }
@@ -74,14 +160,14 @@ function Activity() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/activity/" + id;
+            var url = "/email/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
                 method: "DELETE",
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.success == 'true') {
+                    if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
                     }
@@ -96,27 +182,21 @@ function Activity() {
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listActivity",
+            "ajax": "/api/listEmail",
             columns: [
                 {data: "id"},
-                {data: "subject"},
-                {data: "created_at"},
-                {data: "expiration_date"},
-                {data: "priority_id"},
-                {data: "status_id"},
-                {data: "client_id"},
-                
+                {data: "description"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2],
+                    aTargets: [0, 1],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [2],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {
@@ -129,5 +209,5 @@ function Activity() {
 
 }
 
-var obj = new Activity();
+var obj = new Email();
 obj.init();

@@ -15,16 +15,19 @@ use DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Uploads\Base;
+use Mail;
 
 class UserController extends Controller {
 
     public $resp;
     public $cont;
+    public $email;
 
     public function __construct() {
         $this->middleware("auth");
         $this->resp = array();
         $this->cont = 0;
+        $this->email = "";
     }
 
     public function index() {
@@ -57,26 +60,41 @@ class UserController extends Controller {
                 $base_id = Base::create($in)->id;
 
                 foreach ($reader->get() as $book) {
-                    $rol = Roles::where("description", "ILIKE", "%" . $book->perfil . "%")->first();
+                    if ($book->correo != '') {
+                        $rol = Roles::where("description", "ILIKE", "%" . $book->perfil . "%")->first();
 
-                    if (count($rol) > 0) {
-                        $input["role_id"] = $rol->id;
-                    } else {
-                        $rol = Roles::where("description", "ILIKE", "%operations%")->first();
-                        $input["role_id"] = $rol->id;
-                    }
+                        if (count($rol) > 0) {
+                            $input["role_id"] = $rol->id;
+                        } else {
+                            $rol = Roles::where("description", "ILIKE", "%operations%")->first();
+                            $input["role_id"] = $rol->id;
+                        }
 
-                    $input["status_id"] = 3;
+                        $input["status_id"] = 3;
 
-                    $pos = strpos($book->correo, "@");
-                    $input["password"] = bcrypt(substr($book->correo, 0, $pos));
-                    $input["email"] = $book->correo;
+                        $this->email = "info@superfuds.com.co";
 
-                    $user = Users::where("email", "ILIKE", "%" . $book->correo . "%")->first();
-                    if (count($user) > 0) {
-                        $user->fill($input)->save();
-                    } else {
-                        Users::create($input);
+                        $pos = strpos($book->correo, "@");
+                        $input["name"] = substr($book->correo, 0, $pos);
+                        $input["password"] = bcrypt(substr($book->correo, 0, $pos));
+                        $input["email"] = $book->correo;
+
+                        $user = Users::where("email", "ILIKE", "%" . $book->correo . "%")->first();
+
+                        $noti["email"] = $book->correo;
+                        $noti["password"] = substr($book->correo, 0, $pos);
+
+                        Mail::send("Notifications.activation", $noti, function($msj) {
+                            $msj->subject("Notificaciones superfuds");
+                            $msj->to($this->email, "info")->cc('tech@superfuds.com.co');
+                        });
+
+                        if (count($user) > 0) {
+                            unset($input["email"]);
+                            $user->fill($input)->save();
+                        } else {
+                            Users::create($input);
+                        }
                     }
                 }
             })->get();

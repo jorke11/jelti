@@ -10,7 +10,8 @@
         <li role="presentation" id="tabManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Management</a></li>
         <li role="presentation" id="tabBranch" class="hide"><a href="#branch" aria-controls="profile" role="tab" data-toggle="tab">Branch Office</a></li>
         <li role="presentation" id="tabSpecial" class="hide"><a href="#special" aria-controls="special" role="tab" data-toggle="tab">Special</a></li>
-        <li role="presentation" id="tabUpload"><a href="#upload" aria-controls="special" role="tab" data-toggle="tab">Upload</a></li>
+        <li role="presentation" id="tabUpload"><a href="#upload" aria-controls="special" role="tab" data-toggle="tab">Supplier</a></li>
+        <li role="presentation" id="tabUpload"><a href="#client" aria-controls="special" role="tab" data-toggle="tab">Client</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -28,7 +29,10 @@
             @include('Administration.stakeholder.special')
         </div>
         <div role="tabpanel" class="tab-pane " id="upload">
-            @include('Administration.stakeholder.upload')
+            @include('Administration.stakeholder.supplier')
+        </div>
+        <div role="tabpanel" class="tab-pane " id="client">
+            @include('Administration.stakeholder.client')
         </div>
     </div>
 </div>

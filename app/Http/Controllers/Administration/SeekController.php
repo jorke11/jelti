@@ -158,7 +158,7 @@ class SeekController extends Controller {
     public function getCategory(Request $req) {
         $in = $req->all();
         $query = Categories::select("id", "description as text");
-        if (isset($in["q"]) && $in["q"] == 0) {
+        if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"]);
@@ -245,7 +245,7 @@ class SeekController extends Controller {
     public function getBranch(Request $req) {
         $in = $req->all();
         $query = Branch::select("id", "address as text");
-        if (isset($in["q"]) && $in["q"] == 0) {
+        if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"]);

@@ -99,7 +99,9 @@ function Warehouse() {
                 {data: "id"},
                 {data: "description"},
                 {data: "address"},
-                {data: "responsible"}
+                {data: "responsible"},
+                {data: "city"},
+                
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
@@ -110,7 +112,7 @@ function Warehouse() {
                     }
                 },
                 {
-                    targets: [4],
+                    targets: [5],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

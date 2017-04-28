@@ -16,6 +16,7 @@ class CreateWarehousesTable extends Migration
         Schema::create('warehouses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
+            $table->integer('city_id');
             $table->string('address');
             $table->integer('responsible_id')->nullable();
             $table->timestamps();

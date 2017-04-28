@@ -188,13 +188,16 @@ class SeekController extends Controller {
 
     public function getResponsable(Request $req) {
         $in = $req->all();
-        $query = Users::select("id", "name as text");
+        $query = Users::select("id", DB::raw("coalesce(name,'') || ' ' || coalesce(last_name) || ' ' || email as text"));
         if (isset($in["q"]) && $in["q"] == "0") {
             $city = $query->where("id", Auth::user()->id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"])->get();
         } else {
-            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+            $query->where("name", "ilike", "%" . $in["q"] . "%")
+                    ->Orwhere("last_name", "ilike", "%" . $in["q"] . "%")
+                    ->Orwhere("email", "ilike", "%" . $in["q"] . "%")
+                    ->get();
         }
         $result = $query->get();
 

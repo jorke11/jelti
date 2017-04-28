@@ -246,8 +246,10 @@ Route::get('/api/listConsecutive', function() {
 });
 Route::get('/api/listWarehouse', function() {
     $query = DB::table("warehouses")
-            ->select("warehouses.id", "warehouses.description", "warehouses.address", "users.name as responsible")
-            ->leftjoin("users", "users.id", "warehouses.responsible_id");
+            ->select("warehouses.id", "warehouses.description", "warehouses.address","cities.description as city",
+                    DB::raw("coalesce(users.name) || coalesce(users.last_name) as responsible"))
+            ->leftjoin("users", "users.id", "warehouses.responsible_id")
+            ->leftjoin("cities", "cities.id", "warehouses.city_id");
     return Datatables::queryBuilder($query)->make(true);
 });
 

@@ -1,4 +1,16 @@
 {!!Form::open(["id"=>"frmFile","file"=>true])!!}
+<br>
+<div class="row">
+    <div class="col-lg-1">Warehouse</div>
+    <div class="col-lg-2">
+        <select class="form-control" id="warehouse_id" name="warehouse_id">
+            @foreach($warehouse as $val)
+            <option value="{{$val->id}}">{{$val->description}}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+<br>
 <div class="row">
     <div class="col-lg-1">File</div>
     <div class="col-lg-1">

@@ -25,18 +25,21 @@ class EntryController extends Controller {
 
     public $total;
     public $total_real;
+    public $warehouse_id;
 
     public function __construct() {
         App::setLocale("en");
         $this->total = 0;
         $this->total_real = 0;
+        $this->warehouse_id = 0;
         $this->middleware("auth");
     }
 
     public function index() {
         $category = Categories::all();
         $status = Parameters::where("group", "entry")->get();
-        return view("Inventory.entry.init", compact("category", "status"));
+        $warehouse = Warehouses::all();
+        return view("Inventory.entry.init", compact("category", "status", "warehouse"));
     }
 
     public function createConsecutive($id) {
@@ -149,6 +152,7 @@ class EntryController extends Controller {
         if ($request->ajax()) {
 
             $input = $request->all();
+
             $this->name = '';
             $this->path = '';
             $file = array_get($input, 'file_excel');
@@ -157,7 +161,7 @@ class EntryController extends Controller {
             $this->path = "uploads/entry/" . date("Y-m-d") . "/" . $this->name;
 
             $file->move("uploads/entry/" . date("Y-m-d") . "/", $this->name);
-
+            $this->warehouse_id = $input["warehouse_id"];
             Excel::load($this->path, function($reader) {
                 $in["name"] = $this->name;
                 $in["path"] = $this->path;
@@ -172,7 +176,7 @@ class EntryController extends Controller {
                         $pro = Products::where("reference", (int) $book->codigo)->first();
 
                         if (count($pro) > 0 && count($sup) > 0) {
-                            $new["warehouse_id"] = Auth::user()->warehouse_id;
+                            $new["warehouse_id"] = $this->warehouse_id;
                             $new["responsible_id"] = Auth::user()->id;
                             $new["supplier_id"] = $sup->id;
                             $new["purchase_id"] = 0;
@@ -213,7 +217,7 @@ class EntryController extends Controller {
             $entry = Entries::findOrFail($input["id"]);
 
             $exist = Purchases::find($entry->purchase_id);
-            
+
             $val = EntriesDetail::where("entry_id", $entry["id"])->where("status_id", 1)->count();
 
             if ($val == 0) {

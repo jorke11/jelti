@@ -25,6 +25,7 @@
                             <th>Description</th>
                             <th>Address</th>
                             <th>Responsible</th>
+                            <th>City</th>
                             <th>Action</th>
                         </tr>
                     </thead>

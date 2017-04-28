@@ -27,6 +27,15 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
+                            <label for="address">City</label>
+                            <select class="form-control input-warehouse"  id="city_id" name="city_id" data-api="/api/getCity">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
                             <label for="email">Responsible</label>
                             <select class="form-control input-warehouse"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
                             </select>

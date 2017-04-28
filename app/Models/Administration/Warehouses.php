@@ -8,6 +8,6 @@ class Warehouses extends Model
 {
    protected $table = "warehouses";
     protected $primaryKey = "id";
-    protected $fillable = ["id", "description",'address',"responsible_id"];
+    protected $fillable = ["id", "description",'address',"city_id","responsible_id"];
     public $timestamp = false;
 }

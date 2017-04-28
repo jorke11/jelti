@@ -143,7 +143,7 @@ class SeekController extends Controller {
     public function getWarehouse(Request $req) {
         $in = $req->all();
         $query = Warehouses::select("id", "description as text");
-        if (isset($in["q"]) && $in["q"] == 0) {
+        if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"]);

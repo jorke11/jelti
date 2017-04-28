@@ -12,6 +12,17 @@
 </div>
 <br>
 <div class="row">
+    <div class="col-lg-1">Responsible</div>
+    <div class="col-lg-2">
+        <select class="form-control" id="responsible_id" name="responsible_id">
+            @foreach($users as $val)
+            <option value="{{$val->id}}">{{$val->email}}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+<br>
+<div class="row">
     <div class="col-lg-1">File</div>
     <div class="col-lg-1">
         <input id="file_excel" name="file_excel" type="file">

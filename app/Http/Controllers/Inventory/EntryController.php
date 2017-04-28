@@ -15,6 +15,7 @@ use App\models\Administration\Consecutives;
 use App\Models\Administration\Stakeholder;
 use App\Models\Invoicing\Purchases;
 use App\Models\Invoicing\PurchasesDetail;
+use App\Models\Security\Users;
 use Session;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Uploads\Base;
@@ -26,12 +27,14 @@ class EntryController extends Controller {
     public $total;
     public $total_real;
     public $warehouse_id;
+    public $responsible_id;
 
     public function __construct() {
         App::setLocale("en");
         $this->total = 0;
         $this->total_real = 0;
         $this->warehouse_id = 0;
+        $this->responsible_id = 0;
         $this->middleware("auth");
     }
 
@@ -39,7 +42,8 @@ class EntryController extends Controller {
         $category = Categories::all();
         $status = Parameters::where("group", "entry")->get();
         $warehouse = Warehouses::all();
-        return view("Inventory.entry.init", compact("category", "status", "warehouse"));
+        $users = Users::where("role_id", 5)->get();
+        return view("Inventory.entry.init", compact("category", "status", "warehouse", "users"));
     }
 
     public function createConsecutive($id) {
@@ -152,7 +156,7 @@ class EntryController extends Controller {
         if ($request->ajax()) {
 
             $input = $request->all();
-
+            //dd($input);
             $this->name = '';
             $this->path = '';
             $file = array_get($input, 'file_excel');
@@ -162,6 +166,8 @@ class EntryController extends Controller {
 
             $file->move("uploads/entry/" . date("Y-m-d") . "/", $this->name);
             $this->warehouse_id = $input["warehouse_id"];
+            $this->responsible_id = $input["responsible_id"];
+
             Excel::load($this->path, function($reader) {
                 $in["name"] = $this->name;
                 $in["path"] = $this->path;
@@ -169,6 +175,7 @@ class EntryController extends Controller {
 
                 $base_id = Base::create($in)->id;
 
+                $ware = Warehouses::find($this->warehouse_id);
 
                 foreach ($reader->get() as $book) {
                     if ((int) $book->unidades != 0) {
@@ -177,10 +184,10 @@ class EntryController extends Controller {
 
                         if (count($pro) > 0 && count($sup) > 0) {
                             $new["warehouse_id"] = $this->warehouse_id;
-                            $new["responsible_id"] = Auth::user()->id;
+                            $new["responsible_id"] = $this->responsible_id;
                             $new["supplier_id"] = $sup->id;
                             $new["purchase_id"] = 0;
-                            $new["city_id"] = Auth::user()->city_id;
+                            $new["city_id"] = $ware->city_id;
                             $new["consecutive"] = $this->createConsecutive(2);
                             $new["description"] = "Initial inventory";
                             $new["invoice"] = "system";
@@ -188,7 +195,6 @@ class EntryController extends Controller {
                             $new["created"] = date("Y-m-d H:i");
                             $entry_id = Entries::create($new)->id;
                             $this->updateConsecutive(2);
-
 
                             $detail["entry_id"] = $entry_id;
                             $detail["product_id"] = $pro->id;

@@ -180,7 +180,7 @@ class EntryController extends Controller {
                             $new["consecutive"] = $this->createConsecutive(2);
                             $new["description"] = "Initial inventory";
                             $new["invoice"] = "system";
-                            $new["status_id"] = 2;
+                            $new["status_id"] = 1;
                             $new["created"] = date("Y-m-d H:i");
                             $entry_id = Entries::create($new)->id;
                             $this->updateConsecutive(2);
@@ -212,16 +212,19 @@ class EntryController extends Controller {
             $input = $request->all();
             $entry = Entries::findOrFail($input["id"]);
 
-            $exist = Purchases::findOrFail($entry["purchase_id"]);
-
+            $exist = Purchases::find($entry->purchase_id);
+            
             $val = EntriesDetail::where("entry_id", $entry["id"])->where("status_id", 1)->count();
 
             if ($val == 0) {
                 if ($entry["status_id"] != 2) {
                     $entry->status_id = 2;
                     $entry->save();
-                    $exist->status_id = 4;
-                    $exist->save();
+                    if (count($exist) > 0) {
+                        $exist->status_id = 4;
+                        $exist->save();
+                    }
+
                     return response()->json(["success" => true, "header" => $entry]);
                 } else {
                     return response()->json(["success" => false, "msg" => "Entry is already generate"], 404);
@@ -384,7 +387,7 @@ class EntryController extends Controller {
         $input["status_id"] = 3;
 
         if ($input["real_quantity"] <= $input["quantity"]) {
-            
+
             $result = $entry->fill($input)->save();
 
             if ($result) {

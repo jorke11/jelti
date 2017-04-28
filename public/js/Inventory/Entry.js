@@ -88,7 +88,10 @@ function Entry() {
             cache: false,
             contentType: false,
             success: function (data) {
-                console.log(data);
+                if(data.success==true){
+                    table.ajax.reload();
+                }
+                
             }
         })
     }

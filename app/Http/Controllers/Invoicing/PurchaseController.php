@@ -14,6 +14,8 @@ use App\Models\Administration\Products;
 use App\Models\Administration\Puc;
 use App\models\Administration\Consecutives;
 use App\Models\Administration\Parameters;
+use App\Models\Administration\Email;
+use App\Models\Administration\EmailDetail;
 use App\Models\Security\Users;
 use Mail;
 
@@ -22,11 +24,13 @@ class PurchaseController extends Controller {
     public $total;
     public $debt;
     public $credit;
+    public $mails;
 
     public function __construct() {
         $this->total = 0;
         $this->debt = 0;
         $this->credit = 0;
+        $this->mails = array();
         $this->middleware("auth");
     }
 
@@ -262,10 +266,19 @@ class PurchaseController extends Controller {
                                 ->join("products", "products.id", "purchases_detail.product_id")
                                 ->where("purchase_id", $purchase->id)->get();
 
-                Mail::send("Notifications.purchase", $input, function($msj) {
-                    $msj->subject("Notificaciones superfuds");
-                    $msj->to("jpinedom@hotmail.com")->cc('jorke8710@gmail.com');
-                });
+                $email = Email::where("description", "purchase")->first();
+                $emDetail = EmailDetail::where("email_id", $email->id)->get();
+                if (count($emDetail) > 0) {
+                    $this->mails = array();
+                    foreach ($emDetail as $value) {
+                        $this->mails[] = $value->description;
+                    }
+
+                    Mail::send("Notifications.purchase", $input, function($msj) {
+                        $msj->subject("Notificaciones superfuds");
+                        $msj->to($this->mails);
+                    });
+                }
 
 
                 return response()->json(["success" => true, "header" => $pur]);

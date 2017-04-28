@@ -12,7 +12,8 @@
         </div>
     </div>
     <div class="panel-body">
-
+        <br>
+        <div class="alert alert-success"><h4>Bienvenido, Por favor ingresa tus datos personales</h4></div>
         <input id="id" name="id" type="hidden" class="input-user" value="{{$users->id}}">
         <div class="row">
             <div class="col-lg-3">

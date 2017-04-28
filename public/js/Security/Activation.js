@@ -48,7 +48,7 @@ function User() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
-                        toastr.success("Usuario activado");
+                        location.href = "logout";
                     }
                 }
             })

@@ -72,28 +72,31 @@ class UserController extends Controller {
 
                         $input["status_id"] = 3;
 
-                        $this->email = "info@superfuds.com.co";
+                        $this->email = $book->correo;
 
                         $pos = strpos($book->correo, "@");
                         $input["name"] = substr($book->correo, 0, $pos);
                         $input["password"] = bcrypt(substr($book->correo, 0, $pos));
                         $input["email"] = $book->correo;
 
-                        $user = Users::where("email", "ILIKE", "%" . $book->correo . "%")->first();
+                        if ($book->correo != 'tech@superfuds.com.co') {
+                            $user = Users::where("email", "ILIKE", "%" . $book->correo . "%")
+                                    ->first();
 
-                        $noti["email"] = $book->correo;
-                        $noti["password"] = substr($book->correo, 0, $pos);
+                            $noti["email"] = $book->correo;
+                            $noti["password"] = substr($book->correo, 0, $pos);
 
-                        Mail::send("Notifications.activation", $noti, function($msj) {
-                            $msj->subject("Notificaciones superfuds");
-                            $msj->to($this->email, "info")->cc('tech@superfuds.com.co');
-                        });
+                            Mail::send("Notifications.activation", $noti, function($msj) {
+                                $msj->subject("Notificaciones superfuds");
+                                $msj->to($this->email, "info")->cc('tech@superfuds.com.co');
+                            });
 
-                        if (count($user) > 0) {
-                            unset($input["email"]);
-                            $user->fill($input)->save();
-                        } else {
-                            Users::create($input);
+                            if (count($user) > 0) {
+                                unset($input["email"]);
+                                $user->fill($input)->save();
+                            } else {
+                                Users::create($input);
+                            }
                         }
                     }
                 }

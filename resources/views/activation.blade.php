@@ -15,6 +15,7 @@
         <br>
         <div class="alert alert-success"><h4>Bienvenido, Por favor ingresa tus datos personales</h4></div>
         <input id="id" name="id" type="hidden" class="input-user" value="{{$users->id}}">
+        <input type="checkbox" class="form-control hidden" id="status_id" name='status_id' checked readonly="">
         <div class="row">
             <div class="col-lg-3">
                 <div class="form-group">
@@ -87,13 +88,6 @@
                     <label for="email">Stakeholder:</label>
                     <select id="stakeholder_id" name="stakeholder_id" class="form-control input-user" data-api="/api/getStakeholder" required>
                     </select>
-                </div>
-            </div>
-
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label for="email">Status</label>
-                    <input type="checkbox" class="form-control" id="status_id" name='status_id' checked disabled>
                 </div>
             </div>
         </div>

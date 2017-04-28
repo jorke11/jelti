@@ -182,7 +182,7 @@ class UserController extends Controller {
         $user = Users::FindOrFail($id);
         $input = $request->all();
 
-
+        
         if (!isset($input["status_id"])) {
             $input["status_id"] = false;
         } else {
@@ -194,6 +194,9 @@ class UserController extends Controller {
         } else {
             unset($input["password"]);
         }
+        
+        
+//        dd($input);exit;
 
         $result = $user->fill($input)->save();
         if ($result) {

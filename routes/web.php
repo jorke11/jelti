@@ -246,8 +246,7 @@ Route::get('/api/listConsecutive', function() {
 });
 Route::get('/api/listWarehouse', function() {
     $query = DB::table("warehouses")
-            ->select("warehouses.id", "warehouses.description", "warehouses.address","cities.description as city",
-                    DB::raw("coalesce(users.name) || coalesce(users.last_name) as responsible"))
+            ->select("warehouses.id", "warehouses.description", "warehouses.address", "cities.description as city", DB::raw("coalesce(users.name) || coalesce(users.last_name) as responsible"))
             ->leftjoin("users", "users.id", "warehouses.responsible_id")
             ->leftjoin("cities", "cities.id", "warehouses.city_id");
     return Datatables::queryBuilder($query)->make(true);
@@ -334,7 +333,12 @@ Route::get('/api/listOrder', function() {
     return Datatables::eloquent(Models\Inventory\Orders::query())->make(true);
 });
 Route::get('/api/listCity', function() {
-    return Datatables::eloquent(Models\Administration\Cities::query())->make(true);
+
+    $query = DB::table("cities")
+            ->select("cities.id", "cities.description as city", "cities.code", "departments.description as deparment")
+            ->join("departments", "departments.id", "cities.department_id");
+
+    return Datatables::queryBuilder($query)->make(true);
 });
 Route::get('/api/listDepartment', function() {
     return Datatables::eloquent(Models\Administration\Department::query())->make(true);
@@ -370,6 +374,7 @@ Route::get('/logout', 'Security\UserController@logOut');
 
 
 Route::get('/api/getCity', 'Administration\SeekController@getCity');
+Route::get('/api/getDepartment', 'Administration\SeekController@getDepartment');
 Route::get('/api/getSupplier', 'Administration\SeekController@getSupplier');
 Route::get('/api/getStakeholder', 'Administration\SeekController@getSupplier');
 Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacteristic');

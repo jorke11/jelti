@@ -119,7 +119,9 @@ function City() {
             "ajax": "/api/listCity",
             columns: [
                 {data: "id"},
-                {data: "description"}
+                {data: "city"},
+                {data: "code"},
+                {data: "department"}
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
@@ -130,7 +132,7 @@ function City() {
                     }
                 },
                 {
-                    targets: [2],
+                    targets: [4],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

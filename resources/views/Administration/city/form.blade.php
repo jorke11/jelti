@@ -11,17 +11,33 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="email">Description</label>
-                            <input type="text" class="form-control input-city" id="description" name='description' required>
+                            <label for="email">Department</label>
+                            <select class="form-control input-city" id='department_id' name="department_id" data-api="/api/getDepartment" required>
+                            </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="email">Code</label>
+                                <input type="text" class="form-control input-city" id="code" name='code' required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="email">Description</label>
+                                <input type="text" class="form-control input-city" id="description" name='description' required>
+                            </div>
+                        </div>
+                    </div>
+                    {!!Form::close()!!}
                 </div>
-                {!!Form::close()!!}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id='new'>Save</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id='new'>Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>

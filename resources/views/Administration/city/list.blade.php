@@ -18,6 +18,8 @@
                         <tr>
                             <th></th>
                             <th>Description</th>
+                            <th>Department</th>
+                            <th>Code</th>
                             <th>Action</th>
                         </tr>
                     </thead>

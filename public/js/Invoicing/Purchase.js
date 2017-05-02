@@ -341,7 +341,7 @@ function Purchase() {
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.description + "</td>";
             html += "<td>" + val.product + "</td>";
-            html += "<td>" + val.expiration_date + "</td>";
+            
             html += "<td>" + val.tax + "</td>";
             html += "<td>" + val.quantity + "</td>";
             if (val.product_id == null) {
@@ -379,7 +379,7 @@ function Purchase() {
         });
 
         $("#tblDetail tbody").html(html);
-        $("#tblDetail tfoot").html('<tr><td colspan="8">Total</td><td>' + data.totalDebt + '</td><td>' + data.totalDebt + '</td></tr>');
+        $("#tblDetail tfoot").html('<tr><td colspan="7">Total</td><td>' + data.totalDebt + '</td><td>' + data.totalDebt + '</td></tr>');
 
 
     }

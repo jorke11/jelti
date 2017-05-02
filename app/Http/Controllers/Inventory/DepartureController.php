@@ -287,7 +287,7 @@ class DepartureController extends Controller {
                         ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", "products.title as product", "departures_detail.description", "parameters.description as status")
                         ->join("products", "departures_detail.product_id", "products.id")
                         ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
-                        ->where("departure_id", $id)->get();
+                        ->where("departure_id", $id)->orderBy("id", "asc")->get();
 
         $this->total = 0;
 
@@ -338,8 +338,6 @@ class DepartureController extends Controller {
             return response()->json(['success' => true, "data" => $resp]);
         }
 
-
-
         $stock = new StockController();
         $available = $stock->getDetailProduct($input["product_id"]);
         $available = $available->getData(true);
@@ -351,8 +349,6 @@ class DepartureController extends Controller {
             $resp = $this->formatDetail($input["departure_id"]);
             return response()->json(['success' => true, "data" => $resp, "msg" => "No se puede agregar se deja en 0"]);
         }
-
-
 
         if ($input["real_quantity"] != 0) {
 

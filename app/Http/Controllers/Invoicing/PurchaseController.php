@@ -17,6 +17,8 @@ use App\Models\Administration\Parameters;
 use App\Models\Administration\Email;
 use App\Models\Administration\EmailDetail;
 use App\Models\Security\Users;
+use App\Models\Administration\Stakeholder;
+use App\Models\Administration\Cities;
 use Mail;
 
 class PurchaseController extends Controller {
@@ -25,12 +27,14 @@ class PurchaseController extends Controller {
     public $debt;
     public $credit;
     public $mails;
+    public $subject;
 
     public function __construct() {
         $this->total = 0;
         $this->debt = 0;
         $this->credit = 0;
         $this->mails = array();
+        $this->subject = "";
         $this->middleware("auth");
     }
 
@@ -247,10 +251,9 @@ class PurchaseController extends Controller {
             } else {
                 $pur->status_id = 2;
                 $pur->save();
-                $pur = Purchases::findOrFail($in["id"]);
-
 
                 $purchase = Purchases::findOrFail($in["id"]);
+                $sup = Stakeholder::find($purchase->supplier_id);
 
                 $input["consecutive"] = $purchase->consecutive;
                 $ware = Warehouses::findOrFail($purchase->warehouse_id);
@@ -259,7 +262,8 @@ class PurchaseController extends Controller {
 
                 $user = Users::findOrFail($ware->responsible_id);
 
-                $input["responsible"] = $user->name;
+                $input["name"] = $user->name;
+                $input["last_name"] = $user->last_name;
 
                 $input["detail"] = DB::table("purchases_detail")
                                 ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("purchases_detail.quantity * purchases_detail.value as total"))
@@ -274,8 +278,13 @@ class PurchaseController extends Controller {
                         $this->mails[] = $value->description;
                     }
 
+                    $cit = Cities::find($ware->city_id);
+
+                    $this->subject = "SuperFuds " . date("d/m") . " " . $sup->business . " " . $cit->description . " " . $pur->consecutive;
+                    $input["city"] = $cit->description;
+
                     Mail::send("Notifications.purchase", $input, function($msj) {
-                        $msj->subject("Notificaciones superfuds");
+                        $msj->subject($this->subject);
                         $msj->to($this->mails);
                     });
                 }

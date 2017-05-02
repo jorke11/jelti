@@ -49,6 +49,10 @@ function User() {
                 success: function (data) {
                     if (data.success == true) {
                         toastr.success("Usuario activado");
+                        ssetTimeout(function () {
+                            location.href = "/logout";
+                        }, 900);
+
                     }
                 }
             })

@@ -216,7 +216,7 @@ function Purchase() {
 
 
         var url = "", method = "";
-        $("#frm #btnSave").attr("disabled", true);
+
         var id = $("#frm #id").val();
         var msg = '';
         var validate = $(".input-purchase").validate();
@@ -247,6 +247,7 @@ function Purchase() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
+                        $("#frm #btnSave").attr("disabled", true);
                         $(".input-purchase").setFields({data: data.header, disabled: true});
                         table.ajax.reload();
                         toastr.success(msg);

@@ -138,7 +138,7 @@ function Purchase() {
     }
 
     this.loadProducts = function () {
-        var html = "";
+        var html = "", color = "";
 
         $("#tblDetail tbody").empty();
 
@@ -159,7 +159,9 @@ function Purchase() {
                 listProducts[i].credit = 0;
             }
 
-            html += '<tr id="row_' + val.product_id + '">';
+            color = (listProducts[i].quantity == 0) ? '' : 'info';
+
+            html += '<tr id="row_' + val.product_id + '" class="' + color + '">';
             html += "<td>" + i + "</td><td>" + val.description + "</td><td>" + val.title + "</td>";
             html += "<td>" + val.tax + "</td><td>" + val.quantity + "</td>";
             html += "<td>" + val.cost_sf + "</td><td>" + val.total + "</td>";

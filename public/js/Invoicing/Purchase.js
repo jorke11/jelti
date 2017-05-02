@@ -174,10 +174,10 @@ function Purchase() {
     }
 
     this.edit = function (product_id) {
+        toastr.remove();
         $("#modalDetail").modal("show");
         obj.getItem(product_id)
         $(".input-detail").setFields({data: row});
-        toastr.success("Register edited");
     }
 
     this.getItem = function (product_id) {
@@ -208,6 +208,7 @@ function Purchase() {
     }
 
     this.save = function () {
+        toastr.remove();
         obj.fieldDisabled();
         $("#frm #warehouse_id").prop("disabled", false);
         $("#frm #responsible_id").prop("disabled", false);
@@ -246,7 +247,7 @@ function Purchase() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
-                        $(".input-purchase").setFields({data: data.data, disabled: true});
+                        $(".input-purchase").setFields({data: data.header, disabled: true});
                         table.ajax.reload();
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);

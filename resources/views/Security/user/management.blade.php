@@ -73,7 +73,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Status</label>
-            <input type="checkbox" class="form-control" id="status" name='status'>
+            <input type="checkbox" class="form-control input-user" id="status_id" name='status_id'>
         </div>
     </div>
 </div>

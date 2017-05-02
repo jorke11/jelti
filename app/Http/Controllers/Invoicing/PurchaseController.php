@@ -266,7 +266,7 @@ class PurchaseController extends Controller {
                                 ->join("products", "products.id", "purchases_detail.product_id")
                                 ->where("purchase_id", $purchase->id)->get();
 
-                $email = Email::where("description", "purchase")->first();
+                $email = Email::where("description", "purchases")->first();
                 $emDetail = EmailDetail::where("email_id", $email->id)->get();
                 if (count($emDetail) > 0) {
                     $this->mails = array();

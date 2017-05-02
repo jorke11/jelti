@@ -25,9 +25,9 @@ class CreateBranchTable extends Migration {
             $table->string('email');
             $table->string('term');
             $table->string('mobile');
-            $table->text('businnes_name');
+            $table->text('business_name');
             $table->string('nit');
-            $table->integer('verifcation');
+            $table->integer('verification');
             $table->timestamps();
         });
     }

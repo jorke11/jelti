@@ -50,6 +50,10 @@ Route::post('/stakeholder/StoreBranch', 'Administration\StakeholderController@st
 Route::delete('/stakeholder/deleteBranch/{id}', 'Administration\StakeholderController@deleteBranch');
 Route::post('/stakeholder/addChage', 'Administration\StakeholderController@addChanges');
 
+Route::post('/stakeholder/addTax', 'Administration\StakeholderController@storeTax');
+Route::put('/stakeholder/UpdateTax', 'Administration\StakeholderController@updateTax');
+Route::delete('/stakeholder/deleteTax/{id}', 'Administration\StakeholderController@deleteTax');
+
 
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/puc', 'Administration\PucController');
@@ -335,7 +339,7 @@ Route::get('/api/listOrder', function() {
 Route::get('/api/listCity', function() {
 
     $query = DB::table("cities")
-            ->select("cities.id", "cities.description as city", "cities.code", "departments.description as deparment")
+            ->select("cities.id", "cities.description as city", "cities.code", "departments.description as department")
             ->join("departments", "departments.id", "cities.department_id");
 
     return Datatables::queryBuilder($query)->make(true);

@@ -37,6 +37,7 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
+
     public function getDepartment(Request $req) {
         $in = $req->all();
         $query = Department::select("id", "description as text");
@@ -207,13 +208,14 @@ class SeekController extends Controller {
         $query = Users::select("id", DB::raw("coalesce(name,'') || ' ' || coalesce(last_name) || ' ' || email as text"));
         if (isset($in["q"]) && $in["q"] == "0") {
             $city = $query->where("id", Auth::user()->id)->get();
-        } else if (isset($in["id"])) {
+        } else if (isset($in["id"]) && $in["id"] != '') {
             $query->where("id", $in["id"])->get();
         } else {
-            $query->where("name", "ilike", "%" . $in["q"] . "%")
-                    ->Orwhere("last_name", "ilike", "%" . $in["q"] . "%")
-                    ->Orwhere("email", "ilike", "%" . $in["q"] . "%")
-                    ->get();
+            if (isset($in["q"]))
+                $query->where("name", "ilike", "%" . $in["q"] . "%")
+                        ->Orwhere("last_name", "ilike", "%" . $in["q"] . "%")
+                        ->Orwhere("email", "ilike", "%" . $in["q"] . "%")
+                        ->get();
         }
         $result = $query->get();
 

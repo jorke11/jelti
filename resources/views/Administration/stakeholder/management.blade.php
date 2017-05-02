@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="page-title">
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-10">
+                <div class="col-lg-5 col-lg-offset-9">
                     <div class="row">
                         <div class="col-lg-2">
                             <div class="btn-group">
@@ -14,7 +14,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-5">
+                        <div class="col-lg-6">
                             <button class="btn btn-success btn-sm" id='btnNew'>
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"> New</span>
                             </button>
@@ -24,10 +24,6 @@
                         </div>
 
                     </div>
-
-
-
-
                 </div>
             </div>
         </div>

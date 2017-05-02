@@ -12,6 +12,7 @@
         <li role="presentation" id="tabSpecial" class="hide"><a href="#special" aria-controls="special" role="tab" data-toggle="tab">Special</a></li>
         <li role="presentation" id="tabUpload"><a href="#upload" aria-controls="special" role="tab" data-toggle="tab">Supplier</a></li>
         <li role="presentation" id="tabUpload"><a href="#client" aria-controls="special" role="tab" data-toggle="tab">Client</a></li>
+        <li role="presentation" id="tabTax"><a href="#frmTax" aria-controls="special" role="tab" data-toggle="tab">Tax</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -25,14 +26,17 @@
         <div role="tabpanel" class="tab-pane" id="branch">
             @include('Administration.stakeholder.branch')
         </div>
-        <div role="tabpanel" class="tab-pane " id="special">
+        <div role="tabpanel" class="tab-pane" id="special">
             @include('Administration.stakeholder.special')
         </div>
-        <div role="tabpanel" class="tab-pane " id="upload">
+        <div role="tabpanel" class="tab-pane" id="upload">
             @include('Administration.stakeholder.supplier')
         </div>
-        <div role="tabpanel" class="tab-pane " id="client">
+        <div role="tabpanel" class="tab-pane" id="client">
             @include('Administration.stakeholder.client')
+        </div>
+        <div role="tabpanel" class="tab-pane " id="frmTax">
+            @include('Administration.stakeholder.tax')
         </div>
     </div>
 </div>

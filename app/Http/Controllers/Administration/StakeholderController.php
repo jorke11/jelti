@@ -13,6 +13,7 @@ use App\Models\Administration\PricesSpecial;
 use App\Models\Administration\Branch;
 use App\Models\Administration\Parameters;
 use App\Models\Administration\Contact;
+use App\Models\Administration\StakeholderTax;
 use Datatables;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -40,7 +41,8 @@ class StakeholderController extends Controller {
         $type_document = Parameters::where("group", "typedocument")->get();
         $type_stakeholder = Parameters::where("group", "typestakeholder")->get();
         $status = Parameters::where("group", "generic")->get();
-        return view("Administration.stakeholder.init", compact('type_person', "type_regimen", "type_document", "type_stakeholder", "status"));
+        $tax = Parameters::where("group", "tax")->get();
+        return view("Administration.stakeholder.init", compact('type_person', "type_regimen", "type_document", "type_stakeholder", "status", "tax"));
     }
 
     public function store(Request $request) {
@@ -58,6 +60,21 @@ class StakeholderController extends Controller {
         }
     }
 
+    public function storeTax(Request $request) {
+        if ($request->ajax()) {
+            $input = $request->all();
+            unset($input["id"]);
+
+            $result = StakeholderTax::create($input);
+            if ($result) {
+                $resp = $this->getTax($input["stakeholder_id"])->getData();
+                return response()->json(['success' => true, "detail" => $resp]);
+            } else {
+                return response()->json(['success' => false]);
+            }
+        }
+    }
+
     public function getSpecial(Request $req) {
         $in = $req->all();
         return Datatables::eloquent(PricesSpecial::where("client_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
@@ -65,7 +82,7 @@ class StakeholderController extends Controller {
 
     public function getBranch(Request $req) {
         $in = $req->all();
-        return Datatables::eloquent(Branch::where("client_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
+        return Datatables::eloquent(Branch::where("stakeholder_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
     }
 
     public function updatePrice(Request $data, $id) {
@@ -124,6 +141,7 @@ class StakeholderController extends Controller {
     public function edit($id) {
         $resp["header"] = Stakeholder::FindOrFail($id);
         $resp["images"] = $this->getImages($id)->getData();
+        $resp["taxes"] = $this->getTax($id)->getData();
         return response()->json($resp);
     }
 
@@ -283,8 +301,8 @@ class StakeholderController extends Controller {
 //                dd($book);
                 $number = $book->nit;
                 $verify = $book->codigo_de_verificacion;
-                
-                
+
+
 
                 $stake = Stakeholder::where("document", trim($number))->first();
 
@@ -363,8 +381,16 @@ class StakeholderController extends Controller {
         $in = $data->all();
         $image = StakeholderDocument::find($id);
         $image->delete();
-        $list = $this->getImages($in["stakeholder_id"]);
+        $list = $this->getImages($in["stakeholder_id"])->getData();
         return response()->json(["response" => true, "images" => $list]);
+    }
+
+    public function deleteTax(Request $data, $id) {
+        $in = $data->all();
+        $image = StakeholderTax::find($id);
+        $image->delete();
+        $list = $this->getTax($in["stakeholder_id"])->getData();
+        return response()->json(["success" => true, "detail" => $list]);
     }
 
     public function deleteBranch(Request $data, $id) {
@@ -379,6 +405,15 @@ class StakeholderController extends Controller {
                         ->join("parameters", "parameters.code", DB::raw("stakeholder_document.document_id and parameters.group='typedocument'"))
                         ->where("stakeholder_id", $id)->get();
         return response()->json($image);
+    }
+
+    public function getTax($id) {
+        $data = DB::table("stakeholder_tax")
+                ->select("stakeholder_tax.id", "parameters.description as tax","stakeholder_tax.stakeholder_id")
+                ->join("parameters", "parameters.code", DB::raw("stakeholder_tax.tax_id and parameters.group='tax'"))
+                ->where("stakeholder_id", $id)
+                ->get();
+        return response()->json($data);
     }
 
 }

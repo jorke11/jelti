@@ -63,6 +63,7 @@ Route::resource('/email', 'Administration\EmailController');
 Route::post('/email/detail', 'Administration\EmailController@storeDetail');
 Route::put('/email/detail/{id}', 'Administration\EmailController@updateDetail');
 Route::get('/email/detail/{id}/edit', 'Administration\EmailController@editDetail');
+Route::delete('/email/detail/{id}', 'Administration\EmailController@destroyDetail');
 
 Route::resource('/city', 'Administration\CityController');
 Route::post('/city/uploadExcel', 'Administration\CityController@storeExcel');

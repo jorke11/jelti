@@ -99,4 +99,17 @@ class EmailController extends Controller {
         }
     }
 
+    public function destroyDetail(Request $req, $id) {
+        $input = $req->all();
+        $record = EmailDetail::FindOrFail($id);
+        $result = $record->delete();
+
+        if ($result) {
+            $data = EmailDetail::where("email_id", $input["email_id"])->get();
+            return response()->json(['success' => true, "detail" => $data]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
 }

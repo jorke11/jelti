@@ -262,11 +262,13 @@ class SeekController extends Controller {
 
     public function getBranch(Request $req) {
         $in = $req->all();
-        $query = Branch::select("id", "address as text");
+        $query = Branch::select("id", "name as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
         } else if (isset($in["id"])) {
-            $query->where("id", $in["id"]);
+            if ($in["id"] != '') {
+                $query->where("id", $in["id"]);
+            }
         } else {
             $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
         }

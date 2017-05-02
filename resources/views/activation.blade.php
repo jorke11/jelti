@@ -50,13 +50,6 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="form-group">
-                    <label for="email">Warehouse:</label>
-                    <select id="warehouse_id" name="warehouse_id" class="form-control input-user" data-api="/api/getWarehouse">
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
                     <label for="email">City:</label>
                     <select id="city_id" name="city_id" class="form-control input-user" data-api="/api/getCity" required>
                     </select>
@@ -75,14 +68,15 @@
                     <input type="password" class="form-control input-user" id="confirmation" name='confirmation'>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">Document:</label>
                     <input type="text" class="form-control input-user" id="document" name='document'>
                 </div>
             </div>
+        </div>
+        <div class="row">
+
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">Stakeholder:</label>

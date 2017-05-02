@@ -15,10 +15,11 @@
     </div>
     <div class="col-lg-3">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" class="form-control input-user" id="email" name='email' required>
+            <label for="email">Document:</label>
+            <input type="text" class="form-control input-user" id="document" name='document'>
         </div>
     </div>
+
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Role:</label>
@@ -32,13 +33,6 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-3">
-        <div class="form-group">
-            <label for="email">Warehouse:</label>
-            <select id="warehouse_id" name="warehouse_id" class="form-control input-user" data-api="/api/getWarehouse" required>
-            </select>
-        </div>
-    </div>
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">City:</label>
@@ -59,14 +53,15 @@
             <input type="password" class="form-control input-user" id="confirmation" name='confirmation'>
         </div>
     </div>
-</div>
-<div class="row">
     <div class="col-lg-3">
         <div class="form-group">
-            <label for="email">Document:</label>
-            <input type="text" class="form-control input-user" id="document" name='document'>
+            <label for="email">Email:</label>
+            <input type="text" class="form-control input-user" id="email" name='email' required>
         </div>
     </div>
+
+</div>
+<div class="row">
     <div class="col-lg-3">
         <div class="form-group">
             <label for="email">Stakeholder:</label>

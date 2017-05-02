@@ -182,7 +182,7 @@ function Entry() {
                     $(".input-entry").setFields({data: resp.header, disabled: true});
                     $("#btnmodalDetail").attr("disabled", true);
                     $("#btnSend").attr("disabled", true);
-
+                    table.ajax.reload();
                 } else {
                     toastr.warning(resp.msg);
                 }

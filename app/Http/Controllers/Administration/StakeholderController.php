@@ -25,13 +25,19 @@ class StakeholderController extends Controller {
     public $name;
     public $typestakeholder;
     public $updated;
+    public $updatedCont;
     public $inserted;
+    public $insertedCont;
+    public $countData;
 
     public function __construct() {
         $this->middleware("auth");
         $this->name = '';
         $this->updated = 0;
+        $this->updatedCont = 0;
         $this->inserted = 0;
+        $this->insertedCont = 0;
+        $this->countData = 0;
         $this->typestakeholder = 2;
     }
 
@@ -211,6 +217,7 @@ class StakeholderController extends Controller {
             $base_id = Base::create($in)->id;
 
             $verify = '';
+            $this->countData = count($reader->get());
             foreach ($reader->get() as $book) {
 
                 if (stripos($book->nit_rut, "-") !== false) {
@@ -257,8 +264,10 @@ class StakeholderController extends Controller {
                         $contact["web_site"] = trim($book->sitio_web);
 
                         if (count($cont) > 0) {
+                            $this->updatedCont++;
                             $cont->fill($contact)->save();
                         } else {
+                            $this->insertedCont++;
                             Contact::create($contact);
                         }
                     } else {
@@ -279,7 +288,8 @@ class StakeholderController extends Controller {
             }
         })->get();
 
-        return response()->json(["success" => true, "data" => Stakeholder::where("status_id", 3)->get(), "updates" => $this->updated, "insert" => $this->inserted]);
+        return response()->json(["success" => true, "data" => Stakeholder::where("status_id", 3)->get(), "updated" => $this->updated
+                    , "inserted" => $this->inserted, "quantity" => $this->countData, "contactnew" => $this->insertedCont, "contactedit" => $this->updatedCont]);
     }
 
     public function uploadClient(Request $req) {
@@ -295,10 +305,10 @@ class StakeholderController extends Controller {
 
 //        if (is_file($this->path) === true) {
         Excel::load($this->path, function($reader) {
-//            $in["name"] = $this->name;
-//            $in["path"] = $this->path;
-//            $in["quantity"] = count($reader->get());
-//            $base_id = Base::create($in)->id;
+            $in["name"] = $this->name;
+            $in["path"] = $this->path;
+            $in["quantity"] = count($reader->get());
+            $base_id = Base::create($in)->id;
 
             $verify = '';
             foreach ($reader->get() as $book) {

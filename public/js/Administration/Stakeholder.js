@@ -56,7 +56,8 @@ function Stakeholder() {
                     $(".cargando").removeClass("hidden");
                 },
                 success: function (data) {
-                    obj.printImages(data)
+                    obj.printImages(data);
+
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     //clearInterval(intervalo);
                     console.log(thrownError)
@@ -85,6 +86,8 @@ function Stakeholder() {
                     if (data.success == true) {
                         table.ajax.reload();
                         obj.resultTableUpload(data.data);
+                        $("#reviewResponse").html("<strong>Result:</strong> Quantity: " + data.quantity + " Inserted: " + data.inserted + " Updated: " +
+                                data.updated + " contact new: " + data.contactnew + " contact edit: " + data.contactedit);
                         toastr.success("file uploaded");
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
@@ -448,10 +451,9 @@ function Stakeholder() {
             "processing": true,
             "serverSide": true,
             "ajax": "/api/listStakeholder",
-//            "scrollX": true,
+            "scrollX": true,
             columns: [
-                {data: "id"},
-                {data: "business_name", sWidth: "10%"},
+                {data: "business_name", sWidth: "15%"},
                 {data: "business"},
                 {data: "name"},
                 {data: "last_name"},

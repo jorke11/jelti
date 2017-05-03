@@ -18,16 +18,30 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="email">File</label>
+                            <label for="email">File Supplier</label>
                             <input type="file" name="file_excel" name="file_excel">
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
     {!!Form::close()!!}
+</div>
+<div class="row">
+    <div class="col-lg-5 col-lg-offset-3">
+        <div class="panel panel-info">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p id="reviewResponse"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <div class="row">
     <div class="col-lg-12">

@@ -4,7 +4,6 @@
             <table class="table table-condensed" id="tblStakeholder" width='100%'>
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Business Name</th>
                         <th>Business</th>
                         <th>Name</th>

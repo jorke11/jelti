@@ -20,13 +20,19 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">Name:</label>
-                    <input type="text" class="form-control input-user" id="name" name='name' required>
+                    <input type="text" class="form-control input-user" id="name" name='name' value="{{$users->name}}" required>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">Last Name:</label>
-                    <input type="text" class="form-control input-user" id="last_name" name='last_name' required>
+                    <input type="text" class="form-control input-user" id="last_name" name='last_name' required value="{{$users->name}}">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="email">Document:</label>
+                    <input type="text" class="form-control input-user" id="document" name='document' value="{{$users->document}}" required data-type="number">
                 </div>
             </div>
             <div class="col-lg-3">
@@ -35,6 +41,9 @@
                     <input type="text" class="form-control input-user" id="email" name='email' value="{{$users->email}}" required readonly="">
                 </div>
             </div>
+
+        </div>
+        <div class="row">
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">Role:</label>
@@ -46,8 +55,6 @@
                     </select>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">City:</label>
@@ -68,12 +75,7 @@
                     <input type="password" class="form-control input-user" id="confirmation" name='confirmation'>
                 </div>
             </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label for="email">Document:</label>
-                    <input type="text" class="form-control input-user" id="document" name='document'>
-                </div>
-            </div>
+
         </div>
         <div class="row">
 
@@ -82,6 +84,12 @@
                     <label for="email">Stakeholder:</label>
                     <select id="stakeholder_id" name="stakeholder_id" class="form-control input-user" data-api="/api/getStakeholder" required>
                     </select>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="email">Phone:</label>
+                    <input type="text" class="form-control input-user" id="phone" name='phone' required data-type="number">
                 </div>
             </div>
         </div>

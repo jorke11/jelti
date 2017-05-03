@@ -133,28 +133,15 @@
 
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Products <span class="fa fa-chevron-down"></span></a>
-                                                <ul class="nav child_menu">
-                                                    <li><a href="/product">Product</a></li>
-                                                    <li><a href="/category">Category</a></li> 
-                                                    <li><a href="/characteristic">Characterist</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Stake Holders <span class="fa fa-chevron-down"></span></a>
-                                                <ul class="nav child_menu">
-                                                    <!--<li><a href="/supplier">Supplier</a></li>-->
-                                                    <li><a href="/contact">Contact</a></li>
-                                                    <li><a href="/stakeholder">Stake Holder</a></li>
-                                                    <li><a href="/warehouse">Warehouse</a></li>
-                                                    <li><a href="/city">City</a></li>
-                                                    <li><a href="/department">Department</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Accountant <span class="fa fa-chevron-down"></span></a>
-                                                <ul class="nav child_menu">
-                                                    <li><a href="/puc">PUC</a></li>
-                                                </ul>
-                                            </li>
+                                            <li><a href="/product">Product</a></li>
+                                            <li><a href="/category">Category</a></li> 
+                                            <li><a href="/characteristic">Characterist</a></li>
+                                            <li><a href="/contact">Contact</a></li>
+                                            <li><a href="/stakeholder">StakeHolder</a></li>
+                                            <li><a href="/puc">PUC</a></li>
+                                            <li><a href="/warehouse">Warehouse</a></li>
+                                            <li><a href="/department">Department</a></li>
+                                            <li><a href="/city">City</a></li>
                                             <li><a href="/parameter">Parameters</a></li>
                                             <li><a href="/consecutive">Consecutives</a></li>
                                             <li><a href="/email">Email</a></li>

@@ -4,7 +4,7 @@
 @section('title','Warehouse')
 @section('subtitle','Management')
 <div class="row">
-    <div class="col-lg-6 col-lg-offset-3">
+    <div class="col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">

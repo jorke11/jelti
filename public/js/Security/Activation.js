@@ -1,16 +1,18 @@
 function User() {
 
     this.init = function () {
+        var data = {};
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
-        var email = $("#frm #email").val();
-        var id = $("#frm #id").val();
-        var role = $("#frm #role_id").val();
+        data.id = $("#frm #id").val();
+        data.email = $("#frm #email").val();
+        data.role_id = $("#frm #role_id").val();
+        data.name = $("#frm #name").val();
+        data.last_name = $("#frm #last_name").val();
+        data.document = $("#frm #document").val();
+        data.phone = $("#frm #phone").val();
         $(".input-user").cleanFields({disabled: false});
-        $("#frm #email").val(email);
-        $("#frm #id").val(id);
-        $("#frm #role_id").val(role);
-
+        $(".input-user").setFields({data: data});
     }
 
 
@@ -50,6 +52,7 @@ function User() {
                     if (data.success == true) {
                         toastr.success("Usuario activado");
                         ssetTimeout(function () {
+                            console.log("asdasdib")
                             location.href = "/logout";
                         }, 900);
 

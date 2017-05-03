@@ -119,7 +119,8 @@ function Department() {
             "ajax": "/api/listDepartment",
             columns: [
                 {data: "id"},
-                {data: "description"}
+                {data: "description"},
+                {data: "code"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
@@ -130,7 +131,7 @@ function Department() {
                     }
                 },
                 {
-                    targets: [2],
+                    targets: [3],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

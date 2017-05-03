@@ -87,7 +87,7 @@ class UserController extends Controller {
                             $noti["password"] = substr($book->correo, 0, $pos);
 
                             Mail::send("Notifications.activation", $noti, function($msj) {
-                                $msj->subject("Notificaciones superfuds");
+                                $msj->subject("Solicitud de activación para: " . $this->email);
                                 $msj->to($this->email, "info")->cc('tech@superfuds.com.co');
                             });
 
@@ -113,7 +113,7 @@ class UserController extends Controller {
             if (!isset($input["status"])) {
                 $input["status"] = false;
             }
-            
+
 
             if ($input["password"] != '') {
                 $input["password"] = bcrypt($input["password"]);
@@ -122,8 +122,8 @@ class UserController extends Controller {
             }
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
-            
-            
+
+
             $result = Users::create($input);
             if ($result) {
                 return response()->json(['success' => true]);
@@ -190,14 +190,14 @@ class UserController extends Controller {
         } else {
             $input["status_id"] = 1;
         }
-        
+
 
         if ($input["password"] != '') {
             $input["password"] = bcrypt($input["password"]);
         } else {
             unset($input["password"]);
         }
-        
+
 
         $result = $user->fill($input)->save();
         if ($result) {

@@ -1,7 +1,7 @@
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-body">
-            <table class="table table-condensed" id="tblStakeholder" width='100%'>
+            <table class="table table-condensed table-hover table-responsive table-striped table-bordered" id="tblStakeholder" width='100%'>
                 <thead>
                     <tr>
                         <th>Business Name</th>

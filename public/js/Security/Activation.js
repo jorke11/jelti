@@ -51,8 +51,7 @@ function User() {
                 success: function (data) {
                     if (data.success == true) {
                         toastr.success("Usuario activado");
-                        ssetTimeout(function () {
-                            console.log("asdasdib")
+                        setTimeout(function () {
                             location.href = "/logout";
                         }, 900);
 

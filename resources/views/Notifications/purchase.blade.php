@@ -7,6 +7,7 @@
         <p>Les escribo para solicitar el siguiente pedido para nuestra bodega en {{$city}}</p>
         <strong>Solicitud Compra {!!$consecutive!!}</strong>
         <br>
+        <br>
         <table border="1">
             <tr>
                 <td>Producto</td>
@@ -36,14 +37,14 @@
             <tr>
                 <td>Direccion: {!!$address!!} Recibe {!!$name!!} {!!$last_name!!} - Celular:</td>
             </tr>
-            <tr>
-                <td>Por favor confirmame la recepcion del pedido y fecha de despacho, cualquier detalle adicional no dudes en escribirme.</td>
-            </tr>
+        </table>
+        <br>
+        <table>
+
             <tr>
                 <td>Por favor confirmame la recepcion del pedido y fecha de despacho, cualquier detalle adicional no dudes en escribirme.</td>
             </tr>
         </table>
-
         <br>
 
         <table>

@@ -8,5 +8,5 @@ class FileErrors extends Model
 {
     protected $table = "file_error";
     protected $primaryKey = "id";
-    protected $fillable = ["id", "base_id","data"];
+    protected $fillable = ["id", "base_id","data","reason"];
 }

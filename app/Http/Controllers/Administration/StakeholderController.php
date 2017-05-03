@@ -17,6 +17,7 @@ use App\Models\Administration\StakeholderTax;
 use Datatables;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Administration\FileErrors;
 use App\Models\Uploads\Base;
 use Auth;
 
@@ -29,6 +30,7 @@ class StakeholderController extends Controller {
     public $inserted;
     public $insertedCont;
     public $countData;
+    public $base_id;
 
     public function __construct() {
         $this->middleware("auth");
@@ -39,6 +41,7 @@ class StakeholderController extends Controller {
         $this->insertedCont = 0;
         $this->countData = 0;
         $this->typestakeholder = 2;
+        $this->base_id = 0;
     }
 
     public function index() {
@@ -308,7 +311,7 @@ class StakeholderController extends Controller {
             $in["name"] = $this->name;
             $in["path"] = $this->path;
             $in["quantity"] = count($reader->get());
-            $base_id = Base::create($in)->id;
+            $this->base_id = Base::create($in)->id;
 
             $verify = '';
             foreach ($reader->get() as $book) {
@@ -372,18 +375,33 @@ class StakeholderController extends Controller {
                 $new["address_invoice"] = $book->domicilio_de_facturacion;
                 $new["address_send"] = $book->domicilio_de_envio;
 
-                $new["city_id"] = $ciudad_de_facturacion;
-                unset($new["type_stakeholder"]);
+                if ($new["business_name"] != '') {
+                    if ($ciudad_de_facturacion != null) {
 
-                if ($branch == null) {
-                    Branch::create($new);
+                        $new["city_id"] = $ciudad_de_facturacion;
+                        unset($new["type_stakeholder"]);
+
+                        if ($branch == null) {
+                            Branch::create($new);
+                        } else {
+                            $branch->fill($new)->save();
+                        }
+                    } else {
+                        $error["base_id"] = $this->base_id;
+                        $error["reason"] = "No existe ciudad facturación: " . $book->ciudad_de_facturacion;
+                        $error["data"] = json_encode($book);
+                        FileErrors::create($error);
+                    }
                 } else {
-                    $branch->fill($new)->save();
+                    $error["base_id"] = $this->base_id;
+                    $error["reason"] = "Razon social vacia: " . $new["business_name"];
+                    $error["data"] = json_encode($book);
+                    FileErrors::create($error);
                 }
             }
         })->get();
 
-        return response()->json(["success" => true, "data" => Stakeholder::where("status_id", 3)->get(), "updates" => $this->updated, "insert" => $this->inserted]);
+        return response()->json(["success" => true, "data" => FileErrors::where("base_id", $this->base_id)->get(), "updates" => $this->updated, "insert" => $this->inserted]);
     }
 
     function cleanText($string) {

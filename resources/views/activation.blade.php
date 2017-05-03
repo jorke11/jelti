@@ -26,7 +26,7 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">Last Name:</label>
-                    <input type="text" class="form-control input-user" id="last_name" name='last_name' required value="{{$users->name}}">
+                    <input type="text" class="form-control input-user" id="last_name" name='last_name' required value="{{$users->last_name}}">
                 </div>
             </div>
             <div class="col-lg-3">
@@ -79,6 +79,13 @@
         </div>
         <div class="row">
 
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="email">Warehouse:</label>
+                    <select id="warehouse_id" name="warehouse_id" class="form-control input-user" data-api="/api/getWarehouse" required>
+                    </select>
+                </div>
+            </div>
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="email">Stakeholder:</label>

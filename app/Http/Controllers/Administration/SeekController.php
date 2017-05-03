@@ -65,7 +65,7 @@ class SeekController extends Controller {
             if (isset($in["q"]))
                 $query->where("business", "ILIKE", "%" . $in["q"] . "%")
                         ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
-//                    ->where("type_stakeholder", 1)
+                        ->where("type_stakeholder", 1)
                         ->get();
         }
         $result = $query->get();
@@ -87,8 +87,8 @@ class SeekController extends Controller {
                     ->get();
         }
 
-//        $result = $query->where("type_stakeholder", 2)->where("status_id", 1)->get();
-        $result = $query->where("type_stakeholder", 2)->get();
+        $result = $query->where("type_stakeholder", 2)->where("status_id", 1)->get();
+//        $result = $query->where("type_stakeholder", 2)->get();
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }

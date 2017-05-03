@@ -339,10 +339,7 @@ Route::get('/api/listOrder', function() {
 });
 Route::get('/api/listCity', function() {
 
-    $query = DB::table("cities")
-            ->select("cities.id", "cities.description as city", "cities.code", "departments.description as department")
-            ->join("departments", "departments.id", "cities.department_id");
-
+    $query = DB::table("vcities");
     return Datatables::queryBuilder($query)->make(true);
 });
 Route::get('/api/listDepartment', function() {

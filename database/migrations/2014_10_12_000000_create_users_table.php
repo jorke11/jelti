@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration {
             $table->increments('id');
             $table->integer('role_id');
             $table->integer('stakeholder_id')->nullable();
+            $table->integer('warehouse_id')->nullable();
             $table->integer('city_id')->nullable();
             $table->string('name');
             $table->string('last_name')->nullable();

@@ -27,19 +27,23 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <table class="table table-bordered" id="tblUpload">
-            <thead>
-                <tr>
-                    <th>Business</th>
-                    <th>Business Name</th>
-                    <th>document</th>
-                    <th>contact</th>
-                    <th>Telefono contact</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Results</div>
+            <!-- Table -->
+            <table class="table table-bordered" id="tblUpload">
+                <thead>
+                    <tr>
+                        <th>Reason</th>
+                        <th>Record</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
     </div>
 </div>
 

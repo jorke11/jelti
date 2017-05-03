@@ -96,7 +96,7 @@ function Stakeholder() {
                 }
             });
         })
-        
+
         $("#btnUploadClient").click(function () {
 
             var formData = new FormData($("#frmClient")[0]);
@@ -156,9 +156,9 @@ function Stakeholder() {
     this.addJustify = function () {
         var valid = $(".input-justify").validate();
         $("#frmJustify #stakeholder_id").val($("#frm #id").val());
-        
+
         var data = $("#frmJustify").serialize();
-        
+
         if (valid.length == 0) {
             $.ajax({
                 url: 'stakeholder/addChage',
@@ -448,9 +448,10 @@ function Stakeholder() {
             "processing": true,
             "serverSide": true,
             "ajax": "/api/listStakeholder",
+//            "scrollX": true,
             columns: [
                 {data: "id"},
-                {data: "business_name"},
+                {data: "business_name", sWidth: "10%"},
                 {data: "business"},
                 {data: "name"},
                 {data: "last_name"},

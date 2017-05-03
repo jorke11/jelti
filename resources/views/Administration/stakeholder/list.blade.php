@@ -6,6 +6,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Business Name</th>
+                        <th>Business</th>
                         <th>Name</th>
                         <th>Last Name</th>
                         <th>Document</th>

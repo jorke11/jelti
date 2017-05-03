@@ -451,6 +451,7 @@ function Stakeholder() {
             columns: [
                 {data: "id"},
                 {data: "business_name"},
+                {data: "business"},
                 {data: "name"},
                 {data: "last_name"},
                 {data: "document"},

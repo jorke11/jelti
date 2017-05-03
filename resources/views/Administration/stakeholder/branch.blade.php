@@ -131,11 +131,11 @@
                         <table class="table table-bordered table-condensed table-hover table-striped" id="tblBranch">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
-                                    <th>City</th>
-                                    <th>Address</th>
-                                    <th>Name Contact</th>
-                                    <th>Phone Contact</th>
+                                    <th></th>
+                                    <th>Business Name</th>
+                                    <th>Document</th>
+                                    <th>Address send</th>
+                                    <th>Email</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

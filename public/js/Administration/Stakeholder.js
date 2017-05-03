@@ -13,7 +13,6 @@ function Stakeholder() {
         $("#btnSaveBranch").click(this.saveBranch);
 
         $("#tabManagement").click(function () {
-            $(".input-stakeholder").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
 
@@ -87,6 +86,35 @@ function Stakeholder() {
                         table.ajax.reload();
                         obj.resultTableUpload(data.data);
                         toastr.success("file uploaded");
+                    }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    //clearInte4rval(intervalo);
+                    console.log(xhr)
+                    console.log(ajaxOptions)
+                    console.log(thrownError)
+                    alert("Problemas con el archivo, informar a sistemas");
+                }
+            });
+        })
+        
+        $("#btnUploadClient").click(function () {
+
+            var formData = new FormData($("#frmClient")[0]);
+
+            $.ajax({
+                url: 'stakeholder/uploadClient',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                dataType: 'JSON',
+                beforeSend: function () {
+                    $(".cargando").removeClass("hidden");
+                },
+                success: function (data) {
+                    if (data.success == true) {
+                        console.log(data)
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     //clearInte4rval(intervalo);
@@ -512,7 +540,7 @@ function Stakeholder() {
 
     this.tableBranch = function (id) {
         var obj = {}, checked = false;
-        obj.client_id = id;
+        obj.stakeholder_id = id;
 
         return $('#tblBranch').DataTable({
             "processing": true,
@@ -525,10 +553,10 @@ function Stakeholder() {
             },
             columns: [
                 {data: "id"},
-                {data: "city_id"},
-                {data: "address"},
-                {data: "name"},
-                {data: "phone"},
+                {data: "business_name"},
+                {data: "document"},
+                {data: "address_send"},
+                {data: "email"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [

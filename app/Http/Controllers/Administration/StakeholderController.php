@@ -82,7 +82,12 @@ class StakeholderController extends Controller {
 
     public function getBranch(Request $req) {
         $in = $req->all();
-        return Datatables::eloquent(Branch::where("stakeholder_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
+        $query = DB::table("branch_office")
+                ->select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_send", "branch_office.email")
+                ->where("branch_office.stakeholder_id", $in["stakeholder_id"])
+                ->orderBy("id", "asc");
+
+        return Datatables::queryBuilder($query)->make(true);
     }
 
     public function updatePrice(Request $data, $id) {
@@ -298,71 +303,126 @@ class StakeholderController extends Controller {
             $verify = '';
             foreach ($reader->get() as $book) {
 
-//                dd($book);
                 $number = $book->nit;
                 $verify = $book->codigo_de_verificacion;
 
+                $new["user_insert"] = Auth::user()->id;
+                $new["type_stakeholder"] = 1;
+                $new["status_id"] = 3;
+                $new["responsible_id"] = 1;
+                $new["business"] = trim($book->cuenta_principal);
+                $new["phone"] = trim($book->telefono);
+                $new["web_site"] = trim($book->sitio_web);
+                $new["document"] = (int) trim($book->nit);
+                $new["verification"] = (int) trim($book->codigo_de_verificacion);
+                $new["business_name"] = $this->cleanText(trim($book->razon_social));
+                $new["term"] = (int) trim($book->plazo_de_pago_dias);
+                $new["email"] = trim($book->correo_electronico);
+                $book->cuenta_principal = $this->cleanText($book->cuenta_principal);
 
+                $business = Stakeholder::where("business", "ILIKE", "%" . trim($book->cuenta_principal) . "%")->first();
 
-                $stake = Stakeholder::where("document", trim($number))->first();
-
-                dd($stake);
-
-                $city = Administration\Cities::where("description", "ILIKE", "%" . $book->ciudad . "%")->first();
-                if (count($city) > 0) {
-                    $insert["city_id"] = $city->id;
+                if ($business == null) {
+                    $stakeholder_id = Stakeholder::create($new)->id;
                 } else {
-                    $insert["city_id"] = null;
+                    $business->fill($new)->save();
+                    $stakeholder_id = $business->id;
                 }
 
-                $insert["user_insert"] = Auth::user()->id;
-                $insert["status_id"] = 3;
-                $insert["lead_time"] = (int) trim($book->lead_time);
-                $insert["document"] = trim($number);
-                $insert["business"] = trim($book->nombre);
-                $insert["business_name"] = trim($book->razon_social);
-                $insert["email"] = trim($book->correo);
-                $insert["web_site"] = trim($book->sitio_web);
-                $insert["type_stakeholder"] = $this->typestakeholder;
-                $insert["term"] = (trim($book->plazo)) == '' ? 0 : trim($book->plazo);
-                $insert["phone"] = (int) trim($book->celular);
-                $insert["name"] = trim($book->contact);
 
-                if (count($stake) > 0) {
+                if (strpos($book->celular, "-") !== false) {
+                    $cel = explode("-", $book->celular);
+                    $book->celular = trim($cel[0]);
+                }
+                if (strpos($book->celular, "/") !== false) {
+                    $cel = explode("/", $book->celular);
+                    $book->celular = trim($cel[0]);
+                }
 
-                    if ($stake->phone != $book->celular) {
-                        $cont = Contact::where("phone", $book->celular)->first();
-                        $contact["stakeholder_id"] = $stake->id;
-                        $contact["city_id"] = $insert["city_id"];
-                        $contact["name"] = trim($book->contacto);
-                        $contact["email"] = trim($book->correo);
-                        $contact["mobile"] = trim($book->celular);
-                        $contact["web_site"] = trim($book->sitio_web);
 
-                        if (count($cont) > 0) {
-                            $cont->fill($contact)->save();
-                        } else {
-                            Contact::create($contact);
-                        }
-                    } else {
-                        $stake->fill($insert)->save();
-                        $this->updated++;
-                    }
+                $branch = Branch::where("document", trim($number))->where("mobile", $book->celular)->first();
+
+                if ($this->cleanText($book->ciudad_de_envio) != 'N/A') {
+                    $ciudad_de_envio = Administration\Cities::where("description", "ILIKE", "%" . $this->cleanText($book->ciudad_de_envio) . "%")->first();
+                    $ciudad_de_envio = ($ciudad_de_envio == null) ? null : $ciudad_de_envio->id;
                 } else {
+                    $ciudad_de_envio = null;
+                }
 
-                    $insert["phone_contact"] = (int) trim($book->celular);
-                    $insert["contact"] = trim($book->contacto);
-                    $insert["type_stakeholder"] = 2;
-                    $insert["type_document"] = null;
-                    $insert["resposible_id"] = 1;
+                if ($this->cleanText($book->ciudad_de_facturacion) != 'N/A') {
+                    $ciudad_de_facturacion = Administration\Cities::where("description", "ILIKE", "%" . $this->cleanText($book->ciudad_de_facturacion) . "%")->first();
+                    $ciudad_de_facturacion = ($ciudad_de_facturacion == null) ? null : $ciudad_de_facturacion->id;
+                } else {
+                    $ciudad_de_envio = null;
+                }
 
-                    Stakeholder::create($insert);
-                    $this->inserted++;
+                $new["invoice_city_id"] = $ciudad_de_facturacion;
+                $new["send_city_id"] = $ciudad_de_envio;
+                $new["stakeholder_id"] = $stakeholder_id;
+                $new["address_invoice"] = $book->domicilio_de_facturacion;
+                $new["address_send"] = $book->domicilio_de_envio;
+
+                $new["city_id"] = $ciudad_de_facturacion;
+                unset($new["type_stakeholder"]);
+
+                if ($branch == null) {
+                    Branch::create($new);
+                } else {
+                    $branch->fill($new)->save();
                 }
             }
         })->get();
 
         return response()->json(["success" => true, "data" => Stakeholder::where("status_id", 3)->get(), "updates" => $this->updated, "insert" => $this->inserted]);
+    }
+
+    function cleanText($string) {
+        $string = trim($string);
+        $string = utf8_encode((filter_var($string, FILTER_SANITIZE_STRING)));
+        $string = str_replace(
+                array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä', 'Ã'), array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A', 'A'), $string
+        );
+        $string = str_replace(
+                array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'), array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'), $string
+        );
+        $string = str_replace(
+                array('í', 'ì', 'ï', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'), array('i', 'i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'), $string
+        );
+        $string = str_replace(
+                array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'), array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'), $string
+        );
+        $string = str_replace(
+                array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'), array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'), $string
+        );
+        $string = str_replace(
+                array('ñ', 'Ñ', 'ç', 'Ç'), array('n', 'N', 'c', 'C'), $string
+        );
+        $string = str_replace(
+                array("\\", "¨", "º", "–", "~", "|", "·",
+            "¡", "[", "^", "`", "]", "¨", "´", "¿",
+            '§', '¤', '¥', 'Ð', 'Þ'), '', $string
+        );
+        $string = str_replace(
+                array(";",), array(","), $string
+        );
+        $string = str_replace(
+                array("&#39;", "&#39,", '&#34;', '&#34,'), array("'", "'", '"', '"'), $string
+        );
+        $string = htmlentities($string, ENT_QUOTES | ENT_IGNORE, 'UTF-8');
+
+        $string = str_replace(
+                array('&quot;', '&#39;', '&#039;'), array('"', "'", "'"), $string
+        );
+        $string = str_replace(
+                array('&amp;', '&nbsp;'), array('&', ' '), $string
+        );
+        $string = str_replace(
+                array('&deg;', '&sup3;', '&shy;'), array(''), $string
+        );
+        $string = str_replace(
+                array('&copy;', '&sup3;', '&shy;', '&plusmn;'), array('e', 'o', 'i', 'n'), $string
+        );
+        return $string;
     }
 
     public function checkmain(Request $data, $id) {
@@ -409,7 +469,7 @@ class StakeholderController extends Controller {
 
     public function getTax($id) {
         $data = DB::table("stakeholder_tax")
-                ->select("stakeholder_tax.id", "parameters.description as tax","stakeholder_tax.stakeholder_id")
+                ->select("stakeholder_tax.id", "parameters.description as tax", "stakeholder_tax.stakeholder_id")
                 ->join("parameters", "parameters.code", DB::raw("stakeholder_tax.tax_id and parameters.group='tax'"))
                 ->where("stakeholder_id", $id)
                 ->get();

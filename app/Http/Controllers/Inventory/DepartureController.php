@@ -15,6 +15,7 @@ use App\Models\Administration\Products;
 use App\Models\Administration\Stakeholder;
 use App\Models\Administration\Parameters;
 use App\models\Administration\Consecutives;
+use App\models\Administration\Branch;
 use App\Models\Invoicing\Sales;
 use Session;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,15 @@ class DepartureController extends Controller {
 
     public function showOrder($id) {
         return view("departure.init", compact("id"));
+    }
+
+    public function getClient($id) {
+        $client = Stakeholder::find($id);
+        return response()->json(["response" => $client]);
+    }
+    public function getBranch($id) {
+        $response = Branch::find($id);
+        return response()->json(["response" => $response]);
     }
 
     public function getOrderExt($id) {

@@ -50,7 +50,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Quantity real</label>
-                            <input type="text" class="form-control input-detail" id="real_quantity" name='real_quantity' min='0' placeholder="Quantity real" data-type="number">
+                            <input type="text" class="form-control input-detail" id="real_quantity" name='real_quantity' min='0' placeholder="Quantity real" data-type="number"
+                                   <?php echo (Auth::user()->role != 4)?'':"readonly" ?>>
                         </div>
                     </div>
                     <div class="col-lg-6">

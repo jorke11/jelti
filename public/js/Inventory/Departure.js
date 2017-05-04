@@ -13,13 +13,22 @@ function Sale() {
         });
         $("#client_id").change(function () {
             if ($(this).val() != 0) {
-                obj.getSupplier($(this).val());
+                obj.getClient($(this).val());
             } else {
                 $("#frm #name_client").val("");
                 $("#frm #address_supplier").val("");
                 $("#frm #phone_supplier").val("");
             }
         });
+
+        $("#branch_id").change(function () {
+            if ($(this).val() != 0) {
+                obj.getBranchAddress($(this).val());
+            } else {
+
+            }
+        });
+
         if ($("#id_orderext").val() != '') {
             obj.infomationExt($("#id_orderext").val(), true);
         }
@@ -56,7 +65,7 @@ function Sale() {
                 success: function (resp) {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf)
-                    $("#frmDetail #quantityMax").html("Available: (" + resp.quantity + ")")
+                    $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
                 }
             })
         });
@@ -72,7 +81,6 @@ function Sale() {
                             $("#frm #invoice").val(resp.consecutive);
                             $("#btnDocument").attr("disabled", true);
                         }
-
                     }
                 })
 
@@ -114,10 +122,26 @@ function Sale() {
 
         obj.consecutive();
     }
-    this.getSupplier = function (id, path) {
-        var url = 'entry/' + id + '/getSupplier';
+
+    this.getBranchAddress = function (id, path) {
+        var url = 'departure/' + id + '/getBranch';
         if (path == undefined) {
-            url = '../../entry/' + id + '/getSupplier';
+            url = '../../departure/' + id + '/getBranch';
+        }
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (resp) {
+                $("#frm #address").val(resp.response.address_invoice);
+            }
+        })
+    }
+    this.getClient = function (id, path) {
+        var url = 'departure/' + id + '/getClient';
+        if (path == undefined) {
+            url = '../../departure/' + id + '/getClient';
         }
 
         $.ajax({
@@ -133,7 +157,10 @@ function Sale() {
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.response.address);
                 $("#frm #phone").val(resp.response.phone);
+
                 $("#frm #branch_id").getSeeker({filter: {stakeholder_id: $("#frm #client_id").val()}});
+
+                $("#frm #destination_id").setFields({data: {destination_id: resp.response.city_id}});
             }
         })
     }

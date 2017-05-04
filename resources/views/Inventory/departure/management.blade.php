@@ -79,14 +79,6 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">City Destination:</label>
-                    <select class="form-control input-departure input-fillable" id="destination_id" name='destination_id' data-api="/api/getCity" required>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-lg-2">
-                <div class="form-group">
                     <label for="email">Client:</label>
                     <select class="form-control input-departure input-fillable" id="client_id" name='client_id' data-api="/api/getClient" required> 
                     </select>
@@ -98,11 +90,17 @@
                     <input type="text" class="form-control input-departure input-sm" id="name_client" readonly="">
                 </div>
             </div>
-
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="email">City Destination:</label>
+                    <select class="form-control input-departure input-fillable" id="destination_id" name='destination_id' data-api="/api/getCity" required>
+                    </select>
+                </div>
+            </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Address:</label>
-                    <input type="text" class="form-control input-departure input-sm input-fillable" id="address" name="address">
+                    <input type="text" class="form-control input-departure input-sm input-fillable" id="address" name="address" required>
                 </div>
             </div>
             <div class="col-lg-2">

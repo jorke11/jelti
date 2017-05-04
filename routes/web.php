@@ -144,6 +144,10 @@ Route::get('/departure/{id}/getInvoiceHtml', ['uses' => 'Inventory\DepartureCont
 Route::get('/departure/{id}/detailAll/', 'Inventory\DepartureController@getAllDetail');
 Route::put('/departure/generateInvoice/{id}', 'Inventory\DepartureController@generateInvoice');
 
+Route::get('/departure/{id}/getClient', ['uses' => 'Inventory\DepartureController@getClient']);
+Route::get('/departure/{id}/getBranch', ['uses' => 'Inventory\DepartureController@getBranch']);
+
+
 Route::resource('/order', 'Inventory\OrderController');
 Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);
 Route::get('/order/{id}/quantity', ['uses' => 'Inventory\OrderController@getQuantity']);

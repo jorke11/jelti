@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Seller\Prospect;
 use App\Models\Administration\Stakeholder;
 use Session;
+use Auth;
 
 class ProspectsController extends Controller {
 

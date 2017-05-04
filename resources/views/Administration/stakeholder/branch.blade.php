@@ -106,7 +106,7 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label for="email">Nit</label>
-                            <input class="form-control input-branch input-sm" id="nit" name="nit">    
+                            <input class="form-control input-branch input-sm" id="document" name="document">    
                         </div>
                     </div>
                     <div class="col-lg-4">

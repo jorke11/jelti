@@ -77,7 +77,7 @@ class ProspectsController extends Controller {
             'address' => $record->address,
             'phone' => $record->phone,
             'bussines_name' => $record->bussines_name,
-            'commercial_id' => $record->commercial_id,
+            'responsible_id' => $record->commercial_id,
             'web_site' => $record->web_site,
             'status_id' => 2,
             

@@ -3,18 +3,14 @@
 @section('content')
 @section('title','Kardex')
 @section('subtitle','Management')
-<style>
-    #micanvas{
-        border:1px #000 solid;
-    }
-</style>
+
 <div class="row">
     <div class="col-lg-6 col-lg-offset-3">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-3">
-                        <input type="text" id="quantity" name="quantity">
+                        <input type="text" id="quantity" name="quantity" placeholder="days">
                     </div>
                     <div class="col-lg-2">
                         <button id="btnPrint" class="btn btn-success" type="button">Print</button>
@@ -22,16 +18,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-12">
                         <table class="table table-condensed table-bordered" id="data">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>Dias</th>
                                     <th>Aleatorio</th>
-                                    <th>Pasos</th>
+                                    <th># autos rentados por dia</th>
                                     <th>Aleatorio</th>
-                                    <th>Angulo</th>
-                                    <th>Distancia</th>
+                                    <th># dias rentados por auto</th>
+                                    <th>Disponibles</th>
+                                    <th>Necesarios</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,9 +39,7 @@
                     </div>
 
                 </div>
-                <canvas height="500px" width="500px" id="micanvas">
-                    Su navegador no soporta en elemento CANVAS
-                </canvas>
+              
             </div>
         </div>
     </div>

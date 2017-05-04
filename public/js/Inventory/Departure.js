@@ -111,6 +111,7 @@ function Sale() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+
         obj.consecutive();
     }
     this.getSupplier = function (id, path) {
@@ -132,6 +133,7 @@ function Sale() {
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.response.address);
                 $("#frm #phone").val(resp.response.phone);
+                $("#frm #branch_id").getSeeker({filter: {stakeholder_id: $("#frm #client_id").val()}});
             }
         })
     }
@@ -287,7 +289,7 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-departure").setFields({data: data.header,disabled:true});
+                $(".input-departure").setFields({data: data.header, disabled: true});
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }

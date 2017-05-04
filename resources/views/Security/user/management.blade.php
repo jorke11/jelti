@@ -64,6 +64,13 @@
 <div class="row">
     <div class="col-lg-3">
         <div class="form-group">
+            <label for="email">Warehouse:</label>
+            <select id="warehouse_id" name="warehouse_id" class="form-control input-user" data-api="/api/getWarehouse" required>
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
             <label for="email">Stakeholder:</label>
             <select id="stakeholder_id" name="stakeholder_id" class="form-control input-user" data-api="/api/getStakeholder" required>
             </select>

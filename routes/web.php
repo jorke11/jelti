@@ -378,7 +378,7 @@ Route::get('/logout', 'Security\UserController@logOut');
 Route::get('/api/getCity', 'Administration\SeekController@getCity');
 Route::get('/api/getDepartment', 'Administration\SeekController@getDepartment');
 Route::get('/api/getSupplier', 'Administration\SeekController@getSupplier');
-Route::get('/api/getStakeholder', 'Administration\SeekController@getSupplier');
+Route::get('/api/getStakeholder', 'Administration\SeekController@getStakeholder');
 Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacteristic');
 Route::get('/api/getClient', 'Administration\SeekController@getClient');
 Route::get('/api/getContact', 'Administration\SeekController@getContact');

@@ -82,7 +82,7 @@ class SeekController extends Controller {
             $query->where("id", $in["id"])->get();
         } else {
             $query
-                    ->where("business", "ilike", "%" . $in["q"] . "%")
+                    ->where("business", "ILIKE", "%" . $in["q"] . "%")
                     ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
                     ->get();
         }
@@ -95,13 +95,13 @@ class SeekController extends Controller {
 
     public function getStakeholder(Request $req) {
         $in = $req->all();
-        $query = Stakeholder::select("id", "name as text");
+        $query = Stakeholder::select("id", "business as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"])) {
             $query->where("id", $in["id"])->get();
         } else {
-            $query->where("name", "ilike", "%" . $in["q"] . "%")->get();
+            $query->where("business", "ILIKE", "%" . $in["q"] . "%")->get();
         }
         $result = $query->get();
 
@@ -262,7 +262,7 @@ class SeekController extends Controller {
 
     public function getBranch(Request $req) {
         $in = $req->all();
-        $query = Branch::select("id", "name as text");
+        $query = Branch::select("id", "address_invoice as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
         } else if (isset($in["id"])) {
@@ -270,7 +270,13 @@ class SeekController extends Controller {
                 $query->where("id", $in["id"]);
             }
         } else {
-            $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+            $query->where("address_invoice", "ilike", "%" . $in["q"] . "%")->get();
+        }
+
+        if (isset($in["filter"]) && $in["filter"] != '') {
+            foreach ($in["filter"] as $key => $val) {
+                $query->where($key, $val);
+            }
         }
         $result = $query->get();
 

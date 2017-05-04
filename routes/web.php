@@ -312,24 +312,25 @@ Route::get('/api/listEntry', function() {
 
 Route::get('/api/listDeparture', function() {
 
-    $query = DB::table('departures')
-            ->select("departures.id", "departures.created_at", DB::raw("stakeholder.name || stakeholder.last_name as client")
-                    , "warehouses.description as warehouse", "cities.description as city"
-                    , DB::raw("coalesce(parameters.description,'') as status"), "departures.status_id")
-            ->join("stakeholder", "stakeholder.id", "departures.client_id")
-            ->leftjoin("cities", "cities.id", "departures.city_id")
-            ->leftjoin("warehouses", "warehouses.id", "departures.warehouse_id")
-            ->leftjoin("parameters", "parameters.code", DB::raw("departures.status_id and parameters.group='entry'"))
-            ->where("parameters.group", "entry");
+//    $query = DB::table('departures')
+//            ->select("departures.id", "departures.created_at", DB::raw("stakeholder.name || stakeholder.last_name as client")
+//                    , "warehouses.description as warehouse", "cities.description as city"
+//                    , DB::raw("coalesce(parameters.description,'') as status"), "departures.status_id")
+//            ->join("stakeholder", "stakeholder.id", "departures.client_id")
+//            ->leftjoin("cities", "cities.id", "departures.city_id")
+//            ->leftjoin("warehouses", "warehouses.id", "departures.warehouse_id")
+//            ->leftjoin("parameters", "parameters.code", DB::raw("departures.status_id and parameters.group='entry'"))
+//            ->where("parameters.group", "entry");
 
 //    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
 //        $query->where("departures.responsible_id", Auth::user()->id);
 //    }
-//    $query = DB::table('vdepartures');
-//            
-//    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-//        $query->where("responsible_id", Auth::user()->id);
-//    }
+
+    $query = DB::table('vdepartures');
+            
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("responsible_id", Auth::user()->id);
+    }
 
     return Datatables::queryBuilder($query)->make(true);
 });

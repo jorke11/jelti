@@ -316,10 +316,10 @@ function Stakeholder() {
     this.saveBranch = function () {
         toastr.remove();
         var frm = $("#frmBranch");
-        $("#frmBranch #client_id").val($("#frm #id").val());
+        $("#frmBranch #stakeholder_id").val($("#frm #id").val());
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frmSpecial #id").val();
+        var id = $("#frmBranch #id").val();
 
         var msg = '';
 
@@ -611,7 +611,7 @@ function Stakeholder() {
     this.tableBranch = function (id) {
         var obj = {}, checked = false;
         obj.stakeholder_id = id;
-
+        
         return $('#tblBranch').DataTable({
             "processing": true,
             "serverSide": true,

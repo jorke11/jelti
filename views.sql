@@ -43,3 +43,14 @@ create view vcities as
 select c.id,c.description city,d.description department,c.code
 from cities c
 join departments d ON d.id=c.department_id
+
+
+
+create view vpurchases as 
+select p.id, p.consecutive,p.description,p.created_at,s.business || ' '|| s.business_name as stakeholder,w.description as warehouse,c.description as city,param.description as status,
+p.responsible_id
+from purchases p
+JOIN stakeholder s ON s.id=p.supplier_id
+JOIN warehouses w ON w.id=p.warehouse_id
+JOIN cities c ON c.id=p.city_id
+JOIN parameters param ON param.id=p.status_id and param.group='entry'

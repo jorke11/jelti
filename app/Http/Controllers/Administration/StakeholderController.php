@@ -129,7 +129,8 @@ class StakeholderController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
-
+            $input["user_insert"] = Auth::user()->id;
+            $input["status_id"] = 1;
             $result = Branch::create($input);
             if ($result) {
                 return response()->json(['success' => true]);

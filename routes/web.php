@@ -282,15 +282,10 @@ Route::get('/api/listContact', function() {
 
 Route::get('/api/listPurchase', function() {
 
-    $query = DB::table("purchases")
-            ->select("purchases.id", "purchases.consecutive", "purchases.description", "purchases.created_at", "stakeholder.name as stakeholder", "purchases.created_at", "warehouses.description as warehouse", "cities.description as city", "parameters.description as status")
-            ->join("stakeholder", "stakeholder.id", DB::raw("purchases.supplier_id and stakeholder.type_stakeholder=2"))
-            ->join("warehouses", "warehouses.id", "purchases.warehouse_id")
-            ->join("cities", "cities.id", "purchases.city_id")
-            ->join("parameters", "parameters.id", DB::raw("purchases.status_id and parameters.group='entry'"));
-
+    $query = DB::table("vpurchases");
+          
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-        $query->where("purchases.responsible_id", Auth::user()->id);
+        $query->where("responsible_id", Auth::user()->id);
     }
 
     return Datatables::queryBuilder($query)->make(true);

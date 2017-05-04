@@ -15,7 +15,7 @@ use App\Models\Administration\Products;
 use App\Models\Administration\Stakeholder;
 use App\Models\Administration\Parameters;
 use App\models\Administration\Consecutives;
-use App\models\Administration\Branch;
+use App\Models\Administration\Branch;
 use App\Models\Invoicing\Sales;
 use Session;
 use Illuminate\Support\Facades\Auth;

@@ -22,7 +22,10 @@ function Prospect() {
                 data: obj,
                 dataType: 'JSON',
                 success: function (data) {
-                    console.log(data)
+                    if (data.success == true) {
+                        toastr.success("Client converted");
+                    }
+
                 }
             })
         }

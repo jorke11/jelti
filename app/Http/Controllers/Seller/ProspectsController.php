@@ -80,6 +80,7 @@ class ProspectsController extends Controller {
             'responsible_id' => $record->commercial_id,
             'web_site' => $record->web_site,
             'status_id' => 2,
+            'user_insert' => Auth::user()->id,
             
         );
 

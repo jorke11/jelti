@@ -13,6 +13,7 @@
                         <th></th>
                         <th>Date</th>
                         <th>Client</th>
+                        <th>Commercial</th>
                         <th>Warehouse</th>
                         <th>City</th>
                         <th>Status</th>
@@ -23,9 +24,10 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Id</th>
+                        <th></th>
                         <th>Date</th>
                         <th>Client</th>
+                        <th>Commercial</th>
                         <th>Warehouse</th>
                         <th>City</th>
                         <th>Status</th>

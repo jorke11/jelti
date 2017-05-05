@@ -477,6 +477,7 @@ function Sale() {
 //                {data: "id"},
                 {data: "created_at"},
                 {data: "client"},
+                {data: "responsible"},
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "status"},
@@ -490,7 +491,7 @@ function Sale() {
                     }
                 },
                 {
-                    targets: [6],
+                    targets: [7],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -522,11 +523,11 @@ function Sale() {
             },
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
-                    $('td', row).eq(5).addClass('color-new');
+                    $('td', row).eq(6).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(5).addClass('color-pending');
+                    $('td', row).eq(6).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(5).addClass('color-checked');
+                    $('td', row).eq(6).addClass('color-checked');
                 }
             }
         });

@@ -16,7 +16,10 @@ bootstrap/cache/
 
 /node_modules
 /public/storage
-/public/images
+/public/images/supplier
+/public/images/resize
+/public/images/product
+/public/images/stakeholder
 /public/uploads
 /vendor
 /.idea

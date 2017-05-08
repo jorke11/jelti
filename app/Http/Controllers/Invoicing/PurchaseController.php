@@ -266,7 +266,9 @@ class PurchaseController extends Controller {
                 $input["last_name"] = $user->last_name;
 
                 $input["detail"] = DB::table("purchases_detail")
-                                ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("purchases_detail.quantity * purchases_detail.value as total"))
+                                ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier",
+                                        "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), 
+                                        "purchases_detail.quantity", DB::raw("purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value as total"))
                                 ->join("products", "products.id", "purchases_detail.product_id")
                                 ->where("purchase_id", $purchase->id)->get();
 

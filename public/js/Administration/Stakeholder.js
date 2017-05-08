@@ -37,6 +37,10 @@ function Stakeholder() {
             $("#frmFile #stakeholder_id").val($("#frm #id").val());
             $("#modalUpload").modal("show");
         })
+        
+        $("#type_regime_id").change(function(){
+            
+        });
 
         $("#addJustify").click(this.addJustify);
 

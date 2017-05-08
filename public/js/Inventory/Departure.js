@@ -149,18 +149,20 @@ function Sale() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
-
-                resp.response.name = (resp.response.name == null) ? '' : resp.response.name + " ";
-                resp.response.last_name = (resp.response.last_name == null) ? '' : resp.response.last_name + " ";
-                $("#frm #name_client").val(resp.response.name + resp.response.last_name + resp.response.business_name);
+                
+                resp.data.client.name = (resp.data.client.name == null) ? '' : resp.data.client.name + " ";
+                resp.data.client.last_name = (resp.data.client.last_name == null) ? '' : resp.data.client.last_name + " ";
+                $("#frm #name_client").val(resp.data.client.name + resp.data.client.last_name + resp.data.client.business_name);
 
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
-                $("#frm #address").val(resp.response.address);
-                $("#frm #phone").val(resp.response.phone);
+                $("#frm #address").val(resp.data.client.address);
+                $("#frm #phone").val(resp.data.client.phone);
 
                 $("#frm #branch_id").getSeeker({filter: {stakeholder_id: $("#frm #client_id").val()}});
-
-                $("#frm #destination_id").setFields({data: {destination_id: resp.response.city_id}});
+                $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
+                
+                console.log(resp.data);
+                
             }
         })
     }

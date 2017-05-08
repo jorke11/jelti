@@ -17,16 +17,36 @@
                 <td>Valor Unitario</td>
                 <td>Total</td>
             </tr>
-            @foreach($detail as $val)
+            <?php
+            $totalCant = 0;
+            $totalUnit = 0;
+            $totalVUnit = 0;
+            $total = 0;
+            foreach ($detail as $val) {
+                $totalCant += $val->quantity;
+                $totalUnitsSup += $val->units_supplier;
+                $totalUnit += $val->totalunit;
+                $totalVUnit += $val->cost_sf;
+                $total += $val->total;
+                ?>
+                <tr>
+                    <td>{!!$val->producto!!}</td>
+                    <td>{{$val->quantity}}</td>
+                    <td>{{$val->units_supplier}}</td>
+                    <td>{{$val->totalunit}}</td>
+                    <td align="center">$ {{number_format($val->cost_sf,2,",",".")}}</td>
+                    <td align="center">$ {{number_format($val->total,2,",",".")}}</td>
+                </tr>
+                <?php
+            }
+            ?>
             <tr>
-                <td>{!!$val->producto!!}</td>
-                <td>{{$val->quantity}}</td>
-                <td>{{$val->units_supplier}}</td>
-                <td>{{$val->totalunit}}</td>
-                <td align="center">$ {{number_format($val->cost_sf,2,",",".")}}</td>
-                <td align="center">$ {{number_format($val->total,2,",",".")}}</td>
+                <td>Total</td>
+                <td colspan="2">{!!$totalCant!!}</td>
+                <td>{{$totalUnit}}</td>
+                <td>$ {{number_format($totalVUnit,2,",",".")}}</td>
+                <td>$ {{number_format($total,2,",",".")}}</td>
             </tr>
-            @endforeach
 
         </table>
         <br>

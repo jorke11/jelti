@@ -104,6 +104,11 @@ class ParameterTableSeeder extends Seeder {
             'code' => 2,
         ]);
         DB::table("parameters")->insert([
+            'description' => "usuario",
+            'group' => "typestakeholder",
+            'code' => 3,
+        ]);
+        DB::table("parameters")->insert([
             'description' => "active",
             'group' => "generic",
             'code' => 1,

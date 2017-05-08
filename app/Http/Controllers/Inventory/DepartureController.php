@@ -43,9 +43,11 @@ class DepartureController extends Controller {
     }
 
     public function getClient($id) {
-        $client = Stakeholder::find($id);
-        return response()->json(["response" => $client]);
+        $resp["client"] = Stakeholder::find($id);
+        $resp["branch"] = Branch::where("stakeholder_id", $resp["client"]->id)->get();
+        return response()->json(["success" => true, "data" => $resp]);
     }
+
     public function getBranch($id) {
         $response = Branch::find($id);
         return response()->json(["response" => $response]);

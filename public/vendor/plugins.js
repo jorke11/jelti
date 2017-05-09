@@ -284,6 +284,19 @@ jQuery.fn.capital = function (str) {
         return $1.toUpperCase();
     });
 }
+
+jQuery.fn.formatNumber = function () {
+    this.each(function () {
+        var elem = $(this), resp = 0;
+        var number = elem.val();
+        var div = number.split(".");
+        resp = div[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+        resp += "," + div[1];
+        elem.val('$' + resp);
+    })
+
+}
+
 jQuery.fn.getData = function () {
     var resp = '', id;
 

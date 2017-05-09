@@ -120,19 +120,38 @@ class DepartureController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["id"]);
+//            unset($input["id"]);
 //            $user = Auth::User();
-            $input["status_id"] = 1;
 
-            $input["consecutive"] = $this->createConsecutive(3);
-            $result = Departures::create($input)->id;
+            if (isset($input["detail"])) {
 
-            if ($result) {
-                $this->updateConsecutive(2);
-                $resp = Departures::FindOrFail($result);
-                return response()->json(['success' => true, "data" => $resp]);
+                $input["header"]["status_id"] = 1;
+                $input["header"]["consecutive"] = $this->createConsecutive(3);
+                $result = Departures::create($input["header"])->id;
+
+                if ($result) {
+                    $this->updateConsecutive(3);
+                    $resp = Departures::FindOrFail($result);
+
+                    foreach ($input["detail"] as $i => $val) {
+                        $pro = Products::find($val["product_id"]);
+                        $detail["product_id"] = $val["product_id"];
+                        $detail["departure_id"] = $result;
+                        $detail["status_id"] = 1;
+                        $detail["quantity"] = $val["quantity"];
+                        $detail["units_sf"] = $pro->units_sf;
+                        $detail["value"] = $pro->price_cust;
+                        DeparturesDetail::create($detail);
+                    }
+
+                    $detail = $this->formatDetail($result);
+
+                    return response()->json(['success' => true, "data" => $resp, "detail" => $detail]);
+                } else {
+                    return response()->json(['success' => false]);
+                }
             } else {
-                return response()->json(['success' => false]);
+                return response()->json(['success' => false, "msg" => "detail Empty"], 409);
             }
         }
     }
@@ -413,6 +432,7 @@ class DepartureController extends Controller {
 
             $result = DeparturesDetail::create($input);
             if ($result) {
+
                 $resp = $this->formatDetail($input["departure_id"]);
                 return response()->json(['success' => true, "data" => $resp]);
             } else {

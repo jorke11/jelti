@@ -9,6 +9,7 @@
                 {!! Form::open(['id'=>'frmDetail']) !!}
                 <input type="hidden" id="id" name="id" class="input-detail">
                 <input type="hidden" id="departure_id" name="departure_id">
+                <input type="hidden" id="rowItem">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -41,7 +42,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Value:</label>
-                            <input type="text" class="form-control input-detail" id="value" name='value' required readonly data-type="number">
+                            <input type="text" class="form-control input-detail" id="value" name='value' required readonly>
                         </div>
                     </div>
 
@@ -51,7 +52,7 @@
                         <div class="form-group">
                             <label for="email">Quantity real</label>
                             <input type="text" class="form-control input-detail" id="real_quantity" name='real_quantity' min='0' placeholder="Quantity real" data-type="number"
-                                   <?php echo (Auth::user()->role != 4)?'':"readonly" ?>>
+                                   <?php echo (Auth::user()->role != 4) ? '' : "readonly" ?>>
                         </div>
                     </div>
                     <div class="col-lg-6">

@@ -1,5 +1,5 @@
 function Sale() {
-    var table, maxDeparture = 0;
+    var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -37,6 +37,7 @@ function Sale() {
             $(".input-departure").cleanFields({disabled: true});
             $("#btnSend").attr("disabled", true);
             $("#btnSave").attr("disabled", true);
+            $("#btnmodalDetail").attr("disabled", true);
             $("#btnDocument").attr("disabled", true);
             $(".input-fillable").attr("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
@@ -49,6 +50,7 @@ function Sale() {
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
             $(".input-detail").cleanFields();
+            $("#frmDetail #rowItem").val(-1);
 
             if ($("#frm #status_id").val() == 1) {
                 $("#frmDetail #real_quantity").attr("disabled", true);
@@ -63,8 +65,9 @@ function Sale() {
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
+                    dataProduct = resp.response;
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
-                    $("#frmDetail #value").val(resp.response.price_sf)
+                    $("#frmDetail #value").val(resp.response.price_sf).formatNumber()
                     $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
                 }
             })
@@ -89,6 +92,7 @@ function Sale() {
                 toastr.error("error")
             }
         });
+
         $("#tabList").click(function () {
             table.ajax.reload();
         })
@@ -119,7 +123,7 @@ function Sale() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-
+        $("#btnmodalDetail").attr("disabled", false);
         obj.consecutive();
     }
 
@@ -149,7 +153,7 @@ function Sale() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
-                
+
                 resp.data.client.name = (resp.data.client.name == null) ? '' : resp.data.client.name + " ";
                 resp.data.client.last_name = (resp.data.client.last_name == null) ? '' : resp.data.client.last_name + " ";
                 $("#frm #name_client").val(resp.data.client.name + resp.data.client.last_name + resp.data.client.business_name);
@@ -160,9 +164,8 @@ function Sale() {
 
                 $("#frm #branch_id").getSeeker({filter: {stakeholder_id: $("#frm #client_id").val()}});
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
-                
-                console.log(resp.data);
-                
+
+
             }
         })
     }
@@ -204,42 +207,51 @@ function Sale() {
         $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
         var frm = $("#frm");
-        var data = frm.serialize();
+        var data = {};
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
         var validate = $(".input-departure").validate();
+
         if (validate.length == 0) {
             if ($("#id_orderext").val() == '') {
-                if (id == '') {
-                    method = 'POST';
-                    url = "departure";
-                    msg = "Created Record";
-                } else {
-                    method = 'PUT';
-                    url = "departure/" + id;
-                    msg = "Edited Record";
-                }
+                if (listProducts.length > 0) {
+                    data.header = $(".input-departure").getData();
+                    data.detail = listProducts;
 
-                $.ajax({
-                    url: url,
-                    method: method,
-                    data: data,
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if (data.success == true) {
-                            $("#btnSend").attr("disabled", false);
-                            $("#frm #id").val(data.data.id);
-                            $(".input-departure").setFields({data: data.data, disabled: true});
-                            table.ajax.reload();
-                            toastr.success(msg);
-                            $("#btnmodalDetail").attr("disabled", false);
-                        }
+                    if (id == '') {
+                        method = 'POST';
+                        url = "departure";
+                        msg = "Created Record";
+                    } else {
+                        method = 'PUT';
+                        url = "departure/" + id;
+                        msg = "Edited Record";
                     }
-                })
+
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: data,
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if (data.success == true) {
+                                $("#btnSend").attr("disabled", false);
+                                $("#frm #id").val(data.data.id);
+                                $(".input-departure").setFields({data: data.data, disabled: true});
+                                table.ajax.reload();
+                                toastr.success(msg);
+                                $("#btnmodalDetail").attr("disabled", false);
+                                obj.printDetail(data.detail);
+                            }
+                        }
+                    })
+                } else {
+                    toastr.error("Detail empty");
+                }
             } else {
-                var obj = {};
-                obj.id = $("#id_orderext").val();
+                var param = {};
+                param.id = $("#id_orderext").val();
                 $.ajax({
                     url: "../../departure/storeExt",
                     method: 'POST',
@@ -266,45 +278,146 @@ function Sale() {
     this.saveDetail = function () {
         toastr.remove();
         $("#frmDetail #departure_id").val($("#frm #id").val());
-        var frm = $("#frmDetail");
-        var data = frm.serialize();
+
+        var data = {}, value = 0, total = 0;
         var url = "", method = "";
         var id = $("#frmDetail #id").val();
+        var form = $("#frmDetail").serialize()
         var msg = 'Record Detail';
         var validate = $(".input-detail").validate();
 
         if (validate.length == 0) {
 
-            if (id == '') {
-                method = 'POST';
-                url = "departure/storeDetail";
-                msg = "Created " + msg;
+            if (id != '') {
+                $.ajax({
+                    url: "departure/" + id,
+                    method: 'PUT',
+                    data: form,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success == true) {
+                            $("#btnSend").attr("disabled", false);
+                            $("#frm #id").val(data.data.id);
+                            $(".input-departure").setFields({data: data.data, disabled: true});
+                            table.ajax.reload();
+                            toastr.success(msg);
+                            $("#btnmodalDetail").attr("disabled", false);
+                        }
+                    }
+                })
+
             } else {
-                method = 'PUT';
-                url = "departure/detail/" + id;
-                msg = "Edited " + msg;
+                if ($("#frmDetail #rowItem").val() == '-1') {
+
+                    listProducts.push({
+                        row: listProducts.length,
+                        product_id: $("#frmDetail #product_id").val(),
+                        product: $.trim($("#frmDetail #product_id").text()),
+                        quantity: $("#frmDetail #quantity").val(),
+                        valueFormated: $("#frmDetail #value").val(),
+                        totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
+                        real_quantity: '',
+                        totalFormated_real: '',
+                        comment: '',
+                        status: 'new'
+                    });
+                    msg += " add";
+                } else {
+                    listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
+                    listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
+                    msg += " edited";
+                }
+
+
+                toastr.success(msg);
+                obj.printDetailTmp();
             }
 
-            $.ajax({
-                url: url,
-                method: method,
-                data: data,
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == true) {
-                        toastr.success(msg);
-                        $("#btnmodalDetail").attr("disabled", false);
-                        obj.printDetail(data.data);
-                        $("#modalDetail").modal("hide");
-                        $("#frmDetail #quantity").attr("disabled", true);
-                    }
-                }, error: function (xhr, ajaxOptions, thrownError) {
-                    toastr.error(xhr.responseJSON.msg)
-                }
-            })
         } else {
             toastr.error("input required");
         }
+    }
+
+    this.editItem = function (product_id, rowItem) {
+        toastr.remove();
+        $("#modalDetail").modal("show");
+        obj.getItem(product_id);
+        $("#frmDetail #rowItem").val(rowItem);
+        $(".input-detail").cleanFields();
+        $(".input-detail").setFields({data: row});
+    }
+
+    this.getItem = function (product_id) {
+
+        $.each(listProducts, function (i, val) {
+            if (val.product_id == product_id) {
+                rowItem = i;
+                row = val;
+            }
+        })
+    }
+
+    this.printDetailTmp = function (data, btnEdit = true, btnDel = true) {
+        var html = "", htmlEdit = "", htmlDel = "";
+        $("#tblDetail tbody").empty();
+        $.each(listProducts, function (i, val) {
+
+            htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
+            htmlDel = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.deleteItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
+
+            val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+            html += '<tr id="row_' + val.row + '">';
+            html += "<td>" + val.product + "</td>";
+            html += "<td>" + val.comment + "</td>";
+            html += "<td>" + val.quantity + "</td>";
+            html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + val.totalFormated + "</td>";
+            html += "<td>" + val.real_quantity + "</td>";
+            html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + val.totalFormated_real + "</td>";
+            html += '<td>' + val.status + "</td>";
+            html += '<td>' + htmlEdit + "</td>";
+            html += "</tr>";
+        });
+
+        $("#tblDetail tbody").html(html);
+    }
+
+    this.deleteItem = function (product_id, rowItem) {
+        delete listProducts[rowItem];
+    }
+
+    this.printDetail = function (data, btnEdit = true, btnDel = true) {
+        var html = "", htmlEdit = "", htmlDel = "";
+        $("#tblDetail tbody").empty();
+        $.each(data, function (i, val) {
+
+            if (btnEdit == true && val.status_id != 3) {
+                htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
+            } else {
+                htmlEdit = '';
+            }
+            if (btnDel == true && val.status_id != 3) {
+                htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ',' + val.status_id + ')>Delete</button>'
+            } else {
+                htmlDel = '';
+            }
+
+            val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+            html += "<tr>";
+            html += "<td>" + val.product + "</td>";
+            html += "<td>" + val.comment + "</td>";
+            html += "<td>" + val.quantity + "</td>";
+            html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + val.totalFormated + "</td>";
+            html += "<td>" + val.real_quantity + "</td>";
+            html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + val.totalFormated_real + "</td>";
+            html += '<td>' + val.status + "</td>";
+            html += '<td>' + htmlEdit + htmlDel + "</td>";
+            html += "</tr>";
+        });
+        $("#tblDetail tbody").html(html);
     }
 
     this.showModal = function (id) {
@@ -380,39 +493,7 @@ function Sale() {
         })
     }
 
-    this.printDetail = function (data, btnEdit = true, btnDel = true) {
-        var html = "", htmlEdit = "", htmlDel = "";
-        $("#tblDetail tbody").empty();
-        $.each(data, function (i, val) {
 
-            if (btnEdit == true && val.status_id != 3) {
-                htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
-            } else {
-                htmlEdit = '';
-            }
-            if (btnDel == true && val.status_id != 3) {
-                htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ',' + val.status_id + ')>Delete</button>'
-            } else {
-                htmlDel = '';
-            }
-
-            val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
-            html += "<tr>";
-            html += "<td>" + val.id + "</td>";
-            html += "<td>" + val.product + "</td>";
-            html += "<td>" + val.comment + "</td>";
-            html += "<td>" + val.quantity + "</td>";
-            html += "<td>" + val.valueFormated + "</td>";
-            html += "<td>" + val.totalFormated + "</td>";
-            html += "<td>" + val.real_quantity + "</td>";
-            html += "<td>" + val.valueFormated + "</td>";
-            html += "<td>" + val.totalFormated_real + "</td>";
-            html += '<td>' + val.status + "</td>";
-            html += '<td>' + htmlEdit + htmlDel + "</td>";
-            html += "</tr>";
-        });
-        $("#tblDetail tbody").html(html);
-    }
 
     this.delete = function (id) {
         toastr.remove();
@@ -476,7 +557,7 @@ function Sale() {
                     defaultContent: '',
                     searchable: false,
                 },
-//                {data: "id"},
+                {data: "consecutive"},
                 {data: "created_at"},
                 {data: "client"},
                 {data: "responsible"},
@@ -493,7 +574,7 @@ function Sale() {
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [8],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -525,11 +606,11 @@ function Sale() {
             },
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
-                    $('td', row).eq(6).addClass('color-new');
+                    $('td', row).eq(7).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(6).addClass('color-pending');
+                    $('td', row).eq(7).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(6).addClass('color-checked');
+                    $('td', row).eq(7).addClass('color-checked');
                 }
             }
         });

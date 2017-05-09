@@ -5,7 +5,7 @@
                 <button class="btn btn-success btn-sm" id='btnNew'>
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"> New</span>
                 </button>
-                <button class="btn btn-success btn-sm" id='btnSave' disabled>
+                <button class="btn btn-success btn-sm" id='btnSave'>
                     <span class="glyphicon glyphicon-save" aria-hidden="true" > Save</span>
                 </button>
                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
@@ -137,7 +137,7 @@
                 <div class="row">
                     <div class="col-lg-4">List Detail</div>
                     <div class="col-lg-8 text-right">
-                        <button class="btn btn-success btn-sm" type="button" id="btnmodalDetail" disabled>
+                        <button class="btn btn-success btn-sm" type="button" id="btnmodalDetail">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -147,14 +147,13 @@
                 <table class="table table-bordered table-condensed" id="tblDetail">
                     <thead>
                         <tr>
-                            <th colspan="3" class="center-rowspan">Information</th>
+                            <th colspan="2" class="center-rowspan">Information</th>
                             <th colspan="3" class="center-rowspan">Order</th>
                             <th colspan="3" class="center-rowspan">Dispatched</th>
                             <th rowspan="2" class="center-rowspan">Status</th>
                             <th rowspan="2" class="center-rowspan">Actions</th>
                         </tr>
                         <tr>
-                            <th>#</th>
                             <th>Product</th>
                             <th>Comment</th>
                             <th>Quantity</th>

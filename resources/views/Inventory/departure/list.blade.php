@@ -11,6 +11,7 @@
                 <thead>
                     <tr>
                         <th></th>
+                        <th>Consecutive</th>
                         <th>Date</th>
                         <th>Client</th>
                         <th>Commercial</th>
@@ -25,6 +26,7 @@
                 <tfoot>
                     <tr>
                         <th></th>
+                        <th>Consecutive</th>
                         <th>Date</th>
                         <th>Client</th>
                         <th>Commercial</th>

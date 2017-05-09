@@ -179,6 +179,7 @@ function Purchase() {
         toastr.remove();
         $("#modalDetail").modal("show");
         obj.getItem(product_id)
+        $(".input-detail").cleanFields();
         $(".input-detail").setFields({data: row});
     }
 
@@ -256,6 +257,9 @@ function Purchase() {
                         $("#btnmodalDetail").attr("disabled", false);
                         $("#btnSend").attr("disabled", false);
                     }
+                },
+                error: function (xhr, ajaxOption, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
                 }
             })
         } else {
@@ -341,7 +345,7 @@ function Purchase() {
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.description + "</td>";
             html += "<td>" + val.product + "</td>";
-            
+
             html += "<td>" + val.tax + "</td>";
             html += "<td>" + val.quantity + "</td>";
             if (val.product_id == null) {

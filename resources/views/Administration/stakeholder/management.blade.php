@@ -91,7 +91,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="address" class="control-label">Verification</label>
-                        <input type="text" class="form-control input-stakeholder" id="verification" name="verification" placeholder="verification">
+                        <input type="text" class="form-control input-stakeholder" id="verification" name="verification" placeholder="verification" readonly>
                     </div>
                 </div>
                 <div class="col-lg-3">

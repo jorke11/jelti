@@ -37,9 +37,21 @@ function Stakeholder() {
             $("#frmFile #stakeholder_id").val($("#frm #id").val());
             $("#modalUpload").modal("show");
         })
-        
-        $("#type_regime_id").change(function(){
-            
+
+        $("#document").blur(function () {
+            if ($(this).val() != '') {
+                $("#verification").val(obj.calcularDigitoVerificacion($(this).val()));
+            } else {
+                $("#verification").val("");
+            }
+        })
+
+        $("#type_regime_id").change(function () {
+            if ($(this).val() == 2) {
+                $("#type_person_id option[value=2]").addClass("hidden");
+            } else {
+                $("#type_person_id option[value=2]").removeClass("hidden");
+            }
         });
 
         $("#addJustify").click(this.addJustify);
@@ -165,7 +177,7 @@ function Stakeholder() {
         $.each(detail, function (i, val) {
             row = JSON.parse(val.data);
             html += "<tr><td>" + val.reason + "</td>"
-            html += "<td>" + val.data+ "</td></tr>";
+            html += "<td>" + val.data + "</td></tr>";
         })
         $("#tblUpload tbody").html(html)
     }
@@ -615,7 +627,7 @@ function Stakeholder() {
     this.tableBranch = function (id) {
         var obj = {}, checked = false;
         obj.stakeholder_id = id;
-        
+
         return $('#tblBranch').DataTable({
             "processing": true,
             "serverSide": true,

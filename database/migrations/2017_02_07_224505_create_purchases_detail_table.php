@@ -23,7 +23,7 @@ class CreatePurchasesdetailTable extends Migration {
             $table->decimal('value', 15, 2);
             $table->integer('units_supplier')->nullable();
             $table->integer('type_nature');
-            $table->integer('parent_id');
+            $table->integer('parent_id')->nullable();
             $table->decimal('tax', 15, 2)->nullable();
             $table->string('description')->nullable();
             $table->integer("order");

@@ -88,7 +88,7 @@ class PurchaseController extends Controller {
 //            $user = Auth::User();
 
             if (isset($input["detail"])) {
-
+                
                 $input["header"]["consecutive"] = $this->createConsecutive(4);
 
                 $purchase_id = Purchases::create($input["header"])->id;
@@ -269,6 +269,7 @@ class PurchaseController extends Controller {
 
                 $input["name"] = $user->name;
                 $input["last_name"] = $user->last_name;
+                $input["phone"] = $user->phone;
 
                 $input["detail"] = DB::table("purchases_detail")
                                 ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value as total"))

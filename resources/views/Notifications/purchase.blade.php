@@ -21,6 +21,7 @@
             $totalCant = 0;
             $totalUnit = 0;
             $totalVUnit = 0;
+            $totalUnitsSup = 0;
             $total = 0;
             foreach ($detail as $val) {
                 $totalCant += $val->quantity;
@@ -41,11 +42,12 @@
             }
             ?>
             <tr>
-                <td>Total</td>
-                <td colspan="2">{!!$totalCant!!}</td>
+                <td><br>Total</br></td>
+                <td>{!!$totalCant!!}</td>
+                <td></td>
                 <td>{{$totalUnit}}</td>
-                <td>$ {{number_format($totalVUnit,2,",",".")}}</td>
-                <td>$ {{number_format($total,2,",",".")}}</td>
+                <td align="center">$ {{number_format($totalVUnit,2,",",".")}}</td>
+                <td align="center"><br>$ {{number_format($total,2,",",".")}}</br></td>
             </tr>
 
         </table>
@@ -55,7 +57,7 @@
                 <td>Bodega: {!!$warehouse!!}</td>
             </tr>
             <tr>
-                <td>Direccion: {!!$address!!} Recibe {!!$name!!} {!!$last_name!!} - Celular:</td>
+                <td>Direccion: {!!$address!!} Recibe {!!$name!!} {!!$last_name!!} - Celular:{!!$phone!!}</td>
             </tr>
         </table>
         <br>

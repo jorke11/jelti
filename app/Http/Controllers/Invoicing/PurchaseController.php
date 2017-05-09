@@ -69,7 +69,7 @@ class PurchaseController extends Controller {
         $stakeholder = \App\Models\Administration\Stakeholder::findOrFail($id);
         $stakeholder->delivery = date('Y-m-d', strtotime('+' . $stakeholder->lead_time . ' days', strtotime(date('Y-m-d'))));
         $products = Products::select("id as product_id", "tax", "description", "title", "cost_sf", "units_supplier", "category_id")
-                        ->where("supplier_id", $stakeholder->id)->get();
+                        ->where("supplier_id", $stakeholder->id)->orderBy("title", "asc")->get();
         return response()->json(["response" => $stakeholder, "products" => $products]);
     }
 
@@ -88,7 +88,7 @@ class PurchaseController extends Controller {
 //            $user = Auth::User();
 
             if (isset($input["detail"])) {
-                
+
                 $input["header"]["consecutive"] = $this->createConsecutive(4);
 
                 $purchase_id = Purchases::create($input["header"])->id;

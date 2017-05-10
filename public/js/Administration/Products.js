@@ -64,13 +64,13 @@ function Product() {
         })
 
     }
-    
-    this.setDetailExcel=function(detail){
-        var html="";
-       $.each(detail,function(i,val){
-           html+="<tr><td>"+val.description+"</td></tr>";
-       })
-       $("#tblUpload tbody").html(html);
+
+    this.setDetailExcel = function (detail) {
+        var html = "";
+        $.each(detail, function (i, val) {
+            html += "<tr><td>" + val.description + "</td></tr>";
+        })
+        $("#tblUpload tbody").html(html);
     }
 
     this.new = function () {
@@ -232,6 +232,7 @@ function Product() {
     }
 
     this.showModal = function (id) {
+
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "/product/" + id + "/edit";
@@ -309,7 +310,7 @@ function Product() {
                 {
                     aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ');return false";>' + data + '</a>';
                     }
                 },
                 {
@@ -349,7 +350,7 @@ function Product() {
                 {
                     aTargets: [0],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ');return false";>' + data + '</a>';
                     }
                 }
             ],

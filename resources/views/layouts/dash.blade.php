@@ -67,7 +67,14 @@
         {!!Html::script('/vendor/plugins.js')!!}
         {!!Html::style('/css/edited.css')!!}
     </head>
-
+    <style>
+        #loading{
+            position: absolute; z-index: 10000;
+        }
+    </style>
+    <div id="loading">
+        <img src="{!!asset('images/SF-GIFTS-final.gif')!!}" width='15%' class="hidden">
+    </div>
     <body class="nav-md">
         <div class="container body">
             <div class="main_container">
@@ -328,6 +335,10 @@
 
                 <!-- page content -->
                 <div class="right_col" role="main">
+
+
+
+
                     <div class="">
 
                         <!--                        <div class="page-title">

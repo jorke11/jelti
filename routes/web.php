@@ -298,7 +298,13 @@ Route::get('/api/listPurchase', function() {
 });
 
 Route::get('/api/listSale', function() {
-    return Datatables::eloquent(Models\Invoicing\Sales::query())->make(true);
+
+    $sql = DB::table('sales')
+            ->select("sales.id", "sales.consecutive", "sales.description","sales.created","departures.consecutive as departure","warehouses.description as warehouse")
+            ->join("departures","departures.id","sales.departure_id")
+            ->join("warehouses","warehouses.id","sales.warehouse_id");
+
+    return Datatables::queryBuilder($sql)->make(true);
 });
 Route::get('/api/listEntry', function() {
 

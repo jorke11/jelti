@@ -384,11 +384,11 @@ function Sale() {
             "ajax": "/api/listSale",
             columns: [
                 {data: "id"},
-                {data: "id"},
+                {data: "consecutive"},
                 {data: "description"},
                 {data: "created"},
-                {data: "order"},
-                {data: "warehouse_id"},
+                {data: "departure"},
+                {data: "warehouse"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [

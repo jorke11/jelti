@@ -430,13 +430,14 @@ function Stakeholder() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "/stakeholder/" + id + "/edit";
-        $('#myTabs a[href="#management"]').tab('show');
+
         $.ajax({
             url: url,
             method: "GET",
             data: data,
             dataType: 'JSON',
             success: function (data) {
+                $('#myTabs a[href="#management"]').tab('show');
                 $(".input-stakeholder").setFields({data: data.header});
                 $("#tabSpecial").removeClass("hide");
                 $("#tabBranch").removeClass("hide");

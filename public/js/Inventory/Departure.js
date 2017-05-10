@@ -4,7 +4,7 @@ function Sale() {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
-        $("#newDetail").click(this.saveDetail);
+        $("#newDetail").click(this.confirmItem);
         $("#btnSend").click(this.send);
         $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
         $("#edit").click(this.edit);
@@ -68,7 +68,9 @@ function Sale() {
                     dataProduct = resp.response;
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf).formatNumber()
+//                    $("#frmDetail #quantity").val("");
                     $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
+
                 }
             })
         });
@@ -117,7 +119,7 @@ function Sale() {
         $(".input-fillable").prop("readonly", false);
         $("#btnSave").prop("disabled", false);
         $("#tblDetail tbody").empty();
-        $("#frm #status_id").val(1).trigger("change").prop("disabled", true);
+        $("#frm #status_id").val(0).trigger("change").prop("disabled", true);
         $("#frm #supplier_id").prop("disabled", false);
         $("#btnSave").prop("disabled", false);
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
@@ -391,7 +393,6 @@ function Sale() {
         var html = "", htmlEdit = "", htmlDel = "";
         $("#tblDetail tbody").empty();
         $.each(data, function (i, val) {
-
             if (btnEdit == true && val.status_id != 3) {
                 htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
             } else {
@@ -440,6 +441,10 @@ function Sale() {
                     $("#btnDocument").attr("disabled", false);
                 }
 
+                if (data.header.status_id == 1) {
+                    $("#btnSave, #btnmodalDetail").attr("disabled", true);
+                }
+
                 if (data.header.status_id == 2) {
                     $("#btnSend, #btnmodalDetail").attr("disabled", true);
                     btnEdit = false;
@@ -476,6 +481,7 @@ function Sale() {
     }
 
     this.editDetail = function (id) {
+        $("#frmDetail #departure_id").val($("#frm #id").val());
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "/departure/" + id + "/detail";
@@ -484,11 +490,32 @@ function Sale() {
             method: "GET",
             data: data,
             dataType: 'JSON',
-            success: function (data) {
+            success: function (resp) {
                 $("#modalDetail").modal("show");
-                $(".input-detail").setFields({data: data})
+                $(".input-detail").setFields({data: resp})
             }, error(xhr, responseJSON, thrown) {
                 console.log(responseJSON)
+            }
+        })
+    }
+
+    this.confirmItem = function () {
+        var id = $("#frmDetail #id").val();
+
+
+        var frm = $("#frmDetail");
+        var data = frm.serialize();
+        var url = "/departure/detail/" + id;
+        $.ajax({
+            url: url,
+            method: "PUT",
+            data: data,
+            dataType: 'JSON',
+            success: function (resp) {
+                $("#modalDetail").modal("show");
+                $(".input-detail").setFields({data: resp})
+            }, error(xhr, responseJSON, thrown) {
+                toastr.error(xhr.responseJSON.msg);
             }
         })
     }

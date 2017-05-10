@@ -36,7 +36,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Quantity <span id="quantityMax" style="color: red;"></span></label>
-                            <input type="text" class="form-control input-detail" id="quantity" name='quantity' min='0' disabled="" placeholder="Quantity" required data-type="number">
+                            <input type="text" class="form-control input-detail" id="quantity" name='quantity' placeholder="Quantity" required>
                         </div>
                     </div>
                     <div class="col-lg-6">

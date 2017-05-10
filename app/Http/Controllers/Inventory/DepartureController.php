@@ -146,6 +146,25 @@ class DepartureController extends Controller {
 
                     $detail = $this->formatDetail($result);
 
+                    $email = Email::where("description", "departure")->first();
+                    $emDetail = EmailDetail::where("email_id", $email->id)->get();
+                    if (count($emDetail) > 0) {
+                        $this->mails = array();
+                        foreach ($emDetail as $value) {
+                            $this->mails[] = $value->description;
+                        }
+
+                        $cit = Cities::find($ware->city_id);
+
+                        $this->subject = "SuperFuds " . date("d/m") . " " . $sup->business . " " . $cit->description . " " . $pur->consecutive;
+                        $input["city"] = $cit->description;
+
+                        Mail::send("Notifications.purchase", $input, function($msj) {
+                            $msj->subject($this->subject);
+                            $msj->to($this->mails);
+                        });
+                    }
+
                     return response()->json(['success' => true, "data" => $resp, "detail" => $detail]);
                 } else {
                     return response()->json(['success' => false]);
@@ -159,6 +178,7 @@ class DepartureController extends Controller {
     public function setSale(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
+
             $basetax = Parameters::where("group", "tax")->where("code", 2)->first();
             $tax = Parameters::where("group", "tax")->where("code", 1)->first();
             $departure = Departures::findOrFail($input["id"]);
@@ -346,7 +366,7 @@ class DepartureController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $entry = Departures::FindOrFail($id);
+        $entry = Departures::Find($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
@@ -358,8 +378,12 @@ class DepartureController extends Controller {
     }
 
     public function updateDetail(Request $request, $id) {
+
         $entry = DeparturesDetail::FindOrFail($id);
+
         $input = $request->all();
+        $pro = Products::find($input["product_id"]);
+        $input["value"] = $pro->price_cust;
 
 
         if (Auth::user()->role_id == 4) {
@@ -376,6 +400,7 @@ class DepartureController extends Controller {
         $input["status_id"] = 3;
         if ($available["quantity"] == 0 && Auth::user()->role_id != 4) {
             $input["real_quantity"] = 0;
+            $input["description"] = "Inventario no disponible, guarda 0";
             $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
             return response()->json(['success' => true, "data" => $resp, "msg" => "No se puede agregar se deja en 0"]);
@@ -389,7 +414,7 @@ class DepartureController extends Controller {
                     $resp = $this->formatDetail($input["departure_id"]);
                     return response()->json(['success' => true, "data" => $resp]);
                 } else {
-                    return response()->json(['success' => false]);
+                    return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
                 }
             } else {
                 $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];

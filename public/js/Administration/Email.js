@@ -84,7 +84,7 @@ function Email() {
                 success: function (data) {
                     if (data.success == true) {
                         $("#modalNew").modal("hide");
-                        $(".input-email").setFields({data: data});
+                        $(".input-email").setFields({data: data.header});
                         table.ajax.reload();
                         toastr.success(msg);
                     }

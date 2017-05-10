@@ -153,7 +153,9 @@ function Sale() {
             }
         })
     }
+
     this.getClient = function (id, path) {
+        var html = "";
         var url = 'departure/' + id + '/getClient';
         if (path == undefined) {
             url = '../../departure/' + id + '/getClient';
@@ -173,8 +175,14 @@ function Sale() {
                 $("#frm #address").val(resp.data.client.address);
                 $("#frm #phone").val(resp.data.client.phone);
 
-                $("#frm #branch_id").getSeeker({filter: {stakeholder_id: $("#frm #client_id").val()}});
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
+
+                $.each(resp.data.branch, function (i, val) {
+                    html += '<option value="' + val.id + '">' + val.address_invoice + "</option>";
+                })
+
+                $("#frm #branch_id").html(html);
+
 
 
             }

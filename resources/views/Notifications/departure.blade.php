@@ -5,7 +5,7 @@
     <body>
         <p>¡Hola! Feliz día</p>
         <p>Se genero un peticion por parte de <b>{{$name}} {{$last_name}}</b></p>
-        <strong>Solicitud venta {!!$consecutive!!}</strong>
+        <strong>Solicitud {!!$consecutive!!}</strong>
         <br>
         <br>
 

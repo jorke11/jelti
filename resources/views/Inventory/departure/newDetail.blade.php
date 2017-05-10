@@ -50,6 +50,21 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
+                            <label for="email">Quantity with units_sf</label>
+                            <input type="text" class="form-control input-detail" id="quantity_units" readonly="">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Value with units_sf</label>
+                            <input type="text" class="form-control input-detail" id="value_units" readonly="">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label for="email">Quantity real</label>
                             <input type="text" class="form-control input-detail" id="real_quantity" name='real_quantity' min='0' placeholder="Quantity real" data-type="number"
                                    <?php echo (Auth::user()->role != 4) ? '' : "readonly" ?>>

@@ -16,10 +16,16 @@ use App\Models\Administration\Stakeholder;
 use App\Models\Administration\Parameters;
 use App\models\Administration\Consecutives;
 use App\Models\Administration\Branch;
+use App\Models\Administration\Email;
+use App\Models\Administration\EmailDetail;
+use App\Models\Administration\Warehouses;
+use App\Models\Administration\Cities;
+use App\Models\Security\Users;
 use App\Models\Invoicing\Sales;
 use Session;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Inventory\StockController;
+use Mail;
 
 class DepartureController extends Controller {
 
@@ -124,6 +130,7 @@ class DepartureController extends Controller {
 //            $user = Auth::User();
 
             if (isset($input["detail"])) {
+                $emDetail = null;
 
                 $input["header"]["status_id"] = 1;
                 $input["header"]["consecutive"] = $this->createConsecutive(3);
@@ -146,8 +153,17 @@ class DepartureController extends Controller {
 
                     $detail = $this->formatDetail($result);
 
-                    $email = Email::where("description", "departure")->first();
-                    $emDetail = EmailDetail::where("email_id", $email->id)->get();
+
+                    $ware = Warehouses::find($input["header"]["warehouse_id"]);
+
+                    $client = Stakeholder::find($input["header"]["client_id"]);
+
+                    $email = Email::where("description", "departures")->first();
+
+                    if ($email != null) {
+                        $emDetail = EmailDetail::where("email_id", $email->id)->get();
+                    }
+
                     if (count($emDetail) > 0) {
                         $this->mails = array();
                         foreach ($emDetail as $value) {
@@ -156,10 +172,22 @@ class DepartureController extends Controller {
 
                         $cit = Cities::find($ware->city_id);
 
-                        $this->subject = "SuperFuds " . date("d/m") . " " . $sup->business . " " . $cit->description . " " . $pur->consecutive;
+                        $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $input["header"]["consecutive"];
                         $input["city"] = $cit->description;
+                        $input["consecutive"] = $input["header"]["consecutive"];
 
-                        Mail::send("Notifications.purchase", $input, function($msj) {
+                        $user = Users::find($input["header"]["responsible_id"]);
+
+                        $input["name"] = ucwords($user->name);
+                        $input["last_name"] = ucwords($user->last_name);
+                        $input["phone"] = $user->phone;
+                        $input["warehouse"] = $ware->description;
+                        $input["address"] = $ware->address;
+                        $input["detail"] = $detail;
+
+
+
+                        Mail::send("Notifications.departure", $input, function($msj) {
                             $msj->subject($this->subject);
                             $msj->to($this->mails);
                         });
@@ -335,10 +363,13 @@ class DepartureController extends Controller {
 
     public function formatDetail($id) {
         $detail = DB::table("departures_detail")
-                        ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", "products.title as product", "departures_detail.description", "parameters.description as status")
-                        ->join("products", "departures_detail.product_id", "products.id")
-                        ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
-                        ->where("departure_id", $id)->orderBy("id", "asc")->get();
+                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", "products.title as product", "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf")
+                ->join("products", "departures_detail.product_id", "products.id")
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id")
+                ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
+                ->where("departure_id", $id)
+                ->orderBy("id", "asc")
+                ->get();
 
         $this->total = 0;
 
@@ -421,7 +452,13 @@ class DepartureController extends Controller {
                 return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]], 409);
             }
         } else {
-            return response()->json(['success' => false, "msg" => "Zero is not allowed "], 409);
+            $result = $entry->fill($input)->save();
+            if ($result) {
+                $resp = $this->formatDetail($input["departure_id"]);
+                return response()->json(['success' => true, "data" => $resp]);
+            } else {
+                return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
+            }
         }
     }
 

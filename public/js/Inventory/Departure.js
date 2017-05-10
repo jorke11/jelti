@@ -4,7 +4,8 @@ function Sale() {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
-        $("#newDetail").click(this.confirmItem);
+//        $("#newDetail").click(this.confirmItem);
+        $("#newDetail").click(this.saveDetail);
         $("#btnSend").click(this.send);
         $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
         $("#edit").click(this.edit);
@@ -28,6 +29,13 @@ function Sale() {
 
             }
         });
+
+
+        $("#quantity").change(function () {
+            $("#quantity_units").val(dataProduct.units_sf * $(this).val());
+            $("#value_units").val(dataProduct.units_sf * $(this).val() * dataProduct.price_sf).formatNumber();
+        });
+
 
         if ($("#id_orderext").val() != '') {
             obj.infomationExt($("#id_orderext").val(), true);
@@ -68,8 +76,8 @@ function Sale() {
                     dataProduct = resp.response;
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf).formatNumber()
-//                    $("#frmDetail #quantity").val("");
                     $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
+
 
                 }
             })
@@ -126,6 +134,7 @@ function Sale() {
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
         $("#btnmodalDetail").attr("disabled", false);
+        listProducts = [];
         obj.consecutive();
     }
 
@@ -289,22 +298,25 @@ function Sale() {
         var validate = $(".input-detail").validate();
 
         if (validate.length == 0) {
-
             if (id != '') {
+                var id = $("#frmDetail #id").val();
+
+                var frm = $("#frmDetail");
+                var data = frm.serialize();
+                var url = "/departure/detail/" + id;
                 $.ajax({
-                    url: "departure/" + id,
-                    method: 'PUT',
-                    data: form,
+                    url: url,
+                    method: "PUT",
+                    data: data,
                     dataType: 'JSON',
-                    success: function (data) {
-                        if (data.success == true) {
-                            $("#btnSend").attr("disabled", false);
-                            $("#frm #id").val(data.data.id);
-                            $(".input-departure").setFields({data: data.data, disabled: true});
-                            table.ajax.reload();
-                            toastr.success(msg);
-                            $("#btnmodalDetail").attr("disabled", false);
+                    success: function (resp) {
+                        if (resp.success == true) {
+                            $("#modalDetail").modal("hide");
+                            obj.printDetail(resp.data);
+
                         }
+                    }, error(xhr, responseJSON, thrown) {
+                        toastr.error(xhr.responseJSON.msg);
                     }
                 })
 
@@ -501,7 +513,6 @@ function Sale() {
 
     this.confirmItem = function () {
         var id = $("#frmDetail #id").val();
-
 
         var frm = $("#frmDetail");
         var data = frm.serialize();

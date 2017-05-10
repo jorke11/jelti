@@ -291,7 +291,10 @@ jQuery.fn.formatNumber = function () {
         var number = elem.val();
         var div = number.split(".");
         resp = div[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-        resp += "," + div[1];
+        if (div[1] != undefined) {
+            resp += "," + div[1];
+        }
+
         elem.val('$' + resp);
     })
 

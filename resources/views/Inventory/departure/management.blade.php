@@ -64,7 +64,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Status:</label>
-                    <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly required>
+                    <select class="form-control input-departure input-sm" id="status_id" name='status_id' readonly>
                         <option value="0">Selection</option>
                         @foreach($status as $val)
                         <option value="{{$val->code}}">{{$val->description}}</option>

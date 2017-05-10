@@ -216,11 +216,13 @@ Route::get('/api/listSupplier', function() {
                     DB::table('vsupplier')
             )->make(true);
 });
+
 Route::get('/api/listParameter', function() {
     return Datatables::queryBuilder(
                     DB::table('parameters')->orderBy("id", "asc")
             )->make(true);
 });
+
 Route::get('/api/listTicket', function() {
     return Datatables::queryBuilder(
                     DB::table('tickets')
@@ -246,13 +248,16 @@ Route::get('/api/listStakeholder', function() {
 
     return Datatables::queryBuilder($query)->make(true);
 });
+
 Route::get('/api/listProduct', function() {
     $query = DB::table('vproducts');
     return Datatables::queryBuilder($query)->make(true);
 });
+
 Route::get('/api/listConsecutive', function() {
     return Datatables::eloquent(models\Administration\Consecutives::query())->make(true);
 });
+
 Route::get('/api/listWarehouse', function() {
     $query = DB::table("warehouses")
             ->select("warehouses.id", "warehouses.description", "warehouses.address", "cities.description as city", DB::raw("coalesce(users.name) || coalesce(users.last_name) as responsible"))
@@ -264,6 +269,7 @@ Route::get('/api/listWarehouse', function() {
 Route::get('/api/listMark', function() {
     return Datatables::eloquent(Models\Administration\Mark::query())->make(true);
 });
+
 Route::get('/api/listEmail', function() {
     return Datatables::eloquent(Models\Administration\Email::query())->make(true);
 });
@@ -283,13 +289,14 @@ Route::get('/api/listContact', function() {
 Route::get('/api/listPurchase', function() {
 
     $query = DB::table("vpurchases");
-          
+
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
         $query->where("responsible_id", Auth::user()->id);
     }
 
     return Datatables::queryBuilder($query)->make(true);
 });
+
 Route::get('/api/listSale', function() {
     return Datatables::eloquent(Models\Invoicing\Sales::query())->make(true);
 });
@@ -320,13 +327,12 @@ Route::get('/api/listDeparture', function() {
 //            ->leftjoin("warehouses", "warehouses.id", "departures.warehouse_id")
 //            ->leftjoin("parameters", "parameters.code", DB::raw("departures.status_id and parameters.group='entry'"))
 //            ->where("parameters.group", "entry");
-
 //    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
 //        $query->where("departures.responsible_id", Auth::user()->id);
 //    }
 
     $query = DB::table('vdepartures');
-            
+
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
         $query->where("responsible_id", Auth::user()->id);
     }
@@ -337,20 +343,21 @@ Route::get('/api/listDeparture', function() {
 Route::get('/api/listOrder', function() {
     return Datatables::eloquent(Models\Inventory\Orders::query())->make(true);
 });
-Route::get('/api/listCity', function() {
 
+Route::get('/api/listCity', function() {
     $query = DB::table("vcities");
     return Datatables::queryBuilder($query)->make(true);
 });
+
 Route::get('/api/listDepartment', function() {
     return Datatables::eloquent(Models\Administration\Department::query())->make(true);
 });
+
 Route::get('/api/listRole', function() {
     return Datatables::eloquent(Models\Security\Roles::query())->make(true);
 });
 
 Route::get('/api/listUser', function() {
-
     return Datatables::queryBuilder(
                     DB::table("users")
                             ->select("users.id", "users.name", "users.email", DB::raw("coalesce(users.document::text,'') as document"), "roles.description as role", "stakeholder.business_name as stakeholder", "cities.description as city", "parameters.description as status")
@@ -360,6 +367,7 @@ Route::get('/api/listUser', function() {
                             ->join("parameters", "parameters.code", DB::raw("users.status_id and parameters.group='generic'"))
             )->make(true);
 });
+
 Route::get('/api/listPuc', function() {
     return Datatables::eloquent(Models\Administration\Puc::query())->make(true);
 });

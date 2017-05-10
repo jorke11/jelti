@@ -184,7 +184,7 @@ class DepartureController extends Controller {
                         $input["warehouse"] = $ware->description;
                         $input["address"] = $ware->address;
                         $input["detail"] = $detail;
-
+                        $this->mails[] = $user->email;
 
 
                         Mail::send("Notifications.departure", $input, function($msj) {
@@ -449,16 +449,12 @@ class DepartureController extends Controller {
                 }
             } else {
                 $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];
-                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]], 409);
+                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
             }
         } else {
-            $result = $entry->fill($input)->save();
-            if ($result) {
-                $resp = $this->formatDetail($input["departure_id"]);
-                return response()->json(['success' => true, "data" => $resp]);
-            } else {
-                return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
-            }
+            $entry->fill($input)->save();
+            $resp = $this->formatDetail($input["departure_id"]);
+            return response()->json(['success' => true, "data" => $resp]);
         }
     }
 

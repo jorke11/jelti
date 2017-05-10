@@ -214,6 +214,7 @@ function Sale() {
     }
 
     this.save = function () {
+        toastr.remove();
         $("#frm #warehouse_id").prop("disabled", false);
         $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);

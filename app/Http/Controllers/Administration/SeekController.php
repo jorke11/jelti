@@ -241,7 +241,8 @@ class SeekController extends Controller {
 
     public function getProduct(Request $req) {
         $in = $req->all();
-        $query = Products::select("id", "title as text");
+        $query = Products::select("products.id", DB::raw("products.title || ' - ' || stakeholder.business as text"))
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id");
 
         if (isset($in["filter"]) && $in["filter"] != '') {
             foreach ($in["filter"] as $key => $val) {
@@ -252,7 +253,8 @@ class SeekController extends Controller {
         }
 
         if (isset($in["q"]) && $in["q"] != "0") {
-            $query->where("title", "ilike", "%" . $in["q"] . "%")->get();
+            $query->where("products.title", "ILIKE", "%" . $in["q"] . "%")
+                    ->OrWhere("stakeholder.business", "ILIKE", "%" . $in["q"] . "%");
         }
 
         $result = $query->get();

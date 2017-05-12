@@ -26,7 +26,7 @@ class StockController extends Controller {
                 ->where("products.id", $id)
                 ->first();
         
-        $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 3)->sum("quantity");
+        $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 3)->sum(DB::raw("quantity * units_supplier"));
         $departure = DB::table("departures_detail")->where("product_id", $id)->where("status_id", 3)->sum("quantity");
         $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");
         $sales = DB::table("sales_detail")->where("product_id", $id)->sum("quantity");

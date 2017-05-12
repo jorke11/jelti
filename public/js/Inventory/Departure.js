@@ -176,7 +176,7 @@ function Sale() {
                 $("#frm #phone").val(resp.data.client.phone);
 
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
-
+                html = "<option value=0>Selection</option>";
                 $.each(resp.data.branch, function (i, val) {
                     html += '<option value="' + val.id + '">' + val.address_invoice + "</option>";
                 })

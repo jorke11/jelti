@@ -141,7 +141,8 @@ class EntryController extends Controller {
 
                     foreach ($detail as $value) {
                         EntriesDetail::insert([
-                            "entry_id" => $result, "product_id" => $value->product_id, "quantity" => $value->quantity, "value" => $value->value, "status_id" => 1
+                            "entry_id" => $result, "product_id" => $value->product_id, "quantity" => $value->quantity,
+                            "value" => $value->value, "units_supplier" => $value->units_supplier, "status_id" => 1
                         ]);
                     }
 

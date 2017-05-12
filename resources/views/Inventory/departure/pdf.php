@@ -114,9 +114,9 @@
         $rest = 15 - count($detail);
         for ($i = 0; $i < count($detail); $i++) {
             $desc = ($detail[$i]->product_id == '') ? $detail[$i]->description : $detail[$i]->product;
-            $total = number_format(($detail[$i]->value * $detail[$i]->quantity), 2, ',', '.');
+            $total = number_format(($detail[$i]->valuetotal), 2, ',', '.');
             $valueUnit = number_format(($detail[$i]->value), 2, ',', '.');
-            $totalSum += $detail[$i]->value * $detail[$i]->quantity;
+            $totalSum += $detail[$i]->valuetotal;
             ?>
             <tr >
                 <td align='center'><?php echo $detail[$i]->quantity; ?></td>
@@ -159,7 +159,7 @@
                 </tr>
                 <tr>
                     <td>Flete</td>
-                    <td>$ 230</td>
+                    <td>$ 0</td>
                 </tr>
                 <tr>
                     <td>Iva 5%</td>

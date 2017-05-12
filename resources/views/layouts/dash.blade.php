@@ -73,7 +73,7 @@
         }
     </style>
     <div id="loading">
-        <img src="{!!asset('images/SF-GIFTS-final.gif')!!}" width='15%' class="hidden">
+        <img src="{!!asset('images/Gif_final.gif')!!}" width='50%' class="">
     </div>
     <body class="nav-md">
         <div class="container body">

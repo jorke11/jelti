@@ -20,6 +20,7 @@ class CreateEntriesDetailTable extends Migration {
             $table->integer('real_quantity')->nullable();
             $table->dateTime('expiration_date')->nullable();
             $table->decimal('value', 15, 2);
+            $table->decimal('units_supplier', 15, 2);
             $table->string('lot')->nullable();
             $table->string('description')->nullable();
             $table->integer('status_id');

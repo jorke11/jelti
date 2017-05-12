@@ -286,6 +286,7 @@ function Product() {
                 {data: "id"},
                 {data: "title"},
                 {data: "description"},
+                {data: "supplier"},
                 {data: "reference"},
                 {data: "bar_code"},
                 {data: "units_supplier"},
@@ -314,7 +315,7 @@ function Product() {
                     }
                 },
                 {
-                    targets: [13],
+                    targets: [14],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

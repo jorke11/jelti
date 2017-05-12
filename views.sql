@@ -27,9 +27,12 @@ LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='ge
 DROP VIEW IF EXISTS vproducts;
 
 create view vproducts as
-select p.id,p.title,p.description,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,p.price_cust,p.image,status.description as status
+select p.id,p.title,p.description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
+p.price_cust,p.image,status.description as status
 from products p
+JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic';
+
 
 DROP VIEW IF EXISTS vdepartures;
 create view vdepartures as 

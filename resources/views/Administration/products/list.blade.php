@@ -6,6 +6,7 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Supplier</th>
                 <th>reference</th>
                 <th>Bar code</th>
                 <th>units_supplier</th>

@@ -198,6 +198,9 @@ function Sale() {
             method: 'POST',
             data: data,
             dataType: 'JSON',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (resp) {
                 if (resp.success == true) {
                     toastr.success("Sended");
@@ -217,6 +220,9 @@ function Sale() {
                 }
             }, error: function (xhr, ajaxOptions, thrownError) {
                 toastr.error(xhr.responseJSON.msg);
+            },
+            complete: function () {
+                $("#loading-super").addClass("hidden");
             }
         })
     }
@@ -254,6 +260,9 @@ function Sale() {
                         method: method,
                         data: data,
                         dataType: 'JSON',
+                        beforeSend: function () {
+                            $("#loading-super").removeClass("hidden");
+                        },
                         success: function (data) {
                             if (data.success == true) {
                                 $("#btnSend").attr("disabled", false);
@@ -264,6 +273,9 @@ function Sale() {
                                 $("#btnmodalDetail").attr("disabled", false);
                                 obj.printDetail(data.detail);
                             }
+                        },
+                        complete: function () {
+                            $("#loading-super").addClass("hidden");
                         }
                     })
                 } else {

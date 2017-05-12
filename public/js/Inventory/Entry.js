@@ -176,6 +176,9 @@ function Entry() {
             method: 'POST',
             data: obj,
             dataType: 'JSON',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (resp) {
                 if (resp.success == true) {
                     toastr.success("Sended");
@@ -188,7 +191,11 @@ function Entry() {
                 }
             }, error: function (xhr, ajaxOptions, thrownError) {
                 toastr.error(xhr.responseJSON.msg);
+            },
+            complete: function () {
+                $("#loading-super").addClass("hidden");
             }
+
         })
 
     }

@@ -91,6 +91,9 @@ function Purchase() {
                 method: 'POST',
                 data: obj,
                 dataType: 'JSON',
+                beforeSend: function () {
+                    $("#loading-super").removeClass("hidden");
+                },
                 success: function (resp) {
                     $(".input-purchase").setFields({data: resp.header, disabled: true});
                     toastr.success("Purchase sended");
@@ -98,6 +101,9 @@ function Purchase() {
                     table.ajax.reload();
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error(xhr.responseJSON.msg);
+                }
+                ,complete: function () {
+                    $("#loading-super").addClass("hidden");
                 }
             })
         }
@@ -248,6 +254,9 @@ function Purchase() {
                 method: method,
                 data: data,
                 dataType: 'JSON',
+                beforeSend: function () {
+                    $("#loading-super").removeClass("hidden");
+                },
                 success: function (data) {
                     if (data.success == true) {
                         $("#frm #btnSave").attr("disabled", true);
@@ -260,6 +269,9 @@ function Purchase() {
                 },
                 error: function (xhr, ajaxOption, thrownError) {
                     toastr.error(xhr.responseJSON.msg);
+                },
+                complete: function () {
+                    $("#loading-super").addClass("hidden");
                 }
             })
         } else {

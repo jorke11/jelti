@@ -68,12 +68,12 @@
         {!!Html::style('/css/edited.css')!!}
     </head>
     <style>
-        #loading{
-            position: absolute; z-index: 10000;
+        #loading-super{
+            position: absolute; z-index: 10000;left: 50%
         }
     </style>
-    <div id="loading">
-        <img src="{!!asset('images/Gif_final.gif')!!}" width='50%' class="">
+    <div id="loading-super" class="hidden">
+        <img src="{!!asset('images/Gif_final.gif')!!}" width='30%' >
     </div>
     <body class="nav-md">
         <div class="container body">

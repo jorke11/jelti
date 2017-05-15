@@ -87,7 +87,9 @@ class SeekController extends Controller {
                     ->get();
         }
 
-        $result = $query->where("type_stakeholder", 2)->where("status_id", 1)->get();
+        $result = $query->where("type_stakeholder", 2)
+//                ->where("status_id", 1)
+                ->get();
 //        $result = $query->where("type_stakeholder", 2)->get();
 
         return response()->json(['items' => $result, "pages" => count($result)]);

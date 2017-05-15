@@ -99,27 +99,64 @@ class DepartureController extends Controller {
     public function getInvoice($id) {
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
-                ->select("quantity", DB::raw("sales_detail.tax* 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", 
-                        "products.id as product_id", "sales_detail.value", "products.units_sf", 
-                        DB::raw("products.units_sf * quantity as quantityTotal"), DB::raw("(products.units_sf * quantity * value) as valueTotal"))
+                ->select("quantity", DB::raw("sales_detail.tax* 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "products.units_sf", DB::raw("products.units_sf * quantity as quantityTotal"), DB::raw("(products.units_sf * quantity * value) as valueTotal"))
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
 
-//        dd($detail);
-//        exit;
+
+        $cli = Branch::where("stakeholder_id", $sale["client_id"])->first();
+        $user = Users::find($sale["responsible_id"]);
+
+        $cli["emition"] = date("d", strtotime($sale["created"])) . " de " . date("F", strtotime($sale["created"])) . " de " . date("Y", strtotime($sale["created"]));
+        $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
 
 
-        $cli = Stakeholder::find($sale["client_id"]);
+
+        $totalExemp = 0;
+        $totalTax5 = 0;
+        $totalTax19 = 0;
+        $tax = 0;
+        $totalSum = 0;
+        foreach ($detail as $value) {
+            $totalSum += $value->valuetotal;
+            $tax = ($value->tax / 100);
+
+            if ($value->tax == 0) {
+                $totalExemp += $value->valuetotal;
+            }
+            if ($value->tax == '5') {
+                $totalTax5 += $value->valuetotal * $tax;
+            }
+            if ($value->tax == '19') {
+
+                $totalTax19 += $value->valuetotal * $tax;
+            }
+        }
+
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5;
+        
+        
+
         $data = [
             'client' => $cli,
             'detail' => $detail,
+            'exept' => "$ " . number_format(($totalExemp), 2, ',', '.'),
+            'tax5' => "$ " . number_format(($totalTax5), 2, ',', '.'),
+            'tax19' => "$ " . number_format(($totalTax19), 2, ',', '.'),
+            'totalInvoice' => "$ " . number_format(($totalSum), 2, ',', '.'),
+            'totalWithTax' => "$ " . number_format(($totalWithTax), 2, ',', '.'),
         ];
+
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
 
         return $pdf->stream('document.pdf');
+    }
+
+    public function dateText() {
+        
     }
 
     public function getQuantity($id) {
@@ -232,6 +269,7 @@ class DepartureController extends Controller {
                                     "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons
                                 ]
                         );
+                        
                         $this->updateConsecutive(5);
 
                         $detail = DeparturesDetail::where("departure_id", $input["id"])->get();

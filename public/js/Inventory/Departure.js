@@ -624,7 +624,7 @@ function Sale() {
                 {data: "city"},
                 {data: "status"},
             ],
-            order: [[2, 'ASC']],
+            order: [[2, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [1, 2, 3, 4, 5],

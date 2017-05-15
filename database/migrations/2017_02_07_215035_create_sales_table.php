@@ -22,6 +22,8 @@ class CreateSalesTable extends Migration {
             $table->string('consecutive');
             $table->integer('destination_id');
             $table->string('phone');
+            $table->decimal('shipping_cost', 15, 2)->nullable();
+            $table->decimal('discount', 15, 2)->nullable();
             $table->string('status_id');
             $table->string('address');
             $table->string('description')->nullable();

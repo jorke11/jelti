@@ -66,7 +66,7 @@
             <table border='0'>
                 <tr>
                     <td class="font-detail">Cliente</td>
-                    <td class="font-detail-cont"><?php echo $client["name"] . " " . $client["last_name"]; ?></td>
+                    <td class="font-detail-cont"><?php echo $client["business_name"]; ?></td>
                 </tr>
                 <tr>
                     <td class="font-detail">Nit</td>
@@ -74,7 +74,7 @@
                 </tr>
                 <tr>
                     <td class="font-detail">Dirección</td>
-                    <td class="font-detail-cont"><?php echo $client["address"]; ?></td>
+                    <td class="font-detail-cont"><?php echo $client["address_invoice"]; ?></td>
                 </tr>
             </table>
         </td>
@@ -82,7 +82,7 @@
             <table>
                 <tr>
                     <td class="font-detail">Emisión</td>
-                    <td class="font-detail-cont">03 de Marzo de 2017</td>
+                    <td class="font-detail-cont"><?php echo $client["emition"]; ?></td>
                 </tr>
                 <tr>
                     <td class="font-detail">Vencimiento</td>
@@ -90,7 +90,7 @@
                 </tr>
                 <tr>
                     <td class="font-detail">Vendedor</td>
-                    <td class="font-detail-cont">Vendedor de Prueba</td>
+                    <td class="font-detail-cont"><?php echo $client["responsible"]; ?></td>
                 </tr>
             </table>
         </td>
@@ -110,16 +110,14 @@
     </thead>
     <tbody> 
         <?php
-        $totalSum = 0;
         $rest = 15 - count($detail);
         for ($i = 0; $i < count($detail); $i++) {
             $desc = ($detail[$i]->product_id == '') ? $detail[$i]->description : $detail[$i]->product;
             $total = number_format(($detail[$i]->valuetotal), 2, ',', '.');
             $valueUnit = number_format(($detail[$i]->value), 2, ',', '.');
-            $totalSum += $detail[$i]->valuetotal;
             ?>
             <tr >
-                <td align='center'><?php echo $detail[$i]->quantity; ?></td>
+                <td align='center'><?php echo $detail[$i]->quantity; ?> (<?php echo $detail[$i]->units_sf; ?>)</td>
                 <td><?php echo $desc; ?></td>
                 <td align='center'><?php echo $detail[$i]->tax; ?></td>
                 <td align='right'><?php echo "$ " . $valueUnit; ?></td>
@@ -151,7 +149,7 @@
             <table>
                 <tr>
                     <td width='240px' >Total Factura</td>
-                    <td align='right'><?php echo "$ ".number_format(($totalSum), 2, ',', '.'); ?></td>
+                    <td><?php echo $totalInvoice; ?></td>
                 </tr>
                 <tr>
                     <td>Descuento</td>
@@ -163,19 +161,19 @@
                 </tr>
                 <tr>
                     <td>Iva 5%</td>
-                    <td>$ 200</td>
+                    <td><?php echo $tax5; ?></td>
                 </tr>
                 <tr>
-                    <td>Iva 16%</td>
-                    <td>$ 24400</td>
+                    <td>Iva 19%</td>
+                    <td><?php echo $tax19; ?></td>
                 </tr>
                 <tr>
                     <td>Exento</td>
-                    <td>$ 111100</td>
+                    <td><?php echo $exept; ?></td>
                 </tr>
                 <tr>
                     <td>Monto</td>
-                    <td>$ 111100</td>
+                    <td><?php echo $totalWithTax; ?></td>
                 </tr>
 
             </table>
@@ -184,6 +182,6 @@
 
 </table>
 
-<?php // echo $foo  ?>
+<?php // echo $foo   ?>
 <!--<img src="/images/product/default.jpg">-->
 

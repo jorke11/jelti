@@ -44,7 +44,9 @@ create view vdepartures as
             JOIN cities c ON c.id = d.city_id
             JOIN parameters p ON p.id = d.status_id
             JOIN users u ON u.id = d.responsible_id
-            WHERE p.group='entry';
+            WHERE p.group='entry'
+            ORDER BY d.id DESC
+            ;
 
 DROP VIEW IF EXISTS vcities;
 

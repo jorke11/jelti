@@ -356,6 +356,7 @@ function Sale() {
                         comment: '',
                         status: 'new'
                     });
+                    $("#frmDetail #product_id").text("");
                     msg += " add";
                 } else {
                     listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
@@ -394,13 +395,14 @@ function Sale() {
 
     this.printDetailTmp = function (data, btnEdit = true, btnDel = true) {
         var html = "", htmlEdit = "", htmlDel = "";
-        $("#tblDetail tbody").empty();
+        $("#tblDetail tbody").html("");
         $.each(listProducts, function (i, val) {
 
             htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
             htmlDel = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.deleteItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
 
             val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+            
             html += '<tr id="row_' + val.row + '">';
             html += "<td>" + val.product + "</td>";
             html += "<td>" + val.comment + "</td>";

@@ -16,6 +16,7 @@ class DeparturesDetail extends Model
         "mark_id", 
         "quantity", 
         "value",
+        "units_sf",
         "real_quantity",
         "description",
         ];

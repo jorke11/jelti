@@ -271,7 +271,7 @@ class DepartureController extends Controller {
                                 ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
                                     "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
                                     "address" => $departure["address"], "phone" => $departure["phone"],
-                                    "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons
+                                    "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons,
                                 ]
                         );
 
@@ -291,7 +291,7 @@ class DepartureController extends Controller {
                             SaleDetail::insert([
                                 "sale_id" => $id, "product_id" => $value->product_id,
                                 "category_id" => $value->category_id, "quantity" => $value->quantity,
-                                "value" => $value->value, "tax" => $pro["tax"],
+                                "value" => $value->value, "tax" => $pro["tax"],"units_sf"=>$pro->units_sf,
                                 "account_id" => 1, "order" => $cont, "type_nature" => 1
                             ]);
 
@@ -499,6 +499,7 @@ class DepartureController extends Controller {
                 return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
             }
         } else {
+            
             $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
             return response()->json(['success' => true, "data" => $resp]);

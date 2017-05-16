@@ -335,6 +335,8 @@ function Sale() {
                             $("#modalDetail").modal("hide");
                             obj.printDetail(resp.data);
 
+                        }else{
+                            toastr.error(resp.success.msg);
                         }
                     }, error(xhr, responseJSON, thrown) {
                         toastr.error(xhr.responseJSON.msg);

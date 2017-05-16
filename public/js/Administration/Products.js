@@ -168,6 +168,9 @@ function Product() {
                 method: method,
                 data: data,
                 dataType: 'JSON',
+                beforeSend: function () {
+                    $("#loading-super").removeClass("hidden");
+                },
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
@@ -183,6 +186,9 @@ function Product() {
                         elem.after('<small class="help-block" id="error_' + elem.attr("id") + '" data-fv-validator="notEmpty" data-fv-for="firstName" data-fv-result="INVALID" style="">' + elem.attr("id") + ' already exists</small>')
                         elem.parent().parent().addClass("has-error")
                     }
+                },
+                complete: function () {
+                    $("#loading-super").addClass("hidden");
                 }
             })
         } else {

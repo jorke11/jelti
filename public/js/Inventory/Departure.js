@@ -624,6 +624,7 @@ function Sale() {
                     searchable: false,
                 },
                 {data: "consecutive"},
+                {data: "invoice"},
                 {data: "created_at"},
                 {data: "client"},
                 {data: "responsible"},

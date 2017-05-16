@@ -36,7 +36,7 @@ LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='ge
 
 DROP VIEW IF EXISTS vdepartures;
 create view vdepartures as 
-            select d.id,d.consecutive, d.created_at, coalesce(s.business_name,'') as client,w.description as warehouse,
+            select d.id,d.consecutive,d.invoice, d.created_at, coalesce(s.business_name,'') as client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible
             from departures d
             JOIN branch_office s ON s.id = d.branch_id

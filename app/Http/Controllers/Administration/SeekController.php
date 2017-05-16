@@ -243,7 +243,7 @@ class SeekController extends Controller {
 
     public function getProduct(Request $req) {
         $in = $req->all();
-        $query = Products::select("products.id", DB::raw("products.title || ' - ' || stakeholder.business as text"))
+        $query = Products::select("products.id", DB::raw("products.reference ||' - '|| products.title || ' - ' || stakeholder.business  as text"))
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id");
 
         if (isset($in["filter"]) && $in["filter"] != '') {
@@ -257,7 +257,8 @@ class SeekController extends Controller {
         if (isset($in["q"]) && $in["q"] != "0") {
             $query->where("products.title", "ILIKE", "%" . $in["q"] . "%")
                     ->OrWhere("stakeholder.business", "ILIKE", "%" . $in["q"] . "%")
-                    ->OrWhere("stakeholder.bar_code", "ILIKE", "%" . $in["q"] . "%");
+                    ->OrWhere("products.bar_code", "ILIKE", "%" . $in["q"] . "%")
+                    ->OrWhere(DB::raw("products.reference::text"), "ILIKE", "%" . $in["q"] . "%");
                    
         }
 

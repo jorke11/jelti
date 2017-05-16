@@ -256,7 +256,9 @@ class SeekController extends Controller {
 
         if (isset($in["q"]) && $in["q"] != "0") {
             $query->where("products.title", "ILIKE", "%" . $in["q"] . "%")
-                    ->OrWhere("stakeholder.business", "ILIKE", "%" . $in["q"] . "%");
+                    ->OrWhere("stakeholder.business", "ILIKE", "%" . $in["q"] . "%")
+                    ->OrWhere("stakeholder.bar_code", "ILIKE", "%" . $in["q"] . "%");
+                   
         }
 
         $result = $query->get();

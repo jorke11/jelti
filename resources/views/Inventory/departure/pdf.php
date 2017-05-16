@@ -172,8 +172,8 @@
                     <td><?php echo $exept; ?></td>
                 </tr>
                 <tr>
-                    <td>Monto</td>
-                    <td><?php echo $totalWithTax; ?></td>
+                    <td><b>Monto</b></td>
+                    <td><b><?php echo $totalWithTax; ?></b></td>
                 </tr>
 
             </table>

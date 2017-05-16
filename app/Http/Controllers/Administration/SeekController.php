@@ -56,7 +56,7 @@ class SeekController extends Controller {
 
     public function getClient(Request $req) {
         $in = $req->all();
-        $query = Stakeholder::select("id", DB::raw("coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
+        $query = Stakeholder::select("id", DB::raw("document ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"]) && $in["id"] != '') {
@@ -65,6 +65,7 @@ class SeekController extends Controller {
             if (isset($in["q"]))
                 $query->where("business", "ILIKE", "%" . $in["q"] . "%")
                         ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
+                        ->orWhere("document", "ILIKE", "%" . $in["q"] . "%")
                         ->where("type_stakeholder", 1)
                         ->get();
         }

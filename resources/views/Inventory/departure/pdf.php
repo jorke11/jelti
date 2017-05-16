@@ -157,7 +157,7 @@
                 </tr>
                 <tr>
                     <td>Flete</td>
-                    <td>$ 0</td>
+                    <td><?php echo $shipping; ?></td>
                 </tr>
                 <tr>
                     <td>Iva 5%</td>

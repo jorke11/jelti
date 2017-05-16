@@ -356,7 +356,10 @@ function Sale() {
                         comment: '',
                         status: 'new'
                     });
-                    $("#frmDetail #product_id").text("");
+                    $(".input-detail").cleanFields();
+//                    $("#frmDetail #product_id").text("");
+//                    $("#frmDetail #value").val("");
+//                    $("#frmDetail #value").val("");
                     msg += " add";
                 } else {
                     listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();

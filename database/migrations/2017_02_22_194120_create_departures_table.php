@@ -27,6 +27,7 @@ class CreateDeparturesTable extends Migration {
             $table->dateTime('created');
             $table->integer('status_id');
             $table->string('invoice')->nullable();
+            $table->decimal('shipping_cost', 15, 2)->nullable();
             $table->boolean('pdf_create')->nullable();
             $table->timestamps();
         });

@@ -99,13 +99,13 @@ class DepartureController extends Controller {
     public function getInvoice($id) {
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
-                ->select("quantity", DB::raw("sales_detail.tax* 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "products.units_sf", DB::raw("products.units_sf * quantity as quantityTotal"), DB::raw("(products.units_sf * quantity * value) as valueTotal"))
+                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "products.units_sf", DB::raw("products.units_sf * quantity as quantityTotal"), DB::raw("(products.units_sf * quantity * value) as valueTotal"))
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
 
-
+        $dep = Departures::find($id);
         $cli = Branch::where("stakeholder_id", $sale["client_id"])->first();
         $user = Users::find($sale["responsible_id"]);
 
@@ -135,9 +135,9 @@ class DepartureController extends Controller {
             }
         }
 
-        $totalWithTax = $totalSum + $totalTax19 + $totalTax5;
-        
-        
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_invoice;
+
+
 
         $data = [
             'client' => $cli,
@@ -147,6 +147,7 @@ class DepartureController extends Controller {
             'tax19' => "$ " . number_format(($totalTax19), 2, ',', '.'),
             'totalInvoice' => "$ " . number_format(($totalSum), 2, ',', '.'),
             'totalWithTax' => "$ " . number_format(($totalWithTax), 2, ',', '.'),
+            'shipping' => "$ " . number_format(($dep->shipping_invoice), 2, ',', '.'),
         ];
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
@@ -188,7 +189,7 @@ class DepartureController extends Controller {
                         $detail["status_id"] = 1;
                         $detail["quantity"] = $val["quantity"];
                         $detail["units_sf"] = $pro->units_sf;
-                        $detail["value"] = $pro->price_cust;
+                        $detail["value"] = $pro->price_sf;
                         DeparturesDetail::create($detail);
                     }
 
@@ -269,7 +270,7 @@ class DepartureController extends Controller {
                                     "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons
                                 ]
                         );
-                        
+
                         $this->updateConsecutive(5);
 
                         $detail = DeparturesDetail::where("departure_id", $input["id"])->get();

@@ -101,8 +101,8 @@ class DepartureController extends Controller {
         $detail = DB::table("sales_detail")
                 ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), 
                         "products.title as product", "products.id as product_id", "sales_detail.value", "products.units_sf", 
-                        DB::raw("products.units_sf * sales_detail.quantity as quantityTotal"), 
-                        DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.value as valueTotal"))
+                        DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), 
+                        DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"))
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")

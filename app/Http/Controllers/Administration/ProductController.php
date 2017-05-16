@@ -161,7 +161,7 @@ class ProductController extends Controller {
             $input["characteristic"] = json_encode($input["characteristic"]);
         }
 
-        $input["status"] = (isset($input["status"])) ? 1 : 0;
+        $input["status_id"] = (isset($input["status_id"])) ? 1 : 2;
 
         $result = $product->fill($input)->save();
         if ($result) {

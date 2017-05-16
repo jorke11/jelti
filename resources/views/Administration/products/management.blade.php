@@ -84,7 +84,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="email">status</label>
-                                    <input type="checkbox" class="form-control input-product" id="status" name='status'>
+                                    <input type="checkbox" class="form-control input-product" id="status_id" name='status_id'>
                                 </div>
                             </div>
                             

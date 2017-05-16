@@ -59,7 +59,7 @@
 <table width='100%'>
     <tr>
         <td class="font-subtitle" width='50%'>Factura a nombre de:</td>
-        <td class="font-subtitle" width='50%'>Factura de venta: 000031</td>
+        <td class="font-subtitle" width='50%'>Factura de venta: <?php echo $invoice?></td>
     </tr>
     <tr>
         <td>

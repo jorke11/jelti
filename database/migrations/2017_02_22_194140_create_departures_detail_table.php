@@ -21,8 +21,8 @@ class CreateDeparturesDetailTable extends Migration {
             $table->integer('units_sf');
             $table->integer('real_quantity')->nullable();
             $table->decimal('value', 15, 2);
+            $table->decimal('units_sf', 15, 2)->nullable();
             $table->string('description')->nullable();
-
             $table->timestamps();
         });
     }

@@ -12,6 +12,7 @@
                     <tr>
                         <th></th>
                         <th>Consecutive</th>
+                        <th>Invoice</th>
                         <th>Date</th>
                         <th>Client</th>
                         <th>Commercial</th>

@@ -641,7 +641,7 @@ function Sale() {
                     }
                 },
                 {
-                    targets: [8],
+                    targets: [9],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

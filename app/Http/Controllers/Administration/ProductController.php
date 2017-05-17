@@ -95,11 +95,14 @@ class ProductController extends Controller {
                 $base_id = Base::create($in)->id;
 
                 foreach ($reader->get() as $book) {
-
+                    
                     if (trim($book->supplier) != '' && trim($book->category) != '') {
-                        $sup = Administration\Stakeholder::where("business", "like", trim($book->supplier))->first();
+                       
+                        $sup = Administration\Stakeholder::where("business", "ILIKE", trim($book->supplier))->first();
                         $cat = Administration\Categories::where("description", "like", trim($book->category))->first();
+                        
                         if (count($sup) > 0 && count($cat) > 0) {
+                            
                             $book->ean = (!isset($book->ean)) ? '' : trim($book->ean);
                             $product["category_id"] = $cat->id;
                             $product["supplier_id"] = $sup->id;

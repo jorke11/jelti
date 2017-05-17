@@ -146,6 +146,7 @@ Route::put('/departure/generateInvoice/{id}', 'Inventory\DepartureController@gen
 
 Route::get('/departure/{id}/getClient', ['uses' => 'Inventory\DepartureController@getClient']);
 Route::get('/departure/{id}/getBranch', ['uses' => 'Inventory\DepartureController@getBranch']);
+Route::post('/departure/uploadExcel', 'Inventory\DepartureController@storeExcel');
 
 
 Route::resource('/order', 'Inventory\OrderController');

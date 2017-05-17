@@ -18,6 +18,7 @@ class SaleDetail extends Model {
         "category_id",
         "order",
         "value",
+        "units_sf",
         "payed",
         "account_id",
         "type_nature",

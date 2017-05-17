@@ -12,6 +12,9 @@ function Sale() {
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
         });
+
+
+
         $("#client_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getClient($(this).val());
@@ -45,7 +48,7 @@ function Sale() {
             $(".input-departure").cleanFields({disabled: true});
             $("#btnSend").attr("disabled", true);
             $("#btnSave").attr("disabled", true);
-            $("#btnmodalDetail").attr("disabled", true);
+            $("#btnmodalDetail,#btnModalUpload").attr("disabled", true);
             $("#btnDocument").attr("disabled", true);
             $(".input-fillable").attr("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
@@ -106,7 +109,39 @@ function Sale() {
         $("#tabList").click(function () {
             table.ajax.reload();
         })
+
+
+        $("#btnModalUpload").click(function () {
+            $("#modalUpload").modal("show");
+        })
+
+        $("#uploadRequest").click(this.uploadExcel)
+
     }
+
+    this.uploadExcel = function () {
+        var formData = new FormData($("#frmUpload")[0]);
+
+        $.ajax({
+            url: 'departure/uploadExcel',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+                listProducts = data.data;
+
+                obj.printDetailTmp();
+            },
+            complete: function () {
+                $("#modalUpload").modal("hide");
+            }
+        })
+
+    }
+
 
     this.consecutive = function () {
         $.ajax({
@@ -133,7 +168,7 @@ function Sale() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-        $("#btnmodalDetail").attr("disabled", false);
+        $("#btnmodalDetail,#btnModalUpload").attr("disabled", false);
         listProducts = [];
         obj.consecutive();
     }
@@ -335,7 +370,7 @@ function Sale() {
                             $("#modalDetail").modal("hide");
                             obj.printDetail(resp.data);
 
-                        }else{
+                        } else {
                             toastr.error(resp.success.msg);
                         }
                     }, error(xhr, responseJSON, thrown) {
@@ -403,23 +438,25 @@ function Sale() {
         $("#tblDetail tbody").html("");
         $.each(listProducts, function (i, val) {
 
-            htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
-            htmlDel = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.deleteItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
+            if (val != undefined) {
+                htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
+                htmlDel = '<button type="button" class="btn btn-xs btn-danger" onclick=obj.deleteItem(' + val.product_id + ',' + val.row + ')>Del</button>'
 
-            val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
-            
-            html += '<tr id="row_' + val.row + '">';
-            html += "<td>" + val.product + "</td>";
-            html += "<td>" + val.comment + "</td>";
-            html += "<td>" + val.quantity + "</td>";
-            html += "<td>" + val.valueFormated + "</td>";
-            html += "<td>" + val.totalFormated + "</td>";
-            html += "<td>" + val.real_quantity + "</td>";
-            html += "<td>" + val.valueFormated + "</td>";
-            html += "<td>" + val.totalFormated_real + "</td>";
-            html += '<td>' + val.status + "</td>";
-            html += '<td>' + htmlEdit + "</td>";
-            html += "</tr>";
+                val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+
+                html += '<tr id="row_' + val.row + '">';
+                html += "<td>" + val.product + "</td>";
+                html += "<td>" + val.comment + "</td>";
+                html += "<td>" + val.quantity + "</td>";
+                html += "<td>" + val.valueFormated + "</td>";
+                html += "<td>" + val.totalFormated + "</td>";
+                html += "<td>" + val.real_quantity + "</td>";
+                html += "<td>" + val.valueFormated + "</td>";
+                html += "<td>" + val.totalFormated_real + "</td>";
+                html += '<td>' + val.status + "</td>";
+                html += '<td>' + htmlEdit + htmlDel + "</td>";
+                html += "</tr>";
+            }
         });
 
         $("#tblDetail tbody").html(html);
@@ -427,6 +464,8 @@ function Sale() {
 
     this.deleteItem = function (product_id, rowItem) {
         delete listProducts[rowItem];
+        $("#row_" + rowItem).remove();
+
     }
 
     this.printDetail = function (data, btnEdit = true, btnDel = true) {

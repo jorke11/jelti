@@ -26,16 +26,23 @@ use Session;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Inventory\StockController;
 use Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DepartureController extends Controller {
 
     protected $total;
     public $total_real;
+    public $path;
+    public $name;
+    public $listProducts;
 
     public function __construct() {
         $this->middleware("auth");
         $this->total = 0;
         $this->total_real = 0;
+        $this->path = '';
+        $this->name = '';
+        $this->listProducts = array();
     }
 
     public function index() {
@@ -96,13 +103,14 @@ class DepartureController extends Controller {
         return view("departure.pdf", compact("data"));
     }
 
+    public function formatDate($date) {
+        return date("d", strtotime($date)) . " de " . date("F", strtotime($date)) . " de " . date("Y", strtotime($date));
+    }
+
     public function getInvoice($id) {
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
-                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), 
-                        "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", 
-                        DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), 
-                        DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"))
+                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"))
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
@@ -112,7 +120,10 @@ class DepartureController extends Controller {
         $cli = Branch::where("stakeholder_id", $sale["client_id"])->first();
         $user = Users::find($sale["responsible_id"]);
 
-        $cli["emition"] = date("d", strtotime($sale["created"])) . " de " . date("F", strtotime($sale["created"])) . " de " . date("Y", strtotime($sale["created"]));
+        $expiration = date('Y-m-d', strtotime('+30 days', strtotime($sale["created"])));
+
+        $cli["emition"] = $this->formatDate($sale["created"]);
+        $cli["expiration"] = $this->formatDate($expiration);
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
 
 
@@ -185,6 +196,8 @@ class DepartureController extends Controller {
                 if ($result) {
                     $this->updateConsecutive(3);
                     $resp = Departures::FindOrFail($result);
+
+                    $input["detail"] = array_values(array_filter($input["detail"]));
 
                     foreach ($input["detail"] as $i => $val) {
                         $pro = Products::find($val["product_id"]);
@@ -267,6 +280,7 @@ class DepartureController extends Controller {
                 if ($val == 0) {
                     if (count($dep) == 0) {
                         $cons = $this->createConsecutive(5);
+
                         $id = DB::table("sales")->insertGetId(
                                 ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
                                     "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
@@ -274,8 +288,9 @@ class DepartureController extends Controller {
                                     "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons,
                                 ]
                         );
-
+//
                         $this->updateConsecutive(5);
+
 
                         $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
@@ -284,6 +299,8 @@ class DepartureController extends Controller {
                         $credit = 0;
                         $tax = 0;
                         $totalPar = 0;
+
+
                         foreach ($detail as $value) {
                             $pro = Products::findOrFail($value->product_id);
                             $totalPar = $value->quantity * $value->value;
@@ -291,7 +308,7 @@ class DepartureController extends Controller {
                             SaleDetail::insert([
                                 "sale_id" => $id, "product_id" => $value->product_id,
                                 "category_id" => $value->category_id, "quantity" => $value->quantity,
-                                "value" => $value->value, "tax" => $pro["tax"],"units_sf"=>$pro->units_sf,
+                                "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $pro->units_sf,
                                 "account_id" => 1, "order" => $cont, "type_nature" => 1
                             ]);
 
@@ -357,7 +374,7 @@ class DepartureController extends Controller {
 
     public function updateConsecutive($id) {
         $con = Consecutives::where("type_form", $id)->first();
-        $con->current = (($con->current == null) ? 1 : $con->current) + 1;
+        $con->current = ($con->current == null) ? 1 : $con->current + 1;
         $con->save();
     }
 
@@ -461,7 +478,7 @@ class DepartureController extends Controller {
 
         $input = $request->all();
         $pro = Products::find($input["product_id"]);
-        $input["value"] = $pro->price_cust;
+        $input["value"] = $pro->price_sf;
 
 
         if (Auth::user()->role_id == 4) {
@@ -499,7 +516,7 @@ class DepartureController extends Controller {
                 return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
             }
         } else {
-            
+
             $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
             return response()->json(['success' => true, "data" => $resp]);
@@ -553,6 +570,44 @@ class DepartureController extends Controller {
         $dep->save();
         $this->updateConsecutive(1);
         return response()->json(["success" => true, "consecutive" => $dep->invoice]);
+    }
+
+    public function storeExcel(Request $request) {
+        if ($request->ajax()) {
+
+            $input = $request->all();
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($input, 'file_excel');
+            $this->name = $file->getClientOriginalName();
+            $this->name = str_replace(" ", "_", $this->name);
+            $this->path = "uploads/departures/" . date("Y-m-d") . "/" . $this->name;
+
+            $file->move("uploads/departures/" . date("Y-m-d") . "/", $this->name);
+
+            Excel::load($this->path, function($reader) {
+
+                foreach ($reader->get() as $i => $book) {
+                    $pro = Products::where("reference", $book->codigo)->first();
+                    if ($pro != null) {
+                        $this->listProducts[] = array(
+                            "row" => $i,
+                            "product_id" => $pro->id,
+                            "product" => $pro->reference . " - " . $pro->title,
+                            "quantity" => $book->cantidad,
+                            "valueFormated" => "$ " . number_format(($pro->price_sf), 2, ',', '.'),
+                            "totalFormated" => "$ " . number_format(($pro->units_sf * $pro->price_sf * $book->cantidad), 2, ',', '.'),
+                            "real_quantity" => "",
+                            "totalFormated_real" => "",
+                            "comment" => "",
+                            "status" => "new",
+                        );
+                    }
+                }
+            })->get();
+
+            return response()->json(["success" => true, "data" => $this->listProducts]);
+        }
     }
 
 }

@@ -138,6 +138,9 @@
                 <div class="row">
                     <div class="col-lg-4">List Detail</div>
                     <div class="col-lg-8 text-right">
+                        <button class="btn btn-success btn-sm" type="button" id="btnModalUpload">
+                            <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                        </button>
                         <button class="btn btn-success btn-sm" type="button" id="btnmodalDetail">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>

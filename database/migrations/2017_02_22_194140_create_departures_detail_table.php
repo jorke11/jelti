@@ -18,7 +18,6 @@ class CreateDeparturesDetailTable extends Migration {
             $table->integer('product_id');
             $table->integer('status_id');
             $table->integer('quantity');
-            $table->integer('units_sf');
             $table->integer('real_quantity')->nullable();
             $table->decimal('value', 15, 2);
             $table->decimal('units_sf', 15, 2)->nullable();

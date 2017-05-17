@@ -86,7 +86,7 @@
                 </tr>
                 <tr>
                     <td class="font-detail">Vencimiento</td>
-                    <td class="font-detail-cont">3 de Abril de 2017</td>
+                    <td class="font-detail-cont"><?php echo $client["expiration"]; ?></td>
                 </tr>
                 <tr>
                     <td class="font-detail">Vendedor</td>

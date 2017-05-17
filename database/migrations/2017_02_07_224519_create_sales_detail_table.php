@@ -22,6 +22,7 @@ class CreateSalesDetailTable extends Migration {
             $table->integer('account_id');
             $table->integer('order');
             $table->decimal('value', 15, 2);
+            $table->decimal('units_sf', 15, 2)->nullable();
             $table->string('description')->nullable();
             $table->boolean("payed")->nullable();
             $table->integer("type_nature");

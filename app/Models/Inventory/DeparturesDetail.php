@@ -19,5 +19,6 @@ class DeparturesDetail extends Model
         "units_sf",
         "real_quantity",
         "description",
+        "units_sf",
         ];
 }

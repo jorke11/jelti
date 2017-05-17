@@ -427,7 +427,9 @@ class DepartureController extends Controller {
 
     public function updateConsecutive($id) {
         $con = Consecutives::where("type_form", $id)->first();
-        $con->current = ($con->current == null) ? 1 : $con->current;
+        $con->current = ($con->current == null) ? 1 : $con->current + 1;
+        
+
         $con->save();
     }
 

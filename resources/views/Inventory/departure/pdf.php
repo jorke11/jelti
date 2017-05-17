@@ -30,7 +30,7 @@
 
 <table align='center'  width='100%'>
     <tr>
-        <td class="space-title"><img src="../../../../public/assets/images/logo.png" width="10%"/></td>
+        <td class="space-title"></td>
         <td>SUPERFUDS SAS</td>
     </tr>
     <tr>

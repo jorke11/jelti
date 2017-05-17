@@ -194,8 +194,6 @@ class DepartureController extends Controller {
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
-//        $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
-//                    'title' => 'Invoice']);
 
         return $pdf->stream('document.pdf');
     }

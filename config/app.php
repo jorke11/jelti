@@ -146,6 +146,7 @@ return [
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -207,7 +208,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\DatatablesServiceProvider::class,
-        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
+        'PDF2' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Image' => Intervention\Image\Facades\Image::class,
     ],

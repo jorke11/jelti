@@ -192,7 +192,7 @@ class DepartureController extends Controller {
             'invoice' => $dep->invoice
         ];
 
-        $pdf = \PDF2::loadView('Inventory.departure.pdf', [], $data, [
+        $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
 //        $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
 //                    'title' => 'Invoice']);

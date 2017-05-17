@@ -1,6 +1,6 @@
 <div class="col-md-12">
 
-    <table class="table table-condensed table-hover" id="tblProducts" width='100%'>
+    <table class="table table-condensed table-hover nowrap" id="tblProducts" width='100%'>
         <thead>
             <tr>
                 <th>Id</th>

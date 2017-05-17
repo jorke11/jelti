@@ -21,7 +21,7 @@ LEFT JOIN parameters as typestakeholder ON typestakeholder.code=s.type_stakehold
 LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='generic';
 
 create view vproducts as
-select p.id,p.title,p.description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
+select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
 p.price_cust,p.image,status.description as status
 from products p
 JOIN stakeholder s ON s.id=p.supplier_id

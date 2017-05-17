@@ -126,7 +126,7 @@ class DepartureController extends Controller {
         $cli["expiration"] = $this->formatDate($expiration);
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
 
-
+//        dd($dep);
 
         $totalExemp = 0;
         $totalTax5 = 0;
@@ -149,7 +149,7 @@ class DepartureController extends Controller {
             }
         }
 
-        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_invoice;
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
 
 
@@ -157,11 +157,13 @@ class DepartureController extends Controller {
             'client' => $cli,
             'detail' => $detail,
             'exept' => "$ " . number_format(($totalExemp), 2, ',', '.'),
+            'tax5num' => $totalTax5,
             'tax5' => "$ " . number_format(($totalTax5), 2, ',', '.'),
+            'tax19num' => $totalTax19,
             'tax19' => "$ " . number_format(($totalTax19), 2, ',', '.'),
             'totalInvoice' => "$ " . number_format(($totalSum), 2, ',', '.'),
             'totalWithTax' => "$ " . number_format(($totalWithTax), 2, ',', '.'),
-            'shipping' => "$ " . number_format(($dep->shipping_invoice), 2, ',', '.'),
+            'shipping' => "$ " . number_format(($dep->shipping_cost), 2, ',', '.'),
             'invoice' => $dep->invoice
         ];
 
@@ -189,11 +191,18 @@ class DepartureController extends Controller {
             if (isset($input["detail"])) {
 
                 try {
+
                     DB::beginTransaction();
                     $emDetail = null;
 
                     $input["header"]["status_id"] = 1;
                     $input["header"]["consecutive"] = $this->createConsecutive(3);
+
+                    $input["header"]["shipping_cost"] = 10000;
+                    if ($input["header"]["city_id"] != $input["header"]["destination_id"]) {
+                        $input["header"]["shipping_cost"] = 15000;
+                    }
+
                     $result = Departures::create($input["header"])->id;
 
                     if ($result) {
@@ -273,7 +282,6 @@ class DepartureController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
 
-
             try {
                 DB::beginTransaction();
 
@@ -292,11 +300,13 @@ class DepartureController extends Controller {
                         if (count($dep) == 0) {
                             $cons = $this->createConsecutive(5);
 
+
                             $id = DB::table("sales")->insertGetId(
                                     ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
                                         "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
                                         "address" => $departure["address"], "phone" => $departure["phone"],
                                         "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons,
+                                        "shipping_cost" => $departure["shipping_cost"]
                                     ]
                             );
 //
@@ -314,7 +324,7 @@ class DepartureController extends Controller {
 
                             foreach ($detail as $value) {
                                 $pro = Products::findOrFail($value->product_id);
-                                $totalPar = $value->quantity * $value->value;
+                                $totalPar = $value->quantity * $value->value * $value->units_sf;
                                 $total += $totalPar;
                                 SaleDetail::insert([
                                     "sale_id" => $id, "product_id" => $value->product_id,
@@ -338,10 +348,12 @@ class DepartureController extends Controller {
 
 
                             if ($total > $basetax["base"]) {
-                                $rete = ($total * $tax["base"]);
+                                $rete = Parameters::where("group", "tax")->where("code", 1)->first();
+                                $rete = ($total * $rete["value"]);
                                 SaleDetail::insert([
-                                    "sale_id" => $id, "account_id" => 2, "value" => ($total * $tax["base"]), "order" => $cont, "description" => "rete", "type_nature" => 2
+                                    "sale_id" => $id, "account_id" => 2, "value" => ($rete), "order" => $cont, "description" => "rete", "type_nature" => 2
                                 ]);
+
                                 $credit -= $rete;
                                 $cont++;
                             }

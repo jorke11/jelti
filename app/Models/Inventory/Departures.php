@@ -21,6 +21,7 @@ class Departures extends Model {
         "address",
         "phone",
         "status_id",
+        "shipping_cost",
         "invoice"];
 
 }

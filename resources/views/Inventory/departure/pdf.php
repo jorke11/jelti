@@ -59,7 +59,7 @@
 <table width='100%'>
     <tr>
         <td class="font-subtitle" width='50%'>Factura a nombre de:</td>
-        <td class="font-subtitle" width='50%'>Factura de venta: <?php echo $invoice?></td>
+        <td class="font-subtitle" width='50%'>Factura de venta: <?php echo $invoice ?></td>
     </tr>
     <tr>
         <td>
@@ -151,22 +151,34 @@
                     <td width='240px' >Total Factura</td>
                     <td><?php echo $totalInvoice; ?></td>
                 </tr>
-                <tr>
+<!--                <tr>
                     <td>Descuento</td>
                     <td>$ 0</td>
-                </tr>
+                </tr>-->
                 <tr>
                     <td>Flete</td>
                     <td><?php echo $shipping; ?></td>
                 </tr>
-                <tr>
-                    <td>Iva 5%</td>
-                    <td><?php echo $tax5; ?></td>
-                </tr>
-                <tr>
-                    <td>Iva 19%</td>
-                    <td><?php echo $tax19; ?></td>
-                </tr>
+                <?php
+                if ($tax5num > 0) {
+                    ?>
+                    <tr>
+                        <td>Iva 5%</td>
+                        <td><?php echo $tax5; ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                <?php
+                if ($tax19num > 0) {
+                    ?>
+                    <tr>
+                        <td>Iva 19%</td>
+                        <td><?php echo $tax19; ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
                 <tr>
                     <td>Exento</td>
                     <td><?php echo $exept; ?></td>

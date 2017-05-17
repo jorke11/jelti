@@ -187,74 +187,81 @@ class DepartureController extends Controller {
 //            $user = Auth::User();
 
             if (isset($input["detail"])) {
-                $emDetail = null;
 
-                $input["header"]["status_id"] = 1;
-                $input["header"]["consecutive"] = $this->createConsecutive(3);
-                $result = Departures::create($input["header"])->id;
+                try {
+                    DB::beginTransaction();
+                    $emDetail = null;
 
-                if ($result) {
-                    $this->updateConsecutive(3);
-                    $resp = Departures::FindOrFail($result);
+                    $input["header"]["status_id"] = 1;
+                    $input["header"]["consecutive"] = $this->createConsecutive(3);
+                    $result = Departures::create($input["header"])->id;
 
-                    $input["detail"] = array_values(array_filter($input["detail"]));
+                    if ($result) {
+                        $this->updateConsecutive(3);
+                        $resp = Departures::FindOrFail($result);
 
-                    foreach ($input["detail"] as $i => $val) {
-                        $pro = Products::find($val["product_id"]);
-                        $detail["product_id"] = $val["product_id"];
-                        $detail["departure_id"] = $result;
-                        $detail["status_id"] = 1;
-                        $detail["quantity"] = $val["quantity"];
-                        $detail["units_sf"] = $pro->units_sf;
-                        $detail["value"] = $pro->price_sf;
-                        DeparturesDetail::create($detail);
-                    }
+                        $input["detail"] = array_values(array_filter($input["detail"]));
 
-                    $detail = $this->formatDetail($result);
-
-
-                    $ware = Warehouses::find($input["header"]["warehouse_id"]);
-
-                    $client = Stakeholder::find($input["header"]["client_id"]);
-
-                    $email = Email::where("description", "departures")->first();
-
-                    if ($email != null) {
-                        $emDetail = EmailDetail::where("email_id", $email->id)->get();
-                    }
-
-                    if (count($emDetail) > 0) {
-                        $this->mails = array();
-                        foreach ($emDetail as $value) {
-                            $this->mails[] = $value->description;
+                        foreach ($input["detail"] as $i => $val) {
+                            $pro = Products::find($val["product_id"]);
+                            $detail["product_id"] = $val["product_id"];
+                            $detail["departure_id"] = $result;
+                            $detail["status_id"] = 1;
+                            $detail["quantity"] = $val["quantity"];
+                            $detail["units_sf"] = $pro->units_sf;
+                            $detail["value"] = $pro->price_sf;
+                            DeparturesDetail::create($detail);
                         }
 
-                        $cit = Cities::find($ware->city_id);
-
-                        $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $input["header"]["consecutive"];
-                        $input["city"] = $cit->description;
-                        $input["consecutive"] = $input["header"]["consecutive"];
-
-                        $user = Users::find($input["header"]["responsible_id"]);
-
-                        $input["name"] = ucwords($user->name);
-                        $input["last_name"] = ucwords($user->last_name);
-                        $input["phone"] = $user->phone;
-                        $input["warehouse"] = $ware->description;
-                        $input["address"] = $ware->address;
-                        $input["detail"] = $detail;
-                        $this->mails[] = $user->email;
+                        $detail = $this->formatDetail($result);
 
 
-                        Mail::send("Notifications.departure", $input, function($msj) {
-                            $msj->subject($this->subject);
-                            $msj->to($this->mails);
-                        });
+                        $ware = Warehouses::find($input["header"]["warehouse_id"]);
+
+                        $client = Stakeholder::find($input["header"]["client_id"]);
+
+                        $email = Email::where("description", "departures")->first();
+
+                        if ($email != null) {
+                            $emDetail = EmailDetail::where("email_id", $email->id)->get();
+                        }
+
+                        if (count($emDetail) > 0) {
+                            $this->mails = array();
+                            foreach ($emDetail as $value) {
+                                $this->mails[] = $value->description;
+                            }
+
+                            $cit = Cities::find($ware->city_id);
+
+                            $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $input["header"]["consecutive"];
+                            $input["city"] = $cit->description;
+                            $input["consecutive"] = $input["header"]["consecutive"];
+
+                            $user = Users::find($input["header"]["responsible_id"]);
+
+                            $input["name"] = ucwords($user->name);
+                            $input["last_name"] = ucwords($user->last_name);
+                            $input["phone"] = $user->phone;
+                            $input["warehouse"] = $ware->description;
+                            $input["address"] = $ware->address;
+                            $input["detail"] = $detail;
+                            $this->mails[] = $user->email;
+
+
+                            Mail::send("Notifications.departure", $input, function($msj) {
+                                $msj->subject($this->subject);
+                                $msj->to($this->mails);
+                            });
+                        }
+                        DB::commit();
+                        return response()->json(['success' => true, "data" => $resp, "detail" => $detail]);
+                    } else {
+                        return response()->json(['success' => false]);
                     }
-
-                    return response()->json(['success' => true, "data" => $resp, "detail" => $detail]);
-                } else {
-                    return response()->json(['success' => false]);
+                } catch (Exception $exc) {
+                    DB::rollback();
+                    return response()->json(['success' => false, "msg" => "Wrong"], 409);
                 }
             } else {
                 return response()->json(['success' => false, "msg" => "detail Empty"], 409);
@@ -266,96 +273,105 @@ class DepartureController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
 
-            $basetax = Parameters::where("group", "tax")->where("code", 2)->first();
-            $tax = Parameters::where("group", "tax")->where("code", 1)->first();
-            $departure = Departures::findOrFail($input["id"]);
 
-            $val = DeparturesDetail::where("departure_id", $departure["id"])->count();
+            try {
+                DB::beginTransaction();
 
-            $dep = Sales::where("departure_id", $input["id"])->get();
+                $basetax = Parameters::where("group", "tax")->where("code", 2)->first();
+                $tax = Parameters::where("group", "tax")->where("code", 1)->first();
+                $departure = Departures::find($input["id"]);
+
+                $val = DeparturesDetail::where("departure_id", $departure["id"])->count();
+
+                $dep = Sales::where("departure_id", $input["id"])->get();
 
 
-            if ($val > 0) {
-                $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
-                if ($val == 0) {
-                    if (count($dep) == 0) {
-                        $cons = $this->createConsecutive(5);
+                if ($val > 0) {
+                    $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
+                    if ($val == 0) {
+                        if (count($dep) == 0) {
+                            $cons = $this->createConsecutive(5);
 
-                        $id = DB::table("sales")->insertGetId(
-                                ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
-                                    "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
-                                    "address" => $departure["address"], "phone" => $departure["phone"],
-                                    "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons,
-                                ]
-                        );
+                            $id = DB::table("sales")->insertGetId(
+                                    ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
+                                        "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
+                                        "address" => $departure["address"], "phone" => $departure["phone"],
+                                        "status_id" => $departure["status_id"], "created" => $departure["created"], "consecutive" => $cons,
+                                    ]
+                            );
 //
-                        $this->updateConsecutive(5);
+                            $this->updateConsecutive(5);
 
 
-                        $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
+                            $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
-                        $total = 0;
-                        $cont = 0;
-                        $credit = 0;
-                        $tax = 0;
-                        $totalPar = 0;
+                            $total = 0;
+                            $cont = 0;
+                            $credit = 0;
+                            $tax = 0;
+                            $totalPar = 0;
 
 
-                        foreach ($detail as $value) {
-                            $pro = Products::findOrFail($value->product_id);
-                            $totalPar = $value->quantity * $value->value;
-                            $total += $totalPar;
-                            SaleDetail::insert([
-                                "sale_id" => $id, "product_id" => $value->product_id,
-                                "category_id" => $value->category_id, "quantity" => $value->quantity,
-                                "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $pro->units_sf,
-                                "account_id" => 1, "order" => $cont, "type_nature" => 1
-                            ]);
-
-                            $credit += (double) $totalPar;
-                            if ($pro["tax"] != '' && $pro["tax"] > 0) {
-                                $cont++;
-                                $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                            foreach ($detail as $value) {
+                                $pro = Products::findOrFail($value->product_id);
+                                $totalPar = $value->quantity * $value->value;
+                                $total += $totalPar;
                                 SaleDetail::insert([
-                                    "account_id" => 1, "sale_id" => $id, "value" => $tax,
-                                    "order" => $cont, "description" => 'iva', "type_nature" => 1
+                                    "sale_id" => $id, "product_id" => $value->product_id,
+                                    "category_id" => $value->category_id, "quantity" => $value->quantity,
+                                    "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $pro->units_sf,
+                                    "account_id" => 1, "order" => $cont, "type_nature" => 1
                                 ]);
+
+                                $credit += (double) $totalPar;
+                                if ($pro["tax"] != '' && $pro["tax"] > 0) {
+                                    $cont++;
+                                    $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
+                                    SaleDetail::insert([
+                                        "account_id" => 1, "sale_id" => $id, "value" => $tax,
+                                        "order" => $cont, "description" => 'iva', "type_nature" => 1
+                                    ]);
+                                }
+                                $credit += (double) $tax;
+                                $cont++;
                             }
-                            $credit += (double) $tax;
-                            $cont++;
-                        }
 
 
-                        if ($total > $basetax["base"]) {
-                            $rete = ($total * $tax["base"]);
+                            if ($total > $basetax["base"]) {
+                                $rete = ($total * $tax["base"]);
+                                SaleDetail::insert([
+                                    "sale_id" => $id, "account_id" => 2, "value" => ($total * $tax["base"]), "order" => $cont, "description" => "rete", "type_nature" => 2
+                                ]);
+                                $credit -= $rete;
+                                $cont++;
+                            }
+
                             SaleDetail::insert([
-                                "sale_id" => $id, "account_id" => 2, "value" => ($total * $tax["base"]), "order" => $cont, "description" => "rete", "type_nature" => 2
+                                "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes", "type_nature" => 2
                             ]);
-                            $credit -= $rete;
-                            $cont++;
+                            $credit = 0;
+
+                            $departure->invoice = $this->createConsecutive(1);
+                            $departure->status_id = 2;
+                            $departure->save();
+                            $this->updateConsecutive(1);
+
+                            $detail = $this->formatDetail($input["id"]);
+
+                            DB::commit();
+                            return response()->json(["success" => true, "header" => $departure, "detail" => $detail]);
+                        } else {
+                            return response()->json(["success" => false, "msg" => 'Already sended']);
                         }
-
-                        SaleDetail::insert([
-                            "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes", "type_nature" => 2
-                        ]);
-                        $credit = 0;
-
-                        $departure->invoice = $this->createConsecutive(1);
-                        $departure->status_id = 2;
-                        $departure->save();
-                        $this->updateConsecutive(1);
-
-                        $detail = $this->formatDetail($input["id"]);
-                        return response()->json(["success" => true, "header" => $departure, "detail" => $detail]);
                     } else {
-                        return response()->json(["success" => false, "msg" => 'Already sended']);
+                        return response()->json(["success" => false, "msg" => 'All item detail must be checked'], 409);
                     }
                 } else {
-                    return response()->json(["success" => false, "msg" => 'All item detail must be checked'], 409);
+                    return response()->json(["success" => false, "msg" => 'Detail empty'], 409);
                 }
-            } else {
-
-                return response()->json(["success" => false, "msg" => 'Detail empty'], 409);
+            } catch (Exception $exc) {
+                DB::rollback();
+                return response()->json(["success" => false, "msg" => 'Wrong'], 409);
             }
         }
     }

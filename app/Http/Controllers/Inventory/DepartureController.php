@@ -367,7 +367,6 @@ class DepartureController extends Controller {
                             $departure->status_id = 2;
                             $departure->save();
                             $this->updateConsecutive(1);
-
                             $detail = $this->formatDetail($input["id"]);
 
                             DB::commit();
@@ -390,8 +389,7 @@ class DepartureController extends Controller {
 
     public function createConsecutive($id) {
         $con = Consecutives::where("type_form", $id)->first();
-
-        $con->current = ($con->current == null) ? 1 : $con->current;
+        $con->current = ($con->current == null) ? 1 : $con->current + 1;
         $res = "";
         $con->pronoun = ($con->pronoun == null) ? '' : $con->pronoun;
         for ($i = strlen($con->pronoun); $i <= ($con->large - strlen($con->current)); $i++) {

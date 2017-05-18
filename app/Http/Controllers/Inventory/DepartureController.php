@@ -35,6 +35,7 @@ class DepartureController extends Controller {
     public $path;
     public $name;
     public $listProducts;
+    public $errors;
 
     public function __construct() {
         $this->middleware("auth");
@@ -43,6 +44,7 @@ class DepartureController extends Controller {
         $this->path = '';
         $this->name = '';
         $this->listProducts = array();
+        $this->errors = array();
     }
 
     public function index() {
@@ -139,11 +141,7 @@ class DepartureController extends Controller {
 
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
-                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), 
-                        DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", 
-                        "products.id as product_id", "sales_detail.value", "sales_detail.units_sf",
-                        DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), 
-                        DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"))
+                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"))
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
@@ -180,9 +178,14 @@ class DepartureController extends Controller {
             }
         }
 
-        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
+        $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
+
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
+
 
         $data = [
+            'rete' => $rete["value"],
+            'formatRete' => "$ " . number_format(($rete["value"]), 2, ',', '.'),
             'client' => $cli,
             'detail' => $detail,
             'exept' => "$ " . number_format(($totalExemp), 2, ',', '.'),
@@ -195,6 +198,8 @@ class DepartureController extends Controller {
             'shipping' => "$ " . number_format(($dep->shipping_cost), 2, ',', '.'),
             'invoice' => $dep->invoice
         ];
+
+//        dd($data);
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
@@ -239,15 +244,23 @@ class DepartureController extends Controller {
                         $resp = Departures::FindOrFail($result);
 
                         $input["detail"] = array_values(array_filter($input["detail"]));
-
+                        $price_sf = 0;
                         foreach ($input["detail"] as $i => $val) {
                             $pro = Products::find($val["product_id"]);
+
+                            $price_sf = $pro->price_sf;
+                            if (Auth::user()->role_id == 1) {
+                                if (isset($val["price_sf"]) && !empty($val["price_sf"])) {
+                                    $price_sf = $val["price_sf"];
+                                }
+                            }
+
                             $detail["product_id"] = $val["product_id"];
                             $detail["departure_id"] = $result;
                             $detail["status_id"] = 1;
                             $detail["quantity"] = $val["quantity"];
                             $detail["units_sf"] = $pro->units_sf;
-                            $detail["value"] = $pro->price_sf;
+                            $detail["value"] = $price_sf;
                             DeparturesDetail::create($detail);
                         }
 
@@ -352,13 +365,14 @@ class DepartureController extends Controller {
 
 
                             foreach ($detail as $value) {
-                                $pro = Products::findOrFail($value->product_id);
+                                $pro = Products::find($value->product_id);
                                 $totalPar = $value->quantity * $value->value * $value->units_sf;
                                 $total += $totalPar;
+
                                 SaleDetail::insert([
                                     "sale_id" => $id, "product_id" => $value->product_id,
                                     "category_id" => $value->category_id, "quantity" => $value->quantity,
-                                    "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $pro->units_sf,
+                                    "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
                                     "account_id" => 1, "order" => $cont, "type_nature" => 1
                                 ]);
 
@@ -430,8 +444,6 @@ class DepartureController extends Controller {
     public function updateConsecutive($id) {
         $con = Consecutives::where("type_form", $id)->first();
         $con->current = ($con->current == null) ? 1 : $con->current + 1;
-        
-
         $con->save();
     }
 
@@ -484,7 +496,7 @@ class DepartureController extends Controller {
 
     public function formatDetail($id) {
         $detail = DB::table("departures_detail")
-                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", "products.title as product", "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf")
+                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf")
                 ->join("products", "departures_detail.product_id", "products.id")
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id")
                 ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
@@ -535,8 +547,8 @@ class DepartureController extends Controller {
 
         $input = $request->all();
         $pro = Products::find($input["product_id"]);
-        $input["value"] = $pro->price_sf;
 
+        unset($input["value"]);
 
         if (Auth::user()->role_id == 4) {
             unset($input["real_quantity"]);
@@ -544,6 +556,7 @@ class DepartureController extends Controller {
             $resp = $this->formatDetail($input["departure_id"]);
             return response()->json(['success' => true, "data" => $resp]);
         }
+
 
         $stock = new StockController();
         $available = $stock->getDetailProduct($input["product_id"]);
@@ -631,7 +644,7 @@ class DepartureController extends Controller {
 
     public function storeExcel(Request $request) {
         if ($request->ajax()) {
-
+            $error = 0;
             $input = $request->all();
             $this->name = '';
             $this->path = '';
@@ -643,27 +656,38 @@ class DepartureController extends Controller {
             $file->move("uploads/departures/" . date("Y-m-d") . "/", $this->name);
 
             Excel::load($this->path, function($reader) {
-
                 foreach ($reader->get() as $i => $book) {
-                    $pro = Products::where("reference", $book->codigo)->first();
+                    $pro = Products::where("reference", (int) $book->sf_code)->first();
+
                     if ($pro != null) {
+                        $price_sf = $pro->price_sf;
+                        if (Auth::user()->role_id == 1) {
+
+                            if (isset($book->price_sf) && !empty($book->price_sf)) {
+                                $price_sf = $book->price_sf;
+                            }
+                        }
+
                         $this->listProducts[] = array(
                             "row" => $i,
                             "product_id" => $pro->id,
                             "product" => $pro->reference . " - " . $pro->title,
-                            "quantity" => $book->cantidad,
-                            "valueFormated" => "$ " . number_format(($pro->price_sf), 2, ',', '.'),
-                            "totalFormated" => "$ " . number_format(($pro->units_sf * $pro->price_sf * $book->cantidad), 2, ',', '.'),
+                            "quantity" => $book->unidades_totales,
+                            'price_sf' => $price_sf,
+                            "valueFormated" => "$ " . number_format(($price_sf), 2, ',', '.'),
+                            "totalFormated" => "$ " . number_format(($pro->units_sf * $price_sf * $book->cantidad), 2, ',', '.'),
                             "real_quantity" => "",
                             "totalFormated_real" => "",
                             "comment" => "",
                             "status" => "new",
                         );
+                    } else {
+                        $this->errors[] = $book;
                     }
                 }
             })->get();
 
-            return response()->json(["success" => true, "data" => $this->listProducts]);
+            return response()->json(["success" => true, "data" => $this->listProducts, "error" => $this->errors]);
         }
     }
 

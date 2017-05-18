@@ -124,7 +124,7 @@
             <tr >
                 <td align='center'><?php echo $detail[$i]->quantity; ?></td>
                 <td><?php echo $desc; ?></td>
-                <td align='center'><?php echo (int)$detail[$i]->tax; ?></td>
+                <td align='center'><?php echo (int) $detail[$i]->tax; ?></td>
                 <td align='right'><?php echo "$ " . $valueUnit; ?></td>
                 <td align='right'><?php echo "$ " . ($total) ?></td>
             </tr>
@@ -184,6 +184,18 @@
                     <?php
                 }
                 ?>
+
+                <?php
+                if ($rete > 0) {
+                    ?>
+                    <tr>
+                        <td>Retefuente</td>
+                        <td><?php echo $formatRete; ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+
                 <tr>
                     <td>Exento</td>
                     <td><?php echo $exept; ?></td>

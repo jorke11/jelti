@@ -64,8 +64,8 @@ $cont = 0;
             <?php
         }
 
-        $init = $i * 15;
-        $fin += 15;
+//        $init = $i * 15;
+//        $fin += 15;
         ?>
     </table>
     <br>

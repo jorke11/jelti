@@ -181,13 +181,15 @@ class DepartureController extends Controller {
 
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
 
-        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
+//        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
         $tool = new ToolController();
         
 
         $data = [
-            'rete' => $rete["value"],
+            'rete' => 0,
+//            'rete' => $rete["value"],
             'formatRete' => "$ " . number_format(($rete["value"]), 2, ',', '.'),
             'client' => $cli,
             'detail' => $detail,
@@ -240,7 +242,7 @@ class DepartureController extends Controller {
 
                     $input["header"]["shipping_cost"] = 10000;
                     if ($input["header"]["city_id"] != $input["header"]["destination_id"]) {
-                        $input["header"]["shipping_cost"] = 15000;
+                        $input["header"]["shipping_cost"] = 25000;
                     }
 
                     $result = Departures::create($input["header"])->id;

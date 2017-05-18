@@ -414,10 +414,10 @@ class DepartureController extends Controller {
                             ]);
                             $credit = 0;
 
-                            $departure->invoice = $this->createConsecutive(1);
+//                            $departure->invoice = $this->createConsecutive(1);
                             $departure->status_id = 2;
                             $departure->save();
-                            $this->updateConsecutive(1);
+//                            $this->updateConsecutive(1);
                             $detail = $this->formatDetail($input["id"]);
 
                             DB::commit();

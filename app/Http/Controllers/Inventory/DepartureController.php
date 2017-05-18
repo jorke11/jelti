@@ -152,7 +152,7 @@ class DepartureController extends Controller {
         $cli = Branch::where("stakeholder_id", $sale["client_id"])->first();
         $user = Users::find($sale["responsible_id"]);
 
-        $expiration = date('Y-m-d', strtotime('+30 days', strtotime($sale["created"])));
+        $expiration = date('Y-m-d', strtotime('+7 days', strtotime($sale["created"])));
 
         $cli["emition"] = $this->formatDate($sale["created"]);
         $cli["expiration"] = $this->formatDate($expiration);

@@ -696,7 +696,7 @@ class DepartureController extends Controller {
         $dep = Departures::findOrfail($id);
         $dep->invoice = $this->createConsecutive(1);
         $dep->save();
-        $this->updateConse$termcutive(1);
+        $this->updateConsecutive(1);
         return response()->json(["success" => true, "consecutive" => $dep->invoice]);
     }
 

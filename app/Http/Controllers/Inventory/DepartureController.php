@@ -151,8 +151,13 @@ class DepartureController extends Controller {
         $dep = Departures::find($id);
         $cli = Branch::where("stakeholder_id", $sale["client_id"])->first();
         $user = Users::find($sale["responsible_id"]);
-
-        $expiration = date('Y-m-d', strtotime('+7 days', strtotime($sale["created"])));
+        $term = 7;
+        
+        if ($cli["term"] != null) {
+            $term = $cli["term"];
+        }
+        
+        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["created"])));
 
         $cli["emition"] = $this->formatDate($sale["created"]);
         $cli["expiration"] = $this->formatDate($expiration);
@@ -186,7 +191,7 @@ class DepartureController extends Controller {
 
         $tool = new ToolController();
 
-        $cli["business_name"]=$this->cleanText($cli["business_name"]);
+        $cli["business_name"] = $this->cleanText($cli["business_name"]);
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],
@@ -689,9 +694,9 @@ class DepartureController extends Controller {
 
     public function generateInvoice($id) {
         $dep = Departures::findOrfail($id);
-//        $dep->invoice = $this->createConsecutive(1);
-//        $dep->save();
-//        $this->updateConsecutive(1);
+        $dep->invoice = $this->createConsecutive(1);
+        $dep->save();
+        $this->updateConse$termcutive(1);
         return response()->json(["success" => true, "consecutive" => $dep->invoice]);
     }
 

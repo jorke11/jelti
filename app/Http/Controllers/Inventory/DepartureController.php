@@ -25,6 +25,7 @@ use App\Models\Invoicing\Sales;
 use Session;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Inventory\StockController;
+use App\Http\Controllers\ToolController;
 use Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -182,6 +183,8 @@ class DepartureController extends Controller {
 
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
 
+        $tool = new ToolController();
+        
 
         $data = [
             'rete' => $rete["value"],
@@ -196,14 +199,17 @@ class DepartureController extends Controller {
             'totalInvoice' => "$ " . number_format(($totalSum), 2, ',', '.'),
             'totalWithTax' => "$ " . number_format(($totalWithTax), 2, ',', '.'),
             'shipping' => "$ " . number_format(($dep->shipping_cost), 2, ',', '.'),
-            'invoice' => $dep->invoice
+            'invoice' => $dep->invoice,
+            'textTotal'=>trim($tool->to_word($totalWithTax))
         ];
-
-//        dd($data);
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
 
+        $pdf2 = \PDF::loadView('Inventory.departure.pdf', [], $data, [
+                    'title' => 'Invoice']);
+
+        $pdf2->stream('document.pdf');
         return $pdf->stream('document.pdf');
     }
 

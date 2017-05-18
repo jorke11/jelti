@@ -49,7 +49,7 @@ function Sale() {
             $("#btnSend").attr("disabled", true);
             $("#btnSave").attr("disabled", true);
             $("#btnmodalDetail,#btnModalUpload").attr("disabled", true);
-            $("#btnDocument").attr("disabled", true);
+//            $("#btnDocument").attr("disabled", true);
             $(".input-fillable").attr("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
@@ -516,9 +516,9 @@ function Sale() {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
 
-                if (data.header.invoice == '') {
-                    $("#btnDocument").attr("disabled", false);
-                }
+//                if (data.header.invoice == '') {
+//                    $("#btnDocument").attr("disabled", false);
+//                }
 
                 if (data.header.status_id == 1) {
                     $("#btnSave, #btnmodalDetail").attr("disabled", true);

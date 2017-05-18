@@ -208,6 +208,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\DatatablesServiceProvider::class,
         'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
+        
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Image' => Intervention\Image\Facades\Image::class,
     ],

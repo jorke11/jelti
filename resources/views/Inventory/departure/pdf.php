@@ -12,6 +12,11 @@
         font-weight: bold;
         padding-bottom: 15px;
     }
+    .font-invoice{
+        font-size: 20px;
+        font-weight: bold;
+        padding-bottom: 15px;
+    }
     .font-detail{
         font-size: 12px;
     }
@@ -59,7 +64,7 @@
 <table width='100%'>
     <tr>
         <td class="font-subtitle" width='50%'>Factura a nombre de:</td>
-        <td class="font-subtitle" width='50%'>Factura de venta: <?php echo $invoice ?></td>
+        <td class="font-invoice" width='50%'>Factura de venta: <?php echo $invoice ?></td>
     </tr>
     <tr>
         <td>
@@ -101,8 +106,8 @@
 <table width='100%'>
     <thead>
         <tr border='1'>
-            <th>Cantidad</th>
-            <th>Descripción</th>
+            <th width="10%">Cantidad</th>
+            <th width="50%">Descripción</th>
             <th>% Iva</th>
             <th>Precio</th>
             <th>Total</th>
@@ -117,9 +122,9 @@
             $valueUnit = number_format(($detail[$i]->value), 2, ',', '.');
             ?>
             <tr >
-                <td align='center'><?php echo $detail[$i]->quantity; ?> (<?php echo $detail[$i]->units_sf; ?>)</td>
+                <td align='center'><?php echo $detail[$i]->quantity; ?></td>
                 <td><?php echo $desc; ?></td>
-                <td align='center'><?php echo $detail[$i]->tax; ?></td>
+                <td align='center'><?php echo (int)$detail[$i]->tax; ?></td>
                 <td align='right'><?php echo "$ " . $valueUnit; ?></td>
                 <td align='right'><?php echo "$ " . ($total) ?></td>
             </tr>
@@ -144,7 +149,7 @@
 <br>
 <table border='1' width='100%'>
     <tr>
-        <td width='50%' >Notas</td>
+        <td width='50%' >Observaciones</td>
         <td >
             <table>
                 <tr>

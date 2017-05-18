@@ -104,10 +104,39 @@ class DepartureController extends Controller {
     }
 
     public function formatDate($date) {
-        return date("d", strtotime($date)) . " de " . date("F", strtotime($date)) . " de " . date("Y", strtotime($date));
+        $month = date("m", strtotime($date));
+        $monthtext = '';
+        if ($month == '01')
+            $monthtext = 'enero';
+        if ($month == '02')
+            $monthtext = 'febrero';
+        if ($month == '03')
+            $monthtext = 'marzo';
+        if ($month == '04')
+            $monthtext = 'abril';
+        if ($month == '05')
+            $monthtext = 'mayo';
+        if ($month == '06')
+            $monthtext = 'junio';
+        if ($month == '07')
+            $monthtext = 'julio';
+        if ($month == '08')
+            $monthtext = 'agosto';
+        if ($month == '09')
+            $monthtext = 'septiembre';
+        if ($month == '10')
+            $monthtext = 'octubre';
+        if ($month == '11')
+            $monthtext = 'noviembre';
+        if ($month == '12')
+            $monthtext = 'diciembre';
+
+
+        return date("d", strtotime($date)) . " de " . ucwords($monthtext) . " de " . date("Y", strtotime($date));
     }
 
     public function getInvoice($id) {
+
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
                 ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), 
@@ -129,8 +158,6 @@ class DepartureController extends Controller {
         $cli["emition"] = $this->formatDate($sale["created"]);
         $cli["expiration"] = $this->formatDate($expiration);
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
-
-//        dd($dep);
 
         $totalExemp = 0;
         $totalTax5 = 0;
@@ -154,8 +181,6 @@ class DepartureController extends Controller {
         }
 
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
-
-
 
         $data = [
             'client' => $cli,
@@ -405,6 +430,8 @@ class DepartureController extends Controller {
     public function updateConsecutive($id) {
         $con = Consecutives::where("type_form", $id)->first();
         $con->current = ($con->current == null) ? 1 : $con->current + 1;
+        
+
         $con->save();
     }
 

@@ -33,8 +33,8 @@ $init = 0;
 $fin = 15;
 $cont = 0;
 
-print_r($detail);exit;
-for ($i = 1; $i <= $count; $i++) {
+
+//for ($i = 1; $i <= $count; $i++) {
     ?>
     @include('Inventory.departure.pdfheader')
     <br>
@@ -50,7 +50,7 @@ for ($i = 1; $i <= $count; $i++) {
             </tr>
         </thead>  
         <?php
-        for ($j = $init; $j < $fin; $j++) {
+        for ($j = 0; $j < count($detail); $j++) {
             $desc = ($detail[$j]->product_id == '') ? $detail[$j]->description : $detail[$j]->product;
             $total = number_format(($detail[$j]->valuetotal), 2, ',', '.');
             $valueUnit = number_format(($detail[$j]->value), 2, ',', '.');
@@ -65,8 +65,8 @@ for ($i = 1; $i <= $count; $i++) {
             <?php
         }
 
-        $init = $i + 15;
-        $fin += 15;
+//        $init = $i + 15;
+//        $fin += 15;
         ?>
     </table>
     <br>
@@ -89,7 +89,7 @@ for ($i = 1; $i <= $count; $i++) {
     <br>
     <?php
     
-}
+//}
 ?>
 
 

@@ -147,7 +147,7 @@ class DepartureController extends Controller {
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
-
+        
         $dep = Departures::find($id);
         $cli = Branch::where("stakeholder_id", $sale["client_id"])->first();
         $user = Users::find($sale["responsible_id"]);

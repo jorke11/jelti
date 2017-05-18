@@ -32,6 +32,8 @@ $count = round(count($detail) / 15);
 $init = 0;
 $fin = 15;
 $cont = 0;
+
+print_r($detail);exit;
 for ($i = 1; $i <= $count; $i++) {
     ?>
     @include('Inventory.departure.pdfheader')

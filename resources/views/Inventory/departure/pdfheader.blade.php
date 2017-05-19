@@ -35,7 +35,6 @@
                 <tr>
                     <td width='100px'></td>
                     <td>
-                        <?php echo public_path()."/assets/images/logo.png";?>
                         <!--<img src="{{public_path()}}/assets/images/logo.png" width="10%">-->
                     </td>
                 </tr>

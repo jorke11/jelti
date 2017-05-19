@@ -210,6 +210,13 @@ function Sale() {
                 $("#frm #address").val(resp.data.client.address);
                 $("#frm #phone").val(resp.data.client.phone);
 
+                if (resp.data.city_id == $("#frm #city_id").val()) {
+                    $("#frm #shipping_cost").val(10000);
+                } else {
+                    $("#frm #shipping_cost").val(25000);
+                }
+
+
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
                 html = "<option value=0>Selection</option>";
                 $.each(resp.data.branch, function (i, val) {
@@ -217,6 +224,8 @@ function Sale() {
                 })
 
                 $("#frm #branch_id").html(html);
+
+
 
 
 

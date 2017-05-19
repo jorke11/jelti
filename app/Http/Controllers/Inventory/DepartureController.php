@@ -157,11 +157,14 @@ class DepartureController extends Controller {
         $user = Users::find($sale["responsible_id"]);
         $term = 7;
 
+        dd($cli);
+        
         if ($cli["term"] != null) {
             $term = $cli["term"];
         }
 
         $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["created"])));
+        
 
         $cli["emition"] = $this->formatDate($sale["created"]);
         $cli["expiration"] = $this->formatDate($expiration);

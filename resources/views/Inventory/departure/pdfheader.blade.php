@@ -28,7 +28,7 @@
 <br>
 <br>
 
-<table align='center'  width='100%' border='1'>
+<table align='center'  width='100%'>
     <tr>
         <td class="space-title">
             <table>

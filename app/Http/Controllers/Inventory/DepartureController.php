@@ -204,14 +204,14 @@ class DepartureController extends Controller {
             'detail' => $detail,
             'exept' => "$ " . number_format(($totalExemp), 2, ',', '.'),
             'tax5num' => $totalTax5,
-            'tax5' => "$ " . number_format(($totalTax5), 2, ',', '.'),
+            'tax5' => "$ " . number_format((round($totalTax5)), 0, ',', '.'),
             'tax19num' => $totalTax19,
-            'tax19' => "$ " . number_format(($totalTax19), 2, ',', '.'),
-            'totalInvoice' => "$ " . number_format(($totalSum), 2, ',', '.'),
-            'totalWithTax' => "$ " . number_format(($totalWithTax), 2, ',', '.'),
-            'shipping' => "$ " . number_format(($dep->shipping_cost), 2, ',', '.'),
+            'tax19' => "$ " . number_format((round($totalTax19)), 0, ',', '.'),
+            'totalInvoice' => "$ " . number_format(($totalSum), 0, ',', '.'),
+            'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
+            'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
             'invoice' => $dep->invoice,
-            'textTotal' => trim($tool->to_word($totalWithTax))
+            'textTotal' => trim($tool->to_word(round($totalWithTax)))
         ];
 
 //        return view('Inventory.departure.pdf',compact("data"));

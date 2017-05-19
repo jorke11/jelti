@@ -650,6 +650,7 @@ function Sale() {
     }
 
     this.table = function () {
+        var html = '';
         table = $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
@@ -684,7 +685,10 @@ function Sale() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+//                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        html = '<button class="btn btn-primary btn-xs" onclick="obj.viewPdf(' + data.id + ')">';
+                        html += '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>';
+                        return html;
                     }
                 }
             ],
@@ -733,6 +737,10 @@ function Sale() {
             }
         });
         return table;
+    }
+
+    this.viewPdf = function (id) {
+        window.open("departure/" + id + "/getInvoice");
     }
 
     this.format = function (d) {

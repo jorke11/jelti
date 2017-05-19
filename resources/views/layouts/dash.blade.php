@@ -176,6 +176,12 @@
                                             <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>
+                                    
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Ventas <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/reportSales">Reporte</a></li>
+                                        </ul>
+                                    </li>
 
                                 </ul>
                                 @endif

@@ -205,6 +205,10 @@ Route::resource('/ticket/addComment', 'Administration\TicketController@addCommen
 Route::resource('/parameter', 'Administration\ParametersController');
 
 
+Route::get('/reportSales', 'Report\SalesController@index');
+
+
+
 Route::get('/api/listCategory', function() {
     return Datatables::queryBuilder(DB::table("categories")->orderBy("order", "asc"))->make(true);
 });

@@ -3,8 +3,8 @@
         font-size: 11px;
     }
     .space-title{
-        font-size: 10px;
         width: 350px;
+        margin: 0 auto;
     }
 
     .font-subtitle{
@@ -28,26 +28,19 @@
 <br>
 <br>
 
-<table align='center'  width='100%'>
+<table align='center'  width='100%' border='1'>
     <tr>
-        <td class="space-title"></td>
-        <td>SUPERFUDS SAS</td>
-    </tr>
-    <tr>
-        <td class="space-title"></td>
-        <td>NIT 900 703 907-7</td>
-    </tr>
-    <tr>
-        <td class="space-title"></td>
-        <td>BARRANQUILLA COLOMBIA</td>
-    </tr>
-    <tr>
-        <td class="space-title"></td>
-        <td>E-mail: info@superfuds.com.co</td>
+        <td class="space-title">
+            <table>
+                <tr>
+                    <td width='100px'></td>
+                    <td><img src="{{public_path()}}/assets/images/logo.png" width="10%"></td>
+                </tr>
+            </table>
+            </td>
+            <td>SUPERFUDS SAS<br>NIT 900 703 907-7<br>BARRANQUILLA COLOMBIA<br>E-mail: info@superfuds.com.co</td>
     </tr>
 </table>
-<br>
-<br>
 <table align='center' >
     <tr>
         <td class="font-title">Resolución Dian 320001359848</td>
@@ -79,7 +72,7 @@
                 </tr>
                 <tr>
                     <td class="font-detail">Dirección</td>
-                    <td class="font-detail-cont"><?php echo $client["address_invoice"]; ?></td>
+                    <td class="font-detail-cont"><?php echo $client["address_invoice"]."<br>".$client["city"]; ?></td>
                 </tr>
             </table>
         </td>
@@ -101,3 +94,4 @@
         </td>
     </tr>
 </table>
+

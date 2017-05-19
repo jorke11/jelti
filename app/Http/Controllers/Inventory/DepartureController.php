@@ -150,15 +150,14 @@ class DepartureController extends Controller {
                 ->get();
 
         $dep = Departures::find($id);
-        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city")
+        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", 
+                "cities.description as city","branch_office.term")
                 ->where("stakeholder_id", $sale["client_id"])
                 ->join("cities", "cities.id", "branch_office.city_id")
                 ->first();
         $user = Users::find($sale["responsible_id"]);
         $term = 7;
 
-        dd($cli);
-        
         if ($cli["term"] != null) {
             $term = $cli["term"];
         }

@@ -152,11 +152,11 @@ class DepartureController extends Controller {
         $cli = Branch::where("stakeholder_id", $sale["client_id"])->first();
         $user = Users::find($sale["responsible_id"]);
         $term = 7;
-        
+
         if ($cli["term"] != null) {
             $term = $cli["term"];
         }
-        
+
         $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["created"])));
 
         $cli["emition"] = $this->formatDate($sale["created"]);
@@ -283,16 +283,18 @@ class DepartureController extends Controller {
             if (isset($input["detail"])) {
 
                 try {
-
-                    DB::beginTransaction();
+                    
+//                    DB::beginTransaction();
                     $emDetail = null;
 
                     $input["header"]["status_id"] = 1;
                     $input["header"]["consecutive"] = $this->createConsecutive(3);
 
-                    $input["header"]["shipping_cost"] = 10000;
-                    if ($input["header"]["city_id"] != $input["header"]["destination_id"]) {
-                        $input["header"]["shipping_cost"] = 25000;
+                    if (!isset($input["header"]["shipping_cost"])) {
+                        $input["header"]["shipping_cost"] = 10000;
+                        if ($input["header"]["city_id"] != $input["header"]["destination_id"]) {
+                            $input["header"]["shipping_cost"] = 25000;
+                        }
                     }
 
                     $result = Departures::create($input["header"])->id;

@@ -425,12 +425,18 @@ function Entry() {
 
 
     this.table = function () {
-        return $('#tbl').DataTable({
+        table = $('#tbl').DataTable({
             processing: true,
             serverSide: true,
             ajax: "/api/listEntry",
             columns: [
-                {data: "id"},
+                {
+                    className: 'details-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    searchable: false,
+                },
                 {data: "consecutive"},
                 {data: "description"},
                 {data: "created_at"},
@@ -442,7 +448,7 @@ function Entry() {
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6, 7],
+                    aTargets: [ 1, 2, 3, 4, 5, 6, 7],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
@@ -457,6 +463,53 @@ function Entry() {
                 }
             ],
         });
+
+        $('#tbl tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+
+                row.child(obj.format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+
+        return table;
+    }
+
+    this.format = function (d) {
+        var url = "/entry/" + d.id + "/detailAll";
+        var html = '<br><table class="table-detail">';
+        html += '<thead><tr><th colspan="2">Information</th><th colspan="3" class="center-rowspan">Order</th>'
+        html += '<th colspan="3" class="center-rowspan">Dispatched</th></tr>'
+        html += '<tr><th>#</th><th>Product</th><th>Quantity</th><th>Unit</th><th>Total</th><th>Quantity</th><th>Unit</th><th>Total</th></tr></thead>';
+        $.ajax({
+            url: url,
+            method: "GET",
+            dataType: 'JSON',
+            async: false,
+            success: function (data) {
+                html += "<tbody>";
+                $.each(data, function (i, val) {
+                    val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+                    html += "<tr>";
+                    html += "<td>" + val.id + "</td>";
+                    html += "<td>" + val.product + "</td>";
+                    html += "<td>" + val.quantity + "</td>";
+                    html += "<td>" + val.valueFormated + "</td>";
+                    html += "<td>" + val.totalFormated + "</td>";
+                    html += "<td>" + val.real_quantity + "</td>";
+                    html += "<td>" + val.valueFormated + "</td>";
+                    html += "<td>" + val.totalFormated_real + "</td>";
+                    html += "</tr>";
+                });
+                html += "</tbody></table><br>";
+            }
+        })
+        return html;
     }
 
 }

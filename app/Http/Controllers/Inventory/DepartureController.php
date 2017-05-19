@@ -680,8 +680,8 @@ class DepartureController extends Controller {
                         $price_sf = $pro->price_sf;
                         if (Auth::user()->role_id == 1) {
 
-                            if (isset($book->price_sf) && !empty($book->price_sf)) {
-                                $price_sf = $book->price_sf;
+                            if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {
+                                $price_sf = $book->precio_unitario;
                             }
                         }
 

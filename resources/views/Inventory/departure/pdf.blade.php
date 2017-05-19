@@ -95,6 +95,16 @@ $cont = 0;
                     <br>
                     <br>
                     <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                     @include('Inventory.departure.pdffooter')
                     <br>
                     <br>

@@ -677,7 +677,7 @@ class DepartureController extends Controller {
                     $pro = Products::where("reference", (int) $book->sf_code)->first();
 
                     if ($pro != null) {
-                        $price_sf = $pro->price_sf;
+                        $price_sf = $pro->precio_unitario;
                         if (Auth::user()->role_id == 1) {
 
                             if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {

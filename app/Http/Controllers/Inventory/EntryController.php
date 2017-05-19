@@ -192,36 +192,35 @@ class EntryController extends Controller {
                     if ((int) $book->unidades != 0) {
                         $pro = Products::where("bar_code", (int) $book->ean)->first();
                         if ($pro != null) {
-                            $sup = Stakeholder::where("business", $pro->supplier_id)->first();
+                            $sup = Stakeholder::find($pro->supplier_id);
 
-                            if (count($pro) > 0 && count($sup) > 0) {
-                                $new["warehouse_id"] = $this->warehouse_id;
-                                $new["responsible_id"] = $this->responsible_id;
-                                $new["supplier_id"] = $sup->id;
-                                $new["purchase_id"] = 0;
-                                $new["city_id"] = $ware->city_id;
-                                $new["consecutive"] = $this->createConsecutive(2);
-                                $new["description"] = "Initial inventory";
-                                $new["invoice"] = "system";
-                                $new["status_id"] = 1;
-                                $new["created"] = date("Y-m-d H:i");
-                                $entry_id = Entries::create($new)->id;
-                                $this->updateConsecutive(2);
+                            if (count($sup) > 0) {
+                                if ($book->unidades > 0) {
+                                    $new["warehouse_id"] = $this->warehouse_id;
+                                    $new["responsible_id"] = $this->responsible_id;
+                                    $new["supplier_id"] = $sup->id;
+                                    $new["purchase_id"] = 0;
+                                    $new["city_id"] = $ware->city_id;
+                                    $new["consecutive"] = $this->createConsecutive(2);
+                                    $new["description"] = "Initial inventory";
+                                    $new["invoice"] = "system";
+                                    $new["status_id"] = 1;
+                                    $new["created"] = date("Y-m-d H:i");
+                                    $entry_id = Entries::create($new)->id;
+                                    $this->updateConsecutive(2);
 
-                                
-                                $detail["entry_id"] = $entry_id;
-                                $detail["product_id"] = $pro->id;
-                                $detail["quantity"] = $book->unidades;
-                                $detail["real_quantity"] = $book->unidades;
-                                $detail["value"] = $pro->price_cust;
-                                $detail["lot"] = $pro->lote;
-                                $detail["description"] = 'Initial inventory';
-                                $detail["status_id"] = 1;
-                                $detail["expiration_date"] = $pro->vencimiento;
-                                $detail["units_supplier"] = $pro->units_supplier;
-
-                                EntriesDetail::create($detail);
-                                echo "1";
+                                    $detail["entry_id"] = $entry_id;
+                                    $detail["product_id"] = $pro->id;
+                                    $detail["quantity"] = $book->unidades;
+                                    $detail["real_quantity"] = $book->unidades;
+                                    $detail["value"] = $pro->price_cust;
+                                    $detail["lot"] = $pro->lote;
+                                    $detail["description"] = 'Initial inventory';
+                                    $detail["status_id"] = 1;
+                                    $detail["expiration_date"] = $pro->vencimiento;
+                                    $detail["units_supplier"] = $pro->units_supplier;
+                                    EntriesDetail::create($detail);
+                                }
                             }
                         }
                     }

@@ -251,7 +251,6 @@ class DepartureController extends Controller {
                         $input["header"]["shipping_cost"] = 0;
                     }
                     
-                    dd($input);
 
                     $result = Departures::create($input["header"])->id;
 

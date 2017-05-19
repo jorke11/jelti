@@ -89,16 +89,7 @@ $cont = 0;
 //        $fin += 15;
                     ?>
                     </table>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                    
                     @include('Inventory.departure.pdffooter')
                     <br>
                     <br>

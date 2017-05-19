@@ -240,7 +240,7 @@ class DepartureController extends Controller {
             if (isset($input["detail"])) {
 
                 try {
-                    dd($input);
+                    
                     DB::beginTransaction();
                     $emDetail = null;
 
@@ -248,13 +248,10 @@ class DepartureController extends Controller {
                     $input["header"]["consecutive"] = $this->createConsecutive(3);
 
                     if (!isset($input["header"]["shipping_cost"])) {
-                        $input["header"]["shipping_cost"] = 10000;
-                        if ($input["header"]["city_id"] != $input["header"]["destination_id"]) {
-                            $input["header"]["shipping_cost"] = 25000;
-                        }
-                    } else {
                         $input["header"]["shipping_cost"] = 0;
                     }
+                    
+                    dd($input);
 
                     $result = Departures::create($input["header"])->id;
 

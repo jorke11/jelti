@@ -58,7 +58,7 @@ $init = 0;
 $fin = $rows;
 $cont = 0;
 
-//for ($i = 1; $i <= $count; $i++) {
+for ($i = 1; $i <= $count; $i++) {
     ?>
     @include('Inventory.departure.pdfheader')
     <br>
@@ -78,7 +78,7 @@ $cont = 0;
             $cont = 0;
             for ($j = 0; $j < count($detail); $j++) {
 
-//            for ($j = $init; $j < $fin; $j++) {
+            for ($j = $init; $j < $fin; $j++) {
                 if (isset($detail[$j])) {
                     $cont++;
                     $desc = ($detail[$j]->product_id == '') ? $detail[$j]->description : $detail[$j]->product;
@@ -96,7 +96,8 @@ $cont = 0;
                                 }
                             }
 
-                            $init = 1 * $rows;
+//                            $init = 1 * $rows;
+                            $init = $i * $rows;
                             $fin += $rows;
                             ?>
                             </table>
@@ -135,5 +136,5 @@ $cont = 0;
                             </table>
                             <?php
                         }
-//                    }
+                    }
                     ?>

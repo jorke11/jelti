@@ -221,7 +221,8 @@ class DepartureController extends Controller {
                     'title' => 'Invoice']);
 //  
         header('Content-Type: application/pdf');
-        return $pdf->stream('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
+        return $pdf->download('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
+//        return $pdf->stream('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
     }
 
     public function dateText() {

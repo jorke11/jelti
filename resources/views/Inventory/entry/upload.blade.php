@@ -1,6 +1,13 @@
 {!!Form::open(["id"=>"frmFile","file"=>true])!!}
 <br>
 <div class="row">
+    <div class="col-lg-2">
+        <!--<a href="{{asset("formats/inventario_format.xlsx")}}" download="format.xlsx">Downdload Format</a>-->
+        <a href="{{ URL::to( '/assets/formats/inventario_format.xlsx')  }}" target="_blank">Example format</a>
+    </div>                
+</div>
+<br>
+<div class="row">
     <div class="col-lg-1">Warehouse</div>
     <div class="col-lg-2">
         <select class="form-control" id="warehouse_id" name="warehouse_id">

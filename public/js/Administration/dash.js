@@ -21,7 +21,7 @@ function Dash() {
 
                 
 
-//                $("#addMenu").html(html);
+                $("#addMenu").html(html);
 
             }
         })

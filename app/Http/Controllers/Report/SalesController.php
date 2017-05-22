@@ -13,6 +13,7 @@ class SalesController extends Controller {
     }
 
     public function getTotalSales($init, $end) {
+        $where = '';
         $sql = "SELECT sum(sd.value * sd.units_sf * sd.quantity + s.shipping_cost) total 
             FROM sales_detail sd
             JOIN sales s ON s.id=sd.sale_id
@@ -25,7 +26,32 @@ class SalesController extends Controller {
             $sql .= " AND created <= '" . $end . " 23:59'";
         }
         $res = DB::select($sql);
-        return response()->json(["total" => "$ " . number_format($res[0]->total, 0, ",", ".")]);
+
+        if ($init != '') {
+            $where = " AND s.created >= '" . $init . " 00:00'";
+        }
+        if ($end != '') {
+            $where .= " AND s.created <= '" . $end . " 23:59'";
+        }
+
+        $sql = "
+            SELECT sum(sales_detail.quantity) quantity,product_id,p.title
+            FROM sales_detail
+            JOIN products p ON p.id=sales_detail.product_id
+            JOIN sales s ON s.id=sales_detail.sale_id
+            WHERE product_id is not null $where
+            GROUP BY product_id,p.title
+            order by 1 desc	
+            limit 2";
+
+        $res2 = DB::select($sql);
+
+        $quantity = array();
+        if (count($res2) > 0) {
+            $quantity = $res2[0];
+        }
+
+        return response()->json(["total" => "$ " . number_format($res[0]->total, 0, ",", "."), "quantity" => $quantity]);
     }
 
     public function getFulfillmentSup($init, $end) {

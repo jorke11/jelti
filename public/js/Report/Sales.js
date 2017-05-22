@@ -13,7 +13,8 @@ function Sales() {
             method: 'get',
             dataType: 'json',
             success: function (data) {
-                $("#frmSale #quantityTotal").html("Venta Total:<strong>" + data.total + "</strong>");
+                $("#frmSale #quantityTotal").html("Venta Total:<strong>" + data.total + "</strong><br><br><p>Quantiy: <strong>" +
+                        data.quantity.quantity + "</strong> Units <br>Product: <strong>" + data.quantity.title + "</strong></p>");
             }
         })
 

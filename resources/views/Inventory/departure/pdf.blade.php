@@ -58,7 +58,7 @@ $init = 0;
 $fin = $rows;
 $cont = 0;
 
-//for ($i = 1; $i <= $count; $i++) {
+for ($i = 1; $i <= $count; $i++) {
     ?>
     @include('Inventory.departure.pdfheader')
     <br>
@@ -75,8 +75,8 @@ $cont = 0;
         </thead>  
         <?php
         if (isset($detail) && count($detail) > 0) {
-        for ($j = 0; $j < count($detail); $j++) {
-//            for ($j = $init; $j < $fin; $j++) {
+//        for ($j = 0; $j < count($detail); $j++) {
+            for ($j = $init; $j < $fin; $j++) {
                 if (isset($detail[$j])) {
                     $desc = ($detail[$j]->product_id == '') ? $detail[$j]->description : $detail[$j]->product;
                     $total = number_format(($detail[$j]->valuetotal), 2, ',', '.');
@@ -93,8 +93,8 @@ $cont = 0;
                                 }
                             }
 
-                            $init = 1 * $rows;
-//                            $init = $i * $rows;
+//                            $init = 1 * $rows;
+                            $init = $i * $rows;
                             $fin += $rows;
                             ?>
                             </table>
@@ -128,6 +128,7 @@ $cont = 0;
                             </table>
                             <?php
                         }
-//                    }
+                        echo "llegi";
+                    }
                     ?>
 

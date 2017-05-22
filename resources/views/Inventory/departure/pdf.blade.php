@@ -94,7 +94,7 @@ $cont = 0;
                             }
 
                             $init = 1 * $rows;
-                            $init = $i * $rows;
+//                            $init = $i * $rows;
                             $fin += $rows;
                             ?>
                             </table>

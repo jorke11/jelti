@@ -53,7 +53,7 @@
 <?php
 $rows = 12;
 $rest = $rows - count($detail);
-$count = round(count($detail) / $rows);
+$count = ceil(count($detail) / $rows);
 $init = 0;
 $fin = $rows;
 $cont = 0;

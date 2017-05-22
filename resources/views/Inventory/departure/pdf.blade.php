@@ -58,7 +58,7 @@ $init = 0;
 $fin = $rows;
 $cont = 0;
 
-for ($i = 1; $i <= $count; $i++) {
+//for ($i = 1; $i <= $count; $i++) {
     ?>
     @include('Inventory.departure.pdfheader')
     <br>
@@ -128,6 +128,6 @@ for ($i = 1; $i <= $count; $i++) {
                             </table>
                             <?php
                         }
-                    }
+//                    }
                     ?>
 

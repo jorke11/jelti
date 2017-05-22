@@ -206,7 +206,7 @@ for ($i = 1; $i <= $count; $i++) {
                                 <br>
                                 <br>
                                 <br>
-                                @include('Inventory.departure.pdffooter')
+                              
                                 <table>
                                     <tr>
                                         <td class="resolution">La presente factura de compra - venta se asimila en sus efectos a una letra de cambio, art. 774 numeral 6o. Del Código de Comercio. En caso de

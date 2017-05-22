@@ -69,10 +69,13 @@
     </head>
     <style>
         #loading-super{
-            position: absolute; z-index: 10000;left: 50%
+            display:scroll;
+            position:fixed;
+            z-index: 10000;
+            left: 50%
         }
     </style>
-    <div id="loading-super" class="hidden">
+    <div id="loading-super" class="hidden" >
         <img src="{!!asset('images/Gif_final.gif')!!}" width='30%' >
     </div>
     <body class="nav-md">
@@ -176,7 +179,7 @@
                                             <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>
-                                    
+
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Ventas <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/reportSales">Reporte</a></li>

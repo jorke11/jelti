@@ -57,7 +57,6 @@ $count = ceil(count($detail) / $rows);
 $init = 0;
 $fin = $rows;
 $cont = 0;
-
 for ($i = 1; $i <= $count; $i++) {
     ?>
     @include('Inventory.departure.pdfheader')
@@ -78,6 +77,7 @@ for ($i = 1; $i <= $count; $i++) {
 //        for ($j = 0; $j < count($detail); $j++) {
             for ($j = $init; $j < $fin; $j++) {
                 if (isset($detail[$j])) {
+                    $cont++;
                     $desc = ($detail[$j]->product_id == '') ? $detail[$j]->description : $detail[$j]->product;
                     $total = number_format(($detail[$j]->valuetotal), 2, ',', '.');
                     $valueUnit = number_format(($detail[$j]->value), 2, ',', '.');
@@ -92,19 +92,31 @@ for ($i = 1; $i <= $count; $i++) {
                                     <?php
                                 }
                             }
-
 //                            $init = 1 * $rows;
                             $init = $i * $rows;
                             $fin += $rows;
+
+                            if ($cont != 12) {
+                                for ($a = 1; $a <= ($cont-3); $a++) {
+                                    ?>
+                                    <tr>
+                                        <td align='center'>&nbsp;</td>
+                                    </tr>
+                                    <?php
+                                }
+                            }
                             ?>
+
+
                             </table>
+                            <br>
                             <br>
                             <br>
                             <br>
                             @include('Inventory.departure.pdffooter')
                             <table>
                                 <tr>
-                                    <td class="resolution">La presente factura de compra - venta se asimila en sus efectos a una letra de cambio, art. 774 numeral 6o. Del Código de Comercio. En caso de
+                                    <td class="resolution"><?php echo $cont; ?>La presente factura de compra - venta se asimila en sus efectos a una letra de cambio, art. 774 numeral 6o. Del Código de Comercio. En caso de
                                         mora se causarán intereses a la tasa máxima legal estipulada por la ley, o en el respectivo contrato (conforme al art. 884 del Código de Comercio).</td>
                                 </tr>
                                 <tr>
@@ -126,7 +138,11 @@ for ($i = 1; $i <= $count; $i++) {
                                     <td class="resolution"></td>
                                 </tr>
                             </table>
+                            <br>
+                            <br>
+
                             <?php
+                            $cont = 0;
                         }
                     }
                     ?>

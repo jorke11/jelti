@@ -139,7 +139,7 @@ class DepartureController extends Controller {
     }
 
     public function getInvoice($id) {
-
+        header('Content-Type: application/pdf');
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
                 ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
@@ -150,8 +150,7 @@ class DepartureController extends Controller {
                 ->get();
 
         $dep = Departures::find($id);
-        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", 
-                "cities.description as city","branch_office.term")
+        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
                 ->where("stakeholder_id", $sale["client_id"])
                 ->join("cities", "cities.id", "branch_office.city_id")
                 ->first();
@@ -163,7 +162,7 @@ class DepartureController extends Controller {
         }
 
         $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["created"])));
-        
+
 
         $cli["emition"] = $this->formatDate($sale["created"]);
         $cli["expiration"] = $this->formatDate($expiration);
@@ -242,7 +241,7 @@ class DepartureController extends Controller {
             if (isset($input["detail"])) {
 
                 try {
-                    
+
                     DB::beginTransaction();
                     $emDetail = null;
 
@@ -252,7 +251,7 @@ class DepartureController extends Controller {
                     if (!isset($input["header"]["shipping_cost"])) {
                         $input["header"]["shipping_cost"] = 0;
                     }
-                    
+
 
                     $result = Departures::create($input["header"])->id;
 

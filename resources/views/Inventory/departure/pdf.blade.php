@@ -198,8 +198,8 @@ for ($i = 1; $i <= $count; $i++) {
                                     }
                                 }
 
-                            $init = 1 * $rows;
-//                                $init = $i * $rows;
+//                            $init = 1 * $rows;
+                                $init = $i * $rows;
                                 $fin += $rows;
                                 ?>
                                 </table>

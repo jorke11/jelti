@@ -128,7 +128,7 @@ for ($i = 1; $i <= $count; $i++) {
                             </table>
                             <?php
                         }
-                        echo "llegi";
+                        echo "llegi";exit;
                     }
                     ?>
 

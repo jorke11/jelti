@@ -76,7 +76,7 @@ for ($i = 1; $i <= $count; $i++) {
         <?php
         if (isset($detail) && count($detail) > 0) {
             $cont = 0;
-            for ($j = 0; $j < count($detail); $j++) {
+//            for ($j = 0; $j < count($detail); $j++) {
 
                 for ($j = $init; $j < $fin; $j++) {
                     if (isset($detail[$j])) {

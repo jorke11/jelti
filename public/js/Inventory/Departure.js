@@ -163,7 +163,7 @@ function Sale() {
         $("#frm #status_id").val(0).trigger("change").prop("disabled", true);
         $("#frm #supplier_id").prop("disabled", false);
         $("#btnSave").prop("disabled", false);
-        $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
+        $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse'});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
         $("#btnmodalDetail,#btnModalUpload").attr("disabled", false);

@@ -692,9 +692,7 @@ function Sale() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-//                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
-                        html = '<button class="btn btn-primary btn-xs" onclick="obj.viewPdf(' + data.id + ')">';
-                        html += '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>';
+                        html = '<img src="assets/images/pdf_30.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
                         return html;
                     }
                 }

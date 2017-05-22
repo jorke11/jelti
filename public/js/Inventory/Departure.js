@@ -692,7 +692,7 @@ function Sale() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        html = '<img src="assets/images/pdf_30.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                        html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
                         return html;
                     }
                 }

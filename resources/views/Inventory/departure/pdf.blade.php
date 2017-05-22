@@ -96,7 +96,7 @@ $cont = 0;
                                 }
                             }
 
-                            $init = $i * $rows;
+                            $init = 1 * $rows;
                             $fin += $rows;
                             ?>
                             </table>

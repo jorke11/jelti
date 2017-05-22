@@ -139,7 +139,7 @@ class DepartureController extends Controller {
     }
 
     public function getInvoice($id) {
-        header('Content-Type: application/pdf');
+
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
                 ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
@@ -219,7 +219,8 @@ class DepartureController extends Controller {
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
-//
+//  
+        header('Content-Type: application/pdf');
         return $pdf->stream('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
     }
 

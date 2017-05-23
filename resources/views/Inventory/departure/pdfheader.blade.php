@@ -60,9 +60,8 @@
     <br>
     <table width='100%'>
         <tr>
-            <td class="font-subtitle" width='50%'>Remisión a nombre de:</td>
-            <!--<td class="font-invoice" width='50%'>Factura de venta: <?php echo $invoice ?></td>-->
-            <td class="font-invoice" width='50%'>Remisión: <?php echo $invoice ?></td>
+            <td class="font-subtitle" width='50%'>Factura a nombre de:</td>
+            <td class="font-invoice" width='50%'>Factura de venta: <?php echo $invoice ?></td>
         </tr>
         <tr>
             <td>

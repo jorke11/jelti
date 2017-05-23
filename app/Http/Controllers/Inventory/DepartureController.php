@@ -163,7 +163,7 @@ class DepartureController extends Controller {
 
         $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["created"])));
 
-
+        $cli["address_invoice"] = $sale["address"];
         $cli["emition"] = $this->formatDate($sale["created"]);
         $cli["observations"] = $sale["description"];
         $cli["expiration"] = $this->formatDate($expiration);

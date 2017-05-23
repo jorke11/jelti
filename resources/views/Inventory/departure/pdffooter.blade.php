@@ -1,7 +1,8 @@
-<table border='1' width='100%'>
+<table width='100%' bgcolor="#FAFAFA">
     <tr>
-        <td width='50%' >Observaciones</td>
-        <td >
+        <td width='20%' >Observaciones</td>
+        <td width='30%'><?php echo $client["observations"]; ?></td>
+        <td>
             <table>
                 <tr>
                     <td width='240px' >Total Factura</td>

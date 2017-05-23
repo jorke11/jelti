@@ -125,6 +125,12 @@
                     <input type="text" class="form-control input-departure" id="shipping_cost" name="shipping_cost" data-type="number">
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="email">Observations:</label>
+                    <input type="text" class="form-control input-departure" id="description" name="description">
+                </div>
+            </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Invoice generated:</label>

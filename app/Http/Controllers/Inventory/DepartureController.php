@@ -165,6 +165,7 @@ class DepartureController extends Controller {
 
 
         $cli["emition"] = $this->formatDate($sale["created"]);
+        $cli["observations"] = $sale["description"];
         $cli["expiration"] = $this->formatDate($expiration);
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
 
@@ -366,7 +367,7 @@ class DepartureController extends Controller {
                                         "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
                                         "address" => $departure["address"], "phone" => $departure["phone"], "status_id" => $departure["status_id"],
                                         "created" => $departure["created"], "consecutive" => $cons, "shipping_cost" => $departure["shipping_cost"],
-                                        "created_at" => date("Y-m-d H:i")
+                                        "created_at" => date("Y-m-d H:i"), "description" => $departure["description"]
                                     ]
                             );
 //

@@ -62,6 +62,7 @@
                     </div>
 
                 </div>
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -77,6 +78,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 {!!Form::close()!!}
             </div>
             <div class="modal-footer">

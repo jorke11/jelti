@@ -538,6 +538,13 @@ function Sale() {
                 } else {
                     $("#btnSend,#btnmodalDetail").attr("disabled", false);
                 }
+                
+               
+                if ($("#role_id").val() == 1 || $("#role_id").val() == 5) {
+                    btnEdit = true;
+                    btnDel = true;
+                }
+
 
                 obj.printDetail(data.detail, btnEdit, btnDel);
             }
@@ -679,7 +686,7 @@ function Sale() {
                 {data: "city"},
                 {data: "status"},
             ],
-            order: [[2, 'DESC']],
+            order: [[1, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [1, 2, 3, 4, 5],

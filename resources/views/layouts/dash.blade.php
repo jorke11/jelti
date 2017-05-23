@@ -72,11 +72,13 @@
             display:scroll;
             position:fixed;
             z-index: 10000;
-            left: 50%
+            left: 50%;
+            top: 40%
         }
     </style>
     <div id="loading-super" class="hidden" >
-        <img src="{!!asset('images/Gif_final.gif')!!}" width='30%' >
+        <img src="{!!asset('images/Gif_final.gif')!!}" width='60%' >
+        <input id="role_id" type="hidden" value="{{Auth::user()->role_id}}">
     </div>
     <body class="nav-md">
         <div class="container body">
@@ -139,15 +141,17 @@
                                             <li><a href="{{url("/register")}}">Register</a></li>
                                         </ul>
                                     </li>
+                                    @endif
 
 
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/product">Product</a></li>
+                                            <li><a href="/stakeholder">StakeHolder</a></li>
+                                            @if(Auth::user()->role_id == 1)
                                             <li><a href="/category">Category</a></li> 
                                             <li><a href="/characteristic">Characterist</a></li>
                                             <li><a href="/contact">Contact</a></li>
-                                            <li><a href="/stakeholder">StakeHolder</a></li>
                                             <li><a href="/puc">PUC</a></li>
                                             <li><a href="/warehouse">Warehouse</a></li>
                                             <li><a href="/department">Department</a></li>
@@ -155,9 +159,9 @@
                                             <li><a href="/parameter">Parameters</a></li>
                                             <li><a href="/consecutive">Consecutives</a></li>
                                             <li><a href="/email">Email</a></li>
+                                            @endif
                                         </ul>
                                     </li>
-                                    @endif
                                     @endif
                                     @if(Auth::user()->role_id==1)
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Invoicing <span class="fa fa-chevron-down"></span></a>

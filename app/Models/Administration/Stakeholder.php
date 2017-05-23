@@ -21,7 +21,7 @@ class Stakeholder extends Model
         "term",
         "city_id",
         "status_id",
-        "commercial_id",
+        "responsible_id",
         "web_site",
         "type_regime_id",
         "type_person_id",

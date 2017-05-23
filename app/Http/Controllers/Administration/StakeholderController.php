@@ -164,6 +164,7 @@ class StakeholderController extends Controller {
         $stakeholder = Stakeholder::FindOrFail($id);
         $input = $request->all();
         $input["user_update"] = Auth::user()->id;
+        
         $result = $stakeholder->fill($input)->save();
         if ($result) {
             return response()->json(['success' => true]);

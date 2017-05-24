@@ -13,8 +13,6 @@ function Sale() {
             $('#myTabs a[href="#management"]').tab('show');
         });
 
-
-
         $("#client_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getClient($(this).val());
@@ -207,12 +205,6 @@ function Sale() {
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.data.client.address);
                 $("#frm #phone").val(resp.data.client.phone);
-
-                if (resp.data.city_id == $("#frm #city_id").val()) {
-                    $("#frm #shipping_cost").val(10000);
-                } else {
-                    $("#frm #shipping_cost").val(25000);
-                }
 
 
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
@@ -538,11 +530,15 @@ function Sale() {
                 } else {
                     $("#btnSend,#btnmodalDetail").attr("disabled", false);
                 }
-                
-               
+
+
                 if ($("#role_id").val() == 1 || $("#role_id").val() == 5) {
                     btnEdit = true;
                     btnDel = true;
+                }
+
+                if ($("#role_id").val() == 1) {
+                    $("#frm #shipping_cost").attr("disabled", false);
                 }
 
 

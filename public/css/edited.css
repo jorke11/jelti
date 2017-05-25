@@ -50,6 +50,7 @@ table>thead>tr{
 }
 .color-new{
     background-color: #0080FF;
+    color: white;
 
 }
 .color-new > a{
@@ -57,6 +58,7 @@ table>thead>tr{
 }
 .color-pending{
     background-color: #F7BE81;
+    color: white;
 }
 .color-pending>a{
     color: #000;
@@ -68,9 +70,14 @@ table>thead>tr{
 
 .panel-default>.panel-heading {
     /*background-color: #65cea7;*/
-    background-color: #6bafbd;
+    background-color: #00b065;
     /*background-color: #2a3f54;*/
 }
+
+.panel-default>.panel-heading{
+    color:#fff;
+}
+
 .panel-default>.panel-heading>.row {
     color: white;
 }

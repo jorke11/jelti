@@ -695,7 +695,11 @@ function Sale() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                        if (data.status_id != 1) {
+                            html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                        }else{
+                            html=''
+                        }
                         return html;
                     }
                 }
@@ -724,11 +728,11 @@ function Sale() {
             },
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
-                    $('td', row).eq(7).addClass('color-new');
+                    $('td', row).eq(8).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(7).addClass('color-pending');
+                    $('td', row).eq(8).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(7).addClass('color-checked');
+                    $('td', row).eq(8).addClass('color-checked');
                 }
             }
         });
@@ -764,7 +768,7 @@ function Sale() {
             async: false,
             success: function (data) {
                 html += "<tbody>";
-                $.each(data, function (i, val) {
+                $.each(data.detail, function (i, val) {
                     val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
                     html += "<tr>";
                     html += "<td>" + val.id + "</td>";
@@ -777,6 +781,8 @@ function Sale() {
                     html += "<td>" + val.totalFormated_real + "</td>";
                     html += "</tr>";
                 });
+
+                html += '<tr><td colspan="4">Total</td><td>' + data.total + '</td></td>';
                 html += "</tbody></table><br>";
             }
         })

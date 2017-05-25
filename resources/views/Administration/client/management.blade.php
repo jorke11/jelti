@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="page-title">
             <div class="row">
-                <div class="col-lg-5 col-lg-offset-9">
+                <div class="col-lg-5 col-lg-offset-8">
                     <div class="row">
                         <div class="col-lg-2">
                             <div class="btn-group">
@@ -10,16 +10,16 @@
                                     Extra <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#" onclick="obj.showModalJustif()">Enable / Disable</a></li>
+                                    <li><a href="#" onclick="obj.showModalJustif()">Activar / Desactivar</a></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <button class="btn btn-success btn-sm" id='btnNew'>
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"> New</span>
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"> Nuevo</span>
                             </button>
-                            <button class="btn btn-success btn-sm" id='btnSave'>
-                                <span class="glyphicon glyphicon-ok" aria-hidden="true"> Save</span>
+                            <button class="btn btn-success btn-sm" id='btnSave' disabled="">
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"> Guardar</span>
                             </button>
                         </div>
 
@@ -30,191 +30,244 @@
         <div class="panel-body">
             {!! Form::open(['id'=>'frm','files' => true]) !!}
             <div class="row">
-                <input type="hidden" id="id" name="id" class="input-stakeholder">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Type Persona*</label>
-                        <select class="form-control input-stakeholder"  id="type_regime_id" name="type_regime_id" required>
-                            <option value="0">Selection</option>
-                            @foreach($type_person as $val)
-                            <option value="{{$val->code}}">{{$val->description}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Type Regime*</label>
-                        <select id="type_person_id" name="type_person_id" class="form-control input-stakeholder" required>
-                            <option value="0">Selection</option>
-                            @foreach($type_regimen as $val)
-                            <option value="{{$val->code}}">{{$val->description}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+                <div class="col-lg-8 col-center">
+                    <br>
+                    <br>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Información Cuenta</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Cuenta *</label>
+                                        <input type="text" class="form-control input-stakeholder input-sm" id="business" name="business" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label for="address">Razón Social *</label>
+                                        <input type="text" class="form-control input-stakeholder input-sm" id="business_name" name="business_name" required>
+                                    </div>
+                                </div>
+                            </div>
 
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="name" class="control-label">Name*</label>
-                        <input type="text" class="form-control input-stakeholder" id="name" name="name" placeholder="Name" required>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Last Name*</label>
-                        <input type="text" class="form-control  input-stakeholder" id="last_name" name="last_name" placeholder="Last Name" required>
-                    </div>
-                </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address" class="control-label">Tipo Documento *</label>
+                                        <select id="type_document" name="type_document" class="form-control input-stakeholder" required>
+                                            <option value="0">Selección</option>
+                                            @foreach($type_document as $val)
+                                            <option value="{{$val->code}}">{{$val->description}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address" class="control-label">Documento *</label>
+                                        <input type="text" class="form-control input-stakeholder" id="document" name="document"  required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address" class="control-label">Dígito de Verificación *</label>
+                                        <input type="text" class="form-control input-stakeholder" id="verification" name="verification" readonly>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="row">
+                                <input type="hidden" id="id" name="id" class="input-stakeholder">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address" class="control-label">Tipo Persona*</label>
+                                        <select class="form-control input-stakeholder"  id="type_regime_id" name="type_regime_id" required>
+                                            <option value="0">Selección</option>
+                                            @foreach($type_person as $val)
+                                            <option value="{{$val->code}}">{{$val->description}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address" class="control-label">Tipo Regimen*</label>
+                                        <select id="type_person_id" name="type_person_id" class="form-control input-stakeholder" required>
+                                            <option value="0">Selección</option>
+                                            @foreach($type_regimen as $val)
+                                            <option value="{{$val->code}}">{{$val->description}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Plazo de Pago</label>
+                                        <input type="text" class="form-control input-stakeholder" id="term" name="term">
+                                    </div>
+                                </div>
 
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Type Document*</label>
-                        <select id="type_document" name="type_document" class="form-control input-stakeholder" required>
-                            <option value="0">Selection</option>
-                            @foreach($type_document as $val)
-                            <option value="{{$val->code}}">{{$val->description}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Document*</label>
-                        <input type="text" class="form-control input-stakeholder" id="document" name="document" placeholder="Document" required>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Verification</label>
-                        <input type="text" class="form-control input-stakeholder" id="verification" name="verification" placeholder="verification" readonly>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Phone</label>
-                        <input type="text" class="form-control input-stakeholder" id="phone" name="phone" placeholder="Phone">
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">email</label>
-                        <input type="text" class="form-control input-stakeholder" id="email" name="email" placeholder="Email">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Address*</label>
-                        <input type="text" class="form-control input-stakeholder" id="address" name="address" placeholder="Address" required>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Term</label>
-                        <input type="text" class="form-control input-stakeholder" id="term" name="term" placeholder="Term">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">City</label>
-                        <select class="form-control input-stakeholder"  id="city_id" name="city_id" data-api="/api/getCity">
-                        </select>
-                    </div>
-                </div>
+                            </div>
 
 
-            </div>
-            <div class="row">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Ciudad</label>
+                                        <select class="form-control input-stakeholder"  id="city_id" name="city_id" data-api="/api/getCity">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Teléfono</label>
+                                        <input type="text" class="form-control input-stakeholder" id="phone" name="phone">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address" class="control-label">Responsable</label>
+                                        <select class="form-control input-stakeholder"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Contact</label>
-                        <input type="text" class="form-control input-stakeholder" id="contact" name="contact" placeholder="Contact">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Correo</label>
+                                        <input type="text" class="form-control input-stakeholder" id="email" name="email">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Sitio Web</label>
+                                        <input type="text" class="form-control input-stakeholder" id="web_site" name="web_site" >
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Cuenta Principal</label>
+                                        <select class="form-control input-stakeholder"  id="city_id" name="city_id" data-api="/api/getCity">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address" class="control-label">Sector*</label>
+                                        <select id="sector_id" name="sector_id" class="form-control input-stakeholder">
+                                            <option value="0">Selección</option>
+                                            <option value="1">Aerolineas</option>
+                                            <option value="2">Centros de Salud</option>
+                                            <option value="4">Colegios y Universidades</option>
+                                            <option value="5">Empresas</option>
+                                            <option value="6">Grandes Superficies</option>
+                                            <option value="7">Horeca</option>
+                                            <option value="8">Tiendas Especializadas</option>
+                                            <option value="9">Farmacias y Droguerías</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Flete</label>
+                                        <input type="checkbox" id="shipping_cost" name="shipping_cost" class="form-control" checked required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="address">Precio Especial</label>
+                                        <input type="checkbox" id="special_price" name="special_price" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Phone Contact</label>
-                        <input type="text" class="form-control input-stakeholder" id="phone_contact" name="phone_contact" placeholder="Phone Contact">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Información Envio</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Ciudad Envio</label>
+                                        <select class="form-control input-stakeholder input-sm" id="send_city_id" name="send_city_id" data-api="/api/getCity">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label for="email">Dirección Envio</label>
+                                        <input class="form-control input-branch input-sm" id="address_send" name="address_send">    
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Business</label>
-                        <input type="text" class="form-control input-stakeholder" id="business" name="business" placeholder="Bussines">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Información Facturación</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Ciudad Facturación</label>
+                                        <select class="form-control input-stakeholder input-sm" id="invoice_city_id" name="invoice_city_id" data-api="/api/getCity">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label for="email">Dirección Facturación</label>
+                                        <input class="form-control input-branch input-sm" id="address_invoice" name="address_invoice">    
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Business name</label>
-                        <input type="text" class="form-control input-stakeholder" id="business_name" name="business_name" placeholder="Bussines Name">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Web Site</label>
-                        <input type="text" class="form-control input-stakeholder" id="web_site" name="web_site" placeholder="Web site">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Responsible</label>
-                        <select class="form-control input-stakeholder"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Stakeholder type</label>
-                        <select id="type_stakeholder" name="type_stakeholder" class="form-control input-stakeholder" required>
-                            <option value="0">Selection</option>
-                            @foreach($type_stakeholder as $val)
-                            <option value="{{$val->code}}">{{$val->description}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Contract Expiration</label>
-                        <input type="datetime" class="form-control input-stakeholder" id="contract_expiration" name="contract_expiration" placeholder="contract_expiration Name" 
-                               value="{{date("Y-m-d H:i")}}">
-                    </div>
+
+
+
+
+
+
                 </div>
             </div>
             {!!Form::close()!!}
             <div class="row">
-                <div class="col-lg-1">
-                    <button class="btn btn-success" type="button" id="modalImage"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
-                </div>
-                <div class="col-lg-5">
-                    <div class="row" i>
-                        <table class="table table-condensed table-striped" id="contentAttach">
-                            <thead>
-                                <tr>
-                                    <th>Document</th>
-                                    <th>File</th>
-                                    <th>See</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                <div class="col-lg-8 col-center">
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <button class="btn btn-success" type="button" id="modalImage"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="row" i>
+                                <table class="table table-condensed table-striped" id="contentAttach">
+                                    <thead>
+                                        <tr>
+                                            <th>Documento</th>
+                                            <th>Archivo</th>
+                                            <th>Ver</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                            </tbody>
-                        </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -227,7 +280,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Enable / Disabled</h4>
+                <h4 class="modal-title">Activar / Desactivar</h4>
             </div>
             <div class="modal-body">
                 <form id="frmJustify">
@@ -235,9 +288,9 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label for="address" class="control-label">Status</label>
+                                <label for="address" class="control-label">Estatus</label>
                                 <select id="status_id" name="status_id" class="form-control input-justify" required>
-                                    <option value="0">Selection</option>
+                                    <option value="0">Selección</option>
                                     @foreach($status as $val)
                                     <option value="{{$val->code}}">{{$val->description}}</option>
                                     @endforeach
@@ -248,7 +301,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label for="address" class="control-label">Justification</label>
+                                <label for="address" class="control-label">Justificación</label>
                                 <textarea class="form-control input-justify" name="justification" id="justification" required></textarea>
                             </div>
                         </div>
@@ -256,8 +309,8 @@
 
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success" id="addJustify">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success" id="addJustify">Guardar</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->

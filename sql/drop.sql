@@ -1,5 +1,5 @@
 DROP VIEW IF EXISTS vstock;
-DROP VIEW IF EXISTS vstakeholder;
+DROP VIEW IF EXISTS vsupplier;
 DROP VIEW IF EXISTS vproducts;
 DROP VIEW IF EXISTS vdepartures;
 DROP VIEW IF EXISTS vcities;

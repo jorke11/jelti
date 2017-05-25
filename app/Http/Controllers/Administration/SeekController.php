@@ -24,7 +24,7 @@ class SeekController extends Controller {
 
     public function getCity(Request $req) {
         $in = $req->all();
-        $query = Cities::select("id", "description as text");
+        $query = Cities::select("id", DB::raw("initcap(description) as text"));
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->city_id)->get();
         } else if (isset($in["id"])) {

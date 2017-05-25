@@ -61,6 +61,9 @@
         {!!Html::style('/vendor/datetimepicker/css/jquery.datetimepicker.css')!!}
         {!!Html::script('/vendor/datetimepicker/js/jquery.datetimepicker.full.min.js')!!}
 
+
+        {!!Html::style('/vendor/font-awesome-4.7.0/css/font-awesome.min.css')!!}
+
         {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
         {!!Html::style('/vendor/select2/css/select2.min.css')!!}
         {!!Html::script('/vendor/select2/js/select2.js')!!}
@@ -127,13 +130,13 @@
                                     <li><a><i class="fa fa-home"></i> Sellers <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/activity">Activities</a></li>
-                                            <li><a href="/prospect">Posibles clientes</a></li>
+
                                             <li><a href="/fulfillment">Cumplimiento</a></li>
                                             <li><a href="/ticket">Tickets</a></li>
                                         </ul>
                                     </li>
                                     @if(Auth::user()->role_id == 1)
-                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Security <span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/user">Users</a></li>
                                             <li><a href="/role">Roles</a></li>
@@ -143,15 +146,12 @@
                                     </li>
                                     @endif
 
-
-                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administration <span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administracion <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="/product">Product</a></li>
-                                            <li><a href="/stakeholder">StakeHolder</a></li>
+
                                             @if(Auth::user()->role_id == 1)
                                             <li><a href="/category">Category</a></li> 
                                             <li><a href="/characteristic">Characterist</a></li>
-                                            <li><a href="/contact">Contact</a></li>
                                             <li><a href="/puc">PUC</a></li>
                                             <li><a href="/warehouse">Warehouse</a></li>
                                             <li><a href="/department">Department</a></li>
@@ -162,31 +162,50 @@
                                             @endif
                                         </ul>
                                     </li>
-                                    @endif
-                                    @if(Auth::user()->role_id==1)
-                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Invoicing <span class="fa fa-chevron-down"></span></a>
+
+
+                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Proveedores <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="/purchase">Purchase</a></li>
-                                            <li><a href="/sale">Sale</a></li>                                    
-                                            <li><a href="/summary">Summary</a></li>                                    
+                                            <li><a href="/stakeholder">Proveedores</a></li>
+                                            <li><a href="/product">Productos</a></li>
+                                            <!--                                            <li><a href="/contact">Contactos</a></li>-->
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Clientes <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/clients">Clientes</a></li>
+                                            <li><a href="/prospect">Posibles Clientes</a></li>
+                                            <!--<li><a href="/contact">Contactos</a></li>-->
                                         </ul>
                                     </li>
                                     @endif
 
-                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Inventory <span class="fa fa-chevron-down"></span></a>
+                                    @if(Auth::user()->role_id==1)
+                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Compras <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/purchase">Compra</a></li>
+                                            <li><a href="/sale">Salida</a></li>                                    
+                                            <li><a href="/debitNote">Notas Debito</a></li>
+                                            <li><a href="/summary">Resumen</a></li>                                    
+                                        </ul>
+                                    </li>
+                                    @endif
+                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Ventas <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
-                                            <li><a href="/entry">Entry</a></li>
+                                            <li><a href="/entry">Entrada</a></li>
                                             @endif
-                                            <!--<li><a href="/order">Order Service</a></li>-->                                    
-                                            <li><a href="/departure">Departure</a></li>                                    
+
+                                            <li><a href="/departure">Ordenes de Compra</a></li>                                    
+                                            <li><a href="/creditNote">Notas Credito</a></li>
+                                            <li><a href="/purse">Cartera</a></li>                                    
                                             <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>
 
-                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Ventas <span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Reportes <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="/reportSales">Reporte</a></li>
+                                            <li><a href="/reportSales">Ventas</a></li>
                                         </ul>
                                     </li>
 

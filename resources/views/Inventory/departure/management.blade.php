@@ -115,14 +115,14 @@
                 <div class="form-group">
                     <label for="email">Branch office:</label>
                     <select class="form-control input-departure input-fillable" id="branch_id" name='branch_id'>
-                        
+
                     </select>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Shipping Cost:</label>
-                    <input type="text" class="form-control input-departure" id="shipping_cost" name="shipping_cost" data-type="number">
+                    <input type="text" class="form-control input-departure" id="shipping_cost" name="shipping_cost" data-type="number" required>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -150,6 +150,9 @@
                 <div class="row">
                     <div class="col-lg-4">List Detail</div>
                     <div class="col-lg-8 text-right">
+                        <button class="btn btn-success btn-sm" type="button" id="btnAsociar">
+                            Asociar
+                        </button>
                         <button class="btn btn-success btn-sm" type="button" id="btnModalUpload">
                             <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
                         </button>

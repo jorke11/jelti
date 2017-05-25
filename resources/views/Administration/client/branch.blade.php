@@ -52,12 +52,7 @@
                             <input class="form-control input-branch input-sm" id="address_invoice" name="address_invoice">    
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="email">Address Send</label>
-                            <input class="form-control input-branch input-sm" id="address_send" name="address_send">    
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
@@ -67,13 +62,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="email">City Send</label>
-                            <select class="form-control input-branch input-sm" id="send_city_id" name="send_city_id" data-api="/api/getCity">
-                            </select>
-                        </div>
-                    </div>
+                    
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label for="email">Email</label>

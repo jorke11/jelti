@@ -19,8 +19,6 @@ function Dash() {
                     html += '</li>';
                 });
 
-                
-
                 $("#addMenu").html(html);
 
             }

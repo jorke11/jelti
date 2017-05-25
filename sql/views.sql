@@ -9,7 +9,8 @@ from entries_detail e
 JOIN products p ON p.id=e.product_id
 group by 1,2,e.product_id;
 
-CREATE VIEW vstakeholder AS
+
+CREATE VIEW vsupplier AS
 SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address,'') as address,s.phone,
 s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,
 typestakeholder.description as typestakeholder,status.description as status,s.responsible_id
@@ -18,7 +19,22 @@ JOIN cities c ON c.id=s.city_id
 LEFT JOIN parameters as typeperson ON typeperson.code=s.type_person_id and typeperson."group"='typeperson'
 LEFT JOIN parameters as typeregime ON typeregime.code=s.type_regime_id and typeregime."group"='typeregime'
 LEFT JOIN parameters as typestakeholder ON typestakeholder.code=s.type_stakeholder and typestakeholder."group"='typestakeholder'
-LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='generic';
+LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='generic'
+WHERE s.type_stakeholder=2;
+
+
+CREATE VIEW vclient AS
+SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address,'') as address,s.phone,
+s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,
+typestakeholder.description as typestakeholder,status.description as status,s.responsible_id
+FROM stakeholder s
+JOIN cities c ON c.id=s.city_id
+LEFT JOIN parameters as typeperson ON typeperson.code=s.type_person_id and typeperson."group"='typeperson'
+LEFT JOIN parameters as typeregime ON typeregime.code=s.type_regime_id and typeregime."group"='typeregime'
+LEFT JOIN parameters as typestakeholder ON typestakeholder.code=s.type_stakeholder and typestakeholder."group"='typestakeholder'
+LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='generic'
+WHERE s.type_stakeholder=1;
+
 
 create view vproducts as
 select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
@@ -38,8 +54,7 @@ create view vdepartures as
             JOIN parameters p ON p.id = d.status_id
             JOIN users u ON u.id = d.responsible_id
             WHERE p.group='entry'
-            ORDER BY d.id DESC
-            ;
+            ORDER BY d.id DESC;
 
 create view vcities as 
 select c.id,c.description city,d.description department,c.code

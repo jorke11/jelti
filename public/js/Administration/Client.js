@@ -1,4 +1,4 @@
-function Stakeholder() {
+function Client() {
     var table, document_id, tableSpecial, tableBranch;
     this.init = function () {
 
@@ -150,10 +150,11 @@ function Stakeholder() {
             tableSpecial = obj.tableSpecial($("#frm #id").val());
         })
         $("#tabManagement").click(function () {
-            $(".input-stakeholder").cleanFields({disabled: true});
+            $(".input-stakeholder").cleanFields({disabled: false});
             $("#tabBranch").addClass("hide");
             $("#tabSpecial").addClass("hide");
         })
+
         $("#tabList").click(function () {
             $("#tabSpecial").addClass("hide");
             $("#tabBranch").addClass("hide");
@@ -439,6 +440,7 @@ function Stakeholder() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-stakeholder").setFields({data: data.header});
+                $("#btnSave").attr("disabled", false);
                 $("#tabSpecial").removeClass("hide");
                 $("#tabBranch").removeClass("hide");
                 obj.printImages(data.images);
@@ -533,25 +535,18 @@ function Stakeholder() {
                     "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listStakeholder",
+            "ajax": "/api/listClient",
             "scrollX": true,
             columns: [
                 {data: "business_name", sWidth: "15%"},
                 {data: "business"},
-                {data: "name"},
-                {data: "last_name"},
                 {data: "document"},
                 {data: "email"},
                 {data: "address"},
-                {data: "phone"},
-                {data: "contact"},
-                {data: "phone_contact"},
                 {data: "term"},
                 {data: "city"},
-                {data: "web_site"},
                 {data: "typeperson"},
                 {data: "typeregime"},
-                {data: "typestakeholder"},
                 {data: "status"},
             ],
             buttons: [
@@ -563,13 +558,13 @@ function Stakeholder() {
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                    aTargets: [0, 1, 2, 3, 4, 5, 6],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [17],
+                    targets: [10],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -577,6 +572,29 @@ function Stakeholder() {
                     }
                 }
             ],
+
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var type = $(column.header()).attr('rowspan');
+                    if (type != undefined) {
+                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                            );
+                                    column
+//                                            .search(val ? val : '', true, false)
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                });
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    }
+                });
+            },
         });
     }
 
@@ -667,5 +685,5 @@ function Stakeholder() {
     }
 }
 
-var obj = new Stakeholder();
+var obj = new Client();
 obj.init();

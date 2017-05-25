@@ -21,14 +21,14 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Product</label>
+                            <label for="email">Producto</label>
                             <select class="form-control input-special input-sm" id="product_id" name="product_id" data-api="/api/getProduct">
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">price_sf</label>
+                            <label for="email">Precio </label>
                             <input class="form-control input-special input-sm" id="price_sf" name="price_sf">             
                         </div>
                     </div>
@@ -36,13 +36,13 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">margin</label>
+                            <label for="email">Margen</label>
                             <input class="form-control input-special input-sm" id="margin" name="margin">    
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">margin_sf</label>
+                            <label for="email">Margen sf</label>
                             <input class="form-control input-special input-sm" id="margin_sf" name="margin_sf">    
                         </div>
                     </div>
@@ -50,13 +50,13 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">tax</label>
+                            <label for="email">Iva</label>
                             <input class="form-control input-sm input-special" id="tax" name="tax">    
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Reset All</label>
+                            <label for="email">Reiniciar Todo</label>
                             <input type="checkbox" class="form-control input-sm input-special" id="reset">    
                         </div>
                     </div>

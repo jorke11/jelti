@@ -26,6 +26,7 @@ Route::get('/summary', 'Invoicing\SummaryController@index');
 Route::get('/resize', 'ToolController@index');
 
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
+Route::resource('/creditNote', 'Sales\CreditnoteController');
 
 
 Route::resource('/product', 'Administration\ProductController');
@@ -53,6 +54,25 @@ Route::post('/stakeholder/addChage', 'Administration\StakeholderController@addCh
 Route::post('/stakeholder/addTax', 'Administration\StakeholderController@storeTax');
 Route::put('/stakeholder/UpdateTax', 'Administration\StakeholderController@updateTax');
 Route::delete('/stakeholder/deleteTax/{id}', 'Administration\StakeholderController@deleteTax');
+
+
+Route::resource('/clients', 'Administration\ClientController');
+Route::post('/clients/upload', 'Administration\ClientController@uploadImage');
+Route::post('/clients/uploadExcel', 'Administration\ClientController@uploadExcel');
+Route::post('/clients/uploadClient', 'Administration\ClientController@uploadclient');
+Route::put('/clients/checkmain/{id}', 'Administration\ClientController@checkMain');
+Route::delete('/clients/deleteImage/{id}', 'Administration\ClientController@deleteImage');
+Route::get('/clients/getImages/{id}', 'Administration\ClientController@getImages');
+
+Route::post('/clients/StoreSpecial', 'Administration\ClientController@storeSpecial');
+Route::put('/clients/updatePrice/{id}', 'Administration\ClientController@updatePrice');
+Route::post('/clients/StoreBranch', 'Administration\ClientController@storeBranch');
+Route::delete('/clients/deleteBranch/{id}', 'Administration\ClientController@deleteBranch');
+Route::post('/clients/addChage', 'Administration\ClientController@addChanges');
+
+Route::post('/clients/addTax', 'Administration\ClientController@storeTax');
+Route::put('/clients/UpdateTax', 'Administration\ClientController@updateTax');
+Route::delete('/clients/deleteTax/{id}', 'Administration\ClientController@deleteTax');
 
 
 Route::resource('/category', 'Administration\CategoryController');
@@ -216,9 +236,9 @@ Route::get('/api/listCharacterist', function() {
     return Datatables::eloquent(Models\Administration\Characteristic::query())->make(true);
 });
 
-Route::get('/api/listSupplier', function() {
+Route::get('/api/lisCLient', function() {
     return Datatables::queryBuilder(
-                    DB::table('vsupplier')
+                    DB::table('vclient')
             )->make(true);
 });
 
@@ -234,9 +254,9 @@ Route::get('/api/listTicket', function() {
             )->make(true);
 });
 
-Route::get('/api/listStakeholder', function() {
+Route::get('/api/listSupplier', function() {
 
-    $query = DB::table('vstakeholder');
+    $query = DB::table('vsupplier');
 
 //    $query = DB::table('stakeholder')
 //            ->select(
@@ -249,8 +269,24 @@ Route::get('/api/listStakeholder', function() {
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
         $query->where("responsible_id", Auth::user()->id);
     }
+    return Datatables::queryBuilder($query)->make(true);
+});
 
+Route::get('/api/listClient', function() {
 
+    $query = DB::table('vclient');
+
+//    $query = DB::table('stakeholder')
+//            ->select(
+//                    "stakeholder.business_name", "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", "status.description as status_id")
+//            ->leftjoin("cities", "cities.id", "stakeholder.city_id")
+//            ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
+//            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
+//            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
+//            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("responsible_id", Auth::user()->id);
+    }
     return Datatables::queryBuilder($query)->make(true);
 });
 
@@ -305,9 +341,9 @@ Route::get('/api/listPurchase', function() {
 Route::get('/api/listSale', function() {
 
     $sql = DB::table('sales')
-            ->select("sales.id", "sales.consecutive", DB::raw("coalesce(sales.description,'') as description"),"sales.created","departures.consecutive as departure","warehouses.description as warehouse")
-            ->join("departures","departures.id","sales.departure_id")
-            ->join("warehouses","warehouses.id","sales.warehouse_id");
+            ->select("sales.id", "sales.consecutive", DB::raw("coalesce(sales.description,'') as description"), "sales.created", "departures.consecutive as departure", "warehouses.description as warehouse")
+            ->join("departures", "departures.id", "sales.departure_id")
+            ->join("warehouses", "warehouses.id", "sales.warehouse_id");
 
     return Datatables::queryBuilder($sql)->make(true);
 });
@@ -401,6 +437,14 @@ Route::get('/report/sale/{init}/{end}', 'Report\SalesController@getTotalSales');
 Route::get('/report/fulfillmentSup/{init}/{end}', 'Report\SalesController@getFulfillmentSup');
 Route::get('/report/fulfillmentCli/{init}/{end}', 'Report\SalesController@getFulfillmentCli');
 
+
+Route::get('/purse', 'Sales\PurseController@index');
+
+Route::get('/purse/getInvoices', function() {
+    return Datatables::queryBuilder(
+                    DB::table("vdepartures")
+            )->make(true);
+});
 
 
 

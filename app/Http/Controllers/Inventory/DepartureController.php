@@ -545,7 +545,7 @@ class DepartureController extends Controller {
 
     public function getAllDetail($departue_id) {
         $detail = $this->formatDetail($departue_id);
-        return response()->json($detail);
+        return response()->json(["detail" => $detail,"total"=>"$ " . number_format($this->total, 2, ",", ".")]);
     }
 
     public function update(Request $request, $id) {

@@ -438,11 +438,11 @@ Route::get('/report/fulfillmentSup/{init}/{end}', 'Report\SalesController@getFul
 Route::get('/report/fulfillmentCli/{init}/{end}', 'Report\SalesController@getFulfillmentCli');
 
 
-Route::get('/purse', 'Sales\PurseController@index');
+Route::get('/briefcase', 'Sales\BriefcaseController@index');
 
-Route::get('/purse/getInvoices', function() {
+Route::get('/briefcase/getInvoices', function() {
     return Datatables::queryBuilder(
-                    DB::table("vdepartures")
+                    DB::table("vbriefcase")
             )->make(true);
 });
 

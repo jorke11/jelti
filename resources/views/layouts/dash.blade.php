@@ -198,7 +198,7 @@
 
                                             <li><a href="/departure">Ordenes de Compra</a></li>                                    
                                             <li><a href="/creditNote">Notas Credito</a></li>
-                                            <li><a href="/purse">Cartera</a></li>                                    
+                                            <li><a href="/briefcase">Cartera</a></li>                                    
                                             <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>

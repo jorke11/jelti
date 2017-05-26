@@ -98,6 +98,7 @@ function Parameter() {
                 {data: "description"},
                 {data: "value"},
                 {data: "group"},
+                {data: "code"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
@@ -108,7 +109,7 @@ function Parameter() {
                     }
                 },
                 {
-                    targets: [4],
+                    targets: [5],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

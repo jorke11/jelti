@@ -17,6 +17,7 @@
                             <th>Description</th>
                             <th>Value</th>
                             <th>Group</th>
+                            <th>Code</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -57,6 +58,14 @@
                         <div class="form-group">
                             <label for="email">Value:</label>
                             <input class="form-control input-parameter" id="value" name="value" placeholder="Value">
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Code:</label>
+                            <input class="form-control input-parameter" id="code" name="code" placeholder="code">
                         </div>
                     </div>
                 </div>

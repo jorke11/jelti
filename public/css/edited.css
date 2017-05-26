@@ -53,6 +53,16 @@ table>thead>tr{
     color: white;
 
 }
+.color-green{
+    background-color: #00b065;
+    color: white;
+
+}
+.color-red{
+    background-color: #ff0033;
+    color: white;
+
+}
 .color-new > a{
     color: white;
 }

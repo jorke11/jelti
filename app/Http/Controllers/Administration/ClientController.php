@@ -31,12 +31,13 @@ class ClientController extends Controller {
 
     public function index() {
         $type_person = Parameters::where("group", "typeperson")->get();
+        $sector = Parameters::where("group", "sector")->get();
         $type_regimen = Parameters::where("group", "typeregimen")->get();
         $type_document = Parameters::where("group", "typedocument")->get();
         $type_stakeholder = Parameters::where("group", "typestakeholder")->get();
         $status = Parameters::where("group", "generic")->get();
         $tax = Parameters::where("group", "tax")->get();
-        return view("Administration.client.init", compact('type_person', "type_regimen", "type_document", "type_stakeholder", "status", "tax"));
+        return view("Administration.client.init", compact('type_person', "type_regimen", "type_document", "type_stakeholder", "status", "tax","sector"));
     }
 
     public function store(Request $request) {

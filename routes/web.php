@@ -37,23 +37,23 @@ Route::get('/product/getImages/{id}', 'Administration\ProductController@getImage
 Route::post('/product/StoreSpecial', 'Administration\ProductController@storeSpecial');
 Route::post('/product/uploadExcel', 'Administration\ProductController@storeExcel');
 
-Route::resource('/stakeholder', 'Administration\StakeholderController');
-Route::post('/stakeholder/upload', 'Administration\StakeholderController@uploadImage');
-Route::post('/stakeholder/uploadExcel', 'Administration\StakeholderController@uploadExcel');
-Route::post('/stakeholder/uploadClient', 'Administration\StakeholderController@uploadclient');
-Route::put('/stakeholder/checkmain/{id}', 'Administration\StakeholderController@checkMain');
-Route::delete('/stakeholder/deleteImage/{id}', 'Administration\StakeholderController@deleteImage');
-Route::get('/stakeholder/getImages/{id}', 'Administration\StakeholderController@getImages');
+Route::resource('/suppliers', 'Suppliers\SupplierController');
+Route::post('/suppliers/upload', 'Suppliers\SupplierController@uploadImage');
+Route::post('/suppliers/uploadExcel', 'Suppliers\SupplierController@uploadExcel');
+Route::post('/suppliers/uploadClient', 'Suppliers\SupplierController@uploadclient');
+Route::put('/suppliers/checkmain/{id}', 'Suppliers\SupplierController@checkMain');
+Route::delete('/suppliers/deleteImage/{id}', 'Suppliers\SupplierController@deleteImage');
+Route::get('/suppliers/getImages/{id}', 'Suppliers\SupplierController@getImages');
 
-Route::post('/stakeholder/StoreSpecial', 'Administration\StakeholderController@storeSpecial');
-Route::put('/stakeholder/updatePrice/{id}', 'Administration\StakeholderController@updatePrice');
-Route::post('/stakeholder/StoreBranch', 'Administration\StakeholderController@storeBranch');
-Route::delete('/stakeholder/deleteBranch/{id}', 'Administration\StakeholderController@deleteBranch');
-Route::post('/stakeholder/addChage', 'Administration\StakeholderController@addChanges');
+Route::post('/suppliers/StoreSpecial', 'Suppliers\SupplierController@storeSpecial');
+Route::put('/suppliers/updatePrice/{id}', 'Suppliers\SupplierController@updatePrice');
+Route::post('/suppliers/StoreBranch', 'Suppliers\SupplierController@storeBranch');
+Route::delete('/suppliers/deleteBranch/{id}', 'Suppliers\SupplierController@deleteBranch');
+Route::post('/suppliers/addChage', 'Suppliers\SupplierController@addChanges');
 
-Route::post('/stakeholder/addTax', 'Administration\StakeholderController@storeTax');
-Route::put('/stakeholder/UpdateTax', 'Administration\StakeholderController@updateTax');
-Route::delete('/stakeholder/deleteTax/{id}', 'Administration\StakeholderController@deleteTax');
+Route::post('/suppliers/addTax', 'Suppliers\SupplierController@storeTax');
+Route::put('/suppliers/UpdateTax', 'Suppliers\SupplierController@updateTax');
+Route::delete('/suppliers/deleteTax/{id}', 'Suppliers\SupplierController@deleteTax');
 
 
 Route::resource('/clients', 'Clients\ClientController');
@@ -440,7 +440,7 @@ Route::get('/report/fulfillmentCli/{init}/{end}', 'Report\SalesController@getFul
 
 Route::get('/briefcase', 'Sales\BriefcaseController@index');
 
-Route::get('/briefcase/getInvoices/{id}',"Sales\BriefcaseController@getList");
+Route::get('/briefcase/getInvoices/{id}', "Sales\BriefcaseController@getList");
 
 
 

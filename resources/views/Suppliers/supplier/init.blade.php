@@ -20,18 +20,18 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="list">
-            @include('Administration.stakeholder.list')
+            @include('Suppliers.supplier.list')
         </div>
         <div role="tabpanel" class="tab-pane" id="management">
-            @include('Administration.stakeholder.management')
+            @include('Suppliers.supplier.management')
         </div>
         <div role="tabpanel" class="tab-pane" id="upload">
-            @include('Administration.stakeholder.supplier')
+            @include('Suppliers.supplier.supplier')
         </div>
         <div role="tabpanel" class="tab-pane " id="frmTax">
-            @include('Administration.stakeholder.tax')
+            @include('Suppliers.supplier.tax')
         </div>
     </div>
 </div>
-{!!Html::script('js/Administration/Stakeholder.js')!!}
+{!!Html::script('js/Suppliers/Supplier.js')!!}
 @endsection

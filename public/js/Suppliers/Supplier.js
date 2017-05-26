@@ -1,4 +1,4 @@
-function Stakeholder() {
+function Supplier() {
     var table, document_id, tableSpecial, tableBranch;
     this.init = function () {
 
@@ -689,5 +689,5 @@ function Stakeholder() {
     }
 }
 
-var obj = new Stakeholder();
+var obj = new Supplier();
 obj.init();

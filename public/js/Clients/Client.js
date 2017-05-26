@@ -163,7 +163,7 @@ function Client() {
             $(".input-contact").cleanFields({disabled: true});
             $("#frmContact #id").val($("#frm #id").val());
             tableContact = obj.tableContact($("#frm #id").val());
-        })
+        });
 
         $("#reset").click(function () {
             obj.MarkPrice(null, $("#frm #id").val());

@@ -247,4 +247,4 @@
 </div>
 
 
-@include('Administration.stakeholder.modalUpload')
+@include('Suppliers.Supplier.modalUpload')

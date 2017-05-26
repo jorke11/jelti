@@ -166,7 +166,7 @@
 
                                     <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Proveedores <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="/stakeholder">Proveedores</a></li>
+                                            <li><a href="/suppliers">Proveedores</a></li>
                                             <li><a href="/product">Productos</a></li>
                                             <!--                                            <li><a href="/contact">Contactos</a></li>-->
                                         </ul>

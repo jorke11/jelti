@@ -21,6 +21,13 @@ class CreateStakeholderTable extends Migration {
             $table->integer('status_id');
             $table->integer('type_document')->nullable();
             $table->integer('responsible_id')->nullable();
+            $table->integer('send_city_id')->nullable();
+            $table->integer('invoice_city_id')->nullable();
+            $table->integer('stakeholder_id')->nullable();
+
+            $table->string('address_send')->nullable();
+            $table->string('address_invoice')->nullable();
+            
             $table->string('name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('document')->nullable();
@@ -30,9 +37,12 @@ class CreateStakeholderTable extends Migration {
             $table->string('phone')->nullable();
             $table->string('business_name')->nullable();
             $table->string('business')->nullable();
-            $table->string('contact')->nullable();
-            $table->string('phone_contact')->nullable();
             $table->integer('term')->nullable();
+            
+            $table->boolean('shipping_cost')->nullable();
+            $table->boolean('special_price')->nullable();
+
+            
             $table->string('web_site')->nullable();
             $table->integer('lead_time')->nullable();
             $table->integer("user_insert");

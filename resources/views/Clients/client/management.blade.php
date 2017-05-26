@@ -40,13 +40,13 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Cuenta *</label>
-                                        <input type="text" class="form-control input-stakeholder input-sm" id="business" name="business" required>
+                                        <input type="text" class="form-control input-clients input-sm" id="business" name="business" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="form-group">
                                         <label for="address">Razón Social *</label>
-                                        <input type="text" class="form-control input-stakeholder input-sm" id="business_name" name="business_name" required>
+                                        <input type="text" class="form-control input-clients input-sm" id="business_name" name="business_name" required>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Tipo Documento *</label>
-                                        <select id="type_document" name="type_document" class="form-control input-stakeholder" required>
+                                        <select id="type_document" name="type_document" class="form-control input-clients" required>
                                             <option value="0">Selección</option>
                                             @foreach($type_document as $val)
                                             <option value="{{$val->code}}">{{$val->description}}</option>
@@ -66,23 +66,23 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Documento *</label>
-                                        <input type="text" class="form-control input-stakeholder" id="document" name="document"  required>
+                                        <input type="text" class="form-control input-clients" id="document" name="document"  required>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Dígito de Verificación *</label>
-                                        <input type="text" class="form-control input-stakeholder" id="verification" name="verification" readonly>
+                                        <input type="text" class="form-control input-clients" id="verification" name="verification" readonly>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <input type="hidden" id="id" name="id" class="input-stakeholder">
+                                <input type="hidden" id="id" name="id" class="input-clients">
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Tipo Persona*</label>
-                                        <select class="form-control input-stakeholder"  id="type_regime_id" name="type_regime_id" required>
+                                        <select class="form-control input-clients"  id="type_regime_id" name="type_regime_id" required>
                                             <option value="0">Selección</option>
                                             @foreach($type_person as $val)
                                             <option value="{{$val->code}}">{{$val->description}}</option>
@@ -93,7 +93,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Tipo Regimen*</label>
-                                        <select id="type_person_id" name="type_person_id" class="form-control input-stakeholder" required>
+                                        <select id="type_person_id" name="type_person_id" class="form-control input-clients" required>
                                             <option value="0">Selección</option>
                                             @foreach($type_regimen as $val)
                                             <option value="{{$val->code}}">{{$val->description}}</option>
@@ -103,8 +103,8 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label for="address">Plazo de Pago</label>
-                                        <input type="text" class="form-control input-stakeholder" id="term" name="term">
+                                        <label for="address">Plazo de Pago *</label>
+                                        <input type="text" class="form-control input-clients" id="term" name="term" required>
                                     </div>
                                 </div>
 
@@ -115,20 +115,20 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Ciudad</label>
-                                        <select class="form-control input-stakeholder"  id="city_id" name="city_id" data-api="/api/getCity">
+                                        <select class="form-control input-clients"  id="city_id" name="city_id" data-api="/api/getCity">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Teléfono</label>
-                                        <input type="text" class="form-control input-stakeholder" id="phone" name="phone">
+                                        <input type="text" class="form-control input-clients" id="phone" name="phone">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Responsable</label>
-                                        <select class="form-control input-stakeholder"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
+                                        <select class="form-control input-clients"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
                                         </select>
                                     </div>
                                 </div>
@@ -138,20 +138,20 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Correo</label>
-                                        <input type="text" class="form-control input-stakeholder" id="email" name="email">
+                                        <input type="text" class="form-control input-clients" id="email" name="email">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Sitio Web</label>
-                                        <input type="text" class="form-control input-stakeholder" id="web_site" name="web_site" >
+                                        <input type="text" class="form-control input-clients" id="web_site" name="web_site" >
                                     </div>
                                 </div>
 
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Cuenta Principal</label>
-                                        <select class="form-control input-stakeholder"  id="city_id" name="city_id" data-api="/api/getCity">
+                                        <select class="form-control input-clients"  id="stakeholder_id" name="stakeholder_id" data-api="/api/getClient">
                                         </select>
                                     </div>
                                 </div>
@@ -159,30 +159,25 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label for="address" class="control-label">Sector*</label>
-                                        <select id="sector_id" name="sector_id" class="form-control input-stakeholder">
+                                        <label for="address" class="control-label">Sector *</label>
+                                        <select id="sector_id" name="sector_id" class="form-control input-clients" required="">
                                             <option value="0">Selección</option>
-                                            <option value="1">Aerolineas</option>
-                                            <option value="2">Centros de Salud</option>
-                                            <option value="4">Colegios y Universidades</option>
-                                            <option value="5">Empresas</option>
-                                            <option value="6">Grandes Superficies</option>
-                                            <option value="7">Horeca</option>
-                                            <option value="8">Tiendas Especializadas</option>
-                                            <option value="9">Farmacias y Droguerías</option>
+                                            @foreach($sector as $val)
+                                            <option value="{{$val->code}}">{{$val->description}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label for="address">Flete</label>
-                                        <input type="checkbox" id="shipping_cost" name="shipping_cost" class="form-control" checked required>
+                                        <label for="address">Flete *</label>
+                                        <input type="checkbox" id="shipping_cost" name="shipping_cost" class="form-control input-clients" checked>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label for="address">Precio Especial</label>
-                                        <input type="checkbox" id="special_price" name="special_price" class="form-control" required>
+                                        <label for="address">Precio Especial *</label>
+                                        <input type="checkbox" id="special_price" name="special_price" class="form-control input-clients">
                                     </div>
                                 </div>
                             </div>
@@ -195,15 +190,15 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label for="email">Ciudad Envio</label>
-                                        <select class="form-control input-stakeholder input-sm" id="send_city_id" name="send_city_id" data-api="/api/getCity">
+                                        <label for="email">Ciudad Envio *</label>
+                                        <select class="form-control input-clients input-sm" id="send_city_id" name="send_city_id" data-api="/api/getCity" required>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="form-group">
-                                        <label for="email">Dirección Envio</label>
-                                        <input class="form-control input-branch input-sm" id="address_send" name="address_send">    
+                                        <label for="email">Dirección Envio *</label>
+                                        <input class="form-control input-clients input-sm" id="address_send" name="address_send" required>    
                                     </div>
                                 </div>
                             </div>
@@ -218,27 +213,19 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="email">Ciudad Facturación</label>
-                                        <select class="form-control input-stakeholder input-sm" id="invoice_city_id" name="invoice_city_id" data-api="/api/getCity">
+                                        <select class="form-control input-clients input-sm" id="invoice_city_id" name="invoice_city_id" data-api="/api/getCity">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="form-group">
                                         <label for="email">Dirección Facturación</label>
-                                        <input class="form-control input-branch input-sm" id="address_invoice" name="address_invoice">    
+                                        <input class="form-control input-clients input-sm" id="address_invoice" name="address_invoice">    
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
-
-
-
-
-
-
                 </div>
             </div>
             {!!Form::close()!!}
@@ -284,7 +271,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmJustify">
-                    <input class="input-justify" type="hidden" id="stakeholder_id" name="stakeholder_id">
+                    <input class="input-justify" type="hidden" id="clients_id" name="clients_id">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
@@ -319,4 +306,4 @@
 </div>
 
 
-@include('Administration.stakeholder.modalUpload')
+@include('Clients.client.modalUpload')

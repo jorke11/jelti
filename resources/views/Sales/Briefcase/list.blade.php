@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-lg-3">List Departure</div>
+                <div class="col-lg-3">Lista Cartera</div>
             </div>
 
         </div>
@@ -10,15 +10,15 @@
             <table class="table table-condensed  table-hover" id="tbl" width='100%'>
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Consecutive</th>
-                        <th>Invoice</th>
-                        <th>Date</th>
-                        <th>Client</th>
-                        <th>Commercial</th>
-                        <th>Warehouse</th>
-                        <th>City</th>
-                        <th>Status</th>
+                       
+                        <th>Consecutivo</th>
+                        <th>Factura</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Comercial</th>
+                        <th>Ciudad</th>
+                        <th>dias_vencidos</th>
+                        <th>Estado</th>
                         <th tipo="prueba">Action</th>
                     </tr>
                 </thead>
@@ -26,14 +26,12 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th></th>
                         <th>Consecutive</th>
                         <th>Date</th>
                         <th>Client</th>
                         <th>Commercial</th>
-                        <th>Warehouse</th>
                         <th>City</th>
-                        <th>Status</th>
+                        <th>Días Vencidos</th>
                         <th></th>
                     </tr>
                 </tfoot>

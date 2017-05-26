@@ -56,23 +56,23 @@ Route::put('/stakeholder/UpdateTax', 'Administration\StakeholderController@updat
 Route::delete('/stakeholder/deleteTax/{id}', 'Administration\StakeholderController@deleteTax');
 
 
-Route::resource('/clients', 'Administration\ClientController');
-Route::post('/clients/upload', 'Administration\ClientController@uploadImage');
-Route::post('/clients/uploadExcel', 'Administration\ClientController@uploadExcel');
-Route::post('/clients/uploadClient', 'Administration\ClientController@uploadclient');
-Route::put('/clients/checkmain/{id}', 'Administration\ClientController@checkMain');
-Route::delete('/clients/deleteImage/{id}', 'Administration\ClientController@deleteImage');
-Route::get('/clients/getImages/{id}', 'Administration\ClientController@getImages');
+Route::resource('/clients', 'Clients\ClientController');
+Route::post('/clients/upload', 'Clients\ClientController@uploadImage');
+Route::post('/clients/uploadExcel', 'Clients\ClientController@uploadExcel');
+Route::post('/clients/uploadClient', 'Clients\ClientController@uploadclient');
+Route::put('/clients/checkmain/{id}', 'Clients\ClientController@checkMain');
+Route::delete('/clients/deleteImage/{id}', 'Clients\ClientController@deleteImage');
+Route::get('/clients/getImages/{id}', 'Clients\ClientController@getImages');
 
-Route::post('/clients/StoreSpecial', 'Administration\ClientController@storeSpecial');
-Route::put('/clients/updatePrice/{id}', 'Administration\ClientController@updatePrice');
-Route::post('/clients/StoreBranch', 'Administration\ClientController@storeBranch');
-Route::delete('/clients/deleteBranch/{id}', 'Administration\ClientController@deleteBranch');
-Route::post('/clients/addChage', 'Administration\ClientController@addChanges');
+Route::post('/clients/StoreSpecial', 'Clients\ClientController@storeSpecial');
+Route::put('/clients/updatePrice/{id}', 'Clients\ClientController@updatePrice');
+Route::post('/clients/StoreBranch', 'Clients\ClientController@storeBranch');
+Route::delete('/clients/deleteBranch/{id}', 'Clients\ClientController@deleteBranch');
+Route::post('/clients/addChage', 'Clients\ClientController@addChanges');
 
-Route::post('/clients/addTax', 'Administration\ClientController@storeTax');
-Route::put('/clients/UpdateTax', 'Administration\ClientController@updateTax');
-Route::delete('/clients/deleteTax/{id}', 'Administration\ClientController@deleteTax');
+Route::post('/clients/addTax', 'Clients\ClientController@storeTax');
+Route::put('/clients/UpdateTax', 'Clients\ClientController@updateTax');
+Route::delete('/clients/deleteTax/{id}', 'Clients\ClientController@deleteTax');
 
 
 Route::resource('/category', 'Administration\CategoryController');

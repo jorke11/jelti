@@ -27,24 +27,24 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="list">
-            @include('Administration.client.list')
+            @include('Clients.client.list')
         </div>
         <div role="tabpanel" class="tab-pane" id="management">
-            @include('Administration.client.management')
+            @include('Clients.client.management')
         </div>
 <!--        <div role="tabpanel" class="tab-pane" id="branch">
-            @include('Administration.client.branch')
+            @include('Clients.client.branch')
         </div>-->
         <div role="tabpanel" class="tab-pane" id="special">
-            @include('Administration.client.special')
+            @include('Clients.client.special')
         </div>
         <div role="tabpanel" class="tab-pane" id="client">
-            @include('Administration.client.client')
+            @include('Clients.client.client')
         </div>
         <div role="tabpanel" class="tab-pane " id="frmTax">
-            @include('Administration.client.tax')
+            @include('Clients.client.tax')
         </div>
     </div>
 </div>
-{!!Html::script('js/Administration/Client.js')!!}
+{!!Html::script('js/Clients/Client.js')!!}
 @endsection

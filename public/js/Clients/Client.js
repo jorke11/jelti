@@ -19,7 +19,7 @@ function Client() {
         $("#modalImage").click(function () {
 //
 //            $("#input-700").fileinput({
-//                uploadUrl: "stakeholder/upload", // server upload action
+//                uploadUrl: "clients/upload", // server upload action
 //                uploadAsync: true,
 //                maxFileCount: 5,
 //                uploadExtraData: {
@@ -29,12 +29,12 @@ function Client() {
 //                },
 //            }).on('fileuploaded', function (event, data, id, index) {
 //                $("#modalUpload").modal("hide");
-//                obj.showImages(data.extra.stakeholder_id);
+//                obj.showImages(data.extra.clients_id);
 //            }).on('filebrowse', function (event) {
 //                document_id = $("#frmFile #document_id").val()
 //            });
 //
-            $("#frmFile #stakeholder_id").val($("#frm #id").val());
+            $("#frmFile #clients_id").val($("#frm #id").val());
             $("#modalUpload").modal("show");
         })
 
@@ -61,7 +61,7 @@ function Client() {
             var formData = new FormData($("#frmFile")[0]);
 
             $.ajax({
-                url: 'stakeholder/upload',
+                url: 'clients/upload',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -88,7 +88,7 @@ function Client() {
             var formData = new FormData($("#frmExcel")[0]);
 
             $.ajax({
-                url: 'stakeholder/uploadExcel',
+                url: 'clients/uploadExcel',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -121,7 +121,7 @@ function Client() {
             var formData = new FormData($("#frmClient")[0]);
 
             $.ajax({
-                url: 'stakeholder/uploadClient',
+                url: 'clients/uploadClient',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -150,7 +150,7 @@ function Client() {
             tableSpecial = obj.tableSpecial($("#frm #id").val());
         })
         $("#tabManagement").click(function () {
-            $(".input-stakeholder").cleanFields({disabled: false});
+            $(".input-clients").cleanFields({disabled: true});
             $("#tabBranch").addClass("hide");
             $("#tabSpecial").addClass("hide");
         })
@@ -185,13 +185,13 @@ function Client() {
 
     this.addJustify = function () {
         var valid = $(".input-justify").validate();
-        $("#frmJustify #stakeholder_id").val($("#frm #id").val());
+        $("#frmJustify #clients_id").val($("#frm #id").val());
 
         var data = $("#frmJustify").serialize();
 
         if (valid.length == 0) {
             $.ajax({
-                url: 'stakeholder/addChage',
+                url: 'clients/addChage',
                 method: 'post',
                 data: data,
                 dataType: 'JSON',
@@ -286,7 +286,8 @@ function Client() {
     }
 
     this.new = function () {
-        $(".input-stakeholder").cleanFields();
+        $(".input-clients").cleanFields();
+        $("#btnSave").attr("disabled", false);
     }
 
     this.saveSpecial = function () {
@@ -304,11 +305,11 @@ function Client() {
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "stakeholder/StoreSpecial";
+                url = "clients/StoreSpecial";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "stakeholder/UpdateSpecial/" + id;
+                url = "clients/UpdateSpecial/" + id;
                 msg = "Edited Record";
             }
 
@@ -333,7 +334,7 @@ function Client() {
     this.saveBranch = function () {
         toastr.remove();
         var frm = $("#frmBranch");
-        $("#frmBranch #stakeholder_id").val($("#frm #id").val());
+        $("#frmBranch #clients_id").val($("#frm #id").val());
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frmBranch #id").val();
@@ -345,11 +346,11 @@ function Client() {
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "stakeholder/StoreBranch";
+                url = "clients/StoreBranch";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "stakeholder/UpdateBranch/" + id;
+                url = "clients/UpdateBranch/" + id;
                 msg = "Edited Record";
             }
 
@@ -373,7 +374,7 @@ function Client() {
 
     this.showImages = function (id) {
         $.ajax({
-            url: 'stakeholder/getImages/' + id,
+            url: 'clients/getImages/' + id,
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {
@@ -384,8 +385,8 @@ function Client() {
     this.printImages = function (data) {
         var html = '';
         $.each(data, function (i, val) {
-            html += '<tr><td>' + val.document + '</td><td>' + val.name + '</td><td><a href="images/stakeholder/' + val.path + '" target="_blank">See</a></td>';
-            html += '<td><button class="btn btn-xs btn-warning" onclick=obj.deleteImage(' + val.id + ',' + val.stakeholder_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>';
+            html += '<tr><td>' + val.document + '</td><td>' + val.name + '</td><td><a href="images/clients/' + val.path + '" target="_blank">See</a></td>';
+            html += '<td><button class="btn btn-xs btn-warning" onclick=obj.deleteImage(' + val.id + ',' + val.clients_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>';
         })
         $("#contentAttach tbody").html(html);
     }
@@ -397,16 +398,16 @@ function Client() {
         var id = $("#frm #id").val();
         var msg = '';
 
-        var validate = $(".input-stakeholder").validate();
+        var validate = $(".input-clients").validate();
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "stakeholder";
+                url = "clients";
                 msg = "Created Record";
 
             } else {
                 method = 'PUT';
-                url = "stakeholder/" + id;
+                url = "clients/" + id;
                 msg = "Edited Record";
             }
 
@@ -420,6 +421,8 @@ function Client() {
                         table.ajax.reload();
                         toastr.success(msg);
                     }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
                 }
             })
         } else {
@@ -430,7 +433,7 @@ function Client() {
     this.showModal = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/stakeholder/" + id + "/edit";
+        var url = "/clients/" + id + "/edit";
 
         $.ajax({
             url: url,
@@ -439,7 +442,7 @@ function Client() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-stakeholder").setFields({data: data.header});
+                $(".input-clients").setFields({data: data.header});
                 $("#btnSave").attr("disabled", false);
                 $("#tabSpecial").removeClass("hide");
                 $("#tabBranch").removeClass("hide");
@@ -448,12 +451,12 @@ function Client() {
         })
     }
 
-    this.deleteImage = function (id, stakeholder_id) {
+    this.deleteImage = function (id, clients_id) {
         $("#div_" + id).remove();
         var obj = {};
-        obj.stakeholder_id = stakeholder_id;
+        obj.clients_id = clients_id;
         $.ajax({
-            url: 'stakeholder/deleteImage/' + id,
+            url: 'clients/deleteImage/' + id,
             method: 'DELETE',
             data: obj,
             dataType: 'JSON',
@@ -468,7 +471,7 @@ function Client() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/stakeholder/" + id;
+            var url = "/clients/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -490,7 +493,7 @@ function Client() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/stakeholder/deleteBranch/" + id;
+            var url = "/clients/deleteBranch/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -513,7 +516,7 @@ function Client() {
         var obj = {};
         obj.id = id;
         $.ajax({
-            url: 'stakeholder/updatePrice/' + client_id,
+            url: 'clients/updatePrice/' + client_id,
             method: 'PUT',
             data: obj,
             dataType: 'JSON',
@@ -645,7 +648,7 @@ function Client() {
 
     this.tableBranch = function (id) {
         var obj = {}, checked = false;
-        obj.stakeholder_id = id;
+        obj.clients_id = id;
 
         return $('#tblBranch').DataTable({
             "processing": true,

@@ -16,15 +16,16 @@
         <div role="tabpanel" class="tab-pane active" id="list">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    @include('Sales.Purse.list')
+                    @include('Sales.Briefcase.list')
                 </div>
             </div>
 
         </div>
         <div role="tabpanel" class="tab-pane " id="management">
+            @include('Sales.Briefcase.management')
         </div>
 
     </div>
 </div>
-{!!Html::script('js/Sales/Purse.js')!!}
+{!!Html::script('js/Sales/Briefcase.js')!!}
 @endsection

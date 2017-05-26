@@ -1,27 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Administration;
+namespace App\Http\Controllers\Clients;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Administration;
-use App\Models\Core;
-use Session;
-use App\Models\Administration\Stakeholder;
-use App\Models\Administration\StakeholderDocument;
-use App\Models\Administration\PricesSpecial;
-use App\Models\Administration\Branch;
 use App\Models\Administration\Parameters;
-use App\Models\Administration\Contact;
-use App\Models\Administration\StakeholderTax;
-use Datatables;
-use DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Models\Administration\FileErrors;
-use App\Models\Uploads\Base;
+use App\Models\Administration\Stakeholder;
 use Auth;
+use DB;
 
-class StakeholderController extends Controller {
+class ClientController extends Controller {
 
     public $name;
     public $typestakeholder;
@@ -46,25 +34,52 @@ class StakeholderController extends Controller {
 
     public function index() {
         $type_person = Parameters::where("group", "typeperson")->get();
+        $sector = Parameters::where("group", "sector")->get();
         $type_regimen = Parameters::where("group", "typeregimen")->get();
         $type_document = Parameters::where("group", "typedocument")->get();
         $type_stakeholder = Parameters::where("group", "typestakeholder")->get();
         $status = Parameters::where("group", "generic")->get();
         $tax = Parameters::where("group", "tax")->get();
-        return view("Administration.stakeholder.init", compact('type_person', "type_regimen", "type_document", "type_stakeholder", "status", "tax"));
+        return view("Clients.client.init", compact('type_person', "type_regimen", "type_document", "type_stakeholder", "status", "tax", "sector"));
     }
 
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
+
             $input["user_insert"] = Auth::user()->id;
             $input["status_id"] = 1;
-            $result = Stakeholder::create($input);
-            if ($result) {
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false]);
+            $input["type_stakeholder"] = 1;
+            $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
+            $input["special_price"] = isset($input["special_price"]) ? true : false;
+
+
+            try {
+                DB::beginTransaction();
+
+                $document = Stakeholder::where("document", $input["document"])->first();
+
+                if (isset($input["client_id"])) {
+                    $document = null;
+                }
+
+                if ($document == null) {
+                    $result = Stakeholder::create($input);
+                } else {
+                    DB::rollback();
+                    return response()->json(['success' => false, "msg" => "Cliente ya existe"], 409);
+                }
+
+                if ($result) {
+                    DB::commit();
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false, "msg" => "Problemas con la ejecución"], 409);
+                }
+            } catch (Exception $exc) {
+                DB::rollback();
+                return response()->json(['success' => false, "msg" => "Wrong"], 409);
             }
         }
     }
@@ -73,7 +88,7 @@ class StakeholderController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
-            $input["type_stakeholder"] = 2;
+
             $result = StakeholderTax::create($input);
             if ($result) {
                 $resp = $this->getTax($input["stakeholder_id"])->getData();
@@ -210,9 +225,9 @@ class StakeholderController extends Controller {
 
         $this->name = $file->getClientOriginalName();
         $this->name = str_replace(" ", "_", $this->name);
-        $this->path = "uploads/stakeholder/" . date("Y-m-d") . "/" . $this->name;
+        $this->path = "uploads/clients/" . date("Y-m-d") . "/" . $this->name;
         $this->typestakeholder = 2;
-        $file->move("uploads/stakeholder/" . date("Y-m-d") . "/", $this->name);
+        $file->move("uploads/clients/" . date("Y-m-d") . "/", $this->name);
 
 //        if (is_file($this->path) === true) {
         Excel::load($this->path, function($reader) {

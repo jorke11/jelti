@@ -62,6 +62,7 @@ class DashboardController extends Controller {
     }
 
     public function getMenu() {
+        echo "asdsa";exit;
         $sql = "
                         SELECT id = ANY (
                                                     SELECT permission_id 

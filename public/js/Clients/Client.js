@@ -1,5 +1,5 @@
 function Client() {
-    var table, document_id, tableSpecial, tableBranch;
+    var table, document_id, tableSpecial, tableContact;
     this.init = function () {
 
         table = this.table();
@@ -9,12 +9,16 @@ function Client() {
         $("#btnNewSpecial").click(this.newSpecial);
         $("#btnSaveSpecial").click(this.saveSpecial);
 
-        $("#btnNewBranch").click(this.newBranch);
-        $("#btnSaveBranch").click(this.saveBranch);
+        $("#btnNewContact").click(this.newContact);
+        $("#btnSaveContact").click(this.saveContact);
 
-        $("#tabManagement").click(function () {
-            $('#myTabs a[href="#management"]').tab('show');
+        $("#tabInvoice").click(function () {
+            obj.tableInvoice($("#frm #id").val());
         });
+//        $("#tabContact").click(function () {
+//            $(".input-contact").cleanFields({disabled: true});
+//
+//        });
 
         $("#modalImage").click(function () {
 //
@@ -149,19 +153,15 @@ function Client() {
             $(".input-special").cleanFields();
             tableSpecial = obj.tableSpecial($("#frm #id").val());
         })
-        $("#tabManagement").click(function () {
-            $(".input-clients").cleanFields({disabled: true});
-            $("#tabBranch").addClass("hide");
-            $("#tabSpecial").addClass("hide");
-        })
 
         $("#tabList").click(function () {
             $("#tabSpecial").addClass("hide");
             $("#tabBranch").addClass("hide");
         })
-        $("#tabBranch").click(function () {
-            $(".input-branch").cleanFields();
-            tableBranch = obj.tableBranch($("#frm #id").val());
+        $("#tabContact").click(function () {
+            $(".input-contact").cleanFields({disabled: true});
+            $("#frmContact #id").val($("#frm #id").val());
+            tableContact = obj.tableContact($("#frm #id").val());
         })
 
         $("#reset").click(function () {
@@ -281,8 +281,9 @@ function Client() {
         $(".input-special").cleanFields();
     }
 
-    this.newBranch = function () {
-        $(".input-branch").cleanFields();
+    this.newContact = function () {
+        $(".input-contact").cleanFields();
+        $("#btnSaveContact").attr("disabled", false);
     }
 
     this.new = function () {
@@ -331,26 +332,26 @@ function Client() {
         }
     }
 
-    this.saveBranch = function () {
+    this.saveContact = function () {
         toastr.remove();
-        var frm = $("#frmBranch");
-        $("#frmBranch #clients_id").val($("#frm #id").val());
+        var frm = $("#frmContact");
+        $("#frmContact #stakeholder_id").val($("#frm #id").val());
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frmBranch #id").val();
+        var id = $("#frmContact #id").val();
 
         var msg = '';
 
-        var validate = $(".input-branch").validate();
+        var validate = $(".input-contact").validate();
 
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "clients/StoreBranch";
+                url = "clients/StoreContact";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "clients/UpdateBranch/" + id;
+                url = "clients/UpdateContact/" + id;
                 msg = "Edited Record";
             }
 
@@ -361,7 +362,7 @@ function Client() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
-                        tableBranch.ajax.reload();
+                        tableContact.ajax.reload();
                         toastr.success(msg);
                     }
                 }
@@ -439,14 +440,45 @@ function Client() {
             url: url,
             method: "GET",
             data: data,
+
             dataType: 'JSON',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (data) {
-                $('#myTabs a[href="#management"]').tab('show');
                 $(".input-clients").setFields({data: data.header});
+                obj.printImages(data.images);
+            },
+            complete: function (data) {
+                $('#myTabs a[href="#management"]').tab('show');
                 $("#btnSave").attr("disabled", false);
                 $("#tabSpecial").removeClass("hide");
-                $("#tabBranch").removeClass("hide");
-                obj.printImages(data.images);
+                $("#tabContact").removeClass("hide");
+                $("#tabInvoice").removeClass("hide");
+                $("#loading-super").addClass("hidden");
+            }
+        })
+    }
+    this.showModalContact = function (id) {
+        var frm = $("#frm");
+        var data = frm.serialize();
+        var url = "/clients/contact/" + id;
+
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: data,
+
+            dataType: 'JSON',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
+            success: function (data) {
+                $(".input-contact").setFields({data: data});
+                $("#btnSaveContact").attr("disabled", false);
+            },
+            complete: function (data) {
+                $("#loading-super").addClass("hidden");
             }
         })
     }
@@ -489,11 +521,11 @@ function Client() {
         }
     }
 
-    this.deleteBranch = function (id) {
+    this.deleteContact = function (id) {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/clients/deleteBranch/" + id;
+            var url = "/clients/deleteContact/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -501,7 +533,7 @@ function Client() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
-                        tableBranch.ajax.reload();
+                        tableContact.ajax.reload();
                         toastr.warning("Ok");
                     }
                 }, error: function (err) {
@@ -626,9 +658,9 @@ function Client() {
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0],
+                    aTargets: [0, 1, 2, 3, 4],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModalSpecial(' + full.id + ')">' + data + '</a>';
                     }
                 }
                 ,
@@ -646,45 +678,136 @@ function Client() {
         });
     }
 
-    this.tableBranch = function (id) {
+    this.tableContact = function (id) {
         var obj = {}, checked = false;
-        obj.clients_id = id;
+        obj.stakeholder_id = id;
 
-        return $('#tblBranch').DataTable({
+        return $('#tblContact').DataTable({
             "processing": true,
             "serverSide": true,
             destroy: true,
             "ajax": {
-                url: "/api/listBranch",
+                url: "/api/listContact",
                 type: 'GET',
                 data: obj,
             },
             columns: [
                 {data: "id"},
-                {data: "business_name"},
-                {data: "document"},
-                {data: "address_send"},
+                {data: "name"},
+                {data: "last_name"},
+                {data: "city"},
                 {data: "email"},
+                {data: "mobile"},
+                {data: "city"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0],
+                    aTargets: [0, 1, 2, 3, 4, 5],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModalContact(' + full.id + ')">' + data + '</a>';
                     }
                 }
                 ,
                 {
-                    targets: [5],
+                    targets: [6],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.deleteBranch(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.deleteContact(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],
         });
+    }
+
+
+    this.tableInvoice = function (id) {
+        var html = '';
+
+        table = $('#tblInvoice').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/briefcase/getInvoices/" + id,
+                method: 'GET',
+            },
+            columns: [
+
+                {data: "consecutive"},
+                {data: "invoice"},
+                {data: "created_at"},
+                {data: "client"},
+                {data: "responsible"},
+                {data: "city"},
+                {data: "dias_vencidos"},
+                {data: "paid_out", render: function (data, type, row) {
+                        var msg = '';
+                        if (row.paid_out == null || row.paid_out == false) {
+                            if (row.dias_vencidos < 0) {
+                                msg = 'En mora';
+                            } else {
+                                msg = 'No Pago'
+                            }
+                        } else {
+                            msg = 'Pago'
+                        }
+                        return msg;
+                    }
+                },
+            ],
+            order: [[7, 'DESC']],
+            aoColumnDefs: [
+                {
+                    aTargets: [1, 2, 3, 4],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                    }
+                },
+                {
+                    targets: [8],
+                    searchable: false,
+                    mData: null,
+                    mRender: function (data, type, full) {
+                        html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                        return html;
+                    }
+                }
+            ],
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var type = $(column.header()).attr('rowspan');
+                    if (type != undefined) {
+                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                            );
+                                    column
+//                                            .search(val ? val : '', true, false)
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                });
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    }
+                });
+            },
+            createdRow: function (row, data, index) {
+
+                if (data.dias_vencidos >= 0 && data.dias_vencidos <= 3) {
+                    $('td', row).eq(7).addClass('color-green');
+                } else if (data.dias_vencidos < 0) {
+                    $('td', row).eq(7).addClass('color-red');
+                } else if (data.status_id == 3) {
+                    $('td', row).eq(7).addClass('color-checked');
+                }
+            }
+        });
+        return table;
     }
 }
 

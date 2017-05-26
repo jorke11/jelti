@@ -27,4 +27,4 @@ function Dash() {
 }
 
 var objD = new Dash();
-objD.init();
+//objD.init();

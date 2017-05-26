@@ -66,9 +66,11 @@ Route::get('/clients/getImages/{id}', 'Clients\ClientController@getImages');
 
 Route::post('/clients/StoreSpecial', 'Clients\ClientController@storeSpecial');
 Route::put('/clients/updatePrice/{id}', 'Clients\ClientController@updatePrice');
-Route::post('/clients/StoreBranch', 'Clients\ClientController@storeBranch');
-Route::delete('/clients/deleteBranch/{id}', 'Clients\ClientController@deleteBranch');
+Route::put('/clients/UpdateContact/{id}', 'Clients\ClientController@updateContact');
+Route::post('/clients/StoreContact', 'Clients\ClientController@storeContact');
+Route::delete('/clients/deleteContact/{id}', 'Clients\ClientController@deleteContact');
 Route::post('/clients/addChage', 'Clients\ClientController@addChanges');
+Route::get('/clients/contact/{id}', 'Clients\ClientController@editContact');
 
 Route::post('/clients/addTax', 'Clients\ClientController@storeTax');
 Route::put('/clients/UpdateTax', 'Clients\ClientController@updateTax');
@@ -323,9 +325,7 @@ Route::get('/api/listActivity', function() {
     return Datatables::eloquent(Models\Seller\Activity::query())->make(true);
 });
 
-Route::get('/api/listContact', function() {
-    return Datatables::eloquent(Models\Administration\Contact::query())->make(true);
-});
+Route::get('/api/listContact', 'Clients\ClientController@getContact');
 
 Route::get('/api/listPurchase', function() {
 
@@ -440,11 +440,7 @@ Route::get('/report/fulfillmentCli/{init}/{end}', 'Report\SalesController@getFul
 
 Route::get('/briefcase', 'Sales\BriefcaseController@index');
 
-Route::get('/briefcase/getInvoices', function() {
-    return Datatables::queryBuilder(
-                    DB::table("vbriefcase")
-            )->make(true);
-});
+Route::get('/briefcase/getInvoices/{id}',"Sales\BriefcaseController@getList");
 
 
 

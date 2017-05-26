@@ -28,7 +28,8 @@ class SeekController extends Controller {
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->city_id)->get();
         } else if (isset($in["id"])) {
-            $query->where("id", $in["id"])->get();
+//            if ($in["id"] != '')
+                $query->where("id", $in["id"])->get();
         } else {
             $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
         }
@@ -260,7 +261,6 @@ class SeekController extends Controller {
                     ->OrWhere("stakeholder.business", "ILIKE", "%" . $in["q"] . "%")
                     ->OrWhere("products.bar_code", "ILIKE", "%" . $in["q"] . "%")
                     ->OrWhere(DB::raw("products.reference::text"), "ILIKE", "%" . $in["q"] . "%");
-                   
         }
 
         $result = $query->get();

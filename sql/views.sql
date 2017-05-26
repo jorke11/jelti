@@ -70,3 +70,8 @@ JOIN stakeholder s ON s.id=p.supplier_id
 JOIN warehouses w ON w.id=p.warehouse_id
 JOIN cities c ON c.id=p.city_id
 JOIN parameters param ON param.id=p.status_id and param.group='entry';
+
+create view vcontacts as 
+select c.id,c.name,c.last_name,c.email,c.mobile,ci.description city,c.stakeholder_id
+from contacts c
+JOIN cities ci ON ci.id=c.city_id

@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administration\Parameters;
 use App\Models\Administration\Stakeholder;
+use App\Models\Administration\Contact;
+use App\Models\Administration\PricesSpecial;
 use Auth;
 use DB;
+use Datatables;
 
 class ClientController extends Controller {
 
@@ -104,11 +107,10 @@ class ClientController extends Controller {
         return Datatables::eloquent(PricesSpecial::where("client_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
     }
 
-    public function getBranch(Request $req) {
+    public function getContact(Request $req) {
         $in = $req->all();
-        $query = DB::table("branch_office")
-                ->select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_send", "branch_office.email")
-                ->where("branch_office.stakeholder_id", $in["stakeholder_id"])
+        $query = DB::table("vcontacts")
+                ->where("stakeholder_id", $in["stakeholder_id"])
                 ->orderBy("id", "asc");
 
         return Datatables::queryBuilder($query)->make(true);
@@ -122,6 +124,16 @@ class ClientController extends Controller {
         } else {
             PricesSpecial::where("client_id", $id)->update(['priority' => false]);
         }
+
+        return response()->json(["success" => true]);
+    }
+
+    public function updateContact(Request $data, $id) {
+        $input = $data->all();
+
+        $contact = Contact::find($id);
+
+        $contact->fill($input)->save();
 
         return response()->json(["success" => true]);
     }
@@ -140,13 +152,13 @@ class ClientController extends Controller {
         }
     }
 
-    public function storeBranch(Request $request) {
+    public function storeContact(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
             $input["user_insert"] = Auth::user()->id;
             $input["status_id"] = 1;
-            $result = Branch::create($input);
+            $result = Contact::create($input);
             if ($result) {
                 return response()->json(['success' => true]);
             } else {
@@ -171,7 +183,11 @@ class ClientController extends Controller {
     public function edit($id) {
         $resp["header"] = Stakeholder::FindOrFail($id);
         $resp["images"] = $this->getImages($id)->getData();
-        $resp["taxes"] = $this->getTax($id)->getData();
+        return response()->json($resp);
+    }
+
+    public function editContact($id) {
+        $resp = Contact::Find($id);
         return response()->json($resp);
     }
 
@@ -498,8 +514,8 @@ class ClientController extends Controller {
         return response()->json(["success" => true, "detail" => $list]);
     }
 
-    public function deleteBranch(Request $data, $id) {
-        $image = Branch::find($id);
+    public function deleteContact(Request $data, $id) {
+        $image = Contact::find($id);
         $image->delete();
         return response()->json(["success" => true]);
     }

@@ -130,9 +130,9 @@ class ClientController extends Controller {
 
     public function updateContact(Request $data, $id) {
         $input = $data->all();
-
+        unset($input["id"]);
         $contact = Contact::find($id);
-
+        dd($contact);
         $contact->fill($input)->save();
 
         return response()->json(["success" => true]);

@@ -22,14 +22,14 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Producto</label>
-                            <select class="form-control input-special input-sm" id="product_id" name="product_id" data-api="/api/getProduct">
+                            <select class="form-control input-special input-sm" id="product_id" name="product_id" data-api="/api/getProduct" required>
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Precio </label>
-                            <input class="form-control input-special input-sm" id="price_sf" name="price_sf">             
+                            <input class="form-control input-special input-sm" id="price_sf" name="price_sf" required data-type="number">             
                         </div>
                     </div>
                 </div>
@@ -37,13 +37,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Margen</label>
-                            <input class="form-control input-special input-sm" id="margin" name="margin">    
+                            <input class="form-control input-special input-sm" id="margin" name="margin" data-type="number" required>    
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Margen sf</label>
-                            <input class="form-control input-special input-sm" id="margin_sf" name="margin_sf">    
+                            <input class="form-control input-special input-sm" id="margin_sf" name="margin_sf" data-type="number" required>    
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Iva</label>
-                            <input class="form-control input-sm input-special" id="tax" name="tax">    
+                            <input class="form-control input-sm input-special" id="tax" name="tax" data-type="number" maxlength="4" required>    
                         </div>
                     </div>
                     <div class="col-lg-6">

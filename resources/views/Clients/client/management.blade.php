@@ -55,7 +55,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Tipo Documento *</label>
-                                        <select id="type_document" name="type_document" class="form-control input-clients" required disabled>
+                                        <select id="type_document" name="type_document" class="form-control input-clients input-sm" required disabled>
                                             <option value="0">Selección</option>
                                             @foreach($type_document as $val)
                                             <option value="{{$val->code}}">{{$val->description}}</option>
@@ -66,13 +66,13 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Documento *</label>
-                                        <input type="text" class="form-control input-clients" id="document" name="document"  required disabled>
+                                        <input type="text" class="form-control input-clients input-sm" id="document" name="document"  required disabled>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Dígito de Verificación *</label>
-                                        <input type="text" class="form-control input-clients" id="verification" name="verification" readonly disabled>
+                                        <input type="text" class="form-control input-clients input-sm" id="verification" name="verification" readonly disabled>
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Tipo Persona*</label>
-                                        <select class="form-control input-clients"  id="type_regime_id" name="type_regime_id" required disabled>
+                                        <select class="form-control input-clients input-sm"  id="type_regime_id" name="type_regime_id" required disabled>
                                             <option value="0">Selección</option>
                                             @foreach($type_person as $val)
                                             <option value="{{$val->code}}">{{$val->description}}</option>
@@ -93,7 +93,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Tipo Regimen*</label>
-                                        <select id="type_person_id" name="type_person_id" class="form-control input-clients" required disabled>
+                                        <select id="type_person_id" name="type_person_id" class="form-control input-clients input-sm" required disabled>
                                             <option value="0">Selección</option>
                                             @foreach($type_regimen as $val)
                                             <option value="{{$val->code}}">{{$val->description}}</option>
@@ -104,7 +104,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Plazo de Pago *</label>
-                                        <input type="text" class="form-control input-clients" id="term" name="term" required disabled>
+                                        <input type="text" class="form-control input-clients input-sm" id="term" name="term" required disabled>
                                     </div>
                                 </div>
 
@@ -115,14 +115,14 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Ciudad</label>
-                                        <select class="form-control input-clients"  id="city_id" name="city_id" data-api="/api/getCity" disabled>
+                                        <select class="form-control input-clients input-sm"  id="city_id" name="city_id" data-api="/api/getCity" disabled>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Teléfono</label>
-                                        <input type="text" class="form-control input-clients" id="phone" name="phone" disabled>
+                                        <input type="text" class="form-control input-clients input-sm" id="phone" name="phone" disabled>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -138,13 +138,13 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Correo</label>
-                                        <input type="text" class="form-control input-clients" id="email" name="email" disabled>
+                                        <input type="text" class="form-control input-clients input-sm" id="email" name="email" disabled>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Sitio Web</label>
-                                        <input type="text" class="form-control input-clients" id="web_site" name="web_site" disabled>
+                                        <input type="text" class="form-control input-clients input-sm" id="web_site" name="web_site" disabled>
                                     </div>
                                 </div>
 
@@ -160,7 +160,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address" class="control-label">Sector *</label>
-                                        <select id="sector_id" name="sector_id" class="form-control input-clients" required="" disabled>
+                                        <select id="sector_id" name="sector_id" class="form-control input-clients input-sm" required="" disabled>
                                             <option value="0">Selección</option>
                                             @foreach($sector as $val)
                                             <option value="{{$val->code}}">{{$val->description}}</option>
@@ -177,7 +177,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="address">Precio Especial *</label>
-                                        <input type="checkbox" id="special_price" name="special_price" class="form-control input-clients" disabled>
+                                        <input type="checkbox" id="special_price" name="special_price" class="form-control input-clients " disabled>
                                     </div>
                                 </div>
                             </div>

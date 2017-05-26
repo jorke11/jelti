@@ -728,6 +728,7 @@ function Client() {
         table = $('#tblInvoice').DataTable({
             processing: true,
             serverSide: true,
+            destroy: true,
             ajax: {
                 url: "/briefcase/getInvoices/" + id,
                 method: 'GET',

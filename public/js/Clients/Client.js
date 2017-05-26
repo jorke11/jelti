@@ -156,7 +156,8 @@ function Client() {
 
         $("#tabList").click(function () {
             $("#tabSpecial").addClass("hide");
-            $("#tabBranch").addClass("hide");
+            $("#tabContact").addClass("hide");
+            $("#tabInvoice").addClass("hide");
         })
         $("#tabContact").click(function () {
             $(".input-contact").cleanFields({disabled: true});

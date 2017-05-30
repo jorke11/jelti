@@ -132,9 +132,7 @@ class ClientController extends Controller {
         $input = $data->all();
         unset($input["id"]);
         $contact = Contact::find($id);
-        dd($contact);
         $contact->fill($input)->save();
-
         return response()->json(["success" => true]);
     }
 

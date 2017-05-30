@@ -108,11 +108,17 @@ class SupplierController extends Controller {
         return response()->json(["success" => true]);
     }
 
+    public function editContact($id) {
+        $resp = Contact::Find($id);
+        return response()->json($resp);
+    }
+    
+    
+
     public function updateContact(Request $data, $id) {
         $input = $data->all();
         unset($input["id"]);
         $contact = Contact::find($id);
-        dd($contact);
         $contact->fill($input)->save();
 
         return response()->json(["success" => true]);

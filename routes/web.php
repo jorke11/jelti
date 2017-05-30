@@ -47,9 +47,12 @@ Route::get('/suppliers/getImages/{id}', 'Suppliers\SupplierController@getImages'
 
 Route::post('/suppliers/StoreSpecial', 'Suppliers\SupplierController@storeSpecial');
 Route::put('/suppliers/updatePrice/{id}', 'Suppliers\SupplierController@updatePrice');
+Route::put('/suppliers/UpdateContact/{id}', 'Suppliers\SupplierController@updateContact');
 Route::post('/suppliers/StoreContact', 'Suppliers\SupplierController@storeContact');
 Route::delete('/suppliers/deleteContact/{id}', 'Suppliers\SupplierController@deleteContact');
 Route::post('/suppliers/addChage', 'Suppliers\SupplierController@addChanges');
+
+Route::get('/suppliers/contact/{id}', 'Suppliers\SupplierController@editContact');
 
 Route::post('/suppliers/addTax', 'Suppliers\SupplierController@storeTax');
 Route::put('/suppliers/UpdateTax', 'Suppliers\SupplierController@updateTax');

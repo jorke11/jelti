@@ -196,7 +196,7 @@
                                             <li><a href="/entry">Entrada</a></li>
                                             @endif
 
-                                            <li><a href="/departure">Ordenes de Compra</a></li>                                    
+                                            <li><a href="/departure">Ordenes de Venta</a></li>                                    
                                             <li><a href="/creditNote">Notas Credito</a></li>
                                             <li><a href="/briefcase">Cartera</a></li>                                    
                                             <li><a href="/stock">Stock</a></li>                                    

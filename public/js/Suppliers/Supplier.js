@@ -212,6 +212,30 @@ function Supplier() {
 
     }
 
+    this.showModalContact = function (id) {
+        var frm = $("#frm");
+        var data = frm.serialize();
+        var url = "/suppliers/contact/" + id;
+
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: data,
+
+            dataType: 'JSON',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
+            success: function (data) {
+                $(".input-contact").setFields({data: data});
+                $("#btnSaveContact").attr("disabled", false);
+            },
+            complete: function (data) {
+                $("#loading-super").addClass("hidden");
+            }
+        })
+    }
+
 
     this.calcularDigitoVerificacion = function (myNit) {
         var vpri,

@@ -221,8 +221,12 @@ class EntryController extends Controller {
                                     $detail["units_supplier"] = $pro->units_supplier;
                                     EntriesDetail::create($detail);
                                 }
+                            } else {
+                                dd($sup);
                             }
                         }
+                    } else {
+                        echo $book->ean . "\n";
                     }
                 }
             })->get();

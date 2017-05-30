@@ -75,3 +75,12 @@ create view vcontacts as
 select c.id,c.name,c.last_name,c.email,c.mobile,ci.description city,c.stakeholder_id
 from contacts c
 JOIN cities ci ON ci.id=c.city_id
+
+
+create view ventries as 
+select e.id, e.consecutive,e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code
+From entries e
+JOIN warehouses w ON w.id=e.warehouse_id
+JOIN cities c ON c.id=e.city_id
+JOIN parameters p ON p.code=e.status_id and p.group='entry'
+ORDER BY p.code

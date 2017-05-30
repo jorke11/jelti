@@ -349,15 +349,11 @@ Route::get('/api/listSale', function() {
 });
 Route::get('/api/listEntry', function() {
 
-    $query = DB::table('entries')
-            ->select("entries.id", "entries.consecutive", "entries.description", "entries.created_at", "entries.invoice", "warehouses.description as warehouse", "cities.description as city", DB::raw("coalesce(parameters.description,'') as status"))
-            ->join("warehouses", "warehouses.id", "entries.warehouse_id")
-            ->leftjoin("cities", "cities.id", "entries.city_id")
-            ->leftjoin("parameters", "parameters.code", "entries.status_id")
-            ->where("parameters.group", "entry");
+    $query = DB::table('ventries');
+
 
     if (Auth::user()->role_id != 1 && Auth::user()->role_id == 5) {
-        $query->where("entries.responsible_id", Auth::user()->id);
+        $query->where("responsible_id", Auth::user()->id);
     }
 
     return Datatables::queryBuilder($query)->make(true);

@@ -155,7 +155,7 @@ class DepartureController extends Controller {
 //                ->join("cities", "cities.id", "branch_office.city_id")
 //                ->first();
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
-                ->where("id", $sale["client_id"])
+                ->where("stakeholder.id", $sale["client_id"])
                 ->join("cities", "cities.id", "stakeholder.city_id")
                 ->first();
         

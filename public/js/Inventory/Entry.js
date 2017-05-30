@@ -447,7 +447,7 @@ function Entry() {
             ],
             aoColumnDefs: [
                 {
-                    aTargets: [ 1, 2, 3, 4, 5, 6, 7],
+                    aTargets: [1, 2, 3, 4, 5, 6, 7],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
@@ -460,7 +460,28 @@ function Entry() {
                         return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
-            ],
+            ], initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var type = $(column.header()).attr('rowspan');
+                    if (type != undefined) {
+                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                            );
+                                    column
+//                                            .search(val ? val : '', true, false)
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                });
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    }
+                });
+            },
         });
 
         $('#tbl tbody').on('click', 'td.details-control', function () {

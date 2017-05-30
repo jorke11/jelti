@@ -1,5 +1,5 @@
 function Supplier() {
-    var table, document_id, tableSpecial, tableBranch;
+    var table, document_id, tableSpecial, tableContact;
     this.init = function () {
 
         table = this.table();
@@ -9,8 +9,8 @@ function Supplier() {
         $("#btnNewSpecial").click(this.newSpecial);
         $("#btnSaveSpecial").click(this.saveSpecial);
 
-        $("#btnNewBranch").click(this.newBranch);
-        $("#btnSaveBranch").click(this.saveBranch);
+        $("#btnNewContact").click(this.newContact);
+        $("#btnSaveContact").click(this.saveContact);
 
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
@@ -19,7 +19,7 @@ function Supplier() {
         $("#modalImage").click(function () {
 //
 //            $("#input-700").fileinput({
-//                uploadUrl: "stakeholder/upload", // server upload action
+//                uploadUrl: "suppliers/upload", // server upload action
 //                uploadAsync: true,
 //                maxFileCount: 5,
 //                uploadExtraData: {
@@ -29,12 +29,12 @@ function Supplier() {
 //                },
 //            }).on('fileuploaded', function (event, data, id, index) {
 //                $("#modalUpload").modal("hide");
-//                obj.showImages(data.extra.stakeholder_id);
+//                obj.showImages(data.extra.suppliers_id);
 //            }).on('filebrowse', function (event) {
 //                document_id = $("#frmFile #document_id").val()
 //            });
 //
-            $("#frmFile #stakeholder_id").val($("#frm #id").val());
+            $("#frmFile #suppliers_id").val($("#frm #id").val());
             $("#modalUpload").modal("show");
         })
 
@@ -61,7 +61,7 @@ function Supplier() {
             var formData = new FormData($("#frmFile")[0]);
 
             $.ajax({
-                url: 'stakeholder/upload',
+                url: 'suppliers/upload',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -88,7 +88,7 @@ function Supplier() {
             var formData = new FormData($("#frmExcel")[0]);
 
             $.ajax({
-                url: 'stakeholder/uploadExcel',
+                url: 'suppliers/uploadExcel',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -121,7 +121,7 @@ function Supplier() {
             var formData = new FormData($("#frmClient")[0]);
 
             $.ajax({
-                url: 'stakeholder/uploadClient',
+                url: 'suppliers/uploadClient',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -149,21 +149,25 @@ function Supplier() {
             $(".input-special").cleanFields();
             tableSpecial = obj.tableSpecial($("#frm #id").val());
         })
-        $("#tabManagement").click(function () {
-            $(".input-stakeholder").cleanFields({disabled: false});
-            $("#tabBranch").addClass("hide");
-            $("#tabSpecial").addClass("hide");
-        })
+
+//        $("#tabManagement").click(function () {
+//            $(".input-suppliers").cleanFields({disabled: false});
+//            $("#tabBranch").addClass("hide");
+//            $("#tabSpecial").addClass("hide");
+//        })
+
         $("#tabList").click(function () {
             $("#tabSpecial").addClass("hide");
             $("#tabBranch").addClass("hide");
         })
-        $("#tabBranch").click(function () {
-            $(".input-branch").cleanFields();
 
 
-            tableBranch = obj.tableBranch($("#frm #id").val());
-        })
+        $("#tabContact").click(function () {
+            $(".input-contact").cleanFields({disabled: false});
+            $("#frmContact #stakeholder_id").val($("#frm #id").val());
+            console.log()
+            tableContact = obj.tableContact($("#frm #id").val());
+        });
 
         $("#reset").click(function () {
             obj.MarkPrice(null, $("#frm #id").val());
@@ -186,13 +190,13 @@ function Supplier() {
 
     this.addJustify = function () {
         var valid = $(".input-justify").validate();
-        $("#frmJustify #stakeholder_id").val($("#frm #id").val());
+        $("#frmJustify #suppliers_id").val($("#frm #id").val());
 
         var data = $("#frmJustify").serialize();
 
         if (valid.length == 0) {
             $.ajax({
-                url: 'stakeholder/addChage',
+                url: 'suppliers/addChage',
                 method: 'post',
                 data: data,
                 dataType: 'JSON',
@@ -282,12 +286,13 @@ function Supplier() {
         $(".input-special").cleanFields();
     }
 
-    this.newBranch = function () {
-        $(".input-branch").cleanFields();
+    this.newContact = function () {
+        $(".input-contact").cleanFields();
+        $("#btnSaveContact").attr("disabled", false);
     }
 
     this.new = function () {
-        $(".input-stakeholder").cleanFields();
+        $(".input-suppliers").cleanFields();
         $("#btnSave").attr("disabled", false);
     }
 
@@ -306,11 +311,11 @@ function Supplier() {
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "stakeholder/StoreSpecial";
+                url = "suppliers/StoreSpecial";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "stakeholder/UpdateSpecial/" + id;
+                url = "suppliers/UpdateSpecial/" + id;
                 msg = "Edited Record";
             }
 
@@ -332,28 +337,29 @@ function Supplier() {
         }
     }
 
-    this.saveBranch = function () {
+    this.saveContact = function () {
         toastr.remove();
-        var frm = $("#frmBranch");
-        $("#frmBranch #stakeholder_id").val($("#frm #id").val());
+        var frm = $("#frmContact");
+        $("#frmContact #supplier_id").val($("#frm #id").val());
         var data = frm.serialize();
         var url = "", method = "";
-        var id = $("#frmBranch #id").val();
+        var id = $("#frmContact #id").val();
 
         var msg = '';
 
-        var validate = $(".input-branch").validate();
+        var validate = $(".input-contact").validate();
 
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "stakeholder/StoreBranch";
+                url = "suppliers/StoreContact";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "stakeholder/UpdateBranch/" + id;
+                url = "suppliers/UpdateContact/" + id;
                 msg = "Edited Record";
             }
+
 
             $.ajax({
                 url: url,
@@ -362,7 +368,7 @@ function Supplier() {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
-                        tableBranch.ajax.reload();
+                        tableContact.ajax.reload();
                         toastr.success(msg);
                     }
                 }
@@ -375,7 +381,7 @@ function Supplier() {
 
     this.showImages = function (id) {
         $.ajax({
-            url: 'stakeholder/getImages/' + id,
+            url: 'suppliers/getImages/' + id,
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {
@@ -386,8 +392,8 @@ function Supplier() {
     this.printImages = function (data) {
         var html = '';
         $.each(data, function (i, val) {
-            html += '<tr><td>' + val.document + '</td><td>' + val.name + '</td><td><a href="images/stakeholder/' + val.path + '" target="_blank">See</a></td>';
-            html += '<td><button class="btn btn-xs btn-warning" onclick=obj.deleteImage(' + val.id + ',' + val.stakeholder_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>';
+            html += '<tr><td>' + val.document + '</td><td>' + val.name + '</td><td><a href="images/suppliers/' + val.path + '" target="_blank">See</a></td>';
+            html += '<td><button class="btn btn-xs btn-warning" onclick=obj.deleteImage(' + val.id + ',' + val.suppliers_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>';
         })
         $("#contentAttach tbody").html(html);
     }
@@ -399,16 +405,16 @@ function Supplier() {
         var id = $("#frm #id").val();
         var msg = '';
 
-        var validate = $(".input-stakeholder").validate();
+        var validate = $(".input-suppliers").validate();
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "stakeholder";
+                url = "suppliers";
                 msg = "Created Record";
 
             } else {
                 method = 'PUT';
-                url = "stakeholder/" + id;
+                url = "suppliers/" + id;
                 msg = "Edited Record";
             }
 
@@ -432,7 +438,7 @@ function Supplier() {
     this.showModal = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/stakeholder/" + id + "/edit";
+        var url = "/suppliers/" + id + "/edit";
 
         $.ajax({
             url: url,
@@ -441,20 +447,20 @@ function Supplier() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-stakeholder").setFields({data: data.header});
+                $(".input-suppliers").setFields({data: data.header});
                 $("#tabSpecial").removeClass("hide");
-                $("#tabBranch").removeClass("hide");
+                $("#tabContact").removeClass("hide");
                 obj.printImages(data.images);
             }
         })
     }
 
-    this.deleteImage = function (id, stakeholder_id) {
+    this.deleteImage = function (id, suppliers_id) {
         $("#div_" + id).remove();
         var obj = {};
-        obj.stakeholder_id = stakeholder_id;
+        obj.suppliers_id = suppliers_id;
         $.ajax({
-            url: 'stakeholder/deleteImage/' + id,
+            url: 'suppliers/deleteImage/' + id,
             method: 'DELETE',
             data: obj,
             dataType: 'JSON',
@@ -469,7 +475,7 @@ function Supplier() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/stakeholder/" + id;
+            var url = "/suppliers/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -491,7 +497,7 @@ function Supplier() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/stakeholder/deleteBranch/" + id;
+            var url = "/suppliers/deleteBranch/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -514,7 +520,7 @@ function Supplier() {
         var obj = {};
         obj.id = id;
         $.ajax({
-            url: 'stakeholder/updatePrice/' + client_id,
+            url: 'suppliers/updatePrice/' + client_id,
             method: 'PUT',
             data: obj,
             dataType: 'JSON',
@@ -576,29 +582,29 @@ function Supplier() {
                     }
                 }
             ],
-            
-                    initComplete: function () {
-                        this.api().columns().every(function () {
-                            var column = this;
-                            var type = $(column.header()).attr('rowspan');
-                            if (type != undefined) {
-                                var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
-                                        .appendTo($(column.footer()).empty())
-                                        .on('change', function () {
-                                            var val = $.fn.dataTable.util.escapeRegex(
-                                                    $(this).val()
-                                                    );
-                                            column
+
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var type = $(column.header()).attr('rowspan');
+                    if (type != undefined) {
+                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                            );
+                                    column
 //                                            .search(val ? val : '', true, false)
-                                                    .search(val ? '^' + val + '$' : '', true, false)
-                                                    .draw();
-                                        });
-                                column.data().unique().sort().each(function (d, j) {
-                                    select.append('<option value="' + d + '">' + d + '</option>')
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
                                 });
-                            }
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
                         });
-                    },
+                    }
+                });
+            },
         });
     }
 
@@ -647,41 +653,43 @@ function Supplier() {
         });
     }
 
-    this.tableBranch = function (id) {
+    this.tableContact = function (id) {
         var obj = {}, checked = false;
         obj.stakeholder_id = id;
 
-        return $('#tblBranch').DataTable({
+        return $('#tblContact').DataTable({
             "processing": true,
             "serverSide": true,
             destroy: true,
             "ajax": {
-                url: "/api/listBranch",
+                url: "/api/listContact",
                 type: 'GET',
                 data: obj,
             },
             columns: [
                 {data: "id"},
-                {data: "business_name"},
-                {data: "document"},
-                {data: "address_send"},
+                {data: "name"},
+                {data: "last_name"},
+                {data: "city"},
                 {data: "email"},
+                {data: "mobile"},
+                {data: "city"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0],
+                    aTargets: [0, 1, 2, 3, 4, 5],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.showModalContact(' + full.id + ')">' + data + '</a>';
                     }
                 }
                 ,
                 {
-                    targets: [5],
+                    targets: [6],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.deleteBranch(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.deleteContact(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

@@ -1,108 +1,129 @@
 <div class="row">
-    <div class="panel panel-default">
-        <div class="page-title">
-            <div class="row">
-                <div class="col-lg-12 text-right">
-                    <button class="btn btn-success btn-sm" id='btnNew'>
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"> New</span>
-                    </button>
-                    <button class="btn btn-success btn-sm" id='btnSave' disabled>
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"> Save</span>
-                    </button>
+    {!! Form::open(['id'=>'frmContact','files' => true]) !!}
+    <div class="col-lg-7 col-lg-offset-2">
+        <div class="panel panel-info">
+            <div class="page-title" style="">
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        <button class="btn btn-success btn-sm" type="button" id='btnNewContact'>
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                        <button class="btn btn-success btn-sm" type="button" id='btnSaveContact'>
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
-            {!! Form::open(['id'=>'frm','files' => true]) !!}
-            <div class="row">
+            <div class="panel-body">
                 <input type="hidden" id="id" name="id" class="input-contact">
+                <div class="row">
+                   
+                    <input type="hidden" id="stakeholder_id" name="stakeholder_id" class="input-contact">
 
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="name" class="control-label">Name*</label>
-                        <input type="text" class="form-control input-contact" id="name" name="name" placeholder="Name" required>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="name" class="control-label">Nombre *</label>
+                            <input type="text" class="form-control input-contact input-sm" id="name" name="name" placeholder="Name" required disabled>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="last_name" class="control-label">Apellido *</label>
+                            <input type="text" class="form-control  input-contact input-sm" id="last_name" name="last_name" placeholder="Last Name" required disabled>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Last Name*</label>
-                        <input type="text" class="form-control  input-contact" id="last_name" name="last_name" placeholder="Last Name" required>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="last_name" class="control-label">Cargo *</label>
+                            <input type="text" class="form-control  input-contact input-sm" id="position" name="position" placeholder="Position" disabled>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address" class="control-label">Dirección *</label>
+                            <input type="text" class="form-control input-contact input-sm" id="address" name="address" placeholder="Address" required>
+                        </div>
+                    </div>
+                </div>        
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address">Telefono</label>
+                            <input type="text" class="form-control input-contact input-sm" id="phone" name="phone" placeholder="Phone">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address">Celular</label>
+                            <input type="text" class="form-control input-contact input-sm" id="mobile" name="mobile" placeholder="mobile">
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Position*</label>
-                        <input type="text" class="form-control  input-contact" id="position" name="position" placeholder="Position">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address">Correo</label>
+                            <input type="text" class="form-control input-contact input-sm" id="email" name="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address" class="control-label">Fecha de Cumpleaños</label>
+                            <input type="datetime" class="form-control input-contact input-sm" id="birth_date" name="birth_date" placeholder="birth date" 
+                                   value="<?php echo date("Y-m-d H:i"); ?>">
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Address*</label>
-                        <input type="text" class="form-control input-contact" id="address" name="address" placeholder="Address" required>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address">Ciudad</label>
+                            <select class="form-control input-contact input-sm"  id="city_id" name="city_id" data-api="/api/getCity">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address">Sitio Web</label>
+                            <input type="text" class="form-control input-contact input-sm" id="web_site" name="web_site" placeholder="Web site">
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Phone</label>
-                        <input type="text" class="form-control input-contact" id="phone" name="phone" placeholder="Phone">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">mobile</label>
-                        <input type="text" class="form-control input-contact" id="mobile" name="mobile" placeholder="mobile">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">email</label>
-                        <input type="text" class="form-control input-contact" id="email" name="email" placeholder="Email">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">birth Date</label>
-                        <input type="datetime" class="form-control input-contact" id="birth_date" name="birth_date" placeholder="birth date" 
-                               value="<?php echo date("Y-m-d H:i"); ?>">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Stakeholder</label>
-                        <select class="form-control input-contact"  id="stakeholder_id" name="stakeholder_id" data-api="/api/getSupplier" required>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">City</label>
-                        <select class="form-control input-contact"  id="city_id" name="city_id" data-api="/api/getCity">
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Commecial</label>
-                        <select class="form-control input-contact"  id="commercial_id" name="commercial_id" data-api="/api/getCommercial" required>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">Web Site</label>
-                        <input type="text" class="form-control input-contact" id="web_site" name="web_site" placeholder="Web site">
-                    </div>
-                </div>
-
-            </div>
-            {!!Form::close()!!}
         </div>
+    </div>
+</div>
 
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <table class="table table-condensed table-bordered" id="tblContact" width='100%'>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Ciudad</th>
+                            <th>Correo</th>
+                            <th>Celular</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>

@@ -87,11 +87,10 @@ class SupplierController extends Controller {
         return Datatables::eloquent(PricesSpecial::where("client_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
     }
 
-    public function getBranch(Request $req) {
+    public function getContact(Request $req) {
         $in = $req->all();
-        $query = DB::table("branch_office")
-                ->select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_send", "branch_office.email")
-                ->where("branch_office.stakeholder_id", $in["stakeholder_id"])
+        $query = DB::table("vcontacts")
+                ->where("stakeholder_id", $in["stakeholder_id"])
                 ->orderBy("id", "asc");
 
         return Datatables::queryBuilder($query)->make(true);
@@ -105,6 +104,16 @@ class SupplierController extends Controller {
         } else {
             PricesSpecial::where("client_id", $id)->update(['priority' => false]);
         }
+
+        return response()->json(["success" => true]);
+    }
+
+    public function updateContact(Request $data, $id) {
+        $input = $data->all();
+        unset($input["id"]);
+        $contact = Contact::find($id);
+        dd($contact);
+        $contact->fill($input)->save();
 
         return response()->json(["success" => true]);
     }
@@ -123,13 +132,13 @@ class SupplierController extends Controller {
         }
     }
 
-    public function storeBranch(Request $request) {
+    public function storeContact(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
             $input["user_insert"] = Auth::user()->id;
             $input["status_id"] = 1;
-            $result = Branch::create($input);
+            $result = Contact::create($input);
             if ($result) {
                 return response()->json(['success' => true]);
             } else {
@@ -481,8 +490,8 @@ class SupplierController extends Controller {
         return response()->json(["success" => true, "detail" => $list]);
     }
 
-    public function deleteBranch(Request $data, $id) {
-        $image = Branch::find($id);
+    public function deleteContact(Request $data, $id) {
+        $image = Contact::find($id);
         $image->delete();
         return response()->json(["success" => true]);
     }

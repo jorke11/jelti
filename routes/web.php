@@ -47,8 +47,8 @@ Route::get('/suppliers/getImages/{id}', 'Suppliers\SupplierController@getImages'
 
 Route::post('/suppliers/StoreSpecial', 'Suppliers\SupplierController@storeSpecial');
 Route::put('/suppliers/updatePrice/{id}', 'Suppliers\SupplierController@updatePrice');
-Route::post('/suppliers/StoreBranch', 'Suppliers\SupplierController@storeBranch');
-Route::delete('/suppliers/deleteBranch/{id}', 'Suppliers\SupplierController@deleteBranch');
+Route::post('/suppliers/StoreContact', 'Suppliers\SupplierController@storeContact');
+Route::delete('/suppliers/deleteContact/{id}', 'Suppliers\SupplierController@deleteContact');
 Route::post('/suppliers/addChage', 'Suppliers\SupplierController@addChanges');
 
 Route::post('/suppliers/addTax', 'Suppliers\SupplierController@storeTax');
@@ -286,7 +286,7 @@ Route::get('/api/listClient', function() {
 //            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
 //            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
 //            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
-    if (Auth::user()->role_id != 1 || Auth::user()->role_id != 5) {
+    if (Auth::user()->role_id != 1) {
         $query->where("responsible_id", Auth::user()->id);
     }
     return Datatables::queryBuilder($query)->make(true);

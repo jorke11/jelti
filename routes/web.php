@@ -286,7 +286,7 @@ Route::get('/api/listClient', function() {
 //            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
 //            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
 //            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
-    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+    if (Auth::user()->role_id != 1 || Auth::user()->role_id != 5) {
         $query->where("responsible_id", Auth::user()->id);
     }
     return Datatables::queryBuilder($query)->make(true);
@@ -356,9 +356,9 @@ Route::get('/api/listEntry', function() {
             ->leftjoin("parameters", "parameters.code", "entries.status_id")
             ->where("parameters.group", "entry");
 
-//    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-//        $query->where("entries.responsible_id", Auth::user()->id);
-//    }
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id == 5) {
+        $query->where("entries.responsible_id", Auth::user()->id);
+    }
 
     return Datatables::queryBuilder($query)->make(true);
 });

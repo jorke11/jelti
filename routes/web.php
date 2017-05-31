@@ -439,7 +439,8 @@ Route::get('/report/fulfillmentCli/{init}/{end}', 'Report\SalesController@getFul
 
 Route::get('/briefcase', 'Sales\BriefcaseController@index');
 
-Route::get('/briefcase/getInvoices/{id}', "Sales\BriefcaseController@getList");
+Route::get('/briefcase/getInvoices', "Sales\BriefcaseController@getList");
+Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment");
 
 
 

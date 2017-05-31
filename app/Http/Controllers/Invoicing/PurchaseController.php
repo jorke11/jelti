@@ -94,8 +94,6 @@ class PurchaseController extends Controller {
                 $purchase_id = Purchases::create($input["header"])->id;
                 $this->updateConsecutive(4);
 
-
-
                 foreach ($input["detail"] as $i => $val) {
 
                     if ($val["quantity"] != 0) {
@@ -254,6 +252,7 @@ class PurchaseController extends Controller {
             if ($pur["status_id"] == 2) {
                 return response()->json(["success" => false, "msg" => "Already sended"], 409);
             } else {
+                $this->mails = array();
                 $pur->status_id = 2;
                 $pur->save();
 
@@ -272,19 +271,15 @@ class PurchaseController extends Controller {
                 $input["phone"] = $user->phone;
 
                 $input["detail"] = DB::table("purchases_detail")
-                                ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", 
-                                        DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", 
-                                        DB::raw("(purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)
-                                                + ((purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)*purchases_detail.tax) as total"), "products.bar_code", 
-                                                DB::raw("(products.tax * 100) as tax"), 
-                                        DB::raw("purchases_detail.value * purchases_detail.units_supplier as priceperbox"))
+                                ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("(purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)
+                                                + ((purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)*purchases_detail.tax) as total"), "products.bar_code", DB::raw("(products.tax * 100) as tax"), DB::raw("purchases_detail.value * purchases_detail.units_supplier as priceperbox"))
                                 ->join("products", "products.id", "purchases_detail.product_id")
                                 ->where("purchase_id", $purchase->id)->get();
 
                 $email = Email::where("description", "purchases")->first();
                 $emDetail = EmailDetail::where("email_id", $email->id)->get();
                 if (count($emDetail) > 0) {
-                    $this->mails = array();
+                    $this->mails[] = $users->email;
                     foreach ($emDetail as $value) {
                         $this->mails[] = $value->description;
                     }

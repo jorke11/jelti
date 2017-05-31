@@ -19,7 +19,8 @@
                         <th>Ciudad</th>
                         <th>dias_vencidos</th>
                         <th>Estado</th>
-                        <th tipo="prueba">Action</th>
+                        <th tipo="prueba">Factura</th>
+                        <th tipo="prueba">Pagar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +33,7 @@
                         <th>Commercial</th>
                         <th>City</th>
                         <th>Días Vencidos</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </tfoot>

@@ -140,6 +140,8 @@ for ($i = 1; $i <= $count; $i++) {
                             </table>
                             <br>
                             <br>
+                            <br>
+                            <br>
 
                             <?php
                             $cont = 0;

@@ -157,6 +157,7 @@ function Sale() {
         $(".input-detail").cleanFields();
         $(".input-fillable").prop("readonly", false);
         $("#btnSave").prop("disabled", false);
+        $("#btnSend,#btnPdf").prop("disabled", true);
         $("#tblDetail tbody").empty();
         $("#frm #status_id").val(0).trigger("change").prop("disabled", true);
         $("#frm #supplier_id").prop("disabled", false);

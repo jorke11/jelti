@@ -106,7 +106,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Teléfono:</label>
-                    <input type="text" class="form-control input-departure input-sm input-fillable" id="phone" name="phone">
+                    <input type="text" class="form-control input-departure input-sm input-fillable" id="phone" name="phone" required> 
                 </div>
             </div>
         </div>

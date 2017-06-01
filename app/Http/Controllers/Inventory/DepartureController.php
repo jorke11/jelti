@@ -779,41 +779,42 @@ class DepartureController extends Controller {
 
             Excel::load($this->path, function($reader) {
                 foreach ($reader->get() as $i => $book) {
-
-                    if (isset($book->item)) {
-                        $pro = Products::where("alias_reference", (int) $book->item)->first();
-                        if ($pro == null) {
+                    if ($book->unidades_total != 0) {
+                        if (isset($book->item)) {
+                            $pro = Products::where("alias_reference", (int) $book->item)->first();
+                            if ($pro == null) {
+                                $pro = Products::where("reference", (int) $book->sf_code)->first();
+                            }
+                        } else {
                             $pro = Products::where("reference", (int) $book->sf_code)->first();
                         }
-                    } else {
-                        $pro = Products::where("reference", (int) $book->sf_code)->first();
-                    }
 
 
-                    if ($pro != null) {
-                        $price_sf = $pro->precio_unitario;
-                        if (Auth::user()->role_id == 1) {
+                        if ($pro != null) {
+                            $price_sf = $pro->precio_unitario;
+                            if (Auth::user()->role_id == 1) {
 
-                            if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {
-                                $price_sf = $book->precio_unitario;
+                                if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {
+                                    $price_sf = $book->precio_unitario;
+                                }
                             }
-                        }
 
-                        $this->listProducts[] = array(
-                            "row" => $i,
-                            "product_id" => $pro->id,
-                            "product" => $pro->reference . " - " . $pro->title,
-                            "quantity" => $book->unidades_total,
-                            'price_sf' => $price_sf,
-                            "valueFormated" => "$ " . number_format(($price_sf), 2, ',', '.'),
-                            "totalFormated" => "$ " . number_format(($pro->units_sf * $price_sf * $book->unidades_total), 2, ',', '.'),
-                            "real_quantity" => "",
-                            "totalFormated_real" => "",
-                            "comment" => "",
-                            "status" => "new",
-                        );
-                    } else {
-                        $this->errors[] = $book;
+                            $this->listProducts[] = array(
+                                "row" => $i,
+                                "product_id" => $pro->id,
+                                "product" => $pro->reference . " - " . $pro->title,
+                                "quantity" => $book->unidades_total,
+                                'price_sf' => $price_sf,
+                                "valueFormated" => "$ " . number_format(($price_sf), 2, ',', '.'),
+                                "totalFormated" => "$ " . number_format(($pro->units_sf * $price_sf * $book->unidades_total), 2, ',', '.'),
+                                "real_quantity" => "",
+                                "totalFormated_real" => "",
+                                "comment" => "",
+                                "status" => "new",
+                            );
+                        } else {
+                            $this->errors[] = $book;
+                        }
                     }
                 }
             })->get();

@@ -7,8 +7,8 @@
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist" id='myTabs'>
-        <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">Lista</a></li>
-        <li role="presentation" id="insideManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Administracion</a></li>
+        <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">Facturas</a></li>
+        <li role="presentation" id="insideManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Administración</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -19,7 +19,6 @@
                     @include('Sales.CreditNote.list')
                 </div>
             </div>
-
         </div>
         <div role="tabpanel" class="tab-pane " id="management">
             @include('Sales.CreditNote.management')
@@ -28,5 +27,5 @@
     </div>
 </div>
 @include('Sales.CreditNote.newDetail')
-{!!Html::script('js/Sales/Purse.js')!!}
+{!!Html::script('js/Sales/CreditNote.js')!!}
 @endsection

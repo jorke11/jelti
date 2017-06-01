@@ -697,8 +697,8 @@ class DepartureController extends Controller {
                 ->join("cities", "cities.id", "stakeholder.city_id")
                 ->first();
 
-         $user = Users::find($dep["responsible_id"]);
-        
+        $user = Users::find($dep["responsible_id"]);
+
         $totalExemp = 0;
         $totalTax5 = 0;
         $totalTax19 = 0;
@@ -779,7 +779,16 @@ class DepartureController extends Controller {
 
             Excel::load($this->path, function($reader) {
                 foreach ($reader->get() as $i => $book) {
-                    $pro = Products::where("reference", (int) $book->sf_code)->first();
+
+                    if (isset($book->item)) {
+                        $pro = Products::where("alias_reference", (int) $book->item)->first();
+                        if ($pro == null) {
+                            $pro = Products::where("reference", (int) $book->sf_code)->first();
+                        }
+                    } else {
+                        $pro = Products::where("reference", (int) $book->sf_code)->first();
+                    }
+
 
                     if ($pro != null) {
                         $price_sf = $pro->precio_unitario;

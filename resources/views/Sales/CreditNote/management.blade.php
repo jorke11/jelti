@@ -88,7 +88,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Dirección:</label>
-                    <input type="text" class="form-control input-departure input-sm input-fillable" id="address" name="address" required>
+                    <input type="text" class="form-control input-departure input-sm input-fillable" id="address" name="address" readonly="">
                 </div>
             </div>
             <div class="col-lg-2">
@@ -110,7 +110,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Flete:</label>
-                    <input type="text" class="form-control input-departure" id="shipping_cost" name="shipping_cost" data-type="number" required>
+                    <input type="text" class="form-control input-departure" id="shipping_cost" name="shipping_cost" data-type="number" required readonly="">
                 </div>
             </div>
             <div class="col-lg-4">

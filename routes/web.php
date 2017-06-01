@@ -36,6 +36,7 @@ Route::delete('/product/deleteImage/{id}', 'Administration\ProductController@del
 Route::get('/product/getImages/{id}', 'Administration\ProductController@getImages');
 Route::post('/product/StoreSpecial', 'Administration\ProductController@storeSpecial');
 Route::post('/product/uploadExcel', 'Administration\ProductController@storeExcel');
+Route::post('/product/uploadExcelCode', 'Administration\ProductController@storeExcelCode');
 
 Route::resource('/suppliers', 'Suppliers\SupplierController');
 Route::post('/suppliers/upload', 'Suppliers\SupplierController@uploadImage');
@@ -232,6 +233,29 @@ Route::resource('/parameter', 'Administration\ParametersController');
 
 Route::get('/reportSales', 'Report\SalesController@index');
 
+Route::resource('/creditnote', 'Sales\creditnoteController');
+
+Route::get('/api/listCreditNote', function() {
+
+    $query = DB::table('vcreditnote');
+
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("responsible_id", Auth::user()->id);
+    }
+
+    return Datatables::queryBuilder($query)->make(true);
+});
+
+Route::get('/api/CreditNoteGenerated', function() {
+
+    $query = DB::table('vcreditnote');
+
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("responsible_id", Auth::user()->id);
+    }
+
+    return Datatables::queryBuilder($query)->make(true);
+});
 
 
 Route::get('/api/listCategory', function() {
@@ -372,16 +396,7 @@ Route::get('/api/listDeparture', function() {
 
     return Datatables::queryBuilder($query)->make(true);
 });
-Route::get('/api/listCreditNote', function() {
 
-    $query = DB::table('vcreditnote');
-
-    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-        $query->where("responsible_id", Auth::user()->id);
-    }
-
-    return Datatables::queryBuilder($query)->make(true);
-});
 
 Route::get('/api/listOrder', function() {
     return Datatables::eloquent(Models\Inventory\Orders::query())->make(true);

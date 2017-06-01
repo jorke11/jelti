@@ -19,7 +19,8 @@
                         <th>Warehouse</th>
                         <th>City</th>
                         <th>Status</th>
-                        <th tipo="prueba">Action</th>
+                        <th tipo="prueba">Factura</th>
+                        <th tipo="prueba">Nota credito</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,6 +36,7 @@
                         <th>City</th>
                         <th>Status</th>
                         <th></th>
+                        <th tipo="prueba">Nota credito</th>
                     </tr>
                 </tfoot>
             </table>

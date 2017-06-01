@@ -15,6 +15,7 @@
             </a>
         </li>
         <li role="presentation" id="tabUplod"><a href="#upload" aria-controls="special" role="tab" data-toggle="tab">Load</a></li>
+        <li role="presentation" id="tabUplod"><a href="#upload_code" aria-controls="special" role="tab" data-toggle="tab">Load Code</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -32,6 +33,9 @@
         </div>
         <div role="tabpanel" class="tab-pane " id="upload">
             @include('Administration.products.upload')
+        </div>
+        <div role="tabpanel" class="tab-pane " id="upload_code">
+            @include('Administration.products.upload_code')
         </div>
 
     </div>

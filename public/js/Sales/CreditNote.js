@@ -1,4 +1,4 @@
-function Purse() {
+function CreditNote() {
     var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem;
     this.init = function () {
         table = this.table();
@@ -22,6 +22,8 @@ function Purse() {
                 $("#frm #phone_supplier").val("");
             }
         });
+
+        $("#tabNotes").click(this.tableNotes);
 
 
         $("#quantity").change(function () {
@@ -180,19 +182,11 @@ function Purse() {
                     data.header = $(".input-departure").getData();
                     data.detail = listProducts;
 
-                    if (id == '') {
-                        method = 'POST';
-                        url = "departure";
-                        msg = "Created Record";
-                    } else {
-                        method = 'PUT';
-                        url = "departure/" + id;
-                        msg = "Edited Record";
-                    }
+                    msg = "Created Record";
 
                     $.ajax({
-                        url: url,
-                        method: method,
+                        url: 'creditnote',
+                        method: 'post',
                         data: data,
                         dataType: 'JSON',
                         beforeSend: function () {
@@ -207,6 +201,7 @@ function Purse() {
                                 toastr.success(msg);
                                 $("#btnmodalDetail").attr("disabled", false);
                                 obj.printDetail(data.detail);
+                                $("#loading-super").addClass("hidden");
                             }
                         },
                         complete: function () {
@@ -216,24 +211,6 @@ function Purse() {
                 } else {
                     toastr.error("Detail empty");
                 }
-            } else {
-                var param = {};
-                param.id = $("#id_orderext").val();
-                $.ajax({
-                    url: "../../departure/storeExt",
-                    method: 'POST',
-                    data: data,
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if (data.success == true) {
-                            $(".input-departure").setFields({data: data.header})
-
-                            toastr.success("ok");
-                            $("#btnmodalDetail").attr("disabled", false);
-                            location.href = "/departure";
-                        }
-                    }
-                })
             }
         } else {
             toastr.error("input required");
@@ -244,6 +221,7 @@ function Purse() {
 
     this.saveDetail = function () {
         toastr.remove();
+        var param = {};
         $("#frmDetail #departure_id").val($("#frm #id").val());
 
         var data = {}, value = 0, total = 0;
@@ -253,64 +231,17 @@ function Purse() {
         var msg = 'Record Detail';
         var validate = $(".input-detail").validate();
 
-        if (validate.length == 0) {
-            if (id != '') {
-                var id = $("#frmDetail #id").val();
+        param.quantity = $("#frmDetail #quantity").val();
 
-                var frm = $("#frmDetail");
-                var data = frm.serialize();
-                var url = "/departure/detail/" + id;
-                $.ajax({
-                    url: url,
-                    method: "PUT",
-                    data: data,
-                    dataType: 'JSON',
-                    success: function (resp) {
-                        if (resp.success == true) {
-                            $("#modalDetail").modal("hide");
-                            obj.printDetail(resp.data);
-
-                        } else {
-                            toastr.error(resp.success.msg);
-                        }
-                    }, error(xhr, responseJSON, thrown) {
-                        toastr.error(xhr.responseJSON.msg);
-                    }
-                })
-
-            } else {
-                if ($("#frmDetail #rowItem").val() == '-1') {
-
-                    listProducts.push({
-                        row: listProducts.length,
-                        product_id: $("#frmDetail #product_id").val(),
-                        product: $.trim($("#frmDetail #product_id").text()),
-                        quantity: $("#frmDetail #quantity").val(),
-                        valueFormated: $("#frmDetail #value").val(),
-                        totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
-                        real_quantity: '',
-                        totalFormated_real: '',
-                        comment: '',
-                        status: 'new'
-                    });
-//                    $(".input-detail").cleanFields();
-                    $("#frmDetail #product_id").text("");
-                    $("#frmDetail #value").val("");
-//                    $("#frmDetail #value").val("");
-                    msg += " add";
-                } else {
-                    listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
-                    listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
-                    msg += " edited";
-                }
-
-
-                toastr.success(msg);
-                obj.printDetailTmp();
-            }
-
+        obj.getItem($("#frmDetail #product_id").val());
+        var quantity = listProducts[rowItem].quantity;
+        if (quantity >= $("#frmDetail #quantity").val()) {
+            listProducts[rowItem].quantity = $("#frmDetail #quantity").val();
+            obj.printDetailTmp();
+            toastr.success("Proceso realizado");
+            $("#modalDetail").modal("hide");
         } else {
-            toastr.error("input required");
+            toastr.error("La cantidad ingresa no puede ser mayor a " + quantity);
         }
     }
 
@@ -333,18 +264,17 @@ function Purse() {
         })
     }
 
-    this.printDetailTmp = function (data, btnEdit = true, btnDel = true) {
+    this.printDetailTmp = function () {
         var html = "", htmlEdit = "", htmlDel = "";
         $("#tblDetail tbody").html("");
         $.each(listProducts, function (i, val) {
 
             if (val != undefined) {
-                htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
-
+                htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + i + ')>Edit</button>'
 
                 val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
 
-                html += '<tr id="row_' + val.row + '">';
+                html += '<tr id="row_' + i + '">';
                 html += "<td>" + val.product + "</td>";
                 html += "<td>" + val.comment + "</td>";
                 html += "<td>" + val.quantity + "</td>";
@@ -364,7 +294,7 @@ function Purse() {
     this.showModal = function (id) {
         var frm = $("#frmEdit"), btnEdit = true, btnDel = true;
         var data = frm.serialize();
-        var url = "/departure/" + id + "/edit";
+        var url = "/creditnote/" + id + "/edit";
         $.ajax({
             url: url,
             method: "GET",
@@ -483,6 +413,21 @@ function Purse() {
                         return html;
                     }
                 }
+                ,
+                {
+                    targets: [10],
+                    searchable: false,
+                    mData: null,
+                    mRender: function (data, type, full) {
+                        if (data.credit_note != 0) {
+                            html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                        } else {
+                            html = ''
+                        }
+                        
+                        return html;
+                    }
+                }
             ],
             initComplete: function () {
                 this.api().columns().every(function () {
@@ -571,5 +516,5 @@ function Purse() {
 
 }
 
-var obj = new Purse();
+var obj = new CreditNote();
 obj.init();

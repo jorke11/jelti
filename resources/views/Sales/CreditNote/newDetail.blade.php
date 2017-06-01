@@ -47,38 +47,6 @@
                     </div>
 
                 </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Quantity with units_sf</label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity_units" readonly="">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Value with units_sf</label>
-                            <input type="text" class="form-control input-detail input-sm" id="value_units" readonly="">
-                        </div>
-                    </div>
-
-                </div>
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Quantity real</label>
-                            <input type="text" class="form-control input-detail input-sm" id="real_quantity" name='real_quantity' min='0' placeholder="Quantity real" data-type="number"
-                                   <?php echo (Auth::user()->role != 4) ? '' : "readonly" ?>>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Description</label>
-                            <textarea class="form-control input-detail" id="description" name="description"></textarea>
-                        </div>
-                    </div>
-                </div>
-                @endif
                 {!!Form::close()!!}
             </div>
             <div class="modal-footer">

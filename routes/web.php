@@ -372,6 +372,16 @@ Route::get('/api/listDeparture', function() {
 
     return Datatables::queryBuilder($query)->make(true);
 });
+Route::get('/api/listCreditNote', function() {
+
+    $query = DB::table('vcreditnote');
+
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("responsible_id", Auth::user()->id);
+    }
+
+    return Datatables::queryBuilder($query)->make(true);
+});
 
 Route::get('/api/listOrder', function() {
     return Datatables::eloquent(Models\Inventory\Orders::query())->make(true);

@@ -50,10 +50,10 @@
             <td class="font-title">Resolución Dian 320001359848</td>
         </tr>
         <tr>
-            <td class="font-title">del 29.02 de 2016</td>
+            <td class="font-title">del 03/02/2016</td>
         </tr>
         <tr>
-            <td class="font-title">Numeración Autorizada</td>
+            <td class="font-title">Numeración Autorizada 00003 al 50000</td>
         </tr>
     </table>
     <br>

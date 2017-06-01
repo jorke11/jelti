@@ -84,3 +84,16 @@ JOIN warehouses w ON w.id=e.warehouse_id
 JOIN cities c ON c.id=e.city_id
 JOIN parameters p ON p.code=e.status_id and p.group='entry'
 ORDER BY p.code
+
+
+create view vcreditnote as 
+            select d.id,d.consecutive,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name,'') as client,w.description as warehouse,
+            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible
+            from departures d
+            LEFT JOIN branch_office s ON s.id = d.branch_id
+            JOIN warehouses w ON w.id = d.warehouse_id
+            JOIN cities c ON c.id = d.city_id
+            JOIN parameters p ON p.id = d.status_id
+            JOIN users u ON u.id = d.responsible_id
+            WHERE p.group='entry' and d.invoice IS NOT NULL
+            ORDER BY d.id DESC;

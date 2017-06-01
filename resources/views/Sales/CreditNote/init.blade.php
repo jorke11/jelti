@@ -22,9 +22,11 @@
 
         </div>
         <div role="tabpanel" class="tab-pane " id="management">
+            @include('Sales.CreditNote.management')
         </div>
 
     </div>
 </div>
+@include('Sales.CreditNote.newDetail')
 {!!Html::script('js/Sales/Purse.js')!!}
 @endsection

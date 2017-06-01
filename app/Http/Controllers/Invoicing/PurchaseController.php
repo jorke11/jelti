@@ -252,51 +252,61 @@ class PurchaseController extends Controller {
             if ($pur["status_id"] == 2) {
                 return response()->json(["success" => false, "msg" => "Already sended"], 409);
             } else {
-                $this->mails = array();
-                $pur->status_id = 2;
-                $pur->save();
+                try {
+                    DB::beginTransaction();
+                    $this->mails = array();
+                    $pur->status_id = 2;
+                    $pur->save();
 
-                $purchase = Purchases::findOrFail($in["id"]);
-                $sup = Stakeholder::find($purchase->supplier_id);
+                    $purchase = Purchases::findOrFail($in["id"]);
+                    $sup = Stakeholder::find($purchase->supplier_id);
 
-                $input["consecutive"] = $purchase->consecutive;
-                $ware = Warehouses::findOrFail($purchase->warehouse_id);
-                $input["address"] = $ware->address;
-                $input["warehouse"] = $ware->description;
+                    $input["consecutive"] = $purchase->consecutive;
+                    $ware = Warehouses::findOrFail($purchase->warehouse_id);
+                    $input["address"] = $ware->address;
+                    $input["warehouse"] = $ware->description;
 
-                $user = Users::findOrFail($ware->responsible_id);
+                    $user = Users::findOrFail($ware->responsible_id);
 
-                $input["name"] = $user->name;
-                $input["last_name"] = $user->last_name;
-                $input["phone"] = $user->phone;
+                    $input["name"] = $user->name;
+                    $input["last_name"] = $user->last_name;
+                    $input["phone"] = $user->phone;
 
-                $input["detail"] = DB::table("purchases_detail")
-                                ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("(purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)
+                    $input["detail"] = DB::table("purchases_detail")
+                                    ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("(purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)
                                                 + ((purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)*purchases_detail.tax) as total"), "products.bar_code", DB::raw("(products.tax * 100) as tax"), DB::raw("purchases_detail.value * purchases_detail.units_supplier as priceperbox"))
-                                ->join("products", "products.id", "purchases_detail.product_id")
-                                ->where("purchase_id", $purchase->id)->get();
+                                    ->join("products", "products.id", "purchases_detail.product_id")
+                                    ->where("purchase_id", $purchase->id)->get();
 
-                $email = Email::where("description", "purchases")->first();
-                $emDetail = EmailDetail::where("email_id", $email->id)->get();
-                if (count($emDetail) > 0) {
-                    $this->mails[] = $users->email;
-                    foreach ($emDetail as $value) {
-                        $this->mails[] = $value->description;
+                    $email = Email::where("description", "purchases")->first();
+                    $emDetail = EmailDetail::where("email_id", $email->id)->get();
+                    if (count($emDetail) > 0) {
+                        $this->mails[] = $user->email;
+                        foreach ($emDetail as $value) {
+                            $this->mails[] = $value->description;
+                        }
+
+                        $cit = Cities::find($ware->city_id);
+
+                        $this->subject = "SuperFuds " . date("d/m") . " " . $sup->business . " " . $cit->description . " " . $pur->consecutive;
+                        $input["city"] = $cit->description;
+
+                        Mail::send("Notifications.purchase", $input, function($msj) {
+                            $msj->subject($this->subject);
+                            $msj->to($this->mails);
+                        });
                     }
+                    
+                    
+                    
+                    
+                    DB::commit();
 
-                    $cit = Cities::find($ware->city_id);
-
-                    $this->subject = "SuperFuds " . date("d/m") . " " . $sup->business . " " . $cit->description . " " . $pur->consecutive;
-                    $input["city"] = $cit->description;
-
-                    Mail::send("Notifications.purchase", $input, function($msj) {
-                        $msj->subject($this->subject);
-                        $msj->to($this->mails);
-                    });
+                    return response()->json(["success" => true, "header" => $pur]);
+                } catch (Exception $exp) {
+                    DB::rollback();
+                    return response()->json(['success' => false, "msg" => "Wrong"], 409);
                 }
-
-
-                return response()->json(["success" => true, "header" => $pur]);
             }
         } else {
             return response()->json(["success" => false, "msg" => "Detail empty"], 409);

@@ -158,8 +158,8 @@ class DepartureController extends Controller {
                 ->where("stakeholder.id", $sale["client_id"])
                 ->join("cities", "cities.id", "stakeholder.city_id")
                 ->first();
-        
-        $user = Users::find($sale["responsible_id"]);
+        $user = Users::find($dep["responsible_id"]);
+         
         $term = 7;
 
         if ($cli["term"] != null) {
@@ -172,6 +172,7 @@ class DepartureController extends Controller {
         $cli["emition"] = $this->formatDate($sale["created"]);
         $cli["observations"] = $sale["description"];
         $cli["expiration"] = $this->formatDate($expiration);
+        
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
 
         $totalExemp = 0;
@@ -201,7 +202,7 @@ class DepartureController extends Controller {
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
         $tool = new ToolController();
-
+        
         $cli["business_name"] = $tool->cleanText($cli["business_name"]);
         $data = [
             'rete' => 0,
@@ -221,7 +222,9 @@ class DepartureController extends Controller {
             'textTotal' => trim($tool->to_word(round($totalWithTax)))
         ];
 
-//        return view('Inventory.departure.pdf',compact("data"));
+        
+        
+        
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
@@ -660,9 +663,11 @@ class DepartureController extends Controller {
 
     public function generateInvoice($id) {
         $dep = Departures::findOrfail($id);
+        
         $dep->invoice = $this->createConsecutive(1);
         $dep->save();
         $this->updateConsecutive(1);
+        
         return response()->json(["success" => true, "consecutive" => $dep->invoice]);
     }
 

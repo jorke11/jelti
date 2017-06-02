@@ -468,4 +468,28 @@ Route::get('/briefcase/getInvoices', "Sales\BriefcaseController@getList");
 Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment");
 
 
+Route::get('/reportClient', "Report\ClientController@index");
+Route::get('/api/reportClient', function() {
+
+    $query = DB::table('vreportclient');
+    return Datatables::queryBuilder($query)->make(true);
+});
+
+Route::get('/reportSupplier', "Report\SupplierController@index");
+Route::get('/api/reportSupplier', function() {
+    $query = DB::table('vreportsupplier');
+    return Datatables::queryBuilder($query)->make(true);
+});
+
+Route::get('/reportProduct', "Report\ProductController@index");
+Route::get('/api/reportProduct', function() {
+    $query = DB::table('vreportproduct');
+    return Datatables::queryBuilder($query)->make(true);
+});
+
+Route::get('/reportCommercial', "Report\CommercialController@index");
+Route::get('/api/reportCommercial', function() {
+    $query = DB::table('vreportcommercial');
+    return Datatables::queryBuilder($query)->make(true);
+});
 

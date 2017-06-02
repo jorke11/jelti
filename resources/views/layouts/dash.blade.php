@@ -89,7 +89,7 @@
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view">
                         <div class="navbar nav_title" style="border: 0;">
-                            <a href="/home" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>Superfuds</span></a>
+                            <a href="/home" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>SuperFuds</span></a>
                         </div>
 
                         <div class="clearfix"></div>
@@ -192,13 +192,18 @@
                                     @endif
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Ventas <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
-                                            <li><a href="/entry">Entrada</a></li>
-                                            @endif
+
 
                                             <li><a href="/departure">Ordenes de Venta</a></li>                                    
                                             <li><a href="/creditNote">Notas Credito</a></li>
                                             <li><a href="/briefcase">Cartera</a></li>                                    
+                                            <li><a href="/stock">Stock</a></li>                                    
+                                        </ul>
+                                    </li>
+
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Inventario <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/entry">Entrada</a></li>
                                             <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>

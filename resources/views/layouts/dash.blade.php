@@ -127,9 +127,9 @@
                                         </ul>
                                     </li>
                                     @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
-                                    <li><a><i class="fa fa-home"></i> Sellers <span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i class="fa fa-home"></i> Tareas <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="/activity">Activities</a></li>
+                                            <li><a href="/activity">Actividades</a></li>
 
                                             <li><a href="/fulfillment">Cumplimiento</a></li>
                                             <li><a href="/ticket">Tickets</a></li>

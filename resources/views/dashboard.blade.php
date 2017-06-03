@@ -43,7 +43,7 @@
                                 <i class="fa fa-shopping-cart fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">{{$client->business}}</div>
+                                <div class="huge">Cliente <br>{{$client->business}}</div>
                                 <div> Total Unidades {{$client->cantidadtotal}}<br>
                                     Monto: $ {{number_format(round($client->total), 0, ',', '.')}}</div>
                             </div>
@@ -70,7 +70,7 @@
                                 <i class="fa fa-suitcase fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">{{$supplier->proveedor}}</div>
+                                <div class="huge">Proveedor<br>{{$supplier->proveedor}}</div>
                                 <div> Total Unidades {{$supplier->cantidadtotal}}<br>
                                     Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}</div>
                             </div>
@@ -95,7 +95,7 @@
                                 <i class="fa fa-star fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">{{$product->title}}</div>
+                                <div class="huge">Producto<br>{{$product->title}}</div>
                                 <div> Unidades Vendidas {{$product->cantidadtotal}}<br>
                                     Monto: $ {{number_format(round($product->total), 0, ',', '.')}}</div>
                             </div>
@@ -121,7 +121,7 @@
                                 <i class="fa fa-user-circle-o fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">{{$commercial->vendedor}}</div>
+                                <div class="huge">Mejor Vendedor<br>{{$commercial->vendedor}}</div>
                                 <div> Total Unidades {{$commercial->cantidadtotal}}<br>
                                     Monto: $ {{number_format(round($commercial->total), 0, ',', '.')}}</div>
                             </div>

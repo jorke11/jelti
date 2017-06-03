@@ -38,6 +38,18 @@ where product_id is not null
 group by 1
 order by 3 desc
 
+
+CREATE OR REPLACE VIEW public.vreportsupplier AS 
+ SELECT s.business,
+    round(sum(d.quantity::numeric * d.units_sf)) AS totalunidades,
+    round(sum(d.value * d.quantity::numeric * d.units_sf)) AS total
+   FROM sales_detail d
+     JOIN products p ON p.id = d.product_id
+     JOIN stakeholder s ON s.id = p.supplier_id
+  WHERE d.product_id IS NOT NULL
+  GROUP BY s.business
+  ORDER BY (round(sum(d.value * d.quantity::numeric * d.units_sf))) DESC;
+
 --ventas por comercial
 create or replace view vreportcommercial as 
 select u.name ||' '|| u.last_name as vendedor,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total

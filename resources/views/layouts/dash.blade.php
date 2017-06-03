@@ -89,7 +89,7 @@
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view">
                         <div class="navbar nav_title" style="border: 0;">
-                            <a href="/home" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>SuperFuds</span></a>
+                            <a href="/home" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>SuperFüds</span></a>
                         </div>
 
                         <div class="clearfix"></div>

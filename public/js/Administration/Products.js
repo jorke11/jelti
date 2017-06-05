@@ -44,6 +44,7 @@ function Product() {
         $("#btnSaveSpecial").click(this.saveSpecial);
 
         $("#btnUpload").click(this.uploadExcel)
+        $("#btnUpload_code").click(this.uploadExcelCode)
     }
 
     this.uploadExcel = function () {
@@ -51,6 +52,24 @@ function Product() {
 
         $.ajax({
             url: 'product/uploadExcel',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data);
+                obj.setDetailExcel(data.data)
+            }
+        })
+
+    }
+    this.uploadExcelCode = function () {
+        var formData = new FormData($("#frmFileCode")[0]);
+
+        $.ajax({
+            url: 'product/uploadExcelCode',
             method: 'POST',
             data: formData,
             dataType: 'JSON',

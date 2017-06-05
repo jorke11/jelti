@@ -36,6 +36,7 @@ Route::delete('/product/deleteImage/{id}', 'Administration\ProductController@del
 Route::get('/product/getImages/{id}', 'Administration\ProductController@getImages');
 Route::post('/product/StoreSpecial', 'Administration\ProductController@storeSpecial');
 Route::post('/product/uploadExcel', 'Administration\ProductController@storeExcel');
+Route::post('/product/uploadExcelCode', 'Administration\ProductController@storeExcelCode');
 
 Route::resource('/suppliers', 'Suppliers\SupplierController');
 Route::post('/suppliers/upload', 'Suppliers\SupplierController@uploadImage');
@@ -47,9 +48,12 @@ Route::get('/suppliers/getImages/{id}', 'Suppliers\SupplierController@getImages'
 
 Route::post('/suppliers/StoreSpecial', 'Suppliers\SupplierController@storeSpecial');
 Route::put('/suppliers/updatePrice/{id}', 'Suppliers\SupplierController@updatePrice');
-Route::post('/suppliers/StoreBranch', 'Suppliers\SupplierController@storeBranch');
-Route::delete('/suppliers/deleteBranch/{id}', 'Suppliers\SupplierController@deleteBranch');
+Route::put('/suppliers/UpdateContact/{id}', 'Suppliers\SupplierController@updateContact');
+Route::post('/suppliers/StoreContact', 'Suppliers\SupplierController@storeContact');
+Route::delete('/suppliers/deleteContact/{id}', 'Suppliers\SupplierController@deleteContact');
 Route::post('/suppliers/addChage', 'Suppliers\SupplierController@addChanges');
+
+Route::get('/suppliers/contact/{id}', 'Suppliers\SupplierController@editContact');
 
 Route::post('/suppliers/addTax', 'Suppliers\SupplierController@storeTax');
 Route::put('/suppliers/UpdateTax', 'Suppliers\SupplierController@updateTax');
@@ -229,6 +233,29 @@ Route::resource('/parameter', 'Administration\ParametersController');
 
 Route::get('/reportSales', 'Report\SalesController@index');
 
+Route::resource('/creditnote', 'Sales\creditnoteController');
+
+Route::get('/api/listCreditNote', function() {
+
+    $query = DB::table('vcreditnote');
+
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("responsible_id", Auth::user()->id);
+    }
+
+    return Datatables::queryBuilder($query)->make(true);
+});
+
+Route::get('/api/CreditNoteGenerated', function() {
+
+    $query = DB::table('vcreditnote');
+
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+        $query->where("responsible_id", Auth::user()->id);
+    }
+
+    return Datatables::queryBuilder($query)->make(true);
+});
 
 
 Route::get('/api/listCategory', function() {
@@ -286,7 +313,7 @@ Route::get('/api/listClient', function() {
 //            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
 //            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
 //            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
-    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+    if (Auth::user()->role_id != 1) {
         $query->where("responsible_id", Auth::user()->id);
     }
     return Datatables::queryBuilder($query)->make(true);
@@ -349,16 +376,12 @@ Route::get('/api/listSale', function() {
 });
 Route::get('/api/listEntry', function() {
 
-    $query = DB::table('entries')
-            ->select("entries.id", "entries.consecutive", "entries.description", "entries.created_at", "entries.invoice", "warehouses.description as warehouse", "cities.description as city", DB::raw("coalesce(parameters.description,'') as status"))
-            ->join("warehouses", "warehouses.id", "entries.warehouse_id")
-            ->leftjoin("cities", "cities.id", "entries.city_id")
-            ->leftjoin("parameters", "parameters.code", "entries.status_id")
-            ->where("parameters.group", "entry");
+    $query = DB::table('ventries');
 
-//    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-//        $query->where("entries.responsible_id", Auth::user()->id);
-//    }
+
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id == 5) {
+        $query->where("responsible_id", Auth::user()->id);
+    }
 
     return Datatables::queryBuilder($query)->make(true);
 });
@@ -373,6 +396,7 @@ Route::get('/api/listDeparture', function() {
 
     return Datatables::queryBuilder($query)->make(true);
 });
+
 
 Route::get('/api/listOrder', function() {
     return Datatables::eloquent(Models\Inventory\Orders::query())->make(true);
@@ -440,7 +464,29 @@ Route::get('/report/fulfillmentCli/{init}/{end}', 'Report\SalesController@getFul
 
 Route::get('/briefcase', 'Sales\BriefcaseController@index');
 
-Route::get('/briefcase/getInvoices/{id}', "Sales\BriefcaseController@getList");
+Route::get('/briefcase/getInvoices', "Sales\BriefcaseController@getList");
+Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment");
 
 
+Route::get('/reportClient', "Report\ClientController@index");
+
+Route::get('/api/reportClient', "Report\ClientController@getList");
+
+Route::get('/reportSupplier', "Report\SupplierController@index");
+Route::get('/api/reportSupplier', function() {
+    $query = DB::table('vreportsupplier');
+    return Datatables::queryBuilder($query)->make(true);
+});
+
+Route::get('/reportProduct', "Report\ProductController@index");
+Route::get('/api/reportProduct', function() {
+    $query = DB::table('vreportproduct');
+    return Datatables::queryBuilder($query)->make(true);
+});
+
+Route::get('/reportCommercial', "Report\CommercialController@index");
+Route::get('/api/reportCommercial', function() {
+    $query = DB::table('vreportcommercial');
+    return Datatables::queryBuilder($query)->make(true);
+});
 

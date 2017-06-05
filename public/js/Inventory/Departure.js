@@ -157,6 +157,7 @@ function Sale() {
         $(".input-detail").cleanFields();
         $(".input-fillable").prop("readonly", false);
         $("#btnSave").prop("disabled", false);
+        $("#btnSend,#btnPdf").prop("disabled", true);
         $("#tblDetail tbody").empty();
         $("#frm #status_id").val(0).trigger("change").prop("disabled", true);
         $("#frm #supplier_id").prop("disabled", false);
@@ -203,7 +204,7 @@ function Sale() {
                 $("#frm #name_client").val(resp.data.client.name + resp.data.client.last_name + resp.data.client.business_name);
 
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
-                $("#frm #address").val(resp.data.client.address);
+                $("#frm #address").val(resp.data.client.address_send);
                 $("#frm #phone").val(resp.data.client.phone);
 
 

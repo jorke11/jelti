@@ -1,10 +1,49 @@
 function Briefcase() {
+    var invoice = [], tableBrief;
     this.init = function () {
-        obj.table();
+        tableBrief = obj.table();
+        var html = '';
 
         $("#btnModalUpload").click(function () {
             $("#modalUpload").modal("show");
         })
+        $("#insideManagement").click(function () {
+            invoice = [], html = '';
+            $("#table-invoices tbody").empty();
+            $(".selected-invoice").each(function () {
+                if ($(this).is(":checked")) {
+                    html += "<tr><td>" + $(this).attr("invoice") + '</td><input type="hidden" name="invoices[]" value="' + $(this).val() + '"></tr>';
+                    invoice.push({id: $(this).val(), invoice: $(this).attr("invoice")})
+                }
+            })
+            $("#table-invoices tbody").html(html);
+        })
+
+        $("#btnSave").click(this.uploadExcel);
+
+
+    }
+
+
+    this.uploadExcel = function () {
+        var formData = new FormData($("#frm")[0]);
+//        formData.append("invoices", invoice);
+        $.ajax({
+            url: 'briefcase/uploadSupport',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+                if (data.suscess == true) {
+                    Toastr.success("Ok");
+                    tableBrief.ajax.reload();
+                }
+            }
+        })
+
     }
 
     this.viewPdf = function (id) {
@@ -74,6 +113,16 @@ function Briefcase() {
                     mData: null,
                     mRender: function (data, type, full) {
                         html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                        return html;
+                    }
+                }
+                ,
+                {
+                    targets: [9],
+                    searchable: false,
+                    mData: null,
+                    mRender: function (data, type, full) {
+                        html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '">'
                         return html;
                     }
                 }

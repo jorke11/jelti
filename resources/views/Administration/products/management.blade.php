@@ -19,25 +19,25 @@
             <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Information</h4>
+                        <h4 class="panel-title">Información</h4>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="title" class="control-label">Title*</label>
+                                    <label for="title" class="control-label">Título*</label>
                                     <input type="text" class="form-control input-product input-sm" id="title" name='title' required>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="description" class="control-label">Description*</label>
+                                    <label for="description" class="control-label">Descripción*</label>
                                     <input type="text" class="form-control input-product input-sm" id="description" name='description' required>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">Short Description*</label>
+                                    <label for="email" class="control-label">Descripción Corta*</label>
                                     <input type="text" class="form-control input-product input-sm" id="short_description" name='short_description' required>
                                 </div>
                             </div>
@@ -46,20 +46,20 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">Reference*</label>
+                                    <label for="email" class="control-label">Referencia*</label>
                                     <input type="text" class="form-control input-product input-sm" id="reference" name='reference' required data-type="number">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">category_id*</label>
+                                    <label for="email" class="control-label">Categoria *</label>
                                     <select class="form-control input-product" id='category_id' name="category_id" data-api="/api/getCategory" required>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">supplier_id*</label>
+                                    <label for="email" class="control-label">Proveedor *</label>
                                     <select class="form-control input-product" id='supplier_id' name="supplier_id" data-api="/api/getSupplier" required>
                                     </select>
                                 </div>
@@ -71,19 +71,19 @@
 
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email">bar_code*</label>
+                                    <label for="email">Código de Barra*</label>
                                     <input type="text" class="form-control input-product" id="bar_code" name='bar_code' required>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email">url_part*</label>
+                                    <label for="email">Url Imagen*</label>
                                     <input type="text" class="form-control input-product" id="url_part" name='url_part' required>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email">status</label>
+                                    <label for="email">Estafus</label>
                                     <input type="checkbox" class="form-control input-product" id="status_id" name='status_id'>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="form-group">
-                                    <label for="email">Charateristic</label>
+                                    <label for="email">Caracteristica</label>
                                     <select class="form-control input-product" id='characteristic' name="characteristic[]" data-api="/api/getCharacteristic" multiple>
                                     </select>
 
@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email">Account</label>
+                                    <label for="email">Cuenta</label>
                                     <select class="form-control input-product" id='account_id' name="account_id" data-api="/api/getAccount">
                                     </select>
 
@@ -145,25 +145,25 @@
             <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Values</h4>
+                        <h4 class="panel-title">Valores</h4>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">units_supplier:</label>
+                                    <label for="email" class="control-label">Embalaje Proveedor:</label>
                                     <input type="text" class="form-control input-product" id="units_supplier" name='units_supplier' required data-type="number">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">units_sf*</label>
+                                    <label for="email" class="control-label">Embalaje SF*</label>
                                     <input type="text" class="form-control input-product" id="units_sf" name='units_sf' required data-type="number">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">cost_sf*</label>
+                                    <label for="email" class="control-label">cost SF*</label>
                                     <input type="text" class="form-control input-product" id="cost_sf" name='cost_sf' required data-type="number">
                                 </div>
                             </div>
@@ -171,19 +171,19 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">tax*</label>
+                                    <label for="email" class="control-label">Impuesto *</label>
                                     <input type="text" class="form-control input-product" id="tax" name='tax' required data-type="number">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group" class="control-label">
-                                    <label for="email" class="control-label">price_sf*</label>
+                                    <label for="email" class="control-label">Preci SF*</label>
                                     <input type="text" class="form-control input-product"  id="price_sf" name='price_sf' required data-type="number">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">price_cust*</label>
+                                    <label for="email" class="control-label">Precio Cliente*</label>
                                     <input type="text" class="form-control input-product" id="price_cust" name='price_cust' required  data-type="number">
                                 </div>
                             </div>
@@ -191,7 +191,7 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">minimun_stock*</label>
+                                    <label for="email" class="control-label">Stock Minimo*</label>
                                     <input type="text" class="form-control input-product" id="minimum_stock" name='minimum_stock' required  data-type="number">
                                 </div>
                             </div>
@@ -200,7 +200,7 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Images</h4>
+                        <h4 class="panel-title">Imagenes</h4>
                     </div>
                     <div class="panel-body">
                         <div class="row">

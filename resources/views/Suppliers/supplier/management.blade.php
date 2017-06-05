@@ -32,17 +32,17 @@
             <div class="row">
                 <div class="col-lg-8 col-center">
                     <div class="row">
-                        <input type="hidden" id="id" name="id" class="input-stakeholder">
+                        <input type="hidden" id="id" name="id" class="input-suppliers">
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address">Cuenta</label>
-                                <input type="text" class="form-control input-stakeholder input-sm" id="business" name="business">
+                                <input type="text" class="form-control input-suppliers input-sm" id="business" name="business">
                             </div>
                         </div>
                         <div class="col-lg-8">
                             <div class="form-group">
                                 <label for="address">Razón Social</label>
-                                <input type="text" class="form-control input-stakeholder input-sm" id="business_name" name="business_name">
+                                <input type="text" class="form-control input-suppliers input-sm" id="business_name" name="business_name">
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address" class="control-label ">Tipo Documento *</label>
-                                <select id="type_document" name="type_document" class="form-control input-stakeholder input-sm" required>
+                                <select id="type_document" name="type_document" class="form-control input-suppliers input-sm" required>
                                     <option value="0">Selección</option>
                                     @foreach($type_document as $val)
                                     <option value="{{$val->code}}">{{$val->description}}</option>
@@ -61,14 +61,14 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address" class="control-label">Documento *</label>
-                                <input type="text" class="form-control input-stakeholder input-sm" id="document" name="document"required>
+                                <input type="text" class="form-control input-suppliers input-sm" id="document" name="document"required>
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address" class="control-label">Dígito de Verificación</label>
-                                <input type="text" class="form-control input-stakeholder input-sm" id="verification" name="verification"  readonly>
+                                <input type="text" class="form-control input-suppliers input-sm" id="verification" name="verification"  readonly>
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address" class="control-label">Tipo Persona*</label>
-                                <select class="form-control input-stakeholder input-sm"  id="type_regime_id" name="type_regime_id" required>
+                                <select class="form-control input-suppliers input-sm"  id="type_regime_id" name="type_regime_id" required>
                                     <option value="0">Selección</option>
                                     @foreach($type_person as $val)
                                     <option value="{{$val->code}}">{{$val->description}}</option>
@@ -88,7 +88,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address" class="control-label">Tipo Regimen*</label>
-                                <select id="type_person_id" name="type_person_id" class="form-control input-stakeholder input-sm" required>
+                                <select id="type_person_id" name="type_person_id" class="form-control input-suppliers input-sm" required>
                                     <option value="0">Selección</option>
                                     @foreach($type_regimen as $val)
                                     <option value="{{$val->code}}">{{$val->description}}</option>
@@ -99,7 +99,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address">Plazo de Pago</label>
-                                <input type="text" class="form-control input-stakeholder input-sm" id="term" name="term">
+                                <input type="text" class="form-control input-suppliers input-sm" id="term" name="term">
                             </div>
                         </div>
 
@@ -109,7 +109,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address">Ciudad</label>
-                                <select class="form-control input-stakeholder input-sm"  id="city_id" name="city_id" data-api="/api/getCity">
+                                <select class="form-control input-suppliers input-sm"  id="city_id" name="city_id" data-api="/api/getCity">
                                 </select>
                             </div>
                         </div>
@@ -117,13 +117,13 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address" class="control-label">Dirección *</label>
-                                <input type="text" class="form-control input-stakeholder input-sm" id="address" name="address"  required>
+                                <input type="text" class="form-control input-suppliers input-sm" id="address" name="address"  required>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address">Teléfono</label>
-                                <input type="text" class="form-control input-stakeholder input-sm" id="phone" name="phone" >
+                                <input type="text" class="form-control input-suppliers input-sm" id="phone" name="phone" >
                             </div>
                         </div>
 
@@ -134,20 +134,20 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address">Sitio Web</label>
-                                <input type="text" class="form-control input-stakeholder" id="web_site" name="web_site">
+                                <input type="text" class="form-control input-suppliers" id="web_site" name="web_site">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address">Correo</label>
-                                <input type="text" class="form-control input-stakeholder" id="email" name="email">
+                                <input type="text" class="form-control input-suppliers" id="email" name="email">
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address" class="control-label">Terminación de Contrato</label>
-                                <input type="datetime" class="form-control input-stakeholder" id="contract_expiration" name="contract_expiration"
+                                <input type="datetime" class="form-control input-suppliers" id="contract_expiration" name="contract_expiration"
                                        value="{{date("Y-m-d H:i")}}">
                             </div>
                         </div>  
@@ -159,7 +159,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="address" class="control-label">Responsable</label>
-                                <select class="form-control input-stakeholder"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
+                                <select class="form-control input-suppliers"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required>
                                 </select>
                             </div>
                         </div>
@@ -212,7 +212,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmJustify">
-                    <input class="input-justify" type="hidden" id="stakeholder_id" name="stakeholder_id">
+                    <input class="input-justify" type="hidden" id="suppliers_id" name="suppliers_id">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
@@ -247,4 +247,4 @@
 </div>
 
 
-@include('Suppliers.Supplier.modalUpload')
+@include('Suppliers.supplier.modalUpload')

@@ -95,14 +95,14 @@ class ProductController extends Controller {
                 $base_id = Base::create($in)->id;
 
                 foreach ($reader->get() as $book) {
-                    
+
                     if (trim($book->supplier) != '' && trim($book->category) != '') {
-                       
+
                         $sup = Administration\Stakeholder::where("business", "ILIKE", trim($book->supplier))->first();
                         $cat = Administration\Categories::where("description", "like", trim($book->category))->first();
-                        
+
                         if (count($sup) > 0 && count($cat) > 0) {
-                            
+
                             $book->ean = (!isset($book->ean)) ? '' : trim($book->ean);
                             $product["category_id"] = $cat->id;
                             $product["supplier_id"] = $sup->id;
@@ -135,6 +135,41 @@ class ProductController extends Controller {
                                 Products::create($product);
                                 $this->inserted++;
                             }
+                        }
+                    }
+                }
+            })->get();
+
+            return response()->json(["success" => true, "data" => Products::where("status_id", 3)->get(), "inserted" => $this->inserted, "updated" => $this->updated]);
+        }
+    }
+
+    public function storeExcelCode(Request $request) {
+        if ($request->ajax()) {
+
+            $input = $request->all();
+
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($input, 'file_excel');
+            $this->name = $file->getClientOriginalName();
+            $this->name = str_replace(" ", "_", $this->name);
+            $this->path = "uploads/products/" . date("Y-m-d") . "/" . $this->name;
+
+            $file->move("uploads/products/" . date("Y-m-d") . "/", $this->name);
+
+            Excel::load($this->path, function($reader) {
+
+                foreach ($reader->get() as $book) {
+                    if (trim($book->sf_code) != '') {
+                        $pro = Products::where("reference", $book->sf_code)->first();
+                        if (count($pro) > 0) {
+                            $pro->alias_reference = $book->item;
+                            $pro->save();
+                            $this->updated++;
+                        } else {
+                            Products::create($product);
+                            $this->inserted++;
                         }
                     }
                 }

@@ -31,6 +31,7 @@ class CreateDeparturesTable extends Migration {
             $table->decimal('shipping_cost', 15, 2)->nullable();
             $table->boolean('pdf_create')->nullable();
             $table->boolean('paid_out')->nullable();
+            $table->text('voucher')->nullable();
             $table->timestamps();
         });
     }

@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration {
             $table->text('description');
             $table->text('short_description');
             $table->integer('reference');
+            $table->integer('alias_reference')->nullable();
             $table->decimal('units_supplier', 15, 2);
             $table->decimal('units_sf', 15, 2);
             $table->decimal('cost_sf', 15, 2);

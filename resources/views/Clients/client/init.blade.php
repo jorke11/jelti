@@ -9,7 +9,8 @@
         <li role="presentation" id="tabList" class="active"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">Lista</a></li>
         <li role="presentation" id="tabManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </a></li>
+            </a>
+        </li>
             <li role="presentation" id="tabContact" class="hide"><a href="#contact" aria-controls="profile" role="tab" data-toggle="tab">
             <i class="fa fa-address-card fa-lg" aria-hidden="true" class="hide"></i>
             </a></li>

@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-lg-3">List Activities</div>
+                <div class="col-lg-3">Lista Tareas</div>
             </div>
         </div>
         <div class="panel-body">
@@ -11,13 +11,13 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Subject</th>
-                        <th>Date</th>
-                        <th>Expiration</th>
-                        <th>Status</th>
-                        <th>Priority</th>
-                        <th>Relation with</th>
-                        <th>Action</th>
+                        <th>Asunto</th>
+                        <th>Fecha</th>
+                        <th>Vencimiento</th>
+                        <th>Estatus</th>
+                        <th>Prioridad</th>
+                        <th>Relacionado con</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>

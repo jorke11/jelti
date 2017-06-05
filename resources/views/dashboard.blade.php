@@ -2,7 +2,7 @@
 @section('content')
 <style>
     .huge {
-        font-size: 40px;
+        font-size: 18px;
     }
 
     .panel-green > .panel-heading {
@@ -34,21 +34,50 @@
         <div class="clearfix"></div>
 
         <div class="row">
+
+            <div class="col-md-3 col-sm-3">
+                <div class="panel panel-green" style="margin-bottom: 0px;">
+                    <div class="panel-heading" style="height: 100px;">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <i class="fa fa-shopping-cart fa-4x"></i>
+                            </div>
+                            <div class="col-md-9 col-sm-9 text-right">
+                                <div class="huge">Cliente <br>{{$client->business}}</div>
+                                <div> Total Unidades {{$client->cantidadtotal}}<br>
+                                    Monto: $ {{number_format(round($client->total), 0, ',', '.')}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="/reportClient">
+                    <div class="panel-footer" style="background-color:#fff;border-color: blue;">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right">
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+
+
             <div class="col-md-3 col-sm-3">
                 <div class="panel panel-primary" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">
                         <div class="row">
                             <div class="col-md-3 col-sm-3">
-                                <i class="fa fa-comments fa-5x"></i>
+                                <i class="fa fa-suitcase fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">{{$comment}}</div>
-                                <div> Coments</div>
+                                <div class="huge">Proveedor<br>{{$supplier->proveedor}}</div>
+                                <div> Total Unidades {{$supplier->cantidadtotal}}<br>
+                                    Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <a href="/comments">
+                <a href="/reportSupplier">
                     <div class="panel-footer" style="background-color:#fff;border-color: blue;">
                         <span class="pull-left">View Details</span>
                         <span class="pull-right">
@@ -63,18 +92,19 @@
                     <div class="panel-heading" style="height: 100px;">
                         <div class="row">
                             <div class="col-md-3 col-sm-3">
-                                <i class="fa fa-star fa-5x"></i>
+                                <i class="fa fa-star fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">Aceite</div>
-                                <div> Best Product</div>
+                                <div class="huge">Producto<br>{{$product->title}}</div>
+                                <div> Unidades Vendidas {{$product->cantidadtotal}}<br>
+                                    Monto: $ {{number_format(round($product->total), 0, ',', '.')}}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <a href="#">
+                <a href="/reportProduct">
                     <div class="panel-footer" style="background-color:#fff;border-color: blue;">
-                        <span class="pull-left">View Details</span>
+                        <span class="pull-left">Ver Detalle</span>
                         <span class="pull-right">
                             <i class="fa fa-arrow-circle-right"></i>
                         </span>
@@ -82,45 +112,23 @@
                     </div>
                 </a>
             </div>
-            <div class="col-md-3 col-sm-3">
-                <div class="panel panel-green" style="margin-bottom: 0px;">
-                    <div class="panel-heading" style="height: 100px;">
-                        <div class="row">
-                            <div class="col-md-3 col-sm-3">
-                                <i class="fa fa-shopping-cart fa-5x"></i>
-                            </div>
-                            <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">250</div>
-                                <div> Shopping</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a href="#">
-                    <div class="panel-footer" style="background-color:#fff;border-color: blue;">
-                        <span class="pull-left">View Details</span>
-                        <span class="pull-right">
-                            <i class="fa fa-arrow-circle-right"></i>
-                        </span>
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-            </div>
+
             <div class="col-md-3 col-sm-3">
                 <div class="panel panel-red" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">
                         <div class="row">
                             <div class="col-md-3 col-sm-3">
-                                <i class="fa fa-support fa-5x"></i>
+                                <i class="fa fa-user-circle-o fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                <div class="huge">50</div>
-                                <div> Alerts</div>
+                                <div class="huge">Mejor Vendedor<br>{{$commercial->vendedor}}</div>
+                                <div> Total Unidades {{$commercial->cantidadtotal}}<br>
+                                    Monto: $ {{number_format(round($commercial->total), 0, ',', '.')}}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <a href="#">
+                <a href="/reportCommercial">
                     <div class="panel-footer" style="background-color:#fff;border-color: blue;">
                         <span class="pull-left">View Details</span>
                         <span class="pull-right">

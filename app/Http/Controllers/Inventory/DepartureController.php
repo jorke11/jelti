@@ -37,6 +37,8 @@ class DepartureController extends Controller {
     public $name;
     public $listProducts;
     public $errors;
+    public $email;
+    public $mails;
 
     public function __construct() {
         $this->middleware("auth");
@@ -46,6 +48,8 @@ class DepartureController extends Controller {
         $this->name = '';
         $this->listProducts = array();
         $this->errors = array();
+        $this->email = array();
+        $this->mails = array();
     }
 
     public function index() {
@@ -139,6 +143,7 @@ class DepartureController extends Controller {
     }
 
     public function getInvoice($id) {
+        $this->mails = array();
 
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
@@ -150,11 +155,22 @@ class DepartureController extends Controller {
                 ->get();
 
         $dep = Departures::find($id);
-        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
-                ->where("stakeholder_id", $sale["client_id"])
-                ->join("cities", "cities.id", "branch_office.city_id")
+
+//        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
+//                ->where("stakeholder_id", $sale["client_id"])
+//                ->join("cities", "cities.id", "branch_office.city_id")
+//                ->first();
+        $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
+                ->where("stakeholder.id", $sale["client_id"])
+                ->join("cities", "cities.id", "stakeholder.city_id")
                 ->first();
-        $user = Users::find($sale["responsible_id"]);
+        $user = Users::find($dep["responsible_id"]);
+
+        $ware = Warehouses::find($dep["warehouse_id"]);
+
+        $this->email[] = $user->email;
+
+
         $term = 7;
 
         if ($cli["term"] != null) {
@@ -167,6 +183,7 @@ class DepartureController extends Controller {
         $cli["emition"] = $this->formatDate($sale["created"]);
         $cli["observations"] = $sale["description"];
         $cli["expiration"] = $this->formatDate($expiration);
+
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
 
         $totalExemp = 0;
@@ -174,7 +191,10 @@ class DepartureController extends Controller {
         $totalTax19 = 0;
         $tax = 0;
         $totalSum = 0;
-        foreach ($detail as $value) {
+        foreach ($detail as $i => $value) {
+            $detail[$i]->valueFormated = "$" . number_format($value->value, 0, ',', '.');
+            $detail[$i]->totalFormated = "$" . number_format($value->value * $value->units_sf * $value->quantity, 0, ',', '.');
+
             $totalSum += $value->valuetotal;
             $tax = ($value->tax / 100);
 
@@ -216,7 +236,8 @@ class DepartureController extends Controller {
             'textTotal' => trim($tool->to_word(round($totalWithTax)))
         ];
 
-//        return view('Inventory.departure.pdf',compact("data"));
+
+
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
@@ -545,7 +566,7 @@ class DepartureController extends Controller {
 
     public function getAllDetail($departue_id) {
         $detail = $this->formatDetail($departue_id);
-        return response()->json(["detail" => $detail,"total"=>"$ " . number_format($this->total, 2, ",", ".")]);
+        return response()->json(["detail" => $detail, "total" => "$ " . number_format($this->total, 2, ",", ".")]);
     }
 
     public function update(Request $request, $id) {
@@ -655,9 +676,91 @@ class DepartureController extends Controller {
 
     public function generateInvoice($id) {
         $dep = Departures::findOrfail($id);
+
+
         $dep->invoice = $this->createConsecutive(1);
         $dep->save();
         $this->updateConsecutive(1);
+
+        $sale = Sales::where("departure_id", $id)->first();
+
+        $detail = DB::table("sales_detail")
+                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->join("products", "sales_detail.product_id", "products.id")
+                ->join("stakeholder", "products.supplier_id", "stakeholder.id")
+                ->where("sale_id", $sale["id"])
+                ->orderBy("order", "asc")
+                ->get();
+
+        $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
+                ->where("stakeholder.id", $sale["client_id"])
+                ->join("cities", "cities.id", "stakeholder.city_id")
+                ->first();
+
+        $user = Users::find($dep["responsible_id"]);
+
+        $totalExemp = 0;
+        $totalTax5 = 0;
+        $totalTax19 = 0;
+        $tax = 0;
+        $totalSum = 0;
+        foreach ($detail as $i => $value) {
+            $detail[$i]->valueFormated = "$" . number_format($value->value, 0, ',', '.');
+            $detail[$i]->totalFormated = "$" . number_format($value->value * $value->units_sf * $value->quantity, 0, ',', '.');
+
+            $totalSum += $value->valuetotal;
+            $tax = ($value->tax / 100);
+
+            if ($value->tax == 0) {
+                $totalExemp += $value->valuetotal;
+            }
+            if ($value->tax == '5') {
+                $totalTax5 += $value->valuetotal * $tax;
+            }
+            if ($value->tax == '19') {
+
+                $totalTax19 += $value->valuetotal * $tax;
+            }
+        }
+
+        $ware = Warehouses::find($dep["warehouse_id"]);
+
+        $email = Email::where("description", "invoices")->first();
+
+        if ($email != null) {
+            $emDetail = EmailDetail::where("email_id", $email->id)->get();
+        }
+
+
+        if (count($emDetail) > 0) {
+
+            foreach ($emDetail as $value) {
+                $this->mails[] = $value->description;
+            }
+        }
+
+        if (count($this->mails) > 0) {
+            $cit = Cities::find($ware->city_id);
+            $this->subject = "SuperFuds " . date("d/m") . " " . $cli->business . " " . $cit->description . " Despacho de Pedido, factura " . $dep["invoice"];
+            $input["city"] = $cit->description;
+            $input["consecutive"] = $dep["consecutive"];
+            $input["invoice"] = $dep["invoice"];
+
+            $input["name"] = ucwords($user->name);
+            $input["last_name"] = ucwords($user->last_name);
+            $input["phone"] = $user->phone;
+            $input["warehouse"] = $ware->description;
+            $input["address"] = $ware->address;
+            $input["detail"] = $detail;
+            $this->mails[] = $user->email;
+
+
+            Mail::send("Notifications.invoice", $input, function($msj) {
+                $msj->subject($this->subject);
+                $msj->to($this->mails);
+            });
+        }
+
         return response()->json(["success" => true, "consecutive" => $dep->invoice]);
     }
 
@@ -676,32 +779,42 @@ class DepartureController extends Controller {
 
             Excel::load($this->path, function($reader) {
                 foreach ($reader->get() as $i => $book) {
-                    $pro = Products::where("reference", (int) $book->sf_code)->first();
-
-                    if ($pro != null) {
-                        $price_sf = $pro->precio_unitario;
-                        if (Auth::user()->role_id == 1) {
-
-                            if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {
-                                $price_sf = $book->precio_unitario;
+                    if ($book->unidades_total != 0) {
+                        if (isset($book->item)) {
+                            $pro = Products::where("alias_reference", (int) $book->item)->first();
+                            if ($pro == null) {
+                                $pro = Products::where("reference", (int) $book->sf_code)->first();
                             }
+                        } else {
+                            $pro = Products::where("reference", (int) $book->sf_code)->first();
                         }
 
-                        $this->listProducts[] = array(
-                            "row" => $i,
-                            "product_id" => $pro->id,
-                            "product" => $pro->reference . " - " . $pro->title,
-                            "quantity" => $book->unidades_total,
-                            'price_sf' => $price_sf,
-                            "valueFormated" => "$ " . number_format(($price_sf), 2, ',', '.'),
-                            "totalFormated" => "$ " . number_format(($pro->units_sf * $price_sf * $book->unidades_total), 2, ',', '.'),
-                            "real_quantity" => "",
-                            "totalFormated_real" => "",
-                            "comment" => "",
-                            "status" => "new",
-                        );
-                    } else {
-                        $this->errors[] = $book;
+
+                        if ($pro != null) {
+                            $price_sf = $pro->precio_unitario;
+                            if (Auth::user()->role_id == 1) {
+
+                                if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {
+                                    $price_sf = $book->precio_unitario;
+                                }
+                            }
+
+                            $this->listProducts[] = array(
+                                "row" => $i,
+                                "product_id" => $pro->id,
+                                "product" => $pro->reference . " - " . $pro->title,
+                                "quantity" => $book->unidades_total,
+                                'price_sf' => $price_sf,
+                                "valueFormated" => "$ " . number_format(($price_sf), 2, ',', '.'),
+                                "totalFormated" => "$ " . number_format(($pro->units_sf * $price_sf * $book->unidades_total), 2, ',', '.'),
+                                "real_quantity" => "",
+                                "totalFormated_real" => "",
+                                "comment" => "",
+                                "status" => "new",
+                            );
+                        } else {
+                            $this->errors[] = $book;
+                        }
                     }
                 }
             })->get();

@@ -6,7 +6,8 @@
 <div class="row">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist" id='myTabs'>
-        <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">Sales</a></li>
+        <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">Resumen</a></li>
+        <li role="presentation" id="tabDetail"><a href="#detail" aria-controls="home" role="tab" data-toggle="tab">Detalle</a></li>
         <li role="presentation" id="tabFulfillmentSup"><a href="#fulfilmentSup" aria-controls="profile" role="tab" data-toggle="tab">Cumplimiento Sup </a></li>
         <li role="presentation" id="tabFulfillmentCli"><a href="#fulfilmentCli" aria-controls="profile" role="tab" data-toggle="tab">Cumplimiento Cli</a></li>
         <li role="presentation" id="tabUplod"><a href="#upload" aria-controls="special" role="tab" data-toggle="tab">Load</a></li>
@@ -21,6 +22,9 @@
                 </div>
             </div>
 
+        </div>
+        <div role="tabpanel" class="tab-pane " id="detail">
+            @include('Report.Sales.detail')
         </div>
         <div role="tabpanel" class="tab-pane " id="fulfilmentSup">
             @include('Report.Sales.fulfillmentsup')

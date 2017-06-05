@@ -4,20 +4,20 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Supplier</th>
-                <th>reference</th>
-                <th>Bar code</th>
-                <th>units_supplier</th>
-                <th>units_sf</th>
-                <th>cost_sf</th>
-                <th>tax</th>
-                <th>price_sf</th>
-                <th>price_cust</th>
-                <th>image</th>
-                <th>status</th>
-                <th>Action</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Proveedor</th>
+                <th>Referencia</th>
+                <th>Código de Barra code</th>
+                <th>Embalaje Proveedor</th>
+                <th>Embajale SF</th>
+                <th>Costo SF</th>
+                <th>Impuesto</th>
+                <th>Precio SF</th>
+                <th>Precio Cliente</th>
+                <th>Imagen</th>
+                <th>Estatus</th>
+                <th>Acción</th>
             </tr>
         </thead>
         <tbody>

@@ -213,7 +213,7 @@ class EntryController extends Controller {
                                     $detail["product_id"] = $pro->id;
                                     $detail["quantity"] = $book->unidades;
                                     $detail["real_quantity"] = $book->unidades;
-                                    $detail["value"] = $pro->price_cust;
+                                    $detail["value"] = $pro->price_sf;
                                     $detail["lot"] = $pro->lote;
                                     $detail["description"] = 'Initial inventory';
                                     $detail["status_id"] = 1;

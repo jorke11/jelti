@@ -445,6 +445,7 @@ function Entry() {
                 {data: "city"},
                 {data: "status"},
             ],
+            order: [[1, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [1, 2, 3, 4, 5, 6, 7],

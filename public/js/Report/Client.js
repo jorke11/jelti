@@ -4,10 +4,17 @@ function Client() {
     }
 
     this.table = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/reportClient",
+            "ajax": {
+                url: "/api/reportClient",
+                data: obj,
+            },
             columns: [
                 {data: "business"},
                 {data: "totalunidades"},

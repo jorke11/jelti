@@ -469,11 +469,8 @@ Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment"
 
 
 Route::get('/reportClient', "Report\ClientController@index");
-Route::get('/api/reportClient', function() {
 
-    $query = DB::table('vreportclient');
-    return Datatables::queryBuilder($query)->make(true);
-});
+Route::get('/api/reportClient', "Report\ClientController@getList");
 
 Route::get('/reportSupplier', "Report\SupplierController@index");
 Route::get('/api/reportSupplier', function() {

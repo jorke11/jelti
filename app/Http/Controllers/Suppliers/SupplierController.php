@@ -58,6 +58,7 @@ class SupplierController extends Controller {
             unset($input["id"]);
             $input["user_insert"] = Auth::user()->id;
             $input["status_id"] = 1;
+            $input["type_stakeholder"] = 2;
             $result = Stakeholder::create($input);
             if ($result) {
                 return response()->json(['success' => true]);

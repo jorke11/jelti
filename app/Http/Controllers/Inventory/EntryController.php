@@ -188,7 +188,7 @@ class EntryController extends Controller {
 
                 foreach ($reader->get() as $book) {
 
-
+                    
                     if ((int) $book->unidades != 0) {
                         $pro = Products::where("bar_code", (int) $book->ean)->first();
                         if ($pro != null) {
@@ -222,7 +222,7 @@ class EntryController extends Controller {
                                     EntriesDetail::create($detail);
                                 }
                             } else {
-                                dd($sup);
+                                dd($book);
                             }
                         }
                     } else {

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use Dompdf\Adapter\PDFLib;
+use App\Models\Administration\Products;
 use Datatables;
 use PDF;
 
@@ -16,6 +17,23 @@ class StockController extends Controller {
     }
 
     public function getStock() {
+        $sql = "
+            select products.id,products.title,sum(entries_detail.quantity) entradas,
+            coalesce((select sum(quantity) from sales_detail where product_id=products.id and product_id IS NOT NULL),0) salidas,
+            sum(entries_detail.quantity) - coalesce((select sum(quantity) from sales_detail where product_id=products.id and product_id IS NOT NULL),0) total
+            from products
+            JOIN entries_detail ON entries_detail.product_id=products.id
+            JOIN entries ON entries.id = entries_detail.entry_id and entries.status_id=2
+            group by 1
+            order by 5 desc";
+        $resp = DB::select($sql);
+        $stock = Products::select("products.id","products.title",DB::raw("entries_detail.quantity"))->sum(DB::raw("entries_detail.quantity"))
+                ->join("entries_detail", "entries_detail.product_id", "products.id")
+                ->join("entries", "entries.id", DB::raw("entries_detail.entry_id and entries.status_id=2"))
+                ->groupBy("products.id","products.title")
+                ->get();
+
+        dd($stock);
         return Datatables::queryBuilder(DB::table("vstock"))->make(true);
     }
 

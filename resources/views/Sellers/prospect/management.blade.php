@@ -1,164 +1,385 @@
 <div class="row">
-    <div class="panel panel-default">
-        <div class="page-title">
-            <div class="row">
-                <div class="col-lg-12 text-right">
-                    <button class="btn btn-success btn-sm" id='btnNew'>
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true">New</span>
-                    </button>
-                    <button class="btn btn-success btn-sm" id='btnSave' disabled>
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true">Save</span>
-                    </button>
-                    <button class="btn btn-success btn-sm" id='btnConvert' disabled>
-                        <span class="glyphicon glyphicon-retweet" aria-hidden="true">Convert</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="panel-body">
-            {!! Form::open(['id'=>'frm']) !!}
-            <div class="row">
-                <input type="hidden" id="id" name="id" class="input-prospect">                
-
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="name" class="control-label">Name*</label>
-                        <input type="text" class="form-control input-prospect" id="name" name="name" placeholder="Name" required>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Last Name*</label>
-                        <input type="text" class="form-control  input-prospect" id="last_name" name="last_name" placeholder="Last Name" required>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Business*</label>
-                        <input type="text" class="form-control  input-prospect" id="business" name="business" placeholder="business" required>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Business Name*</label>
-                        <input type="text" class="form-control  input-prospect" id="business_name" name="business_name" placeholder="Business name" required>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Email</label>
-                        <input type="text" class="form-control  input-prospect" id="email" name="email" placeholder="email">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Position</label>
-                        <input type="text" class="form-control  input-prospect" id="position" name="position" placeholder="position">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="last_name" class="control-label">Phone</label>
-                        <input type="text" class="form-control  input-prospect" id="phone" name="phone" placeholder="phone">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Web Site</label>
-                        <input type="text" class="form-control input-prospect" id="web_site" name="web_site" placeholder="web site">
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="page-title">
+                <div class="row">
+                    <div class="col-lg-5 col-lg-offset-8">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Extra <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" onclick="obj.showModalJustif()">Activar / Desactivar</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <button class="btn btn-primary btn-sm" id='btnNew'>
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"> Nuevo</span>
+                                </button>
+                                <button class="btn btn-primary btn-sm" id='btnSave' disabled="">
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"> Guardar</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="panel-body">
+                {!! Form::open(['id'=>'frm','files' => true]) !!}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                        <br>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Información Cuenta</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Cuenta *</label>
+                                            <input type="text" class="form-control input-clients input-sm" id="business" name="business" required disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label for="address">Razón Social</label>
+                                            <input type="text" class="form-control input-clients input-sm" id="business_name" name="business_name" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
 
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Status Prospect</label>
-                        <select id="status_prospect_id" name="status_prospect_id" class="form-control input-prospect">
-                            <option value="0">Selection</option>
-                            <option value="1">Contactado</option>
-                            <option value="2">No Contactado</option>
-                            <option value="3">Sin respuesta</option>
-                            <option value="4">Contactado, interesado portafolio</option>
-                        </select>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Tipo Documento</label>
+                                            <select id="type_document" name="type_document" class="form-control input-clients input-sm" disabled>
+                                                <option value="0">Selección</option>
+                                                @foreach($type_document as $val)
+                                                <option value="{{$val->code}}">{{$val->description}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Documento</label>
+                                            <input type="text" class="form-control input-clients input-sm" id="document" name="document"  disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Dígito de Verificación</label>
+                                            <input type="text" class="form-control input-clients input-sm" id="verification" name="verification" readonly disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <input type="hidden" id="id" name="id" class="input-clients">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Tipo Persona</label>
+                                            <select class="form-control input-clients input-sm"  id="type_regime_id" name="type_regime_id" disabled>
+                                                <option value="0">Selección</option>
+                                                @foreach($type_person as $val)
+                                                <option value="{{$val->code}}">{{$val->description}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Tipo Regimen</label>
+                                            <select id="type_person_id" name="type_person_id" class="form-control input-clients input-sm" disabled>
+                                                <option value="0">Selección</option>
+                                                @foreach($type_regimen as $val)
+                                                <option value="{{$val->code}}">{{$val->description}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Plazo de Pago</label>
+                                            <input type="text" class="form-control input-clients input-sm" id="term" name="term" required disabled>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Ciudad</label>
+                                            <select class="form-control input-clients input-sm"  id="city_id" name="city_id" data-api="/api/getCity" disabled>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Teléfono</label>
+                                            <input type="text" class="form-control input-clients input-sm" id="phone" name="phone" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Responsable *</label>
+                                            <select class="form-control input-clients"  id="responsible_id" name="responsible_id" data-api="/api/getResponsable" required disabled>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Correo</label>
+                                            <input type="text" class="form-control input-clients input-sm" id="email" name="email" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Sitio Web</label>
+                                            <input type="text" class="form-control input-clients input-sm" id="web_site" name="web_site" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Fuente Posible Cliente *</label>
+                                            <select id="sector_id" name="sector_id" class="form-control input-clients input-sm" required="" disabled>
+                                                <option value="0">Selección</option>
+                                                @foreach($sector as $val)
+                                                <option value="{{$val->code}}">{{$val->description}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Sector *</label>
+                                            <select id="sector_id" name="sector_id" class="form-control input-clients input-sm" required="" disabled>
+                                                <option value="0">Selección</option>
+                                                @foreach($sector as $val)
+                                                <option value="{{$val->code}}">{{$val->description}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Flete *</label>
+                                            <input type="checkbox" id="shipping_cost" name="shipping_cost" class="form-control input-clients" checked disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Precio Especial *</label>
+                                            <input type="checkbox" id="special_price" name="special_price" class="form-control input-clients " disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Información Contacto</div>
+                            <div class="panel-body">
+                                <input type="hidden" id="id" name="id" class="input-special">
+                                <input type="hidden" id="client_id" name="client_id" class="input-special">
+                                <div class="row">
+                                    <input type="hidden" id="id" name="id" class="input-contact">
+                                    <input type="hidden" id="stakeholder_id" name="stakeholder_id" class="input-contact">
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="name" class="control-label">Nombre *</label>
+                                            <input type="text" class="form-control input-contact input-sm" id="name" name="name" required disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="last_name" class="control-label">Apellido *</label>
+                                            <input type="text" class="form-control  input-contact input-sm" id="last_name" name="last_name"  required disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="last_name" class="control-label">Cargo</label>
+                                            <input type="text" class="form-control  input-contact input-sm" id="position" name="position" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Dirección</label>
+                                            <input type="text" class="form-control input-contact input-sm" id="address" name="address" required>
+                                        </div>
+                                    </div>
+                                </div>        
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="address">Telefono</label>
+                                            <input type="text" class="form-control input-contact input-sm" id="phone" name="phone" >
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="address">Celular *</label>
+                                            <input type="text" class="form-control input-contact input-sm" id="mobile" name="mobile">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="address">Correo *</label>
+                                            <input type="text" class="form-control input-contact input-sm" id="email" name="email" >
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Fecha de Cumpleaños</label>
+                                            <input type="datetime" class="form-control input-contact input-sm" id="birth_date" name="birth_date" 
+                                                   value="<?php echo date("Y-m-d H:i"); ?>">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Información Envio</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="email">Ciudad Envio *</label>
+                                            <select class="form-control input-clients input-sm" id="send_city_id" name="send_city_id" data-api="/api/getCity" required disabled>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label for="email">Dirección Envio *</label>
+                                            <input class="form-control input-clients input-sm" id="address_send" name="address_send" required disabled>    
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Información Facturación</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="email">Ciudad Facturación</label>
+                                            <select class="form-control input-clients input-sm" id="invoice_city_id" name="invoice_city_id" data-api="/api/getCity" disabled>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label for="email">Dirección Facturación</label>
+                                            <input class="form-control input-clients input-sm" id="address_invoice" name="address_invoice" disabled>    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Source Prospect</label>
-                        <select id="source_id" name="source_id" class="form-control input-prospect">
-                            <option value="0">Selection</option>
-                            <option value="1">Chat</option>
-                            <option value="2">Correo</option>
-                            <option value="3">Feria</option>
-                            <option value="4">Otro</option>
-                            <option value="5">Pagina web</option>
-                            <option value="6">Recomendación externa</option>
-                            <option value="7">Redes sociales</option>
-                            <option value="8">Referido de proveedor</option>
-                            <option value="9">Vendedor</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Sector</label>
-                        <select id="sector_id" name="sector_id" class="form-control input-prospect">
-                            <option value="0">Selection</option>
-                            <option value="1">Aerolineas</option>
-                            <option value="2">Centros de salud</option>
-                            <option value="3">Centros deportivos</option>
-                            <option value="4">Colegios y universidades</option>
-                            <option value="5">Empresas</option>
-                            <option value="6">Grandes superficies</option>
-                            <option value="7">Horeca</option>
-                            <option value="8">Tiendas especializadas</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">City</label>
-                        <select class="form-control input-prospect"  id="city_id" name="city_id" data-api="/api/getCity">
-                        </select>
-                    </div>
-                </div>
-
-
+                {!!Form::close()!!}
             </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">ID skype</label>
-                        <input type="text" class="form-control input-prospect" id="id_skype" name="id_skype" placeholder="skype">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address">ID twitter</label>
-                        <input type="text" class="form-control input-prospect" id="id_twitter" name="id_twitter" placeholder="@user">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Commecial</label>
-                        <select class="form-control input-prospect"  id="commercial_id" name="commercial_id" data-api="/api/getCommercial" required>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="address" class="control-label">Address</label>
-                        <input type="text" class="form-control input-prospect" id="address" name="address" placeholder="address">
-                    </div>
-                </div>
-            </div>
-            {!!Form::close()!!}
+
         </div>
     </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-2"><button class="btn btn-info btn-sm">Comentar</button></div>
+                    <div class="col-lg-10">
+                        <textarea class="form-control"></textarea>
+                    </div>
+
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="badge">Fiorella</span>
+                                [<?php echo date("Y-m-d")?>] Cras justo odio
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge badge-success">Sebastian</span>
+                                [<?php echo date("Y-m-d")?>] Other comment
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modelActive">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Activar / Desactivar</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmJustify">
+                    <input class="input-justify" type="hidden" id="clients_id" name="clients_id">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="address" class="control-label">Estatus</label>
+                                <select id="status_id" name="status_id" class="form-control input-justify" required>
+                                    <option value="0">Selección</option>
+                                    @foreach($status as $val)
+                                    <option value="{{$val->code}}">{{$val->description}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="address" class="control-label">Justificación</label>
+                                <textarea class="form-control input-justify" name="justification" id="justification" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success" id="addJustify">Guardar</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+</div>
+

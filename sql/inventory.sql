@@ -29,3 +29,13 @@ group by w.description,pro.title,pro.reference
 
 ---
 
+select products.id,products.title,sum(entries_detail.quantity) entradas,
+coalesce((select sum(quantity) from sales_detail where product_id=products.id and product_id IS NOT NULL),0) salidas,
+sum(entries_detail.quantity) - coalesce((select sum(quantity) from sales_detail where product_id=products.id and product_id IS NOT NULL),0) total
+from products
+JOIN entries_detail ON entries_detail.product_id=products.id
+JOIN entries ON entries.id = entries_detail.entry_id and entries.status_id=2
+group by 1
+order by 5 desc
+
+

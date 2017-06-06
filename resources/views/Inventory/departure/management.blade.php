@@ -3,14 +3,14 @@
         <div class="row">
             <div class="col-lg-12 text-right">
                 <button class="btn btn-success btn-sm" id='btnNew'>
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"> New</span>
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"> Nuevo</span>
                 </button>
                 <button class="btn btn-success btn-sm" id='btnSave'>
-                    <span class="glyphicon glyphicon-save" aria-hidden="true" > Save</span>
+                    <span class="glyphicon glyphicon-save" aria-hidden="true" > Guardar</span>
                 </button>
                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                 <button class="btn btn-success btn-sm" id='btnSend' disabled>
-                    <span class="glyphicon glyphicon-send" aria-hidden="true"> Send</span>
+                    <span class="glyphicon glyphicon-send" aria-hidden="true"> Enviar</span>
                 </button>
 
                 <button class="btn btn-success btn-sm" id='btnDocument' disabled>
@@ -113,7 +113,7 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Branch office:</label>
+                    <label for="email">Sucursal:</label>
                     <select class="form-control input-departure input-fillable" id="branch_id" name='branch_id'>
 
                     </select>
@@ -127,7 +127,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="email">Observationes:</label>
+                    <label for="email">Observaciones:</label>
                     <input type="text" class="form-control input-departure" id="description" name="description">
                 </div>
             </div>

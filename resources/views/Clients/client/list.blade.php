@@ -9,7 +9,7 @@
                         <th>Documento</th>
                         <th>Correo</th>
                         <th>Direccion</th>
-                        <th>Plazo de apgo</th>
+                        <th>Plazo de pago</th>
                         <th>Ciudad</th>
                         <th>Tipo persona</th>
                         <th>Regimen</th>
@@ -26,7 +26,7 @@
                         <th>Documento</th>
                         <th>Correo</th>
                         <th>Direccion</th>
-                        <th>Plazo de apgo</th>
+                        <th>Plazo de pago</th>
                         <th>Ciudad</th>
                         <th>Tipo persona</th>
                         <th>Regimen</th>

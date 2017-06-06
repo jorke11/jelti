@@ -1,6 +1,6 @@
 @extends('layouts.dash')
 @section('content')
-@section('title','Clientes')
+@section('title','Cuenta')
 @section('subtitle','Administración')
 {!!Html::script('/vendor/file-input/js/fileinput.js')!!}
 {!!Html::style('/vendor/file-input/css/fileinput.css')!!}

@@ -173,7 +173,7 @@
                                     </li>
                                     <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Clientes <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="/clients">Clientes</a></li>
+                                            <li><a href="/clients">Cuentas</a></li>
                                             <li><a href="/prospect">Posibles Clientes</a></li>
                                             <!--<li><a href="/contact">Contactos</a></li>-->
                                         </ul>

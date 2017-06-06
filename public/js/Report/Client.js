@@ -1,6 +1,10 @@
 function Client() {
     this.init = function () {
         this.table();
+
+        $("#btnSearch").click(function () {
+            objCli.table();
+        })
     }
 
     this.table = function () {
@@ -9,9 +13,10 @@ function Client() {
         obj.end = $("#Detail #fend").val();
 
         return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {
                 url: "/api/reportClient",
                 data: obj,
             },
@@ -33,5 +38,5 @@ function Client() {
     }
 }
 
-var objSale = new Client();
-objSale.init();
+var objCli = new Client();
+objCli.init();

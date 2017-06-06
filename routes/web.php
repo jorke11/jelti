@@ -473,16 +473,13 @@ Route::get('/reportClient', "Report\ClientController@index");
 Route::get('/api/reportClient', "Report\ClientController@getList");
 
 Route::get('/reportSupplier', "Report\SupplierController@index");
-Route::get('/api/reportSupplier', function() {
-    $query = DB::table('vreportsupplier');
-    return Datatables::queryBuilder($query)->make(true);
-});
+
+Route::get('/api/reportSupplier', "Report\SupplierController@getList");
+
 
 Route::get('/reportProduct', "Report\ProductController@index");
-Route::get('/api/reportProduct', function() {
-    $query = DB::table('vreportproduct');
-    return Datatables::queryBuilder($query)->make(true);
-});
+
+Route::get('/api/reportProduct', "Report\ProductController@getList");
 
 Route::get('/reportCommercial', "Report\CommercialController@index");
 Route::get('/api/reportCommercial', function() {

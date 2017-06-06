@@ -1,13 +1,26 @@
 function Product() {
     this.init = function () {
         this.table();
+
+        $("#btnSearch").click(function () {
+            obj.table();
+        })
     }
 
     this.table = function () {
+
+        var param = {};
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+
         return $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/reportProduct",
+            ajax: {
+                url: "/api/reportProduct",
+                data: param,
+            },
+            destroy: true,
             columns: [
                 {data: "product"},
                 {data: "totalunidades"},

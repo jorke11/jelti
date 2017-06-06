@@ -41,7 +41,7 @@ class FulfillmentController extends Controller {
     }
 
     public function getSales($user_id) {
-        $stake = Stakeholder::where("commercial_id", $user_id)->get();
+        $stake = Stakeholder::where("responsible_id", $user_id)->get();
 
         foreach ($stake as $value) {
             $dep = Departures::where("client_id", $value->id)->get();
@@ -84,7 +84,7 @@ class FulfillmentController extends Controller {
     }
 
     public function getValueDetail($id) {
-        $stake = Stakeholder::where("commercial_id", $id)->get();
+        $stake = Stakeholder::where("responsible_id", $id)->get();
 
         $quantity = 0;
         foreach ($stake as $value) {
@@ -115,13 +115,11 @@ class FulfillmentController extends Controller {
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
             $val = FulfillmentDetail::where("fulfillment_id", $input["fulfillment_id"])->where("commercial_id", $input["commercial_id"])->get();
-
+            
             if (count($val) == 0) {
                 $val = Fulfillment::findOrFail($input["fulfillment_id"]);
                 $det = FulfillmentDetail::where("fulfillment_id", $input["fulfillment_id"])->sum("value");
                 $max = $val["value"] - $det;
-//                dd($det);
-//            dd($val);
 
                 if ($max >= $input["value"]) {
                     $result = FulfillmentDetail::create($input);

@@ -1,13 +1,25 @@
 function Supplier() {
     this.init = function () {
         this.table();
+
+        $("#btnSearch").click(function () {
+            obj.table();
+        })
     }
 
     this.table = function () {
+        var param = {};
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+
         return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "/api/reportSupplier",
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {
+                url: "/api/reportSupplier",
+                data: param,
+            },
             columns: [
                 {data: "business"},
                 {data: "totalunidades"},

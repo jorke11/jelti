@@ -60,12 +60,10 @@ group by 1
 order by 2 desc
 
 --informe ventas por cliente
-create or replace view vreportclient as 
-select cli.business,sum(d.quantity) totalunidades,sum(d.value*d.quantity*d.units_sf) total
-from sales_detail d
-JOIN sales s ON s.id=d.sale_id
-JOIN departures dep ON dep.id=s.departure_id
-JOIN stakeholder cli ON cli.id=s.client_id
-where product_id is not null
-group by 1
-order by 3 desc
+create view vreportclient as 
+select s.created,cli.business,sum(d.quantity) totalunidades,sum(d.value*d.quantity*d.units_sf) total 
+from sales_detail d 
+JOIN sales s ON s.id=d.sale_id JOIN departures dep ON dep.id=s.departure_id 
+JOIN stakeholder cli ON cli.id=s.client_id where product_id is not null 
+GROUP BY 1,2 
+ORDER BY 4 DESC

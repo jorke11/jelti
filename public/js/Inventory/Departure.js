@@ -1,6 +1,7 @@
 function Sale() {
     var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem;
     this.init = function () {
+        console.log($("#role_id").val())
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);

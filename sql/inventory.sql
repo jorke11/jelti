@@ -25,3 +25,7 @@ WHERE en.status_id=2
 AND d.product_id IN (select id from products where bar_code='7503008669000')
 AND en.warehouse_id=2
 group by w.description,pro.title,pro.reference
+
+
+---
+

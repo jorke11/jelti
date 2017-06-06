@@ -77,6 +77,7 @@ class HomeController extends Controller {
 
         $commercial = DB::select($sql);
         $commercial = $commercial[0];
+
         if (Auth::user()->status_id == 3) {
             $users = Auth::user();
             $roles = Roles::where("id", $users->role_id)->get();
@@ -87,8 +88,11 @@ class HomeController extends Controller {
                 return \Redirect::to('/');
             }
         } else {
-
-            return view('dashboard', compact("product", "client", "supplier", "commercial"));
+            if (Auth::user()->role_id == 2) {
+                return view('client', compact("product", "client", "supplier", "commercial"));
+            } else {
+                return view('dashboard', compact("product", "client", "supplier", "commercial"));
+            }
         }
     }
 

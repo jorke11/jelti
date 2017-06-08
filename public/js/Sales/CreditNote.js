@@ -32,7 +32,6 @@ function CreditNote() {
         });
 
 
-
         $("#insideManagement").click(function () {
             $(".input-departure").cleanFields({disabled: true});
             $("#btnSend").attr("disabled", true);
@@ -108,11 +107,9 @@ function CreditNote() {
 
     this.new = function () {
         toastr.remove();
-        $("#btnSave").attr("disabled", false);
         $(".input-departure").cleanFields();
         $(".input-detail").cleanFields();
         $(".input-fillable").prop("readonly", false);
-        $("#btnSave").prop("disabled", false);
         $("#btnSend,#btnPdf").prop("disabled", true);
         $("#tblDetail tbody").empty();
         $("#frm #status_id").val(0).trigger("change").prop("disabled", true);
@@ -235,14 +232,14 @@ function CreditNote() {
 
         obj.getItem($("#frmDetail #product_id").val());
         var quantity = listProducts[rowItem].quantity;
-        if (quantity >= $("#frmDetail #quantity").val()) {
-            listProducts[rowItem].quantity = $("#frmDetail #quantity").val();
-            obj.printDetailTmp();
-            toastr.success("Proceso realizado");
-            $("#modalDetail").modal("hide");
-        } else {
-            toastr.error("La cantidad ingresa no puede ser mayor a " + quantity);
-        }
+//        if (quantity >= $("#frmDetail #quantity").val()) {
+        listProducts[rowItem].quantity = $("#frmDetail #quantity").val();
+        obj.printDetailTmp();
+        toastr.success("Proceso realizado");
+        $("#modalDetail").modal("hide");
+//        } else {
+//            toastr.error("La cantidad ingresa no puede ser mayor a " + quantity);
+//        }
     }
 
     this.editItem = function (product_id, rowItem) {
@@ -420,11 +417,11 @@ function CreditNote() {
                     mData: null,
                     mRender: function (data, type, full) {
                         if (data.credit_note != 0) {
-                            html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                            html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdfNote(' + data.id + ')">';
                         } else {
                             html = ''
                         }
-                        
+
                         return html;
                     }
                 }
@@ -478,6 +475,9 @@ function CreditNote() {
 
     this.viewPdf = function (id) {
         window.open("departure/" + id + "/getInvoice");
+    }
+    this.viewPdfNote = function (id) {
+        window.open("creditnote/" + id + "/getInvoice");
     }
 
     this.format = function (d) {

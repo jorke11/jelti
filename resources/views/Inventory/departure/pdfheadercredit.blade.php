@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <title>Nota Credito</title>
+    </head>
     <style>
         body{
             font-size: 11px;
@@ -45,23 +48,12 @@
             <td>SUPERFUDS SAS<br>NIT 900 703 907-7<br>BARRANQUILLA COLOMBIA<br>E-mail: info@superfuds.com.co</td>
         </tr>
     </table>
-    <table align='center' >
-        <tr>
-            <td class="font-title">Resolución Dian 320001359848</td>
-        </tr>
-        <tr>
-            <td class="font-title">del 03/02/2016</td>
-        </tr>
-        <tr>
-            <td class="font-title">Numeración Autorizada 00003 al 50000</td>
-        </tr>
-    </table>
     <br>
     <br>
     <table width='100%'>
         <tr>
-            <td class="font-subtitle" width='50%'>Factura a nombre de:</td>
-            <td class="font-invoice" width='50%'>Factura de venta: <?php echo $invoice ?></td>
+            <td class="font-subtitle" width='50%'>Nota Credito a nombre de:</td>
+            <td class="font-invoice" width='50%'>Nota Credito: <?php echo $invoice ?></td>
         </tr>
         <tr>
             <td>

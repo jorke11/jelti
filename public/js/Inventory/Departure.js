@@ -1,7 +1,6 @@
 function Sale() {
     var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem;
     this.init = function () {
-        console.log($("#role_id").val())
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
@@ -216,11 +215,6 @@ function Sale() {
                 })
 
                 $("#frm #branch_id").html(html);
-
-
-
-
-
             }
         })
     }
@@ -699,8 +693,8 @@ function Sale() {
                     mRender: function (data, type, full) {
                         if (data.status_id != 1) {
                             html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
-                        }else{
-                            html=''
+                        } else {
+                            html = ''
                         }
                         return html;
                     }

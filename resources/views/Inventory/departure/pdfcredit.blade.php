@@ -59,7 +59,7 @@ $fin = $rows;
 $cont = 0;
 for ($i = 1; $i <= $count; $i++) {
     ?>
-    @include('Inventory.departure.pdfheader')
+    @include('Inventory.departure.pdfheadercredit')
     <br>
     <br>
     <table width='100%' id="detail">
@@ -113,31 +113,7 @@ for ($i = 1; $i <= $count; $i++) {
                             <br>
                             <br>
                             <br>
-                            @include('Inventory.departure.pdffooter')
-                            <table>
-                                <tr>
-                                    <td class="resolution">La presente factura de compra - venta se asimila en sus efectos a una letra de cambio, art. 774 numeral 6o. Del Código de Comercio. En caso de
-                                        mora se causarán intereses a la tasa máxima legal estipulada por la ley, o en el respectivo contrato (conforme al art. 884 del Código de Comercio).</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">No somos grandes Contribuyentes, no somos Autorretenedores.</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">Favor hacer transferencia a:</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">Cuenta Bancaria:</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">Bancolombia # 72951229710</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">Corriente a nombre de SuperFuds S.A.S.</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution"></td>
-                                </tr>
-                            </table>
+                            @include('Inventory.departure.pdffootercredit')
                             <br>
                             <br>
                             <br>

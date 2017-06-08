@@ -257,6 +257,7 @@ Route::get('/api/CreditNoteGenerated', function() {
     return Datatables::queryBuilder($query)->make(true);
 });
 
+Route::get('/creditnote/{id}/getInvoice', ['uses' => 'Sales\creditnoteController@getInvoice']);
 
 Route::get('/api/listCategory', function() {
     return Datatables::queryBuilder(DB::table("categories")->orderBy("order", "asc"))->make(true);
@@ -486,4 +487,6 @@ Route::get('/api/reportCommercial', function() {
     $query = DB::table('vreportcommercial');
     return Datatables::queryBuilder($query)->make(true);
 });
+
+Route::get('/fixedInvoice', "ToolController@asignInvoice");
 

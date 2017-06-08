@@ -8,6 +8,6 @@ class CreditNote extends Model {
 
     protected $table = "credit_note";
     protected $primaryKey = "id";
-    protected $fillable = ["id", "departure_id", "quantity"];
+    protected $fillable = ["id", "departure_id", "consecutive"];
 
 }

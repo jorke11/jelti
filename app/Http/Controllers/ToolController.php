@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
+use App\Models\Inventory\Departures;
+use App\models\Administration\Consecutives;
+use DB;
 
 class ToolController extends Controller {
 
@@ -243,6 +246,22 @@ class ToolController extends Controller {
             }
         }
         return $output;
+    }
+
+    public function asignInvoice() {
+        $depAll = Departures::whereNull("invoice")->where("status_id", 2)->get();
+
+
+        foreach ($depAll as $value) {
+
+            $con = Consecutives::select(DB::raw("current+1 as invoice"))->where("id", 1)->first();
+            $dep = Departures::find($value->id);
+            $dep->invoice = $con["invoice"];
+            echo "consecutive " . $con["invoice"] . "dep:" . $dep->consecutive . " <br>";
+            $dep->save();
+            $con->current = $con["invoice"];
+            $con->save();
+        }
     }
 
 }

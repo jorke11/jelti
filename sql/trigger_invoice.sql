@@ -1,27 +1,13 @@
-
-create or replace function invoice() returns trigger as $invoice$
-declare 
-newinvoice integer;
-newin text;
-begin 
-	IF NEW.status_id = 2  THEN
-		newinvoice :=(select current + 1 from consecutives where id=1);
-		newin :=newinvoice::text;
-		update departures set invoice='1' where id =102;
-		update consecutives set current=newinvoice::int where id=1;
-	end IF;
+CREATE OR REPLACE FUNCTION invoice() RETURNS trigger AS $invoice$
+	DECLARE consecutivo int;
+	BEGIN
+		consecutivo:=(select current+1 from consecutive WHERE id=1);
+		update consecutives set current=consecutivo where id=1;
+		update departures set consecutive = consecutivo where id=NEW.id;
+		
 	return NEW;
-END;
-$invoice$ language plpgsql;
+	END;
 
 
-
-create trigger invoice AFTER INSERT OR UPDATE ON departures
-	for each row execute procedure invoice();
-
-
-select * from departures where consecutive='dep0067'
-update departures set status_id=2 where id=102
-
-select * from consecutives
-update departures set invoice=1 where id =102;
+CREATE TRIGGER invoice BEFORE INSERT OR UPDATE ON departures
+    FOR EACH ROW EXECUTE PROCEDURE invoice();

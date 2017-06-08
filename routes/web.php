@@ -396,6 +396,10 @@ Route::get('/api/listDeparture', function() {
         $query->where("responsible_id", Auth::user()->id);
     }
 
+    if (Auth::user()->role_id == 5) {
+        $query->where("warehouse_id", Auth::user()->warehouse_id);
+    }
+
     return Datatables::queryBuilder($query)->make(true);
 });
 

@@ -46,8 +46,9 @@ LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='ge
 
 create view vdepartures as 
 
+
             select d.id,d.consecutive,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name ,sta.business_name) as client,w.description as warehouse,
-            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible
+            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id

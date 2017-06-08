@@ -269,16 +269,16 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-2"><button class="btn btn-info btn-sm">Comentar</button></div>
+                    <div class="col-lg-2"><button type="button" class="btn btn-info btn-sm" id="btnComment">Comentar</button></div>
                     <div class="col-lg-10">
-                        <textarea class="form-control"></textarea>
+                        <textarea class="form-control" id="txtComment"></textarea>
                     </div>
 
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-lg-12">
-                        <ul class="list-group">
+                        <ul class="list-group" id="listComments">
                             <li class="list-group-item">
                                 <span class="badge">Fiorella</span>
                                 [<?php echo date("Y-m-d") ?>] Cras justo odio

@@ -8,6 +8,6 @@ class Comment extends Model {
 
     protected $table = "comments";
     protected $primaryKey = "id";
-    protected $fillable = ["id", "product_id", "stakeholder_id", "description"];
+    protected $fillable = ["id", "product_id", "stakeholder_id", "description","user_id"];
 
 }

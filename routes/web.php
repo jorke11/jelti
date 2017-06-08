@@ -79,6 +79,7 @@ Route::get('/clients/contact/{id}', 'Clients\ClientController@editContact');
 Route::post('/clients/addTax', 'Clients\ClientController@storeTax');
 Route::put('/clients/UpdateTax', 'Clients\ClientController@updateTax');
 Route::delete('/clients/deleteTax/{id}', 'Clients\ClientController@deleteTax');
+Route::post('/clients/addComment', 'Clients\ClientController@storeComment');
 
 
 Route::resource('/category', 'Administration\CategoryController');

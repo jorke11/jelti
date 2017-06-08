@@ -89,8 +89,8 @@ ORDER BY p.code
 
 
 create view vcreditnote as 
-            select d.id,d.consecutive,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name,'') as client,w.description as warehouse,
-            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible
+             select d.id,d.consecutive,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name,'') as client,w.description as warehouse,
+            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,(select count(*) from credit_note where credit_note.departure_id=d.id) credit_note
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN warehouses w ON w.id = d.warehouse_id
@@ -99,3 +99,4 @@ create view vcreditnote as
             JOIN users u ON u.id = d.responsible_id
             WHERE p.group='entry' and d.invoice IS NOT NULL
             ORDER BY d.id DESC;
+

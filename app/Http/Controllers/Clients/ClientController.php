@@ -8,6 +8,7 @@ use App\Models\Administration\Parameters;
 use App\Models\Administration\Stakeholder;
 use App\Models\Administration\Contact;
 use App\Models\Administration\PricesSpecial;
+use App\Models\Administration\Comment;
 use Auth;
 use DB;
 use Datatables;
@@ -179,8 +180,17 @@ class ClientController extends Controller {
     }
 
     public function edit($id) {
+
+
+        $comment = Comment::select("comments.id", "comments.description", "users.name", "comments.created_at")
+                ->join("users", "users.id", "comments.user_id")
+                ->where("comments.stakeholder_id", $id)
+                ->orderBy("comments.created_at", "desc")
+                ->get();
+
         $resp["header"] = Stakeholder::FindOrFail($id);
         $resp["images"] = $this->getImages($id)->getData();
+        $resp["comments"] = $comment;
         return response()->json($resp);
     }
 
@@ -533,6 +543,21 @@ class ClientController extends Controller {
                 ->where("stakeholder_id", $id)
                 ->get();
         return response()->json($data);
+    }
+
+    public function storeComment(Request $request) {
+        $in = $request->all();
+        $new["description"] = $in["comment"];
+        $new["stakeholder_id"] = $in["client_id"];
+        $new["user_id"] = Auth::user()->id;
+        Comment::create($new);
+        $comment = Comment::select("comments.id", "comments.description", "users.name", "comments.created_at")
+                ->join("users", "users.id", "comments.user_id")
+                ->where("comments.stakeholder_id", $in["client_id"])
+                ->orderBy("comments.created_at", "desc")
+                ->get();
+
+        return response()->json(["success" => true, "detail" => $comment]);
     }
 
 }

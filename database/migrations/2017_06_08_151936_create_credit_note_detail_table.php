@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCreditNoteTable extends Migration {
+class CreateCreditNoteDetailTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,10 +12,12 @@ class CreateCreditNoteTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('credit_note', function (Blueprint $table) {
+        Schema::create('credit_note_detail', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('departure_id');
-            $table->integer('sale_id');
+            $table->integer('creditnote_id');
+            $table->integer('product_id');
+            $table->integer('row_id');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }
@@ -26,7 +28,7 @@ class CreateCreditNoteTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('credit_note');
+        Schema::dropIfExists('credit_note_detail');
     }
 
 }

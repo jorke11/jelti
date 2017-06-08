@@ -172,6 +172,26 @@ function Client() {
         $("#contract_expiration").datetimepicker({
             format: 'Y-m-d H:i',
         });
+        $("#btnComment").click(this.addCommnet);
+
+    }
+
+    this.addCommnet = function () {
+        var data = {};
+        data.comment = $("#txtComment").val();
+        data.client_id = $("#frm #id").val();
+        $.ajax({
+            url: 'clients/addComment',
+            method: 'post',
+            data: data,
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.success == true) {
+                    $("#modelActive").modal("hide");
+                    obj.tableComment(data.detail)
+                }
+            }
+        })
     }
 
     this.printErrorClient = function (detail) {
@@ -449,6 +469,8 @@ function Client() {
             success: function (data) {
                 $(".input-clients").setFields({data: data.header});
                 obj.printImages(data.images);
+                obj.tableComment(data.comments);
+
             },
             complete: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
@@ -460,6 +482,16 @@ function Client() {
             }
         })
     }
+
+    this.tableComment = function (detail) {
+        var html = '';
+        $("#listComments").empty();
+        $.each(detail, function (i, val) {
+            html += '<li class="list-group-item"><span class="badge">' + val.name + '</span>[' + val.created_at + ']' + val.description + '</li>';
+        })
+        $("#listComments").html(html);
+    }
+
     this.showModalContact = function (id) {
         var frm = $("#frm");
         var data = frm.serialize();

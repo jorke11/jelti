@@ -13,6 +13,7 @@ use App\Models\Inventory\Departures;
 use App\Models\Invoicing\Sales;
 use App\Models\Invoicing\SaleDetail;
 use App\Models\Sales\CreditNote;
+use App\Models\Sales\CreditNoteDetail;
 use App\Http\Controllers\ToolController;
 use DB;
 
@@ -50,15 +51,18 @@ class creditnoteController extends Controller {
     public function store(Request $req) {
         $input = $req->all();
 
-        
-        dd($input);exit;    
-        
+        $sales = Sales::where("departure_id", $input["header"]["id"])->first();
+        $new["sale_id"] = $sales->id;
+        $new["departure_id"] = $input["header"]["id"];
+
+        $id = CreditNote::create($new)->id;
 
         foreach ($input["detail"] as $value) {
-            $cre = new CreditNote();
-            $cre->departure_id = $input["header"]["id"];
-            $cre->item_id = $value["id"];
+            $cre = new CreditNoteDetail();
+            $cre->creditnote_id = $id;
+            $cre->row_id = $value["id"];
             $cre->quantity = $value["quantity"];
+            $cre->product_id = $value["product_id"];
             $cre->save();
         }
 
@@ -66,6 +70,7 @@ class creditnoteController extends Controller {
     }
 
     public function formatDetail($id) {
+
         $detail = DB::table("departures_detail")
                 ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "products.id as product_id")
                 ->join("products", "departures_detail.product_id", "products.id")
@@ -95,19 +100,16 @@ class creditnoteController extends Controller {
 
         $sale = Sales::where("departure_id", $id)->first();
         $detail = DB::table("sales_detail")
-                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->select(DB::raw("sales_detail.quantity - credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * (sales_detail.quantity - credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
+                ->join("credit_note_detail", "credit_note_detail.product_id", "sales_detail.product_id")
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
 
         $dep = Departures::find($id);
 
-//        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
-//                ->where("stakeholder_id", $sale["client_id"])
-//                ->join("cities", "cities.id", "branch_office.city_id")
-//                ->first();
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
                 ->where("stakeholder.id", $sale["client_id"])
                 ->join("cities", "cities.id", "stakeholder.city_id")
@@ -166,6 +168,10 @@ class creditnoteController extends Controller {
         $tool = new ToolController();
 
         $cli["business_name"] = $tool->cleanText($cli["business_name"]);
+
+
+        $credit = CreditNote::where("departure_id", $id)->first();
+
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],
@@ -180,7 +186,7 @@ class creditnoteController extends Controller {
             'totalInvoice' => "$ " . number_format(($totalSum), 0, ',', '.'),
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
-            'invoice' => $dep->invoice,
+            'invoice' => $credit->id,
             'textTotal' => trim($tool->to_word(round($totalWithTax)))
         ];
 

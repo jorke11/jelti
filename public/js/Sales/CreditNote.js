@@ -1,5 +1,5 @@
 function CreditNote() {
-    var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem;
+    var table, maxDeparture = 0, listProducts = [], listProductsStatic = [], dataProduct, row = {}, rowItem;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -200,9 +200,6 @@ function CreditNote() {
                                 obj.printDetail(data.detail);
                                 $("#loading-super").addClass("hidden");
                             }
-                        },
-                        complete: function () {
-                            $("#loading-super").addClass("hidden");
                         }
                     })
                 } else {
@@ -231,7 +228,8 @@ function CreditNote() {
         param.quantity = $("#frmDetail #quantity").val();
 
         obj.getItem($("#frmDetail #product_id").val());
-        var quantity = listProducts[rowItem].quantity;
+        var quantity = listProductsStatic[rowItem].quantity;
+   
 //        if (quantity >= $("#frmDetail #quantity").val()) {
         listProducts[rowItem].quantity = $("#frmDetail #quantity").val();
         obj.printDetailTmp();
@@ -322,6 +320,7 @@ function CreditNote() {
                 }
 
                 listProducts = data.detail;
+                listProductsStatic = data.detail;
                 obj.printDetailTmp(data.detail, btnEdit, btnDel);
             }
         })

@@ -261,6 +261,7 @@ class ToolController extends Controller {
             $dep->save();
             $con->current = $con["invoice"];
             $con->save();
+            $con = '';
         }
     }
 

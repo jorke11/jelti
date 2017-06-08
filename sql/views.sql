@@ -46,7 +46,6 @@ LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='ge
 
 create view vdepartures as 
 
-
             select d.id,d.consecutive,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name ,sta.business_name) as client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id
             from departures d
@@ -57,7 +56,7 @@ create view vdepartures as
             JOIN parameters p ON p.id = d.status_id
             JOIN users u ON u.id = d.responsible_id
             WHERE p.group='entry'
-            ORDER BY d.id DESC;
+            ORDER BY d.status_id,d.id asc
 
 create view vcities as 
 select c.id,c.description city,d.description department,c.code

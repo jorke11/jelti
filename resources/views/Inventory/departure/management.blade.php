@@ -27,8 +27,8 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Consecutivo:</label>
-                    <input type="text" class="form-control input-departure input-sm" id="consecutive" name='consecutive' value="0001" readonly="">
+                    <label for="email">#:</label>
+                    <input type="text" class="form-control input-departure input-sm" id="id" name='id' readonly="">
                 </div>
             </div>
             <div class="col-lg-2">

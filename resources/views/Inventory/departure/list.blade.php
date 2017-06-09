@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th></th>
-            <th>Consecutive</th>
+            <th>#</th>
             <th>Factura</th>
             <th>Fecha</th>
             <th>Cliente</th>
@@ -19,7 +19,7 @@
     <tfoot>
         <tr>
             <th></th>
-            <th>Consecutive</th>
+            <th>#</th>
             <th>Factura</th>
             <th>Fecha</th>
             <th>Cliente</th>

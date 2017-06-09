@@ -243,7 +243,7 @@ function Sale() {
                         btnDel = false;
                     }
 
-                    obj.printDetail(resp.detail, btnEdit, btnDel);
+                    obj.printDetail(resp, btnEdit, btnDel);
                 } else {
                     toastr.warning(resp.msg);
                     $("#btnDocument").attr("disabled", false);
@@ -503,15 +503,20 @@ function Sale() {
     this.printDetail = function (data, btnEdit = true, btnDel = true) {
         var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0;
         $("#tblDetail tbody").empty();
+
         $.each(data.detail, function (i, val) {
             quantityTotal += val.quantity;
-
             total += val.total;
-            if (btnEdit == true && val.status_id != 3) {
-                htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
-            } else {
+            if (val.status_id == 3 && $("#role_id").val() == 4) {
                 htmlEdit = '';
+            } else {
+                if (val.status_id == 3) {
+                    htmlEdit = '';
+                } else {
+                    htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
+                }
             }
+
             if (btnDel == true && val.status_id != 3) {
                 htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ',' + val.status_id + ')>Delete</button>'
             } else {
@@ -573,6 +578,7 @@ function Sale() {
                     btnEdit = true;
                     btnDel = true;
                 }
+
 
                 if ($("#role_id").val() == 1) {
                     $("#frm #shipping_cost").attr("disabled", false);
@@ -709,7 +715,7 @@ function Sale() {
                     defaultContent: '',
                     searchable: false,
                 },
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "invoice"},
                 {data: "created_at"},
                 {data: "client"},

@@ -22,7 +22,6 @@ class CreateDeparturesTable extends Migration {
             $table->integer('order_id')->nullable();
             $table->integer('branch_id')->nullable();
             $table->string('address');
-            $table->string('consecutive');
             $table->string('description');
             $table->string('phone');
             $table->dateTime('created');

@@ -259,26 +259,21 @@ class DepartureController extends Controller {
             $input = $request->all();
 //            unset($input["id"]);
 //            $user = Auth::User();
-
             if (isset($input["detail"])) {
 
                 try {
-
                     DB::beginTransaction();
                     $emDetail = null;
 
                     $input["header"]["status_id"] = 1;
-                    $input["header"]["consecutive"] = $this->createConsecutive(3);
 
                     if (!isset($input["header"]["shipping_cost"])) {
                         $input["header"]["shipping_cost"] = 0;
                     }
 
-
                     $result = Departures::create($input["header"])->id;
 
                     if ($result) {
-                        $this->updateConsecutive(3);
                         $resp = Departures::FindOrFail($result);
 
                         $input["detail"] = array_values(array_filter($input["detail"]));
@@ -378,20 +373,15 @@ class DepartureController extends Controller {
                     $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
                     if ($val == 0) {
                         if (count($dep) == 0) {
-                            $cons = $this->createConsecutive(5);
-
 
                             $id = DB::table("sales")->insertGetId(
                                     ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
                                         "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
                                         "address" => $departure["address"], "phone" => $departure["phone"], "status_id" => $departure["status_id"],
-                                        "created" => $departure["created"], "consecutive" => $cons, "shipping_cost" => $departure["shipping_cost"],
+                                        "created" => $departure["created"], "shipping_cost" => $departure["shipping_cost"],
                                         "created_at" => date("Y-m-d H:i"), "description" => $departure["description"]
                                     ]
                             );
-//
-                            $this->updateConsecutive(5);
-
 
                             $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
@@ -443,15 +433,16 @@ class DepartureController extends Controller {
                                 "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes", "type_nature" => 2
                             ]);
                             $credit = 0;
-
-//                            $departure->invoice = $this->createConsecutive(1);
+                            $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
+                            $departure->invoice = $con->consecutive;
                             $departure->status_id = 2;
                             $departure->save();
-//                            $this->updateConsecutive(1);
-                            $detail = $this->formatDetail($input["id"]);
 
+                            $detail = $this->formatDetail($input["id"]);
+                            $departure = Departures::find($input["id"]);
+                            $total = "$ " . number_format($this->total, 0, ",", ".");
                             DB::commit();
-                            return response()->json(["success" => true, "header" => $departure, "detail" => $detail]);
+                            return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" =>$total]);
                         } else {
                             return response()->json(["success" => false, "msg" => 'Already sended']);
                         }
@@ -607,7 +598,8 @@ class DepartureController extends Controller {
             $input["description"] = "Inventario no disponible, guarda 0";
             $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
-            return response()->json(['success' => true, "data" => $resp, "msg" => "No se puede agregar se deja en 0"]);
+            $total = "$ " . number_format($this->total, 0, ",", ".");
+            return response()->json(['success' => true, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
         }
 
         if ($input["real_quantity"] != 0) {
@@ -678,12 +670,6 @@ class DepartureController extends Controller {
     }
 
     public function generateInvoice($id) {
-        $dep = Departures::findOrfail($id);
-
-
-        $dep->invoice = $this->createConsecutive(1);
-        $dep->save();
-        $this->updateConsecutive(1);
 
         $sale = Sales::where("departure_id", $id)->first();
 

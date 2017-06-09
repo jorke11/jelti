@@ -16,7 +16,6 @@ class Departures extends Model {
         "client_id",
         "warehouse_id",
         "created",
-        "consecutive",
         "destination_id",
         "address",
         "phone",
@@ -24,7 +23,8 @@ class Departures extends Model {
         "shipping_cost",
         "invoice",
         "description",
-        "paid_out"
+        "paid_out",
+        "date_dispatched"
         ];
 
 }

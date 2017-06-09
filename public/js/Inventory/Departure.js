@@ -510,10 +510,10 @@ function Sale() {
             if (val.status_id == 3 && $("#role_id").val() == 4) {
                 htmlEdit = '';
             } else {
-                if (val.status_id == 3) {
-                    htmlEdit = '';
-                } else {
+                if (val.status_id == 1) {
                     htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
+                } else {
+                    htmlEdit = '';
                 }
             }
 

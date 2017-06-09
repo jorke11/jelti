@@ -442,7 +442,7 @@ class DepartureController extends Controller {
                             $departure = Departures::find($input["id"]);
                             $total = "$ " . number_format($this->total, 0, ",", ".");
                             DB::commit();
-                            return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" =>$total]);
+                            return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" => $total]);
                         } else {
                             return response()->json(["success" => false, "msg" => 'Already sended']);
                         }
@@ -578,7 +578,7 @@ class DepartureController extends Controller {
         $pro = Products::find($input["product_id"]);
 
         unset($input["value"]);
-
+        $input["value"] = $pro->price_sf;
         if (Auth::user()->role_id == 4) {
             unset($input["real_quantity"]);
             $result = $entry->fill($input)->save();

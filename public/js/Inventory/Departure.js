@@ -509,17 +509,11 @@ function Sale() {
             total += val.total;
             if (val.status_id == 3 && $("#role_id").val() == 4) {
                 htmlEdit = '';
-                console.log("si")
-                 console.log(val)
             } else {
-                if (val.status_id == 1) {
-                     console.log("else")
-                 console.log(val)
-                    htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
-                } else {
-                      console.log("else lese")
-                 console.log(val)
+                if (val.status_id == 2 && data.header.status_id == 2) {
                     htmlEdit = '';
+                } else {
+                    htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
                 }
             }
 
@@ -584,6 +578,7 @@ function Sale() {
                     btnEdit = true;
                     btnDel = true;
                 }
+
 
 
                 if ($("#role_id").val() == 1) {

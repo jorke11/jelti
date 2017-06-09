@@ -509,8 +509,10 @@ function Sale() {
             total += val.total;
             if (val.status_id == 3 && $("#role_id").val() == 4) {
                 htmlEdit = '';
+                console.log("si")
             } else {
                 if (val.status_id == 1) {
+                    console.log(val)
                     htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
                 } else {
                     htmlEdit = '';

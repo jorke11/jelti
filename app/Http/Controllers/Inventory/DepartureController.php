@@ -317,7 +317,7 @@ class DepartureController extends Controller {
 
                             $cit = Cities::find($ware->city_id);
 
-                            $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $input["header"]["consecutive"];
+                            $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $input["header"]["id"];
                             $input["city"] = $cit->description;
                             $input["consecutive"] = $input["header"]["consecutive"];
 

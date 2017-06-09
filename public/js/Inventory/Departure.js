@@ -1,5 +1,5 @@
 function Sale() {
-    var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem;
+    var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -168,6 +168,7 @@ function Sale() {
         $("#btnmodalDetail,#btnModalUpload").attr("disabled", false);
         listProducts = [];
         obj.consecutive();
+        statusRecord = false;
     }
 
     this.getBranchAddress = function (id, path) {
@@ -295,13 +296,14 @@ function Sale() {
                         },
                         success: function (data) {
                             if (data.success == true) {
+                                statusRecord = true;
                                 $("#btnSend").attr("disabled", false);
                                 $("#frm #id").val(data.data.id);
                                 $(".input-departure").setFields({data: data.data, disabled: true});
                                 table.ajax.reload();
                                 toastr.success(msg);
                                 $("#btnmodalDetail").attr("disabled", false);
-                                obj.printDetail(data.detail);
+                                obj.printDetail(data);
                             }
                         },
                         complete: function () {
@@ -363,8 +365,12 @@ function Sale() {
                     success: function (resp) {
                         if (resp.success == true) {
                             $("#modalDetail").modal("hide");
-                            obj.printDetail(resp.data);
-
+                            obj.printDetail(resp);
+                            $("#frmDetail #product_id").text("");
+                            $("#frmDetail #value").val("");
+                            $("#frmDetail #quantity").val("");
+                            $("#frmDetail #quantity_units").val("");
+                            $("#frmDetail #value_units").val("");
                         } else {
                             toastr.error(resp.success.msg);
                         }
@@ -374,34 +380,65 @@ function Sale() {
                 })
 
             } else {
-                if ($("#frmDetail #rowItem").val() == '-1') {
-
-                    listProducts.push({
-                        row: listProducts.length,
-                        product_id: $("#frmDetail #product_id").val(),
-                        product: $.trim($("#frmDetail #product_id").text()),
-                        quantity: $("#frmDetail #quantity").val(),
-                        valueFormated: $("#frmDetail #value").val(),
-                        totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
-                        real_quantity: '',
-                        totalFormated_real: '',
-                        comment: '',
-                        status: 'new'
-                    });
-//                    $(".input-detail").cleanFields();
-                    $("#frmDetail #product_id").text("");
-                    $("#frmDetail #value").val("");
-//                    $("#frmDetail #value").val("");
-                    msg += " add";
+                if (statusRecord == true) {
+                    var frm = $("#frmDetail");
+                    var data = frm.serialize();
+                    var url = "/departure/storeDetail";
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        data: data,
+                        dataType: 'JSON',
+                        success: function (resp) {
+                            if (resp.success == true) {
+                                $("#modalDetail").modal("hide");
+                                obj.printDetail(resp);
+                                $("#frmDetail #product_id").text("");
+                                $("#frmDetail #value").val("");
+                                $("#frmDetail #quantity").val("");
+                                $("#frmDetail #quantity_units").val("");
+                                $("#frmDetail #value_units").val("");
+                            } else {
+                                toastr.error(resp.success.msg);
+                            }
+                        }, error(xhr, responseJSON, thrown) {
+                            toastr.error(xhr.responseJSON.msg);
+                        }
+                    })
                 } else {
-                    listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
-                    listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
-                    msg += " edited";
+                    if ($("#frmDetail #rowItem").val() == '-1') {
+
+                        listProducts.push({
+                            row: listProducts.length,
+                            product_id: $("#frmDetail #product_id").val(),
+                            product: $.trim($("#frmDetail #product_id").text()),
+                            quantity: $("#frmDetail #quantity").val(),
+                            valueFormated: $("#frmDetail #value").val(),
+                            totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
+                            real_quantity: '',
+                            totalFormated_real: '',
+                            comment: '',
+                            status: 'new'
+                        });
+//                    $(".input-detail").cleanFields();
+                        $("#frmDetail #product_id").text("");
+                        $("#frmDetail #value").val("");
+                        $("#frmDetail #quantity").val("");
+                        $("#frmDetail #quantity_units").val("");
+                        $("#frmDetail #value_units").val("");
+//                    $("#frmDetail #value").val("");
+                        msg += " add";
+                    } else {
+                        listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
+                        listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
+                        msg += " edited";
+                    }
+                    obj.printDetailTmp();
                 }
 
 
                 toastr.success(msg);
-                obj.printDetailTmp();
+
             }
 
         } else {
@@ -464,9 +501,12 @@ function Sale() {
     }
 
     this.printDetail = function (data, btnEdit = true, btnDel = true) {
-        var html = "", htmlEdit = "", htmlDel = "";
+        var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0;
         $("#tblDetail tbody").empty();
-        $.each(data, function (i, val) {
+        $.each(data.detail, function (i, val) {
+            quantityTotal += val.quantity;
+
+            total += val.total;
             if (btnEdit == true && val.status_id != 3) {
                 htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
             } else {
@@ -492,6 +532,8 @@ function Sale() {
             html += '<td>' + htmlEdit + htmlDel + "</td>";
             html += "</tr>";
         });
+        html += '<tr><td colspan="2"><Strong>Total</strong></td><td>' + quantityTotal + '</td><td></td><td>' + data.total + '</td><td></td><td></td><td></td><td></td></tr>';
+
         $("#tblDetail tbody").html(html);
     }
 
@@ -511,18 +553,17 @@ function Sale() {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
 
-//                if (data.header.invoice == '') {
-//                    $("#btnDocument").attr("disabled", false);
-//                }
 
                 if (data.header.status_id == 1) {
                     $("#btnSave, #btnmodalDetail").attr("disabled", true);
+                    statusRecord = true;
                 }
 
                 if (data.header.status_id == 2) {
                     $("#btnSend, #btnmodalDetail").attr("disabled", true);
                     btnEdit = false;
                     btnDel = false;
+                    statusRecord = false;
                 } else {
                     $("#btnSend,#btnmodalDetail").attr("disabled", false);
                 }
@@ -537,8 +578,7 @@ function Sale() {
                     $("#frm #shipping_cost").attr("disabled", false);
                 }
 
-
-                obj.printDetail(data.detail, btnEdit, btnDel);
+                obj.printDetail(data, btnEdit, btnDel);
             }
         })
     }
@@ -643,7 +683,7 @@ function Sale() {
                     success: function (data) {
                         if (data.success == true) {
                             toastr.warning("Record deleted");
-                            obj.printDetail(data.data);
+                            obj.printDetail(data);
                         }
                     }, error: function (err) {
                         toastr.error("No se puede borrra Este registro");

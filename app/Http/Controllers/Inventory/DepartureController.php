@@ -237,8 +237,6 @@ class DepartureController extends Controller {
         ];
 
 
-
-
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
 //  
@@ -306,7 +304,6 @@ class DepartureController extends Controller {
 
                         $detail = $this->formatDetail($result);
 
-
                         $ware = Warehouses::find($input["header"]["warehouse_id"]);
 
                         $client = Stakeholder::find($input["header"]["client_id"]);
@@ -346,7 +343,8 @@ class DepartureController extends Controller {
                             });
                         }
                         DB::commit();
-                        return response()->json(['success' => true, "data" => $resp, "detail" => $detail]);
+                        $total = "$ " . number_format($this->total, 0, ",", ".");
+                        return response()->json(['success' => true, "data" => $resp, "detail" => $detail, "total" => $total]);
                     } else {
                         return response()->json(['success' => false]);
                     }
@@ -530,15 +528,13 @@ class DepartureController extends Controller {
     public function edit($id) {
         $entry = Departures::FindOrFail($id);
         $detail = $this->formatDetail($id);
-
-        return response()->json(["header" => $entry, "detail" => $detail]);
+        $total = "$ " . number_format($this->total, 0, ",", ".");
+        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);
     }
 
     public function formatDetail($id) {
         $detail = DB::table("departures_detail")
-                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), 
-                        "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", 
-                        DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf")
+                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf")
                 ->join("products", "departures_detail.product_id", "products.id")
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id")
                 ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
@@ -596,7 +592,8 @@ class DepartureController extends Controller {
             unset($input["real_quantity"]);
             $result = $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
-            return response()->json(['success' => true, "data" => $resp]);
+            $total = "$ " . number_format($this->total, 0, ",", ".");
+            return response()->json(['success' => true, "detail" => $resp, "total" => $total]);
         }
 
 
@@ -631,7 +628,8 @@ class DepartureController extends Controller {
 
             $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
-            return response()->json(['success' => true, "data" => $resp]);
+            $total = "$ " . number_format($this->total, 0, ",", ".");
+            return response()->json(['success' => true, "detail" => $resp, "total" => $total]);
         }
     }
 
@@ -649,9 +647,9 @@ class DepartureController extends Controller {
         $entry = DeparturesDetail::FindOrFail($id);
         $result = $entry->delete();
         if ($result) {
-
             $resp = $this->formatDetail($entry["departure_id"]);
-            return response()->json(['success' => true, "data" => $resp]);
+            $total = "$ " . number_format($this->total, 0, ",", ".");
+            return response()->json(['success' => true, "detail" => $resp, 'total' => $total]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -665,11 +663,14 @@ class DepartureController extends Controller {
             $input["status_id"] = 1;
             $input["real_quantity"] = (!isset($input["real_quantity"]) || $input["real_quantity"] == '') ? null : $input["real_quantity"];
 
+            $product = Products::find($input["product_id"]);
+
+            $input["value"] = $product->price_sf;
             $result = DeparturesDetail::create($input);
             if ($result) {
-
                 $resp = $this->formatDetail($input["departure_id"]);
-                return response()->json(['success' => true, "data" => $resp]);
+                $total = "$ " . number_format($this->total, 0, ",", ".");
+                return response()->json(['success' => true, "detail" => $resp, "total" => $total]);
             } else {
                 return response()->json(['success' => false]);
             }

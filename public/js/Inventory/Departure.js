@@ -705,6 +705,8 @@ function Sale() {
                 {data: "responsible"},
                 {data: "warehouse"},
                 {data: "city"},
+                {data: "quantity"},
+                {data: "subtotal"},
                 {data: "status"},
             ],
             order: [[1, 'DESC']],
@@ -716,7 +718,7 @@ function Sale() {
                     }
                 },
                 {
-                    targets: [9],
+                    targets: [11],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -729,37 +731,41 @@ function Sale() {
                     }
                 }
             ],
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var type = $(column.header()).attr('rowspan');
-                    if (type != undefined) {
-                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
-                                .appendTo($(column.footer()).empty())
-                                .on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                            $(this).val()
-                                            );
-                                    column
-//                                            .search(val ? val : '', true, false)
-                                            .search(val ? '^' + val + '$' : '', true, false)
-                                            .draw();
-                                });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        });
-                    }
-                });
-            },
+           
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
-                    $('td', row).eq(8).addClass('color-new');
+                    $('td', row).eq(10).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(8).addClass('color-pending');
+                    $('td', row).eq(10).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(8).addClass('color-checked');
+                    $('td', row).eq(10).addClass('color-checked');
                 }
+            },
+            footerCallback: function (row, data, start, end, display) {
+                var api = this.api(), data, total;
+
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                };
+
+                total = api
+                        .column(8)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                // Update footer
+                $(api.column(8).footer()).html(
+                        '(' + total + ')'
+                        );
+
+                console.log(api)
             }
+
         });
         $('#tbl tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
@@ -777,7 +783,7 @@ function Sale() {
     }
 
     this.viewPdf = function (id) {
-        window.open(PATH+"/departure/" + id + "/getInvoice");
+        window.open(PATH + "/departure/" + id + "/getInvoice");
     }
 
     this.format = function (d) {

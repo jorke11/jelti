@@ -28,7 +28,6 @@ function Client() {
                 {data: "totalunidades"},
                 {data: "totalformat"},
             ],
-            order: [[2, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [0, 1, 2],

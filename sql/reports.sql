@@ -62,10 +62,16 @@ group by 1
 order by 2 desc
 
 --informe ventas por cliente
-create view vreportclient as 
-select s.created,cli.business,sum(d.quantity) totalunidades,sum(d.value*d.quantity*d.units_sf) total 
-from sales_detail d 
-JOIN sales s ON s.id=d.sale_id JOIN departures dep ON dep.id=s.departure_id 
-JOIN stakeholder cli ON cli.id=s.client_id where product_id is not null 
-GROUP BY 1,2 
-ORDER BY 4 DESC
+create view vdepartures as 
+
+            select d.id,coalesce(d.invoice,'') invoice, d.created_at,d.created ,coalesce(sta.business_name ,sta.business_name) as client,w.description as warehouse,
+            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,sta.id as client_id
+            from departures d
+            LEFT JOIN branch_office s ON s.id = d.branch_id
+            JOIN stakeholder sta ON sta.id = d.client_id
+            JOIN warehouses w ON w.id = d.warehouse_id
+            JOIN cities c ON c.id = d.city_id
+            JOIN parameters p ON p.id = d.status_id
+            JOIN users u ON u.id = d.responsible_id
+            WHERE p.group='entry'
+            ORDER BY d.status_id,d.id asc

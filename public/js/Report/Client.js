@@ -1,7 +1,6 @@
 function Client() {
     this.init = function () {
         this.table();
-
         $("#btnSearch").click(function () {
             objCli.table();
         })
@@ -11,7 +10,6 @@ function Client() {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
-
         return $('#tbl').DataTable({
             processing: true,
             serverSide: true,
@@ -20,10 +18,14 @@ function Client() {
                 url: "/api/reportClient",
                 data: obj,
             },
+//            dataSrc: function (json) {
+//                console.log(json)
+////                return json.data;
+//            },
             columns: [
                 {data: "business"},
                 {data: "totalunidades"},
-                {data: "total"},
+                {data: "totalformat"},
             ],
             order: [[2, 'DESC']],
             aoColumnDefs: [

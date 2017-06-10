@@ -24,6 +24,9 @@
         {!! Form::open(['id'=>'frm']) !!}
         <input id="id_orderext" type="hidden" value="{{isset($id)?$id:''}}">
         <input id="id" name="id" type="hidden" class="input-departure">
+        <input id="client_id" type="hidden" value="{{$client_id}}">
+        <input id="init" type="hidden" value="{{$init}}">
+        <input id="end" type="hidden" value="{{$end}}">
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">

@@ -176,6 +176,9 @@ Route::get('/departure/{id}/getBranch', ['uses' => 'Inventory\DepartureControlle
 Route::post('/departure/uploadExcel', 'Inventory\DepartureController@storeExcel');
 
 
+Route::get('/departure/{id}/{init}/{end}', ['uses' => 'Inventory\DepartureController@index']);
+Route::get('/api/listDeparture', 'Inventory\DepartureController@listTable');
+
 Route::resource('/order', 'Inventory\OrderController');
 Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);
 Route::get('/order/{id}/quantity', ['uses' => 'Inventory\OrderController@getQuantity']);
@@ -388,20 +391,7 @@ Route::get('/api/listEntry', function() {
     return Datatables::queryBuilder($query)->make(true);
 });
 
-Route::get('/api/listDeparture', function() {
 
-    $query = DB::table('vdepartures');
-
-    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-        $query->where("responsible_id", Auth::user()->id);
-    }
-
-    if (Auth::user()->role_id == 5) {
-        $query->where("warehouse_id", Auth::user()->warehouse_id);
-    }
-
-    return Datatables::queryBuilder($query)->make(true);
-});
 
 
 Route::get('/api/listOrder', function() {

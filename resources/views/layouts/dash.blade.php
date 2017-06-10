@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="{{ asset('assets/images/icon.png') }}">
         <title>SuperFüds</title>
+        <script>var PATH='{{url("/")}}'</script>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
         {!!Html::script('/vendor/jquery-ui.js')!!}
 

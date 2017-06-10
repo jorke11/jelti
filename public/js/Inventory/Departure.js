@@ -12,7 +12,6 @@ function Sale() {
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
         });
-
         $("#client_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getClient($(this).val());
@@ -22,7 +21,6 @@ function Sale() {
                 $("#frm #phone_supplier").val("");
             }
         });
-
         $("#branch_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getBranchAddress($(this).val());
@@ -30,12 +28,10 @@ function Sale() {
 
             }
         });
-
         $("#quantity").change(function () {
             $("#quantity_units").val(dataProduct.units_sf * $(this).val());
             $("#value_units").val(dataProduct.units_sf * $(this).val() * dataProduct.price_sf).formatNumber();
         });
-
         if ($("#id_orderext").val() != '') {
             obj.infomationExt($("#id_orderext").val(), true);
         }
@@ -58,14 +54,12 @@ function Sale() {
             $("#modalDetail").modal("show");
             $(".input-detail").cleanFields();
             $("#frmDetail #rowItem").val(-1);
-
             if ($("#frm #status_id").val() == 1) {
                 $("#frmDetail #real_quantity").attr("disabled", true);
                 $("#frmDetail #description").attr("disabled", true);
             }
 
         });
-
         $("#frmDetail #product_id").change(function () {
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
@@ -101,7 +95,6 @@ function Sale() {
                 toastr.error("error")
             }
         });
-
         $("#tabList").click(function () {
             table.ajax.reload();
         })
@@ -117,7 +110,6 @@ function Sale() {
 
     this.uploadExcel = function () {
         var formData = new FormData($("#frmUpload")[0]);
-
         $.ajax({
             url: 'departure/uploadExcel',
             method: 'POST',
@@ -128,7 +120,6 @@ function Sale() {
             contentType: false,
             success: function (data) {
                 listProducts = data.data;
-
                 obj.printDetailTmp();
             },
             complete: function () {
@@ -203,12 +194,9 @@ function Sale() {
                 resp.data.client.name = (resp.data.client.name == null) ? '' : resp.data.client.name + " ";
                 resp.data.client.last_name = (resp.data.client.last_name == null) ? '' : resp.data.client.last_name + " ";
                 $("#frm #name_client").val(resp.data.client.name + resp.data.client.last_name + resp.data.client.business_name);
-
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.data.client.address_send);
                 $("#frm #phone").val(resp.data.client.phone);
-
-
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
                 html = "<option value=0>Selection</option>";
                 $.each(resp.data.branch, function (i, val) {
@@ -237,7 +225,6 @@ function Sale() {
                     toastr.success("Sended");
                     $(".input-departure").setFields({data: resp.header, disabled: true});
                     $("#btnDocument").attr("disabled", false);
-
                     if (resp.header.status_id == 2) {
                         btnEdit = false;
                         btnDel = false;
@@ -269,13 +256,11 @@ function Sale() {
         var id = $("#frm #id").val();
         var msg = '';
         var validate = $(".input-departure").validate();
-
         if (validate.length == 0) {
             if ($("#id_orderext").val() == '') {
                 if (listProducts.length > 0) {
                     data.header = $(".input-departure").getData();
                     data.detail = listProducts;
-
                     if (id == '') {
                         method = 'POST';
                         url = "departure";
@@ -342,18 +327,15 @@ function Sale() {
     this.saveDetail = function () {
         toastr.remove();
         $("#frmDetail #departure_id").val($("#frm #id").val());
-
         var data = {}, value = 0, total = 0;
         var url = "", method = "";
         var id = $("#frmDetail #id").val();
         var form = $("#frmDetail").serialize()
         var msg = 'Record Detail';
         var validate = $(".input-detail").validate();
-
         if (validate.length == 0) {
             if (id != '') {
                 var id = $("#frmDetail #id").val();
-
                 var frm = $("#frmDetail");
                 var data = frm.serialize();
                 var url = "/departure/detail/" + id;
@@ -438,7 +420,6 @@ function Sale() {
 
 
                 toastr.success(msg);
-
             }
 
         } else {
@@ -475,7 +456,6 @@ function Sale() {
                 htmlDel = '<button type="button" class="btn btn-xs btn-danger" onclick=obj.deleteItem(' + val.product_id + ',' + val.row + ')>Del</button>'
 
                 val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
-
                 html += '<tr id="row_' + val.row + '">';
                 html += "<td>" + val.product + "</td>";
                 html += "<td>" + val.comment + "</td>";
@@ -490,20 +470,17 @@ function Sale() {
                 html += "</tr>";
             }
         });
-
         $("#tblDetail tbody").html(html);
     }
 
     this.deleteItem = function (product_id, rowItem) {
         delete listProducts[rowItem];
         $("#row_" + rowItem).remove();
-
     }
 
     this.printDetail = function (data, btnEdit = true, btnDel = true) {
         var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0;
         $("#tblDetail tbody").empty();
-
         $.each(data.detail, function (i, val) {
             quantityTotal += val.quantity;
             total += val.total;
@@ -538,7 +515,6 @@ function Sale() {
             html += "</tr>";
         });
         html += '<tr><td colspan="2"><Strong>Total</strong></td><td>' + quantityTotal + '</td><td></td><td>' + data.total + '</td><td></td><td></td><td></td><td></td></tr>';
-
         $("#tblDetail tbody").html(html);
     }
 
@@ -633,7 +609,6 @@ function Sale() {
 
     this.confirmItem = function () {
         var id = $("#frmDetail #id").val();
-
         var frm = $("#frmDetail");
         var data = frm.serialize();
         var url = "/departure/detail/" + id;
@@ -703,11 +678,18 @@ function Sale() {
     }
 
     this.table = function () {
+        var param = {};
+        param.client_id = $("#frm #client_id").val();
+        param.init = $("#frm #init").val();
+        param.end = $("#frm #end").val();
         var html = '';
         table = $('#tbl').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listDeparture",
+            ajax: {
+                url: "/api/listDeparture",
+                data: param
+            },
             columns: [
                 {
                     className: 'details-control',
@@ -739,7 +721,7 @@ function Sale() {
                     mData: null,
                     mRender: function (data, type, full) {
                         if (data.status_id != 1) {
-                            html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                            html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
                         } else {
                             html = ''
                         }
@@ -795,7 +777,7 @@ function Sale() {
     }
 
     this.viewPdf = function (id) {
-        window.open("departure/" + id + "/getInvoice");
+        window.open(PATH+"/departure/" + id + "/getInvoice");
     }
 
     this.format = function (d) {
@@ -824,7 +806,6 @@ function Sale() {
                     html += "<td>" + val.totalFormated_real + "</td>";
                     html += "</tr>";
                 });
-
                 html += '<tr><td colspan="4">Total</td><td>' + data.total + '</td></td>';
                 html += "</tbody></table><br>";
             }

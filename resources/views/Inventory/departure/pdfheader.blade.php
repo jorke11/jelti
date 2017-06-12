@@ -53,7 +53,7 @@
             <td class="font-title">del 03/02/2016</td>
         </tr>
         <tr>
-            <td class="font-title">Numeración Autorizada 00003 al 50000</td>
+            <td class="font-title">Numeración Autorizada 0003 al 5000</td>
         </tr>
     </table>
     <br>

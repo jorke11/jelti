@@ -198,7 +198,6 @@
                                             <li><a href="/departure">Ordenes de Venta</a></li>                                    
                                             <li><a href="/creditNote">Notas Credito</a></li>
                                             <li><a href="/briefcase">Cartera</a></li>                                    
-                                            <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>
 

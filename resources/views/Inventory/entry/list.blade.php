@@ -10,8 +10,8 @@
             <table class="table table-condensed table-bordered table-striped table-hover" id="tbl" width='100%'>
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Consecutive</th>
+                        <th></th>
+                        <th>#</th>
                         <th>Description</th>
                         <th>Date</th>
                         <th>Invoice</th>
@@ -25,8 +25,8 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Id</th>
-                        <th>Consecutive</th>
+                        <th></th>
+                        <th>#</th>
                         <th>Description</th>
                         <th>Date</th>
                         <th>Invoice</th>

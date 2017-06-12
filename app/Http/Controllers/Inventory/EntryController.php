@@ -11,7 +11,6 @@ use App\Models\Inventory\Entries;
 use App\Models\Inventory\EntriesDetail;
 use App\Models\Administration\Categories;
 use App\Models\Administration\Parameters;
-use App\models\Administration\Consecutives;
 use App\Models\Administration\Stakeholder;
 use App\Models\Invoicing\Purchases;
 use App\Models\Invoicing\PurchasesDetail;
@@ -44,23 +43,6 @@ class EntryController extends Controller {
         $warehouse = Warehouses::all();
         $users = Users::where("role_id", 5)->get();
         return view("Inventory.entry.init", compact("category", "status", "warehouse", "users"));
-    }
-
-    public function createConsecutive($id) {
-        $con = Consecutives::where("type_form", $id)->first();
-
-        $con->current = ($con->current == null) ? 1 : $con->current;
-        $res = "";
-        for ($i = strlen($con->pronoun); $i <= ($con->large - strlen($con->current)); $i++) {
-            $res .= '0';
-        }
-        return $con->pronoun . $res . $con->current;
-    }
-
-    public function updateConsecutive($id) {
-        $con = Consecutives::where("type_form", $id)->first();
-        $con->current = (($con->current == null) ? 1 : $con->current) + 1;
-        $con->save();
     }
 
     public function getConsecutive($id) {
@@ -128,14 +110,11 @@ class EntryController extends Controller {
 
 
                 $input["status_id"] = 1;
-                $input["consecutive"] = $this->createConsecutive(2);
                 $result = Entries::create($input)->id;
 
                 if ($result) {
-                    $this->updateConsecutive(2);
+
                     $resp = Entries::FindOrFail($result);
-
-
 
                     $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->whereNotNull('product_id')->get();
 
@@ -186,82 +165,118 @@ class EntryController extends Controller {
 
                 $ware = Warehouses::find($this->warehouse_id);
 
-                foreach ($reader->get() as $book) {
+                foreach ($reader->get() as $i => $book) {
 
-                    if ((int) $book->unidades != 0) {
+                    if ($book->unidades != '' && (int) $book->unidades != 0 && (int) $book->ean != '') {
                         $pro = Products::where("bar_code", (int) $book->ean)->first();
                         if ($pro != null) {
+
                             $sup = Stakeholder::find($pro->supplier_id);
 
                             if (count($sup) > 0) {
-                                if ($book->unidades > 0) {
 
-                                    $sql = "select w.description,pro.title,pro.reference,SUM(d.quantity) entradas,
-                                            (
-                                            select coalesce(SUM(d.quantity),0) 
-                                            from sales_detail d 
-                                            JOIN sales s ON s.id=d.sale_id
-                                            JOIN warehouses w ON w.id=s.warehouse_id
-                                            where d.product_id IS NOT NULL
-                                            AND d.product_id IN (select id from products where bar_code='" . $pro->bar_code . "')
-                                            AND s.warehouse_id=" . $this->warehouse_id . "
-                                            ) salidas,SUM(d.quantity)-coalesce((
-                                            select SUM(d.quantity) 
-                                            from sales_detail d 
-                                            JOIN sales s ON s.id=d.sale_id
-                                            JOIN warehouses w ON w.id=s.warehouse_id
-                                            where d.product_id IS NOT NULL
-                                            AND d.product_id IN (select id from products where bar_code='" . $pro->bar_code . "')
-                                            AND s.warehouse_id=" . $this->warehouse_id . "
-                                            ),0) total
-                                            from entries_detail d
-                                            JOIN entries en ON en.id=d.entry_id
-                                            JOIN warehouses w ON w.id=en.warehouse_id
-                                            JOIN products pro ON pro.id=d.product_id
-                                            WHERE en.status_id=2
-                                            AND d.product_id IN (select id from products where bar_code='" . $pro->bar_code . "')
-                                            AND en.warehouse_id=" . $this->warehouse_id . "
-                                            group by w.description,pro.title,pro.reference";
+                                if ($book->unidades > 0) {
+                                    $sql = "
+                                        select products.id,products.reference,products.title as product,sum(entries_detail.quantity) entry, 
+                                        coalesce(( 
+                                            select sum(quantity)   
+                                            from sales_detail 
+                                            JOIN sales ON sales.id=sales_detail.sale_id 
+                                            where product_id=products.id and product_id IS NOT NULL 
+                                            AND sales.warehouse_id=" . $this->warehouse_id . ")
+                                                ,0) departure, 
+                                        sum(entries_detail.quantity) - coalesce((
+                                                                            select sum(quantity) 
+                                                                            from sales_detail 
+                                                                            JOIN sales ON sales.id=sales_detail.sale_id 
+                                                                            where product_id=products.id 
+                                                                            and product_id IS NOT NULL 
+                                                                            AND sales.warehouse_id=" . $this->warehouse_id . ")
+                                                                                ,0) total 
+                                        from products 
+                                        JOIN entries_detail ON entries_detail.product_id=products.id 
+                                        JOIN entries ON entries.id = entries_detail.entry_id and entries.status_id=2 
+                                        AND entries.warehouse_id=" . $this->warehouse_id . " 
+                                        WHERE products.id=" . $pro->id . "
+                                        group by 1 
+                                        order by 6 desc";
 
                                     $inventory = DB::select($sql);
-                                    if (count($inventory) > 0) {
+
+                                    $unidades = 0;
+//
+//
+                                    if ($inventory != false) {
                                         $inventory = $inventory[0];
-                                        if ($inventory->total < 0) {
-                                            $unidades = ($inventory->total * -1) + $book->unidades;
-                                        } else {
+
+                                        if ($book->unidades > $inventory->total) {
                                             $unidades = $book->unidades - $inventory->total;
                                         }
 
-                                        if ($unidades > 0) {
+//
+                                        if ($unidades != 0 && $unidades > 0) {
+//
+                                            try {
+                                                DB::beginTransaction();
+                                                $new["warehouse_id"] = $this->warehouse_id;
+                                                $new["responsible_id"] = $this->responsible_id;
+                                                $new["supplier_id"] = $sup->id;
+                                                $new["purchase_id"] = 0;
+                                                $new["city_id"] = $ware->city_id;
+                                                $new["description"] = "Initial inventory";
+                                                $new["invoice"] = "system";
+                                                $new["status_id"] = 1;
+                                                $new["created"] = date("Y-m-d H:i");
+                                                $entry_id = Entries::create($new)->id;
+
+                                                $detail["entry_id"] = $entry_id;
+                                                $detail["product_id"] = $pro->id;
+                                                $detail["quantity"] = $unidades;
+                                                $detail["real_quantity"] = 0;
+                                                $detail["value"] = $pro->price_sf;
+                                                $detail["lot"] = $pro->lote;
+                                                $detail["description"] = 'Initial inventory';
+                                                $detail["status_id"] = 1;
+                                                $detail["expiration_date"] = $book->vencimiento;
+                                                $detail["units_supplier"] = $pro->units_supplier;
+
+                                                EntriesDetail::create($detail);
+                                                DB::commit();
+                                            } catch (Exception $exep) {
+                                                DB::rollback();
+                                                return response()->json(['success' => false, "msg" => "Wrong"], 409);
+                                            }
+                                        }
+                                    } else {
+                                        try {
+                                            DB::beginTransaction();
                                             $new["warehouse_id"] = $this->warehouse_id;
                                             $new["responsible_id"] = $this->responsible_id;
                                             $new["supplier_id"] = $sup->id;
                                             $new["purchase_id"] = 0;
                                             $new["city_id"] = $ware->city_id;
-                                            $new["consecutive"] = $this->createConsecutive(2);
                                             $new["description"] = "Initial inventory";
                                             $new["invoice"] = "system";
                                             $new["status_id"] = 1;
                                             $new["created"] = date("Y-m-d H:i");
                                             $entry_id = Entries::create($new)->id;
-                                            $this->updateConsecutive(2);
 
                                             $detail["entry_id"] = $entry_id;
                                             $detail["product_id"] = $pro->id;
-                                            $detail["quantity"] = $unidades;
-                                            $detail["real_quantity"] = $book->unidades;
+                                            $detail["quantity"] = (int) $book->unidades;
+                                            $detail["real_quantity"] = 0;
                                             $detail["value"] = $pro->price_sf;
                                             $detail["lot"] = $pro->lote;
                                             $detail["description"] = 'Initial inventory';
                                             $detail["status_id"] = 1;
-                                            $detail["expiration_date"] = $pro->vencimiento;
+                                            $detail["expiration_date"] = $book->vencimiento;
                                             $detail["units_supplier"] = $pro->units_supplier;
-                                            EntriesDetail::create($detail);
+                                        } catch (Exception $exp) {
+                                            DB::rollback();
+                                            return response()->json(['success' => false, "msg" => "Wrong"], 409);
                                         }
                                     }
                                 }
-                            } else {
-                                dd($book);
                             }
                         }
                     } else {

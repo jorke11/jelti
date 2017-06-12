@@ -15,7 +15,6 @@ class CreateEntriesTable extends Migration
             $table->integer('purchase_id');
             $table->integer('city_id');
             $table->string('description')->nullable();
-            $table->string('consecutive');
             $table->string('invoice');
             $table->dateTime('created');
             $table->integer('status_id');

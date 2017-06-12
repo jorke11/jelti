@@ -437,7 +437,7 @@ function Entry() {
                     defaultContent: '',
                     searchable: false,
                 },
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "description"},
                 {data: "created_at"},
                 {data: "invoice"},

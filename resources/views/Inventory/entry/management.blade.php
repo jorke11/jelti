@@ -16,12 +16,11 @@
     </div>
     <div class="panel-body">
         {!! Form::open(['id'=>'frm']) !!}
-        <input id="id" name="id" type="hidden" class="input-entry">
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
-                    <label for="email">Consecutive:</label>
-                    <input type="text" class="form-control input-entry input-sm" id="consecutive" readonly="" name="consecutive">
+                    <label for="email">#:</label>
+                    <input type="text" class="form-control input-entry input-sm" id="id" readonly="" name="id">
                 </div>
             </div>
             <div class="col-lg-2">

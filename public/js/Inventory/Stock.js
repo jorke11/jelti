@@ -2,27 +2,36 @@ function Stock() {
     var table;
     this.init = function () {
         table = this.table();
-        
+
+        $("#btnFind").click(function () {
+            obj.table();
+        })
     }
 
     this.table = function () {
+        var param = {};
+        param.warehouse_id = $("#warehouse_id").val();
+        param.bar_code = $("#bar_code").val();
         return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": "/api/listStock",
+//            processing: true,
+//            serverSide: true,
+            destroy: true,
+            ajax: {
+                url: "/api/listStock",
+                data: param
+            },
             columns: [
-                {data: "date"},
+                {data: "id"},
+                {data: "reference"},
                 {data: "product"},
-                {data: "entries"},
-                {data: "purchases"},
-                {data: "departures"},
-                {data: "sales"},
-                {data: "available"},
+                {data: "entry"},
+                {data: "departure"},
+                {data: "total"},
             ],
-            order: [[1, 'ASC']],
+            order: [[5, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1],
+                    aTargets: [2],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }

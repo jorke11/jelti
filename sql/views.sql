@@ -83,7 +83,7 @@ JOIN cities ci ON ci.id=c.city_id
 
 
 create view ventries as 
-select e.id, e.consecutive,e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code
+select e.id, e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code
 From entries e
 JOIN warehouses w ON w.id=e.warehouse_id
 JOIN cities c ON c.id=e.city_id

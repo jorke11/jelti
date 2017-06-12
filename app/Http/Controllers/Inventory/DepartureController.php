@@ -14,7 +14,6 @@ use App\Models\Invoicing\SaleDetail;
 use App\Models\Administration\Products;
 use App\Models\Administration\Stakeholder;
 use App\Models\Administration\Parameters;
-use App\models\Administration\Consecutives;
 use App\Models\Administration\Branch;
 use App\Models\Administration\Email;
 use App\Models\Administration\EmailDetail;
@@ -105,10 +104,6 @@ class DepartureController extends Controller {
         $detail = DB::select("SELECT id,product_id,generate as quantity,value FROM orders_detail where order_id=" . $id);
 
         return response()->json(["header" => $entry, "detail" => $detail]);
-    }
-
-    public function getConsecutive($id) {
-        return response()->json(["response" => $this->createConsecutive(3)]);
     }
 
     public function pdf($id) {
@@ -500,23 +495,6 @@ class DepartureController extends Controller {
         }
     }
 
-    public function createConsecutive($id) {
-        $con = Consecutives::where("type_form", $id)->first();
-        $con->current = ($con->current == null) ? 1 : $con->current + 1;
-        $res = "";
-        $con->pronoun = ($con->pronoun == null) ? '' : $con->pronoun;
-        for ($i = strlen($con->pronoun); $i <= ($con->large - strlen($con->current)); $i++) {
-            $res .= '0';
-        }
-        return $con->pronoun . $res . $con->current;
-    }
-
-    public function updateConsecutive($id) {
-        $con = Consecutives::where("type_form", $id)->first();
-        $con->current = ($con->current == null) ? 1 : $con->current + 1;
-        $con->save();
-    }
-
     public function storeExtern(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
@@ -728,7 +706,7 @@ class DepartureController extends Controller {
                 ->first();
 
         $user = Users::find($dep["responsible_id"]);
-
+        dd($user);exit;
         $totalExemp = 0;
         $totalTax5 = 0;
         $totalTax19 = 0;
@@ -773,7 +751,7 @@ class DepartureController extends Controller {
             $cit = Cities::find($ware->city_id);
             $this->subject = "SuperFuds " . date("d/m") . " " . $cli->business . " " . $cit->description . " Despacho de Pedido, factura " . $dep["invoice"];
             $input["city"] = $cit->description;
-            $input["consecutive"] = $dep["consecutive"];
+            $input["consecutive"] = $dep->id;
             $input["invoice"] = $dep["invoice"];
 
             $input["name"] = ucwords($user->name);

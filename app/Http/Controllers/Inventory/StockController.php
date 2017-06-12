@@ -10,33 +10,51 @@ use App\Models\Administration\Products;
 use App\Models\Administration\PricesSpecial;
 use Datatables;
 use PDF;
-
+use App\Models\Administration\Warehouses;
 
 class StockController extends Controller {
 
     public function index() {
-        return view("Inventory.stock.init");
+        $warehouse = Warehouses::all();
+        return view("Inventory.stock.init", compact("warehouse"));
     }
 
-    public function getStock() {
+    public function getStock(Request $req) {
+        $in = $req->all();
+        $warehouse_entry = '';
+        $warehouse_departure = '';
+        if ($in["warehouse_id"] != 0) {
+            $warehouse_entry = ' AND entries.warehouse_id=' . $in["warehouse_id"];
+            $warehouse_departure = ' AND sales.warehouse_id=' . $in["warehouse_id"];
+        }
+        $bar_code = '';
+        if ($in["bar_code"] != '') {
+            $bar_code = " WHERE products.bar_code='" . $in["bar_code"] . "'";
+        }
+
         $sql = "
-            select products.id,products.title,sum(entries_detail.quantity) entradas,
-            coalesce((select sum(quantity) from sales_detail where product_id=products.id and product_id IS NOT NULL),0) salidas,
-            sum(entries_detail.quantity) - coalesce((select sum(quantity) from sales_detail where product_id=products.id and product_id IS NOT NULL),0) total
+            select products.id,products.reference,products.title as product,sum(entries_detail.quantity) entry,
+            coalesce((
+                    select sum(quantity) 
+                    from sales_detail 
+                    JOIN sales ON sales.id=sales_detail.sale_id 
+                    where product_id=products.id and product_id IS NOT NULL " . $warehouse_departure . "),0) departure,
+            sum(entries_detail.quantity) - coalesce((
+                                                    select sum(quantity) 
+                                                    from sales_detail 
+                                                    JOIN sales ON sales.id=sales_detail.sale_id 
+                                                    where product_id=products.id 
+                                                    and product_id IS NOT NULL " . $warehouse_departure . "),0) total
             from products
             JOIN entries_detail ON entries_detail.product_id=products.id
-            JOIN entries ON entries.id = entries_detail.entry_id and entries.status_id=2
+            JOIN entries ON entries.id = entries_detail.entry_id and entries.status_id=2 " . $warehouse_entry . "
+                $bar_code
             group by 1
-            order by 5 desc";
+            order by 6 desc";
+//        echo $sql;exit;
         $resp = DB::select($sql);
-        $stock = Products::select("products.id", "products.title", DB::raw("entries_detail.quantity"))->sum(DB::raw("entries_detail.quantity"))
-                ->join("entries_detail", "entries_detail.product_id", "products.id")
-                ->join("entries", "entries.id", DB::raw("entries_detail.entry_id and entries.status_id=2"))
-                ->groupBy("products.id", "products.title")
-                ->get();
 
-        dd($stock);
-        return Datatables::queryBuilder(DB::table("vstock"))->make(true);
+        return response()->json(["data" => $resp]);
     }
 
     public function getDetailProduct(Request $req, $id) {
@@ -67,7 +85,7 @@ class StockController extends Controller {
 
         return response()->json(["response" => $response, "quantity" => $quantity]);
     }
-    
+
     public function getDetailProductIn($client_id, $id) {
 
         $special = PricesSpecial::where("product_id", $id)->where("client_id", $client_id)->first();

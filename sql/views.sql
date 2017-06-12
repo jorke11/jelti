@@ -43,11 +43,14 @@ from products p
 JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic';
 
-
 create view vdepartures as 
 
             select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name ,sta.business_name) as client,w.description as warehouse,
-            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id
+            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
+            (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity,
+            (select coalesce(sum(quantity * units_sf * value),0)::money from departures_detail where departure_id=d.id) subtotal,
+            (select coalesce(sum(quantity * units_sf * value),0) from departures_detail where departure_id=d.id) subtotalnumeric,sta.id as client_id,d.created
+
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id

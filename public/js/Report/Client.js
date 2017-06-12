@@ -1,17 +1,20 @@
 function Client() {
     this.init = function () {
         this.table();
-
         $("#btnSearch").click(function () {
             objCli.table();
         })
+    }
+
+    this.getDetail = function (client_id) {
+        window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
+
     }
 
     this.table = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
-
         return $('#tbl').DataTable({
             processing: true,
             serverSide: true,
@@ -23,14 +26,13 @@ function Client() {
             columns: [
                 {data: "business"},
                 {data: "totalunidades"},
-                {data: "total"},
+                {data: "totalformat"},
             ],
-            order: [[2, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [0, 1, 2],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
                     }
                 }
             ],

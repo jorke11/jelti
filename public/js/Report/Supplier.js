@@ -6,6 +6,11 @@ function Supplier() {
             obj.table();
         })
     }
+    
+    this.getDetail = function (client_id) {
+        window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
+
+    }
 
     this.table = function () {
         var param = {};
@@ -25,12 +30,11 @@ function Supplier() {
                 {data: "totalunidades"},
                 {data: "total"},
             ],
-            order: [[2, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [0, 1, 2],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.getDetail(' + full.id + ')">' + data + '</a>';
                     }
                 }
             ],

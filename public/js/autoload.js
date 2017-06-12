@@ -2,7 +2,7 @@ function Autoload() {
     this.init = function () {
         var html = "";
         $.ajax({
-            url: '../getCounter',
+            url: PATH+'/getCounter',
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {

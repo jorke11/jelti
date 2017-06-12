@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Inventory\StockController;
 use App\Http\Controllers\ToolController;
 use Mail;
+use Datatables;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DepartureController extends Controller {
@@ -52,10 +53,33 @@ class DepartureController extends Controller {
         $this->mails = array();
     }
 
-    public function index() {
+    public function index($client_id = null, $init = null, $end = null) {
+//        echo $client_id;
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "departure")->get();
-        return view("Inventory.departure.init", compact("category", "status"));
+        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end"));
+    }
+
+    public function listTable(Request $req) {
+        $in = $req->all();
+
+        $query = DB::table('vdepartures');
+
+        if (isset($in["client_id"]) && $in["client_id"] != '') {
+            $query->where("client_id", $in["client_id"])
+                    ->where("status_id", 2)
+                    ->whereBetween("created", array($in["init"], $in["end"]));
+        }
+
+        if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
+            $query->where("responsible_id", Auth::user()->id);
+        }
+
+        if (Auth::user()->role_id == 5) {
+            $query->where("warehouse_id", Auth::user()->warehouse_id);
+        }
+
+        return Datatables::queryBuilder($query)->make(true);
     }
 
     public function showOrder($id) {

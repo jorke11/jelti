@@ -20,8 +20,20 @@ class ClientController extends Controller {
 
     public function getList(Request $req) {
         $input = $req->all();
-        $query = DB::table('vreportclient')->whereBetween("created", array($input["init"] . " 00:00", $input["end"] . " 23:59"));
-        return Datatables::queryBuilder($query)->make(true);
+        $sql = "
+            SELECT cli.id,cli.business,sum(d.quantity) totalunidades,sum(d.value*d.quantity*d.units_sf) total,
+            replace(round(sum(d.value*d.quantity*d.units_sf))::money::text,',','.') totalformat 
+            FROM sales_detail d 
+            JOIN sales s ON s.id=d.sale_id 
+            JOIN departures dep ON dep.id=s.departure_id 
+            JOIN stakeholder cli ON cli.id=s.client_id 
+            WHERE product_id is not null 
+            AND dep.status_id=2
+            AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            GROUP BY 1,2 
+            ORDER BY 3 DESC";
+        $res = DB::select($sql);
+        return response()->json(["data" => $res]);
     }
 
 }

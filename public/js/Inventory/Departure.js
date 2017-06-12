@@ -302,12 +302,10 @@ function Sale() {
                                 $(".input-departure").setFields({data: data.data, disabled: true});
                                 table.ajax.reload();
                                 toastr.success(msg);
+                                $("#loading-super").addClass("hidden");
                                 $("#btnmodalDetail").attr("disabled", false);
                                 obj.printDetail(data);
                             }
-                        },
-                        complete: function () {
-                            $("#loading-super").addClass("hidden");
                         }
                     })
                 } else {

@@ -51,7 +51,10 @@ class creditnoteController extends Controller {
 
     public function store(Request $req) {
         $input = $req->all();
-
+        
+        
+        dd($input);
+        
         $sales = Sales::where("departure_id", $input["header"]["id"])->first();
         $new["sale_id"] = $sales->id;
         $new["departure_id"] = $input["header"]["id"];
@@ -114,7 +117,8 @@ class creditnoteController extends Controller {
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
-
+        
+        
         $dep = Departures::find($id);
 
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")

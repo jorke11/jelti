@@ -92,7 +92,7 @@ ORDER BY p.code
 
 
 create view vcreditnote as 
-             select d.id,d.consecutive,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name,'') as client,w.description as warehouse,
+             select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name,'') as client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,(select count(*) from credit_note where credit_note.departure_id=d.id) credit_note
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id

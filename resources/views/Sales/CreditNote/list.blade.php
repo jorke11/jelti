@@ -11,7 +11,7 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Consecutive</th>
+                        <th>#</th>
                         <th>Invoice</th>
                         <th>Date</th>
                         <th>Client</th>
@@ -28,7 +28,7 @@
                 <tfoot>
                     <tr>
                         <th></th>
-                        <th>Consecutive</th>
+                        <th>#</th>
                         <th>Date</th>
                         <th>Client</th>
                         <th>Commercial</th>

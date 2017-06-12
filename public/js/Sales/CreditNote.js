@@ -379,7 +379,7 @@ function CreditNote() {
                     defaultContent: '',
                     searchable: false,
                 },
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "invoice"},
                 {data: "created_at"},
                 {data: "client"},

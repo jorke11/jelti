@@ -321,7 +321,6 @@ function Client() {
         var id = $("#frmSpecial #id").val();
 
         var msg = '';
-
         var validate = $(".input-special").validate();
 
         if (validate.length == 0) {

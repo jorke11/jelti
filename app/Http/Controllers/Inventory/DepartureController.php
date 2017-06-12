@@ -29,6 +29,8 @@ use App\Http\Controllers\ToolController;
 use Mail;
 use Datatables;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Administration\PricesSpecial;
+use App\Http\Controllers\LogController;
 
 class DepartureController extends Controller {
 
@@ -40,6 +42,7 @@ class DepartureController extends Controller {
     public $errors;
     public $email;
     public $mails;
+    public $log;
 
     public function __construct() {
         $this->middleware("auth");
@@ -51,10 +54,10 @@ class DepartureController extends Controller {
         $this->errors = array();
         $this->email = array();
         $this->mails = array();
+        $this->log = new LogController();
     }
 
     public function index($client_id = null, $init = null, $end = null) {
-//        echo $client_id;
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "departure")->get();
         return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end"));
@@ -286,6 +289,7 @@ class DepartureController extends Controller {
             if (isset($input["detail"])) {
 
                 try {
+
                     DB::beginTransaction();
                     $emDetail = null;
 
@@ -303,7 +307,18 @@ class DepartureController extends Controller {
                         $input["detail"] = array_values(array_filter($input["detail"]));
                         $price_sf = 0;
                         foreach ($input["detail"] as $i => $val) {
-                            $pro = Products::find($val["product_id"]);
+                            $special = PricesSpecial::where("product_id", $val["product_id"])
+                                            ->where("client_id", $input["header"]["client_id"])->first();
+
+                            if ($special == null) {
+                                $pro = Products::find($val["product_id"]);
+                            } else {
+                                $pro = DB::table("products")
+                                        ->select("products.id", "prices_special.price_sf", "products.units_sf")
+                                        ->join("prices_special", "prices_special.product_id", "=", "products.id")
+                                        ->where("products.id", $val["product_id"])
+                                        ->first();
+                            }
 
                             $price_sf = $pro->price_sf;
                             if (Auth::user()->role_id == 1) {
@@ -321,7 +336,7 @@ class DepartureController extends Controller {
                             DeparturesDetail::create($detail);
                         }
 
-                        $detail = $this->formatDetail($result);
+                        $listdetail = $this->formatDetail($result);
 
                         $ware = Warehouses::find($input["header"]["warehouse_id"]);
 
@@ -341,9 +356,8 @@ class DepartureController extends Controller {
 
                             $cit = Cities::find($ware->city_id);
 
-                            $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $input["header"]["id"];
+                            $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $result;
                             $input["city"] = $cit->description;
-                            $input["consecutive"] = $input["header"]["consecutive"];
 
                             $user = Users::find($input["header"]["responsible_id"]);
 
@@ -352,7 +366,8 @@ class DepartureController extends Controller {
                             $input["phone"] = $user->phone;
                             $input["warehouse"] = $ware->description;
                             $input["address"] = $ware->address;
-                            $input["detail"] = $detail;
+                            $input["detail"] = $listdetail;
+                            $input["id"] = $result;
                             $this->mails[] = $user->email;
 
 
@@ -360,10 +375,11 @@ class DepartureController extends Controller {
                                 $msj->subject($this->subject);
                                 $msj->to($this->mails);
                             });
+                            $this->log->logClient($client->id, "Genero Orden de venta " . $result);
                         }
                         DB::commit();
                         $total = "$ " . number_format($this->total, 0, ",", ".");
-                        return response()->json(['success' => true, "data" => $resp, "detail" => $detail, "total" => $total]);
+                        return response()->json(['success' => true, "header" => $resp, "detail" => $listdetail, "total" => $total]);
                     } else {
                         return response()->json(['success' => false]);
                     }
@@ -465,6 +481,7 @@ class DepartureController extends Controller {
                             $detail = $this->formatDetail($input["id"]);
                             $departure = Departures::find($input["id"]);
                             $total = "$ " . number_format($this->total, 0, ",", ".");
+                            $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $con->consecutive);
                             DB::commit();
                             return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" => $total]);
                         } else {
@@ -595,10 +612,11 @@ class DepartureController extends Controller {
     }
 
     public function updateDetail(Request $request, $id) {
-
+        $input = $request->all();
+        $header = Departures::find($input["departure_id"]);
         $entry = DeparturesDetail::FindOrFail($id);
 
-        $input = $request->all();
+
         $pro = Products::find($input["product_id"]);
 
         unset($input["value"]);
@@ -613,7 +631,7 @@ class DepartureController extends Controller {
 
 
         $stock = new StockController();
-        $available = $stock->getDetailProduct($input["product_id"]);
+        $available = $stock->getDetailProductIn($header->client_id, $input["product_id"]);
         $available = $available->getData(true);
 
         $input["status_id"] = 3;
@@ -623,7 +641,7 @@ class DepartureController extends Controller {
             $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
+            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
         }
 
         if ($input["real_quantity"] != 0) {
@@ -645,7 +663,7 @@ class DepartureController extends Controller {
             $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "detail" => $resp, "total" => $total]);
+            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
         }
     }
 
@@ -694,7 +712,6 @@ class DepartureController extends Controller {
     }
 
     public function generateInvoice($id) {
-
         $sale = Sales::where("departure_id", $id)->first();
 
         $detail = DB::table("sales_detail")

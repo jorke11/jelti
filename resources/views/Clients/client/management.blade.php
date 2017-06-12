@@ -3,9 +3,9 @@
         <div class="panel panel-default">
             <div class="page-title">
                 <div class="row">
-                    <div class="col-lg-5 col-lg-offset-8">
+                    <div class="col-lg-5 col-lg-offset-7">
                         <div class="row">
-                            <div class="col-lg-2">
+                            <div class="col-lg-3">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Extra <span class="caret"></span>
@@ -15,7 +15,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-8">
                                 <button class="btn btn-primary btn-sm" id='btnNew'>
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"> Nuevo</span>
                                 </button>
@@ -269,8 +269,8 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-2"><button type="button" class="btn btn-info btn-sm" id="btnComment">Comentar</button></div>
-                    <div class="col-lg-10">
+                    <div class="col-lg-3"><button type="button" class="btn btn-info btn-sm" id="btnComment">Comentar</button></div>
+                    <div class="col-lg-9">
                         <textarea class="form-control" id="txtComment"></textarea>
                     </div>
 
@@ -279,14 +279,6 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <ul class="list-group" id="listComments">
-                            <li class="list-group-item">
-                                <span class="badge">Fiorella</span>
-                                [<?php echo date("Y-m-d") ?>] Cras justo odio
-                            </li>
-                            <li class="list-group-item">
-                                <span class="badge badge-success">Sebastian</span>
-                                [<?php echo date("Y-m-d") ?>] Other comment
-                            </li>
                         </ul>
                     </div>
                 </div>

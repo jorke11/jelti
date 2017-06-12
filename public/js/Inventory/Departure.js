@@ -1,5 +1,5 @@
 function Sale() {
-    var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false;
+    var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false, client_id = null;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -12,8 +12,9 @@ function Sale() {
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
         });
-        $("#client_id").change(function () {
+        $("#frm #client_id").change(function () {
             if ($(this).val() != 0) {
+                client_id = $(this).val();
                 obj.getClient($(this).val());
             } else {
                 $("#frm #name_client").val("");
@@ -61,9 +62,12 @@ function Sale() {
 
         });
         $("#frmDetail #product_id").change(function () {
+            var param = {};
+            param.client_id = client_id;
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
+                data: param,
                 dataType: 'JSON',
                 success: function (resp) {
                     dataProduct = resp.response;
@@ -143,6 +147,8 @@ function Sale() {
 
     this.new = function () {
         toastr.remove();
+        $("#loading-super").addClass("hidden");
+        client_id = null;
         $("#btnSave").attr("disabled", false);
         $(".input-departure").cleanFields();
         $(".input-detail").cleanFields();
@@ -198,6 +204,7 @@ function Sale() {
                 $("#frm #address").val(resp.data.client.address_send);
                 $("#frm #phone").val(resp.data.client.phone);
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
+                $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
                 html = "<option value=0>Selection</option>";
                 $.each(resp.data.branch, function (i, val) {
                     html += '<option value="' + val.id + '">' + val.address_invoice + "</option>";
@@ -229,8 +236,8 @@ function Sale() {
                         btnEdit = false;
                         btnDel = false;
                     }
-
                     obj.printDetail(resp, btnEdit, btnDel);
+                    $("#btnmodalDetail").attr("disabled", true);
                 } else {
                     toastr.warning(resp.msg);
                     $("#btnDocument").attr("disabled", false);
@@ -283,8 +290,8 @@ function Sale() {
                             if (data.success == true) {
                                 statusRecord = true;
                                 $("#btnSend").attr("disabled", false);
-                                $("#frm #id").val(data.data.id);
-                                $(".input-departure").setFields({data: data.data, disabled: true});
+                                $("#frm #id").val(data.header.id);
+                                $(".input-departure").setFields({data: data.header, disabled: true});
                                 table.ajax.reload();
                                 toastr.success(msg);
                                 $("#loading-super").addClass("hidden");
@@ -480,6 +487,7 @@ function Sale() {
         var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0;
         $("#tblDetail tbody").empty();
         $.each(data.detail, function (i, val) {
+
             quantityTotal += val.quantity;
             total += val.total;
             if (val.status_id == 3 && $("#role_id").val() == 4) {
@@ -729,7 +737,7 @@ function Sale() {
                     }
                 }
             ],
-           
+
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
                     $('td', row).eq(10).addClass('color-new');
@@ -761,7 +769,7 @@ function Sale() {
                         '(' + total + ')'
                         );
 
-                console.log(api)
+//                console.log(api)
             }
 
         });

@@ -28,7 +28,7 @@ class SeekController extends Controller {
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->city_id)->get();
         } else if (isset($in["id"])) {
-//            if ($in["id"] != '')
+            if ($in["id"] != '')
                 $query->where("id", $in["id"])->get();
         } else {
             $query->where("description", "ilike", "%" . $in["q"] . "%")->get();

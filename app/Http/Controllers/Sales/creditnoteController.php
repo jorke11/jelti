@@ -59,12 +59,14 @@ class creditnoteController extends Controller {
         $id = CreditNote::create($new)->id;
 
         foreach ($input["detail"] as $value) {
-            $cre = new CreditNoteDetail();
-            $cre->creditnote_id = $id;
-            $cre->row_id = $value["id"];
-            $cre->quantity = $value["quantity"];
-            $cre->product_id = $value["product_id"];
-            $cre->save();
+            if ($value["quantity"] != 0) {
+                $cre = new CreditNoteDetail();
+                $cre->creditnote_id = $id;
+                $cre->row_id = $value["id"];
+                $cre->quantity = $value["quantity"];
+                $cre->product_id = $value["product_id"];
+                $cre->save();
+            }
         }
 
         return response()->json(["success" => true]);

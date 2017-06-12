@@ -27,6 +27,7 @@ class creditnoteController extends Controller {
     public $errors;
 
     public function __construct() {
+        $this->middleware("auth");
         $this->total = 0;
         $this->total_real = 0;
         $this->path = '';

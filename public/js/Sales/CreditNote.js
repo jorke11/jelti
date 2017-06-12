@@ -229,7 +229,7 @@ function CreditNote() {
 
         obj.getItem($("#frmDetail #product_id").val());
         var quantity = listProductsStatic[rowItem].quantity;
-   
+
 //        if (quantity >= $("#frmDetail #quantity").val()) {
         listProducts[rowItem].quantity = $("#frmDetail #quantity").val();
         obj.printDetailTmp();
@@ -266,6 +266,7 @@ function CreditNote() {
 
             if (val != undefined) {
                 htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + i + ')>Edit</button>'
+                htmlDel = '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteItem(' + val.product_id + ',' + i + ')>Delete</button>'
 
                 val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
 
@@ -278,7 +279,7 @@ function CreditNote() {
                 html += "<td>" + val.real_quantity + "</td>";
                 html += "<td>" + val.valueFormated + "</td>";
                 html += "<td>" + val.totalFormated_real + "</td>";
-                html += '<td>' + htmlEdit + "</td>";
+                html += '<td>' + htmlEdit + htmlDel + "</td>";
                 html += "</tr>";
             }
         });

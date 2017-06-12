@@ -50,6 +50,7 @@ function Client() {
             }
         })
 
+
         $("#type_regime_id").change(function () {
             if ($(this).val() == 2) {
                 $("#type_person_id option[value=2]").addClass("hidden");
@@ -57,6 +58,16 @@ function Client() {
                 $("#type_person_id option[value=2]").removeClass("hidden");
             }
         });
+
+
+//        $("#frm #stakeholder_id").change(function () {
+//            if ($(this).val() != 0) {
+//                if (confirm("La informacion del formulario de Sobreescribira, esta seguro de carga los datos?")) {
+//                    obj.getCuenta($(this).val());
+//                }
+//
+//            }
+//        });
 
         $("#addJustify").click(this.addJustify);
 
@@ -174,6 +185,37 @@ function Client() {
         });
         $("#btnComment").click(this.addCommnet);
 
+    }
+
+    this.getCuenta = function (id, path) {
+        var html = "";
+        var url = 'departure/' + id + '/getClient';
+        if (path == undefined) {
+            url = '../../departure/' + id + '/getClient';
+        }
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (resp) {
+                $("#frm #business").val(resp.data.client.business);
+                $("#frm #business_name").val(resp.data.client.business_name);
+                $("#frm #document").val(resp.data.client.document);
+                $("#frm #term").val(resp.data.client.term);
+                $("#frm #web_site").val(resp.data.client.web_site);
+                $("#frm #email").val(resp.data.client.email);
+                $("#frm #verification").val(resp.data.client.verification);
+
+                $("#frm #address").val(resp.data.client.address_send);
+                $("#frm #phone").val(resp.data.client.phone);
+
+                $("#frm #city_id").setFields({data: {city_id: resp.data.client.city_id}});
+                $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
+                $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
+                console.log(resp.data.client)
+            }
+        })
     }
 
     this.addCommnet = function () {
@@ -594,7 +636,7 @@ function Client() {
     }
 
     this.table = function () {
-        return $('#tblStakeholder').DataTable({
+        var tableStake = $('#tblStakeholder').DataTable({
             bSort: true,
             "dom":
                     "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
@@ -605,7 +647,14 @@ function Client() {
             "ajax": "/api/listClient",
             "scrollX": true,
             columns: [
-                {data: "business_name", sWidth: "15%"},
+                {
+                    className: 'details-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    searchable: false,
+                },
+                {data: "business_name"},
                 {data: "business"},
                 {data: "document"},
                 {data: "email"},
@@ -622,16 +671,16 @@ function Client() {
                 'csvHtml5',
                 'pdfHtml5'
             ],
-            order: [[1, 'ASC']],
+            order: [[2, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6],
+                    aTargets: [1, 2, 3, 4, 5, 6],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [10],
+                    targets: [11],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -640,29 +689,74 @@ function Client() {
                 }
             ],
 
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var type = $(column.header()).attr('rowspan');
-                    if (type != undefined) {
-                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
-                                .appendTo($(column.footer()).empty())
-                                .on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                            $(this).val()
-                                            );
-                                    column
-//                                            .search(val ? val : '', true, false)
-                                            .search(val ? '^' + val + '$' : '', true, false)
-                                            .draw();
-                                });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        });
-                    }
-                });
-            },
+//            initComplete: function () {
+//                this.api().columns().every(function () {
+//                    var column = this;
+//                    var type = $(column.header()).attr('rowspan');
+//                    if (type != undefined) {
+//                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
+//                                .appendTo($(column.footer()).empty())
+//                                .on('change', function () {
+//                                    var val = $.fn.dataTable.util.escapeRegex(
+//                                            $(this).val()
+//                                            );
+//                                    column
+////                                            .search(val ? val : '', true, false)
+//                                            .search(val ? '^' + val + '$' : '', true, false)
+//                                            .draw();
+//                                });
+//                        column.data().unique().sort().each(function (d, j) {
+//                            select.append('<option value="' + d + '">' + d + '</option>')
+//                        });
+//                    }
+//                });
+//            },
         });
+
+        $('#tblStakeholder tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                row.child(obj.format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+
+        return tableStake;
+    }
+
+    this.format = function (d) {
+
+        var html = '<br><table class="table-detail">';
+        html += '<thead>'
+        html += '<tr><th>#</th><th>Cuenta</th><th>Razón Social</th><th>Documento</th><th>Correo</th><th>Dirección</th><th>Plazo de pago</th><th>Ciudad</th></tr></thead>';
+        $.ajax({
+            url: 'clients/' + d.id + "/getBranch",
+            method: "GET",
+            dataType: 'JSON',
+            async: false,
+            success: function (data) {
+                html += "<tbody>";
+                $.each(data.response, function (i, val) {
+                    
+                    html += "<tr>";
+                    html += "<td>" + val.id + "</td>";
+                    html += "<td>" + val.business + "</td>";
+                    html += "<td>" + val.business_name + "</td>";
+                    html += "<td>" + val.document + "</td>";
+                    html += "<td>" + val.email + "</td>";
+                    html += "<td>" + val.address + "</td>";
+                    html += "<td>" + val.term + "</td>";
+                    html += "<td>" + val.city + "</td>";
+                    html += "</tr>";
+                });
+                html += "</tbody></table><br>";
+            }
+        })
+        return html;
     }
 
     this.tableSpecial = function (id) {

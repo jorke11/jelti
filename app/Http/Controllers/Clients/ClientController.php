@@ -58,13 +58,11 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
 
-
             try {
                 DB::beginTransaction();
-
                 $document = Stakeholder::where("document", $input["document"])->first();
 
-                if (isset($input["client_id"])) {
+                if (isset($input["stakeholder_id"])) {
                     $document = null;
                 }
 
@@ -86,6 +84,11 @@ class ClientController extends Controller {
                 return response()->json(['success' => false, "msg" => "Wrong"], 409);
             }
         }
+    }
+
+    public function getBranch($id) {
+        $response = DB::table("vbranch_office")->where("stakeholder_id", $id)->get();
+        return response()->json(["response" => $response]);
     }
 
     public function storeTax(Request $request) {

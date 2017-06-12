@@ -4,6 +4,7 @@
             <table class="table table-condensed table-hover table-responsive table-striped table-bordered nowrap" id="tblStakeholder" width='100%'>
                 <thead>
                     <tr>
+                        <th>Sucursales</th>
                         <th>Razon social</th>
                         <th>Cuenta</th>
                         <th>Documento</th>
@@ -19,9 +20,9 @@
                 </thead>
                 <tbody>
                 </tbody>
-                <tfoot>
+<!--                <tfoot>
                     <tr>
-                        <th>Razon social</th>
+                        <th></th>
                         <th>Cuenta</th>
                         <th>Documento</th>
                         <th>Correo</th>
@@ -33,7 +34,7 @@
                         <th>Estado</th>
                         <th>Actiones</th>
                     </tr>
-                </tfoot>
+                </tfoot>-->
             </table>
         </div>
     </div>

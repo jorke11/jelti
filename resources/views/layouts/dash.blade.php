@@ -196,7 +196,7 @@
 
 
                                             <li><a href="/departure">Ordenes de Venta</a></li>                                    
-                                            <li><a href="/creditNote">Notas Credito</a></li>
+                                            <li><a href="/creditnote">Notas Credito</a></li>
                                             <li><a href="/briefcase">Cartera</a></li>                                    
                                         </ul>
                                     </li>

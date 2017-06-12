@@ -26,7 +26,7 @@ Route::get('/summary', 'Invoicing\SummaryController@index');
 Route::get('/resize', 'ToolController@index');
 
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
-Route::resource('/creditNote', 'Sales\CreditnoteController');
+
 
 
 Route::resource('/product', 'Administration\ProductController');

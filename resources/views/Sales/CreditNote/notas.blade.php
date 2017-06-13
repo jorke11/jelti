@@ -4,6 +4,7 @@
         <thead>
             <tr>
                 <th>#</th>
+                <th>Id</th>
                 <th>Invoice</th>
                 <th>Client</th>
                 <th>Orden de venta</th>

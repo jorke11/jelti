@@ -363,6 +363,7 @@ function CreditNote() {
                     defaultContent: '',
                     searchable: false,
                 },
+                {data: "id"},
                 {data: "invoice"},
                 {data: "client"},
                 {data: "departure_id"},
@@ -377,7 +378,7 @@ function CreditNote() {
                 },
                 
                 {
-                    targets: [4],
+                    targets: [5],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

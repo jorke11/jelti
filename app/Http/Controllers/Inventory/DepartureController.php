@@ -787,6 +787,7 @@ class DepartureController extends Controller {
 
             Excel::load($this->path, function($reader) {
                 foreach ($reader->get() as $i => $book) {
+                    
                     if ($book->unidades_total != 0) {
                         if (isset($book->item)) {
                             $pro = Products::where("alias_reference", (int) $book->item)->first();
@@ -797,11 +798,9 @@ class DepartureController extends Controller {
                             $pro = Products::where("reference", (int) $book->sf_code)->first();
                         }
 
-
                         if ($pro != null) {
-                            $price_sf = $pro->precio_unitario;
+                            $price_sf = $pro->price_sf;
                             if (Auth::user()->role_id == 1) {
-
                                 if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {
                                     $price_sf = $book->precio_unitario;
                                 }

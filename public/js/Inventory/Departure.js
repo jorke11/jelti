@@ -49,7 +49,6 @@ function Sale() {
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#frm #status_id").val(1).trigger('change');
             $("#frm #status_id").prop("disabled", true);
-            obj.consecutive();
         });
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
@@ -134,17 +133,6 @@ function Sale() {
     }
 
 
-    this.consecutive = function () {
-        $.ajax({
-            url: 'departure/1/consecutive',
-            method: 'GET',
-            dataType: 'JSON',
-            success: function (resp) {
-                $("#frm #consecutive").val(resp.response);
-            }
-        })
-    }
-
     this.new = function () {
         toastr.remove();
         $("#loading-super").addClass("hidden");
@@ -164,7 +152,6 @@ function Sale() {
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
         $("#btnmodalDetail,#btnModalUpload").attr("disabled", false);
         listProducts = [];
-        obj.consecutive();
         statusRecord = false;
     }
 
@@ -452,11 +439,13 @@ function Sale() {
     }
 
     this.printDetailTmp = function (data, btnEdit = true, btnDel = true) {
-        var html = "", htmlEdit = "", htmlDel = "";
+        var html = "", htmlEdit = "", htmlDel = "", total = 0;
         $("#tblDetail tbody").html("");
+        console.log(listProducts)
         $.each(listProducts, function (i, val) {
 
             if (val != undefined) {
+                total += val.price_sf * val.quantity;
                 htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
                 htmlDel = '<button type="button" class="btn btn-xs btn-danger" onclick=obj.deleteItem(' + val.product_id + ',' + val.row + ')>Del</button>'
 
@@ -475,6 +464,8 @@ function Sale() {
                 html += "</tr>";
             }
         });
+
+        html += '<tr><td colspan="4">Total</td><td>' + total + '</td></tr>';
         $("#tblDetail tbody").html(html);
     }
 

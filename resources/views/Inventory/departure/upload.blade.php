@@ -13,7 +13,7 @@
                             <label for="email">File:</label>
                             <input type="file" name="file_excel" id="file_excel" class="form-control">
                         </div>
-º                    </div>
+                    </div>
                 </div>
                 {!!Form::close()!!}
             </div>

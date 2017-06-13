@@ -16,6 +16,7 @@ use App\Models\Sales\CreditNote;
 use App\Models\Sales\CreditNoteDetail;
 use App\Http\Controllers\ToolController;
 use DB;
+use Datatables;
 
 class creditnoteController extends Controller {
 

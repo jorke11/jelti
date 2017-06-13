@@ -12,6 +12,7 @@ use App\Models\Administration\Comment;
 use Auth;
 use DB;
 use Datatables;
+use App\Models\Administration\Branch;
 
 class ClientController extends Controller {
 
@@ -63,14 +64,14 @@ class ClientController extends Controller {
                 $document = Stakeholder::where("document", $input["document"])->first();
 
                 if (isset($input["stakeholder_id"])) {
-                    $document = null;
-                }
-
-                if ($document == null) {
-                    $result = Stakeholder::create($input);
+                    $result = Branch::create($input);
                 } else {
-                    DB::rollback();
-                    return response()->json(['success' => false, "msg" => "Cliente ya existe"], 409);
+                    if ($document == null) {
+                        $result = Stakeholder::create($input);
+                    } else {
+                        DB::rollback();
+                        return response()->json(['success' => false, "msg" => "Cliente ya existe"], 409);
+                    }
                 }
 
                 if ($result) {

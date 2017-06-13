@@ -104,6 +104,14 @@ create view vcreditnote as
             WHERE p.group='entry' and d.invoice IS NOT NULL
             ORDER BY d.id DESC;
 
+
+create view vcreditnote_detail as 
+select d.invoice,d.client ,d.id as departure_id
+from credit_note c  
+JOIN vdepartures d ON d.id=c.departure_id
+
+
+
 CREATE VIEW vbranch_office AS
 SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address,'') as address,s.phone,
 s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,

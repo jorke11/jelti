@@ -239,6 +239,7 @@ Route::resource('/parameter', 'Administration\ParametersController');
 Route::get('/reportSales', 'Report\SalesController@index');
 
 Route::resource('/creditnote', 'Sales\creditnoteController');
+Route::get('/creditnote/{id}/getCreditNote', 'Sales\creditnoteController@editCreditNote');
 
 Route::get('/api/listCreditNote', function() {
 
@@ -247,6 +248,12 @@ Route::get('/api/listCreditNote', function() {
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
         $query->where("responsible_id", Auth::user()->id);
     }
+
+    return Datatables::queryBuilder($query)->make(true);
+});
+Route::get('/api/listCreditNotePDF', function() {
+
+    $query = DB::table('vcreditnote_detail');
 
     return Datatables::queryBuilder($query)->make(true);
 });

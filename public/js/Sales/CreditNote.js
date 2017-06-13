@@ -23,7 +23,7 @@ function CreditNote() {
             }
         });
 
-        $("#tabNotes").click(this.tableNotes);
+        $("#tabNotes").click(this.tableNote);
 
 
         $("#quantity").change(function () {
@@ -101,6 +101,7 @@ function CreditNote() {
         $("#btnModalUpload").click(function () {
             $("#modalUpload").modal("show");
         })
+        $("#tabNota").click(this.tableNote)
 
 
     }
@@ -152,11 +153,6 @@ function CreditNote() {
                 })
 
                 $("#frm #branch_id").html(html);
-
-
-
-
-
             }
         })
     }
@@ -299,26 +295,6 @@ function CreditNote() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header, disabled: true});
-                if (data.header.id != '') {
-                    $("#btnmodalDetail").attr("disabled", false);
-                }
-
-
-                if (data.header.status_id == 1) {
-                    $("#btnSave, #btnmodalDetail").attr("disabled", true);
-                }
-
-                if (data.header.status_id == 2) {
-                    $("#btnSend, #btnmodalDetail").attr("disabled", true);
-                    btnEdit = false;
-                    btnDel = false;
-                } else {
-                    $("#btnSend,#btnmodalDetail").attr("disabled", false);
-                }
-
-                if ($("#role_id").val() == 1) {
-                    $("#frm #shipping_cost").attr("disabled", false);
-                }
 
                 listProducts = data.detail;
                 listProductsStatic = data.detail;
@@ -364,6 +340,76 @@ function CreditNote() {
                 toastr.error(xhr.responseJSON.msg);
             }
         })
+    }
+
+    this.tableNote = function () {
+        var html = '';
+        var param = {};
+        param.departure_id = $("#frm #id").val();
+        
+        table = $('#tblNote').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                url: "/api/listCreditNotePDF",
+                data: param
+            },
+            destroy: true,
+            columns: [
+                {
+                    className: 'details-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    searchable: false,
+                },
+                {data: "invoice"},
+                {data: "client"},
+                {data: "departure_id"},
+            ],
+            order: [[1, 'DESC']],
+            aoColumnDefs: [
+                {
+                    aTargets: [1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                    }
+                },
+                
+                {
+                    targets: [4],
+                    searchable: false,
+                    mData: null,
+                    mRender: function (data, type, full) {
+                        if (data.credit_note != 0) {
+
+                            html = '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>';
+                            html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdfNote(' + data.id + ')">';
+                        } else {
+                            html = ''
+                        }
+
+                        return html;
+                    }
+                }
+            ]
+
+        }
+        );
+        $('#tblNote tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+
+                row.child(obj.formatNote(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+
+        return table;
     }
 
     this.table = function () {
@@ -417,7 +463,7 @@ function CreditNote() {
                     mData: null,
                     mRender: function (data, type, full) {
                         if (data.credit_note != 0) {
-                            html = '<img src="assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdfNote(' + data.id + ')">';
+                            html = '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>';
                         } else {
                             html = ''
                         }
@@ -480,6 +526,32 @@ function CreditNote() {
         window.open("creditnote/" + id + "/getInvoice");
     }
 
+    this.formatNote = function (d) {
+        var url = "/creditnote/" + d.id + "/getCreditNote";
+        var html = '<br><table class="table-detail">';
+        html += '<thead>'
+        html += '<tr><th>#</th><th>Product</th><th>Quantity</th>';
+        $.ajax({
+            url: url,
+            method: "GET",
+            dataType: 'JSON',
+            async: false,
+            success: function (data) {
+                html += "<tbody>";
+                $.each(data.detail, function (i, val) {
+                    val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+                    html += "<tr>";
+                    html += "<td>" + val.id + "</td>";
+                    html += "<td>" + val.product + "</td>";
+                    html += "<td>" + val.quantity + "</td>";
+                    html += "</tr>";
+                });
+
+                html += "</tbody></table><br>";
+            }
+        })
+        return html;
+    }
     this.format = function (d) {
         var url = "/departure/" + d.id + "/detailAll";
         var html = '<br><table class="table-detail">';

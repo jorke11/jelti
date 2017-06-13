@@ -51,14 +51,11 @@ class creditnoteController extends Controller {
 
     public function store(Request $req) {
         $input = $req->all();
-        
-        
-        dd($input);
-        
+
+
         $sales = Sales::where("departure_id", $input["header"]["id"])->first();
         $new["sale_id"] = $sales->id;
         $new["departure_id"] = $input["header"]["id"];
-
         $id = CreditNote::create($new)->id;
 
         foreach ($input["detail"] as $value) {
@@ -73,6 +70,13 @@ class creditnoteController extends Controller {
         }
 
         return response()->json(["success" => true]);
+    }
+
+    public function editCreditNote($id) {
+        $res = CreditNoteDetail::select("credit_note_detail.id", "products.title as product", "credit_note_detail.quantity")
+                        ->join("products", "products.id", "credit_note_detail.product_id")
+                        ->where("creditnote_id", $id)->get();
+        return response()->json(["success" => true, "detail" => $res]);
     }
 
     public function formatDetail($id) {
@@ -104,27 +108,25 @@ class creditnoteController extends Controller {
     public function getInvoice($id) {
         $this->mails = array();
 
-        $sale = Sales::where("departure_id", $id)->first();
+        $cre = CreditNote::find($id);
+
+        $sale = Sales::where("departure_id", $cre->departure_id)->first();
         $detail = DB::table("sales_detail")
-                ->select(DB::raw("credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), 
-                        DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", 
-                        "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), 
-                        DB::raw("sales_detail.value * (credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), 
-                        "stakeholder.business as stakeholder")
+                ->select(DB::raw("credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * (credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
                 ->join("credit_note_detail", "credit_note_detail.product_id", "sales_detail.product_id")
-                ->where("sale_id", $sale["id"])
+                ->where("sale_id", $cre->sale_id)
                 ->orderBy("order", "asc")
                 ->get();
-        
-        
-        $dep = Departures::find($id);
+
+        $dep = Departures::find($cre->departure_id);
 
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
                 ->where("stakeholder.id", $sale["client_id"])
                 ->join("cities", "cities.id", "stakeholder.city_id")
                 ->first();
+
         $user = Users::find($dep["responsible_id"]);
 
         $ware = Warehouses::find($dep["warehouse_id"]);
@@ -178,10 +180,8 @@ class creditnoteController extends Controller {
 
         $tool = new ToolController();
 
+
         $cli["business_name"] = $tool->cleanText($cli["business_name"]);
-
-
-        $credit = CreditNote::where("departure_id", $id)->first();
 
         $data = [
             'rete' => 0,
@@ -197,12 +197,9 @@ class creditnoteController extends Controller {
             'totalInvoice' => "$ " . number_format(($totalSum), 0, ',', '.'),
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
-            'invoice' => $credit->id,
+            'invoice' => $cre->id,
             'textTotal' => trim($tool->to_word(round($totalWithTax)))
         ];
-
-
-
 
         $pdf = \PDF::loadView('Inventory.departure.pdfcredit', [], $data, [
                     'title' => 'Invoice']);

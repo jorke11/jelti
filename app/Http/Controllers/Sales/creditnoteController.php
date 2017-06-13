@@ -44,17 +44,18 @@ class creditnoteController extends Controller {
     }
 
     public function edit($id) {
-        $entry = Departures::FindOrFail($id);
-        $detail = $this->formatDetail($id);
+        $entry = Sales::where("departure_id", $id)->first();
+        $departure = Departures::find($id);
+        $detail = $this->formatDetail($entry);
 
-        return response()->json(["header" => $entry, "detail" => $detail]);
+        return response()->json(["header" => $departure, "detail" => $detail]);
     }
 
     public function store(Request $req) {
         $input = $req->all();
-
-
+        
         $sales = Sales::where("departure_id", $input["header"]["id"])->first();
+        
         $new["sale_id"] = $sales->id;
         $new["departure_id"] = $input["header"]["id"];
         $id = CreditNote::create($new)->id;
@@ -80,19 +81,20 @@ class creditnoteController extends Controller {
         return response()->json(["success" => true, "detail" => $res]);
     }
 
-    public function formatDetail($id) {
-
-        $detail = DB::table("departures_detail")
-                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "products.id as product_id")
-                ->join("products", "departures_detail.product_id", "products.id")
+    public function formatDetail($sale) {
+       
+        $detail = DB::table("sales_detail")
+                ->select("sales_detail.id", "sales_detail.quantity", "sales_detail.quantity as real_quantity", 
+                        "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title as product"),"stakeholder.business as stakeholder",
+                        "products.bar_code", "products.units_sf", "products.id as product_id")
+                ->join("products", "sales_detail.product_id", "products.id")
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id")
-                ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
-                ->where("departure_id", $id)
-                ->orderBy("id", "asc")
-                ->get();
-
+                ->where("sale_id", $sale->id)
+                ->whereNotNull("sales_detail.product_id")
+                ->orderBy("id", "asc")->get();
         $this->total = 0;
 
+        
         foreach ($detail as $i => $value) {
 //            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");

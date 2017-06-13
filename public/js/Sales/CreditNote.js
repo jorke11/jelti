@@ -265,6 +265,7 @@ function CreditNote() {
                 htmlDel = '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteItem(' + val.product_id + ',' + i + ')>Delete</button>'
 
                 val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+                val.comment = (val.comment != null) ? val.comment : '';
 
                 html += '<tr id="row_' + i + '">';
                 html += "<td>" + val.product + "</td>";

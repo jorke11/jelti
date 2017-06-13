@@ -56,7 +56,7 @@ class SalesController extends Controller {
 
     public function getFulfillmentSup($init, $end) {
         $sql = "
-            SELECT p.id, p.consecutive purchase,en.consecutive entry,s.lead_time,p.created date_purchase,en.created date_entry
+            SELECT p.id, p.idpurchase,en.consecutive entry,s.lead_time,p.created date_purchase,en.created date_entry
             FROM purchases p
             JOIN entries en ON en.purchase_id=p.id
             JOIN stakeholder s ON s.id=p.supplier_id";
@@ -87,7 +87,7 @@ class SalesController extends Controller {
     public function getFulfillmentCli($init, $end) {
         $sql = "
             SELECT 
-                consecutive as departure,created,updated_at,date_part('day' ,updated_at-created) days,
+                id as departure,created,updated_at,date_part('day' ,updated_at-created) days,
                 date_part('hours' ,updated_at-created) hours
             From departures
             WHERE status_id=2";
@@ -98,7 +98,7 @@ class SalesController extends Controller {
         if ($end != '') {
             $sql .= " AND created <= '" . $end . " 23:59'";
         }
-        $sql .= ' ORDER BY consecutive desc';
+        $sql .= ' ORDER BY 1 desc';
 
         $res = DB::select($sql);
 

@@ -251,12 +251,7 @@ Route::get('/api/listCreditNote', function() {
 
     return Datatables::queryBuilder($query)->make(true);
 });
-Route::get('/api/listCreditNotePDF', function() {
-
-    $query = DB::table('vcreditnote_detail');
-
-    return Datatables::queryBuilder($query)->make(true);
-});
+Route::get('/api/listCreditNotePDF', 'Sales\creditnoteController@editCreditNotePDF');
 
 Route::get('/api/CreditNoteGenerated', function() {
 

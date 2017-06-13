@@ -209,6 +209,14 @@ class creditnoteController extends Controller {
         return $pdf->stream('nota_credito_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
     }
 
+    public function editCreditNotePDF(Request $req) {
+        $in = $req->all();
+        $query = DB::table('vcreditnote_detail');
+        $query->where("departure_id", $in["departure_id"]);
+
+        return Datatables::queryBuilder($query)->make(true);
+    }
+
     public function formatDate($date) {
         $month = date("m", strtotime($date));
         $monthtext = '';

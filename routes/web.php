@@ -376,7 +376,7 @@ Route::get('/api/listPurchase', function() {
 Route::get('/api/listSale', function() {
 
     $sql = DB::table('sales')
-            ->select("sales.id", "sales.consecutive", DB::raw("coalesce(sales.description,'') as description"), "sales.created", "departures.consecutive as departure", "warehouses.description as warehouse")
+            ->select("sales.id",DB::raw("coalesce(sales.description,'') as description"), "sales.created", "departures.consecutive as departure", "warehouses.description as warehouse")
             ->join("departures", "departures.id", "sales.departure_id")
             ->join("warehouses", "warehouses.id", "sales.warehouse_id");
 

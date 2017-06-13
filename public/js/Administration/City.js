@@ -6,7 +6,6 @@ function City() {
         $("#edit").click(this.edit);
 
         $("#btnNew").click(function () {
-
             $(".input-city").cleanFields();
             $("#modalNew").modal("show");
         });
@@ -84,8 +83,7 @@ function City() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #id").val(data.id);
-                $("#frm #description").val(data.description);
+                $(".input-city").setFields({data:data})
             }
         })
     }

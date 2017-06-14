@@ -327,6 +327,7 @@ class DepartureController extends Controller {
                             $detail["status_id"] = 1;
                             $detail["quantity"] = $val["quantity"];
                             $detail["units_sf"] = $pro->units_sf;
+                            $detail["tax"] = $pro->tax;
                             $detail["value"] = $price_sf;
                             DeparturesDetail::create($detail);
                         }

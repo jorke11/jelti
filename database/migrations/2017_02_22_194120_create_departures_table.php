@@ -23,6 +23,7 @@ class CreateDeparturesTable extends Migration {
             $table->integer('branch_id')->nullable();
             $table->string('address');
             $table->string('description');
+            $table->string('transport');
             $table->string('phone');
             $table->dateTime('created');
             $table->integer('status_id');

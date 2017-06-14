@@ -241,6 +241,7 @@ function Sale() {
 
     this.save = function () {
         toastr.remove();
+        $("#btnSave").attr("disabled", true);
         $("#frm #warehouse_id").prop("disabled", false);
         $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
@@ -285,6 +286,9 @@ function Sale() {
                                 $("#btnmodalDetail").attr("disabled", false);
                                 obj.printDetail(data);
                             }
+
+                        }, error: function (xhr, ajaxOptions, thrownError) {
+                            toastr.error("Wrong");
                         }
                     })
                 } else {
@@ -703,7 +707,7 @@ function Sale() {
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "quantity"},
-                {data: "subtotal"},
+                {data: "total"},
                 {data: "status"},
             ],
             order: [[1, 'DESC']],

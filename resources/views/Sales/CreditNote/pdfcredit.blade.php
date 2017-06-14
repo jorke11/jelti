@@ -59,7 +59,7 @@ $fin = $rows;
 $cont = 0;
 for ($i = 1; $i <= $count; $i++) {
     ?>
-    @include('Inventory.departure.pdfheadercredit')
+    @include('Sales.CreditNote.pdfheadercredit')
     <br>
     <br>
     <table width='100%' id="detail">
@@ -85,7 +85,7 @@ for ($i = 1; $i <= $count; $i++) {
                     <tr>
                         <td align='center'><?php echo $detail[$j]->quantity; ?></td>
                         <td><?php echo $desc; ?><br><span class="title-supplier"><?php echo $detail[$j]->stakeholder; ?><span></td>
-                                    <td align='center'><?php echo (int) $detail[$j]->tax; ?></td>
+                                    <td align='center'><?php echo $detail[$j]->tax * 100; ?></td>
                                     <td align='right'><?php echo "$ " . $valueUnit; ?></td>
                                     <td align='right'><?php echo "$ " . ($total) ?></td>
                                     </tr>
@@ -113,7 +113,7 @@ for ($i = 1; $i <= $count; $i++) {
                             <br>
                             <br>
                             <br>
-                            @include('Inventory.departure.pdffootercredit')
+                            @include('Sales.CreditNote.pdffootercredit')
                             <br>
                             <br>
                             <br>

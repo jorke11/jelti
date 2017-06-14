@@ -164,15 +164,15 @@ class creditnoteController extends Controller {
             $detail[$i]->totalFormated = "$" . number_format($value->value * $value->units_sf * $value->quantity, 0, ',', '.');
 
             $totalSum += $value->valuetotal;
-            $tax = ($value->tax / 100);
+            $tax = $value->tax;
 
             if ($value->tax == 0) {
                 $totalExemp += $value->valuetotal;
             }
-            if ($value->tax == '5') {
+            if ($value->tax == 0.05) {
                 $totalTax5 += $value->valuetotal * $tax;
             }
-            if ($value->tax == '19') {
+            if ($value->tax == 0.19) {
 
                 $totalTax19 += $value->valuetotal * $tax;
             }
@@ -205,8 +205,7 @@ class creditnoteController extends Controller {
             'invoice' => $cre->id,
             'textTotal' => trim($tool->to_word(round($totalWithTax)))
         ];
-
-        $pdf = \PDF::loadView('Inventory.departure.pdfcredit', [], $data, [
+        $pdf = \PDF::loadView('Sales.CreditNote.pdfcredit', [], $data, [
                     'title' => 'Invoice']);
 //  
         header('Content-Type: application/pdf');

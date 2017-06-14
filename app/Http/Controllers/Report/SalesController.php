@@ -56,7 +56,7 @@ class SalesController extends Controller {
 
     public function getFulfillmentSup($init, $end) {
         $sql = "
-            SELECT p.id, p.idpurchase,en.consecutive entry,s.lead_time,p.created date_purchase,en.created date_entry
+            SELECT p.id, p.idpurchase,en.id entry,s.lead_time,p.created date_purchase,en.created date_entry
             FROM purchases p
             JOIN entries en ON en.purchase_id=p.id
             JOIN stakeholder s ON s.id=p.supplier_id";

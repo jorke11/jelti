@@ -390,6 +390,7 @@ function Sale() {
                             row: listProducts.length,
                             product_id: $("#frmDetail #product_id").val(),
                             product: $.trim($("#frmDetail #product_id").text()),
+                            price_sf: dataProduct.price_sf,
                             quantity: $("#frmDetail #quantity").val(),
                             valueFormated: $("#frmDetail #value").val(),
                             totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),

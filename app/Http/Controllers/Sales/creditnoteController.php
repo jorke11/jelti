@@ -55,7 +55,7 @@ class creditnoteController extends Controller {
         $input = $req->all();
 
         $sales = Sales::where("departure_id", $input["header"]["id"])->first();
-        dd($input);
+ 
         $new["sale_id"] = $sales->id;
         $new["departure_id"] = $input["header"]["id"];
         $id = CreditNote::create($new)->id;

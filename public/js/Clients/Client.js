@@ -776,6 +776,7 @@ function Client() {
                 {data: "id"},
                 {data: "client"},
                 {data: "product"},
+                {data: "reference"},
                 {data: "price_sf"},
                 {data: "margin"},
                 {data: "margin_sf"},
@@ -791,7 +792,7 @@ function Client() {
                 }
                 ,
                 {
-                    targets: [7],
+                    targets: [8],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

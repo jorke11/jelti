@@ -77,12 +77,13 @@
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Client</th>
-                                    <th>Product</th>
+                                    <th>Cliente</th>
+                                    <th>Producto</th>
+                                    <th>Referencia</th>
                                     <th>price_sf</th>
-                                    <th>margin</th>
-                                    <th>margin_sf</th>
-                                    <th>tax</th>
+                                    <th>margen</th>
+                                    <th>margen_sf</th>
+                                    <th>Iva</th>
                                     <th>all</th>
                                 </tr>
                             </thead>

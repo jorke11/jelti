@@ -618,7 +618,7 @@ class DepartureController extends Controller {
             $result = $entry->fill($input)->save();
             $resp = $this->formatDetail($input["departure_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "detail" => $resp, "total" => $total]);
+            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
         }
 
 

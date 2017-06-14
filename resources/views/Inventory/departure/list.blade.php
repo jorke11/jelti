@@ -11,7 +11,7 @@
             <th>Bodega</th>
             <th>Ciudad</th>
              <th>Unidades</th>
-             <th>Subtotal</th>
+             <th>Total</th>
             <th>Estatus</th>
             <th tipo="prueba">Action</th>
         </tr>

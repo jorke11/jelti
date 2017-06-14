@@ -309,7 +309,7 @@ class DepartureController extends Controller {
                                 $pro = Products::find($val["product_id"]);
                             } else {
                                 $pro = DB::table("products")
-                                        ->select("products.id", "prices_special.price_sf", "products.units_sf")
+                                        ->select("products.id", "prices_special.price_sf", "products.units_sf",'products.tax')
                                         ->join("prices_special", "prices_special.product_id", "=", "products.id")
                                         ->where("products.id", $val["product_id"])
                                         ->first();

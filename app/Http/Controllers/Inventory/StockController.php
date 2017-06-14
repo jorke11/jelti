@@ -87,6 +87,8 @@ class StockController extends Controller {
     }
 
     public function getDetailProductOut($id) {
+        
+//        dd($id);
         $response = DB::table("products")
                 ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
                 ->join("categories", "categories.id", "=", "products.category_id")

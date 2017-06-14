@@ -292,6 +292,7 @@ function Sale() {
                         }
                     })
                 } else {
+                    $("#btnSave").attr("disabled", false);
                     toastr.error("Detail empty");
                 }
             } else {
@@ -314,6 +315,7 @@ function Sale() {
                 })
             }
         } else {
+            $("#btnSave").attr("disabled", false);
             toastr.error("input required");
         }
     }

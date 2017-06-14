@@ -774,8 +774,8 @@ function Client() {
             },
             columns: [
                 {data: "id"},
-                {data: "client_id"},
-                {data: "product_id"},
+                {data: "client"},
+                {data: "product"},
                 {data: "price_sf"},
                 {data: "margin"},
                 {data: "margin_sf"},

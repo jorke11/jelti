@@ -109,7 +109,10 @@ class ClientController extends Controller {
 
     public function getSpecial(Request $req) {
         $in = $req->all();
-        return Datatables::eloquent(PricesSpecial::where("client_id", $in["client_id"])->orderBy("id", "asc"))->make(true);
+        $sql = DB::table("vprice_special")
+                        ->where("client_id", $in["client_id"])->orderBy("id", "asc");
+        
+        return Datatables::queryBuilder($sql)->make(true);
     }
 
     public function getContact(Request $req) {

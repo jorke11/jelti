@@ -309,7 +309,7 @@ class DepartureController extends Controller {
                                 $pro = Products::find($val["product_id"]);
                             } else {
                                 $pro = DB::table("products")
-                                        ->select("products.id", "prices_special.price_sf", "products.units_sf",'products.tax')
+                                        ->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
                                         ->join("prices_special", "prices_special.product_id", "=", "products.id")
                                         ->where("products.id", $val["product_id"])
                                         ->first();
@@ -592,11 +592,24 @@ class DepartureController extends Controller {
 
     public function updateDetail(Request $request, $id) {
         $input = $request->all();
+
         $header = Departures::find($input["departure_id"]);
+        
         $entry = DeparturesDetail::FindOrFail($id);
 
+        $special = PricesSpecial::where("product_id", $input["product_id"])
+                        ->where("client_id", $header->client_id)->first();
 
-        $pro = Products::find($input["product_id"]);
+        if ($special == null) {
+            $pro = Products::find($input["product_id"]);
+        } else {
+            $pro = DB::table("products")
+                    ->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
+                    ->join("prices_special", "prices_special.product_id", "=", "products.id")
+                    ->where("products.id", $input["product_id"])
+                    ->first();
+        }
+
 
         unset($input["value"]);
         $input["value"] = $pro->price_sf;
@@ -707,7 +720,8 @@ class DepartureController extends Controller {
                 ->first();
 
         $user = Users::find($dep["responsible_id"]);
-        dd($user);exit;
+        dd($user);
+        exit;
         $totalExemp = 0;
         $totalTax5 = 0;
         $totalTax19 = 0;
@@ -788,7 +802,7 @@ class DepartureController extends Controller {
 
             Excel::load($this->path, function($reader) {
                 foreach ($reader->get() as $i => $book) {
-                    
+
                     if ($book->unidades_total != 0) {
                         if (isset($book->item)) {
                             $pro = Products::where("alias_reference", (int) $book->item)->first();

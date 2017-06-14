@@ -23,9 +23,6 @@ function CreditNote() {
             }
         });
 
-        $("#tabNotes").click(this.tableNote);
-
-
         $("#quantity").change(function () {
             $("#quantity_units").val(dataProduct.units_sf * $(this).val());
             $("#value_units").val(dataProduct.units_sf * $(this).val() * dataProduct.price_sf).formatNumber();
@@ -300,6 +297,7 @@ function CreditNote() {
                 listProducts = data.detail;
                 listProductsStatic = data.detail;
                 obj.printDetailTmp(data.detail, btnEdit, btnDel);
+                obj.tableNote(id);
             }
         })
     }
@@ -343,11 +341,11 @@ function CreditNote() {
         })
     }
 
-    this.tableNote = function () {
+    this.tableNote = function (id) {
         var html = '';
         var param = {};
-        param.departure_id = $("#frm #id").val();
-        
+        param.departure_id = id;
+
         table = $('#tblNote').DataTable({
             "processing": true,
             "serverSide": true,
@@ -377,7 +375,7 @@ function CreditNote() {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
-                
+
                 {
                     targets: [5],
                     searchable: false,

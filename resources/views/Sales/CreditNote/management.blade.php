@@ -165,6 +165,33 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-lg-4">Notas credito generadas</div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed  table-hover" id="tblNote" width='100%'>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Id</th>
+                            <th>Invoice</th>
+                            <th>Client</th>
+                            <th>Orden de venta</th>
+                            <th>PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

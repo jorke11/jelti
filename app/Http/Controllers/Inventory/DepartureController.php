@@ -643,7 +643,7 @@ class DepartureController extends Controller {
                 if ($result) {
                     $resp = $this->formatDetail($input["departure_id"]);
                     $total = "$ " . number_format($this->total, 0, ",", ".");
-                    return response()->json(['success' => true, "detail" => $resp, "total" => $total]);
+                    return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
                 } else {
                     return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
                 }

@@ -158,7 +158,7 @@ Route::post('/entry/uploadExcel', 'Inventory\EntryController@storeExcel');
 Route::resource('/departure', 'Inventory\DepartureController');
 Route::get('/departure/{id}/consecutive', ['uses' => 'Inventory\DepartureController@getConsecutive']);
 Route::get('/departure/{id}/quantity', ['uses' => 'Inventory\DepartureController@getQuantity']);
-Route::get('/departure/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProductOut']);
+Route::get('/departure/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
 Route::get('/departure/{id}/detail', ['uses' => 'Inventory\DepartureController@getDetail']);
 Route::get('/departure/{id}/editExt', ['uses' => 'Inventory\DepartureController@getOrderExt']);
 Route::post('/departure/storeDetail', 'Inventory\DepartureController@storeDetail');

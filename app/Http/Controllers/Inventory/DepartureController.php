@@ -594,7 +594,7 @@ class DepartureController extends Controller {
         $input = $request->all();
 
         $header = Departures::find($input["departure_id"]);
-        
+
         $entry = DeparturesDetail::FindOrFail($id);
 
         $special = PricesSpecial::where("product_id", $input["product_id"])
@@ -642,7 +642,8 @@ class DepartureController extends Controller {
                 $result = $entry->fill($input)->save();
                 if ($result) {
                     $resp = $this->formatDetail($input["departure_id"]);
-                    return response()->json(['success' => true, "data" => $resp]);
+                    $total = "$ " . number_format($this->total, 0, ",", ".");
+                    return response()->json(['success' => true, "detail" => $resp, "total" => $total]);
                 } else {
                     return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
                 }

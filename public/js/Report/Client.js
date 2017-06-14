@@ -16,8 +16,6 @@ function Client() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         return $('#tbl').DataTable({
-            processing: true,
-            serverSide: true,
             destroy: true,
             ajax: {
                 url: "/api/reportClient",

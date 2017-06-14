@@ -112,18 +112,13 @@ from credit_note c
 JOIN vdepartures d ON d.id=c.departure_id
 
 
-
+drop view vbranch_office
 CREATE VIEW vbranch_office AS
-SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address,'') as address,s.phone,
-s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,
-typestakeholder.description as typestakeholder,status.description as status,s.responsible_id,s.stakeholder_id
-FROM stakeholder s
+SELECT s.id,s.business_name,s.name business,coalesce(s.name,'') as name,s.document,s.email,coalesce(s.address_invoice,'') as address,s.mobile,
+s.term,c.description as city,s.web_site,status.description as status,s.stakeholder_id
+FROM branch_office s
 JOIN cities c ON c.id=s.city_id
-LEFT JOIN parameters as typeperson ON typeperson.code=s.type_person_id and typeperson."group"='typeperson'
-LEFT JOIN parameters as typeregime ON typeregime.code=s.type_regime_id and typeregime."group"='typeregime'
-LEFT JOIN parameters as typestakeholder ON typestakeholder.code=s.type_stakeholder and typestakeholder."group"='typestakeholder'
-LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='generic'
-WHERE s.type_stakeholder=1 
+JOIN parameters as status ON status.code=s.status_id and status."group"='generic'
 
 
 

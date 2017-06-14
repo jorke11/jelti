@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="{{ asset('assets/images/icon.png') }}">
+        <title>SuperFüds</title>
+        <script>var PATH='{{url("/")}}'</script>
+        {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
+        {!!Html::script('/vendor/jquery-ui.js')!!}
+
+        {!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/ColReorder/js/dataTables.colReorder.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/jszip.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/pdfmake.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/vfs_fonts.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/buttons.html5.min.js')!!}
+
+        {!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}	
+
+        {!!Html::style('/vendor/DataTables-1.10.13/extensions/Buttons/css/buttons.bootstrap.css')!!}
+        {!!Html::style('/vendor/DataTables-1.10.13/extensions/Buttons/css/buttons.dataTables.min.css')!!}
+
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.html5.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.colVis.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.flash.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.print.js')!!}
+
+
+
+        <!--<script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>-->
+        <!--<link href='//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css' rel="stylesheet" />-->
+
+        {!!Html::script('/vendor/toastr/toastr.min.js')!!}
+        {!!Html::style('/vendor/toastr/toastr.min.css')!!}
+        <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/dataTables.bootstrap.css')!!}--> 
+        <!--{!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}--> 
+
+        {!!Html::script('js/Administration/dash.js')!!}
+        <!-- Bootstrap -->
+        <!--<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">-->
+        {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
+        {!!Html::style('/vendor/template/vendors/font-awesome/css/font-awesome.min.css')!!}
+        {!!Html::style('/vendor/template/vendors/nprogress/nprogress.css')!!}
+        {!!Html::style('/vendor/template/vendors/google-code-prettify/bin/prettify.min.css')!!}
+
+        <!-- Font Awesome -->
+
+        <!--<link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">-->
+        <!-- NProgress -->
+        <!--<link href="../vendors/nprogress/nprogress.css" rel="stylesheet">-->
+        <!-- bootstrap-wysiwyg -->
+        <!--<link href="../vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">-->
+
+        <!-- Custom styling plus plugins -->
+        <!--<link href="../build/css/custom.min.css" rel="stylesheet">-->
+
+        {!!Html::style('/vendor/datetimepicker/css/jquery.datetimepicker.css')!!}
+        {!!Html::script('/vendor/datetimepicker/js/jquery.datetimepicker.full.min.js')!!}
+
+
+        {!!Html::style('/vendor/font-awesome-4.7.0/css/font-awesome.min.css')!!}
+
+        {!!Html::style('/vendor/template/build/css/custom.min.css')!!}
+        {!!Html::style('/vendor/select2/css/select2.min.css')!!}
+        {!!Html::script('/vendor/select2/js/select2.js')!!}
+        {!!Html::script('/vendor/plugins.js')!!}
+        {!!Html::style('/css/edited.css')!!}
+    </head>
+    <style>
+        #loading-super{
+            display:scroll;
+            position:fixed;
+            z-index: 10000;
+            left: 50%;
+            top: 40%
+        }
+    </style>
+    <div id="loading-super" class="hidden" >
+        <img src="{!!asset('images/Gif_final.gif')!!}" width='60%' >
+        <input id="role_id" type="hidden" value="{{Auth::user()->role_id}}">
+    </div>
+    <body class="nav-md">
+        <div class="container body">
+            <div class="main_container">
+                <div class="col-md-3 left_col">
+                    <div class="left_col scroll-view">
+                        <div class="navbar nav_title" style="border: 0;">
+                            <a href="/home" class="site_title">{!!Html::image('/assets/images/logo.png','foto',array("width"=>"25"))!!} <span>SuperFüds</span></a>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <!-- menu profile quick info -->
+                        <div class="profile clearfix">
+                            <div class="profile_pic">
+                                <!--{!!Html::image('/assets/images/logo.png','foto',array('class' => 'img-circle profile_img'))!!}-->
+                                {!!Html::image('/assets/images/default.jpeg','Profile Image',array('class' => 'img-circle profile_img'))!!}
+                                <!--{!!Html::image('/vendor/template/images/img.jpg','foto',array('class' => 'img-circle profile_img'))!!}-->
+                                <!--<img src="images/img.jpg" alt="..." class="img-circle profile_img">-->
+                            </div>
+                            <div class="profile_info">
+                                <span>Welcome,</span>
+                                <h2>{{auth()->user()->name}}</h2>
+                            </div>
+                        </div>
+                        <!-- /menu profile quick info -->
+                        <br />
+                        <!-- sidebar menu -->
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                            <div class="menu_section">
+                                <h3>General</h3>
+                                <ul class="nav side-menu" id="addMenu">
+
+                                </ul>
+                            </div>                                                       
+                            <div class="menu_section">
+                                @if(Auth::user()->status_id != 3)
+                                <h3>General</h3>
+                                <ul class="nav side-menu">
+                                    <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/shopping">Shopping</a></li>
+                                        </ul>
+                                    </li>
+                                    @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
+                                    <li><a><i class="fa fa-home"></i> Tareas <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/activity">Actividades</a></li>
+
+                                            <li><a href="/fulfillment">Cumplimiento</a></li>
+                                            <li><a href="/ticket">Tickets</a></li>
+                                        </ul>
+                                    </li>
+                                    @if(Auth::user()->role_id == 1)
+                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/user">Users</a></li>
+                                            <li><a href="/role">Roles</a></li>
+                                            <li><a href="/permission">Permission</a></li>
+                                            <li><a href="{{url("/register")}}">Register</a></li>
+                                        </ul>
+                                    </li>
+                                    @endif
+
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administracion <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+
+                                            @if(Auth::user()->role_id == 1)
+                                            <li><a href="/category">Category</a></li> 
+                                            <li><a href="/characteristic">Characterist</a></li>
+                                            <li><a href="/puc">PUC</a></li>
+                                            <li><a href="/warehouse">Warehouse</a></li>
+                                            <li><a href="/department">Department</a></li>
+                                            <li><a href="/city">City</a></li>
+                                            <li><a href="/parameter">Parameters</a></li>
+                                            <li><a href="/consecutive">Consecutives</a></li>
+                                            <li><a href="/email">Email</a></li>
+                                            @endif
+                                        </ul>
+                                    </li>
+
+
+                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Proveedores <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/suppliers">Proveedores</a></li>
+                                            <li><a href="/product">Productos</a></li>
+                                            <!--                                            <li><a href="/contact">Contactos</a></li>-->
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Clientes <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/clients">Cuentas</a></li>
+                                            <li><a href="/prospect">Posibles Clientes</a></li>
+                                            <!--<li><a href="/contact">Contactos</a></li>-->
+                                        </ul>
+                                    </li>
+                                    @endif
+
+                                    @if(Auth::user()->role_id==1)
+                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Compras <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/purchase">Compra</a></li>
+                                            <li><a href="/sale">Salida</a></li>                                    
+                                            <li><a href="/debitNote">Notas Debito</a></li>
+                                            <li><a href="/summary">Resumen</a></li>                                    
+                                        </ul>
+                                    </li>
+                                    @endif
+                                    <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Ventas <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+
+
+                                            <li><a href="/departure">Ordenes de Venta</a></li>                                    
+                                            <li><a href="/creditnote">Notas Credito</a></li>
+                                            <li><a href="/briefcase">Cartera</a></li>                                    
+                                        </ul>
+                                    </li>
+
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Inventario <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/entry">Entrada</a></li>
+                                            <li><a href="/stock">Stock</a></li>                                    
+                                        </ul>
+                                    </li>
+
+                                    <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Reportes <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/reportSales">Ventas</a></li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                                @endif
+                            </div>
+                        </div>
+                        <!-- /sidebar menu -->
+
+                        <!-- /menu footer buttons -->
+                        <div class="sidebar-footer hidden-small">
+                            <a data-toggle="tooltip" data-placement="top" title="Settings">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="Lock">
+                                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                        <!-- /menu footer buttons -->
+                    </div>
+                </div>
+
+                <!-- top navigation -->
+                <div class="top_nav">
+                    <div class="nav_menu">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <!--<img src="images/img.jpg" alt="">-->
+                                        <!--{!!Html::image('/vendor/template/images/img.jpg','Profile Image')!!}-->
+                                        {!!Html::image('/assets/images/default.jpeg','Profile Image')!!}
+                                        {{auth()->user()->name}}
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li><a href="javascript:;"> Profile</a></li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                <span class="badge bg-red pull-right">50%</span>
+                                                <span>Settings</span>
+                                            </a>
+                                        </li>
+                                        <li><a href="javascript:;">Help</a></li>
+                                        <li>
+                                            <a href="{{ url('/logout') }}"
+                                               onclick="event.preventDefault();
+                                                       document.getElementById('logout-form').submit();">
+                                                Logout
+                                            </a>
+
+                                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                                {{ csrf_field() }}
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+
+
+                                <li role="presentation" class="dropdown">
+                                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-envelope-o"></i>
+                                        <span class="badge bg-green">6</span>
+                                    </a>
+                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                        <li>
+                                            <a>
+                                                <span class="image">
+                                                    <!--<img src="images/img.jpg" alt="Profile Image" />-->
+                                                    {!!Html::image('/vendor/template/images/img.jpg','Profile Image')!!}
+                                                </span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image">
+                                                    {!!Html::image('/vendor/template/images/img.jpg','Profile Image')!!}
+                                                    <!--<img src="images/img.jpg" alt="Profile Image" />-->
+                                                </span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image">
+    <!--                                                    <img src="images/img.jpg" alt="Profile Image" />-->
+                                                    {!!Html::image('/vendor/template/images/img.jpg','Profile Image')!!}
+                                                </span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image">
+                                                    <!--<img src="images/img.jpg" alt="Profile Image" />-->
+                                                    {!!Html::image('/vendor/template/images/img.jpg','Profile Image')!!}
+                                                </span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="text-center">
+                                                <a>
+                                                    <strong>See All Alerts</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li role="presentation">
+                                    <a href="/payment" class="dropdown-toggle info-number" aria-expanded="false">
+                                        <i class="fa fa-shopping-cart"></i>
+                                        <span class="badge bg-green" id="quantityOrders">0</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- /top navigation -->
+
+                <!-- page content -->
+                <div class="right_col" role="main">
+
+
+
+
+                    <div class="">
+                        <div class="clearfix"></div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="x_panel">
+                                    <div class="x_content">                          
+                                        @yield('content')
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /page content -->
+
+                <!-- footer content -->
+                <footer>
+                    <div class="pull-right">
+                        Created by <a href="https://www.superfuds.com">Superfuds</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </footer>
+                <!-- /footer content -->
+            </div>
+        </div>
+
+        <!-- compose -->
+        <div class="compose col-md-6 col-xs-12">
+            <div class="compose-header">
+                New Message
+                <button type="button" class="close compose-close">
+                    <span>×</span>
+                </button>
+            </div>
+
+            <div class="compose-body">
+                <div id="alerts"></div>
+
+                <div class="btn-toolbar editor" data-role="editor-toolbar" data-target="#editor">
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font"><i class="fa fa-font"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        </ul>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a data-edit="fontSize 5">
+                                    <p style="font-size:17px">Huge</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-edit="fontSize 3">
+                                    <p style="font-size:14px">Normal</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-edit="fontSize 1">
+                                    <p style="font-size:11px">Small</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="fa fa-bold"></i></a>
+                        <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="fa fa-italic"></i></a>
+                        <a class="btn" data-edit="strikethrough" title="Strikethrough"><i class="fa fa-strikethrough"></i></a>
+                        <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="fa fa-underline"></i></a>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><i class="fa fa-list-ul"></i></a>
+                        <a class="btn" data-edit="insertorderedlist" title="Number list"><i class="fa fa-list-ol"></i></a>
+                        <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="fa fa-dedent"></i></a>
+                        <a class="btn" data-edit="indent" title="Indent (Tab)"><i class="fa fa-indent"></i></a>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="fa fa-align-left"></i></a>
+                        <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="fa fa-align-center"></i></a>
+                        <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="fa fa-align-right"></i></a>
+                        <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></a>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="fa fa-link"></i></a>
+                        <div class="dropdown-menu input-append">
+                            <input class="span2" placeholder="URL" type="text" data-edit="createLink" />
+                            <button class="btn" type="button">Add</button>
+                        </div>
+                        <a class="btn" data-edit="unlink" title="Remove Hyperlink"><i class="fa fa-cut"></i></a>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn" title="Insert picture (or just drag & drop)" id="pictureBtn"><i class="fa fa-picture-o"></i></a>
+                        <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" />
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><i class="fa fa-undo"></i></a>
+                        <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><i class="fa fa-repeat"></i></a>
+                    </div>
+                </div>
+
+                <div id="editor" class="editor-wrapper"></div>
+            </div>
+
+            <div class="compose-footer">
+                <button id="send" class="btn btn-sm btn-success" type="button">Send</button>
+            </div>
+        </div>
+        <!-- /compose -->
+
+        <!-- jQuery -->
+
+        {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
+        {!!Html::script('/vendor/template/vendors/fastclick/lib/fastclick.js')!!}
+        {!!Html::script('/vendor/template/vendors/nprogress/nprogress.js')!!}
+        {!!Html::script('/vendor/template/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js')!!}
+        {!!Html::script('/vendor/template/vendors/jquery.hotkeys/jquery.hotkeys.js')!!}
+        {!!Html::script('/vendor/template/vendors/google-code-prettify/src/prettify.js')!!}
+        <!--<script src="../vendors/jquery/dist/jquery.min.js"></script>-->
+        <!-- Bootstrap -->
+        <!--<script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>-->
+        <!-- FastClick -->
+        <!--<script src="../vendors/fastclick/lib/fastclick.js"></script>-->
+        <!-- NProgress -->
+        <!--<script src="../vendors/nprogress/nprogress.js"></script>-->
+        <!-- bootstrap-wysiwyg -->
+        <!--<script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>-->
+        <!--<script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>-->
+        <!--<script src="../vendors/google-code-prettify/src/prettify.js"></script>-->
+
+
+
+        <!-- Custom Theme Scripts -->
+        <!--<script src="../build/js/custom.min.js"></script>-->
+        {!!Html::script('vendor/template/build/js/custom.min.js')!!}
+        {!!Html::script('/js/autoload.js')!!}
+
+
+    </body>
+</html>

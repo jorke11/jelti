@@ -26,6 +26,7 @@ class CreateDeparturesTable extends Migration {
             $table->string('transport');
             $table->string('phone');
             $table->dateTime('created');
+            $table->dateTime('date_dispatched');
             $table->integer('status_id');
             $table->string('invoice')->nullable();
             $table->decimal('shipping_cost', 15, 2)->nullable();

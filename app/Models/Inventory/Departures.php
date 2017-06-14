@@ -26,6 +26,7 @@ class Departures extends Model {
         "paid_out",
         "date_dispatched",
         "transport",
+       
         ];
 
 }

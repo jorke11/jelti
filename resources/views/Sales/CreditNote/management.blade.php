@@ -11,12 +11,11 @@
     <div class="panel-body">
         {!! Form::open(['id'=>'frm']) !!}
         <input id="id_orderext" type="hidden" value="{{isset($id)?$id:''}}">
-        <input id="id" name="id" type="hidden" class="input-departure">
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Consecutivo:</label>
-                    <input type="text" class="form-control input-departure input-sm" id="consecutive" name='consecutive' value="0001" readonly="">
+                    <input type="text" class="form-control input-departure input-sm" id="id" name='id' readonly="">
                 </div>
             </div>
             <div class="col-lg-2">

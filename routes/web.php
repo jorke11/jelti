@@ -240,6 +240,7 @@ Route::get('/reportSales', 'Report\SalesController@index');
 
 Route::resource('/creditnote', 'Sales\creditnoteController');
 Route::get('/creditnote/{id}/getCreditNote', 'Sales\creditnoteController@editCreditNote');
+Route::get('/creditnote/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProductOut']);
 
 Route::get('/api/listCreditNote', function() {
 

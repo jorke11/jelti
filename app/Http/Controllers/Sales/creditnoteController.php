@@ -53,13 +53,12 @@ class creditnoteController extends Controller {
 
     public function store(Request $req) {
         $input = $req->all();
-        
+
         $sales = Sales::where("departure_id", $input["header"]["id"])->first();
-        
+        dd($input);
         $new["sale_id"] = $sales->id;
         $new["departure_id"] = $input["header"]["id"];
         $id = CreditNote::create($new)->id;
-
         foreach ($input["detail"] as $value) {
             if ($value["quantity"] != 0) {
                 $cre = new CreditNoteDetail();
@@ -82,19 +81,17 @@ class creditnoteController extends Controller {
     }
 
     public function formatDetail($sale) {
-       
+
         $detail = DB::table("sales_detail")
-                ->select("sales_detail.id", "sales_detail.quantity", "sales_detail.quantity as real_quantity", 
-                        "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title as product"),"stakeholder.business as stakeholder",
-                        "products.bar_code", "products.units_sf", "products.id as product_id")
-                ->join("products", "sales_detail.product_id", "products.id")
-                ->join("stakeholder", "stakeholder.id", "products.supplier_id")
-                ->where("sale_id", $sale->id)
-                ->whereNotNull("sales_detail.product_id")
-                ->orderBy("id", "asc")->get();
+                        ->select("sales_detail.id", "sales_detail.quantity", "sales_detail.quantity as real_quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title as product"), "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "products.id as product_id")
+                        ->join("products", "sales_detail.product_id", "products.id")
+                        ->join("stakeholder", "stakeholder.id", "products.supplier_id")
+                        ->where("sale_id", $sale->id)
+                        ->whereNotNull("sales_detail.product_id")
+                        ->orderBy("id", "asc")->get();
         $this->total = 0;
 
-        
+
         foreach ($detail as $i => $value) {
 //            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
@@ -114,15 +111,20 @@ class creditnoteController extends Controller {
         $cre = CreditNote::find($id);
 
         $sale = Sales::where("departure_id", $cre->departure_id)->first();
-        $detail = DB::table("sales_detail")
-                ->select(DB::raw("credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * (credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
-                ->join("products", "sales_detail.product_id", "products.id")
-                ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->join("credit_note_detail", "credit_note_detail.product_id", "sales_detail.product_id")
-                ->where("sale_id", $cre->sale_id)
-                ->orderBy("order", "asc")
-                ->get();
 
+        $detail = DB::table("vcreditnote_detail_row")
+                ->select("id","quantity","tax","product","product_id","value","units_sf","stakeholder","quantitytotal","valuetotal")
+                ->where("id", $id)
+                ->get();
+//        dd($detail);
+//        $detail = DB::table("sales_detail")
+//                ->select(DB::raw("credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * (credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+//                ->join("products", "sales_detail.product_id", "products.id")
+//                ->join("stakeholder", "products.supplier_id", "stakeholder.id")
+//                ->join("credit_note_detail", "credit_note_detail.product_id", "sales_detail.product_id")
+//                ->where("sale_id", $cre->sale_id)
+//                ->orderBy("order", "asc")
+//                ->get();
         $dep = Departures::find($cre->departure_id);
 
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
@@ -199,7 +201,7 @@ class creditnoteController extends Controller {
             'tax19' => "$ " . number_format((round($totalTax19)), 0, ',', '.'),
             'totalInvoice' => "$ " . number_format(($totalSum), 0, ',', '.'),
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
-            'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
+            'shipping' => "$ " . 0,
             'invoice' => $cre->id,
             'textTotal' => trim($tool->to_word(round($totalWithTax)))
         ];

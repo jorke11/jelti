@@ -56,7 +56,7 @@ function CreditNote() {
 
         $("#frmDetail #product_id").change(function () {
             $.ajax({
-                url: 'departure/' + $(this).val() + '/getDetailProduct',
+                url: 'creditnote/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
@@ -119,6 +119,11 @@ function CreditNote() {
         $("#btnmodalDetail,#btnModalUpload").attr("disabled", false);
         listProducts = [];
         obj.consecutive();
+    }
+
+    this.deleteItem = function (product_id, rowItem) {
+        delete listProducts[rowItem];
+        $("#row_" + rowItem).remove();
     }
 
     this.getClient = function (id, path) {
@@ -245,9 +250,11 @@ function CreditNote() {
     this.getItem = function (product_id) {
 
         $.each(listProducts, function (i, val) {
-            if (val.product_id == product_id) {
-                rowItem = i;
-                row = val;
+            if (val != undefined) {
+                if (val.product_id == product_id) {
+                    rowItem = i;
+                    row = val;
+                }
             }
         })
     }

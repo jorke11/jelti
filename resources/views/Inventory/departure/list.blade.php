@@ -2,9 +2,8 @@
 <table class="table table-condensed  table-hover nowrap" id="tbl" width='100%'>
     <thead>
         <tr>
-            <th></th>
-            <th></th>
-            <th>#</th>
+            <th>Detail</th>
+            <th>Id</th>
             <th>Factura</th>
             <th>Fecha</th>
             <th>Cliente</th>

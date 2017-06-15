@@ -23,7 +23,7 @@ function Client() {
         obj.end = $("#Detail #fend").val();
         return $('#tbl').DataTable({
             destroy: true,
-//            "aaSorting": false,
+            "aaSorting": false,
             ajax: {
                 url: "/api/reportClient",
                 data: obj,

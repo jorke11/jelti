@@ -64,14 +64,14 @@ class StockController extends Controller {
 
         if ($special != null) {
             $response = DB::table("products")
-                    ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
+                    ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
                     ->join("categories", "categories.id", "=", "products.category_id")
                     ->join("prices_special", "prices_special.product_id", "=", "products.id")
                     ->where("products.id", $id)
                     ->first();
         } else {
             $response = DB::table("products")
-                    ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
+                    ->select("products.id", "products.title","products.tax", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
                     ->join("categories", "categories.id", "=", "products.category_id")
                     ->where("products.id", $id)
                     ->first();
@@ -87,10 +87,10 @@ class StockController extends Controller {
     }
 
     public function getDetailProductOut($id) {
-        
+
 //        dd($id);
         $response = DB::table("products")
-                ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
+                ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
                 ->join("categories", "categories.id", "=", "products.category_id")
                 ->where("products.id", $id)
                 ->first();
@@ -109,7 +109,7 @@ class StockController extends Controller {
 
         if ($special != null) {
             $response = DB::table("products")
-                    ->select("products.id", "products.title", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
+                    ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
                     ->join("categories", "categories.id", "=", "products.category_id")
                     ->join("prices_special", "prices_special.product_id", "=", "products.id")
                     ->where("products.id", $id)

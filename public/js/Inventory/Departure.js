@@ -16,6 +16,7 @@ function Sale() {
             if ($(this).val() != 0) {
                 client_id = $(this).val();
                 obj.getClient($(this).val());
+                $("#btnmodalDetail").attr("disabled", false);
             } else {
                 $("#frm #name_client").val("");
                 $("#frm #address_supplier").val("");
@@ -141,16 +142,14 @@ function Sale() {
         $(".input-departure").cleanFields();
         $(".input-detail").cleanFields();
         $(".input-fillable").prop("readonly", false);
-        $("#btnSave").prop("disabled", false);
         $("#btnSend,#btnPdf").prop("disabled", true);
         $("#tblDetail tbody").empty();
         $("#frm #status_id").val(0).trigger("change").prop("disabled", true);
         $("#frm #supplier_id").prop("disabled", false);
-        $("#btnSave").prop("disabled", false);
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse'});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-        $("#btnmodalDetail,#btnModalUpload").attr("disabled", false);
+        $("#btnModalUpload").attr("disabled", false);
         listProducts = [];
         statusRecord = false;
     }
@@ -392,16 +391,18 @@ function Sale() {
                             row: listProducts.length,
                             product_id: $("#frmDetail #product_id").val(),
                             product: $.trim($("#frmDetail #product_id").text()),
+                            price_tax: dataProduct.price_sf * dataProduct.units_sf * dataProduct.tax,
                             price_sf: dataProduct.price_sf,
                             quantity: $("#frmDetail #quantity").val(),
                             valueFormated: $("#frmDetail #value").val(),
                             totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
+                            total: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf) + (dataProduct.price_sf * dataProduct.units_sf * $("#frmDetail #quantity").val() * dataProduct.tax),
                             real_quantity: '',
                             totalFormated_real: '',
                             comment: '',
                             status: 'new'
                         });
-//                    $(".input-detail").cleanFields();
+                        //                    $(".input-detail").cleanFields();
                         $("#frmDetail #product_id").text("");
                         $("#frmDetail #value").val("");
                         $("#frmDetail #quantity").val("");
@@ -448,11 +449,10 @@ function Sale() {
     this.printDetailTmp = function (data, btnEdit = true, btnDel = true) {
         var html = "", htmlEdit = "", htmlDel = "", total = 0;
         $("#tblDetail tbody").html("");
-        console.log(listProducts)
         $.each(listProducts, function (i, val) {
 
             if (val != undefined) {
-                total += val.price_sf * val.quantity;
+                total += val.total;
                 htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + val.row + ')>Edit</button>'
                 htmlDel = '<button type="button" class="btn btn-xs btn-danger" onclick=obj.deleteItem(' + val.product_id + ',' + val.row + ')>Del</button>'
 

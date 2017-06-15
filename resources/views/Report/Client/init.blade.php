@@ -45,6 +45,23 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <!-- Nav tabs -->
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @include('Report.Client.product')
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @include('Report.Client.target')
+            </div>
+        </div>
+    </div>
+</div>
 
 {!!Html::script('js/Report/Client.js')!!}
 

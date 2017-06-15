@@ -20,6 +20,7 @@ class ClientController extends Controller {
 
     public function getList(Request $req) {
         $input = $req->all();
+
         $sql = "
             SELECT cli.id,cli.business,sum(d.quantity) totalunidades,sum(d.value*d.quantity*d.units_sf) total,
             replace(round(sum(d.value*d.quantity*d.units_sf))::money::text,',','.') totalformat 
@@ -34,6 +35,36 @@ class ClientController extends Controller {
             ORDER BY 3 DESC";
 //        echo $sql;exit;
         $res = DB::select($sql);
+        return response()->json(["data" => $res]);
+    }
+
+    public function getListTarger(Request $req) {
+        $input = $req->all();
+        $cli = "
+            SELECT business, (select count(*) +1 from branch_office where stakeholder_id=stakeholder.id) seats,created_at as created
+            FROM stakeholder
+            WHERE type_stakeholder=1 
+            AND created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'";
+
+        $res = DB::select($cli);
+
+        return response()->json(["data" => $res]);
+    }
+    public function getListProduct(Request $req) {
+        $input = $req->all();
+        $cli = "
+            select d.product_id,p.title product,sum(quantity) units
+            from sales_detail d
+            JOIN sales s ON s.id=d.sale_id 
+            JOIN products p ON p.id=d.product_id 
+            WHERE d.product_id is Not null
+            AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            group by 1,2
+            order by 3 desc";
+            
+
+        $res = DB::select($cli);
+
         return response()->json(["data" => $res]);
     }
 

@@ -471,6 +471,10 @@ Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment"
 Route::get('/reportClient', "Report\ClientController@index");
 
 Route::get('/api/reportClient', "Report\ClientController@getList");
+Route::get('/api/reportClientTarget', "Report\ClientController@getListTarger");
+Route::get('/api/reportClientProduct', "Report\ClientController@getListProduct");
+
+
 
 Route::get('/reportSupplier', "Report\SupplierController@index");
 

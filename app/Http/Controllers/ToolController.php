@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use App\Models\Inventory\Departures;
 use App\models\Administration\Consecutives;
+use App\Models\Inventory\Entries;
+use App\Models\Inventory\EntriesDetail;
+use App\Models\Administration\Products;
+use App\Models\Administration\Warehouses;
 use DB;
 
 class ToolController extends Controller {
@@ -248,21 +252,81 @@ class ToolController extends Controller {
         return $output;
     }
 
-    public function asignInvoice() {
-        $depAll = Departures::whereNull("invoice")->where("status_id", 2)->get();
+    public function getProduct($warehouse_id, $reference) {
+
+        $sql = "
+            select 
+                p.id,
+                p.reference,
+                p.title as product,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from entries_detail
+                    JOIN entries ON entries.id=entries_detail.entry_id
+                    WHERE entries.status_id=2 and entries_detail.product_id=p.id 
+                    and entries.warehouse_id=$warehouse_id
+                ) entradas,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id
+                    and sales.warehouse_id=$warehouse_id
+                ) salidas,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from entries_detail
+                    JOIN entries ON entries.id=entries_detail.entry_id
+                    WHERE entries.status_id=2 and entries_detail.product_id=p.id
+                    and entries.warehouse_id=$warehouse_id
+                ) - (
+                    select coalesce(sum(quantity),0) 
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id
+                    and sales.warehouse_id=$warehouse_id
+                ) Total
+            from products p
+            where p.reference=$reference
+            order by p.title asc";
+        $res = DB::select($sql);
+        $res = $res[0];
+        dd($res);
+    }
+
+    public function addInventory($warehouse_id, $reference, $quantity) {
+
+        $pro = Products::where("reference", $reference)->first();
+
+        $w = Warehouses::find($warehouse_id);
+
+        $en["warehouse_id"] = $warehouse_id;
+        $en["responsible_id"] = $w->responsible_id;
+        $en["supplier_id"] = $pro->supplier_id;
+        $en["purchase_id"] = 0;
+        $en["city_id"] = $w->city_id;
+        $en["description"] = "initial inventory";
+        $en["invoice"] = "system";
+        $en["status_id"] = 2;
+        $en["created"] = date("Y-m-d H:i:s");
 
 
-        foreach ($depAll as $value) {
 
-            $con = Consecutives::select(DB::raw("current+1 as invoice"))->where("id", 1)->first();
-            $dep = Departures::find($value->id);
-            $dep->invoice = $con["invoice"];
-            echo "consecutive " . $con["invoice"] . "dep:" . $dep->consecutive . " <br>";
-            $dep->save();
-            $con->current = $con["invoice"];
-            $con->save();
-            $con = '';
-        }
+        $entry_id = Entries::create($en)->id;
+        echo "entry:" . $entry_id;
+
+        $det["entry_id"] = $entry_id;
+        $det["product_id"] = $pro->id;
+        $det["quantity"] = $quantity;
+        $det["real_quantity"] = $quantity;
+        $det["value"] = $pro->price_sf;
+        $det["lot"] = "system";
+        $det["description"] = "system";
+        $det["status_id"] = 3;
+        $det["created_at"] = date("Y-m-d H:i:s");
+
+        $detail_id = EntriesDetail::create($det)->id;
+        echo " detail:" . $detail_id;
     }
 
 }

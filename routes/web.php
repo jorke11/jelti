@@ -487,5 +487,6 @@ Route::get('/api/reportCommercial', function() {
     return Datatables::queryBuilder($query)->make(true);
 });
 
-Route::get('/fixedInvoice', "ToolController@asignInvoice");
+Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
+Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");
 

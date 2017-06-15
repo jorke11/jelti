@@ -3,6 +3,7 @@
     <thead>
         <tr>
             <th></th>
+            <th></th>
             <th>#</th>
             <th>Factura</th>
             <th>Fecha</th>

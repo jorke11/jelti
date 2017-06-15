@@ -182,10 +182,14 @@ class DepartureController extends Controller {
                 ->where("stakeholder_id", $sale["client_id"])
                 ->join("cities", "cities.id", "branch_office.city_id")
                 ->first();
-//        $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
-//                ->where("stakeholder.id", $sale["client_id"])
-//                ->join("cities", "cities.id", "stakeholder.city_id")
-//                ->first();
+        
+        if ($cli == null) {
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
+                    ->where("stakeholder.id", $sale["client_id"])
+                    ->join("cities", "cities.id", "stakeholder.city_id")
+                    ->first();
+        }
+        
         $user = Users::find($dep["responsible_id"]);
 
         $ware = Warehouses::find($dep["warehouse_id"]);

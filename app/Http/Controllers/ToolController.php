@@ -373,6 +373,12 @@ class ToolController extends Controller {
 
         $detail_id = EntriesDetail::create($det)->id;
         echo " detail:" . $detail_id;
+
+
+        $res = DB::select($sql);
+        $res = $res[0];
+        
+        dd($res);
     }
 
 }

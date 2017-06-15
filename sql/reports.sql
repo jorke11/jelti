@@ -75,3 +75,10 @@ create view vdepartures as
             JOIN users u ON u.id = d.responsible_id
             WHERE p.group='entry'
             ORDER BY d.status_id,d.id asc
+
+
+---totales por meses
+select substring(s.created::text from 1 for 7),sum(d.quantity*d.value*d.units_sf)
+from sales_detail d
+JOIN sales s ON s.id=d.sale_id
+group by 1

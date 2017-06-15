@@ -296,6 +296,45 @@ class ToolController extends Controller {
 
     public function addInventory($warehouse_id, $reference, $quantity) {
 
+        $sql = "
+            select 
+                p.id,
+                p.reference,
+                p.title as product,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from entries_detail
+                    JOIN entries ON entries.id=entries_detail.entry_id
+                    WHERE entries.status_id=2 and entries_detail.product_id=p.id 
+                    and entries.warehouse_id=$warehouse_id
+                ) entradas,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id
+                    and sales.warehouse_id=$warehouse_id
+                ) salidas,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from entries_detail
+                    JOIN entries ON entries.id=entries_detail.entry_id
+                    WHERE entries.status_id=2 and entries_detail.product_id=p.id
+                    and entries.warehouse_id=$warehouse_id
+                ) - (
+                    select coalesce(sum(quantity),0) 
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id
+                    and sales.warehouse_id=$warehouse_id
+                ) Total
+            from products p
+            where p.reference=$reference
+            order by p.title asc";
+        $res = DB::select($sql);
+        $res = $res[0];
+
+
         $pro = Products::where("reference", $reference)->first();
 
         $w = Warehouses::find($warehouse_id);
@@ -310,10 +349,17 @@ class ToolController extends Controller {
         $en["status_id"] = 2;
         $en["created"] = date("Y-m-d H:i:s");
 
+        $total = ($res->total < 0 ) ? $res->total * -1 : $res->total;
 
+        if ($res->total < 0) {
+            $quantity = $quantity + ($res->total * -1);
+        } else {
+            $quantity = $quantity - $res->total;
+        }
 
         $entry_id = Entries::create($en)->id;
         echo "entry:" . $entry_id;
+
 
         $det["entry_id"] = $entry_id;
         $det["product_id"] = $pro->id;

@@ -30,14 +30,14 @@
 
 <div class="row">
     <!-- Nav tabs -->
-    <div class="col-lg-4">
+    <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
                 @include('Report.Client.detail')
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
                 @include('Report.Client.target')

@@ -1,4 +1,4 @@
-<div class="col-md-10 col-md-offset-1">
+<div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -11,7 +11,6 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Consecutive</th>
                         <th>Description</th>
                         <th>Date</th>
                         <th>Stakeholder</th>

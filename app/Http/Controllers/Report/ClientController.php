@@ -32,6 +32,7 @@ class ClientController extends Controller {
             AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             GROUP BY 1,2 
             ORDER BY 3 DESC";
+//        echo $sql;exit;
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }

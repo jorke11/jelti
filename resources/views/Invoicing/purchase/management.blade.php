@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-9 col-md-6">
-                    Consecutive: <label><span id="consecutive" class="input-purchase"></span></label>
+                    #: <label><span id="consecutive" class="input-purchase"></span></label>
                 </div>
                 <div class="col-lg-3 col-md-6 text-right">
                     <button type="button" class="btn btn-success btn-sm" id='btnNew'>

@@ -13,7 +13,7 @@
     <body>
         <p>¡Hola! Feliz día</p>
         <p>Les escribo para solicitar el siguiente pedido para nuestra bodega en {{$city}}</p>
-        <strong>Solicitud Compra {!!$consecutive!!}</strong>
+        <strong>Solicitud Compra {!!$id!!}</strong>
         <br>
         <br>
         <table border="1">

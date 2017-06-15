@@ -17,6 +17,7 @@ function Client() {
         obj.end = $("#Detail #fend").val();
         return $('#tbl').DataTable({
             destroy: true,
+            "aaSorting":false,
             ajax: {
                 url: "/api/reportClient",
                 data: obj,
@@ -33,6 +34,7 @@ function Client() {
                         return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
                     }
                 }
+
             ],
         });
     }

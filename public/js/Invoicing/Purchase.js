@@ -32,8 +32,6 @@ function Purchase() {
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#frm #branch_id").getSeeker({default: true, api: '/api/getSupplier', disabled: true});
-
-            obj.consecutive();
         });
 
         $("#frmDetail #product_id").change(function () {
@@ -67,19 +65,7 @@ function Purchase() {
         })
 
     }
-
-
-
-    this.consecutive = function () {
-        $.ajax({
-            url: 'purchase/1/consecutive',
-            method: 'GET',
-            dataType: 'JSON',
-            success: function (resp) {
-                $("#frm #consecutive").html(resp.response);
-            }
-        })
-    }
+   
 
     this.send = function () {
         toastr.remove();
@@ -111,8 +97,6 @@ function Purchase() {
     }
 
     this.new = function () {
-        obj.consecutive();
-
         $(".input-purchase").cleanFields();
         $("#btnSave").attr("disabled", false);
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
@@ -452,7 +436,6 @@ function Purchase() {
             "ajax": "/api/listPurchase",
             columns: [
                 {data: "id"},
-                {data: "consecutive"},
                 {data: "description"},
                 {data: "created_at"},
                 {data: "stakeholder"},
@@ -463,13 +446,13 @@ function Purchase() {
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6, 7],
+                    aTargets: [0, 1, 2, 3, 4, 5, 6],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [8],
+                    targets: [7],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

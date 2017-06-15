@@ -55,16 +55,6 @@ class PurchaseController extends Controller {
         return $con->pronoun . $res . $con->current;
     }
 
-    public function getConsecutive($id) {
-        return response()->json(["response" => $this->createConsecutive(4)]);
-    }
-
-    public function updateConsecutive($id) {
-        $con = Consecutives::where("type_form", $id)->first();
-        $con->current = (($con->current == null) ? 1 : $con->current) + 1;
-        $con->save();
-    }
-
     public function getSupplier($id) {
         $stakeholder = \App\Models\Administration\Stakeholder::findOrFail($id);
         $stakeholder->delivery = date('Y-m-d', strtotime('+' . $stakeholder->lead_time . ' days', strtotime(date('Y-m-d'))));
@@ -89,10 +79,7 @@ class PurchaseController extends Controller {
 
             if (isset($input["detail"])) {
 
-                $input["header"]["consecutive"] = $this->createConsecutive(4);
-
                 $purchase_id = Purchases::create($input["header"])->id;
-                $this->updateConsecutive(4);
 
                 foreach ($input["detail"] as $i => $val) {
 
@@ -261,8 +248,9 @@ class PurchaseController extends Controller {
                     $purchase = Purchases::findOrFail($in["id"]);
                     $sup = Stakeholder::find($purchase->supplier_id);
 
-                    $input["consecutive"] = $purchase->consecutive;
+
                     $ware = Warehouses::findOrFail($purchase->warehouse_id);
+                    $input["id"] = $purchase->id;
                     $input["address"] = $ware->address;
                     $input["warehouse"] = $ware->description;
 
@@ -288,7 +276,7 @@ class PurchaseController extends Controller {
 
                         $cit = Cities::find($ware->city_id);
 
-                        $this->subject = "SuperFuds " . date("d/m") . " " . $sup->business . " " . $cit->description . " " . $pur->consecutive;
+                        $this->subject = "SuperFuds " . date("d/m") . " " . $sup->business . " " . $cit->description . " " . $pur->id;
                         $input["city"] = $cit->description;
 
                         Mail::send("Notifications.purchase", $input, function($msj) {
@@ -296,10 +284,6 @@ class PurchaseController extends Controller {
                             $msj->to($this->mails);
                         });
                     }
-                    
-                    
-                    
-                    
                     DB::commit();
 
                     return response()->json(["success" => true, "header" => $pur]);

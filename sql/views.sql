@@ -70,7 +70,7 @@ join departments d ON d.id=c.department_id;
 
 
 create view vpurchases as 
-select p.id, p.consecutive,coalesce(p.description,'') as description,p.created_at,s.business || ' '|| s.business_name as stakeholder,w.description as warehouse,c.description as city,param.description as status,
+select p.id,coalesce(p.description,'') as description,p.created_at,s.business || ' '|| s.business_name as stakeholder,w.description as warehouse,c.description as city,param.description as status,
 p.responsible_id
 from purchases p
 JOIN stakeholder s ON s.id=p.supplier_id

@@ -116,7 +116,7 @@ for ($i = 1; $i <= $count; $i++) {
                             @include('Inventory.departure.pdffooter')
                             <table>
                                 <tr>
-                                    <td class="resolution">La presente factura de compra - venta se asimila en sus efectos a una letra de cambio, art. 774 numeral 6o. Del Código de Comercio. En caso de
+                                    <td class="resolution">La presente Factura se asemeja en todos sus efectos a un Título Valor Art. 1 Ley 1231 de 2008. En caso de
                                         mora se causarán intereses a la tasa máxima legal estipulada por la ley, o en el respectivo contrato (conforme al art. 884 del Código de Comercio).</td>
                                 </tr>
                                 <tr>

@@ -1,5 +1,6 @@
 @extends('layouts.report')
 @section('content')
+
 <div class="row">
     {!! Form::open(['id'=>'Detail']) !!}
     <div class="panel panel-default">
@@ -27,7 +28,25 @@
     </div>
     {!!Form::close()!!}
 </div>
-
+<div class="row">
+    <!-- Nav tabs -->
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="container_product" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                <!--@include('Report.Client.product')-->
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="container_cities" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                <!--@include('Report.Client.cities')-->
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <!-- Nav tabs -->
     <div class="col-lg-6">
@@ -45,23 +64,10 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <!-- Nav tabs -->
-    <div class="col-lg-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                @include('Report.Client.product')
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                @include('Report.Client.target')
-            </div>
-        </div>
-    </div>
-</div>
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 {!!Html::script('js/Report/Client.js')!!}
 

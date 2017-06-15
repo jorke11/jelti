@@ -45,15 +45,12 @@
             <td>SUPERFUDS SAS<br>NIT 900 703 907-7<br>BARRANQUILLA COLOMBIA<br>E-mail: info@superfuds.com.co</td>
         </tr>
     </table>
-    <table align='center' >
+    <table >
         <tr>
-            <td class="font-title">Resolución Dian 320001359848</td>
+            <td class="font-title">Resolución DIAN 18762003299025 del 17/05/2017</td>
         </tr>
         <tr>
-            <td class="font-title">del 03/02/2016</td>
-        </tr>
-        <tr>
-            <td class="font-title">Numeración Autorizada 0003 al 5000</td>
+            <td class="font-title">Numeración Autorizada 3001 al 3999 por computador Actividad Economica 4631 Tarifa Ica 4.14 x 1000</td>
         </tr>
     </table>
     <br>

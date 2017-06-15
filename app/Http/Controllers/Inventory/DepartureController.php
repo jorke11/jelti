@@ -199,10 +199,10 @@ class DepartureController extends Controller {
             $term = $cli["term"];
         }
 
-        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["created"])));
+        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["dispatched"])));
 
         $cli["address_invoice"] = $sale["address"];
-        $cli["emition"] = $this->formatDate($sale["created"]);
+        $cli["emition"] = $this->formatDate($sale["dispatched"]);
         $cli["observations"] = $sale["description"];
         $cli["expiration"] = $this->formatDate($expiration);
 
@@ -366,7 +366,6 @@ class DepartureController extends Controller {
                             $input["id"] = $result;
                             $this->mails[] = $user->email;
 
-
                             Mail::send("Notifications.departure", $input, function($msj) {
                                 $msj->subject($this->subject);
                                 $msj->to($this->mails);
@@ -427,6 +426,7 @@ class DepartureController extends Controller {
                             $tax = 0;
                             $totalPar = 0;
 
+                            $sale = Sales::find($id);
 
                             foreach ($detail as $value) {
                                 $pro = Products::find($value->product_id);
@@ -477,6 +477,11 @@ class DepartureController extends Controller {
                             $detail = $this->formatDetail($input["id"]);
                             $departure = Departures::find($input["id"]);
                             $total = "$ " . number_format($this->total, 0, ",", ".");
+
+                            $sale->dispatched = date("Y-m-d H:i:s");
+                            $sale->invoice = $con->consecutive;
+                            $sale->save();
+
                             $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $con->consecutive);
                             DB::commit();
                             return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" => $total]);
@@ -721,8 +726,6 @@ class DepartureController extends Controller {
                 ->first();
 
         $user = Users::find($dep["responsible_id"]);
-        dd($user);
-        exit;
         $totalExemp = 0;
         $totalTax5 = 0;
         $totalTax19 = 0;

@@ -473,7 +473,10 @@ Route::get('/reportClient', "Report\ClientController@index");
 Route::get('/api/reportClient', "Report\ClientController@getList");
 Route::get('/api/reportClientTarget', "Report\ClientController@getListTarger");
 Route::get('/api/reportClientProduct', "Report\ClientController@getListProduct");
+Route::get('/api/reportClientCities', "Report\ClientController@listCities");
 
+Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");
+Route::get('/api/reportCommercialGraph', "Report\CommercialController@listCommercialGraph");
 
 
 Route::get('/reportSupplier', "Report\SupplierController@index");
@@ -486,10 +489,7 @@ Route::get('/reportProduct', "Report\ProductController@index");
 Route::get('/api/reportProduct', "Report\ProductController@getList");
 
 Route::get('/reportCommercial', "Report\CommercialController@index");
-Route::get('/api/reportCommercial', function() {
-    $query = DB::table('vreportcommercial');
-    return Datatables::queryBuilder($query)->make(true);
-});
+
 
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");

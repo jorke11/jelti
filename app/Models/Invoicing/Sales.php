@@ -23,6 +23,8 @@ class Sales extends Model {
         "description",
         "status_id",
         "created",
+        "invoice",
+        "dispatched",
     ];
 
 }

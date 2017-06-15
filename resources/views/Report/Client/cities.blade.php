@@ -1,15 +1,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-
             <div class="panel panel-default">
+                <div class="panel-heading">Unidades por Ciudad</div>
                 <div class="panel-body">
-                    <table class="table" id="tbl">
+                    <table class="table nowrap" cellspacing="0" width="100%" id="tblCities">
                         <thead>
                             <tr>
-                                <td>Comercial</td>
-                                <td>Total Unidades</td>
-                                <td>Valor Total</td>
+                                <td>Ciudad</td>
+                                <td>Unidades</td>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -19,4 +18,5 @@
 
         </div>
     </div>
+
 </div>

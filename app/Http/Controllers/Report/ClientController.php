@@ -50,6 +50,7 @@ class ClientController extends Controller {
 
         return response()->json(["data" => $res]);
     }
+
     public function getListProduct(Request $req) {
         $input = $req->all();
         $cli = "
@@ -60,8 +61,33 @@ class ClientController extends Controller {
             WHERE d.product_id is Not null
             AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             group by 1,2
-            order by 3 desc";
-            
+            order by 3 desc limit 10";
+//            echo $cli;exit;
+
+        $res = DB::select($cli);
+        $units = array();
+        $cat = array();
+        foreach ($res as $value) {
+            $units[] = $value->units;
+            $cat[] = $value->product;
+        }
+        
+        return response()->json(["data" => $res,"categories"=>$cat,"units"=>$units]);
+    }
+
+    public function listCities(Request $req) {
+        $input = $req->all();
+        $cli = "
+            select c.description as data,c.description as name,sum(quantity) y
+            from sales_detail d
+            JOIN sales s ON s.id=d.sale_id 
+            JOIN cities c ON c.id=s.destination_id
+            WHERE d.product_id is Not null
+            AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            group by 1,s.destination_id
+            order by 2 desc
+            ";
+//            echo $cli;exit;
 
         $res = DB::select($cli);
 

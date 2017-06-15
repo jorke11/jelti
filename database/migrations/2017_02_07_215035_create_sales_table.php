@@ -21,12 +21,14 @@ class CreateSalesTable extends Migration {
             $table->integer('client_id');
             $table->integer('destination_id');
             $table->string('phone');
+            $table->string('invoice')->nullable();
             $table->decimal('shipping_cost', 15, 2)->nullable();
             $table->decimal('discount', 15, 2)->nullable();
             $table->string('status_id');
             $table->string('address');
             $table->string('description')->nullable();
             $table->dateTime('created');
+            $table->dateTime('dispatched');
             $table->timestamps();
         });
     }

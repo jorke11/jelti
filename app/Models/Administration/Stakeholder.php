@@ -39,5 +39,6 @@ class Stakeholder extends Model
         "lead_time",
         "user_insert",
         "user_update",
+        "send_city_id"
         ];
 }

@@ -18,8 +18,6 @@ class CityController extends Controller {
     }
     
     public function index() {
-//       trigger_error("warning test", E_USER_WARNING);
-        Log::info('This is some useful information.');
         return view("Administration.city.init");
     }
 

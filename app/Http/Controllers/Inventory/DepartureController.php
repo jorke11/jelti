@@ -182,14 +182,14 @@ class DepartureController extends Controller {
                 ->where("stakeholder_id", $sale["client_id"])
                 ->join("cities", "cities.id", "branch_office.city_id")
                 ->first();
-        
+
         if ($cli == null) {
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
                     ->where("stakeholder.id", $sale["client_id"])
                     ->join("cities", "cities.id", "stakeholder.city_id")
                     ->first();
         }
-        
+
         $user = Users::find($dep["responsible_id"]);
 
         $ware = Warehouses::find($dep["warehouse_id"]);
@@ -818,7 +818,11 @@ class DepartureController extends Controller {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
                             }
                         } else {
-                            $pro = Products::where("reference", (int) $book->sf_code)->first();
+                            if (isset($book->ean)) {
+                                $pro = Products::where("bar_code", $book->ean)->first();
+                            } else {
+                                $pro = Products::where("reference", (int) $book->sf_code)->first();
+                            }
                         }
 
                         if ($pro != null) {

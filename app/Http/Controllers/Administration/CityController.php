@@ -17,6 +17,7 @@ class CityController extends Controller {
     }
     
     public function index() {
+        $div=10/0;
         return view("Administration.city.init");
     }
 

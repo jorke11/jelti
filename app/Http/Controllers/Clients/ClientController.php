@@ -111,7 +111,7 @@ class ClientController extends Controller {
         $in = $req->all();
         $sql = DB::table("vprice_special")
                         ->where("client_id", $in["client_id"])->orderBy("id", "asc");
-        
+
         return Datatables::queryBuilder($sql)->make(true);
     }
 
@@ -195,8 +195,8 @@ class ClientController extends Controller {
                 ->orderBy("comments.created_at", "desc")
                 ->get();
 
-        $resp["header"] = Stakeholder::FindOrFail($id);
-        $resp["images"] = $this->getImages($id)->getData();
+        $resp["header"] = Stakeholder::Find($id);
+//        $resp["images"] = $this->getImages($id)->getData();
         $resp["comments"] = $comment;
         return response()->json($resp);
     }

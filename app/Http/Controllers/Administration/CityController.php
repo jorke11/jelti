@@ -17,7 +17,7 @@ class CityController extends Controller {
     }
     
     public function index() {
-        $div=$e;
+       trigger_error("warning test", E_USER_WARNING);
         return view("Administration.city.init");
     }
 

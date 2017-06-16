@@ -62,22 +62,25 @@ class SeekController extends Controller {
     public function getClient(Request $req) {
         $in = $req->all();
 
-        if (isset($in["id"]) && !empty($in["id"])) {
-            $query = Stakeholder::select("id", DB::raw("document ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
-            if (isset($in["q"]) && $in["q"] == "0") {
-                $query->where("id", Auth::user()->supplier_id)->get();
+        $query = Stakeholder::select("id", DB::raw("document ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $query->where("id", Auth::user()->supplier_id)->get();
+        } else if (isset($in["id"])) {
+            if ($in["id"] != '') {
+                $query->where("id", $in["id"])->get();
             } else {
-                if (isset($in["q"]))
-                    $query->where("business", "ILIKE", "%" . $in["q"] . "%")
-                            ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
-                            ->orWhere("document", "ILIKE", "%" . $in["q"] . "%")
-                            ->where("type_stakeholder", 1)
-                            ->get();
+                $result = array();
+            }
+        } else {
+            if (isset($in["q"])) {
+                $query->where("business", "ILIKE", "%" . $in["q"] . "%")
+                        ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
+                        ->orWhere("document", "ILIKE", "%" . $in["q"] . "%")
+                        ->where("type_stakeholder", 1);
             }
             $result = $query->get();
-        }else {
-            $result = array();
         }
+
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }

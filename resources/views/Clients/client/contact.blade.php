@@ -45,7 +45,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="address" class="control-label">Dirección</label>
-                            <input type="text" class="form-control input-contact input-sm" id="address" name="address" placeholder="Address" required>
+                            <input type="text" class="form-control input-contact input-sm" id="address" name="address" placeholder="Address">
                         </div>
                     </div>
                 </div>        

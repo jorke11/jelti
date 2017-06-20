@@ -54,7 +54,7 @@ class ClientController extends Controller {
     public function getListProduct(Request $req) {
         $input = $req->all();
         $cli = "
-            select d.product_id,p.title product,sum(quantity) units
+            select d.product_id,p.title product,sum(quantity*units_sf) units
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 

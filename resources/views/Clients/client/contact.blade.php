@@ -59,16 +59,16 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="address">Celular</label>
-                            <input type="text" class="form-control input-contact input-sm" id="mobile" name="mobile" placeholder="mobile">
+                            <label for="address">Celular *</label>
+                            <input type="text" class="form-control input-contact input-sm" id="mobile" name="mobile" placeholder="mobile" required="">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="address">Correo</label>
-                            <input type="text" class="form-control input-contact input-sm" id="email" name="email" placeholder="Email">
+                            <label for="address">Correo*</label>
+                            <input type="text" class="form-control input-contact input-sm" id="email" name="email" placeholder="Email" required="">
                         </div>
                     </div>
                     <div class="col-lg-6">

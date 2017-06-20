@@ -60,6 +60,7 @@ class SeekController extends Controller {
     }
 
     public function getClient(Request $req) {
+        DB::connection()->enableQueryLog();
         $in = $req->all();
 
         $query = Stakeholder::select("id", DB::raw("document ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
@@ -79,6 +80,8 @@ class SeekController extends Controller {
                         ->where("type_stakeholder", 1);
             }
             $result = $query->get();
+            $queries = print_r(DB::getQueryLog(), true);
+            Log::info($queries);
         }
 
 

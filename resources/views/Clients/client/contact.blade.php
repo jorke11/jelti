@@ -38,13 +38,13 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="last_name" class="control-label">Cargo *</label>
+                            <label for="last_name" class="control-label">Cargo</label>
                             <input type="text" class="form-control  input-contact input-sm" id="position" name="position" placeholder="Position" disabled>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="address" class="control-label">Dirección *</label>
+                            <label for="address" class="control-label">Dirección</label>
                             <input type="text" class="form-control input-contact input-sm" id="address" name="address" placeholder="Address" required>
                         </div>
                     </div>

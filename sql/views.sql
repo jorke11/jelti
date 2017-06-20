@@ -82,7 +82,7 @@ JOIN parameters param ON param.id=p.status_id and param.group='entry';
 create view vcontacts as 
 select c.id,c.name,c.last_name,c.email,c.mobile,ci.description city,c.stakeholder_id
 from contacts c
-JOIN cities ci ON ci.id=c.city_id
+LEFT JOIN cities ci ON ci.id=c.city_id
 
 
 create view ventries as 

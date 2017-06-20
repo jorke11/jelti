@@ -18,7 +18,7 @@ class CreateContactsTable extends Migration {
             $table->integer('commercial_id')->nullable();
 
             $table->integer('source_id')->nullable();
-            $table->integer('city_id');
+            $table->integer('city_id')->nullable();
 
             $table->string('name');
             $table->string('last_name')->nullable();

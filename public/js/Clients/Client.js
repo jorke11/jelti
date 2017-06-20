@@ -172,7 +172,7 @@ function Client() {
         })
         $("#tabContact").click(function () {
             $(".input-contact").cleanFields({disabled: true});
-            $("#frmContact #id").val($("#frm #id").val());
+            $("#frmContact #stakeholder_id").val($("#frm #id").val());
             tableContact = obj.tableContact($("#frm #id").val());
         });
 

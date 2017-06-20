@@ -54,7 +54,7 @@ class ClientController extends Controller {
     public function getListProduct(Request $req) {
         $input = $req->all();
         $cli = "
-            select d.product_id,p.title product,sum(quantity*units_sf) units
+            select d.product_id,p.title product,sum(d.quantity) units
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 
@@ -71,8 +71,8 @@ class ClientController extends Controller {
             $units[] = $value->units;
             $cat[] = $value->product;
         }
-        
-        return response()->json(["data" => $res,"categories"=>$cat,"units"=>$units]);
+
+        return response()->json(["data" => $res, "categories" => $cat, "units" => $units]);
     }
 
     public function listCities(Request $req) {

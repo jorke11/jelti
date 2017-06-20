@@ -661,6 +661,7 @@ function Client() {
                 {data: "address"},
                 {data: "term"},
                 {data: "city"},
+                {data: "responsible"},
                 {data: "typeperson"},
                 {data: "typeregime"},
                 {data: "status"},
@@ -680,7 +681,7 @@ function Client() {
                     }
                 },
                 {
-                    targets: [11],
+                    targets: [12],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

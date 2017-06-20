@@ -12,6 +12,7 @@
                         <th>Direccion</th>
                         <th>Plazo de pago</th>
                         <th>Ciudad</th>
+                        <th>Responsable</th>
                         <th>Tipo persona</th>
                         <th>Regimen</th>
                         <th>Estado</th>

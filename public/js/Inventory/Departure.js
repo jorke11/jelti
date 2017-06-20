@@ -729,7 +729,7 @@ function Sale() {
                         if (data.status_id != 1) {
                             html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
                         } else {
-                            html = ''
+                            html = '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                         }
                         return html;
                     }

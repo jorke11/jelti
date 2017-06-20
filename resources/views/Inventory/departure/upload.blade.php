@@ -10,7 +10,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="email">File:</label>
+                            <label for="email">File:  <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><a href="{{ URL::to( '/assets/formats/upload.xlsx')  }}" target="_blank">Descargar formato</a></label>
                             <input type="file" name="file_excel" id="file_excel" class="form-control">
                         </div>
                     </div>

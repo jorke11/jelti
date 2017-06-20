@@ -114,9 +114,12 @@ class creditnoteController extends Controller {
 
         $detail = DB::table("vcreditnote_detail_row")
                 ->select("id","quantity","tax","product","product_id","value","units_sf","stakeholder","quantitytotal","valuetotal")
-                ->where("id", $id)
+                ->whereNotNull("product_id")
+                ->where("id", $cre->id)
                 ->get();
-//        dd($detail);
+        
+        dd($detail);
+        
 //        $detail = DB::table("sales_detail")
 //                ->select(DB::raw("credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * (credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
 //                ->join("products", "sales_detail.product_id", "products.id")
@@ -177,7 +180,7 @@ class creditnoteController extends Controller {
                 $totalTax19 += $value->valuetotal * $tax;
             }
         }
-
+//dd($detail);
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
 
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);

@@ -118,7 +118,7 @@ class creditnoteController extends Controller {
                 ->where("id", $cre->id)
                 ->get();
         
-        dd($detail);
+//        dd($detail);
         
 //        $detail = DB::table("sales_detail")
 //                ->select(DB::raw("credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * (credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")

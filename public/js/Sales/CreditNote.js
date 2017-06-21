@@ -191,12 +191,8 @@ function CreditNote() {
                         success: function (data) {
                             if (data.success == true) {
                                 $("#btnSend").attr("disabled", false);
-                                $("#frm #id").val(data.data.id);
-                                $(".input-departure").setFields({data: data.data, disabled: true});
                                 table.ajax.reload();
                                 toastr.success(msg);
-                                $("#btnmodalDetail").attr("disabled", false);
-                                obj.printDetail(data.detail);
                                 $("#loading-super").addClass("hidden");
                             }
                         }
@@ -301,7 +297,7 @@ function CreditNote() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header, disabled: true});
-                $("#frm #description").attr("disabled",false);
+                $("#frm #description").attr("disabled", false);
                 listProducts = data.detail;
                 listProductsStatic = data.detail;
                 obj.printDetailTmp(data.detail, btnEdit, btnDel);

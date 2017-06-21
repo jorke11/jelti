@@ -80,7 +80,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Ciudad Destino:</label>
-                    <select class="form-control input-departure input-fillable" id="destination_id" name='destination_id' data-api="/api/getCity" required>
+                    <select class="form-control input-departure" id="destination_id" name='destination_id' data-api="/api/getCity" required>
                     </select>
                 </div>
             </div>
@@ -93,7 +93,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Teléfono:</label>
-                    <input type="text" class="form-control input-departure input-sm input-fillable" id="phone" name="phone" required> 
+                    <input type="text" class="form-control input-departure input-sm input-fillable" id="phone" name="phone"> 
                 </div>
             </div>
         </div>
@@ -115,7 +115,7 @@
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="email">Observationes:</label>
-                    <input type="text" class="form-control input-departure" id="description" name="description">
+                    <input type="text" class="form-control input-departure" id="description" name="description" required>
                 </div>
             </div>
             <div class="col-lg-2">

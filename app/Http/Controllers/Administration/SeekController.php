@@ -60,19 +60,20 @@ class SeekController extends Controller {
     }
 
     public function getClient(Request $req) {
-        DB::connection()->enableQueryLog();
         $in = $req->all();
-
-        $query = Stakeholder::select("id", DB::raw("document ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
+        $result = array();
+        $query = Stakeholder::select("id", DB::raw("coalesce(document,'') ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
+        
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"])) {
             if ($in["id"] != '') {
-                $query->where("id", $in["id"])->get();
+                $result = $query->where("id", $in["id"])->get();
             } else {
                 $result = array();
             }
         } else {
+            
             if (isset($in["q"])) {
                 $query->where("business", "ILIKE", "%" . $in["q"] . "%")
                         ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
@@ -80,10 +81,8 @@ class SeekController extends Controller {
                         ->where("type_stakeholder", 1);
             }
             $result = $query->get();
-            $queries = print_r(DB::getQueryLog(), true);
-            Log::info($queries);
+            
         }
-
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }

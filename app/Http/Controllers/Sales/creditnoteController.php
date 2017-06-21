@@ -53,11 +53,12 @@ class creditnoteController extends Controller {
 
     public function store(Request $req) {
         $input = $req->all();
-
-        $sales = Sales::where("departure_id", $input["header"]["id"])->first();
- 
+        
+        $sales = Sales::where("departure_id", $input["id"])->first();
+        
         $new["sale_id"] = $sales->id;
-        $new["departure_id"] = $input["header"]["id"];
+        $new["departure_id"] = $input["id"];
+        $new["description"] = $input["description"];
         $id = CreditNote::create($new)->id;
         foreach ($input["detail"] as $value) {
             if ($value["quantity"] != 0) {

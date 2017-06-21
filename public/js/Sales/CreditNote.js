@@ -174,7 +174,8 @@ function CreditNote() {
         if (validate.length == 0) {
             if ($("#id_orderext").val() == '') {
                 if (listProducts.length > 0) {
-                    data.header = $(".input-departure").getData();
+                    data.id = $("#frm #id").val();
+                    data.description = $("#frm #description").val();
                     data.detail = listProducts;
 
                     msg = "Created Record";
@@ -300,7 +301,7 @@ function CreditNote() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header, disabled: true});
-
+                $("#frm #description").attr("disabled",false);
                 listProducts = data.detail;
                 listProductsStatic = data.detail;
                 obj.printDetailTmp(data.detail, btnEdit, btnDel);

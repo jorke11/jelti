@@ -1,5 +1,6 @@
 drop view vbriefcase
-            create view vbriefcase as 
+
+ create view vbriefcase as 
        select d.id,coalesce(d.invoice,'') invoice, coalesce(s.business_name,'') as client,
             c.description as city,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,
             s.term, d.created_at,d.created_at + CAST(s.term || ' days' AS INTERVAL) as fecha_vencimiento,

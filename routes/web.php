@@ -483,6 +483,7 @@ Route::get('/api/reportCommercialGraph', "Report\CommercialController@listCommer
 Route::get('/reportSupplier', "Report\SupplierController@index");
 
 Route::get('/api/reportSupplier', "Report\SupplierController@getList");
+Route::get('/api/reportSupplierClient', "Report\SupplierController@getListClient");
 
 
 Route::get('/reportProduct', "Report\ProductController@index");

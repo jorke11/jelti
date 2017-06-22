@@ -82,3 +82,14 @@ select substring(s.created::text from 1 for 7),sum(d.quantity*d.value*d.units_sf
 from sales_detail d
 JOIN sales s ON s.id=d.sale_id
 group by 1
+
+
+
+
+---products by clients
+select sta.business,SUM(d.quantity * d.value * d.units_sf) + SUM(d.quantity * d.value * d.units_sf * tax)
+from sales_detail d
+JOIN sales s ON s.id=d.sale_id
+JOIN departures dep ON
+JOIN stakeholder sta ON sta.id=s.client_id
+group by 1,s.client_id

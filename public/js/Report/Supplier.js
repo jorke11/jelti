@@ -1,9 +1,13 @@
 function Supplier() {
     this.init = function () {
         this.table();
+        this.tableClient();
+        
+         $(".input-find").cleanFields();
 
         $("#btnSearch").click(function () {
             obj.table();
+            obj.tableClient();
         })
     }
     
@@ -18,8 +22,6 @@ function Supplier() {
         param.end = $("#Detail #fend").val();
 
         return $('#tbl').DataTable({
-            processing: true,
-            serverSide: true,
             destroy: true,
             ajax: {
                 url: "/api/reportSupplier",
@@ -29,6 +31,34 @@ function Supplier() {
                 {data: "business"},
                 {data: "totalunidades"},
                 {data: "total"},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1, 2],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="obj.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+            ],
+        });
+    }
+    
+    this.tableClient = function () {
+        var param = {};
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+        param.product_id = $("#Detail #product_id").val();
+
+        return $('#tblClient').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/api/reportSupplierClient",
+                data: param,
+            },
+            columns: [
+                {data: "business"},
+                {data: "totalunidades"},
+                {data: "totalformated"},
             ],
             aoColumnDefs: [
                 {

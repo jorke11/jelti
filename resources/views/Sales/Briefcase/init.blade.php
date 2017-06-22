@@ -14,12 +14,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="list">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    @include('Sales.Briefcase.list')
-                </div>
-            </div>
-
+            @include('Sales.Briefcase.list')
         </div>
         <div role="tabpanel" class="tab-pane " id="management">
             @include('Sales.Briefcase.management')

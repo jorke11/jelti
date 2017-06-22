@@ -474,6 +474,7 @@ function Supplier() {
                 $(".input-suppliers").setFields({data: data.header});
                 $("#tabSpecial").removeClass("hide");
                 $("#tabContact").removeClass("hide");
+                $("#btnSave").attr("disabled",false);
                 obj.printImages(data.images);
             }
         })

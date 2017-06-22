@@ -21,24 +21,45 @@
                         <input type="file" id="document_file" name="document_file">
                     </div>
                 </div>
-
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <table class="table" id="table-invoices">
+                                <thead>
+                                    <tr>
+                                        <th>Factura</th>
+                                        <th>Valor a pagar</th>
+                                        <th>Valor Pagado</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-lg-3">
+    <div class="col-lg-6">
         <div class="panel panel-default">
-            <table class="table" id="table-invoices">
-                <thead>
-                    <tr>
-                        <th>Factura</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="panel-body">
+                <table class="table" id="table-payed">
+                    <thead>
+                        <tr>
+                            <th>Factura</th>
+                            <th>Valor Pagado</th>
+                            <th>Fecha</th>
+                            <th>Soporte</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
 {!!Form::close()!!}

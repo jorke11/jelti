@@ -466,6 +466,7 @@ Route::get('/briefcase', 'Sales\BriefcaseController@index');
 
 Route::get('/briefcase/getInvoices', "Sales\BriefcaseController@getList");
 Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment");
+Route::get('/briefcase/getBriefcase', "Sales\BriefcaseController@getBriefcase");
 
 
 Route::get('/reportClient', "Report\ClientController@index");

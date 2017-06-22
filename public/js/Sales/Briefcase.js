@@ -2,26 +2,57 @@ function Briefcase() {
     var invoice = [], tableBrief;
     this.init = function () {
         tableBrief = obj.table();
-        var html = '';
+        var html = '', param = {}, dep = '';
 
         $("#btnModalUpload").click(function () {
             $("#modalUpload").modal("show");
         })
         $("#insideManagement").click(function () {
-            invoice = [], html = '';
+            invoice = [], html = '', dep = '';
             $("#table-invoices tbody").empty();
+
             $(".selected-invoice").each(function () {
                 if ($(this).is(":checked")) {
-                    html += "<tr><td>" + $(this).attr("invoice") + '</td><input type="hidden" name="invoices[]" value="' + $(this).val() + '"></tr>';
-                    invoice.push({id: $(this).val(), invoice: $(this).attr("invoice")})
+                    html += "<tr><td>" + $(this).attr("invoice") + '<input type="hidden" name="invoices[]" value="' + $(this).val() + '"></td>';
+                    html += '<td>' + $(this).attr("totalformated") + '</td><td><input type="text" class="form-control" name="values[]" value="' + $(this).attr("total") + '"></td></tr>';
+                    invoice.push({id: $(this).val(), invoice: $(this).attr("invoice"), total: $(this).attr("total"), totalforamted: $(this).attr("totalforamted")})
+                    dep += (dep == '') ? '' : ',';
+                    dep += $(this).val();
                 }
             })
+            param.departures = dep;
+
+            $.ajax({
+                url: 'briefcase/getBriefcase',
+                method: "GET",
+                data: param,
+                dataType: 'JSON',
+                success: function (data) {
+                    obj.loadTable(data.data);
+                }
+            })
+
             $("#table-invoices tbody").html(html);
         })
 
         $("#btnSave").click(this.uploadExcel);
 
 
+    }
+
+    this.loadTable = function (detail) {
+        var html = '';
+        $.each(detail, function (i, value) {
+            $.each(value, function (j, val) {
+                if (val.total != undefined) {
+                    html += '<tr style="background-color:#ececec"><td>Total</td><td>' + val.totalformated + '</td><td colspan="2"></td></tr>';
+                } else {
+                    html += '<tr><td>' + val.invoice + '</td><td>' + val.valuepayed + '</td><td>' + val.created_at + '</td></tr>';
+                }
+            })
+
+        })
+        $("#table-payed tbody").html(html);
     }
 
 
@@ -38,7 +69,8 @@ function Briefcase() {
             contentType: false,
             success: function (data) {
                 if (data.suscess == true) {
-                    Toastr.success("Ok");
+                    toastr.success("Ok");
+
                     tableBrief.ajax.reload();
                 }
             }
@@ -77,12 +109,13 @@ function Briefcase() {
             "ajax": "/briefcase/getInvoices",
             columns: [
 
-                {data: "consecutive"},
+                {data: "id"},
                 {data: "invoice"},
                 {data: "created_at"},
                 {data: "client"},
                 {data: "responsible"},
                 {data: "city"},
+                {data: "totalformated"},
                 {data: "dias_vencidos"},
                 {data: "paid_out", render: function (data, type, row) {
                         var msg = '';
@@ -108,7 +141,7 @@ function Briefcase() {
                     }
                 },
                 {
-                    targets: [8],
+                    targets: [9],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -118,11 +151,11 @@ function Briefcase() {
                 }
                 ,
                 {
-                    targets: [9],
+                    targets: [10],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '">'
+                        html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" total="' + data.total + '" totalformated="' + data.totalformated + '">'
                         return html;
                     }
                 }

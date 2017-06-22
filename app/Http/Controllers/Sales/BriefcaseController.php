@@ -36,11 +36,24 @@ class BriefcaseController extends Controller {
     public function getBriefcase(Request $req) {
         $input = $req->all();
         $departures = explode(",", $input["departures"]);
-        $dep = BriefCase::select("briefcase.id", "departures.invoice", "briefcase.value", "briefcase.created_at", DB::raw("briefcase.value::money as valuepayed"))
+
+        $resp = $this->formatDetail($departures);
+        return response()->json(["success" => true, "data" => $resp]);
+    }
+
+    public function formatDetail($departures) {
+        
+        $dep = BriefCase::select("briefcase.id", "departures.invoice", "briefcase.value", "briefcase.created_at", DB::raw("briefcase.value::money as valuepayed"), "briefcase.img")
                 ->join("departures", "departures.id", "briefcase.departure_id")
-                ->whereIn("briefcase.departure_id", $departures)
-                ->orderBy("departures.invoice")
-                ->get();
+                ->orderBy("departures.invoice");
+
+        if (is_array($departures)) {
+            $dep->whereIn("briefcase.departure_id", $departures);
+        } else {
+            $dep->where("briefcase.departure_id", $departures);
+        }
+
+        $dep = $dep->get();
 
         $resp = array();
         $cont = 0;
@@ -55,17 +68,14 @@ class BriefcaseController extends Controller {
                 }
             }
             $total += $value->value;
-            $resp[$cont][] = array("id" => $value->id, "invoice" => $value->invoice, "value" => $value->value, "created_at" => date("Y-m-d H:i", strtotime($value->created_at)), "valuepayed" => $value->valuepayed);
+            $resp[$cont][] = array("id" => $value->id, "invoice" => $value->invoice, "value" => $value->value, "created_at" => date("Y-m-d H:i", strtotime($value->created_at))
+                , "valuepayed" => $value->valuepayed, "img" => $value->img);
             if ($i == (count($dep) - 1)) {
                 $resp[$cont][] = array("total" => $total, "totalformated" => "$ " . number_format($total, 0, ",", "."));
             }
         }
 
-        return response()->json(["success" => true, "data" => $resp]);
-    }
-    
-    public function formatDetail($dep){
-        
+        return $resp;
     }
 
     public function storePayment(Request $req) {
@@ -93,8 +103,19 @@ class BriefcaseController extends Controller {
             BriefCase::create($new);
         }
 
-        $response = BriefCase::whereIn("id", $departures)->get();
+        $response = $this->formatDetail($departures);
         return response()->json(["success" => true, "data" => $response]);
+    }
+
+    public function delete(Request $req, $id) {
+        $in = $req->all();
+
+        $departures = $in["departures"];
+        $brief = BriefCase::find($id);
+        $brief->delete();
+        $resp = $this->formatDetail($departures);
+
+        return response()->json(["success" => true, "data" => $resp]);
     }
 
 }

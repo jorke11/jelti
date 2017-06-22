@@ -1,8 +1,8 @@
 function Briefcase() {
-    var invoice = [], tableBrief;
+    var invoice = [], tableBrief, dep = '';
     this.init = function () {
         tableBrief = obj.table();
-        var html = '', param = {}, dep = '';
+        var html = '', param = {};
 
         $("#btnModalUpload").click(function () {
             $("#modalUpload").modal("show");
@@ -45,14 +45,48 @@ function Briefcase() {
         $.each(detail, function (i, value) {
             $.each(value, function (j, val) {
                 if (val.total != undefined) {
-                    html += '<tr style="background-color:#ececec"><td>Total</td><td>' + val.totalformated + '</td><td colspan="2"></td></tr>';
+                    html += '<tr style="background-color:#ececec"><td>Total</td><td>' + val.totalformated + '</td><td colspan="3"></td></tr>';
                 } else {
-                    html += '<tr><td>' + val.invoice + '</td><td>' + val.valuepayed + '</td><td>' + val.created_at + '</td></tr>';
+                    html += '<tr id="id_"' + val.id + ' ><td>' + val.invoice + '</td><td>' + val.valuepayed + '</td><td>' + val.created_at + '</td>';
+                    if (val.img != null) {
+                        html += '<td><a href="' + val.img + '" target="_blank"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></td>';
+                    } else {
+                        html += '<td></td>';
+                    }
+                    html += '<td><span style="cursor:pointer" class="glyphicon glyphicon-trash" aria-hidden="true" onclick=obj.deleteItem(' + val.id + ')></span></td>';
+                    html += '</tr>';
                 }
             })
 
         })
         $("#table-payed tbody").html(html);
+    }
+
+    this.deleteItem = function (id) {
+        toastr.remove();
+        var param = {};
+        if (confirm("Deseas eliminar")) {
+            param.departures = dep;
+            var token = $("input[name=_token]").val();
+            var url = "/briefcase/" + id;
+            $.ajax({
+                url: url,
+                headers: {'X-CSRF-TOKEN': token},
+                method: "DELETE",
+                data: param,
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        $("#id_" + id).remove();
+                        obj.loadTable(data.data);
+                        table.ajax.reload();
+                        toastr.warning("Ok");
+                    }
+                }, error: function (err) {
+                    toastr.error("No se puede borrra Este registro");
+                }
+            })
+        }
     }
 
 
@@ -68,9 +102,9 @@ function Briefcase() {
             cache: false,
             contentType: false,
             success: function (data) {
-                if (data.suscess == true) {
+                if (data.success == true) {
                     toastr.success("Ok");
-
+                    obj.loadTable(data.data)
                     tableBrief.ajax.reload();
                 }
             }
@@ -116,6 +150,7 @@ function Briefcase() {
                 {data: "responsible"},
                 {data: "city"},
                 {data: "totalformated"},
+                {data: "payed"},
                 {data: "dias_vencidos"},
                 {data: "paid_out", render: function (data, type, row) {
                         var msg = '';
@@ -141,7 +176,7 @@ function Briefcase() {
                     }
                 },
                 {
-                    targets: [9],
+                    targets: [10],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -151,7 +186,7 @@ function Briefcase() {
                 }
                 ,
                 {
-                    targets: [10],
+                    targets: [11],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -185,11 +220,11 @@ function Briefcase() {
             createdRow: function (row, data, index) {
 
                 if (data.dias_vencidos >= 0 && data.dias_vencidos <= 3) {
-                    $('td', row).eq(7).addClass('color-green');
+                    $('td', row).eq(8).addClass('color-green');
                 } else if (data.dias_vencidos < 0) {
-                    $('td', row).eq(7).addClass('color-red');
+                    $('td', row).eq(8).addClass('color-red');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(7).addClass('color-checked');
+                    $('td', row).eq(8).addClass('color-checked');
                 }
             }
         });

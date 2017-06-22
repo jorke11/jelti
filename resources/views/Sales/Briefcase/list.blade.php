@@ -12,6 +12,7 @@
                         <th>Comercial</th>
                         <th>Ciudad</th>
                         <th>Valor a Pagar</th>
+                        <th>Valor a Pagado</th>
                         <th>dias_vencidos</th>
                         <th>Estado</th>
                         <th tipo="prueba">Factura</th>

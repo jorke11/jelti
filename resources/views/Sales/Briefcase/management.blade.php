@@ -53,6 +53,7 @@
                             <th>Valor Pagado</th>
                             <th>Fecha</th>
                             <th>Soporte</th>
+                            <th>Borrar</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

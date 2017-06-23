@@ -154,7 +154,7 @@ function Briefcase() {
                 {data: "responsible"},
                 {data: "city"},
                 {data: "totalformated"},
-                {data: "payed"},
+                {data: "payedformated"},
                 {data: "dias_vencidos"},
                 {data: "paid_out", render: function (data, type, row) {
                         var msg = '';

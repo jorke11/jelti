@@ -7,7 +7,7 @@ drop view vbriefcase
             date_part('day',now()-(d.created_at + CAST(s.term || ' days' AS INTERVAL))) as dias_vencidos,d.paid_out,d.client_id,
             (select (ceil(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0)) + d.shipping_cost)::money from departures_detail where departure_id=d.id) totalFormated,
            (select (ceil(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0)) + d.shipping_cost) from departures_detail where departure_id=d.id) total,
-           (select sum(value)::money from briefcase where departure_id=d.id) payed
+           (select sum(value) from briefcase where departure_id=d.id) payed,(select sum(value)::money from briefcase where departure_id=d.id) payedformated
             from departures d
             JOIN branch_office s ON s.id = d.branch_id
             JOIN cities c ON c.id = d.city_id

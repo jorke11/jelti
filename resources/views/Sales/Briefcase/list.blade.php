@@ -4,7 +4,7 @@
             <table class="table table-condensed  table-hover" id="tbl" width='100%'>
                 <thead>
                     <tr>
-                       
+
                         <th>#</th>
                         <th>Factura</th>
                         <th>Fecha</th>
@@ -40,3 +40,36 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" role="dialog" id="modalPayed">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Pagar</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Saldo:</label>
+                            <input type="text" class="form-control input-pay input-sm" id="saldo" name='saldo'>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Comentario:</label>
+                            <textarea class="form-control input-pay" id="comment"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" id="btnPay">Guardar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -126,7 +126,7 @@ Route::get('/purchase/{id}/getProducts', ['uses' => 'Invoicing\PurchaseControlle
 Route::post('/purchase/storeDetail', 'Invoicing\PurchaseController@storeDetail');
 Route::put('/purchase/detail/{id}', 'Invoicing\PurchaseController@updateDetail');
 Route::delete('/purchase/detail/{id}', 'Invoicing\PurchaseController@destroyDetail');
-Route::get('/purchase/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
+Route::get('/purchase/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProductOut']);
 Route::post('/purchase/sendPurchase', 'Invoicing\PurchaseController@sendPurchase');
 
 Route::resource('/sale', 'Invoicing\SaleController');

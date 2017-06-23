@@ -135,6 +135,10 @@ function Briefcase() {
         })
     }
 
+    this.payed = function () {
+        $("#modalPayed").modal("show");
+    }
+
     this.table = function () {
         var html = '';
         table = $('#tbl').DataTable({
@@ -191,6 +195,7 @@ function Briefcase() {
                     mData: null,
                     mRender: function (data, type, full) {
                         html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" total="' + data.total + '" totalformated="' + data.totalformated + '">'
+                        html += '&nbsp;&nbsp;<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
                         return html;
                     }
                 }

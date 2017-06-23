@@ -53,9 +53,9 @@ class creditnoteController extends Controller {
 
     public function store(Request $req) {
         $input = $req->all();
-        
+
         $sales = Sales::where("departure_id", $input["id"])->first();
-        
+
         $new["sale_id"] = $sales->id;
         $new["departure_id"] = $input["id"];
         $new["description"] = $input["description"];
@@ -114,13 +114,12 @@ class creditnoteController extends Controller {
         $sale = Sales::where("departure_id", $cre->departure_id)->first();
 
         $detail = DB::table("vcreditnote_detail_row")
-                ->select("id","quantity","tax","product","product_id","value","units_sf","stakeholder","quantitytotal","valuetotal")
+                ->select("id", "quantity", "tax", "product", "product_id", "value", "units_sf", "stakeholder", "quantitytotal", "valuetotal")
                 ->whereNotNull("product_id")
                 ->where("id", $cre->id)
                 ->get();
-        
+
 //        dd($detail);
-        
 //        $detail = DB::table("sales_detail")
 //                ->select(DB::raw("credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * (credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
 //                ->join("products", "sales_detail.product_id", "products.id")
@@ -223,6 +222,28 @@ class creditnoteController extends Controller {
         $query->where("departure_id", $in["departure_id"]);
 
         return Datatables::queryBuilder($query)->make(true);
+    }
+
+    public function delete($id) {
+        try {
+            DB::beginTransaction();
+            $row = CreditNote::find($id);
+            $detail = CreditNoteDetail::where("creditnote_id", $id)->get();
+
+            $row->delete();
+
+            foreach ($detail as $value) {
+                $record = CreditNoteDetail::find($value->id);
+                $record->delete();
+            }
+
+            DB::commit();
+
+            return response()->json(['success' => true]);
+        } catch (Exception $ex) {
+            DB::rollback();
+            return response()->json(['success' => false, "msg" => "Wrong"], 409);
+        }
     }
 
     public function formatDate($date) {

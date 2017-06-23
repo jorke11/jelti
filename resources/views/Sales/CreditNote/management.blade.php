@@ -178,10 +178,11 @@
                         <tr>
                             <th>#</th>
                             <th>Id</th>
-                            <th>Invoice</th>
-                            <th>Client</th>
+                            <th>Factura</th>
+                            <th>Cliente</th>
                             <th>Orden de venta</th>
                             <th>PDF</th>
+                            <th>Borrar</th>
                         </tr>
                     </thead>
                     <tbody>

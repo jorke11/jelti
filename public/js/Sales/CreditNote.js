@@ -1,5 +1,5 @@
 function CreditNote() {
-    var table, maxDeparture = 0, listProducts = [], listProductsStatic = [], dataProduct, row = {}, rowItem;
+    var table, maxDeparture = 0, listProducts = [], listProductsStatic = [], dataProduct, row = {}, rowItem, tableNote;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -301,7 +301,7 @@ function CreditNote() {
                 listProducts = data.detail;
                 listProductsStatic = data.detail;
                 obj.printDetailTmp(data.detail, btnEdit, btnDel);
-                obj.tableNote(id);
+                tableNote = obj.tableNote(id);
             }
         })
     }
@@ -339,6 +339,21 @@ function CreditNote() {
             success: function (resp) {
                 $("#modalDetail").modal("show");
                 $(".input-detail").setFields({data: resp})
+            }, error(xhr, responseJSON, thrown) {
+                toastr.error(xhr.responseJSON.msg);
+            }
+        })
+    }
+    this.deleteNote = function (id) {
+        var url = "/creditnote/detail/" + id;
+        $.ajax({
+            url: url,
+            method: "DELETE",
+            dataType: 'JSON',
+            success: function (resp) {
+                table.ajax.reload();
+                tableNote.ajax.reload();
+                
             }, error(xhr, responseJSON, thrown) {
                 toastr.error(xhr.responseJSON.msg);
             }
@@ -393,6 +408,15 @@ function CreditNote() {
                             html = ''
                         }
 
+                        return html;
+                    }
+                },
+                {
+                    targets: [6],
+                    searchable: false,
+                    mData: null,
+                    mRender: function (data, type, full) {
+                        html = '<span style="cursor:pointer" class="glyphicon glyphicon-trash" aria-hidden="true" onclick=obj.deleteNote(' + data.id + ')></span>';
                         return html;
                     }
                 }

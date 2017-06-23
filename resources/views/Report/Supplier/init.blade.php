@@ -9,7 +9,14 @@
     {!! Form::open(['id'=>'Detail']) !!}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="col-lg-8 col-center">
+            <div class="col-lg-10 col-center">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Proveedor</label>
+                        <select class="form-control input-departure input-find" id="supplier_id" name='supplier_id'  data-api="/api/getSupplier">
+                        </select>
+                    </div>
+                </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label for="title" class="control-label">Producto</label>
@@ -17,13 +24,13 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Inicio</label>
                         <input type="text" class="form-control input-sm" id="finit" name='finit' value="<?php echo date("Y-m-") . "01" ?>">
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Final</label>
                         <input type="text" class="form-control input-sm" id="fend" name='fend' value="<?php echo date("Y-m-d") ?>">

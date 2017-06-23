@@ -9,6 +9,8 @@ function Supplier() {
             obj.table();
             obj.tableClient();
         })
+        
+        
     }
     
     this.getDetail = function (client_id) {
@@ -48,6 +50,7 @@ function Supplier() {
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
         param.product_id = $("#Detail #product_id").val();
+        param.supplier_id = $("#Detail #supplier_id").val();
 
         return $('#tblClient').DataTable({
             destroy: true,

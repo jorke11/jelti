@@ -599,6 +599,17 @@ class DepartureController extends Controller {
         }
     }
 
+    public function cancelInvoice(Request $request, $id) {
+        $in = $request->all();
+        $row = Departures::Find($id);
+        $row->description = "Cancelador: " . $in["description"] . ", " . $row->description;
+        $row->status_id = 4;
+        $row->save();
+
+        $resp = Departures::FindOrFail($id);
+        return response()->json(['success' => true, "data" => $resp]);
+    }
+
     public function updateDetail(Request $request, $id) {
         $input = $request->all();
 

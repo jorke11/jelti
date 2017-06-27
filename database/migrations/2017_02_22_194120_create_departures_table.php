@@ -28,8 +28,11 @@ class CreateDeparturesTable extends Migration {
             $table->dateTime('created');
             $table->dateTime('date_dispatched');
             $table->integer('status_id');
+            $table->integer('insert_id');
+            $table->integer('update_id')->nullable();
             $table->string('invoice')->nullable();
             $table->decimal('shipping_cost', 15, 2)->nullable();
+            $table->decimal('outstanding', 15, 2)->nullable();
             $table->boolean('pdf_create')->nullable();
             $table->boolean('paid_out')->nullable();
             $table->text('voucher')->nullable();

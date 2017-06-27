@@ -25,6 +25,9 @@ class Departures extends Model {
         "description",
         "paid_out",
         "transport",
+        "insert_id",
+        "update_id",
+        "outstanding",
         ];
 
 }

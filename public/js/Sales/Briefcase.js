@@ -36,8 +36,30 @@ function Briefcase() {
         })
 
         $("#btnSave").click(this.uploadExcel);
+        $("#btnPay").click(this.pay);
 
+    }
 
+    this.pay = function () {
+        var param = {};
+        param.description = $("#frmPay #comment").val()
+        param.saldo = $("#frmPay #saldo").val()
+
+        $.ajax({
+            url: "briefcase/payInvoice/" + $("#frmPay #departure_id").val(),
+            method: "PUT",
+            data: param,
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.success == true) {
+                    table.ajax.reload();
+                    $("#modalPayed").modal("hide");
+                    toastr.success("Ok");
+                }
+            }, error: function (err) {
+                toastr.error("No se puede borrra Este registro");
+            }
+        })
     }
 
     this.loadTable = function (detail) {
@@ -135,8 +157,11 @@ function Briefcase() {
         })
     }
 
-    this.payed = function () {
+    this.payed = function (id) {
         $("#modalPayed").modal("show");
+        var total = $("#row_" + id).attr("total") - (($("#row_" + id).attr("payed") == "null") ? 0 : $("#row_" + id).attr("payed"));
+        $("#frmPay #saldo").val(total);
+        $("#frmPay #departure_id").val(id);
     }
 
     this.table = function () {
@@ -171,7 +196,7 @@ function Briefcase() {
                     }
                 },
             ],
-            order: [[7, 'DESC']],
+            order: [[8, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [1, 2, 3, 4],
@@ -194,7 +219,7 @@ function Briefcase() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" total="' + data.total + '" totalformated="' + data.totalformated + '">'
+                        html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">'
                         html += '&nbsp;&nbsp;<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
                         return html;
                     }

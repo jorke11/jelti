@@ -175,7 +175,7 @@ Route::put('/departure/generateInvoice/{id}', 'Inventory\DepartureController@gen
 Route::get('/departure/{id}/getClient', ['uses' => 'Inventory\DepartureController@getClient']);
 Route::get('/departure/{id}/getBranch', ['uses' => 'Inventory\DepartureController@getBranch']);
 Route::post('/departure/uploadExcel', 'Inventory\DepartureController@storeExcel');
-
+Route::put('/departure/{id}/cancelInvoice', ['uses' => 'Inventory\DepartureController@cancelInvoice']);
 
 Route::get('/departure/{id}/{init}/{end}', ['uses' => 'Inventory\DepartureController@index']);
 Route::get('/api/listDeparture', 'Inventory\DepartureController@listTable');
@@ -378,7 +378,7 @@ Route::get('/api/listPurchase', function() {
 Route::get('/api/listSale', function() {
 
     $sql = DB::table('sales')
-            ->select("sales.id",DB::raw("coalesce(sales.description,'') as description"), "sales.created", "departures.id as departure", "warehouses.description as warehouse")
+            ->select("sales.id", DB::raw("coalesce(sales.description,'') as description"), "sales.created", "departures.id as departure", "warehouses.description as warehouse")
             ->join("departures", "departures.id", "sales.departure_id")
             ->join("warehouses", "warehouses.id", "sales.warehouse_id");
 
@@ -468,6 +468,7 @@ Route::get('/briefcase/getInvoices', "Sales\BriefcaseController@getList");
 Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment");
 Route::get('/briefcase/getBriefcase', "Sales\BriefcaseController@getBriefcase");
 Route::delete('/briefcase/{id}', "Sales\BriefcaseController@delete");
+Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice");
 
 
 Route::get('/reportClient', "Report\ClientController@index");

@@ -9,6 +9,7 @@ use App\Models\Inventory\Departures;
 use App\Models\Sales\BriefCase;
 use DB;
 use Datatables;
+use Auth;
 
 class BriefcaseController extends Controller {
 
@@ -42,7 +43,7 @@ class BriefcaseController extends Controller {
     }
 
     public function formatDetail($departures) {
-        
+
         $dep = BriefCase::select("briefcase.id", "departures.invoice", "briefcase.value", "briefcase.created_at", DB::raw("briefcase.value::money as valuepayed"), "briefcase.img")
                 ->join("departures", "departures.id", "briefcase.departure_id")
                 ->orderBy("departures.invoice");
@@ -116,6 +117,21 @@ class BriefcaseController extends Controller {
         $resp = $this->formatDetail($departures);
 
         return response()->json(["success" => true, "data" => $resp]);
+    }
+
+    public function payInvoice(Request $req, $id) {
+        $in = $req->all();
+
+        $row = Departures::find($id);
+        $row->paid_out = true;
+        $row->description = "Pagado: " . $in["description"] . ", " . $row->description;
+        $row->outstanding = $in["saldo"];
+        $row->update_id = Auth::user()->id;
+        $row->save();
+
+        $row = Departures::find($id);
+
+        return response()->json(["success" => true, "data" => $row]);
     }
 
 }

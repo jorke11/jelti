@@ -49,6 +49,8 @@
                 <h4 class="modal-title">Pagar</h4>
             </div>
             <div class="modal-body">
+                {!! Form::open(['id'=>'frmPay']) !!}
+                <input type="hidden" class="input-pay input-sm" id="departure_id" name='departure_id'>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -65,6 +67,7 @@
                         </div>
                     </div>
                 </div>
+                {!!Form::close()!!}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>

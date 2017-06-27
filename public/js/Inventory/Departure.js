@@ -4,7 +4,7 @@ function Sale() {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
-//        $("#newDetail").click(this.confirmItem);
+        $("#btnCancel").click(this.cancelInvoice);
         $("#newDetail").click(this.saveDetail);
         $("#btnSend").click(this.send);
         $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
@@ -110,6 +110,32 @@ function Sale() {
 
         $("#uploadRequest").click(this.uploadExcel)
 
+    }
+
+    this.cancelInvoice = function () {
+        toastr.remove()
+        var param = {};
+        param.description = $("#frmCancel #description").val();
+        if ($("#frmCancel #description").val() != '') {
+            $.ajax({
+                url: 'departure/' + $("#frmCancel #departure_id").val() + '/cancelInvoice',
+                method: 'PUT',
+                data: param,
+                dataType: 'JSON',
+                success: function (resp) {
+                    table.ajax.reload();
+                }
+            })
+        } else {
+            toastr.error("Necesitas dar una justificación!");
+        }
+
+    }
+
+
+    this.modalCancel = function (id) {
+        $("#modalCancel").modal("show");
+        $("#frmCancel #departure_id").val(id);
     }
 
     this.uploadExcel = function () {
@@ -681,6 +707,10 @@ function Sale() {
         }
     }
 
+
+
+
+
     this.table = function () {
         var param = {};
         param.client_id = $("#frm #client_id").val();
@@ -728,6 +758,9 @@ function Sale() {
                     mRender: function (data, type, full) {
                         if (data.status_id != 1) {
                             html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
+                            if (data.status_id != 4) {
+                                html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + data.id + ')"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
+                            }
                         } else {
                             html = '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                         }
@@ -745,30 +778,30 @@ function Sale() {
                     $('td', row).eq(10).addClass('color-checked');
                 }
             },
-            footerCallback: function (row, data, start, end, display) {
-                var api = this.api(), data, total;
-
-                var intVal = function (i) {
-                    return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '') * 1 :
-                            typeof i === 'number' ?
-                            i : 0;
-                };
-
-                total = api
-                        .column(8)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                // Update footer
-                $(api.column(8).footer()).html(
-                        '(' + total + ')'
-                        );
-
-//                console.log(api)
-            }
+//            footerCallback: function (row, data, start, end, display) {
+//                var api = this.api(), data, total;
+//
+//                var intVal = function (i) {
+//                    return typeof i === 'string' ?
+//                            i.replace(/[\$,]/g, '') * 1 :
+//                            typeof i === 'number' ?
+//                            i : 0;
+//                };
+//
+//                total = api
+//                        .column(8)
+//                        .data()
+//                        .reduce(function (a, b) {
+//                            return intVal(a) + intVal(b);
+//                        }, 0);
+//
+//                // Update footer
+//                $(api.column(8).footer()).html(
+//                        '(' + total + ')'
+//                        );
+//
+////                console.log(api)
+//            }
 
         });
         $('#tbl tbody').on('click', 'td.details-control', function () {

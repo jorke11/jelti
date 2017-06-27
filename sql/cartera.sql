@@ -12,6 +12,7 @@ drop view vbriefcase
             JOIN branch_office s ON s.id = d.branch_id
             JOIN cities c ON c.id = d.city_id
             JOIN users u ON u.id = d.responsible_id
-            WHERE d.status_id=2 
+            WHERE d.status_id=2  and (paid_out = false OR paid_out is null)
             AND date_part('day',now()-(d.created_at + CAST(s.term || ' days' AS INTERVAL))) < 5
             ORDER BY  (d.created_at + CAST(s.term || ' days' AS INTERVAL),date_part('day',now()-(d.created_at + CAST(s.term || ' days' AS INTERVAL)))) DESC;
+

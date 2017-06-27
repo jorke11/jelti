@@ -128,6 +128,8 @@ class creditnoteController extends Controller {
 //                ->where("sale_id", $cre->sale_id)
 //                ->orderBy("order", "asc")
 //                ->get();
+        
+        
         $dep = Departures::find($cre->departure_id);
 
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
@@ -162,6 +164,7 @@ class creditnoteController extends Controller {
         $totalTax19 = 0;
         $tax = 0;
         $totalSum = 0;
+
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$" . number_format($value->value, 0, ',', '.');
             $detail[$i]->totalFormated = "$" . number_format($value->value * $value->units_sf * $value->quantity, 0, ',', '.');
@@ -180,11 +183,11 @@ class creditnoteController extends Controller {
                 $totalTax19 += $value->valuetotal * $tax;
             }
         }
-//dd($detail);
+
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
 
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
-        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5;
 
         $tool = new ToolController();
 

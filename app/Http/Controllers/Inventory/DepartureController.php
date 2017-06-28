@@ -277,10 +277,15 @@ class DepartureController extends Controller {
         $dep = Departures::find($id);
         
         $detail = DB::table("departures_detail")
-                ->select("quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), 
+                        DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", 
+                        "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", 
+                        DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), 
+                        DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), 
+                        "stakeholder.business as stakeholder")
                 ->join("products", "departures_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("departures_detail.id", $dep["id"])
+                ->where("departures_detail.departure_id", $id)
                 ->get();
 
 

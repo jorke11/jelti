@@ -53,7 +53,7 @@
                     <td><?php echo $exept; ?></td>
                 </tr>
                 <tr>
-                    <td><b>Total a Pedido</b></td>
+                    <td><b>Total Pedido</b></td>
                     <td><b><?php echo $totalWithTax; ?></b></td>
                 </tr>
 

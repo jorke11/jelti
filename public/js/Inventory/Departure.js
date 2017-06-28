@@ -708,7 +708,27 @@ function Sale() {
     }
 
 
+    this.tempInvoice = function (id) {
+        if (confirm("¿Deseas crear una remisión?")) {
+            $.ajax({
+                url: 'departure/generateRemission/' + id,
+                method: 'PUT',
+                dataType: 'JSON',
+                success: function (resp) {
+                    if (resp.success == true) {
+                        table.ajax.reload();
+                        window.open("departure/" + id + "/getRemission");
+                    }
+                }
+            })
 
+
+        }
+    }
+
+    this.viewRemission = function (id) {
+        window.open("departure/" + id + "/getRemission");
+    }
 
 
     this.table = function () {
@@ -756,13 +776,18 @@ function Sale() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        if (data.status_id != 1) {
-                            html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
-                            if (data.status_id != 4) {
-                                html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + data.id + ')"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
-                            }
+                        if (data.status_id == 5) {
+                            html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + data.id + ')"></i>';
                         } else {
-                            html = '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                            if (data.status_id != 1) {
+
+                                html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')" title="Ver Factura">';
+                                if (data.status_id != 4) {
+                                    html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + data.id + ')" title="Anular Factura"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
+                                }
+                            } else {
+                                html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + data.id + ')" title="Borrar Orden"></i>&nbsp;&nbsp;<i style="cursor:pointer" class="fa fa-file-text fa-lg" aria-hidden="true" onclick="obj.tempInvoice(' + data.id + ')" title="Generar Remisión"></i>';
+                            }
                         }
                         return html;
                     }

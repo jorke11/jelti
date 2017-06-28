@@ -271,6 +271,112 @@ class DepartureController extends Controller {
         return $pdf->stream('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
     }
 
+    public function getRemission($id) {
+        $this->mails = array();
+
+        $dep = Departures::find($id);
+        
+        $detail = DB::table("departures_detail")
+                ->select("quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->join("products", "departures_detail.product_id", "products.id")
+                ->join("stakeholder", "products.supplier_id", "stakeholder.id")
+                ->where("departures_detail.id", $dep["id"])
+                ->get();
+
+
+        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
+                ->where("stakeholder_id", $dep["client_id"])
+                ->join("cities", "cities.id", "branch_office.city_id")
+                ->first();
+        
+        if ($cli == null) {
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
+                    ->where("stakeholder.id", $dep["client_id"])
+                    ->join("cities", "cities.id", "stakeholder.city_id")
+                    ->first();
+        }
+        
+        $user = Users::find($dep["responsible_id"]);
+
+        $ware = Warehouses::find($dep["warehouse_id"]);
+
+        $this->email[] = $user->email;
+
+
+        $term = 7;
+
+        if ($cli["term"] != null) {
+            $term = $cli["term"];
+        }
+
+        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($dep["dispatched"])));
+
+        $cli["address_invoice"] = $dep["address"];
+        $cli["emition"] = $this->formatDate($dep["dispatched"]);
+        $cli["observations"] = $dep["description"];
+        $cli["expiration"] = $this->formatDate($expiration);
+
+        $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
+
+        $totalExemp = 0;
+        $totalTax5 = 0;
+        $totalTax19 = 0;
+        $tax = 0;
+        $totalSum = 0;
+        foreach ($detail as $i => $value) {
+            $detail[$i]->valueFormated = "$" . number_format($value->value, 0, ',', '.');
+            $detail[$i]->totalFormated = "$" . number_format($value->value * $value->units_sf * $value->quantity, 0, ',', '.');
+
+            $totalSum += $value->valuetotal;
+            $tax = ($value->tax / 100);
+
+            if ($value->tax == 0) {
+                $totalExemp += $value->valuetotal;
+            }
+            if ($value->tax == '5') {
+                $totalTax5 += $value->valuetotal * $tax;
+            }
+            if ($value->tax == '19') {
+
+                $totalTax19 += $value->valuetotal * $tax;
+            }
+        }
+
+        $rete = SaleDetail::where("description", "rete")->where("sale_id", $dep["id"])->first();
+
+//        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
+
+        $tool = new ToolController();
+
+        $cli["business_name"] = $tool->cleanText($cli["business_name"]);
+        $data = [
+            'rete' => 0,
+//            'rete' => $rete["value"],
+            'formatRete' => "$ " . number_format(($rete["value"]), 2, ',', '.'),
+            'client' => $cli,
+            'detail' => $detail,
+            'exept' => "$ " . number_format(($totalExemp), 2, ',', '.'),
+            'tax5num' => $totalTax5,
+            'tax5' => "$ " . number_format((round($totalTax5)), 0, ',', '.'),
+            'tax19num' => $totalTax19,
+            'tax19' => "$ " . number_format((round($totalTax19)), 0, ',', '.'),
+            'totalInvoice' => "$ " . number_format(($totalSum), 0, ',', '.'),
+            'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
+            'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
+            'invoice' => $dep->remission,
+            'textTotal' => trim($tool->to_word(round($totalWithTax)))
+        ];
+
+
+        $pdf = \PDF::loadView('Inventory.departure.remission', [], $data, [
+                    'title' => 'Invoice']);
+//  
+        header('Content-Type: application/pdf');
+//        return $pdf->download('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
+        return $pdf->stream('remission_' . $dep["remission"] . '_' . $cli["business_name"] . '.pdf');
+    }
+
     public function dateText() {
         
     }
@@ -729,6 +835,15 @@ class DepartureController extends Controller {
                 return response()->json(['success' => false]);
             }
         }
+    }
+
+    public function generateRemission($id) {
+        $row = Departures::find($id);
+        $con = Departures::select(DB::raw("count(*) +1 consecutive"))->whereNotNull("remission")->first();
+        $row->status_id = 5;
+        $row->remission = $con->consecutive;
+        $row->save();
+        return response()->json(['success' => true]);
     }
 
     public function generateInvoice($id) {

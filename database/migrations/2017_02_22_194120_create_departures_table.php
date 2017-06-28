@@ -30,6 +30,7 @@ class CreateDeparturesTable extends Migration {
             $table->integer('status_id');
             $table->integer('insert_id');
             $table->integer('update_id')->nullable();
+            $table->integer('remission')->nullable();
             $table->string('invoice')->nullable();
             $table->decimal('shipping_cost', 15, 2)->nullable();
             $table->decimal('outstanding', 15, 2)->nullable();

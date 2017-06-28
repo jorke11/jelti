@@ -5,7 +5,7 @@
         <td>
             <table>
                 <tr>
-                    <td width='240px' >Total Factura</td>
+                    <td width='240px' >Total Remisión</td>
                     <td><?php echo $totalInvoice; ?></td>
                 </tr>
 <!--                <tr>
@@ -67,3 +67,5 @@
         <td><?php echo $textTotal; ?></td>
     </tr>
 </table>
+</body>
+</html>

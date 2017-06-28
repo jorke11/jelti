@@ -314,12 +314,11 @@ class DepartureController extends Controller {
             $term = $cli["term"];
         }
 
-        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($dep["dispatched"])));
 
         $cli["address_invoice"] = $dep["address"];
-        $cli["emition"] = $this->formatDate($dep["dispatched"]);
+        $cli["emition"] = $this->formatDate($dep["created_at"]);
         $cli["observations"] = $dep["description"];
-        $cli["expiration"] = $this->formatDate($expiration);
+        
 
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
 

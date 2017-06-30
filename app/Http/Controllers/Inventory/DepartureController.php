@@ -34,6 +34,11 @@ use App\Http\Controllers\LogController;
 class DepartureController extends Controller {
 
     protected $total;
+    protected $tool;
+    protected $subtotal;
+    protected $exento;
+    protected $tax19;
+    protected $tax5;
     public $total_real;
     public $path;
     public $name;
@@ -45,7 +50,12 @@ class DepartureController extends Controller {
 
     public function __construct() {
         $this->middleware("auth");
+        $this->tool = new ToolController();
+        $this->exento = 0;
+        $this->tax19 = 0;
+        $this->tax5 = 0;
         $this->total = 0;
+        $this->subtotal = 0;
         $this->total_real = 0;
         $this->path = '';
         $this->name = '';
@@ -241,9 +251,8 @@ class DepartureController extends Controller {
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
-        $tool = new ToolController();
 
-        $cli["business_name"] = $tool->cleanText($cli["business_name"]);
+        $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],
@@ -259,7 +268,7 @@ class DepartureController extends Controller {
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
             'invoice' => $dep->invoice,
-            'textTotal' => trim($tool->to_word(round($totalWithTax)))
+            'textTotal' => trim($this->tool->to_word(round($totalWithTax)))
         ];
 
 
@@ -336,7 +345,6 @@ class DepartureController extends Controller {
                 $totalTax5 += $value->valuetotal * $tax;
             }
             if ($value->tax == '19') {
-
                 $totalTax19 += $value->valuetotal * $tax;
             }
         }
@@ -346,9 +354,7 @@ class DepartureController extends Controller {
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
-        $tool = new ToolController();
-
-        $cli["business_name"] = $tool->cleanText($cli["business_name"]);
+        $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],
@@ -364,7 +370,7 @@ class DepartureController extends Controller {
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
             'invoice' => $dep->remission,
-            'textTotal' => trim($tool->to_word(round($totalWithTax)))
+            'textTotal' => trim($this->tool->to_word(round($totalWithTax)))
         ];
 
 
@@ -429,7 +435,7 @@ class DepartureController extends Controller {
                     $result = Departures::create($input["header"])->id;
 
                     if ($result) {
-                        $resp = Departures::FindOrFail($result);
+                        $resp = Departures::Find($result);
 
                         $input["detail"] = array_values(array_filter($input["detail"]));
                         $price_sf = 0;
@@ -478,6 +484,10 @@ class DepartureController extends Controller {
 
                         if (count($emDetail) > 0) {
                             $this->mails = array();
+
+                            $userware = Users::find($ware->responsible_id);
+                            $this->mails[] = $userware->email;
+
                             foreach ($emDetail as $value) {
                                 $this->mails[] = $value->description;
                             }
@@ -496,6 +506,18 @@ class DepartureController extends Controller {
                             $input["address"] = $ware->address;
                             $input["detail"] = $listdetail;
                             $input["id"] = $result;
+                            $input["environment"] = env("APP_ENV");
+                            $input["created_at"] = $resp->created_at;
+
+                            $input["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
+                            $input["total"] = "$ " . number_format($this->total, 0, ",", ".");
+                            $input["exento"] = "$ " . number_format($this->total, 0, ",", ".");
+                            $input["tax5f"] = "$ " . number_format($this->tax5, 0, ",", ".");
+                            $input["tax5"] = $this->tax5;
+                            $input["tax19f"] = "$ " . number_format($this->tax19, 0, ",", ".");
+                            $input["tax19"] = $this->tax19;
+                            $input["flete"] = "$ " . number_format(100000, 0, ",", ".");
+
                             $this->mails[] = $user->email;
 
                             Mail::send("Notifications.departure", $input, function($msj) {
@@ -607,7 +629,7 @@ class DepartureController extends Controller {
                             if ($departure->status_id != 6) {
                                 $departure->invoice = $con->consecutive;
                             }
-                            
+
                             $departure->status_id = 2;
                             $departure->save();
 
@@ -620,6 +642,74 @@ class DepartureController extends Controller {
                             $sale->save();
 
                             $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $con->consecutive);
+
+                            $email = Email::where("description", "invoices")->first();
+
+                            if ($email != null) {
+                                $emDetail = EmailDetail::where("email_id", $email->id)->get();
+                            }
+
+                            if (count($emDetail) > 0) {
+
+                                $ware = Warehouses::find($departure->warehouse_id);
+                                $client = Stakeholder::find($departure->client_id);
+                                $sales = Sales::where("departure_id", $departure->id)->first();
+                                $this->mails = array();
+
+                                $userware = Users::find($ware->responsible_id);
+                                $this->mails[] = $userware->email;
+
+                                foreach ($emDetail as $value) {
+                                    $this->mails[] = $value->description;
+                                }
+
+                                $listdetail = $this->formatDetail($departure->id);
+
+                                $cit = Cities::find($ware->city_id);
+                                $commercial = Users::where("id", $departure->responsible_id)->first();
+                                $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $departure->id;
+                                $input["city"] = $cit->description;
+
+                                $user = Users::find($departure->responsible_id);
+                                $term = 7;
+
+                                if ($client->term != null) {
+                                    $term = $client->term;
+                                }
+                                $input["client"] = ucwords($client->business);
+                                $input["address"] = ucwords($client->business);
+                                $input["document"] = $client->document;
+                                $input["address_send"] = $client->address_send;
+                                $input["address_invoice"] = $client->address_invoice;
+                                $input["dispatched"] = $sales->dispatched;
+                                $input["expiration"] = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sales->dispatched)));
+
+                                $input["responsible"] = $commercial->name . " " . $commercial->last_name;
+                                $input["observation"] = $departure->description;
+                                $input["city"] = $cit->description;
+                                $input["detail"] = $listdetail;
+                                $input["id"] = $departure->id;
+                                $input["environment"] = env("APP_ENV");
+                                $input["created_at"] = $departure->created_at;
+                                $input["textTotal"] = trim($this->tool->to_word(round($this->total)));
+
+                                $input["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
+                                $input["total"] = "$ " . number_format($this->total, 0, ",", ".");
+                                $input["exento"] = "$ " . number_format($this->total, 0, ",", ".");
+                                $input["tax5f"] = "$ " . number_format($this->tax5, 0, ",", ".");
+                                $input["tax5"] = $this->tax5;
+                                $input["tax19f"] = "$ " . number_format($this->tax19, 0, ",", ".");
+                                $input["tax19"] = $this->tax19;
+                                $input["flete"] = "$ " . number_format($departure->shipping_cost, 0, ",", ".");
+
+                                $this->mails[] = $user->email;
+
+                                Mail::send("Notifications.invoice", $input, function($msj) {
+                                    $msj->subject($this->subject);
+                                    $msj->to($this->mails);
+                                });
+                            }
+
                             DB::commit();
                             return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" => $total]);
                         } else {
@@ -636,6 +726,45 @@ class DepartureController extends Controller {
                 return response()->json(["success" => false, "msg" => 'Wrong'], 409);
             }
         }
+    }
+
+    public function testDepNotification($id) {
+        $name = "jorge";
+        $last_name = "Pinedo";
+        $id = 1;
+        $created_at = date("Y-m-d H:i");
+        $warehouse = "jorge";
+        $detail = $this->formatDetail(297);
+        $subtotal = "$ " . number_format($this->subtotal, 0, ",", ".");
+        $total = "$ " . number_format($this->total, 0, ",", ".");
+        $exento = "$ " . number_format($this->total, 0, ",", ".");
+        $tax5f = "$ " . number_format($this->tax5, 0, ",", ".");
+        $tax5 = $this->tax5;
+        $tax19f = "$ " . number_format($this->tax19, 0, ",", ".");
+        $tax19 = $this->tax19;
+        $flete = "$ " . number_format(100000, 0, ",", ".");
+        $environment = "production";
+        return view("Notifications.departure", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment"));
+    }
+
+    public function testInvoiceNotification($id) {
+        $name = "jorge";
+        $last_name = "Pinedo";
+        $id = 1;
+        $created_at = date("Y-m-d H:i");
+        $warehouse = "jorge";
+        $detail = $this->formatDetail(297);
+        $subtotal = "$ " . number_format($this->subtotal, 0, ",", ".");
+        $total = "$ " . number_format($this->total, 0, ",", ".");
+        $exento = "$ " . number_format($this->total, 0, ",", ".");
+        $tax5f = "$ " . number_format($this->tax5, 0, ",", ".");
+        $tax5 = $this->tax5;
+        $tax19f = "$ " . number_format($this->tax19, 0, ",", ".");
+        $tax19 = $this->tax19;
+        $flete = "$ " . number_format(100000, 0, ",", ".");
+        $environment = "production";
+        $invoice = "3022";
+        return view("Notifications.invoice", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "invoice"));
     }
 
     public function storeExtern(Request $request) {
@@ -687,7 +816,7 @@ class DepartureController extends Controller {
 
     public function formatDetail($id) {
         $detail = DB::table("departures_detail")
-                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf")
+                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "departures_detail.tax")
                 ->join("products", "departures_detail.product_id", "products.id")
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id")
                 ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
@@ -698,14 +827,24 @@ class DepartureController extends Controller {
         $this->total = 0;
 
         foreach ($detail as $i => $value) {
-//            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
-            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value;
+            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
             $detail[$i]->total_real = $detail[$i]->real_quantity * $detail[$i]->value;
             $detail[$i]->totalFormated_real = "$ " . number_format($detail[$i]->total_real, 2, ",", ".");
-            $this->total += $detail[$i]->total;
+            $this->subtotal += $detail[$i]->total;
+            $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
             $this->total_real += $detail[$i]->total_real;
+
+            if ($value->tax == 0) {
+                $this->exento += $detail[$i]->total;
+            }
+            if ($value->tax == 0.05) {
+                $this->tax5 += $detail[$i]->total * $value->tax;
+            }
+            if ($value->tax == 0.19) {
+                $this->tax19 += $detail[$i]->total * $value->tax;
+            }
         }
         return $detail;
     }

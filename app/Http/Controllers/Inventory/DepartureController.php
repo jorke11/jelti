@@ -603,7 +603,11 @@ class DepartureController extends Controller {
                             ]);
                             $credit = 0;
                             $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
-                            $departure->invoice = $con->consecutive;
+
+                            if ($departure->status_id != 6) {
+                                $departure->invoice = $con->consecutive;
+                            }
+                            
                             $departure->status_id = 2;
                             $departure->save();
 

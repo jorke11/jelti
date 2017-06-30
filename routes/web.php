@@ -181,6 +181,7 @@ Route::put('/departure/{id}/cancelInvoice', ['uses' => 'Inventory\DepartureContr
 
 Route::get('/departure/{id}/{init}/{end}', ['uses' => 'Inventory\DepartureController@index']);
 Route::get('/api/listDeparture', 'Inventory\DepartureController@listTable');
+Route::put('/departure/{id}/reverseInvoice', 'Inventory\DepartureController@reverse');
 
 Route::resource('/order', 'Inventory\OrderController');
 Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);

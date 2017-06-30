@@ -17,6 +17,11 @@
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Pdf</span>
                 </button>
                 @endif
+                @if( Auth::user()->role_id == 1)
+                <button class="btn btn-success btn-sm" id='btnReverse'>
+                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true">Reversar</span>
+                </button>
+                @endif
             </div>
         </div>
     </div>

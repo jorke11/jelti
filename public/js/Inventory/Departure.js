@@ -109,7 +109,21 @@ function Sale() {
         })
 
         $("#uploadRequest").click(this.uploadExcel)
+        $("#btnReverse").click(this.reverse)
 
+    }
+
+
+    this.reverse = function () {
+        toastr.remove()
+        $.ajax({
+            url: 'departure/' + $("#frm #id").val() + '/reverseInvoice',
+            method: 'PUT',
+            dataType: 'JSON',
+            success: function (data) {
+                $(".input-departure").setFields({data: data.header});
+            }
+        })
     }
 
     this.cancelInvoice = function () {
@@ -766,7 +780,7 @@ function Sale() {
             order: [[1, 'DESC']],
             aoColumnDefs: [
                 {
-                    aTargets: [1, 2, 3, 4, 5],
+                    aTargets: [1, 2, 3, 4, 5, 6, 7, 8, 9],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }

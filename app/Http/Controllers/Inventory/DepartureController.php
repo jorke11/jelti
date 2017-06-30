@@ -58,7 +58,7 @@ class DepartureController extends Controller {
 
     public function index($client_id = null, $init = null, $end = null) {
         $category = \App\Models\Administration\Categories::all();
-        $status = Parameters::where("group", "departure")->get();
+        $status = Parameters::where("group", "entry")->get();
         return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end"));
     }
 
@@ -275,14 +275,9 @@ class DepartureController extends Controller {
         $this->mails = array();
 
         $dep = Departures::find($id);
-        
+
         $detail = DB::table("departures_detail")
-                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), 
-                        DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", 
-                        "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", 
-                        DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), 
-                        DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), 
-                        "stakeholder.business as stakeholder")
+                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
                 ->join("products", "departures_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
                 ->where("departures_detail.departure_id", $id)
@@ -293,14 +288,14 @@ class DepartureController extends Controller {
                 ->where("stakeholder_id", $dep["client_id"])
                 ->join("cities", "cities.id", "branch_office.city_id")
                 ->first();
-        
+
         if ($cli == null) {
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
                     ->where("stakeholder.id", $dep["client_id"])
                     ->join("cities", "cities.id", "stakeholder.city_id")
                     ->first();
         }
-        
+
         $user = Users::find($dep["responsible_id"]);
 
         $ware = Warehouses::find($dep["warehouse_id"]);
@@ -318,7 +313,7 @@ class DepartureController extends Controller {
         $cli["address_invoice"] = $dep["address"];
         $cli["emition"] = $this->formatDate($dep["created_at"]);
         $cli["observations"] = $dep["description"];
-        
+
 
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
 
@@ -381,8 +376,31 @@ class DepartureController extends Controller {
         return $pdf->stream('remission_' . $dep["remission"] . '_' . $cli["business_name"] . '.pdf');
     }
 
-    public function dateText() {
-        
+    public function reverse($id) {
+
+        try {
+            DB::beginTransaction();
+            $dep = Departures::find($id);
+
+            $sal = Sales::where("departure_id", $id)->first();
+            $detail = SaleDetail::where("sale_id", $sal->id)->get();
+
+            foreach ($detail as $value) {
+                $det = SaleDetail::find($value->id);
+                $det->delete();
+            }
+
+            $sal->delete();
+
+            $dep->status_id = 6;
+            $dep->save();
+            DB::commit();
+            $dep = Departures::find($id);
+            return response()->json(["success" => true, "header" => $dep]);
+        } catch (Exception $exp) {
+            DB::rollback();
+            return response()->json(["success" => false]);
+        }
     }
 
     public function getQuantity($id) {
@@ -487,6 +505,7 @@ class DepartureController extends Controller {
                             $this->log->logClient($client->id, "Genero Orden de venta " . $result);
                         }
                         DB::commit();
+
                         $total = "$ " . number_format($this->total, 0, ",", ".");
                         return response()->json(['success' => true, "header" => $resp, "detail" => $listdetail, "total" => $total]);
                     } else {

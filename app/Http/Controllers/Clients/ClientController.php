@@ -92,6 +92,11 @@ class ClientController extends Controller {
         return response()->json(["response" => $response]);
     }
 
+    public function getSpecialId($id) {
+        $response = PricesSpecial::find($id);
+        return response()->json(["response" => $response]);
+    }
+
     public function storeTax(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
@@ -132,6 +137,15 @@ class ClientController extends Controller {
         } else {
             PricesSpecial::where("client_id", $id)->update(['priority' => false]);
         }
+
+        return response()->json(["success" => true]);
+    }
+
+    public function updatePriceId(Request $data, $id) {
+        $input = $data->all();
+        unset($input["id"]);
+        $price = PricesSpecial::find($id);
+        $price->fill($input)->save();
 
         return response()->json(["success" => true]);
     }

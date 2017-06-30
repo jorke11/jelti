@@ -70,6 +70,7 @@ Route::get('/clients/getImages/{id}', 'Clients\ClientController@getImages');
 
 Route::post('/clients/StoreSpecial', 'Clients\ClientController@storeSpecial');
 Route::put('/clients/updatePrice/{id}', 'Clients\ClientController@updatePrice');
+Route::put('/clients/updatePriceId/{id}', 'Clients\ClientController@updatePriceId');
 Route::put('/clients/UpdateContact/{id}', 'Clients\ClientController@updateContact');
 Route::post('/clients/StoreContact', 'Clients\ClientController@storeContact');
 Route::delete('/clients/deleteContact/{id}', 'Clients\ClientController@deleteContact');
@@ -81,6 +82,7 @@ Route::put('/clients/UpdateTax', 'Clients\ClientController@updateTax');
 Route::delete('/clients/deleteTax/{id}', 'Clients\ClientController@deleteTax');
 Route::post('/clients/addComment', 'Clients\ClientController@storeComment');
 Route::get('/clients/{id}/getBranch', ['uses' => 'Clients\ClientController@getBranch']);
+Route::get('/clients/{id}/getSpecialId', ['uses' => 'Clients\ClientController@getSpecialId']);
 
 
 Route::resource('/category', 'Administration\CategoryController');

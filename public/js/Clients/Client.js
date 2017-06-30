@@ -372,7 +372,7 @@ function Client() {
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "clients/UpdateSpecial/" + id;
+                url = "clients/updatePriceId/" + id;
                 msg = "Edited Record";
             }
 
@@ -742,7 +742,7 @@ function Client() {
             success: function (data) {
                 html += "<tbody>";
                 $.each(data.response, function (i, val) {
-                    
+
                     html += "<tr>";
                     html += "<td>" + val.id + "</td>";
                     html += "<td>" + val.business + "</td>";
@@ -758,6 +758,17 @@ function Client() {
             }
         })
         return html;
+    }
+
+    this.showModalSpecial = function (id) {
+        $.ajax({
+            url: 'clients/' + id + '/getSpecialId',
+            method: 'get',
+            dataType: 'JSON',
+            success: function (data) {
+                $(".input-special").setFields({data: data.response})
+            }
+        })
     }
 
     this.tableSpecial = function (id) {

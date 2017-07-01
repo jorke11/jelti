@@ -129,9 +129,8 @@ JOIN stakeholder stake On stake.id=s.client_id
 JOIN products p On p.id=s.product_id
 
 
-
 create view vcreditnote_detail_row as 
-select c.id,d.quantity,s.tax,p.title product,s.product_id,s.value,s.units_sf,st.business as stakeholder,d.quantity * s.units_sf as  quantitytotal,d.quantity * s.units_sf* s.value as valuetotal
+select c.id,d.quantity,s.tax,p.title product,s.product_id,s.value,s.units_sf,st.business as stakeholder,d.quantity * s.units_sf as  quantitytotal,d.quantity * s.units_sf* s.value as valuetotal,c.created_at
 from credit_note_detail d
 JOIN credit_note c ON c.id=d.creditnote_id
 JOIN sales_detail s ON s.id=d.row_id

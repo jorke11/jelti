@@ -14,18 +14,31 @@ class SalesController extends Controller {
 
     public function getTotalSales($init, $end) {
         $where = '';
-        $sql = "SELECT sum(sd.value * sd.units_sf * sd.quantity + s.shipping_cost) total 
-            FROM sales_detail sd
-            JOIN sales s ON s.id=sd.sale_id
-            WHERE sd.product_id is not null";
+        $sql = "
+            SELECT round((sum(d.value * d.quantity * d.units_sf)-
+            (select sum(value * quantity * units_sf) 
+            from vcreditnote_detail_row 
+            where created_at >= '" . $init . " 00:00' AND created_at <= '" . $end . " 23:59'))) as total
+            FROM sales_detail d
+            JOIN sales s ON s.id=d.sale_id
+            JOIN departures dep ON dep.id=s.departure_id and dep.status_id=2
+            JOIN products p ON p.id=d.product_id 
+            WHERE d.product_id is NOT NULL 
+            AND s.created >= '" . $init . " 00:00' AND s.created <= '" . $end . " 23:59'
+            ";
 
-        if ($init != '') {
-            $sql .= " AND created >= '" . $init . " 00:00'";
-        }
-        if ($end != '') {
-            $sql .= " AND created <= '" . $end . " 23:59'";
-        }
+
+//        if ($init != '') {
+//            $sql .= " AND created >= '" . $init . " 00:00'";
+//        }
+//        if ($end != '') {
+//            $sql .= " AND created <= '" . $end . " 23:59'";
+//        }
         $res = DB::select($sql);
+        $total = 0;
+        if (count($res) > 0) {
+            $total = $res[0]->total;
+        }
 
         if ($init != '') {
             $where = " AND s.created >= '" . $init . " 00:00'";
@@ -46,12 +59,12 @@ class SalesController extends Controller {
 
         $res2 = DB::select($sql);
 
-        $quantity = array();
+        $quantity = array("quantity" => 0, "product_id" => 0, "title" => '');
         if (count($res2) > 0) {
             $quantity = $res2[0];
         }
 
-        return response()->json(["total" => "$ " . number_format($res[0]->total, 0, ",", "."), "quantity" => $quantity]);
+        return response()->json(["total" => "$ " . number_format($total, 0, ",", "."), "quantity" => $quantity]);
     }
 
     public function getFulfillmentSup($init, $end) {

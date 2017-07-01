@@ -29,6 +29,7 @@ class HomeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+
         $sql = "
             SELECT p.title,sum(d.quantity) cantidadTotal,round(sum(d.value * d.quantity * d.units_sf)) as total
             FROM sales_detail d
@@ -37,9 +38,12 @@ class HomeController extends Controller {
             WHERE product_id IS NOT NULL AND s.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 2 DESC LIMIT 1";
+
         $product = DB::select($sql);
-        $product = $product[0];
-        
+
+        if (count($product) > 0) {
+            $product = $product[0];
+        }
 
         $sql = "
             SELECT cli.business,sum(d.quantity) cantidadtotal,sum(d.value*d.quantity*d.units_sf) total
@@ -51,9 +55,11 @@ class HomeController extends Controller {
             GROUP BY 1
             ORDER BY 2 DESC LIMIT 1";
 
-    
+
         $client = DB::select($sql);
-        $client = $client[0];
+        if (count($client) > 0) {
+            $client = $client[0];
+        }
 
         $sql = "
             SELECT s.business proveedor,round(sum(d.quantity*d.units_sf)) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
@@ -66,8 +72,9 @@ class HomeController extends Controller {
             ORDER BY 3 desc LIMIT 1";
 
         $supplier = DB::select($sql);
-        $supplier = $supplier[0];
-
+        if (count($supplier) > 0) {
+            $supplier = $supplier[0];
+        }
         $sql = "
             SELECT u.name ||' '|| u.last_name as vendedor,sum(d.quantity) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
             FROM sales_detail d
@@ -77,7 +84,9 @@ class HomeController extends Controller {
             ORDER BY 3 desc";
 
         $commercial = DB::select($sql);
-        $commercial = $commercial[0];
+        if (count($commercial) > 0) {
+            $commercial = $commercial[0];
+        }
 
         if (Auth::user()->status_id == 3) {
             $users = Auth::user();

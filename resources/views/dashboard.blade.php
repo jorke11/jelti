@@ -43,7 +43,7 @@
                                 <i class="fa fa-shopping-cart fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                @if(isset($client))
+                                @if(isset($client) && count($client)>0)
                                 <div class="huge">Cliente <br>{{$client->business}}</div>
                                 <div> Total Unidades {{$client->cantidadtotal}}<br>
                                     Monto: $ {{number_format(round($client->total), 0, ',', '.')}}</div>
@@ -63,7 +63,6 @@
                 </a>
             </div>
 
-
             <div class="col-md-3 col-sm-3">
                 <div class="panel panel-primary" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">
@@ -72,7 +71,7 @@
                                 <i class="fa fa-suitcase fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                @if(isset($supplier))
+                                @if(isset($supplier) && count($supplier)>0)
                                 <div class="huge">Proveedor<br>{{$supplier->proveedor}}</div>
                                 <div> Total Unidades {{$supplier->cantidadtotal}}<br>
                                     Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}</div>
@@ -99,7 +98,7 @@
                                 <i class="fa fa-star fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                @if(isset($product))
+                                @if(isset($product) && count($product)>0)
                                 <div class="huge">Producto<br>{{$product->title}}</div>
                                 <div> Unidades Vendidas {{$product->cantidadtotal}}<br>
                                     Monto: $ {{number_format(round($product->total), 0, ',', '.')}}</div>

@@ -77,10 +77,17 @@ class DepartureController extends Controller {
 
         $query = DB::table('vdepartures');
 
-        if (isset($in["client_id"]) && $in["client_id"] != '') {
+        if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
             $query->where("client_id", $in["client_id"])
-                    ->where("status_id", 2)
-                    ->whereBetween("created", array($in["init"], $in["end"]));
+                    ->where("status_id", 2);
+        }
+
+        if (isset($in["init"]) && $in["init"] != '') {
+            $query->whereBetween("created", array($in["init"], $in["end"]));
+        }
+
+        if ($in["client_id"] == 0) {
+            $query->where("status_id", 2);
         }
 
         if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {

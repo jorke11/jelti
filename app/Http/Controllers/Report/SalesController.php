@@ -18,8 +18,7 @@ class SalesController extends Controller {
             SELECT round((sum(d.value * d.quantity * d.units_sf)-
             (select sum(value * quantity * units_sf) 
             from vcreditnote_detail_row 
-            where vcreditnote_detail_row.created_at >= '" . $init . " 00:00' "
-                . "AND vcreditnote_detail_row.created_at <= '" . $end . " 23:59'))) as total
+            where created_at >= '" . $init . " 00:00' AND created_at <= '" . $end . " 23:59'))) as total
             FROM sales_detail d
             JOIN sales s ON s.id=d.sale_id
             JOIN departures dep ON dep.id=s.departure_id and dep.status_id=2

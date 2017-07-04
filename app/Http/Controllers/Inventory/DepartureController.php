@@ -86,7 +86,7 @@ class DepartureController extends Controller {
             $query->whereBetween("created", array($in["init"], $in["end"]));
         }
 
-        if ($in["client_id"] == 0) {
+        if ($in["client_id"] == 0 && $in["client_id"] != '') {
             $query->where("status_id", 2);
         }
 

@@ -23,8 +23,11 @@ class SalesController extends Controller {
              select sum(value * quantity * units_sf) 
              from vcreditnote_detail_row where created_at >= '" . $init . " 00:00' AND created_at <= '" . $end . " 23:59'
              )),0) as totalwithtaxn,
-             coalesce((round(sum(d.value * d.quantity * coalesce(d.units_sf,1)) + sum(d.value * d.quantity * coalesce(d.units_sf,1) * d.tax))),0) as totalwithtax
-             ,sum(coalesce(dep.shipping_cost,0)) as cost
+             coalesce((round(sum(d.value * d.quantity * coalesce(d.units_sf,1)) 
+             + sum(d.value * d.quantity * coalesce(d.units_sf,1) * d.tax))),0) as totalwithtax
+             ,coalesce((round(sum(d.value * d.quantity * coalesce(d.units_sf,1)) 
+             + sum(d.value * d.quantity * coalesce(d.units_sf,1) * d.tax))),0)+ 
+             (select sum(shipping_cost) from sales where created_at >= '" . $init . " 00:00' AND created_at <= '" . $end . " 23:59' and status_id='1')as topay
             FROM sales_detail d
             JOIN sales s ON s.id=d.sale_id
             JOIN departures dep ON dep.id=s.departure_id and dep.status_id=2
@@ -35,11 +38,12 @@ class SalesController extends Controller {
 
         $res = DB::select($sql);
         $total = 0;
+//        echo $sql;exit;
         if (count($res) > 0) {
             $total = $res[0]->total;
             $totaltax = $res[0]->totalwithtax;
             $totaltaxn = $res[0]->totalwithtaxn;
-            $topay = $res[0]->cost;
+            $topay = $res[0]->topay;
         }
 
         if ($init != '') {
@@ -67,10 +71,10 @@ class SalesController extends Controller {
         }
 
         return response()->json(["total" => "$ " . number_format($total, 0, ",", "."),
-            "totalwithtax"=>"$ " . number_format($totaltax, 0, ",", "."), 
-            "totalwithtaxn"=>"$ " . number_format($totaltaxn, 0, ",", "."),
-            "quantity" => $quantity,
-            "topay"=>"$ " . number_format($topay, 0, ",", ".")]);
+                    "totalwithtax" => "$ " . number_format($totaltax, 0, ",", "."),
+                    "totalwithtaxn" => "$ " . number_format($totaltaxn, 0, ",", "."),
+                    "quantity" => $quantity,
+                    "topay" => "$ " . number_format($topay, 0, ",", ".")]);
     }
 
     public function getFulfillmentSup($init, $end) {

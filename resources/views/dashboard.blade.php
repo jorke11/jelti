@@ -43,10 +43,13 @@
                                 <i class="fa fa-shopping-cart fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                @if(isset($client) && count($client)>0)
-                                <div class="huge">Cliente <br>{{$client->business}}</div>
-                                <div> Total Unidades {{$client->cantidadtotal}}<br>
-                                    Monto: $ {{number_format(round($client->total), 0, ',', '.')}}</div>
+                                @if(isset($client))
+                                <div class="huge">Cliente <br>{{(isset($client->business)?$client->business:'SuperFüds')}}</div>
+                                <div> Total Unidades {{(isset($client->cantidadtotal)?$client->cantidadtotal:0)}}<br>
+                                    @if(count($client)>0)
+                                    Monto: $ {{number_format(round($client->total), 0, ',', '.')}}
+                                    @endif
+                                </div>
                                 @endif
                             </div>
                         </div>
@@ -71,10 +74,13 @@
                                 <i class="fa fa-suitcase fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                @if(isset($supplier) && count($supplier)>0)
-                                <div class="huge">Proveedor<br>{{$supplier->proveedor}}</div>
-                                <div> Total Unidades {{$supplier->cantidadtotal}}<br>
-                                    Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}</div>
+                                @if(isset($supplier))
+                                <div class="huge">Proveedor<br>{{(isset($supplier->proveedor)?$supplier->proveedor:'SuperFüds')}}</div>
+                                <div> Total Unidades {{(isset($supplier->cantidadtotal)?$supplier->cantidadtotal:0)}}<br>
+                                    @if(count($supplier)>0)
+                                    Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}
+                                    @endif
+                                </div>
                                 @endif
                             </div>
                         </div>
@@ -98,10 +104,13 @@
                                 <i class="fa fa-star fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
-                                @if(isset($product) && count($product)>0)
-                                <div class="huge">Producto<br>{{$product->title}}</div>
-                                <div> Unidades Vendidas {{$product->cantidadtotal}}<br>
-                                    Monto: $ {{number_format(round($product->total), 0, ',', '.')}}</div>
+                                @if(isset($product))
+                                <div class="huge">Producto<br>{{(isset($product->title)?$product->title:'')}}</div>
+                                <div> Unidades Vendidas {{(isset($product->cantidadtotal)?$product->cantidadtotal:0)}}<br>
+                                    @if(count($product)>0)
+                                    Monto: $ {{number_format(round($product->total), 0, ',', '.')}}
+                                    @endif
+                                </div>
                                 @endif
                             </div>
                         </div>

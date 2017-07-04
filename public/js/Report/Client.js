@@ -4,6 +4,11 @@ function Client() {
         this.tableTarget();
         this.tableProduct();
         this.tableCities();
+        
+        $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
+        $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
+        
+        
         $("#btnSearch").click(function () {
             objCli.table();
             objCli.tableTarget();

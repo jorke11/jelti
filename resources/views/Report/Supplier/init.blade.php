@@ -1,9 +1,5 @@
-@extends('layouts.dash')
+@extends('layouts.report')
 @section('content')
-@section('title','Indicador')
-@section('subtitle','Proveedores')
-
-
 
 <div class="row">
     {!! Form::open(['id'=>'Detail']) !!}

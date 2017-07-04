@@ -747,9 +747,15 @@ function Sale() {
 
     this.table = function () {
         var param = {};
-        param.client_id = $("#frm #client_id").val();
+        if($("#frm #type").val()=='r'){
+            param.supplier_id = $("#frm #client_id").val();
+        }else{
+            param.client_id = $("#frm #client_id").val();
+        }
+        
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
+        
         var html = '';
         table = $('#tbl').DataTable({
             "processing": true,

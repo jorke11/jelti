@@ -66,10 +66,10 @@ class DepartureController extends Controller {
         $this->log = new LogController();
     }
 
-    public function index($client_id = null, $init = null, $end = null) {
+    public function index($client_id = null, $init = null, $end = null, $product = null, $supplier = NUll, $type = null) {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
-        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end"));
+        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product", "supplier","type"));
     }
 
     public function listTable(Request $req) {
@@ -80,6 +80,11 @@ class DepartureController extends Controller {
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
             $query->where("client_id", $in["client_id"])
                     ->where("status_id", 2);
+        }
+
+        if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
+            $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
+            dd($pro);
         }
 
         if (isset($in["init"]) && $in["init"] != '') {

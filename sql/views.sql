@@ -46,12 +46,12 @@ JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic';
 
 --drop view vdepartures
-create view vdepartures as 
+create or replace view vdepartures as 
             select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name ,sta.business_name) as client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
             (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity,
-            (select (ceil(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0)) + d.shipping_cost)::money from departures_detail where departure_id=d.id) total,
-            (select coalesce(sum(quantity * units_sf * value),0) from departures_detail where departure_id=d.id) subtotalnumeric,sta.id as client_id,d.created
+            (select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0)) + d.shipping_cost)::money from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where departure_id=d.id) total,
+            (select coalesce(sum(quantity * units_sf * value),0) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id) subtotalnumeric,sta.id as client_id,d.created
 
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id

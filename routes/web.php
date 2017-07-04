@@ -181,7 +181,8 @@ Route::get('/departure/{id}/getBranch', ['uses' => 'Inventory\DepartureControlle
 Route::post('/departure/uploadExcel', 'Inventory\DepartureController@storeExcel');
 Route::put('/departure/{id}/cancelInvoice', ['uses' => 'Inventory\DepartureController@cancelInvoice']);
 
-Route::get('/departure/{id}/{init}/{end}', ['uses' => 'Inventory\DepartureController@index']);
+Route::get('/departure/{id}/{init}/{end}/', ['uses' => 'Inventory\DepartureController@index']);
+Route::get('/departure/{id}/{init}/{end}/{product}/{supplier}', ['uses' => 'Inventory\DepartureController@index']);
 Route::get('/api/listDeparture', 'Inventory\DepartureController@listTable');
 Route::put('/departure/{id}/reverseInvoice', 'Inventory\DepartureController@reverse');
 Route::get('/departure/testDepNotification/{id}', 'Inventory\DepartureController@testDepNotification');

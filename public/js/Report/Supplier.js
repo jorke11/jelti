@@ -2,19 +2,22 @@ function Supplier() {
     this.init = function () {
         this.table();
         this.tableClient();
-        
-         $(".input-find").cleanFields();
 
+        $(".input-find").cleanFields();
+        $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
+        $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
         $("#btnSearch").click(function () {
             obj.table();
             obj.tableClient();
         })
-        
-        
+
+
     }
-    
+
     this.getDetail = function (client_id) {
-        window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
+        var product = ($("#Detail #product_id").val() == null) ? 0 : $("#Detail #product_id").val();
+        var supplier = ($("#Detail #supplier_id").val() == null) ? 0 : $("#Detail #supplier_id").val();
+        window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val() + "/" + product + "/" + supplier);
 
     }
 
@@ -44,7 +47,7 @@ function Supplier() {
             ],
         });
     }
-    
+
     this.tableClient = function () {
         var param = {};
         param.init = $("#Detail #finit").val();

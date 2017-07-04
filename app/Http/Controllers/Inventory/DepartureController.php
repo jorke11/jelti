@@ -78,13 +78,13 @@ class DepartureController extends Controller {
         $query = DB::table('vdepartures');
 
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
-            $query->where("client_id", $in["client_id"])
+                        
+           $query->where("client_id", $in["client_id"])
                     ->where("status_id", 2);
         }
 
         if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
             $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
-            dd($pro);
         }
 
         if (isset($in["init"]) && $in["init"] != '') {
@@ -102,7 +102,7 @@ class DepartureController extends Controller {
         if (Auth::user()->role_id == 5) {
             $query->where("warehouse_id", Auth::user()->warehouse_id);
         }
-
+        
         return Datatables::queryBuilder($query)->make(true);
     }
 

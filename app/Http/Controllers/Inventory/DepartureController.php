@@ -69,7 +69,7 @@ class DepartureController extends Controller {
     public function index($client_id = null, $init = null, $end = null, $product = null, $supplier = NUll, $type = null) {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
-        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product", "supplier","type"));
+        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product", "supplier", "type"));
     }
 
     public function listTable(Request $req) {
@@ -78,8 +78,8 @@ class DepartureController extends Controller {
         $query = DB::table('vdepartures');
 
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
-                        
-           $query->where("client_id", $in["client_id"])
+
+            $query->where("client_id", $in["client_id"])
                     ->where("status_id", 2);
         }
 
@@ -88,7 +88,7 @@ class DepartureController extends Controller {
         }
 
         if (isset($in["init"]) && $in["init"] != '') {
-            $query->whereBetween("created", array($in["init"], $in["end"]));
+            $query->whereBetween("created_at", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
         }
 
         if ($in["client_id"] == 0 && $in["client_id"] != '') {
@@ -102,7 +102,6 @@ class DepartureController extends Controller {
         if (Auth::user()->role_id == 5) {
             $query->where("warehouse_id", Auth::user()->warehouse_id);
         }
-        
         return Datatables::queryBuilder($query)->make(true);
     }
 

@@ -1,7 +1,8 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-            <div class="panel panel-default">
+             <div id="container_supplier" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<!--            <div class="panel panel-default">
                 <div class="panel-body">
                     <table class="table" id="tbl">
                         <thead>
@@ -14,7 +15,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-            </div>
+            </div>-->
 
         </div>
     </div>

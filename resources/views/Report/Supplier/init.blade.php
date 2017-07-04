@@ -57,7 +57,7 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-               @include('Report.Supplier.detail')
+                <div id="container_supplier" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
             </div>
         </div>
     </div>
@@ -67,19 +67,19 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-<!--                @include('Report.Supplier.detail')-->
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <!--@include('Report.Client.target')-->
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 {!!Html::script('js/Report/Supplier.js')!!}
 

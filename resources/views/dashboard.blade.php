@@ -21,6 +21,11 @@
         color: white;
         background-color: #d9534f;
     }
+    .panel-blue > .panel-heading {
+        border-color: #4e859a;
+        color: white;
+        background-color: #4e859a;
+    }
 
 </style>
 <div class="right_col" role="main" style="margin:0 auto;">
@@ -34,7 +39,6 @@
         <div class="clearfix"></div>
 
         <div class="row">
-
             <div class="col-md-3 col-sm-3">
                 <div class="panel panel-green" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">
@@ -155,6 +159,64 @@
                 </a>
             </div>
         </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <div class="panel panel-blue" style="margin-bottom: 0px;">
+                    <div class="panel-heading" style="height: 100px;">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <i class="fa fa-user-circle-o fa-4x"></i>
+                            </div>
+                            <div class="col-md-9 col-sm-9 text-right">
+                                @if(isset($newClient))
+                                <div class="huge">Clientes Nuevos{{$newClient->estemes}}</div>
+                                <div> Total Mes anterior {{$newClient->mesanterior}}</div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="/reportCommercial">
+                    <div class="panel-footer" style="background-color:#fff;border-color: blue;">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right">
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-md-3 col-sm-3">
+                <div class="panel panel-blue" style="margin-bottom: 0px;">
+                    <div class="panel-heading" style="height: 100px;">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <i class="fa fa-user-circle-o fa-4x"></i>
+                            </div>
+                            <div class="col-md-9 col-sm-9 text-right">
+                                @if(isset($purchase))
+                                <div class="huge">Compras $ {{number_format(round($purchase->estemes), 0, ',', '.')}}</div>
+                                <div> Total Mes anterior $ {{number_format(round($purchase->mesanterior), 0, ',', '.')}}</div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="/reportCommercial">
+                    <div class="panel-footer" style="background-color:#fff;border-color: blue;">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right">
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        
         <br />
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">

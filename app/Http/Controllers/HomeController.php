@@ -88,6 +88,36 @@ class HomeController extends Controller {
             $commercial = $commercial[0];
         }
 
+        $ant = date('Y-m', strtotime('-1 month', strtotime(date("Y-m"))));
+
+
+        $sql = "
+                SELECT count(*) estemes,(select count(*) 
+                                        from stakeholder where created_at between '" . $ant . "-01 00:00' and '" . $ant . "-30 23:59') mesanterior 
+                FROM stakeholder where created_at > '" . date("Y-m") . "-01 00:00'";
+
+        $newClient = DB::select($sql);
+        if (count($newClient) > 0) {
+            $newClient = $newClient[0];
+        }
+
+        $sql = "
+            select sum(d.quantity * d.value * d.units_supplier) estemes,
+            (select sum(d.quantity * d.value * d.units_supplier)
+            from purchases_detail  d
+            JOIN purchases p ON p.id=d.purchase_id
+            where d.product_id is not null and p.created_at between '" . $ant . "-01 00:00' and '" . $ant . "-30 23:59') mesanterior
+            from purchases_detail  d
+            JOIN purchases p ON p.id=d.purchase_id
+            where d.product_id is not null and p.created_at > '" . date("Y-m") . "-01 00:00'
+        ";
+        $purchase = DB::select($sql);
+        if (count($purchase) > 0) {
+            $purchase = $purchase[0];
+        }
+        
+//        dd($purchase);
+
         if (Auth::user()->status_id == 3) {
             $users = Auth::user();
             $roles = Roles::where("id", $users->role_id)->get();
@@ -101,7 +131,7 @@ class HomeController extends Controller {
             if (Auth::user()->role_id == 2) {
                 return view('client', compact("product", "client", "supplier", "commercial"));
             } else {
-                return view('dashboard', compact("product", "client", "supplier", "commercial"));
+                return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient","purchase"));
 //                return view('dashboard');
             }
         }

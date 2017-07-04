@@ -111,27 +111,7 @@ function Client() {
 
         })
 
-//        return $('#tblProduct').DataTable({
-//            destroy: true,
-//            ajax: {
-//                url: "/api/reportClientProduct",
-//                data: obj,
-//            },
-//            order: [[1, 'desc']],
-//            columns: [
-//                {data: "product"},
-//                {data: "units"},
-//            ],
-//            aoColumnDefs: [
-//                {
-//                    aTargets: [0, 1],
-//                    mRender: function (data, type, full) {
-//                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
-//                    }
-//                }
-//
-//            ],
-//        });
+
     }
 
     this.tableCities = function () {

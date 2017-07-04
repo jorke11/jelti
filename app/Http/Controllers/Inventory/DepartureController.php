@@ -1122,13 +1122,17 @@ class DepartureController extends Controller {
                 foreach ($reader->get() as $i => $book) {
 
                     if ($book->unidades_total != 0) {
-                        if (isset($book->item)) {
+                        if (isset($book->item) && $book->item != '') {
                             $pro = Products::where("alias_reference", (int) $book->item)->first();
                             if ($pro == null) {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
                             }
+
+                            if ($pro == null) {
+                                $pro = Products::where("bar_code", $book->ean)->first();
+                            }
                         } else {
-                            if (isset($book->ean)) {
+                            if (isset($book->ean) && $book->ean != '') {
                                 $pro = Products::where("bar_code", $book->ean)->first();
                             } else {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();

@@ -634,7 +634,7 @@ class ClientController extends Controller {
             })->get();
             
             $detail=PricesSpecial::select("prices_special.item","prices_special.tax","prices_special.price_sf","products.bar_code",
-                    "products.reference")
+                    "products.reference","products.title")
                     ->join("products","products.id","prices_special.product_id")
                     ->where("prices_special.client_id", $this->in["client_id"])
                     ->get();

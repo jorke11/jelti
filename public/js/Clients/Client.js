@@ -190,7 +190,6 @@ function Client() {
     }
 
     this.uploadExcelCode = function () {
-        console.log("")
         $("#frmFileCode #client_id").val($("#frm #id").val());
         var formData = new FormData($("#frmFileCode")[0]);
 
@@ -213,7 +212,7 @@ function Client() {
         var html = "";
         console.log(detail)
         $.each(detail, function (i, val) {
-            html += "<tr><td>" + val.bar_code + "</td><td>" + val.reference + "</td><td>" + val.item + "</td><td>" + val.price_sf + "</td></tr>";
+            html += "<tr><td>" + val.title + "</td><td>" + val.bar_code + "</td><td>" + val.reference + "</td><td>" + val.item + "</td><td>" + val.price_sf + "</td></tr>";
         })
         $("#tblUpload tbody").html(html);
     }

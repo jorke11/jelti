@@ -18,10 +18,10 @@
         <table class="table table-bordered" id="tblUpload">
             <thead>
                 <tr>
+                    <th>Item</th>
+                    <th>Sf Code</th>
                     <th>Product</th>
                     <th>Ean</th>
-                    <th>Sf Code</th>
-                    <th>Item</th>
                     <th>Price</th>
                 </tr>
             </thead>

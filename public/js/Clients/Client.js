@@ -212,7 +212,7 @@ function Client() {
         var html = "";
         console.log(detail)
         $.each(detail, function (i, val) {
-            html += "<tr><td>" + val.title + "</td><td>" + val.bar_code + "</td><td>" + val.reference + "</td><td>" + val.item + "</td><td>" + val.price_sf + "</td></tr>";
+            html += "<tr><td>" + val.item + "</td><td>" + val.reference + "</td><td>" + val.title + "</td><td>" + val.ean + "</td><td>" + val.price_sf + "</td></tr>";
         })
         $("#tblUpload tbody").html(html);
     }

@@ -18,6 +18,7 @@
         <table class="table table-bordered" id="tblUpload">
             <thead>
                 <tr>
+                    <th>Product</th>
                     <th>Ean</th>
                     <th>Sf Code</th>
                     <th>Item</th>

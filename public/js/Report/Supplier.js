@@ -2,13 +2,16 @@ function Supplier() {
     this.init = function () {
         this.table();
         this.tableClient();
+        this.tableSales();
 
         $(".input-find").cleanFields();
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
+        
         $("#btnSearch").click(function () {
             obj.table();
             obj.tableClient();
+            obj.tableSales();
         })
 
 
@@ -81,13 +84,37 @@ function Supplier() {
 //                        }],
                     series:data.series
                 });
-                
-                console.log(data.series)
-
 
             }
 
         })
+    }
+    
+    this.tableSales = function () {
+        var param = {};
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+
+        return $('#tblSales').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/api/reportSupplierSales",
+                data: param,
+            },
+            columns: [
+                {data: "business"},
+                {data: "totalunidades"},
+                {data: "total"},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1, 2],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="obj.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+            ],
+        });
     }
 
     this.tableClient = function () {

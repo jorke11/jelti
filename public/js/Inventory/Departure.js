@@ -15,7 +15,7 @@ function Sale() {
         $("#frm #client_id").change(function () {
             if ($(this).val() != 0) {
                 client_id = $(this).val();
-                $("#btnModalUpload").attr("disabled", false);
+                $("#btnModalUpload,#btnmodalDetail").attr("disabled", false);
                 obj.getClient($(this).val());
 
             } else {

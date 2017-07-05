@@ -54,7 +54,7 @@ class ClientController extends Controller {
     public function getListProduct(Request $req) {
         $input = $req->all();
         $cli = "
-            select d.product_id,p.title product,sum(d.quantity * d.units_sf) units
+            select d.product_id,p.title product,sum(d.quantity * coalesce(d.units_sf,1)) units
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 
@@ -62,10 +62,8 @@ class ClientController extends Controller {
             AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             group by 1,2
             order by 3 desc limit 10";
-//            echo $cli;exit;
 
         $res = DB::select($cli);
-        
         $units = array();
         $cat = array();
         foreach ($res as $value) {

@@ -1125,8 +1125,12 @@ class DepartureController extends Controller {
                         if (isset($book->item) && $book->item != '') {
 
                             $special = PricesSpecial::where("item", (int) $book->item)->first();
-
-                            $pro = Products::find($special->product_id);
+                            if ($special == null) {
+                                $product_id = 0;
+                            } else {
+                                $product_id = $special->product_id;
+                            }
+                            $pro = Products::find($product_id);
                             if ($pro == null) {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
                             }

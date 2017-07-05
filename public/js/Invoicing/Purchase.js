@@ -330,43 +330,16 @@ function Purchase() {
         var html = "", total = 0;
         $("#tblDetail tbody").empty();
         $.each(data.detail, function (i, val) {
-            total = val.quantity * val.value;
-
-            val.product = (val.product == null) ? '' : val.product
-            val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date
-            val.tax = (val.tax == null) ? '' : val.tax
-            val.quantity = (val.quantity == null) ? '' : val.quantity
-
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
-            html += "<td>" + val.description + "</td>";
             html += "<td>" + val.product + "</td>";
+            html += "<td>" + val.description + "</td>";
+            html += "<td>" + val.units_supplier + "</td>";
 
             html += "<td>" + val.tax + "</td>";
             html += "<td>" + val.quantity + "</td>";
-            if (val.product_id == null) {
-                html += "<td>" + val.totalFormated + "</td>";
-            } else {
-                html += "<td>0</td>";
-            }
+            html += "<td>" + val.valueFormated + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
-
-
-            if (val.type_nature == 2) {
-                html += "<td>" + 0 + "</td>";
-                html += "<td>" + val.valueFormated + "</td>";
-
-            } else {
-                if (val.product == "") {
-                    html += "<td>" + val.valueFormated + "</td>";
-                    html += "<td> " + 0 + "</td>";
-
-                } else {
-                    html += "<td>" + val.totalFormated + "</td>";
-                    html += "<td>$ " + 0 + "</td>";
-                }
-
-            }
 
             if (val.description == 'product') {
                 html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
@@ -379,7 +352,7 @@ function Purchase() {
         });
 
         $("#tblDetail tbody").html(html);
-        $("#tblDetail tfoot").html('<tr><td colspan="7">Total</td><td>' + data.totalDebt + '</td><td>' + data.totalDebt + '</td></tr>');
+        $("#tblDetail tfoot").html('<tr><td colspan="6"></td><td><strong>Subtotal</strong></td><td>' + data.subtotal + '</td></tr><tr><td colspan="6"><td><strong>Total</strong></td></td><td>' + data.total + '</td></tr>');
 
 
     }
@@ -443,7 +416,7 @@ function Purchase() {
                 {data: "city"},
                 {data: "status"},
             ],
-            order: [[1, 'ASC']],
+            order: [[2, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [0, 1, 2, 3, 4, 5, 6],

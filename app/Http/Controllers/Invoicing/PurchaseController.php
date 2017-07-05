@@ -23,6 +23,7 @@ use Mail;
 
 class PurchaseController extends Controller {
 
+    public $subtotal;
     public $total;
     public $debt;
     public $credit;
@@ -31,6 +32,7 @@ class PurchaseController extends Controller {
 
     public function __construct() {
         $this->total = 0;
+        $this->subtotal = 0;
         $this->debt = 0;
         $this->credit = 0;
         $this->mails = array();
@@ -84,10 +86,8 @@ class PurchaseController extends Controller {
                 foreach ($input["detail"] as $i => $val) {
 
                     if ($val["quantity"] != 0) {
-
                         $total = $input["detail"][$i]["quantity"] * $input["detail"][$i]["cost_sf"];
                         $account = Puc::where("code", "143501")->first();
-
                         $input["detail"][$i]["tax"] = $val["tax"];
                         $input["detail"][$i]["purchase_id"] = $purchase_id;
                         $input["detail"][$i]["account_id"] = $account->id;
@@ -101,48 +101,7 @@ class PurchaseController extends Controller {
                         unset($input["detail"][$i]["debt"]);
                         unset($input["detail"][$i]["credit"]);
                         unset($input["detail"][$i]["total"]);
-
                         $detail_id = PurchasesDetail::create($input["detail"][$i])->id;
-
-                        if ($input["detail"][$i]["tax"] != 0 && $input["detail"][$i]["tax"] != '') {
-                            $account = Puc::where("code", "240802")->first();
-                            $input["detail"][$i]["account_id"] = $account->id;
-                            $input["detail"][$i]["type_nature"] = $account->nature;
-                            $input["detail"][$i]["description"] = 'tax';
-                            $input["detail"][$i]["value"] = $total * $input["detail"][$i]["tax"];
-                            $input["detail"][$i]["parent_id"] = $detail_id;
-                            $total += $input["detail"][$i]["value"];
-                            unset($input["detail"][$i]["product_id"]);
-                            unset($input["detail"][$i]["category_id"]);
-                            unset($input["detail"][$i]["quantity"]);
-                            unset($input["detail"][$i]["units_supplier"]);
-                            unset($input["detail"][$i]["tax"]);
-                            PurchasesDetail::create($input["detail"][$i])->id;
-                        }
-
-                        $account = Puc::where("code", "220501")->first();
-
-                        $supplier = PurchasesDetail::where("purchase_id", $purchase_id)->where("account_id", $account->id)->first();
-                        if (count($supplier) > 0) {
-
-                            $ord = PurchasesDetail::where("purchase_id", $purchase_id)->count();
-                            $supplier->order = $ord - 1;
-                            $supplier->value = $total;
-                            $supplier->save();
-                        } else {
-                            $input["detail"][$i]["parent_id"] = $detail_id;
-                            $input["detail"][$i]["purchase_id"] = $purchase_id;
-                            $input["detail"][$i]["account_id"] = $account->id;
-                            $input["detail"][$i]["type_nature"] = $account->nature;
-                            $input["detail"][$i]["description"] = "supplier";
-                            $input["detail"][$i]["value"] = $total;
-                            unset($input["detail"][$i]["product_id"]);
-                            unset($input["detail"][$i]["category_id"]);
-                            unset($input["detail"][$i]["quantity"]);
-                            unset($input["detail"][$i]["units_supplier"]);
-                            unset($input["detail"][$i]["tax"]);
-                            PurchasesDetail::create($input["detail"][$i]);
-                        }
                     }
                 }
 
@@ -301,8 +260,8 @@ class PurchaseController extends Controller {
         $entry = Purchases::FindOrFail($id);
 
         $detail = DB::table("purchases_detail")
-                ->select("purchases_detail.id", "purchases_detail.description as comment", "products.title as product", "purchases_detail.tax", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.quantity", "purchases_detail.description")
-                ->leftjoin("products", "purchases_detail.product_id", "products.id")
+                ->select("purchases_detail.id", "purchases_detail.description as comment", "products.title as product", "purchases_detail.tax", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.quantity", "purchases_detail.description", "products.units_supplier")
+                ->join("products", "purchases_detail.product_id", "products.id")
                 ->where("purchase_id", "=", $id)
                 ->orderBy('order', 'ASC')
                 ->get();
@@ -310,27 +269,17 @@ class PurchaseController extends Controller {
         $debtTotal = 0;
         $creditTotal = 0;
         foreach ($detail as $i => $value) {
-            $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ',', '.');
-            if ($detail[$i]->product == '') {
-                $detail[$i]->total = $detail[$i]->value;
-            } else {
-                $detail[$i]->total = $detail[$i]->value * $detail[$i]->quantity;
-            }
-
-
-            $detail[$i]->totalFormated = "$ " . number_format($value->total, 2, ',', '.');
-
-            if ($detail[$i]->type_nature == 1) {
-                $detail[$i]->debt = $detail[$i]->total;
-                $debtTotal += $detail[$i]->debt;
-            } else {
-                $detail[$i]->credit = $detail[$i]->total;
-                $creditTotal += $detail[$i]->credit;
-            }
+            $detail[$i]->valueFormated = "$ " . number_format($value->value, 0, ',', '.');
+            $detail[$i]->total = $value->value * $value->quantity * $value->units_supplier;
+            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 0, ',', '.');
+            $this->subtotal += $detail[$i]->total;
+            $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
         }
 
-        return response()->json(["header" => $entry, "detail" => $detail, "totalCredt" => "$ " . number_format($creditTotal, 2, ',', '.'),
-                    "totalDebt" => "$ " . number_format($debtTotal, 2, ',', '.')]);
+
+        $this->total = "$ " . number_format($this->total, 0, ',', '.');
+        $this->subtotal = "$ " . number_format($this->subtotal, 0, ',', '.');
+        return response()->json(["header" => $entry, "detail" => $detail, "total" => $this->total,"subtotal"=>$this->subtotal]);
     }
 
     public function getDetail($id) {
@@ -401,8 +350,7 @@ class PurchaseController extends Controller {
     public function destroyDetail($id) {
         $entry = PurchasesDetail::FindOrFail($id);
 
-        dd($entry);
-        exit;
+
 
         $result = $entry->delete();
         if ($result) {
@@ -417,7 +365,7 @@ class PurchaseController extends Controller {
         $detail = DB::table("purchases_detail")
                         ->select("purchases_detail.id", "purchases_detail.description as comment", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0)"), "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description")
                         ->where("purchase_id", "=", $id)
-                        ->leftjoin("products", "purchases_detail.product_id", "products.id")
+                        ->join("products", "purchases_detail.product_id", "products.id")
                         ->orderBy("order", "asc")->get();
 
         foreach ($detail as $i => $value) {

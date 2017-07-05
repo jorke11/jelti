@@ -527,7 +527,7 @@ class DepartureController extends Controller {
                             $input["tax5"] = $this->tax5;
                             $input["tax19f"] = "$ " . number_format($this->tax19, 0, ",", ".");
                             $input["tax19"] = $this->tax19;
-                            $input["flete"] = "$ " . number_format(100000, 0, ",", ".");
+                            $input["flete"] = "$ " . number_format($resp->shipping_cost, 0, ",", ".");
 
                             $this->mails[] = $user->email;
 
@@ -753,7 +753,7 @@ class DepartureController extends Controller {
         $tax5 = $this->tax5;
         $tax19f = "$ " . number_format($this->tax19, 0, ",", ".");
         $tax19 = $this->tax19;
-        $flete = "$ " . number_format(100000, 0, ",", ".");
+        $flete = "$ " . number_format($this->flete, 0, ",", ".");
         $environment = "production";
         return view("Notifications.departure", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment"));
     }
@@ -1123,7 +1123,10 @@ class DepartureController extends Controller {
 
                     if ($book->unidades_total != 0) {
                         if (isset($book->item) && $book->item != '') {
-                            $pro = Products::where("alias_reference", (int) $book->item)->first();
+
+                            $special = PricesSpecial::where("item", (int) $book->item)->first();
+
+                            $pro = Products::find($special->product_id);
                             if ($pro == null) {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
                             }
@@ -1140,7 +1143,12 @@ class DepartureController extends Controller {
                         }
 
                         if ($pro != null) {
-                            $price_sf = $pro->price_sf;
+                            if ($special == null) {
+                                $price_sf = $pro->price_sf;
+                            } else {
+                                $price_sf = $special->price_sf;
+                            }
+
                             if (Auth::user()->role_id == 1) {
                                 if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {
                                     $price_sf = $book->precio_unitario;
@@ -1160,6 +1168,8 @@ class DepartureController extends Controller {
                                 "comment" => "",
                                 "status" => "new",
                             );
+
+                            $this->total += ($price_sf * $book->unidades_total * $pro->units_sf);
                         } else {
                             $this->errors[] = $book;
                         }
@@ -1167,7 +1177,7 @@ class DepartureController extends Controller {
                 }
             })->get();
 
-            return response()->json(["success" => true, "data" => $this->listProducts, "error" => $this->errors]);
+            return response()->json(["success" => true, "data" => $this->listProducts, "error" => $this->errors, "total" => "$ " . number_format(($this->total), 0, ',', '.')]);
         }
     }
 

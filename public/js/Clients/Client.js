@@ -15,29 +15,29 @@ function Client() {
         $("#tabInvoice").click(function () {
             obj.tableInvoice($("#frm #id").val());
         });
-//        $("#tabContact").click(function () {
-//            $(".input-contact").cleanFields({disabled: true});
-//
-//        });
+        //        $("#tabContact").click(function () {
+        //            $(".input-contact").cleanFields({disabled: true});
+        //
+        //        });
 
         $("#modalImage").click(function () {
-//
-//            $("#input-700").fileinput({
-//                uploadUrl: "clients/upload", // server upload action
-//                uploadAsync: true,
-//                maxFileCount: 5,
-//                uploadExtraData: {
-//                    id: $("#frm #id").val(),
-//                    document_id: document_id,
-//
-//                },
-//            }).on('fileuploaded', function (event, data, id, index) {
-//                $("#modalUpload").modal("hide");
-//                obj.showImages(data.extra.clients_id);
-//            }).on('filebrowse', function (event) {
-//                document_id = $("#frmFile #document_id").val()
-//            });
-//
+            //
+            //            $("#input-700").fileinput({
+            //                uploadUrl: "clients/upload", // server upload action
+            //                uploadAsync: true,
+            //                maxFileCount: 5,
+            //                uploadExtraData: {
+            //                    id: $("#frm #id").val(),
+            //                    document_id: document_id,
+            //
+            //                },
+            //            }).on('fileuploaded', function (event, data, id, index) {
+            //                $("#modalUpload").modal("hide");
+            //                obj.showImages(data.extra.clients_id);
+            //            }).on('filebrowse', function (event) {
+            //                document_id = $("#frmFile #document_id").val()
+            //            });
+            //
             $("#frmFile #clients_id").val($("#frm #id").val());
             $("#modalUpload").modal("show");
         })
@@ -60,14 +60,14 @@ function Client() {
         });
 
 
-//        $("#frm #stakeholder_id").change(function () {
-//            if ($(this).val() != 0) {
-//                if (confirm("La informacion del formulario de Sobreescribira, esta seguro de carga los datos?")) {
-//                    obj.getCuenta($(this).val());
-//                }
-//
-//            }
-//        });
+        //        $("#frm #stakeholder_id").change(function () {
+        //            if ($(this).val() != 0) {
+        //                if (confirm("La informacion del formulario de Sobreescribira, esta seguro de carga los datos?")) {
+        //                    obj.getCuenta($(this).val());
+        //                }
+        //
+        //            }
+        //        });
 
         $("#addJustify").click(this.addJustify);
 
@@ -185,7 +185,39 @@ function Client() {
         });
         $("#btnComment").click(this.addCommnet);
 
+        $("#btnUpload_code").click(this.uploadExcelCode)
+
     }
+
+    this.uploadExcelCode = function () {
+        console.log("")
+        $("#frmFileCode #client_id").val($("#frm #id").val());
+        var formData = new FormData($("#frmFileCode")[0]);
+
+        $.ajax({
+            url: '/clients/uploadExcelCode',
+            method: 'POST',
+            data: formData,
+            dataType: 'JSON',
+            processData: false,
+            cache: false,
+            contentType: false,
+            success: function (data) {
+                obj.setDetailExcel(data.data)
+            }
+        })
+
+    }
+
+    this.setDetailExcel = function (detail) {
+        var html = "";
+        console.log(detail)
+        $.each(detail, function (i, val) {
+            html += "<tr><td>" + val.bar_code + "</td><td>" + val.reference + "</td><td>" + val.item + "</td><td>" + val.price_sf + "</td></tr>";
+        })
+        $("#tblUpload tbody").html(html);
+    }
+
 
     this.getCuenta = function (id, path) {
         var html = "";
@@ -568,7 +600,7 @@ function Client() {
             dataType: 'JSON',
             success: function (data) {
                 toastr.success("Image Deleted")
-//                $("#imageMain").attr("src", "/images/product/" + data.path.path);
+                //                $("#imageMain").attr("src", "/images/product/" + data.path.path);
             }
         })
     }
@@ -690,28 +722,28 @@ function Client() {
                 }
             ],
 
-//            initComplete: function () {
-//                this.api().columns().every(function () {
-//                    var column = this;
-//                    var type = $(column.header()).attr('rowspan');
-//                    if (type != undefined) {
-//                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
-//                                .appendTo($(column.footer()).empty())
-//                                .on('change', function () {
-//                                    var val = $.fn.dataTable.util.escapeRegex(
-//                                            $(this).val()
-//                                            );
-//                                    column
-////                                            .search(val ? val : '', true, false)
-//                                            .search(val ? '^' + val + '$' : '', true, false)
-//                                            .draw();
-//                                });
-//                        column.data().unique().sort().each(function (d, j) {
-//                            select.append('<option value="' + d + '">' + d + '</option>')
-//                        });
-//                    }
-//                });
-//            },
+            //            initComplete: function () {
+            //                this.api().columns().every(function () {
+            //                    var column = this;
+            //                    var type = $(column.header()).attr('rowspan');
+            //                    if (type != undefined) {
+            //                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
+            //                                .appendTo($(column.footer()).empty())
+            //                                .on('change', function () {
+            //                                    var val = $.fn.dataTable.util.escapeRegex(
+            //                                            $(this).val()
+            //                                            );
+            //                                    column
+            ////                                            .search(val ? val : '', true, false)
+            //                                            .search(val ? '^' + val + '$' : '', true, false)
+            //                                            .draw();
+            //                                });
+            //                        column.data().unique().sort().each(function (d, j) {
+            //                            select.append('<option value="' + d + '">' + d + '</option>')
+            //                        });
+            //                    }
+            //                });
+            //            },
         });
 
         $('#tblStakeholder tbody').on('click', 'td.details-control', function () {
@@ -809,7 +841,7 @@ function Client() {
                     mData: null,
                     mRender: function (data, type, full) {
                         checked = (data.priority == true) ? 'checked' : '';
-//                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        //                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                         return '<input type="radio" ' + checked + ' name="all" onclick=obj.MarkPrice(' + data.id + ',' + data.client_id + ')>';
                     }
                 }
@@ -926,7 +958,7 @@ function Client() {
                                             $(this).val()
                                             );
                                     column
-//                                            .search(val ? val : '', true, false)
+                                            //                                            .search(val ? val : '', true, false)
                                             .search(val ? '^' + val + '$' : '', true, false)
                                             .draw();
                                 });

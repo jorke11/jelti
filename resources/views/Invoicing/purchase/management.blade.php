@@ -136,12 +136,11 @@
                             <th>#</th>
                             <th>Descripción</th>
                             <th>Producto</th>
+                            <th>Embalaje</th>
                             <th>Iva</th>
-                            <th>Cantidad</th>
                             <th>Unidades</th>
+                            <th>Precio Unit</th>
                             <th>Total</th>
-                            <th>Debito</th>
-                            <th>Credito</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>

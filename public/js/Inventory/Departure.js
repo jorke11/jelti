@@ -15,8 +15,9 @@ function Sale() {
         $("#frm #client_id").change(function () {
             if ($(this).val() != 0) {
                 client_id = $(this).val();
+                $("#btnModalUpload").attr("disabled", false);
                 obj.getClient($(this).val());
-                $("#btnmodalDetail").attr("disabled", false);
+
             } else {
                 $("#frm #name_client").val("");
                 $("#frm #address_supplier").val("");
@@ -164,7 +165,7 @@ function Sale() {
             contentType: false,
             success: function (data) {
                 listProducts = data.data;
-                obj.printDetailTmp();
+                obj.printDetailTmp(data);
             },
             complete: function () {
                 $("#modalUpload").modal("hide");
@@ -189,7 +190,7 @@ function Sale() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse'});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-        $("#btnModalUpload").attr("disabled", false);
+
         listProducts = [];
         statusRecord = false;
     }
@@ -512,7 +513,7 @@ function Sale() {
             }
         });
 
-        html += '<tr><td colspan="4">Total</td><td>' + total + '</td></tr>';
+        html += '<tr><td colspan="4">Total</td><td>' + data.total + '</td></tr>';
         $("#tblDetail tbody").html(html);
     }
 
@@ -580,8 +581,10 @@ function Sale() {
 
 
                 if (data.header.status_id == 1) {
-                    $("#btnSave, #btnmodalDetail").attr("disabled", true);
                     statusRecord = true;
+                }
+                if (data.header.status_id != 1) {
+                    $("#btnSave, #btnmodalDetail").attr("disabled", true);
                 }
 
                 if (data.header.status_id == 2) {
@@ -747,15 +750,15 @@ function Sale() {
 
     this.table = function () {
         var param = {};
-        if($("#frm #type").val()=='r'){
+        if ($("#frm #type").val() == 'r') {
             param.supplier_id = $("#frm #client_id").val();
-        }else{
+        } else {
             param.client_id = $("#frm #client_id").val();
         }
-        
+
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
-        
+
         var html = '';
         table = $('#tbl').DataTable({
             "processing": true,

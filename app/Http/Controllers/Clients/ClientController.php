@@ -13,10 +13,13 @@ use Auth;
 use DB;
 use Datatables;
 use App\Models\Administration\Branch;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Administration\Products;
 
 class ClientController extends Controller {
 
     public $name;
+    public $in;
     public $typestakeholder;
     public $updated;
     public $updatedCont;
@@ -579,6 +582,66 @@ class ClientController extends Controller {
                 ->get();
 
         return response()->json(["success" => true, "detail" => $comment]);
+    }
+
+    public function storeExcelCode(Request $request) {
+        if ($request->ajax()) {
+            $this->in = $request->all();
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($this->in, 'file_excel');
+            $this->name = $file->getClientOriginalName();
+            $this->name = str_replace(" ", "_", $this->name);
+            $this->path = "uploads/prices/" . date("Y-m-d") . "/" . $this->name;
+
+            $file->move("uploads/prices/" . date("Y-m-d") . "/", $this->name);
+
+            Excel::load($this->path, function($reader) {
+
+                foreach ($reader->get() as $book) {
+
+                    if ($book->item != '') {
+                        $product = '';
+                        if (trim($book->sf_code) != '') {
+                            $product = Products::where("reference", trim($book->sf_code))->first();
+                        } else {
+                            if (trim($book->ean) != '') {
+                                $product = Products::where("bar_code", trim($book->ean))->first();
+                            }
+                        }
+
+                        if ($product != '') {
+                            $price = PricesSpecial::where("item", $book->item)->first();
+                            $new["client_id"] = $this->in["client_id"];
+                            $new["product_id"] = $product->id;
+                            $new["price_sf"] = $book->price_sf;
+                            $new["margin"] = 1;
+                            $new["margin_sf"] = 1;
+                            $new["item"] = $book->item;
+                            $new["tax"] = $product->tax;
+
+                            if ($price == null) {
+                                $this->inserted++;
+                                PricesSpecial::create($new);
+                            } else {
+                                $this->updated++;
+                                $p = PricesSpecial::find($price->id);
+                                $p->fill($new)->save();
+                            }
+                        }
+                    }
+                }
+            })->get();
+            
+            $detail=PricesSpecial::select("prices_special.item","prices_special.tax","prices_special.price_sf","products.bar_code",
+                    "products.reference")
+                    ->join("products","products.id","prices_special.product_id")
+                    ->where("prices_special.client_id", $this->in["client_id"])
+                    ->get();
+            
+            return response()->json(["success" => true, "data" => $detail,
+                        "updated" => $this->updated, "inserted" => $this->inserted]);
+        }
     }
 
 }

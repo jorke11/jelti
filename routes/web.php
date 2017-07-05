@@ -83,7 +83,7 @@ Route::delete('/clients/deleteTax/{id}', 'Clients\ClientController@deleteTax');
 Route::post('/clients/addComment', 'Clients\ClientController@storeComment');
 Route::get('/clients/{id}/getBranch', ['uses' => 'Clients\ClientController@getBranch']);
 Route::get('/clients/{id}/getSpecialId', ['uses' => 'Clients\ClientController@getSpecialId']);
-
+Route::post('/clients/uploadExcelCode', 'Clients\ClientController@storeExcelCode');
 
 Route::resource('/category', 'Administration\CategoryController');
 Route::resource('/puc', 'Administration\PucController');

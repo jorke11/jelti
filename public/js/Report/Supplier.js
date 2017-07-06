@@ -7,7 +7,7 @@ function Supplier() {
         $(".input-find").cleanFields();
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
-        
+
         $("#btnSearch").click(function () {
             obj.table();
             obj.tableClient();
@@ -46,7 +46,7 @@ function Supplier() {
                         text: 'Source: WorldClimate.com'
                     },
                     xAxis: {
-                        categories: ["Mes Anterior","Actual"],
+                        categories: ["Mes Anterior", "Actual"],
                         crosshair: true
                     },
                     yAxis: {
@@ -82,14 +82,14 @@ function Supplier() {
 //                            data: [10000, 20000]
 //
 //                        }],
-                    series:data.series
+                    series: data.series
                 });
 
             }
 
         })
     }
-    
+
     this.tableSales = function () {
         var param = {};
         param.init = $("#Detail #finit").val();
@@ -101,10 +101,11 @@ function Supplier() {
                 url: "/api/reportSupplierSales",
                 data: param,
             },
+            order: [[2, "desc"]],
             columns: [
                 {data: "business"},
                 {data: "totalunidades"},
-                {data: "total"},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],
             aoColumnDefs: [
                 {
@@ -130,10 +131,11 @@ function Supplier() {
                 url: "/api/reportSupplierClient",
                 data: param,
             },
+            order: [[2, "desc"]],
             columns: [
                 {data: "business"},
                 {data: "totalunidades"},
-                {data: "totalformated"},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],
             aoColumnDefs: [
                 {

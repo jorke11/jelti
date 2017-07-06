@@ -16,8 +16,6 @@ function Commercial() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
             "ajax": {
                 url: "/api/reportCommercial",
                 method: 'GET',
@@ -26,7 +24,7 @@ function Commercial() {
             columns: [
                 {data: "vendedor"},
                 {data: "totalunidades"},
-                {data: "totalformated"},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],
             order: [[2, 'DESC']],
             aoColumnDefs: [
@@ -39,6 +37,8 @@ function Commercial() {
             ],
         });
     }
+    
+    
     this.tableCommercial = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();

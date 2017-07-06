@@ -4,11 +4,11 @@ function Client() {
         this.tableTarget();
         this.tableProduct();
         this.tableCities();
-        
+
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
-        
-        
+
+
         $("#btnSearch").click(function () {
             objCli.table();
             objCli.tableTarget();
@@ -28,7 +28,7 @@ function Client() {
         obj.end = $("#Detail #fend").val();
         return $('#tbl').DataTable({
             destroy: true,
-            "aaSorting": false,
+            order: [[2, "desc"]],
             ajax: {
                 url: "/api/reportClient",
                 data: obj,
@@ -36,8 +36,9 @@ function Client() {
             columns: [
                 {data: "business"},
                 {data: "totalunidades"},
-                {data: "totalformat"},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],
+
             aoColumnDefs: [
                 {
                     aTargets: [0, 1, 2],
@@ -47,6 +48,8 @@ function Client() {
                 }
 
             ],
+            "decimal": ",",
+            "thousands": ".",
         });
     }
     this.tableTarget = function () {

@@ -17,7 +17,7 @@ class CommercialController extends Controller {
 
         $sql = "
             select u.name ||' '|| u.last_name as vendedor,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total,
-            sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::money totalFormated
+            sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id
             JOIN users u ON u.id=s.responsible_id

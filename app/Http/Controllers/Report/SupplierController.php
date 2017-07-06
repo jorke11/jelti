@@ -56,7 +56,7 @@ class SupplierController extends Controller {
         $sql = "
             SELECT sta.id,sta.business,
             round(sum(d.quantity::numeric * d.units_sf)) AS totalunidades,
-            coalesce(round(sum(d.value * d.quantity::numeric * d.units_sf)),0)::money AS total
+            coalesce(round(sum(d.value * d.quantity::numeric * d.units_sf)),0) AS total
             FROM sales_detail d
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id = d.product_id
@@ -97,7 +97,7 @@ class SupplierController extends Controller {
                     select coalesce(sum(shipping_cost),0) 
                     from sales 
                     where created_at >= '" . $input["init"] . " 00:00' AND created_at <= '" . $input["end"] . " 23:59' 
-                        and status_id='1' and client_id=s.client_id))::money as totalformated
+                        and status_id='1' and client_id=s.client_id)) as total
             FROM sales_detail d
             JOIN sales s ON s.id=d.sale_id
             JOIN departures dep ON dep.id=s.departure_id
@@ -110,6 +110,7 @@ class SupplierController extends Controller {
             order by 3 desc";
 //        echo $sql;exit;
         $res = DB::select($sql);
+        
         return response()->json(["data" => $res]);
     }
 

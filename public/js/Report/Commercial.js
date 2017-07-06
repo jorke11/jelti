@@ -2,6 +2,8 @@ function Commercial() {
     this.init = function () {
         this.table();
         this.tableCommercial();
+        $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
+        $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
         $("#btnSearch").click(function () {
             objCom.table();
             objCom.tableCommercial();

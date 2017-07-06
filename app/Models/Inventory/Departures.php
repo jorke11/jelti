@@ -29,6 +29,7 @@ class Departures extends Model {
         "update_id",
         "outstanding",
         "remission",
+        "discount",
         ];
 
 }

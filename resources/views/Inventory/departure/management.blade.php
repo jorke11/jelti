@@ -154,6 +154,14 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="email">Descuento:</label>
+                    <input type="text" class="form-control input-departure" id="discount" name="discount">
+                </div>
+            </div>
+        </div>
         {!!Form::close()!!}
     </div>
 </div>
@@ -182,7 +190,7 @@
                 <table class="table table-bordered table-condensed" id="tblDetail">
                     <thead>
                         <tr>
-                            <th colspan="2" class="center-rowspan">Información</th>
+                            <th colspan="3" class="center-rowspan">Información</th>
                             <th colspan="3" class="center-rowspan">Pedido</th>
                             <th colspan="3" class="center-rowspan">Despachado</th>
                             <th rowspan="2" class="center-rowspan">Estatus</th>
@@ -191,6 +199,7 @@
                         <tr>
                             <th>Producto</th>
                             <th>Comentario</th>
+                            <th>Embalaje</th>
                             <th>Cantidad</th>
                             <th>Unidad</th>
                             <th>Total</th>

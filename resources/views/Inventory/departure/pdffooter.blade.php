@@ -12,26 +12,33 @@
                     <td>Descuento</td>
                     <td>$ 0</td>
                 </tr>-->
-                <tr>
-                    <td>Flete</td>
-                    <td><?php echo $shipping; ?></td>
-                </tr>
                 <?php
-                if ($tax5num > 0) {
+                if ($shipping > 0) {
                     ?>
                     <tr>
-                        <td>Iva 5%</td>
-                        <td><?php echo $tax5; ?></td>
+                        <td>Flete</td>
+                        <td><?php echo "$ " . number_format((round($shipping_cost)), 0, ',', '.'); ?></td>
                     </tr>
                     <?php
                 }
                 ?>
                 <?php
-                if ($tax19num > 0) {
+                if ($tax5 > 0) {
+                    ?>
+                    <tr>
+                        <td>Iva 5%</td>
+                        <td><?php echo "$ " . number_format((round($tax5)), 0, ',', '.');
+                ; ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                <?php
+                if ($tax19 > 0) {
                     ?>
                     <tr>
                         <td>Iva 19%</td>
-                        <td><?php echo $tax19; ?></td>
+                        <td><?php echo "$ " . number_format((round($tax19)), 0, ',', '.'); ?></td>
                     </tr>
                     <?php
                 }
@@ -43,6 +50,16 @@
                     <tr>
                         <td>Retefuente</td>
                         <td><?php echo $formatRete; ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                <?php
+                if ($discount > 0) {
+                    ?>
+                    <tr>
+                        <td>Descuento</td>
+                        <td><?php echo "$ " . number_format((round($discount)), 0, ',', '.'); ?></td>
                     </tr>
                     <?php
                 }

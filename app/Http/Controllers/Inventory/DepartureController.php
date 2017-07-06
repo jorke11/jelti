@@ -83,8 +83,6 @@ class DepartureController extends Controller {
 
         $query = DB::table('vdepartures');
 
-       
-
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
 
             $query->where("client_id", $in["client_id"])
@@ -272,8 +270,8 @@ class DepartureController extends Controller {
         }
 
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
-
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
+        $totalSum = $totalSum - $dep->discount;
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
 
@@ -285,17 +283,16 @@ class DepartureController extends Controller {
             'client' => $cli,
             'detail' => $detail,
             'exept' => "$ " . number_format(($totalExemp), 2, ',', '.'),
-            'tax5num' => $totalTax5,
-            'tax5' => "$ " . number_format((round($totalTax5)), 0, ',', '.'),
-            'tax19num' => $totalTax19,
-            'tax19' => "$ " . number_format((round($totalTax19)), 0, ',', '.'),
+            'tax5' => $totalTax5,
+            'tax19' => $totalTax19,
             'totalInvoice' => "$ " . number_format(($totalSum), 0, ',', '.'),
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
-            'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
+            'shipping' => $dep->shipping_cost,
             'invoice' => $dep->invoice,
-            'textTotal' => trim($this->tool->to_word(round($totalWithTax)))
+            'textTotal' => trim($this->tool->to_word(round($totalWithTax))),
+            'discount' => $dep->discount
         ];
-
+//dd($data);
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
@@ -444,6 +441,7 @@ class DepartureController extends Controller {
             $input = $request->all();
 //            unset($input["id"]);
 //            $user = Auth::User();
+
             if (isset($input["detail"])) {
 
                 try {
@@ -537,11 +535,10 @@ class DepartureController extends Controller {
                             $input["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
                             $input["total"] = "$ " . number_format($this->total, 0, ",", ".");
                             $input["exento"] = "$ " . number_format($this->total, 0, ",", ".");
-                            $input["tax5f"] = "$ " . number_format($this->tax5, 0, ",", ".");
                             $input["tax5"] = $this->tax5;
-                            $input["tax19f"] = "$ " . number_format($this->tax19, 0, ",", ".");
                             $input["tax19"] = $this->tax19;
-                            $input["flete"] = "$ " . number_format($resp->shipping_cost, 0, ",", ".");
+                            $input["flete"] = $resp->shipping_cost;
+                            $input["discount"] = $resp->discount;
 
                             $this->mails[] = $user->email;
 
@@ -726,6 +723,7 @@ class DepartureController extends Controller {
                                 $input["tax19f"] = "$ " . number_format($this->tax19, 0, ",", ".");
                                 $input["tax19"] = $this->tax19;
                                 $input["flete"] = "$ " . number_format($departure->shipping_cost, 0, ",", ".");
+                                $input["discount"] = $departure->discount;
 
                                 $this->mails[] = $user->email;
 

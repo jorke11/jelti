@@ -427,13 +427,13 @@ function Sale() {
                     })
                 } else {
                     if ($("#frmDetail #rowItem").val() == '-1') {
-
                         listProducts.push({
                             row: listProducts.length,
                             product_id: $("#frmDetail #product_id").val(),
                             product: $.trim($("#frmDetail #product_id").text()),
                             price_tax: dataProduct.price_sf * dataProduct.units_sf * dataProduct.tax,
                             price_sf: dataProduct.price_sf,
+                            units_sf: parseFloat(dataProduct.units_sf),
                             quantity: $("#frmDetail #quantity").val(),
                             valueFormated: $("#frmDetail #value").val(),
                             totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
@@ -501,6 +501,7 @@ function Sale() {
                 html += '<tr id="row_' + val.row + '">';
                 html += "<td>" + val.product + "</td>";
                 html += "<td>" + val.comment + "</td>";
+                html += "<td>" + val.units_sf + "</td>";
                 html += "<td>" + val.quantity + "</td>";
                 html += "<td>" + val.valueFormated + "</td>";
                 html += "<td>" + val.totalFormated + "</td>";
@@ -512,7 +513,7 @@ function Sale() {
                 html += "</tr>";
             }
         });
-        
+
         total = (data == undefined) ? total : data.total;
 
         html += '<tr><td colspan="4">Total</td><td>' + total + '</td></tr>';
@@ -551,6 +552,7 @@ function Sale() {
             html += "<tr>";
             html += "<td>" + val.product + "</td>";
             html += "<td>" + val.comment + "</td>";
+            html += "<td>" + val.units_sf + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
@@ -561,7 +563,7 @@ function Sale() {
             html += '<td>' + htmlEdit + htmlDel + "</td>";
             html += "</tr>";
         });
-        html += '<tr><td colspan="2"><Strong>Total</strong></td><td>' + quantityTotal + '</td><td></td><td>' + data.total + '</td><td></td><td></td><td></td><td></td></tr>';
+        html += '<tr><td colspan="3"><Strong>Total</strong></td><td>' + quantityTotal + '</td><td></td><td>' + data.total + '</td><td></td><td></td><td></td><td></td></tr>';
         $("#tblDetail tbody").html(html);
     }
 

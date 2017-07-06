@@ -26,7 +26,7 @@ function Sales() {
                 $("#frmSale #quantityTotal").html("Venta Total:<strong>" + data.total + "</strong>"
                         + "<br>Total con Iva:<strong>" + data.totalwithtax + "</strong><br>"
                         + "Nota incluido credito: <strong>" + data.totalwithtaxn + "</strong><br>" +
-                        "A Pagar: <strong>" + data.topay + "</strong>&nbsp;" + link + "<br><br><p>Quantiy: <strong>" +
+                        "Facturado: <strong>" + data.topay + "</strong>&nbsp;" + link + "<br><br><p>Quantiy: <strong>" +
                         data.quantity.quantity + "</strong> Units <br>Product: <strong>" + data.quantity.title + "</strong></p>");
             }
         })

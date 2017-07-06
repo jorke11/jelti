@@ -287,7 +287,7 @@ class DepartureController extends Controller {
             'tax19' => $totalTax19,
             'totalInvoice' => "$ " . number_format(($totalSum), 0, ',', '.'),
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
-            'shipping' => $dep->shipping_cost,
+            'shipping_cost' => $dep->shipping_cost,
             'invoice' => $dep->invoice,
             'textTotal' => trim($this->tool->to_word(round($totalWithTax))),
             'discount' => $dep->discount

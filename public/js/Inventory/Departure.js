@@ -789,7 +789,7 @@ function Sale() {
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "quantity"},
-                {data: "total"},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
                 {data: "status"},
             ],
 

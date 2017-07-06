@@ -13,7 +13,7 @@
                     <td>$ 0</td>
                 </tr>-->
                 <?php
-                if ($shipping > 0) {
+                if ($shipping_cost > 0) {
                     ?>
                     <tr>
                         <td>Flete</td>

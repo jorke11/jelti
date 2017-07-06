@@ -755,7 +755,7 @@ function Sale() {
         } else {
             param.client_id = $("#frm #client_id").val();
         }
-        
+
         param.commercial_id = $("#frm #commercial_id").val();
 
         param.init = $("#frm #init").val();
@@ -763,6 +763,10 @@ function Sale() {
 
         var html = '';
         table = $('#tbl').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "processing": true,
             "serverSide": true,
             ajax: {
@@ -787,6 +791,13 @@ function Sale() {
                 {data: "quantity"},
                 {data: "total"},
                 {data: "status"},
+            ],
+
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
             ],
             order: [[1, 'DESC']],
             aoColumnDefs: [

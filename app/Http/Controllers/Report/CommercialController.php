@@ -8,6 +8,10 @@ use DB;
 
 class CommercialController extends Controller {
 
+    public function __construct() {
+        $this->middleware("auth");
+    }
+
     public function index() {
         return view("Report.Commercial.init");
     }
@@ -17,7 +21,7 @@ class CommercialController extends Controller {
 
         $sql = "
             select u.id,u.name ||' '|| u.last_name as vendedor,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total,
-            sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total
+            sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * coalesce(d.units_sf))) total
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id
             JOIN users u ON u.id=s.responsible_id
@@ -27,7 +31,7 @@ class CommercialController extends Controller {
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }
-    
+
     public function listCommercialGraph(Request $req) {
         $input = $req->all();
 
@@ -41,7 +45,7 @@ class CommercialController extends Controller {
             group by 1
             order by 2 desc";
         $res = DB::select($sql);
-        
+
         return response()->json(["data" => $res]);
     }
 

@@ -18,6 +18,7 @@ function Commercial() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         return $('#tbl').DataTable({
+            destroy:true,
             "ajax": {
                 url: "/api/reportCommercial",
                 method: 'GET',

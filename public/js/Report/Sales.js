@@ -23,10 +23,10 @@ function Sales() {
             dataType: 'json',
             success: function (data) {
                 link = '<span style="cursor:pointer" class="glyphicon glyphicon-search" aria-hidden="true" onclick=objSale.see()></span>';
-                $("#frmSale #quantityTotal").html("Venta Total:<strong>" + data.total + "</strong>&nbsp;" + link
+                $("#frmSale #quantityTotal").html("Venta Total:<strong>" + data.total + "</strong>"
                         + "<br>Total con Iva:<strong>" + data.totalwithtax + "</strong><br>"
                         + "Nota incluido credito: <strong>" + data.totalwithtaxn + "</strong><br>" +
-                        "A Pagar: <strong>" + data.topay + "</strong><br><br><p>Quantiy: <strong>" +
+                        "A Pagar: <strong>" + data.topay + "</strong>&nbsp;" + link + "<br><br><p>Quantiy: <strong>" +
                         data.quantity.quantity + "</strong> Units <br>Product: <strong>" + data.quantity.title + "</strong></p>");
             }
         })

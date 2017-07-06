@@ -512,8 +512,10 @@ function Sale() {
                 html += "</tr>";
             }
         });
+        
+        total = (data == undefined) ? total : data.total;
 
-        html += '<tr><td colspan="4">Total</td><td>' + data.total + '</td></tr>';
+        html += '<tr><td colspan="4">Total</td><td>' + total + '</td></tr>';
         $("#tblDetail tbody").html(html);
     }
 

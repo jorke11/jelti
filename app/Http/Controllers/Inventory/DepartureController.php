@@ -69,13 +69,21 @@ class DepartureController extends Controller {
     public function index($client_id = null, $init = null, $end = null, $product = null, $supplier = NUll, $type = null) {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
-        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product", "supplier", "type"));
+        $commercial_id = null;
+        if (strpos($client_id, "_") !== false) {
+            $commercial_id = str_replace("_", "", $client_id);
+            $client_id = null;
+        }
+
+        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product", "supplier", "type", "commercial_id"));
     }
 
     public function listTable(Request $req) {
         $in = $req->all();
 
         $query = DB::table('vdepartures');
+
+       
 
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
 
@@ -102,6 +110,12 @@ class DepartureController extends Controller {
         if (Auth::user()->role_id == 5) {
             $query->where("warehouse_id", Auth::user()->warehouse_id);
         }
+
+
+        if (isset($in["commercial_id"]) && $in["commercial_id"] != '') {
+            $query->where("status_id", 2)->where("responsible_id", $in["commercial_id"]);
+        }
+
         return Datatables::queryBuilder($query)->make(true);
     }
 

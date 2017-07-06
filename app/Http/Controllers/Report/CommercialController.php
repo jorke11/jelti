@@ -16,13 +16,13 @@ class CommercialController extends Controller {
         $input = $req->all();
 
         $sql = "
-            select u.name ||' '|| u.last_name as vendedor,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total,
+            select u.id,u.name ||' '|| u.last_name as vendedor,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total,
             sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id
             JOIN users u ON u.id=s.responsible_id
             WHERE s.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
-            group by 1
+            group by 1,2
             order by 2 desc";
         $res = DB::select($sql);
         return response()->json(["data" => $res]);

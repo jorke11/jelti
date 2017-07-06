@@ -13,8 +13,6 @@ function Supplier() {
             obj.tableClient();
             obj.tableSales();
         })
-
-
     }
 
     this.getDetail = function (client_id) {

@@ -12,6 +12,10 @@ function Commercial() {
 //            objCom.tableCities();
         })
     }
+    
+    this.see = function (id) {
+        window.open("departure/_" + id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
+    }
 
     this.table = function () {
         var obj = {};
@@ -34,7 +38,7 @@ function Commercial() {
                 {
                     aTargets: [0, 1, 2],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="objCom.see(' + full.id + ')">' + data + '</a>';
                     }
                 }
             ],

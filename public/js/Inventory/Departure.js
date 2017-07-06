@@ -755,6 +755,8 @@ function Sale() {
         } else {
             param.client_id = $("#frm #client_id").val();
         }
+        
+        param.commercial_id = $("#frm #commercial_id").val();
 
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();

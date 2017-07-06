@@ -33,6 +33,7 @@
         <input id="end" type="hidden" value="{{$end}}">
         <input id="type" type="hidden" value="{{$type}}">
         <input id="product_id" type="hidden" value="{{$product}}">
+        <input id="commercial_id" type="hidden" value="{{$commercial_id}}">
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">

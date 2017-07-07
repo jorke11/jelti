@@ -202,6 +202,7 @@ class ProductController extends Controller {
         $input["update_id"] = Auth::User()->id;
 
         $input["status_id"] = (isset($input["status_id"])) ? 1 : 2;
+        $input["packaging"] = ($input["packaging"] == '') ? 0 : $input["packaging"];
 
         $result = $product->fill($input)->save();
         if ($result) {

@@ -6,7 +6,7 @@ where product_id is not null
 
 --product x total cantidades y total valor
 create or replace view vreportproduct as 
-select s.created,p.title as product,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) as total
+select s.created,p.title as product,sum(d.quantity * p.packaging) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) as total
 from sales_detail d
 JOIN sales s ON s.id=d.sale_id
 JOIN products p ON p.id=d.product_id  

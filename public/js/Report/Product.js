@@ -14,8 +14,6 @@ function Product() {
         param.end = $("#Detail #fend").val();
 
         return $('#tbl').DataTable({
-            "processing": true,
-            "serverSide": true,
             ajax: {
                 url: "/api/reportProduct",
                 data: param,
@@ -24,7 +22,7 @@ function Product() {
             columns: [
                 {data: "product"},
                 {data: "totalunidades"},
-                {data: "total"},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],
             order: [[2, 'DESC']],
             aoColumnDefs: [

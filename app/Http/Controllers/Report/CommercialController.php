@@ -20,14 +20,12 @@ class CommercialController extends Controller {
         $input = $req->all();
 
         $sql = "
-            select u.id,u.name ||' '|| u.last_name as vendedor,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) total,
-            sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * coalesce(d.units_sf))) total
-            from sales_detail d
-            JOIN sales s ON s.id=d.sale_id
-            JOIN users u ON u.id=s.responsible_id
-            WHERE s.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
-            group by 1,2
-            order by 2 desc";
+            SELECT responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
+            from vdepartures 
+            WHERE created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            group by responsible
+            order by 3 DESC
+            ";
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }

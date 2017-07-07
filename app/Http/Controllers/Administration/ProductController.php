@@ -120,7 +120,6 @@ class ProductController extends Controller {
                             $product["units_sf"] = (int) trim($book->sf_packing);
                             $product["cost_sf"] = trim($book->unit_cost);
                             $product["price_sf"] = trim($book->sf_price);
-                            $product["price_cust"] = trim($book->pvp_sugerido_sin_iva);
                             $product["status_id"] = 2;
                             $product["margin_sf"] = (double) trim($book->sf_margin);
                             $product["margin"] = trim($book->margen);

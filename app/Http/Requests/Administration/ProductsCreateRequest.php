@@ -35,7 +35,6 @@ class ProductsCreateRequest extends FormRequest
             'cost_sf' => 'required',
             'tax' => 'required',
             'price_sf' => 'required',
-            'price_cust' => 'required',
             'minimum_stock' => 'required',
         ];
     }

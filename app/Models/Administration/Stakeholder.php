@@ -4,8 +4,8 @@ namespace App\Models\Administration;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Stakeholder extends Model
-{
+class Stakeholder extends Model {
+
     protected $table = "stakeholder";
     protected $primaryKey = "id";
     protected $fillable = [
@@ -39,6 +39,8 @@ class Stakeholder extends Model
         "lead_time",
         "user_insert",
         "user_update",
-        "send_city_id"
-        ];
+        "send_city_id",
+        "sector_id"
+    ];
+
 }

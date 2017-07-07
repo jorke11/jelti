@@ -27,7 +27,6 @@ class CreateProductsTable extends Migration {
             $table->decimal('cost_sf', 15, 2);
             $table->decimal('tax', 15, 2);
             $table->decimal('price_sf', 15, 2);
-            $table->decimal('price_cust', 15, 2);
             $table->string('url_part', 60)->nullable();
             $table->string('bar_code', 30);
             $table->integer('status_id');

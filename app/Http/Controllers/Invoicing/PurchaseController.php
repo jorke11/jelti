@@ -25,16 +25,18 @@ class PurchaseController extends Controller {
 
     public $subtotal;
     public $total;
-    public $debt;
-    public $credit;
+    public $tax5;
+    public $tax19;
+    public $exempt;
     public $mails;
     public $subject;
 
     public function __construct() {
+        $this->exempt = 0;
         $this->total = 0;
         $this->subtotal = 0;
-        $this->debt = 0;
-        $this->credit = 0;
+        $this->tax5 = 0;
+        $this->tax19 = 0;
         $this->mails = array();
         $this->subject = "";
         $this->middleware("auth");
@@ -60,7 +62,7 @@ class PurchaseController extends Controller {
     public function getSupplier($id) {
         $stakeholder = \App\Models\Administration\Stakeholder::findOrFail($id);
         $stakeholder->delivery = date('Y-m-d', strtotime('+' . $stakeholder->lead_time . ' days', strtotime(date('Y-m-d'))));
-        $products = Products::select("id as product_id", "tax", "description", "title", "cost_sf", "units_supplier", "category_id")
+        $products = Products::select("id as product_id", "tax", "title", "cost_sf", "units_supplier", "category_id")
                         ->where("supplier_id", $stakeholder->id)->orderBy("title", "asc")->get();
         return response()->json(["response" => $stakeholder, "products" => $products]);
     }
@@ -94,6 +96,7 @@ class PurchaseController extends Controller {
                         $input["detail"][$i]["type_nature"] = 1;
                         $input["detail"][$i]["order"] = $i;
                         $input["detail"][$i]["value"] = $val["cost_sf"];
+                        $input["detail"][$i]["quantity"] = $val["quantity"];
                         $input["detail"][$i]["units_supplier"] = (int) $input["detail"][$i]["units_supplier"];
                         $input["detail"][$i]["description"] = 'product';
                         unset($input["detail"][$i]["cost_sf"]);
@@ -106,10 +109,9 @@ class PurchaseController extends Controller {
                 }
 
                 $detail = $this->formatDetail($purchase_id);
-                $debt = "$ " . number_format($this->debt, 2, ",", ".");
-                $cred = "$ " . number_format($this->credit, 2, ",", ".");
                 $header = Purchases::findOrFail($purchase_id);
-                return response()->json(['success' => true, "header" => $header, "detail" => $detail, "totalDebt" => $debt, "totalDebt" => $cred]);
+                return response()->json(['success' => true, "header" => $header, "detail" => $detail, "total" => $this->total,
+                            "subtotal" => $this->subtotal, "tax5" => $this->tax5, "tax19" => $this->tax19]);
             } else {
                 return response()->json(['success' => false, "msg" => "Detail Empty"], 409);
             }
@@ -193,7 +195,6 @@ class PurchaseController extends Controller {
         $in = $req->all();
         $pur = Purchases::findOrFail($in["id"]);
         $val = PurchasesDetail::where("purchase_id", $pur["id"])->count();
-
         if ($val > 0) {
             if ($pur["status_id"] == 2) {
                 return response()->json(["success" => false, "msg" => "Already sended"], 409);
@@ -207,7 +208,6 @@ class PurchaseController extends Controller {
                     $purchase = Purchases::findOrFail($in["id"]);
                     $sup = Stakeholder::find($purchase->supplier_id);
 
-
                     $ware = Warehouses::findOrFail($purchase->warehouse_id);
                     $input["id"] = $purchase->id;
                     $input["address"] = $ware->address;
@@ -218,13 +218,15 @@ class PurchaseController extends Controller {
                     $input["name"] = $user->name;
                     $input["last_name"] = $user->last_name;
                     $input["phone"] = $user->phone;
+                    $input["environment"] = env("APP_ENV");
+                    $input["created_at"] = $purchase->created_at;
+                    $input["tax5"] = $this->tax5;
+                    $input["tax19"] = $this->tax19;
+                    $input["subtotal"] = $this->subtotal;
+                    $input["total"] = $this->total;
 
-                    $input["detail"] = DB::table("purchases_detail")
-                                    ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("(purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)
-                                                + ((purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)*purchases_detail.tax) as total"), "products.bar_code", DB::raw("(products.tax * 100) as tax"), DB::raw("purchases_detail.value * purchases_detail.units_supplier as priceperbox"))
-                                    ->join("products", "products.id", "purchases_detail.product_id")
-                                    ->where("purchase_id", $purchase->id)->get();
-
+                    $input["detail"] = $this->formatDetail($purchase->id);
+                    dd($input["detail"]);
                     $email = Email::where("description", "purchases")->first();
                     $emDetail = EmailDetail::where("email_id", $email->id)->get();
                     if (count($emDetail) > 0) {
@@ -243,6 +245,7 @@ class PurchaseController extends Controller {
                             $msj->to($this->mails);
                         });
                     }
+
                     DB::commit();
 
                     return response()->json(["success" => true, "header" => $pur]);
@@ -256,30 +259,36 @@ class PurchaseController extends Controller {
         }
     }
 
+    public function testNotification() {
+        $data["id"] = "res";
+        $data["city"] = "res";
+        $data["detail"] = DB::table("purchases_detail")
+                        ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("(purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)
+                                                + ((purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)*purchases_detail.tax) as total"), "products.bar_code", DB::raw("(products.tax * 100) as tax"), DB::raw("purchases_detail.value * purchases_detail.units_supplier as priceperbox"))
+                        ->join("products", "products.id", "purchases_detail.product_id")
+                        ->where("purchase_id", 18)->get();
+        $data["warehouse"] = "";
+        $data["address"] = "";
+        $data["name"] = "";
+        $data["last_name"] = "";
+        $data["phone"] = "";
+        $data["flete"] = 10;
+        $data["tax5"] = 10;
+        $data["tax19"] = 10;
+        $data["discount"] = 10;
+        $data["total"] = 10;
+        $data["environment"] = "local";
+        $data["created_at"] = "local";
+        return view("Notifications.purchase", $data);
+    }
+
     public function edit($id) {
         $entry = Purchases::FindOrFail($id);
-
-        $detail = DB::table("purchases_detail")
-                ->select("purchases_detail.id", "purchases_detail.description as comment", "products.title as product", "purchases_detail.tax", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.quantity", "purchases_detail.description", "products.units_supplier")
-                ->join("products", "purchases_detail.product_id", "products.id")
-                ->where("purchase_id", "=", $id)
-                ->orderBy('order', 'ASC')
-                ->get();
-
-        $debtTotal = 0;
-        $creditTotal = 0;
-        foreach ($detail as $i => $value) {
-            $detail[$i]->valueFormated = "$ " . number_format($value->value, 0, ',', '.');
-            $detail[$i]->total = $value->value * $value->quantity * $value->units_supplier;
-            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 0, ',', '.');
-            $this->subtotal += $detail[$i]->total;
-            $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
-        }
-
+        $detail = $this->formatDetail($id);
 
         $this->total = "$ " . number_format($this->total, 0, ',', '.');
         $this->subtotal = "$ " . number_format($this->subtotal, 0, ',', '.');
-        return response()->json(["header" => $entry, "detail" => $detail, "total" => $this->total,"subtotal"=>$this->subtotal]);
+        return response()->json(["header" => $entry, "detail" => $detail, "total" => $this->total, "subtotal" => $this->subtotal]);
     }
 
     public function getDetail($id) {
@@ -326,9 +335,7 @@ class PurchaseController extends Controller {
 
         if ($result) {
             $detail = $this->formatDetail($input["purchase_id"]);
-            $debt = "$ " . number_format($this->debt, 2, ",", ".");
-            $cred = "$ " . number_format($this->credit, 2, ",", ".");
-            return response()->json(['success' => 'true', "detail" => $detail, "totalDebt" => $debt, "totalDebt" => $cred]);
+            return response()->json(['success' => 'true', "detail" => $detail, "subtotal" => $this->subtotal, "total" => $this->total]);
 
 
             return response()->json(['success' => true, "data" => $resp]);
@@ -350,8 +357,6 @@ class PurchaseController extends Controller {
     public function destroyDetail($id) {
         $entry = PurchasesDetail::FindOrFail($id);
 
-
-
         $result = $entry->delete();
         if ($result) {
             $resp = DB::table("purchases_detail")->where("purchase_id", "=", $entry["purchage_id"])->get();
@@ -363,22 +368,31 @@ class PurchaseController extends Controller {
 
     public function formatDetail($id) {
         $detail = DB::table("purchases_detail")
-                        ->select("purchases_detail.id", "purchases_detail.description as comment", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0)"), "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description")
+                        ->select("purchases_detail.id", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0) as tax"), "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description", "products.units_supplier")
                         ->where("purchase_id", "=", $id)
                         ->join("products", "purchases_detail.product_id", "products.id")
                         ->orderBy("order", "asc")->get();
 
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
-            $value->quantity = ($value->quantity == '') ? 1 : $value->quantity;
-            $detail[$i]->total = $value->value * (($value->quantity == '') ? 1 : $value->quantity);
+            $detail[$i]->subtotal = $value->value * $value->quantity * $value->units_supplier;
+            $detail[$i]->total = $detail[$i]->subtotal + ($value->value * $value->quantity * $value->units_supplier * $value->tax);
+            $detail[$i]->costFormated = "$ " . number_format($detail[$i]->value, 2, ",", ".");
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
-            if ($detail[$i]->type_nature == 1) {
-                $this->debt += $detail[$i]->total;
-            } else {
-                $this->credit += $detail[$i]->total;
+            $detail[$i]->totalunits = $value->quantity * $value->units_supplier;
+
+            $this->subtotal += $detail[$i]->total;
+            if ($value->tax == 0) {
+                $this->exempt += $value->valuetotal;
+            }
+            if ($value->tax == 0.05) {
+                $this->tax5 += $detail[$i]->total * $value->tax;
+            }
+            if ($value->tax == 0.19) {
+                $this->tax5 += $detail[$i]->total * $value->tax;
             }
         }
+
         return $detail;
     }
 

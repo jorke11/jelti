@@ -48,8 +48,8 @@
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
                                 @if(isset($client))
-                                <div class="huge">Cliente <br>{{(isset($client->business)?$client->business:'SuperFüds')}}</div>
-                                <div> Total Unidades {{(isset($client->cantidadtotal)?$client->cantidadtotal:0)}}<br>
+                                <div class="huge">Cliente <br>{{(isset($client->client)?$client->client:'SuperFüds')}}</div>
+                                <div> Total Unidades {{(isset($client->unidades)?$client->unidades:0)}}<br>
                                     @if(count($client)>0)
                                     Monto: $ {{number_format(round($client->total), 0, ',', '.')}}
                                     @endif

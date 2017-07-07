@@ -40,21 +40,19 @@ class HomeController extends Controller {
             ORDER BY 2 DESC LIMIT 1";
 
         $product = DB::select($sql);
-
+        
         if (count($product) > 0) {
             $product = $product[0];
         }
 
         $sql = "
-            SELECT cli.business,sum(d.quantity) cantidadtotal,sum(d.value*d.quantity*d.units_sf) total
-            FROM sales_detail d
-            JOIN sales s ON s.id=d.sale_id
-            JOIN departures dep ON dep.id=s.departure_id
-            JOIN stakeholder cli ON cli.id=s.client_id
-            WHERE product_id IS NOT NULL AND s.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
-            GROUP BY 1
-            ORDER BY 2 DESC LIMIT 1";
-
+            SELECT client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) as unidades
+            FROM vdepartures
+            WHERE created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59' AND status_id=2
+            group by 1
+            ORDER BY 2 DESC
+            LIMIT 1
+            ";
 
         $client = DB::select($sql);
         if (count($client) > 0) {
@@ -72,6 +70,7 @@ class HomeController extends Controller {
             ORDER BY 3 desc LIMIT 1";
 
         $supplier = DB::select($sql);
+        
         if (count($supplier) > 0) {
             $supplier = $supplier[0];
         }

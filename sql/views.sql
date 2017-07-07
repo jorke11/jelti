@@ -40,7 +40,7 @@ WHERE s.type_stakeholder=1
 
 create view vproducts as
 select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
-p.price_cust,p.image,status.description as status
+p.image,status.description as status
 from products p
 JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic';
@@ -50,9 +50,20 @@ create or replace view vdepartures as
             select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name ,sta.business_name) as client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
             (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity,
-            (select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0)) + d.shipping_cost)::money from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where departure_id=d.id) total,
-            (select coalesce(sum(quantity * units_sf * value),0) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id) subtotalnumeric,sta.id as client_id,d.created
-
+            
+		CASE WHEN (d.status_id=1) THEN 
+		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
+		 ELSE 
+		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where departure_id=d.id)
+		 END+d.shipping_cost as total,
+		 
+		CASE WHEN (d.status_id=1) THEN 
+		(select (round(coalesce(sum(quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
+		ELSE
+            (select coalesce(sum(quantity * units_sf * value),0) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id) 
+            END as subtotalnumeric,
+            
+           sta.id as client_id,d.created
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id
@@ -60,7 +71,8 @@ create or replace view vdepartures as
             JOIN cities c ON c.id = d.city_id
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
-            ORDER BY d.status_id,d.id asc
+            ORDER BY d.status_id,d.id asc 
+
 
 create view vcities as 
 select c.id,c.description city,d.description department,c.code

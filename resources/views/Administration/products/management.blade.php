@@ -77,17 +77,17 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email">Url Imagen*</label>
-                                    <input type="text" class="form-control input-product" id="url_part" name='url_part' required>
+                                    <label for="email">Url Imagen</label>
+                                    <input type="text" class="form-control input-product" id="url_part" name='url_part'>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email">Estafus</label>
+                                    <label for="email">Estatus</label>
                                     <input type="checkbox" class="form-control input-product" id="status_id" name='status_id'>
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="row">
                             <div class="col-lg-8">
@@ -163,7 +163,7 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">cost SF*</label>
+                                    <label for="email" class="control-label">Costo SF*</label>
                                     <input type="text" class="form-control input-product" id="cost_sf" name='cost_sf' required data-type="number">
                                 </div>
                             </div>
@@ -172,27 +172,31 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="email" class="control-label">Impuesto *</label>
-                                    <input type="text" class="form-control input-product" id="tax" name='tax' required data-type="number">
+                                    <select id="tax" name="tax" class="form-control input-product">
+                                        @foreach($tax as $val)
+                                        <option value="{{$val->value}}">{{$val->description}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group" class="control-label">
-                                    <label for="email" class="control-label">Preci SF*</label>
+                                    <label for="email" class="control-label">Precio SF*</label>
                                     <input type="text" class="form-control input-product"  id="price_sf" name='price_sf' required data-type="number">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">Precio Cliente*</label>
-                                    <input type="text" class="form-control input-product" id="price_cust" name='price_cust' required  data-type="number">
+                                    <label for="email" class="control-label">Packaging</label>
+                                    <input type="text" class="form-control input-product" id="packaging" name='packaging'  data-type="number">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email" class="control-label">Stock Minimo*</label>
-                                    <input type="text" class="form-control input-product" id="minimum_stock" name='minimum_stock' required  data-type="number">
+                                    <label for="email" class="control-label">Stock Minimo</label>
+                                    <input type="text" class="form-control input-product" id="minimum_stock" name='minimum_stock'  data-type="number">
                                 </div>
                             </div>
                         </div>

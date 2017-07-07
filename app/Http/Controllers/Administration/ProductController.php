@@ -16,6 +16,7 @@ use App\Http\Requests\Administration\ProductsCreateRequest;
 use App\Http\Requests\Administration\ProductsUpdateRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Uploads\Base;
+use Auth;
 
 class ProductController extends Controller {
 
@@ -33,7 +34,8 @@ class ProductController extends Controller {
     }
 
     public function index() {
-        return view("Administration.products.init");
+        $tax = Administration\Parameters::where("group", "tax")->whereIn("code", array(3, 4))->get();
+        return view("Administration.products.init", compact("tax"));
     }
 
     public function store(ProductsCreateRequest $request) {
@@ -41,7 +43,7 @@ class ProductController extends Controller {
             $input = $request->all();
             unset($input["id"]);
 //            $user = Auth::User();
-//            $input["users_id"] = 1;
+            $input["users_id"] = Auth::User()->id;
 
             if (isset($input["characteristic"])) {
                 $input["characteristic"] = json_encode($input["characteristic"]);
@@ -198,6 +200,7 @@ class ProductController extends Controller {
         if (isset($input["characteristic"])) {
             $input["characteristic"] = json_encode($input["characteristic"]);
         }
+        $input["update_id"] = Auth::User()->id;
 
         $input["status_id"] = (isset($input["status_id"])) ? 1 : 2;
 

@@ -308,20 +308,17 @@ function Product() {
             "serverSide": true,
             "ajax": "/api/listProduct",
             scrollX: true,
-            bAutoWidth: false,
             columns: [
-                {data: "id"},
-                {data: "title", sWidth: "300px"},
-                {data: "description", sWidth: "300px"},
-                {data: "supplier", sWidth: "500px"},
-                {data: "reference", sWidth: "300px"},
+                {data: "id", sWidth: "50px"},
+                {data: "reference", sWidth: "100px"},
+                {data: "title", sWidth: "400px"},
+                {data: "supplier", sWidth: "100px"},
                 {data: "bar_code"},
-                {data: "units_supplier"},
-                {data: "units_sf"},
-                {data: "cost_sf"},
+                {data: "units_supplier", sWidth: "100px"},
+                {data: "cost_sf", render: $.fn.dataTable.render.number('.', ',', 2)},
                 {data: "tax"},
+                {data: "units_sf"},
                 {data: "price_sf"},
-                {data: "price_cust"},
                 {data: "image", width: 10, searchable: false, render: function (data, type, row) {
 
                         if (data == null) {
@@ -342,7 +339,7 @@ function Product() {
                     }
                 },
                 {
-                    targets: [14],
+                    targets: [12],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

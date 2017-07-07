@@ -34,8 +34,9 @@ function Client() {
                 data: obj,
             },
             columns: [
-                {data: "business"},
-                {data: "totalunidades"},
+                {data: "client"},
+                {data: "unidades"},
+                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],
 

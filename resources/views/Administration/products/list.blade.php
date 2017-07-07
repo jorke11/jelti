@@ -4,17 +4,15 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Sf code</th>
                 <th>Título</th>
-                <th>Descripción</th>
                 <th>Proveedor</th>
-                <th>Referencia</th>
                 <th>Código de Barra code</th>
                 <th>Embalaje Proveedor</th>
-                <th>Embajale SF</th>
                 <th>Costo SF</th>
                 <th>Impuesto</th>
+                <th>Embajale SF</th>
                 <th>Precio SF</th>
-                <th>Precio Cliente</th>
                 <th>Imagen</th>
                 <th>Estatus</th>
                 <th>Acción</th>

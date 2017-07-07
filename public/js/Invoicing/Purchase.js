@@ -65,7 +65,7 @@ function Purchase() {
         })
 
     }
-   
+
 
     this.send = function () {
         toastr.remove();
@@ -88,7 +88,7 @@ function Purchase() {
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error(xhr.responseJSON.msg);
                 }
-                ,complete: function () {
+                , complete: function () {
                     $("#loading-super").addClass("hidden");
                 }
             })
@@ -128,7 +128,7 @@ function Purchase() {
     }
 
     this.loadProducts = function () {
-        var html = "", color = "";
+        var html = "", color = "", quantityTotal = 0;
 
         $("#tblDetail tbody").empty();
 
@@ -150,12 +150,11 @@ function Purchase() {
             }
 
             color = (listProducts[i].quantity == 0) ? '' : 'info';
-
+            quantityTotal = val.units_supplier * val.quantity;
             html += '<tr id="row_' + val.product_id + '" class="' + color + '">';
-            html += "<td>" + i + "</td><td>" + val.description + "</td><td>" + val.title + "</td>";
-            html += "<td>" + val.tax + "</td><td>" + val.quantity + "</td>";
-            html += "<td>" + val.cost_sf + "</td><td>" + val.total + "</td>";
-            html += "<td>" + val.debt + "</td><td>" + val.credit + "</td>";
+            html += "<td>" + i + "</td><td>" + val.title + "</td>";
+            html += "<td>" + val.units_supplier + "</td><td>" + val.tax + "</td><td>" + val.quantity + "</td>";
+            html += "<td>" + val.cost_sf + "</td><td>" + (quantityTotal) + "</td><td>" + (quantityTotal * val.cost_sf) + "</td>";
             html += '<td ><button class="btn btn-info btn-xs" onclick=obj.edit(' + val.product_id + ')><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>';
             html += '<button class="btn btn-danger btn-xs" onclick=obj.deleteNew(' + val.product_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>';
             html += "</tr>";
@@ -249,6 +248,7 @@ function Purchase() {
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
                         $("#btnSend").attr("disabled", false);
+                        obj
                     }
                 },
                 error: function (xhr, ajaxOption, thrownError) {
@@ -266,7 +266,6 @@ function Purchase() {
     this.saveDetail = function () {
         toastr.remove();
         var validate = $(".input-detail").validate();
-
         if (validate.length == 0) {
             $.each(listProducts, function (i, val) {
                 if (val.product_id == row.product_id) {
@@ -327,18 +326,19 @@ function Purchase() {
     }
 
     this.printDetail = function (data) {
-        var html = "", total = 0;
+        var html = "", total = 0, units_total = 0;
         $("#tblDetail tbody").empty();
         $.each(data.detail, function (i, val) {
+            units_total = val.units_supplier * val.quantity;
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.product + "</td>";
-            html += "<td>" + val.description + "</td>";
             html += "<td>" + val.units_supplier + "</td>";
 
             html += "<td>" + val.tax + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
+            html += "<td>" + units_total + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
 
             if (val.description == 'product') {

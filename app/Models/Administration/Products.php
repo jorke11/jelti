@@ -21,7 +21,6 @@ class Products extends Model {
         "cost_sf",
         "tax",
         "price_sf",
-        "price_cust",
         "url_part",
         "bar_code",
         "status_id",
@@ -31,6 +30,7 @@ class Products extends Model {
         "minimum_stock",
         "characteristic",
         "account_id",
+        "packaging",
         
     ];
     

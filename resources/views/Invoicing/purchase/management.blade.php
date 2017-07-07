@@ -61,7 +61,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="email">Descripción:</label>
+                                    <label for="email">Observaciones:</label>
                                     <input type="text" class="form-control input-purchase input-sm" id="description" name='description'>
                                 </div>
                             </div>
@@ -134,13 +134,13 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Descripción</th>
                             <th>Producto</th>
                             <th>Embalaje</th>
                             <th>Iva</th>
-                            <th>Unidades</th>
+                            <th>Unidades Pedido</th>
                             <th>Precio Unit</th>
-                            <th>Total</th>
+                            <th>Unidades Total</th>
+                            <th>Precio Total</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>

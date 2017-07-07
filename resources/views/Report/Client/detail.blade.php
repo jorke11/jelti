@@ -8,8 +8,9 @@
                         <thead>
                             <tr>
                                 <td>Cliente</td>
-                                <td>Total Unidades</td>
-                                <td>Valor Total</td>
+                                <td>Unidades Total</td>
+                                <td>Total Bruto</td>
+                                <td>Total Facturado</td>
                             </tr>
                         </thead>
                         <tbody></tbody>

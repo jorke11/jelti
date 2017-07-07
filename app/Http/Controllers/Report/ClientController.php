@@ -28,6 +28,7 @@ class ClientController extends Controller {
             group by 1
             ORDER BY 2 DESC
             ";
+//        echo $sql;exit;
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);
@@ -57,7 +58,7 @@ class ClientController extends Controller {
             AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             group by 1,2
             order by 3 desc limit 10";
-
+//        echo $cli;exit;
         $res = DB::select($cli);
 
         $cat = array();
@@ -82,7 +83,7 @@ class ClientController extends Controller {
             ";
 
         $res = DB::select($cli);
-
+//echo $cli;exit;
         $cat = array();
         $total = array();
         $quantity = array();

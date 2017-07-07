@@ -172,7 +172,8 @@ class HomeController extends Controller {
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is NOT null
-            AND s.created_at BETWEEN'" . date("Y-m") . "-01 00:00' AND '" . date("Y-m-d") . " 23:59'
+
+            AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             group by 1,2
             order by 4 
             desc limit 10";

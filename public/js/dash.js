@@ -156,7 +156,7 @@ function dash() {
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Facturado',
+                            name: 'Valor en Pesos',
                             type: 'column',
                             yAxis: 1,
 //                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
@@ -250,7 +250,7 @@ function dash() {
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Facturado',
+                            name: 'Valor en Pesos',
                             type: 'column',
                             yAxis: 1,
 //                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],

@@ -4,14 +4,28 @@
     {!! Form::open(['id'=>'Detail']) !!}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="col-lg-6 col-center">
-                <div class="col-lg-5">
+            <div class="col-lg-10 col-center">
+                 <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Ciudades</label>
+                        <select class="form-control input-departure input-find" id="city_id" name='city_id'  data-api="/api/getCity">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Producto</label>
+                        <select class="form-control input-departure input-find" id="product_id" name='product_id'  data-api="/api/getProduct">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Inicio</label>
                         <input type="text" class="form-control input-sm" id="finit" name='finit' value="<?php echo date("Y-m-") . "01" ?>">
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Final</label>
                         <input type="text" class="form-control input-sm" id="fend" name='fend' value="<?php echo date("Y-m-d") ?>">
@@ -87,7 +101,8 @@
     </div>
 </div>
 
-
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 {!!Html::script('js/Report/Product.js')!!}
 
 @endsection

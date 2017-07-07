@@ -3,6 +3,10 @@ function Product() {
         this.table();
         this.productbycity();
 
+        $(".input-find").cleanFields();
+        $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
+        $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
+
         $("#btnSearch").click(function () {
             obj.table();
         })
@@ -13,6 +17,8 @@ function Product() {
         var param = {};
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
+        param.city_id = $("#Detail #city_id").val();
+        param.product_id = $("#Detail #product_id").val();
 
         return $('#tbl').DataTable({
             ajax: {
@@ -36,9 +42,9 @@ function Product() {
             ],
         });
     }
-    
-    
-    this.productbycity= function () {
+
+
+    this.productbycity = function () {
         var obj = {};
 
         $.ajax({
@@ -51,7 +57,7 @@ function Product() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text:  '<br>Ventas por Productos '
+                        text: '<br>Ventas por Productos '
                     },
                     subtitle: {
                         text: 'Ventas con IVA en $ y en Units'
@@ -116,7 +122,7 @@ function Product() {
                             name: 'Unidades',
                             type: 'column',
                             data: data.quantity,
-                             color: "#00b065",
+                            color: "#00b065",
                             tooltip: {
                                 valueSuffix: ' Units'
                             }

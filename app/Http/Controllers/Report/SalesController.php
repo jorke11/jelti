@@ -30,6 +30,7 @@ FROM sales_detail d JOIN sales s ON s.id=d.sale_id JOIN departures dep ON dep.id
 JOIN products p ON p.id=d.product_id WHERE d.product_id is NOT NULL AND s.created >= '" . $init . " 00:00' AND s.created <= '" . $end . " 23:59'	            
             ";
         $sql="
+            SELECT 
                 ";
         echo $sql;
 //        exit;

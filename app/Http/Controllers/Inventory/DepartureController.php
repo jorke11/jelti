@@ -1131,6 +1131,7 @@ class DepartureController extends Controller {
             $file->move("uploads/departures/" . date("Y-m-d") . "/", $this->name);
 
             Excel::load($this->path, function($reader) {
+                $special = null;
                 foreach ($reader->get() as $i => $book) {
 
                     if ($book->unidades_total != 0) {
@@ -1176,6 +1177,7 @@ class DepartureController extends Controller {
                                 "product_id" => $pro->id,
                                 "product" => $pro->reference . " - " . $pro->title,
                                 "quantity" => $book->unidades_total,
+                                "units_sf" => $pro->units_sf,
                                 'price_sf' => $price_sf,
                                 "valueFormated" => "$ " . number_format(($price_sf), 2, ',', '.'),
                                 "totalFormated" => "$ " . number_format(($pro->units_sf * $price_sf * $book->unidades_total), 2, ',', '.'),

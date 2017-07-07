@@ -295,7 +295,7 @@ function dash() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text:  '<br>Ventas por Productos '
+                        text:  '<br>Ventas por Proveedor '
                     },
                     subtitle: {
                         text: 'Ventas con IVA en $ y en Units'

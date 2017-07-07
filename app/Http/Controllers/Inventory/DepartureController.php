@@ -94,7 +94,7 @@ class DepartureController extends Controller {
         }
 
         if (isset($in["init"]) && $in["init"] != '') {
-            $query->whereBetween("created_at", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
+            $query->whereBetween("created", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
         }
 
         if ($in["client_id"] == 0 && $in["client_id"] != '') {

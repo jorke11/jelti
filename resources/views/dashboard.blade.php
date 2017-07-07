@@ -222,7 +222,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Line graph<small>Sessions</small></h2>
+                        <h2>Ventas por productos<small>Sessions</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -241,7 +241,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <canvas id="lineChart"></canvas>
+                        <div id="container_product" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>
@@ -249,7 +249,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Bar graph <small>Sessions</small></h2>
+                        <h2>Ventas <small>Sessions</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -268,7 +268,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <canvas id="mybarChart"></canvas>
+                         <div id="graph_products" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>
@@ -278,7 +278,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Radar <small>Sessions</small></h2>
+                        <h2>Ventas por Totales <small>Sessions</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -297,7 +297,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <canvas id="canvasRadar"></canvas>
+                        <div id="graph_sales" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>
@@ -305,7 +305,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Donut Graph <small>Sessions</small></h2>
+                        <h2>Ventas por proveedor <small>Sessions</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -324,7 +324,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <canvas id="canvasDoughnut"></canvas>
+                        <div id="container_supplier" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>
@@ -388,5 +388,8 @@
     </div>
 </div>
 
-{!!Html::script('/vendor/template/vendors/Chart.js/dist/Chart.min.js')!!}
+<!--{!!Html::script('/vendor/template/vendors/Chart.js/dist/Chart.min.js')!!}-->
+{!!Html::script('/js/dash.js')!!}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 @endsection

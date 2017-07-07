@@ -45,7 +45,8 @@ from products p
 JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic';
 
---drop view vdepartures
+
+
 create or replace view vdepartures as 
 select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name ,sta.business_name) as client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
@@ -63,12 +64,13 @@ select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_na
             (select coalesce(sum(quantity * units_sf * value),0) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id) 
             END as subtotalnumeric,
             
-           sta.id as client_id,d.created
+           sta.id as client_id,d.created,dest.description as destination,d.destination_id
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id
             JOIN warehouses w ON w.id = d.warehouse_id
             JOIN cities c ON c.id = d.city_id
+            JOIN cities dest ON dest.id = d.destination_id
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
             ORDER BY d.status_id,d.id asc 

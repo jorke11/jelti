@@ -90,32 +90,87 @@ function Client() {
             method: 'GET',
             data: obj,
             success: function (data) {
-                var chart = Highcharts.chart('container_product', {
-                    title: {
-                        text: 'Productos por Unidades de ' + $("#Detail #finit").val() + " a Hoy"
-                    },
 
-                    subtitle: {
-                        text: 'SuperFüds'
+                Highcharts.chart('container_product', {
+                    chart: {
+                        zoomType: 'xy'
                     },
-                    xAxis: {
-                        categories: data.categories
+                    title: {
+                        text: 'Productos x Ventas'
+                    },
+                    subtitle: {
+                        text: 'Ventas totales con IVA'
+                    },
+                    xAxis: [{
+                            categories: data.category,
+                            crosshair: true
+                        }],
+                    yAxis: [{// Primary yAxis
+                            labels: {
+                                format: '{value}',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            },
+                            title: {
+                                text: 'Unidades',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            }
+                        }, {// Secondary yAxis
+                            title: {
+                                text: 'Monto',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            labels: {
+                                format: '{value} $',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            opposite: true
+                        }],
+                    tooltip: {
+                        shared: true
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'left',
+                        x: 120,
+                        verticalAlign: 'top',
+                        y: 100,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
+                            name: 'Facturado',
                             type: 'column',
-                            colorByPoint: true,
-                            data: data.units,
-                            showInLegend: false
-                        }]
+                            yAxis: 1,
+//                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                            data: data.data,
+                            tooltip: {
+                                valueSuffix: ' $'
+                            }
 
+                        },
+                        {
+                            name: 'Unidades',
+                            type: 'column',
+                            data: data.quantity,
+                            tooltip: {
+                                valueSuffix: ' Units'
+                            }
+                        }
+
+                    ]
                 });
-
 
             }
 
         })
-
-
     }
 
     this.tableCities = function () {
@@ -130,35 +185,80 @@ function Client() {
             success: function (data) {
                 Highcharts.chart('container_cities', {
                     chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
+                        zoomType: 'xy'
                     },
                     title: {
-                        text: 'Unidades por Ciudades de ' + $("#Detail #finit").val() + " a Hoy"
+                        text: 'Total ventas por Mes'
                     },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    subtitle: {
+                        text: 'Ventas totales con IVA'
                     },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    xAxis: [{
+                            categories: data.category,
+                            crosshair: true
+                        }],
+                    yAxis: [{// Primary yAxis
+                            labels: {
+                                format: '{value}',
                                 style: {
-                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    color: Highcharts.getOptions().colors[1]
+                                }
+                            },
+                            title: {
+                                text: 'Unidades',
+                                style: {
+                                    color: Highcharts.getOptions().colors[1]
                                 }
                             }
-                        }
+                        }, {// Secondary yAxis
+                            title: {
+                                text: 'Monto',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            labels: {
+                                format: '{value} $',
+                                style: {
+                                    color: Highcharts.getOptions().colors[0]
+                                }
+                            },
+                            opposite: true
+                        }],
+                    tooltip: {
+                        shared: true
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'left',
+                        x: 120,
+                        verticalAlign: 'top',
+                        y: 100,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Brands',
-                            colorByPoint: true,
-                            data: data.data
-                        }]
+                            name: 'Facturado',
+                            type: 'column',
+                            yAxis: 1,
+//                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                            data: data.data,
+                            tooltip: {
+                                valueSuffix: ' $'
+                            }
+
+                        }
+                        ,
+                        {
+                            name: 'Unidades',
+                            type: 'column',
+                            data: data.quantity,
+                            tooltip: {
+                                valueSuffix: ' Units'
+                            }
+                        }
+
+                    ]
                 });
 
 

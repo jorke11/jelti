@@ -485,8 +485,12 @@ Route::get('/reportClient', "Report\ClientController@index");
 
 Route::get('/api/reportClient', "Report\ClientController@getList");
 Route::get('/api/reportClientTarget', "Report\ClientController@getListTarger");
-Route::get('/api/reportClientProduct', "Report\ClientController@getListProduct");
+Route::get('/api/reportClientProduct', "HomeController@getListProduct");
+Route::get('/api/reportClientProductUnits', "HomeController@getListProductUnits");
+Route::get('/api/reportSupplierDash', "HomeController@getListSupplier");
 Route::get('/api/reportClientCities', "Report\ClientController@listCities");
+
+
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");
 Route::get('/api/reportCommercialGraph', "Report\CommercialController@listCommercialGraph");
@@ -497,9 +501,11 @@ Route::get('/reportSupplier', "Report\SupplierController@index");
 Route::get('/api/reportSupplier', "Report\SupplierController@getList");
 Route::get('/api/reportSupplierSales', "Report\SupplierController@getListSales");
 Route::get('/api/reportSupplierClient', "Report\SupplierController@getListClient");
+Route::get('/api/reportSales', "HomeController@getSales");
 
 
 Route::get('/reportProduct', "Report\ProductController@index");
+Route::get('/api/reportProductCity', "Report\ProductController@productByCity");
 
 Route::get('/api/reportProduct', "Report\ProductController@getList");
 

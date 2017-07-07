@@ -29,7 +29,7 @@ class ClientController extends Controller {
             ORDER BY 2 DESC
             ";
         $res = DB::select($sql);
-        
+
         return response()->json(["data" => $res]);
     }
 
@@ -49,7 +49,7 @@ class ClientController extends Controller {
     public function getListProduct(Request $req) {
         $input = $req->all();
         $cli = "
-            select d.product_id,p.title product,sum(d.quantity *  coalesce(p.packaging,1)) units
+            select d.product_id,p.title product,sum(d.quantity *  coalesce(p.packaging,1)) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 
@@ -57,35 +57,42 @@ class ClientController extends Controller {
             AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             group by 1,2
             order by 3 desc limit 10";
-        
+
         $res = DB::select($cli);
-        $units = array();
+
         $cat = array();
+        $total = array();
+        $quantity = array();
         foreach ($res as $value) {
-            $units[] = (int)$value->units;
             $cat[] = $value->product;
+            $total[] = (int) $value->total;
+            $quantity[] = (int) $value->quantity;
         }
 
-        return response()->json(["data" => $res, "categories" => $cat, "units" => $units]);
+        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity]);
     }
 
     public function listCities(Request $req) {
         $input = $req->all();
         $cli = "
-            select c.description as data,c.description as name,sum(quantity) y
-            from sales_detail d
-            JOIN sales s ON s.id=d.sale_id 
-            JOIN cities c ON c.id=s.destination_id
-            WHERE d.product_id is Not null
-            AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
-            group by 1,s.destination_id
-            order by 2 desc
+            SELECT destination_id,destination,sum(total) total,sum(quantity) quantity 
+            FROM vdepartures
+            WHERE created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            GROUP BY destination_id,2
             ";
-//            echo $cli;exit;
 
         $res = DB::select($cli);
 
-        return response()->json(["data" => $res]);
+        $cat = array();
+        $total = array();
+        $quantity = array();
+        foreach ($res as $value) {
+            $cat[] = trim($value->destination);
+            $total[] = (int) $value->total;
+            $quantity[] = (int) $value->quantity;
+        }
+
+        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity]);
     }
 
 }

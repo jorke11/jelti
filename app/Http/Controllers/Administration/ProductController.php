@@ -34,7 +34,7 @@ class ProductController extends Controller {
     }
 
     public function index() {
-        $tax = Administration\Parameters::where("group", "tax")->whereIn("code", array(3, 4))->get();
+        $tax = Administration\Parameters::where("group", "tax")->whereIn("code", array(3, 4, 5))->get();
         return view("Administration.products.init", compact("tax"));
     }
 

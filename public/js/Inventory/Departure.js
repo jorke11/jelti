@@ -350,6 +350,7 @@ function Sale() {
                             toastr.success("ok");
                             $("#btnmodalDetail").attr("disabled", false);
                             location.href = "/departure";
+                            obj.printDetail(data);
                         }
                     }
                 })

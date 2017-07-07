@@ -173,9 +173,11 @@
                                 <div class="form-group">
                                     <label for="email" class="control-label">Impuesto *</label>
                                     <select id="tax" name="tax" class="form-control input-product">
+                                        @if(isset($tax))
                                         @foreach($tax as $val)
                                         <option value="{{$val->value}}">{{$val->description}}</option>
                                         @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>

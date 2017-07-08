@@ -31,6 +31,7 @@ function Commercial() {
             columns: [
                 {data: "vendedor"},
                 {data: "quantity"},
+                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],
             order: [[2, 'DESC']],

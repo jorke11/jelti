@@ -9,7 +9,8 @@
                             <tr>
                                 <td>Comercial</td>
                                 <td>Total Unidades</td>
-                                <td>Valor Total</td>
+                                <td>Valor Bruto</td>
+                                <td>Total</td>
                             </tr>
                         </thead>
                         <tbody></tbody>

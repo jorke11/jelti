@@ -22,7 +22,7 @@ class CommercialController extends Controller {
         $sql = "
             SELECT responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
             from vdepartures 
-            WHERE created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            WHERE created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and status_id=2
             group by responsible
             order by 3 DESC
             ";

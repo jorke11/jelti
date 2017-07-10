@@ -238,7 +238,10 @@ class ClientController extends Controller {
 
     public function destroy($id) {
         $stakeholder = Stakeholder::FindOrFail($id);
-        $result = $stakeholder->delete();
+//        $result = $stakeholder->delete();
+        $stakeholder->status_id = 3;
+        $result = $stakeholder->save();
+//        $result = $stakeholder->delete();
         if ($result) {
             return response()->json(['success' => true]);
         } else {
@@ -632,13 +635,12 @@ class ClientController extends Controller {
                     }
                 }
             })->get();
-            
-            $detail=PricesSpecial::select("prices_special.item","prices_special.tax","prices_special.price_sf","products.bar_code",
-                    "products.reference","products.title")
-                    ->join("products","products.id","prices_special.product_id")
+
+            $detail = PricesSpecial::select("prices_special.item", "prices_special.tax", "prices_special.price_sf", "products.bar_code", "products.reference", "products.title")
+                    ->join("products", "products.id", "prices_special.product_id")
                     ->where("prices_special.client_id", $this->in["client_id"])
                     ->get();
-            
+
             return response()->json(["success" => true, "data" => $detail,
                         "updated" => $this->updated, "inserted" => $this->inserted]);
         }

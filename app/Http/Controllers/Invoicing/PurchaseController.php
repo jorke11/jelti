@@ -19,6 +19,8 @@ use App\Models\Administration\EmailDetail;
 use App\Models\Security\Users;
 use App\Models\Administration\Stakeholder;
 use App\Models\Administration\Cities;
+use App\Models\Inventory\Entries;
+use App\Models\Inventory\EntriesDetail;
 use Mail;
 
 class PurchaseController extends Controller {
@@ -46,17 +48,6 @@ class PurchaseController extends Controller {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
         return view("Invoicing.purchase.init", compact("category", "status"));
-    }
-
-    public function createConsecutive($id) {
-        $con = Consecutives::where("type_form", $id)->first();
-
-        $con->current = ($con->current == null) ? 1 : $con->current;
-        $res = "";
-        for ($i = strlen($con->pronoun); $i <= ($con->large - strlen($con->current)); $i++) {
-            $res .= '0';
-        }
-        return $con->pronoun . $res . $con->current;
     }
 
     public function getSupplier($id) {
@@ -98,7 +89,6 @@ class PurchaseController extends Controller {
                         $input["detail"][$i]["value"] = $val["cost_sf"];
                         $input["detail"][$i]["quantity"] = $val["quantity"];
                         $input["detail"][$i]["units_supplier"] = (int) $input["detail"][$i]["units_supplier"];
-                        $input["detail"][$i]["description"] = 'product';
                         unset($input["detail"][$i]["cost_sf"]);
                         unset($input["detail"][$i]["title"]);
                         unset($input["detail"][$i]["debt"]);
@@ -110,6 +100,11 @@ class PurchaseController extends Controller {
 
                 $detail = $this->formatDetail($purchase_id);
                 $header = Purchases::findOrFail($purchase_id);
+                $this->subtotal = "$ " . number_format($this->subtotal, 0, ',', '.');
+                $this->total = "$ " . number_format($this->total, 0, ',', '.');
+                $this->tax5 = "$ " . number_format($this->tax5, 0, ',', '.');
+                $this->tax19 = "$ " . number_format($this->tax19, 0, ',', '.');
+
                 return response()->json(['success' => true, "header" => $header, "detail" => $detail, "total" => $this->total,
                             "subtotal" => $this->subtotal, "tax5" => $this->tax5, "tax19" => $this->tax19]);
             } else {
@@ -194,6 +189,7 @@ class PurchaseController extends Controller {
     public function sendPurchase(Request $req) {
         $in = $req->all();
         $pur = Purchases::findOrFail($in["id"]);
+
         $val = PurchasesDetail::where("purchase_id", $pur["id"])->count();
         if ($val > 0) {
             if ($pur["status_id"] == 2) {
@@ -205,30 +201,59 @@ class PurchaseController extends Controller {
                     $pur->status_id = 2;
                     $pur->save();
 
+                    $newIn["responsible_id"] = Auth::user()->id;
+                    $newIn["warehouse_id"] = $pur->warehouse_id;
+                    $newIn["supplier_id"] = $pur->supplier_id;
+                    $newIn["purchase_id"] = $in["id"];
+                    $newIn["city_id"] = $pur->city_id;
+                    $newIn["description"] = "Compra nueva";
+                    $newIn["invoice"] = "new";
+                    $newIn["created"] = date("Y-m-d H:i:s");
+                    $newIn["status_id"] = 1;
+
+                    $newId = Entries::create($newIn)->id;
+                    $det = PurchasesDetail::where("purchase_id", $in["id"])->get();
+                    
+                    foreach ($det as $key => $value) {
+                        $newDet["entry_id"] = $newId;
+                        $newDet["product_id"] = $value->product_id;
+                        $newDet["quantity"] = $value->quantity;
+                        $newDet["quantity_real"] = 0;
+                        $newDet["value"] = $value->value;
+                        $newDet["units_supplier"] = $value->units_supplier;
+                        $newDet["lote"] = 'new';
+                        $newDet["status_id"] = 3;
+                        EntriesDetail::create($newDet);
+                    }
+
                     $purchase = Purchases::findOrFail($in["id"]);
+
                     $sup = Stakeholder::find($purchase->supplier_id);
 
                     $ware = Warehouses::findOrFail($purchase->warehouse_id);
+
                     $input["id"] = $purchase->id;
                     $input["address"] = $ware->address;
                     $input["warehouse"] = $ware->description;
 
                     $user = Users::findOrFail($ware->responsible_id);
-
+                    
                     $input["name"] = $user->name;
                     $input["last_name"] = $user->last_name;
                     $input["phone"] = $user->phone;
                     $input["environment"] = env("APP_ENV");
                     $input["created_at"] = $purchase->created_at;
+
+
+                    $input["detail"] = $this->formatDetail($purchase->id);
                     $input["tax5"] = $this->tax5;
                     $input["tax19"] = $this->tax19;
                     $input["subtotal"] = $this->subtotal;
                     $input["total"] = $this->total;
 
-                    $input["detail"] = $this->formatDetail($purchase->id);
-                    dd($input["detail"]);
                     $email = Email::where("description", "purchases")->first();
                     $emDetail = EmailDetail::where("email_id", $email->id)->get();
+
                     if (count($emDetail) > 0) {
                         $this->mails[] = $user->email;
                         foreach ($emDetail as $value) {
@@ -309,36 +334,20 @@ class PurchaseController extends Controller {
     }
 
     public function updateDetail(Request $request, $id) {
-        $entry = PurchasesDetail::FindOrFail($id);
+
+        $row = PurchasesDetail::FindOrFail($id);
         $input = $request->all();
-
-        $pro = Products::findOrFail($input["product_id"]);
-
-
-        $input["value"] = $request["quantity"] * $request["value"];
-        $result = $entry->fill($input)->save();
-
-        $tax = PurchasesDetail::where("parent_id", $input["purchase_id"])->where("type_nature", 1)->first();
-        $tax->value = ($pro["tax"] / 100.0) * $input["value"];
-        $tax->save();
-
-
-        $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->get();
-        $total = 0;
-        foreach ($detail as $value) {
-            $total += ($value->value * $value->quantity);
-        }
-
-        $client = PurchasesDetail::where("parent_id", $input["purchase_id"])->where("type_nature", 2)->first();
-        $client->value = $total;
-        $client->save();
+        $result = $row->fill($input)->save();
 
         if ($result) {
             $detail = $this->formatDetail($input["purchase_id"]);
-            return response()->json(['success' => 'true', "detail" => $detail, "subtotal" => $this->subtotal, "total" => $this->total]);
+            $this->subtotal = "$ " . number_format($this->subtotal, 0, ',', '.');
+            $this->total = "$ " . number_format($this->total, 0, ',', '.');
+            $this->tax5 = "$ " . number_format($this->tax5, 0, ',', '.');
+            $this->tax19 = "$ " . number_format($this->tax19, 0, ',', '.');
 
-
-            return response()->json(['success' => true, "data" => $resp]);
+            return response()->json(['success' => true, "detail" => $detail, "total" => $this->total,
+                        "subtotal" => $this->subtotal, "tax5" => $this->tax5, "tax19" => $this->tax19]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -374,14 +383,17 @@ class PurchaseController extends Controller {
                         ->orderBy("order", "asc")->get();
 
         foreach ($detail as $i => $value) {
+
+            $detail[$i]->total = $value->value * $value->quantity * $value->units_supplier;
+            $this->subtotal += $detail[$i]->total;
+
+            $this->total += $detail[$i]->total + ($value->value * $value->quantity * $value->units_supplier * $value->tax);
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
-            $detail[$i]->subtotal = $value->value * $value->quantity * $value->units_supplier;
-            $detail[$i]->total = $detail[$i]->subtotal + ($value->value * $value->quantity * $value->units_supplier * $value->tax);
             $detail[$i]->costFormated = "$ " . number_format($detail[$i]->value, 2, ",", ".");
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
             $detail[$i]->totalunits = $value->quantity * $value->units_supplier;
 
-            $this->subtotal += $detail[$i]->total;
+
             if ($value->tax == 0) {
                 $this->exempt += $value->valuetotal;
             }
@@ -389,7 +401,7 @@ class PurchaseController extends Controller {
                 $this->tax5 += $detail[$i]->total * $value->tax;
             }
             if ($value->tax == 0.19) {
-                $this->tax5 += $detail[$i]->total * $value->tax;
+                $this->tax19 += $detail[$i]->total * $value->tax;
             }
         }
 

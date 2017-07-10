@@ -248,7 +248,7 @@ function Purchase() {
                         toastr.success(msg);
                         $("#btnmodalDetail").attr("disabled", false);
                         $("#btnSend").attr("disabled", false);
-                        obj
+                        obj.printDetail(data)
                     }
                 },
                 error: function (xhr, ajaxOption, thrownError) {
@@ -267,15 +267,34 @@ function Purchase() {
         toastr.remove();
         var validate = $(".input-detail").validate();
         if (validate.length == 0) {
-            $.each(listProducts, function (i, val) {
-                if (val.product_id == row.product_id) {
-                    listProducts[i].quantity = $("#frmDetail #quantity").val()
-                    $("#modalDetail").modal("hide");
-                    obj.loadProducts();
-                    toastr.success("Register Edited");
-                }
-            });
+            if ($("#frm #id").val() == '') {
+                $.each(listProducts, function (i, val) {
+                    if (val.product_id == row.product_id) {
+                        listProducts[i].quantity = $("#frmDetail #quantity").val()
+                        $("#modalDetail").modal("hide");
+                        obj.loadProducts();
+                        toastr.success("Register Edited");
+                    }
+                });
+            } else {
+                var param = {};
+                param.quantity = $("#frmDetail #quantity").val();
+                param.purchase_id = $("#frm #id").val();
 
+                $.ajax({
+                    url: 'purchase/detail/' + $("#frmDetail #id").val(),
+                    method: "PUT",
+                    data: param,
+                    dataType: 'JSON',
+                    success: function (resp) {
+                        if (resp.success == true) {
+                            obj.printDetail(resp);
+                        }
+                    }, error: function () {
+
+                    }
+                })
+            }
         } else {
             toastr.error("input required");
         }
@@ -341,18 +360,24 @@ function Purchase() {
             html += "<td>" + units_total + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
 
-            if (val.description == 'product') {
-                html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
-                html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
-            } else {
-                html += '<td></td>';
-            }
-
+            html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
+            html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
             html += "</tr>";
         });
 
+        if (data.tax5) {
+            html += "<tr>";
+            html += '<td><td colspan="6" align="right"><b>Iva 5%</b></td><td>' + data.tax5 + '</td>';
+            html += "</tr>";
+        }
+        if (data.tax19) {
+            html += "<tr>";
+            html += '<td><td colspan="6" align="right"><b>Iva 19%</b></td><td>' + data.tax19 + '</td>';
+            html += "</tr>";
+        }
+
         $("#tblDetail tbody").html(html);
-        $("#tblDetail tfoot").html('<tr><td colspan="6"></td><td><strong>Subtotal</strong></td><td>' + data.subtotal + '</td></tr><tr><td colspan="6"><td><strong>Total</strong></td></td><td>' + data.total + '</td></tr>');
+        $("#tblDetail tfoot").html('<tr><td colspan="7" align="right"><strong>Subtotal</strong></td><td>' + data.subtotal + '</td></tr><tr><td colspan="7" align="right"><strong>Total</strong></td><td>' + data.total + '</td></tr>');
 
 
     }

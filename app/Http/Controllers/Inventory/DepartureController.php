@@ -983,8 +983,7 @@ class DepartureController extends Controller {
             $det = DeparturesDetail::find($value->id);
             $det->delete();
         }
-
-
+        
         if ($id) {
             return response()->json(['success' => true]);
         } else {

@@ -18,7 +18,8 @@ class EntriesDetail extends Model {
         "quantity",
         "description",
         "real_quantity",
-        "value"
+        "value",
+        "units_supplier"
     ];
 
 }

@@ -23,7 +23,7 @@
             <tr>
                 <td width='15%'><img src="{!!asset('assets/images/logo.png')!!}" width="45" style="display:block"></td>
                 <td width='60%'>¡Hola! Feliz día</td>
-                <td><strong>Solicitud {!!(isset($id))?$id:0!!}</strong><br> <strong></strong></td>
+                <td><strong>Solicitud Compra {!!(isset($id))?$id:0!!}</strong><br> <strong></strong></td>
             </tr>
             <tr>
                 <td><br></td>
@@ -31,9 +31,6 @@
             <tr>
                 <td colspan="2">Les escribo para solicitar el siguiente pedido para nuestra bodega en {{$city}} 
                 </td>
-            </tr>
-            <tr>
-                <td><strong>Solicitud Compra {!!$id!!}</strong></td>
             </tr>
         </table>
         
@@ -65,12 +62,12 @@
                 foreach ($detail as $val) {
                     ?>
                     <tr>
-                        <td>{!!$val->product!!}</td>
+                        <td>{{$val->product}}</td>
                         <td align="center">{{$val->units_supplier}}</td>
                         <td align="center">{{$val->quantity}}</td>
                         <td align="center">{{$val->totalunits}}</td>
-                        <td align="center">$ {{number_format($val->costFormated,2,",",".")}}</td>
-                        <td align="right">$ {{number_format($val->total,2,",",".")}}</td>
+                        <td align="center">{{$val->costFormated}}</td>
+                        <td align="right">{{$val->totalFormated}}</td>
                     </tr>
                     <?php
                 }
@@ -79,7 +76,7 @@
                 <tr align="right">
                     <td colspan="4"</td>
                     <td ><b>SubTotal</b></td>
-                    <td >{{(isset($subtotal))?$subtotal:0}}</td>
+                    <td>{{"$ " . number_format($subtotal, 0, ",", ".")}}</td>
                 </tr>
                 @if($tax5!=0)
                 <tr align="right">

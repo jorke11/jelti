@@ -33,6 +33,7 @@ function Client() {
                 url: "/api/reportClient",
                 data: obj,
             },
+            scrollX:true,
             columns: [
                 {data: "client"},
                 {data: "unidades"},
@@ -63,6 +64,7 @@ function Client() {
                 url: "/api/reportClientTarget",
                 data: obj,
             },
+            scrollX:true,
             columns: [
                 {data: "business"},
                 {data: "seats"},

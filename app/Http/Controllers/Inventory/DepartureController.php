@@ -1012,8 +1012,10 @@ class DepartureController extends Controller {
             $input["real_quantity"] = (!isset($input["real_quantity"]) || $input["real_quantity"] == '') ? null : $input["real_quantity"];
 
             $product = Products::find($input["product_id"]);
-
             $input["value"] = $product->price_sf;
+            $input["units_sf"] = $product->units_sf;
+            $input["tax"] = $product->tax;
+            
             $result = DeparturesDetail::create($input);
             if ($result) {
                 $resp = $this->formatDetail($input["departure_id"]);

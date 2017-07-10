@@ -166,11 +166,18 @@ class ClientController extends Controller {
             $input = $request->all();
             unset($input["id"]);
 
-            $result = PricesSpecial::create($input);
-            if ($result) {
-                return response()->json(['success' => true]);
+            $special = PricesSpecial::where("product_id", $input["product_id"])->where("client_id", $input["client_id"])->first();
+
+            if ($special == null) {
+                $input["packaging"] = ($input["packaging"] == null) ? 1 : $input["packaging"];
+                $result = PricesSpecial::create($input);
+                if ($result) {
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false, "msg" => "Problemas con la solicitud"], 409);
+                }
             } else {
-                return response()->json(['success' => false]);
+                return response()->json(['success' => false, "msg" => "Producto ya existe"], 409);
             }
         }
     }

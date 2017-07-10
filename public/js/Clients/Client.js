@@ -165,6 +165,23 @@ function Client() {
             tableSpecial = obj.tableSpecial($("#frm #id").val());
         })
 
+        $("#frmSpecial #product_id").change(function () {
+            var param = {};
+            param.client_id = $("#frm #id").val();
+            $.ajax({
+                url: 'departure/' + $(this).val() + '/getDetailProduct',
+                method: 'GET',
+                data: param,
+                dataType: 'JSON',
+                success: function (resp) {
+                    $("#frmSpecial #tax").val(resp.response.tax);
+                    $("#frmSpecial #price_sf").val(resp.response.price_sf);
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                }
+            })
+        });
+
         $("#tabList").click(function () {
             $("#tabSpecial").addClass("hide");
             $("#tabContact").addClass("hide");
@@ -821,6 +838,7 @@ function Client() {
                 {data: "product"},
                 {data: "reference"},
                 {data: "item"},
+                {data: "packaging"},
                 {data: "price_sf"},
                 {data: "margin"},
                 {data: "margin_sf"},
@@ -836,7 +854,7 @@ function Client() {
                 }
                 ,
                 {
-                    targets: [9],
+                    targets: [10],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

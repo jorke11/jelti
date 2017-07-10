@@ -462,6 +462,7 @@ class DepartureController extends Controller {
 
                         $input["detail"] = array_values(array_filter($input["detail"]));
                         $price_sf = 0;
+
                         foreach ($input["detail"] as $i => $val) {
                             $special = PricesSpecial::where("product_id", $val["product_id"])
                                             ->where("client_id", $input["header"]["client_id"])->first();
@@ -470,11 +471,12 @@ class DepartureController extends Controller {
                                 $pro = Products::find($val["product_id"]);
                             } else {
                                 $pro = DB::table("products")
-                                        ->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
-                                        ->join("prices_special", "prices_special.product_id", "=", "products.id")
-                                        ->where("products.id", $val["product_id"])
+                                        ->select("products.id", "prices_special.price_sf", "prices_special.units_sf", 'prices_special.tax', "prices_special.packaging")
+                                        ->join("prices_special", "prices_special.product_id", "products.id")
+                                        ->where("prices_special.id", $special->id)
                                         ->first();
                             }
+
 
                             $price_sf = $pro->price_sf;
                             if (Auth::user()->role_id == 1) {
@@ -488,8 +490,10 @@ class DepartureController extends Controller {
                             $detail["status_id"] = 1;
                             $detail["quantity"] = $val["quantity"];
                             $detail["units_sf"] = $pro->units_sf;
+                            $detail["packaging"] = $pro->packaging;
                             $detail["tax"] = $pro->tax;
                             $detail["value"] = $price_sf;
+
                             DeparturesDetail::create($detail);
                         }
 
@@ -983,7 +987,7 @@ class DepartureController extends Controller {
             $det = DeparturesDetail::find($value->id);
             $det->delete();
         }
-        
+
         if ($id) {
             return response()->json(['success' => true]);
         } else {
@@ -1015,7 +1019,7 @@ class DepartureController extends Controller {
             $input["value"] = $product->price_sf;
             $input["units_sf"] = $product->units_sf;
             $input["tax"] = $product->tax;
-            
+
             $result = DeparturesDetail::create($input);
             if ($result) {
                 $resp = $this->formatDetail($input["departure_id"]);

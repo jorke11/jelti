@@ -56,6 +56,14 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
+                            <label for="email">Packaging</label>
+                            <input type="text" class="form-control input-sm input-special" id="packaging" name="packaging">    
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label for="email">Reiniciar Todo</label>
                             <input type="checkbox" class="form-control input-sm input-special" id="reset">    
                         </div>
@@ -66,7 +74,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-7 col-lg-offset-2">
+    <div class="col-lg-10 col-lg-offset-1">
         <div class="panel panel-info">
             <div class="page-title" style="">
             </div>
@@ -81,6 +89,7 @@
                                     <th>Producto</th>
                                     <th>Sf Code</th>
                                     <th>Item</th>
+                                    <th>Packaging</th>
                                     <th>price_sf</th>
                                     <th>margen</th>
                                     <th>margen_sf</th>

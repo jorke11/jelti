@@ -138,7 +138,7 @@ JOIN parameters as status ON status.code=s.status_id and status."group"='generic
 
 drop view vprice_special
 create view vprice_special as
-select s.id,s.client_id,stake.business client,s.product_id,p.title product,p.reference,s.price_sf::money,s.margin,s.margin_sf,s.tax 
+select s.id,s.client_id,stake.business client,s.product_id,p.title product,p.reference,s.price_sf::money,s.margin,s.margin_sf,s.tax,s.item 
 from prices_special s
 JOIN stakeholder stake On stake.id=s.client_id
 JOIN products p On p.id=s.product_id;

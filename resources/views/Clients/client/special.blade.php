@@ -79,7 +79,8 @@
                                     <th>Id</th>
                                     <th>Cliente</th>
                                     <th>Producto</th>
-                                    <th>Referencia</th>
+                                    <th>Sf Code</th>
+                                    <th>Item</th>
                                     <th>price_sf</th>
                                     <th>margen</th>
                                     <th>margen_sf</th>

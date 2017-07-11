@@ -420,7 +420,7 @@ class DepartureController extends Controller {
 
             $sal->delete();
 
-            $dep->status_id = 6;
+            $dep->status_id = 1;
             $dep->save();
             DB::commit();
             $dep = Departures::find($id);

@@ -5,13 +5,10 @@ function Client() {
         table = this.table();
         $("#btnSave").click(this.save);
         $("#btnNew").click(this.new);
-
         $("#btnNewSpecial").click(this.newSpecial);
         $("#btnSaveSpecial").click(this.saveSpecial);
-
         $("#btnNewContact").click(this.newContact);
         $("#btnSaveContact").click(this.saveContact);
-
         $("#tabInvoice").click(function () {
             obj.tableInvoice($("#frm #id").val());
         });
@@ -58,8 +55,6 @@ function Client() {
                 $("#type_person_id option[value=2]").removeClass("hidden");
             }
         });
-
-
         //        $("#frm #stakeholder_id").change(function () {
         //            if ($(this).val() != 0) {
         //                if (confirm("La informacion del formulario de Sobreescribira, esta seguro de carga los datos?")) {
@@ -69,12 +64,40 @@ function Client() {
         //            }
         //        });
 
-        $("#addJustify").click(this.addJustify);
+        $("#frm #stakeholder_id").on('select2:closing', function (evt) {
+            var cont = 0;
+            var elem = $(this);
+            $(".input-clients").each(function () {
+                if ($(this).val() != '') {
+                    cont++;
+                }
+            })
 
+            if (cont > 0) {
+                if (confirm("Los datos del formulario se reemplazaran, esta seguro que quiere seleccionarlo?")) {
+                    var frm = $("#frm");
+                    var data = frm.serialize();
+                    var url = "/clients/" + elem.val() + "/edit";
+                    $.ajax({
+                        url: url,
+                        method: "GET",
+                        data: data,
+                        success: function (resp) {
+                            var stakeholder = resp.header.stakeholder_id;
+                            delete resp.header.stakeholder_id;
+
+                            $(".input-clients").setFields({data: resp.header});
+                            $("#frm #id").val("");
+                        }
+                    })
+                }
+            }
+        });
+
+        $("#addJustify").click(this.addJustify);
         $("#btnUpload").click(function () {
 
             var formData = new FormData($("#frmFile")[0]);
-
             $.ajax({
                 url: 'clients/upload',
                 type: 'POST',
@@ -88,7 +111,6 @@ function Client() {
                 },
                 success: function (data) {
                     obj.printImages(data);
-
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     //clearInterval(intervalo);
                     console.log(thrownError)
@@ -101,7 +123,6 @@ function Client() {
         $("#btnUploadExcel").click(function () {
 
             var formData = new FormData($("#frmExcel")[0]);
-
             $.ajax({
                 url: 'clients/uploadExcel',
                 type: 'POST',
@@ -134,7 +155,6 @@ function Client() {
         $("#btnUploadClient").click(function () {
 
             var formData = new FormData($("#frmClient")[0]);
-
             $.ajax({
                 url: 'clients/uploadClient',
                 type: 'POST',
@@ -181,7 +201,6 @@ function Client() {
                 }
             })
         });
-
         $("#tabList").click(function () {
             $("#tabSpecial").addClass("hide");
             $("#tabContact").addClass("hide");
@@ -192,16 +211,13 @@ function Client() {
             $("#frmContact #stakeholder_id").val($("#frm #id").val());
             tableContact = obj.tableContact($("#frm #id").val());
         });
-
         $("#reset").click(function () {
             obj.MarkPrice(null, $("#frm #id").val());
         });
-
         $("#contract_expiration").datetimepicker({
             format: 'Y-m-d H:i',
         });
         $("#btnComment").click(this.addCommnet);
-
         $("#btnUpload_code").click(this.uploadExcelCode)
 
     }
@@ -209,7 +225,6 @@ function Client() {
     this.uploadExcelCode = function () {
         $("#frmFileCode #client_id").val($("#frm #id").val());
         var formData = new FormData($("#frmFileCode")[0]);
-
         $.ajax({
             url: '/clients/uploadExcelCode',
             method: 'POST',
@@ -254,10 +269,8 @@ function Client() {
                 $("#frm #web_site").val(resp.data.client.web_site);
                 $("#frm #email").val(resp.data.client.email);
                 $("#frm #verification").val(resp.data.client.verification);
-
                 $("#frm #address").val(resp.data.client.address_send);
                 $("#frm #phone").val(resp.data.client.phone);
-
                 $("#frm #city_id").setFields({data: {city_id: resp.data.client.city_id}});
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
@@ -297,9 +310,7 @@ function Client() {
     this.addJustify = function () {
         var valid = $(".input-justify").validate();
         $("#frmJustify #clients_id").val($("#frm #id").val());
-
         var data = $("#frmJustify").serialize();
-
         if (valid.length == 0) {
             $.ajax({
                 url: 'clients/addChage',
@@ -324,7 +335,6 @@ function Client() {
                 x,
                 y,
                 z;
-
         // Se limpia el Nit
         myNit = myNit.replace(/\s/g, ""); // Espacios
         myNit = myNit.replace(/,/g, ""); // Comas
@@ -337,11 +347,9 @@ function Client() {
             return "";
         }
         ;
-
         // Procedimiento
         vpri = new Array(16);
         z = myNit.length;
-
         vpri[1] = 3;
         vpri[2] = 7;
         vpri[3] = 13;
@@ -357,7 +365,6 @@ function Client() {
         vpri[13] = 59;
         vpri[14] = 67;
         vpri[15] = 71;
-
         x = 0;
         y = 0;
         for (var i = 0; i < z; i++) {
@@ -409,10 +416,8 @@ function Client() {
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frmSpecial #id").val();
-
         var msg = '';
         var validate = $(".input-special").validate();
-
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
@@ -449,11 +454,8 @@ function Client() {
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frmContact #id").val();
-
         var msg = '';
-
         var validate = $(".input-contact").validate();
-
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
@@ -508,14 +510,12 @@ function Client() {
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
-
         var validate = $(".input-clients").validate();
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
                 url = "clients";
                 msg = "Created Record";
-
             } else {
                 method = 'PUT';
                 url = "clients/" + id;
@@ -545,12 +545,10 @@ function Client() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "/clients/" + id + "/edit";
-
         $.ajax({
             url: url,
             method: "GET",
             data: data,
-
             dataType: 'JSON',
             beforeSend: function () {
                 $("#loading-super").removeClass("hidden");
@@ -559,7 +557,6 @@ function Client() {
                 $(".input-clients").setFields({data: data.header});
                 obj.printImages(data.images);
                 obj.tableComment(data.comments);
-
             },
             complete: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
@@ -585,12 +582,10 @@ function Client() {
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "/clients/contact/" + id;
-
         $.ajax({
             url: url,
             method: "GET",
             data: data,
-
             dataType: 'JSON',
             beforeSend: function () {
                 $("#loading-super").removeClass("hidden");
@@ -737,7 +732,6 @@ function Client() {
                     }
                 }
             ],
-
             //            initComplete: function () {
             //                this.api().columns().every(function () {
             //                    var column = this;
@@ -761,7 +755,6 @@ function Client() {
             //                });
             //            },
         });
-
         $('#tblStakeholder tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = table.row(tr);
@@ -773,7 +766,6 @@ function Client() {
                 tr.addClass('shown');
             }
         });
-
         return tableStake;
     }
 
@@ -822,7 +814,6 @@ function Client() {
     this.tableSpecial = function (id) {
         var obj = {}, checked = false;
         obj.client_id = id;
-
         return $('#tblSpecial').DataTable({
             "processing": true,
             "serverSide": true,
@@ -870,7 +861,6 @@ function Client() {
     this.tableContact = function (id) {
         var obj = {}, checked = false;
         obj.stakeholder_id = id;
-
         return $('#tblContact').DataTable({
             "processing": true,
             "serverSide": true,
@@ -913,7 +903,6 @@ function Client() {
 
     this.tableInvoice = function (id) {
         var html = '';
-
         table = $('#tblInvoice').DataTable({
             processing: true,
             serverSide: true,

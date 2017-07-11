@@ -62,14 +62,18 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
 
+            
+
             try {
                 DB::beginTransaction();
                 $document = Stakeholder::where("document", $input["document"])->first();
 
                 if (isset($input["stakeholder_id"])) {
+                    
                     $result = Branch::create($input);
                 } else {
                     if ($document == null) {
+                        
                         $result = Stakeholder::create($input);
                     } else {
                         DB::rollback();

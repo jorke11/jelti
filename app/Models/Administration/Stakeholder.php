@@ -13,6 +13,7 @@ class Stakeholder extends Model {
         "name",
         "last_name",
         "document",
+        "verification",
         "email",
         "address",
         "phone",

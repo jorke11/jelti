@@ -782,7 +782,6 @@ function Client() {
             success: function (data) {
                 html += "<tbody>";
                 $.each(data.response, function (i, val) {
-
                     html += "<tr>";
                     html += "<td>" + val.id + "</td>";
                     html += "<td>" + val.business + "</td>";

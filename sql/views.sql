@@ -128,7 +128,7 @@ JOIN vdepartures d ON d.id=c.departure_id
 
 drop view vbranch_office
 CREATE VIEW vbranch_office AS
-SELECT s.id,s.business_name,s.name business,coalesce(s.name,'') as name,s.document,s.email,coalesce(s.address_invoice,'') as address,s.mobile,
+SELECT s.id,s.business_name,coalesce(s.business,'') as business,s.document,s.email,coalesce(s.address_invoice,'') as address,s.mobile,
 s.term,c.description as city,s.web_site,status.description as status,s.stakeholder_id
 FROM branch_office s
 JOIN cities c ON c.id=s.city_id

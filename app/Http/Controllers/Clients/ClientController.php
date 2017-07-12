@@ -79,7 +79,7 @@ class ClientController extends Controller {
                         return response()->json(['success' => false, "msg" => "Cliente ya existe"], 409);
                     }
                 }
-                
+
                 if ($result) {
                     DB::commit();
                     return response()->json(['success' => true, "header" => $result]);
@@ -242,18 +242,18 @@ class ClientController extends Controller {
 
     public function update(Request $request, $id) {
         $input = $request->all();
-        
-        if($input["stakeholder_id"]==''){
+
+        if (isset($input["stakeholder_id"]) && $input["stakeholder_id"] == '') {
             $stakeholder = Stakeholder::Find($id);
-        }else{
+        } else {
             $stakeholder = Branch::Find($id);
         }
-        
+
         $input["user_update"] = Auth::user()->id;
 
         $result = $stakeholder->fill($input)->save();
         if ($result) {
-            
+
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);

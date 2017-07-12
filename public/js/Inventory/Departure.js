@@ -719,7 +719,7 @@ function Sale() {
                             obj.printDetail(data);
                         }
                     }, error: function (err) {
-                        toastr.error("No se puede borrra Este registro");
+                        toastr.error("No se puede borrar Este registro");
                     }
                 })
             }

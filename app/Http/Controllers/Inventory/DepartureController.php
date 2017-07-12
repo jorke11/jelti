@@ -999,9 +999,10 @@ class DepartureController extends Controller {
         $entry = DeparturesDetail::FindOrFail($id);
         $result = $entry->delete();
         if ($result) {
+            $header = Departures::find($entry["departure_id"]);
             $resp = $this->formatDetail($entry["departure_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "detail" => $resp, 'total' => $total]);
+            return response()->json(['success' => true, "header" => $header, "detail" => $resp, 'total' => $total]);
         } else {
             return response()->json(['success' => false]);
         }

@@ -180,6 +180,7 @@ class ClientController extends Controller {
 
             if ($special == null) {
                 $input["packaging"] = ($input["packaging"] == null) ? 1 : $input["packaging"];
+                $input["item"] = ($input["item"] == null) ? null : $input["item"];
                 $result = PricesSpecial::create($input);
                 if ($result) {
                     return response()->json(['success' => true]);

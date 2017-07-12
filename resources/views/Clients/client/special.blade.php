@@ -36,14 +36,14 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Margen</label>
-                            <input class="form-control input-special input-sm" id="margin" name="margin" data-type="number" required>    
+                            <label for="email">Unit sf</label>
+                            <input class="form-control input-special input-sm" id="units_sf" name="units_sf" data-type="number" required>    
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Margen sf</label>
-                            <input class="form-control input-special input-sm" id="margin_sf" name="margin_sf" data-type="number" required>    
+                            <label for="email">Item</label>
+                            <input class="form-control input-special input-sm" id="item" name="item">    
                         </div>
                     </div>
                 </div>
@@ -58,6 +58,20 @@
                         <div class="form-group">
                             <label for="email">Packaging</label>
                             <input type="text" class="form-control input-sm input-special" id="packaging" name="packaging">    
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Margen</label>
+                            <input class="form-control input-special input-sm" id="margin" name="margin" data-type="number" required>    
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Margen sf</label>
+                            <input class="form-control input-special input-sm" id="margin_sf" name="margin_sf" data-type="number" required>    
                         </div>
                     </div>
                 </div>
@@ -98,7 +112,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
+
                             </tbody>
                         </table>
                     </div>

@@ -196,6 +196,8 @@ function Client() {
                 success: function (resp) {
                     $("#frmSpecial #tax").val(resp.response.tax);
                     $("#frmSpecial #price_sf").val(resp.response.price_sf);
+                    $("#frmSpecial #units_sf").val(resp.response.units_sf);
+
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error(xhr.responseJSON.msg);
                 }
@@ -439,6 +441,8 @@ function Client() {
                         tableSpecial.ajax.reload();
                         toastr.success(msg);
                     }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
                 }
             })
         } else {
@@ -771,7 +775,6 @@ function Client() {
     }
 
     this.format = function (d) {
-
         var html = '<br><table class="table-detail">';
         html += '<thead>'
         html += '<tr><th>#</th><th>Cuenta</th><th>Razón Social</th><th>Documento</th><th>Correo</th><th>Dirección</th><th>Plazo de pago</th><th>Ciudad</th></tr></thead>';

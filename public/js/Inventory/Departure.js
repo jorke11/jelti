@@ -587,6 +587,7 @@ function Sale() {
 
                 if (data.header.status_id == 1) {
                     statusRecord = true;
+                    btnDel = true;
                 }
                 if (data.header.status_id != 1) {
                     $("#btnSave, #btnmodalDetail").attr("disabled", true);

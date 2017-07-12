@@ -845,30 +845,31 @@ function Sale() {
                     $('td', row).eq(11).addClass('color-checked');
                 }
             },
-//            footerCallback: function (row, data, start, end, display) {
-//                var api = this.api(), data, total;
-//
-//                var intVal = function (i) {
-//                    return typeof i === 'string' ?
-//                            i.replace(/[\$,]/g, '') * 1 :
-//                            typeof i === 'number' ?
-//                            i : 0;
-//                };
-//
-//                total = api
-//                        .column(8)
-//                        .data()
-//                        .reduce(function (a, b) {
-//                            return intVal(a) + intVal(b);
-//                        }, 0);
-//
-//                // Update footer
-//                $(api.column(8).footer()).html(
-//                        '(' + total + ')'
-//                        );
-//
-////                console.log(api)
-//            }
+            footerCallback: function (row, data, start, end, display) {
+                var api = this.api(), data, total;
+
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                };
+                console.log("asd");
+
+                total = api
+                        .column(8)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                // Update footer
+                $(api.column(3).footer()).html(
+                        '(' + total + ')'
+                        );
+
+//                console.log(api)
+            }
 
         });
         $('#tbl tbody').on('click', 'td.details-control', function () {

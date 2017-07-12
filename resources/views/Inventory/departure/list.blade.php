@@ -21,19 +21,8 @@
     </tbody>
     <tfoot>
         <tr>
-            <th>Detail</th>
-            <th>Id</th>
-            <th>Factura</th>
-            <th>Fecha</th>
-            <th>Cliente</th>
-            <th>Comercial</th>
-            <th>Bodega</th>
-            <th>Ciudad</th>
-            <th>Unidades</th>
-            <th>SubTotal</th>
-            <th>Total</th>
-            <th>Estatus</th>
-            <th tipo="prueba">Action</th>
+            <th colspan="7"></th>
+            <th></th>
         </tr>
     </tfoot>
 </table>

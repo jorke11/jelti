@@ -846,7 +846,7 @@ function Sale() {
                 }
             },
             footerCallback: function (row, data, start, end, display) {
-                var api = this.api(), data, total;
+                var api = this.api(), data, subtotal, total, quantity = 0;
 
                 var intVal = function (i) {
                     return typeof i === 'string' ?
@@ -854,18 +854,42 @@ function Sale() {
                             typeof i === 'number' ?
                             i : 0;
                 };
-                console.log("asd");
 
-                total = api
+                quantity = api
                         .column(8)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
 
+                subtotal = api
+                        .column(9)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                total = api
+                        .column(10)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
                 // Update footer
-                $(api.column(3).footer()).html(
-                        '(' + total + ')'
+                $(api.column(8).footer()).html(
+                        '(' + quantity + ')'
+                        );
+
+
+                $(api.column(9).footer()).html(
+                        '(' + obj.formatCurrency(subtotal, '$') + ')'
+                        );
+
+
+                $(api.column(10).footer()).html(
+                        '(' + obj.formatCurrency(total, "$") + ')'
+
                         );
 
 //                console.log(api)
@@ -886,6 +910,13 @@ function Sale() {
         });
         return table;
     }
+
+    this.formatCurrency = function (n, currency) {
+        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
+    }
+
 
     this.viewPdf = function (id) {
         window.open(PATH + "/departure/" + id + "/getInvoice");

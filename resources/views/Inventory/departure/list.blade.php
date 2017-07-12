@@ -21,7 +21,17 @@
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="7"></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th style="text-align:center">Total:</th>
+            <th></th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
     </tfoot>

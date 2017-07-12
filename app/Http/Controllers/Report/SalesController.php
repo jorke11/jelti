@@ -29,16 +29,21 @@ from sales where created_at >= '" . $init . " 00:00' AND created_at <= '" . $end
 FROM sales_detail d JOIN sales s ON s.id=d.sale_id JOIN departures dep ON dep.id=s.departure_id and dep.status_id=2 
 JOIN products p ON p.id=d.product_id WHERE d.product_id is NOT NULL AND s.created >= '" . $init . " 00:00' AND s.created <= '" . $end . " 23:59'	            
             ";
-        
+
+        $sql = "
+            SELECT sum(total) totalsales,sum(quantity) quantity,sum(shipping_cost) as shipping_cost
+            FROM vdepartures 
+            WHERE created_at >= '" . $init . " 00:00' AND created_at <= '" . $end . " 23:59' and status_id=2
+                ";
+
         $res = DB::select($sql);
 //        dd($res);
         $total = 0;
 //        echo $sql;exit;
         if (count($res) > 0) {
-            $total = $res[0]->total;
-            $totaltax = $res[0]->totalwithtax;
-            $totaltaxn = $res[0]->totalwithtaxn;
-            $topay = $res[0]->topay;
+            $totalsales = $res[0]->totalsales;
+            $quantity = $res[0]->quantity;
+            $shipping_cost = $res[0]->shipping_cost;
         }
 
         if ($init != '') {
@@ -65,11 +70,9 @@ JOIN products p ON p.id=d.product_id WHERE d.product_id is NOT NULL AND s.create
             $quantity = $res2[0];
         }
 
-        return response()->json(["total" => "$ " . number_format($total, 0, ",", "."),
-                    "totalwithtax" => "$ " . number_format($totaltax, 0, ",", "."),
-                    "totalwithtaxn" => "$ " . number_format($totaltaxn, 0, ",", "."),
+        return response()->json(["totalsales" => "$ " . number_format($totalsales, 0, ",", "."),
                     "quantity" => $quantity,
-                    "topay" => "$ " . number_format($topay, 0, ",", ".")]);
+                    "shipping_cost" => "$ " . number_format($shipping_cost, 0, ",", ".")]);
     }
 
     public function getFulfillmentSup($init, $end) {

@@ -704,27 +704,24 @@ function Sale() {
 
     this.deleteDetail = function (id, status_id) {
         toastr.remove();
-        if (status_id == 1) {
-            if (confirm("Do you want delete this record?")) {
-                var token = $("input[name=_token]").val();
-                var url = "/departure/detail/" + id;
-                $.ajax({
-                    url: url,
-                    headers: {'X-CSRF-TOKEN': token},
-                    method: "DELETE",
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if (data.success == true) {
-                            toastr.warning("Record deleted");
-                            obj.printDetail(data);
-                        }
-                    }, error: function (err) {
-                        toastr.error("No se puede borrar Este registro");
+
+        if (confirm("Do you want delete this record?")) {
+            var token = $("input[name=_token]").val();
+            var url = "/departure/detail/" + id;
+            $.ajax({
+                url: url,
+                headers: {'X-CSRF-TOKEN': token},
+                method: "DELETE",
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        toastr.warning("Record deleted");
+                        obj.printDetail(data);
                     }
-                })
-            }
-        } else {
-            toastr.error("No se puede borrra Este registro");
+                }, error: function (err) {
+                    toastr.error("No se puede borrar Este registro");
+                }
+            })
         }
     }
 

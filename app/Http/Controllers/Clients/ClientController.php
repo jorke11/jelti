@@ -73,7 +73,6 @@ class ClientController extends Controller {
                     $result = Branch::create($input);
                 } else {
                     if ($document == null) {
-                        
                         $result = Stakeholder::create($input);
                     } else {
                         DB::rollback();

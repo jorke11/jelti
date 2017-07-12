@@ -73,7 +73,7 @@
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="address" class="control-label">Dígito de Verificación *</label>
-                                            <input type="text" class="form-control input-clients input-sm" id="verification" name="verification" readonly disabled>
+                                            <input type="text" class="form-control input-clients input-sm" id="verification" name="verification" required readonly disabled>
                                         </div>
                                     </div>
                                 </div>

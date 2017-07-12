@@ -543,7 +543,7 @@ function Sale() {
                 }
             }
 
-            if (btnDel == true && val.status_id != 3) {
+            if ((btnDel == true && val.status_id != 3) || btnDel == true) {
                 htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ',' + val.status_id + ')>Delete</button>'
             } else {
                 htmlDel = '';
@@ -607,8 +607,6 @@ function Sale() {
                     btnEdit = true;
                     btnDel = true;
                 }
-
-
 
                 if ($("#role_id").val() == 1) {
                     $("#frm #shipping_cost").attr("disabled", false);

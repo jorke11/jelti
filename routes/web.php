@@ -82,6 +82,7 @@ Route::put('/clients/UpdateTax', 'Clients\ClientController@updateTax');
 Route::delete('/clients/deleteTax/{id}', 'Clients\ClientController@deleteTax');
 Route::post('/clients/addComment', 'Clients\ClientController@storeComment');
 Route::get('/clients/{id}/getBranch', ['uses' => 'Clients\ClientController@getBranch']);
+Route::get('/clients/{id}/getBranchId', ['uses' => 'Clients\ClientController@getBranchId']);
 Route::get('/clients/{id}/getSpecialId', ['uses' => 'Clients\ClientController@getSpecialId']);
 Route::post('/clients/uploadExcelCode', 'Clients\ClientController@storeExcelCode');
 

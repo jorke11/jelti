@@ -52,6 +52,7 @@ class ClientController extends Controller {
     }
 
     public function store(Request $request) {
+        $type = 0;
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
@@ -62,27 +63,26 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
 
-            
-
             try {
                 DB::beginTransaction();
                 $document = Stakeholder::where("document", $input["document"])->first();
 
                 if (isset($input["stakeholder_id"])) {
-                    
+                    $type = 1;
                     $result = Branch::create($input);
                 } else {
                     if ($document == null) {
+                        $type = 2;
                         $result = Stakeholder::create($input);
                     } else {
                         DB::rollback();
                         return response()->json(['success' => false, "msg" => "Cliente ya existe"], 409);
                     }
                 }
-
+                
                 if ($result) {
                     DB::commit();
-                    return response()->json(['success' => true]);
+                    return response()->json(['success' => true, "header" => $result]);
                 } else {
                     return response()->json(['success' => false, "msg" => "Problemas con la ejecución"], 409);
                 }
@@ -95,6 +95,13 @@ class ClientController extends Controller {
 
     public function getBranch($id) {
         $response = DB::table("vbranch_office")->where("stakeholder_id", $id)->get();
+        return response()->json(["response" => $response]);
+    }
+
+    public function getBranchId($id) {
+        $response = Branch::select("branch_office.id", "stakeholder.type_person_id", "stakeholder.type_regime_id", "stakeholder.responsible_id", "stakeholder.type_document", "branch_office.document", "branch_office.verification", "branch_office.business", "branch_office.business_name", "stakeholder.sector_id", "branch_office.city_id", "branch_office.term", "branch_office.stakeholder_id", "branch_office.email", "branch_office.web_site", "branch_office.send_city_id", "branch_office.invoice_city_id", "branch_office.address_send", "branch_office.address_invoice")
+                        ->join("stakeholder", "stakeholder.id", "branch_office.stakeholder_id")
+                        ->where("branch_office.id", $id)->first();
         return response()->json(["response" => $response]);
     }
 
@@ -234,12 +241,19 @@ class ClientController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $stakeholder = Stakeholder::FindOrFail($id);
         $input = $request->all();
+        
+        if($input["stakeholder_id"]==''){
+            $stakeholder = Stakeholder::Find($id);
+        }else{
+            $stakeholder = Branch::Find($id);
+        }
+        
         $input["user_update"] = Auth::user()->id;
 
         $result = $stakeholder->fill($input)->save();
         if ($result) {
+            
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);

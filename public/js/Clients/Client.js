@@ -531,6 +531,7 @@ function Client() {
                     if (data.success == true) {
                         table.ajax.reload();
                         toastr.success(msg);
+                        $(".input-clients").setFields({data: data.header})
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error(xhr.responseJSON.msg);
@@ -783,12 +784,12 @@ function Client() {
                 html += "<tbody>";
                 $.each(data.response, function (i, val) {
                     html += "<tr>";
-                    html += "<td>" + val.id + "</td>";
-                    html += "<td>" + val.business + "</td>";
-                    html += "<td>" + val.business_name + "</td>";
-                    html += "<td>" + val.document + "</td>";
-                    html += "<td>" + val.email + "</td>";
-                    html += "<td>" + val.address + "</td>";
+                    html += '<td><a onclick=obj.showBranch(' + val.id + ') style="cursor:pointer">' + val.id + '</a></td>';
+                    html += '<td><a onclick=obj.showBranch(' + val.id + ') style="cursor:pointer">' + val.business + "</a></td>";
+                    html += '<td><a onclick=obj.showBranch(' + val.id + ') style="cursor:pointer">' + val.business_name + "</a></td>";
+                    html += "<td>" + val.document + "</a></td>";
+                    html += "<td>" + val.email + "</a></td>";
+                    html += "<td>" + val.address + "</a></td>";
                     html += "<td>" + val.term + "</td>";
                     html += "<td>" + val.city + "</td>";
                     html += "</tr>";
@@ -799,6 +800,18 @@ function Client() {
         return html;
     }
 
+    this.showBranch = function (id) {
+        $.ajax({
+            url: 'clients/' + id + '/getBranchId',
+            method: 'get',
+            dataType: 'JSON',
+            success: function (data) {
+                $('#myTabs a[href="#management"]').tab('show');
+                $("#btnSave").attr("disabled", false);
+                $(".input-clients").setFields({data: data.response})
+            }
+        })
+    }
     this.showModalSpecial = function (id) {
         $.ajax({
             url: 'clients/' + id + '/getSpecialId',

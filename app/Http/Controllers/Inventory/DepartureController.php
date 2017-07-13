@@ -722,7 +722,7 @@ class DepartureController extends Controller {
 
                                 $input["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
                                 $input["total"] = "$ " . number_format($this->total, 0, ",", ".");
-                                $input["exento"] = "$ " . number_format($this->total, 0, ",", ".");
+                                $input["exento"] = "$ " . number_format($this->exento, 0, ",", ".");
                                 $input["tax5f"] = "$ " . number_format($this->tax5, 0, ",", ".");
                                 $input["tax5"] = $this->tax5;
                                 $input["tax19f"] = "$ " . number_format($this->tax19, 0, ",", ".");

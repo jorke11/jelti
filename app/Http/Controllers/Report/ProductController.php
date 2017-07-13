@@ -29,7 +29,9 @@ class ProductController extends Controller {
 
 
         $sql = "
-            SELECT p.id,p.title as product,sum(d.quantity * coalesce(p.packaging,1)) totalunidades,round(sum(d.value * d.quantity * d.units_sf)) as total
+            SELECT p.id,p.title as product,
+            sum(d.quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) totalunidades
+            ,round(sum(d.value * d.quantity * coalesce(d.units_sf))) as total
             FROM sales_detail d
             JOIN sales s ON s.id=d.sale_id
             JOIN products p ON p.id=d.product_id  
@@ -39,6 +41,7 @@ class ProductController extends Controller {
             GROUP by 1,2
             ORDER BY 3 DESC
             ";
+//        echo $sql;exit;
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }
@@ -56,8 +59,8 @@ class ProductController extends Controller {
             ORDER BY 3 DESC
             ";
 
-        echo $sql;
-        exit;
+//        echo $sql;
+//        exit;
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }

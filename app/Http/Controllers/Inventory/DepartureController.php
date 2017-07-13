@@ -411,14 +411,17 @@ class DepartureController extends Controller {
             $dep = Departures::find($id);
 
             $sal = Sales::where("departure_id", $id)->first();
-            $detail = SaleDetail::where("sale_id", $sal->id)->get();
+            if ($sal != null) {
+                $detail = SaleDetail::where("sale_id", $sal->id)->get();
 
-            foreach ($detail as $value) {
-                $det = SaleDetail::find($value->id);
-                $det->delete();
+                foreach ($detail as $value) {
+                    $det = SaleDetail::find($value->id);
+                    $det->delete();
+                }
+                $sal->delete();
             }
 
-            $sal->delete();
+
 
             $dep->status_id = 1;
             $dep->save();

@@ -59,8 +59,8 @@ class ProductController extends Controller {
             ORDER BY 3 DESC
             ";
 
-        echo $sql;
-        exit;
+//        echo $sql;
+//        exit;
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }

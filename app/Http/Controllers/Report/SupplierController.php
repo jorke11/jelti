@@ -97,10 +97,11 @@ class SupplierController extends Controller {
                     select coalesce(sum(shipping_cost),0) 
                     from sales 
                     where created_at >= '" . $input["init"] . " 00:00' AND created_at <= '" . $input["end"] . " 23:59' 
-                        and status_id='1' and client_id=s.client_id)) as total
+                        and status_id='1' and client_id=s.client_id)
+                ) as total
             FROM sales_detail d
             JOIN sales s ON s.id=d.sale_id
-            JOIN departures dep ON dep.id=s.departure_id
+            JOIN departures dep ON dep.id=s.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id
             JOIN stakeholder sta ON sta.id=s.client_id
             WHERE d.product_id IS NOT NULL
@@ -108,7 +109,7 @@ class SupplierController extends Controller {
                 $pro $sup
             group by 1,s.client_id
             order by 3 desc";
-//        echo $sql;exit;
+        echo $sql;exit;
         $res = DB::select($sql);
         
         return response()->json(["data" => $res]);

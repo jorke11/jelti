@@ -485,7 +485,7 @@ class DepartureController extends Controller {
                                     $price_sf = $val["price_sf"];
                                 }
                             }
-
+                            
                             $detail["product_id"] = $val["product_id"];
                             $detail["departure_id"] = $result;
                             $detail["status_id"] = 1;

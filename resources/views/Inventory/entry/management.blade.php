@@ -100,14 +100,6 @@
 
         </div>
         <div class="row">
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Purchase(Order):</label>
-                    <select class="form-control input-sm" id="purchase_id" name="purchase_id" required>
-                        <option value="0">Selection</option>
-                    </select>
-                </div>
-            </div>
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="email">Description:</label>

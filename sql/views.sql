@@ -48,7 +48,7 @@ LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='ge
 
 
 create or replace view vdepartures as 
-select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name ,sta.business_name) as client,w.description as warehouse,
+select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business ,sta.business) as client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
             (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity,
             

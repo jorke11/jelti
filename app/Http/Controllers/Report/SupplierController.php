@@ -84,7 +84,6 @@ class SupplierController extends Controller {
         }
 
         $sql = "
-        
                 SELECT sta.id,sta.business,sum(d.quantity * d.units_sf) totalunidades, SUM(d.quantity * d.value * d.units_sf) + SUM(d.quantity * d.value * d.units_sf * d.tax) total,json_agg(dep.invoice)
                 FROM sales_detail d 
                 JOIN sales s ON s.id=d.sale_id 

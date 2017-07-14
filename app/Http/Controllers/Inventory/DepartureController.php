@@ -66,16 +66,12 @@ class DepartureController extends Controller {
         $this->log = new LogController();
     }
 
-    public function index($client_id = null, $init = null, $end = null, $product = null, $supplier = NUll, $type = null) {
+    public function index($client_id = null, $init = null, $end = null, $product_id = null, $supplier_id = null) {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
         $commercial_id = null;
-        if (strpos($client_id, "_") !== false) {
-            $commercial_id = str_replace("_", "", $client_id);
-            $client_id = null;
-        }
 
-        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product", "supplier", "type", "commercial_id"));
+        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id"));
     }
 
     public function listTable(Request $req) {
@@ -91,6 +87,8 @@ class DepartureController extends Controller {
 
         if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
             $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
+
+            dd($pro);
         }
 
         if (isset($in["init"]) && $in["init"] != '') {
@@ -485,7 +483,7 @@ class DepartureController extends Controller {
                                     $price_sf = $val["price_sf"];
                                 }
                             }
-                            
+
                             $detail["product_id"] = $val["product_id"];
                             $detail["departure_id"] = $result;
                             $detail["status_id"] = 1;

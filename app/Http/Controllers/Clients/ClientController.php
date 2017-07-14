@@ -244,12 +244,12 @@ class ClientController extends Controller {
     public function update(Request $request, $id) {
         $input = $request->all();
 
-        if (isset($input["stakeholder_id"]) && $input["stakeholder_id"] == '') {
+        if (!isset($input["stakeholder_id"])) {
             $stakeholder = Stakeholder::Find($id);
         } else {
             $stakeholder = Branch::Find($id);
         }
-
+        
         $input["user_update"] = Auth::user()->id;
 
         $result = $stakeholder->fill($input)->save();

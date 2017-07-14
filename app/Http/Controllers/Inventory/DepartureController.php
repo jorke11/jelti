@@ -85,11 +85,7 @@ class DepartureController extends Controller {
                     ->where("status_id", 2);
         }
 
-        if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
-            $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
-
-            dd($pro);
-        }
+        
 
         if (isset($in["init"]) && $in["init"] != '') {
             $query->whereBetween("created", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
@@ -111,6 +107,15 @@ class DepartureController extends Controller {
         if (isset($in["commercial_id"]) && $in["commercial_id"] != '') {
             $query->where("status_id", 2)->where("responsible_id", $in["commercial_id"]);
         }
+        
+        
+//        if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
+//            $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
+//            
+//            DB::select("")
+//            
+//            dd($pro);
+//        }
 
         return Datatables::queryBuilder($query)->make(true);
     }
@@ -224,7 +229,7 @@ class DepartureController extends Controller {
         $user = Users::find($dep["responsible_id"]);
 
         $ware = Warehouses::find($dep["warehouse_id"]);
-
+        
         $this->email[] = $user->email;
 
 

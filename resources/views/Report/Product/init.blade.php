@@ -76,7 +76,7 @@
 
         <div class="x_panel">
             <div class="x_title">
-                <h2>Ventas por Productos por Ciudades<small>Sessions</small></h2>
+                <h2>Producto más vendido por Ciudad<small class="date-report"></small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -95,7 +95,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-               <div id="container_products" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                @include('Report.Product.products')
             </div>
         </div>
     </div>

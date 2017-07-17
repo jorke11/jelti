@@ -226,7 +226,6 @@ class DepartureController extends Controller {
                     ->first();
         }
         
-        dd($sale);
 
         $user = Users::find($dep["responsible_id"]);
 

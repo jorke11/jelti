@@ -536,7 +536,7 @@ function Client() {
                     dataType: 'JSON',
                     success: function (data) {
                         if (data.success == true) {
-                            $("#btnSave").attr("disabled",true);
+                            $("#btnSave").attr("disabled",false);
                             table.ajax.reload();
                             toastr.success(msg);
                             $(".input-clients").setFields({data: data.header})

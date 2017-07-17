@@ -487,6 +487,7 @@ Route::get('/reportClient', "Report\ClientController@index");
 Route::get('/api/reportClient', "Report\ClientController@getList");
 Route::get('/api/reportClientTarget', "Report\ClientController@getListTarger");
 Route::get('/api/reportClientProduct', "HomeController@getListProduct");
+Route::get('/api/reportClientProductDash', "HomeController@getListProductDash");
 Route::get('/api/reportClientProductUnits', "HomeController@getListProductUnits");
 Route::get('/api/reportSupplierDash', "HomeController@getListSupplier");
 Route::get('/api/reportClientCities', "Report\ClientController@listCities");

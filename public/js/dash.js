@@ -97,7 +97,7 @@ function dash() {
         var obj = {};
 
         $.ajax({
-            url: "/api/reportClientProduct",
+            url: "/api/reportClientProductDash",
             method: 'GET',
             success: function (data) {
 

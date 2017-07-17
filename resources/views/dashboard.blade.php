@@ -222,7 +222,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Ventas por productos<small>Sessions</small></h2>
+                        <h2>Ventas por Productos del mes {{date("F")}}<small>A la fecha {{date("Y F d")}}</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -249,7 +249,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Ventas <small>Sessions</small></h2>
+                        <h2>Ventas por Productos del mes {{date("F")}}<small>A la fecha {{date("Y F d")}}</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -278,7 +278,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Ventas por Totales <small>Sessions</small></h2>
+                        <h2>Ventas por Totales (histórico)<small>A la fecha {{date("Y F d")}}</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -305,7 +305,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Ventas por proveedor <small>Sessions</small></h2>
+                        <h2>Ventas por proveedor del mes {{date('F')}} <small>A la fecha {{date("Y F d")}}</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>

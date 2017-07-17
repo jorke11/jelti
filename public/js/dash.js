@@ -17,10 +17,10 @@ function dash() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text: 'Total ventas por Mes'
+                        text: 'Total ventas mensuales'
                     },
                     subtitle: {
-                        text: 'Ventas totales con IVA'
+                        text: 'en COP (con IVA) y en Unidades'
                     },
                     xAxis: [{
                             categories: data.category,
@@ -67,7 +67,7 @@ function dash() {
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Facturado',
+                            name: 'Valor en COP',
                             type: 'column',
                             yAxis: 1,
 //                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
@@ -106,10 +106,10 @@ function dash() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text: data.date + '<br>Ventas por Productos '
+                        text: 'Ventas por Productos del mes ' + data.date
                     },
                     subtitle: {
-                        text: 'Ventas con IVA en $'
+                        text: 'Ranking de ' +data.date +' en COP (con IVA)'
                     },
                     xAxis: [{
                             categories: data.category,
@@ -156,7 +156,7 @@ function dash() {
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Valor en Pesos',
+                            name: 'Valor en COP',
                             type: 'column',
                             yAxis: 1,
 //                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
@@ -200,10 +200,10 @@ function dash() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text: data.date + '<br>Ventas por Productos'
+                        text: '<br>Ventas por Productos del mes ' + data.date
                     },
                     subtitle: {
-                        text: 'Ventas en Units'
+                        text: 'Ranking de ' + data.date+ ' en Unidades'
                     },
                     xAxis: [{
                             categories: data.category,
@@ -250,7 +250,7 @@ function dash() {
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Valor en Pesos',
+                            name: 'Valor en COP',
                             type: 'column',
                             yAxis: 1,
 //                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
@@ -295,10 +295,10 @@ function dash() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text:  '<br>Ventas por Proveedor '
+                        text: '<br>Ventas por Proveedor '
                     },
                     subtitle: {
-                        text: 'Ventas con IVA en $ y en Units'
+                        text: 'Total Ventas (con IVA) en COP y en Unidades'
                     },
                     xAxis: [{
                             categories: data.category,
@@ -345,7 +345,7 @@ function dash() {
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Facturado',
+                            name: 'Valor en COP',
                             type: 'column',
                             yAxis: 1,
 //                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
@@ -360,7 +360,7 @@ function dash() {
                             name: 'Unidades',
                             type: 'column',
                             data: data.quantity,
-                             color: "#00b065",
+                            color: "#00b065",
                             tooltip: {
                                 valueSuffix: ' Units'
                             }

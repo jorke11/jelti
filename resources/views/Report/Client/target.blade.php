@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Clientes Nuevos</div>
+                <div class="panel-heading">Nuevos Clientes en Jelti</div>
                 <div class="panel-body">
                     <table class="table nowrap" cellspacing="0" width="100%" id="tblTarget">
                         <thead>

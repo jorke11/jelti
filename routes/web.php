@@ -132,6 +132,7 @@ Route::delete('/purchase/detail/{id}', 'Invoicing\PurchaseController@destroyDeta
 Route::get('/purchase/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProductOut']);
 Route::post('/purchase/sendPurchase', 'Invoicing\PurchaseController@sendPurchase');
 Route::get('/purchase/testNotification/{id}', 'Invoicing\PurchaseController@testNotification');
+Route::get('/reportPurchase', 'Report\PurchaseController@index');
 
 Route::resource('/sale', 'Invoicing\SaleController');
 Route::get('/sale/{id}/consecutive', ['uses' => 'Invoicing\SaleController@getConsecutive']);

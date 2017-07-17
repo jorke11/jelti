@@ -30,12 +30,18 @@ FROM sales_detail d JOIN sales s ON s.id=d.sale_id JOIN departures dep ON dep.id
 JOIN products p ON p.id=d.product_id WHERE d.product_id is NOT NULL AND s.created >= '" . $init . " 00:00' AND s.created <= '" . $end . " 23:59'	            
             ";
 
-        $sql = "
+        dd($init);
+        for ($i = 0; $i > 3; $i++) {
+            $sql .= "
             SELECT sum(total) totalsales,sum(quantity) quantity,sum(shipping_cost) as shipping_cost
             FROM vdepartures 
             WHERE created_at >= '" . $init . " 00:00' AND created_at <= '" . $end . " 23:59' and status_id=2
-                ";
+            UNION
+            ";
+        }
 
+        echo $sql;
+        exit;
         $res = DB::select($sql);
 //        dd($res);
         $total = 0;

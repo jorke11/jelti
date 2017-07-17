@@ -216,13 +216,13 @@ class DepartureController extends Controller {
 
         $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
                 ->where("stakeholder_id", $sale["client_id"])
-                ->join("cities", "cities.id", "branch_office.destination_id")
+                ->join("cities", "cities.id", "branch_office.send_city_id")
                 ->first();
 
         if ($cli == null) {
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
                     ->where("stakeholder.id", $sale["client_id"])
-                    ->join("cities", "cities.id", "stakeholder.destination_id")
+                    ->join("cities", "cities.id", "stakeholder.send_city_id")
                     ->first();
         }
 
@@ -231,7 +231,6 @@ class DepartureController extends Controller {
         $ware = Warehouses::find($dep["warehouse_id"]);
         
         $this->email[] = $user->email;
-
 
         $term = 7;
 

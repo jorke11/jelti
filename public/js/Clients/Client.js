@@ -509,6 +509,7 @@ function Client() {
     }
 
     this.save = function () {
+        $("#btnSave").attr("disabled",true);
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
@@ -526,22 +527,31 @@ function Client() {
                 msg = "Edited Record";
             }
 
-            $.ajax({
-                url: url,
-                method: method,
-                data: data,
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == true) {
-                        table.ajax.reload();
-                        toastr.success(msg);
-                        $(".input-clients").setFields({data: data.header})
+            if ($("#frm #verification").val() != '') {
+
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: data,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success == true) {
+                            $("#btnSave").attr("disabled",true);
+                            table.ajax.reload();
+                            toastr.success(msg);
+                            $(".input-clients").setFields({data: data.header})
+                        }
+                    }, error: function (xhr, ajaxOptions, thrownError) {
+                        $("#btnSave").attr("disabled",false);
+                        toastr.error(xhr.responseJSON.msg);
                     }
-                }, error: function (xhr, ajaxOptions, thrownError) {
-                    toastr.error(xhr.responseJSON.msg);
-                }
-            })
+                })
+            } else {
+                $("#btnSave").attr("disabled",false);
+                toastr.error("Campo de verificación vacio!");
+            }
         } else {
+            $("#btnSave").attr("disabled",false);
             toastr.error("Fields Required!");
         }
     }

@@ -225,6 +225,8 @@ class DepartureController extends Controller {
                     ->join("cities", "cities.id", "stakeholder.send_city_id")
                     ->first();
         }
+        
+        dd($sale);
 
         $user = Users::find($dep["responsible_id"]);
 

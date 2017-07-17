@@ -277,8 +277,6 @@ function Product() {
                     $(".input-product").setFields({data: data.header, disabled: true});
                 }
 
-
-
                 if (data.header.image != null) {
                     $("#imageMain").attr("src", "/images/product/" + data.header.image);
                 }

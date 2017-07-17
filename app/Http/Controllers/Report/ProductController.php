@@ -88,8 +88,6 @@ class ProductController extends Controller {
             ORDER by 4 DESC
             ";
 
-//        echo $sql;exit;
-//        exit;
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }

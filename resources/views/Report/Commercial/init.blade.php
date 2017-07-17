@@ -34,7 +34,6 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div id="container_commercial" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                <!--@include('Report.Client.product')-->
             </div>
         </div>
     </div>
@@ -42,8 +41,6 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 @include('Report.Commercial.detail')
-                <!--<div id="container_cities" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
-                <!--@include('Report.Client.cities')-->
             </div>
         </div>
     </div>
@@ -53,18 +50,10 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <!--<div id="container_commercial" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
-                <!--@include('Report.Commercial.detail')-->
+                  @include('Report.Commercial.products')
             </div>
         </div>
     </div>
-<!--    <div class="col-lg-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                @include('Report.Client.target')
-            </div>
-        </div>
-    </div>-->
 </div>
 
 

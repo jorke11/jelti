@@ -234,7 +234,7 @@ class HomeController extends Controller {
             desc limit 10";
 
         $res = DB::select($cli);
-        echo $cli;exit;
+//        echo $cli;exit;
         $cat = array();
         $total = array();
         $quantity = array();

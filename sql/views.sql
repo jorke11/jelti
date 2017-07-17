@@ -64,7 +64,7 @@ select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business ,s
             (select coalesce(sum(quantity * units_sf * value),0) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id) 
             END as subtotalnumeric,
             
-           sta.id as client_id,d.created,dest.description as destination,d.destination_id
+           sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id

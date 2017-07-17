@@ -269,7 +269,14 @@ function Product() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-product").cleanFields();
-                $(".input-product").setFields({data: data.header});
+                
+                if ($("#role_id").val() == 1) {
+                    $(".input-product").setFields({data: data.header});
+                } else {
+                    
+                    $(".input-product").setFields({data: data.header, disabled: true});
+                }
+
 
 
                 if (data.header.image != null) {

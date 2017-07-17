@@ -27,7 +27,6 @@ class ProductController extends Controller {
         }
 
 
-
         $sql = "
             SELECT p.id,p.title as product,
             sum(d.quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) totalunidades

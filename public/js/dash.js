@@ -17,7 +17,7 @@ function dash() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text: 'Total ventas mensuales'
+                        text: 'Ventas Mensuales'
                     },
                     subtitle: {
                         text: 'en COP (con IVA) y en Unidades'

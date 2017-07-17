@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
                                 @if(isset($client))
-                                <div class="huge">Cliente <br>{{(isset($client->client)?$client->client:'SuperFüds')}}</div>
+                                <div class="huge">Ventas <br>{{(isset($client->client)?$client->client:'SuperFüds')}}</div>
                                 <div> Total Unidades {{(isset($client->unidades)?$client->unidades:0)}}<br>
                                     @if(count($client)>0)
                                     Monto: $ {{number_format(round($client->total), 0, ',', '.')}}
@@ -79,7 +79,7 @@
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
                                 @if(isset($supplier))
-                                <div class="huge">Proveedor<br>{{(isset($supplier->proveedor)?$supplier->proveedor:'SuperFüds')}}</div>
+                                <div class="huge">Compras<br>{{(isset($supplier->proveedor)?$supplier->proveedor:'SuperFüds')}}</div>
                                 <div> Total Unidades {{(isset($supplier->cantidadtotal)?$supplier->cantidadtotal:0)}}<br>
                                     @if(count($supplier)>0)
                                     Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}
@@ -305,7 +305,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Ventas por proveedor del mes {{date('F')}} <small>A la fecha {{date("Y F d")}}</small></h2>
+                        <h2>Ventas por Proveedor del mes {{date('F')}} <small>A la fecha {{date("Y F d")}}</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -325,62 +325,6 @@
                     </div>
                     <div class="x_content">
                         <div id="container_supplier" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
-        <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Pie Graph Chart <small>Sessions</small></h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <canvas id="pieChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Pie Area Graph <small>Sessions</small></h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <canvas id="polarArea"></canvas>
                     </div>
                 </div>
             </div>

@@ -52,7 +52,7 @@ function Product() {
             method: 'GET',
             success: function (data) {
 
-                Highcharts.chart('container_supplier', {
+                Highcharts.chart('container_products', {
                     chart: {
                         zoomType: 'xy'
                     },
@@ -117,15 +117,6 @@ function Product() {
                                 valueSuffix: ' $'
                             }
 
-                        },
-                        {
-                            name: 'Unidades',
-                            type: 'column',
-                            data: data.quantity,
-                            color: "#00b065",
-                            tooltip: {
-                                valueSuffix: ' Units'
-                            }
                         }
 
                     ]

@@ -85,7 +85,7 @@ class DepartureController extends Controller {
                     ->where("status_id", 2);
         }
 
-        
+
 
         if (isset($in["init"]) && $in["init"] != '') {
             $query->whereBetween("created", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
@@ -107,8 +107,8 @@ class DepartureController extends Controller {
         if (isset($in["commercial_id"]) && $in["commercial_id"] != '') {
             $query->where("status_id", 2)->where("responsible_id", $in["commercial_id"]);
         }
-        
-        
+
+
 //        if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
 //            $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
 //            
@@ -214,23 +214,25 @@ class DepartureController extends Controller {
 
         $dep = Departures::find($id);
 
-        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
+        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
                 ->where("stakeholder_id", $sale["client_id"])
-                ->join("cities", "cities.id", "branch_office.send_city_id")
                 ->first();
 
         if ($cli == null) {
-            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
                     ->where("stakeholder.id", $sale["client_id"])
-                    ->join("cities", "cities.id", "stakeholder.send_city_id")
                     ->first();
         }
-        
 
+        
+        $city = Cities::find($dep->destination_id);
+        
+        $cli->city = $city->description;
+        
         $user = Users::find($dep["responsible_id"]);
 
         $ware = Warehouses::find($dep["warehouse_id"]);
-        
+
         $this->email[] = $user->email;
 
         $term = 7;

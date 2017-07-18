@@ -67,6 +67,7 @@ function Sale() {
             $("#frm #status_id").val(1).trigger('change');
             $("#frm #status_id").prop("disabled", true);
         });
+
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
             $(".input-detail").cleanFields();
@@ -75,10 +76,12 @@ function Sale() {
                 $("#frmDetail #real_quantity").attr("disabled", true);
                 $("#frmDetail #description").attr("disabled", true);
             }
-
         });
+
         $("#frmDetail #product_id").change(function () {
             var param = {};
+            client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
+            
             param.client_id = client_id;
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
@@ -95,6 +98,7 @@ function Sale() {
                 }
             })
         });
+
         $("#btnDocument").click(function () {
             if ($("#frm #status_id").val() != 1) {
 
@@ -115,6 +119,7 @@ function Sale() {
                 toastr.error("error")
             }
         });
+
         $("#tabList").click(function () {
             table.ajax.reload();
         })

@@ -39,7 +39,7 @@ class SalesController extends Controller {
             ";
         }
 
-        $sql .= " order by 4 ASC";
+        $sql .= " order by 4 DESC";
 //        echo $sql;exit;
 
         $res = DB::select($sql);
@@ -47,9 +47,9 @@ class SalesController extends Controller {
         $total = 0;
 //        echo $sql;exit;
         if (count($res) > 0) {
-            $totalsales = $res[2]->totalsales;
-            $quantity = $res[2]->quantity;
-            $shipping_cost = $res[2]->shipping_cost;
+            $totalsales = $res[0]->totalsales;
+            $quantity = $res[0]->quantity;
+            $shipping_cost = $res[0]->shipping_cost;
         }
 
         if ($init != '') {

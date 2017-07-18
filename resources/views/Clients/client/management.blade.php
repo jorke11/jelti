@@ -151,14 +151,14 @@
 
                                     <div class="col-lg-4">
                                         <div class="row">
-                                            <div class="col-lg-11 col-md-10">
+                                            <div class="col-lg-10 col-md-8">
                                                 <div class="form-group">
                                                     <label for="address">Cuenta Principal</label>
                                                     <select class="form-control input-clients"  id="stakeholder_id" name="stakeholder_id" data-api="/api/getClient" disabled>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-1 col-md-2">
+                                            <div class="col-lg-2 col-md-4">
                                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"  style="top:30px;cursor:pointer" id="cleanSelect2"></span>
                                             </div>
                                         </div>

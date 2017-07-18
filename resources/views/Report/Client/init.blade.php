@@ -52,14 +52,13 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                @include('Report.Product.detail')
+                @include('Report.Client.detail')
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                
             </div>
         </div>
     </div>

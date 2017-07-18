@@ -224,11 +224,11 @@ class DepartureController extends Controller {
                     ->first();
         }
 
-        
+
         $city = Cities::find($dep->destination_id);
-        
+
         $cli->city = $city->description;
-        
+
         $user = Users::find($dep["responsible_id"]);
 
         $ware = Warehouses::find($dep["warehouse_id"]);
@@ -1164,11 +1164,15 @@ class DepartureController extends Controller {
                             if ($pro == null) {
                                 $pro = Products::where("bar_code", $book->ean)->first();
                             }
-                        } else {
+                        } else if (isset($book->ean) && $book->ean != '') {
                             if (isset($book->ean) && $book->ean != '') {
                                 $pro = Products::where("bar_code", $book->ean)->first();
                             } else {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
+                            }
+                        } else {
+                            if (isset($book->sf_code) && $book->sf_code != '') {
+                                $pro = Products::where("sf_code", $book->sf_code)->first();
                             }
                         }
 

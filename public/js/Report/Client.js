@@ -7,8 +7,8 @@ function Client() {
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
-
-
+//
+//
         $("#btnSearch").click(function () {
             objCli.table();
             objCli.tableTarget();
@@ -43,15 +43,13 @@ function Client() {
 
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2],
+                    aTargets: [0, 1],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
                     }
                 }
 
-            ],
-            "decimal": ",",
-            "thousands": ".",
+            ]
         });
     }
     this.tableTarget = function () {

@@ -28,7 +28,7 @@ class ClientController extends Controller {
             group by 1
             ORDER BY 2 DESC
             ";
-//        echo $sql;exit;
+        
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);

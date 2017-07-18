@@ -150,12 +150,22 @@
                                     </div>
 
                                     <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="address">Cuenta Principal</label>
-                                            <select class="form-control input-clients"  id="stakeholder_id" name="stakeholder_id" data-api="/api/getClient" disabled>
-                                            </select>
+                                        <div class="row">
+                                            <div class="col-lg-11">
+                                                <div class="form-group">
+                                                    <label for="address">Cuenta Principal</label>
+                                                    <select class="form-control input-clients"  id="stakeholder_id" name="stakeholder_id" data-api="/api/getClient" disabled>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1">
+                                                <span class="glyphicon glyphicon-remove" aria-hidden="true"  style="top:30px;cursor:pointer" id="cleanSelect2"></span>
+                                            </div>
                                         </div>
+
+
                                     </div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4">

@@ -9,6 +9,7 @@ function Client() {
         $("#btnSaveSpecial").click(this.saveSpecial);
         $("#btnNewContact").click(this.newContact);
         $("#btnSaveContact").click(this.saveContact);
+        $("#cleanSelect2").click(this.cleanStakeholder);
         $("#tabInvoice").click(function () {
             obj.tableInvoice($("#frm #id").val());
         });
@@ -222,6 +223,11 @@ function Client() {
         $("#btnComment").click(this.addCommnet);
         $("#btnUpload_code").click(this.uploadExcelCode)
 
+    }
+
+    this.cleanStakeholder = function () {
+       
+        $("#frm #stakeholder_id").val('').trigger('change')
     }
 
     this.uploadExcelCode = function () {
@@ -509,7 +515,7 @@ function Client() {
     }
 
     this.save = function () {
-        $("#btnSave").attr("disabled",true);
+        $("#btnSave").attr("disabled", true);
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
@@ -536,22 +542,22 @@ function Client() {
                     dataType: 'JSON',
                     success: function (data) {
                         if (data.success == true) {
-                            $("#btnSave").attr("disabled",false);
+                            $("#btnSave").attr("disabled", false);
                             table.ajax.reload();
                             toastr.success(msg);
                             $(".input-clients").setFields({data: data.header})
                         }
                     }, error: function (xhr, ajaxOptions, thrownError) {
-                        $("#btnSave").attr("disabled",false);
+                        $("#btnSave").attr("disabled", false);
                         toastr.error(xhr.responseJSON.msg);
                     }
                 })
             } else {
-                $("#btnSave").attr("disabled",false);
+                $("#btnSave").attr("disabled", false);
                 toastr.error("Campo de verificación vacio!");
             }
         } else {
-            $("#btnSave").attr("disabled",false);
+            $("#btnSave").attr("disabled", false);
             toastr.error("Fields Required!");
         }
     }

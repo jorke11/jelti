@@ -245,16 +245,17 @@ class ClientController extends Controller {
         $input = $request->all();
 
         if (!isset($input["stakeholder_id"])) {
+            $input["stakeholder_id"] = null;
             $stakeholder = Stakeholder::Find($id);
         } else {
             $stakeholder = Branch::Find($id);
         }
-        
+
         $input["user_update"] = Auth::user()->id;
 
         $result = $stakeholder->fill($input)->save();
-        if ($result) {
 
+        if ($result) {
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);

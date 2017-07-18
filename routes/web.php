@@ -500,6 +500,9 @@ Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial"
 Route::get('/api/reportCommercialGraph', "Report\CommercialController@listCommercialGraph");
 
 
+Route::get('/api/reportProductByCommercial', "Report\CommercialController@getProductByCommercial");
+
+
 Route::get('/reportSupplier', "Report\SupplierController@index");
 
 Route::get('/api/reportSupplier', "Report\SupplierController@getList");

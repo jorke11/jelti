@@ -2,6 +2,7 @@ function Commercial() {
     this.init = function () {
         this.table();
         this.tableCommercial();
+        this.tableProductsByCommecial();
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
         $("#btnSearch").click(function () {
@@ -12,7 +13,7 @@ function Commercial() {
 //            objCom.tableCities();
         })
     }
-    
+
     this.see = function (id) {
         window.open("departure/_" + id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
     }
@@ -22,7 +23,7 @@ function Commercial() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         return $('#tbl').DataTable({
-            destroy:true,
+            destroy: true,
             "ajax": {
                 url: "/api/reportCommercial",
                 method: 'GET',
@@ -45,8 +46,64 @@ function Commercial() {
             ],
         });
     }
+
+    this.tableProductsByCommecial = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+
+        $.ajax({
+            url: "/api/reportProductByCommercial",
+            dataType: "json",
+            "success": function (json) {
+                var tableHeaders = '';
+
+                $.each(json.columns, function (i, val) {
+                    tableHeaders += "<th>" + val.title + "</th>";
+                });
+
+//                $("#content-product").empty();
+//                $("#content-product").append('<table id="displayTable" class="display" cellspacing="0" width="100%"><thead><tr>' + tableHeaders + '</tr></thead></table>');
     
-    
+                $("#displayTable thead").html(tableHeaders);
+                $('#displayTable').dataTable(json.data);
+
+//                $('#displayTable').DataTable({
+//                    data: json.data,
+////                    columns: json.columns,
+//                    scrollX: true
+//                });
+            },
+
+        });
+
+
+//        return $('#tblProducts').DataTable({
+//            destroy: true,
+//            "ajax": {
+//                url: "/api/reportProductByCommercial",
+//                method: 'GET',
+//                data: obj
+//            },
+//            columns: [
+//                {data: "vendedor"},
+//                {data: "quantity"},
+//                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
+//                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
+//            ],
+//            order: [[2, 'DESC']],
+//            aoColumnDefs: [
+//                {
+//                    aTargets: [0, 1, 2],
+//                    mRender: function (data, type, full) {
+//                        return '<a href="#" onclick="objCom.see(' + full.id + ')">' + data + '</a>';
+//                    }
+//                }
+//            ],
+//        });
+    }
+
+
     this.tableCommercial = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();

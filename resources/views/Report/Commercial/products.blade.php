@@ -3,17 +3,14 @@
         <div class="col-lg-12">
 
             <div class="panel panel-default">
-                <div class="panel-body">
-                    <table class="table" id="tblProducts">
+                <div class="panel-body"  id="content-product">
+                    <table id="displayTable" class="table table-condensed nowrap">
                         <thead>
-                            <tr>
-                                <td>Comercial</td>
-                                <td>Total Unidades</td>
-                                <td>Total Bruto</td>
-                                <td>Total Factura</td>
-                            </tr>
+                            
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            
+                        </tbody>
                     </table>
                 </div>
             </div>

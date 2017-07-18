@@ -1172,7 +1172,7 @@ class DepartureController extends Controller {
                             }
                         } else {
                             if (isset($book->sf_code) && $book->sf_code != '') {
-                                $pro = Products::where("sf_code", $book->sf_code)->first();
+                                $pro = Products::where("reference", $book->sf_code)->first();
                             }
                         }
 

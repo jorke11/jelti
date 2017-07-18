@@ -271,7 +271,7 @@ class ClientController extends Controller {
     public function destroy($id) {
         $stakeholder = Stakeholder::FindOrFail($id);
 //        $result = $stakeholder->delete();
-        $stakeholder->status_id = 3;
+        $stakeholder->status_id = 4;
         $result = $stakeholder->save();
 //        $result = $stakeholder->delete();
         if ($result) {

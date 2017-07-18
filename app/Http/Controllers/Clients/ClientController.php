@@ -251,6 +251,8 @@ class ClientController extends Controller {
             $stakeholder = Branch::Find($id);
         }
 
+        $input["shipping_cost"] = (isset($input["shipping_cost"])) ? 1 : 0;
+        $input["price_special"] = (isset($input["price_special"])) ? 1 : 0;
         $input["user_update"] = Auth::user()->id;
 
         $result = $stakeholder->fill($input)->save();

@@ -226,7 +226,7 @@ function Client() {
     }
 
     this.cleanStakeholder = function () {
-       
+
         $("#frm #stakeholder_id").val('').trigger('change')
     }
 
@@ -658,6 +658,28 @@ function Client() {
             })
         }
     }
+    
+    this.deleteBranch = function (id) {
+        toastr.remove();
+        if (confirm("Deseas eliminar")) {
+            var token = $("input[name=_token]").val();
+            var url = "/clients/branch/" + id;
+            $.ajax({
+                url: url,
+                headers: {'X-CSRF-TOKEN': token},
+                method: "DELETE",
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        table.ajax.reload();
+                        toastr.warning("Ok");
+                    }
+                }, error: function (err) {
+                    toastr.error("No se puede borrra Este registro");
+                }
+            })
+        }
+    }
 
     this.deleteContact = function (id) {
         toastr.remove();
@@ -793,7 +815,7 @@ function Client() {
     this.format = function (d) {
         var html = '<br><table class="table-detail">';
         html += '<thead>'
-        html += '<tr><th>#</th><th>Cuenta</th><th>Razón Social</th><th>Documento</th><th>Correo</th><th>Dirección</th><th>Plazo de pago</th><th>Ciudad</th></tr></thead>';
+        html += '<tr><th>#</th><th>Cuenta</th><th>Razón Social</th><th>Documento</th><th>Correo</th><th>Dirección</th><th>Plazo de pago</th><th>Ciudad</th><th>Borrar</th></tr></thead>';
         $.ajax({
             url: 'clients/' + d.id + "/getBranch",
             method: "GET",
@@ -811,6 +833,7 @@ function Client() {
                     html += "<td>" + val.address + "</a></td>";
                     html += "<td>" + val.term + "</td>";
                     html += "<td>" + val.city + "</td>";
+                    html += '<td><span class="glyphicon glyphicon-remove" aria-hidden="true" style="cursor:pointer" onclick=obj.deleteBranch('+val.id+')></span></td>';
                     html += "</tr>";
                 });
                 html += "</tbody></table><br>";

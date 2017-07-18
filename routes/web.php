@@ -76,6 +76,7 @@ Route::post('/clients/StoreContact', 'Clients\ClientController@storeContact');
 Route::delete('/clients/deleteContact/{id}', 'Clients\ClientController@deleteContact');
 Route::post('/clients/addChage', 'Clients\ClientController@addChanges');
 Route::get('/clients/contact/{id}', 'Clients\ClientController@editContact');
+Route::delete('/clients/branch/{id}', 'Clients\ClientController@destroyBranch');
 
 Route::post('/clients/addTax', 'Clients\ClientController@storeTax');
 Route::put('/clients/UpdateTax', 'Clients\ClientController@updateTax');

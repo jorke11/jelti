@@ -255,7 +255,11 @@ class ClientController extends Controller {
         $input["price_special"] = (isset($input["price_special"])) ? 1 : 0;
         $input["user_update"] = Auth::user()->id;
 
-        $result = $stakeholder->fill($input)->save();
+        if ($stakeholder == null) {
+            $result = Stakeholder::create($input);
+        } else {
+            $result = $stakeholder->fill($input)->save();
+        }
 
         if ($result) {
             return response()->json(['success' => true]);
@@ -270,6 +274,17 @@ class ClientController extends Controller {
         $stakeholder->status_id = 3;
         $result = $stakeholder->save();
 //        $result = $stakeholder->delete();
+        if ($result) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function destroyBranch($id) {
+        $stakeholder = Branch::FindOrFail($id);
+        $result = $stakeholder->delete();
+
         if ($result) {
             return response()->json(['success' => true]);
         } else {

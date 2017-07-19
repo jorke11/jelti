@@ -493,8 +493,7 @@ Route::get('/api/reportClientProductDash', "HomeController@getListProductDash");
 Route::get('/api/reportClientProductUnits', "HomeController@getListProductUnits");
 Route::get('/api/reportSupplierDash', "HomeController@getListSupplier");
 Route::get('/api/reportClientCities', "Report\ClientController@listCities");
-Route::get('/api/reportProducttByCategory', "Report\ClientController@getProductByCategory");
-
+Route::get('api/reportProductByClient', "Report\CommercialController@getProductByClient");
 
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");

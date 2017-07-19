@@ -56,17 +56,35 @@ function Commercial() {
             url: "/api/reportProductByCommercial",
             dataType: "json",
             "success": function (json) {
-                var tableHeaders = '';
+                var tableHeaders = '<tr>', body = '';
 
                 $.each(json.columns, function (i, val) {
-                    tableHeaders += "<th>" + val.title + "</th>";
+                    tableHeaders += '<th rowspan=' + rowspan + '>' + val + "</th>";
                 });
+                
 
 //                $("#content-product").empty();
 //                $("#content-product").append('<table id="displayTable" class="display" cellspacing="0" width="100%"><thead><tr>' + tableHeaders + '</tr></thead></table>');
-    
+
+//        console.log(tableHeaders)
                 $("#displayTable thead").html(tableHeaders);
-                $('#displayTable').dataTable(json.data);
+                var rowspan = '';
+                $.each(json.data, function (i, val) {
+
+                    body += "<tr>";
+                    $.each(val, function (j, value) {
+
+                        body += '<td >' + value + "</td>";
+                    });
+
+                    body += "</tr>";
+
+                });
+
+                $('#displayTable tbody').html(body);
+                $('#displayTable').dataTable({
+                    scrollX: true
+                });
 
 //                $('#displayTable').DataTable({
 //                    data: json.data,

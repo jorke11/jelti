@@ -66,16 +66,12 @@ class DepartureController extends Controller {
         $this->log = new LogController();
     }
 
-    public function index($client_id = null, $init = null, $end = null, $product = null, $supplier = NUll, $type = null) {
+    public function index($client_id = null, $init = null, $end = null, $product_id = null, $supplier_id = null) {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
         $commercial_id = null;
-        if (strpos($client_id, "_") !== false) {
-            $commercial_id = str_replace("_", "", $client_id);
-            $client_id = null;
-        }
 
-        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product", "supplier", "type", "commercial_id"));
+        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id"));
     }
 
     public function listTable(Request $req) {
@@ -89,9 +85,7 @@ class DepartureController extends Controller {
                     ->where("status_id", 2);
         }
 
-        if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
-            $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
-        }
+
 
         if (isset($in["init"]) && $in["init"] != '') {
             $query->whereBetween("created", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
@@ -113,6 +107,15 @@ class DepartureController extends Controller {
         if (isset($in["commercial_id"]) && $in["commercial_id"] != '') {
             $query->where("status_id", 2)->where("responsible_id", $in["commercial_id"]);
         }
+
+
+//        if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
+//            $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
+//            
+//            DB::select("")
+//            
+//            dd($pro);
+//        }
 
         return Datatables::queryBuilder($query)->make(true);
     }
@@ -211,24 +214,26 @@ class DepartureController extends Controller {
 
         $dep = Departures::find($id);
 
-        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
+        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
                 ->where("stakeholder_id", $sale["client_id"])
-                ->join("cities", "cities.id", "branch_office.city_id")
                 ->first();
 
         if ($cli == null) {
-            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
                     ->where("stakeholder.id", $sale["client_id"])
-                    ->join("cities", "cities.id", "stakeholder.city_id")
                     ->first();
         }
+
+
+        $city = Cities::find($dep->destination_id);
+
+        $cli->city = $city->description;
 
         $user = Users::find($dep["responsible_id"]);
 
         $ware = Warehouses::find($dep["warehouse_id"]);
 
         $this->email[] = $user->email;
-
 
         $term = 7;
 
@@ -411,14 +416,15 @@ class DepartureController extends Controller {
             $dep = Departures::find($id);
 
             $sal = Sales::where("departure_id", $id)->first();
-            $detail = SaleDetail::where("sale_id", $sal->id)->get();
+            if ($sal != null) {
+                $detail = SaleDetail::where("sale_id", $sal->id)->get();
 
-            foreach ($detail as $value) {
-                $det = SaleDetail::find($value->id);
-                $det->delete();
+                foreach ($detail as $value) {
+                    $det = SaleDetail::find($value->id);
+                    $det->delete();
+                }
+                $sal->delete();
             }
-
-            $sal->delete();
 
             $dep->status_id = 1;
             $dep->save();
@@ -653,7 +659,7 @@ class DepartureController extends Controller {
                             $credit = 0;
                             $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
 
-                            if ($departure->status_id != 6) {
+                            if ($departure->invoice == '') {
                                 $departure->invoice = $con->consecutive;
                             }
 
@@ -722,7 +728,7 @@ class DepartureController extends Controller {
 
                                 $input["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
                                 $input["total"] = "$ " . number_format($this->total, 0, ",", ".");
-                                $input["exento"] = "$ " . number_format($this->total, 0, ",", ".");
+                                $input["exento"] = "$ " . number_format($this->exento, 0, ",", ".");
                                 $input["tax5f"] = "$ " . number_format($this->tax5, 0, ",", ".");
                                 $input["tax5"] = $this->tax5;
                                 $input["tax19f"] = "$ " . number_format($this->tax19, 0, ",", ".");
@@ -1159,11 +1165,15 @@ class DepartureController extends Controller {
                             if ($pro == null) {
                                 $pro = Products::where("bar_code", $book->ean)->first();
                             }
-                        } else {
+                        } else if (isset($book->ean) && $book->ean != '') {
                             if (isset($book->ean) && $book->ean != '') {
                                 $pro = Products::where("bar_code", $book->ean)->first();
                             } else {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
+                            }
+                        } else {
+                            if (isset($book->sf_code) && $book->sf_code != '') {
+                                $pro = Products::where("reference", $book->sf_code)->first();
                             }
                         }
 

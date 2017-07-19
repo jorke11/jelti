@@ -1,4 +1,4 @@
-function Sales() {
+function Purchase() {
     this.init = function () {
 
         $("#frmSale #finit").datetimepicker({format: 'Y-m-d'});
@@ -114,5 +114,5 @@ function Sales() {
     }
 }
 
-var objSale = new Sales();
-objSale.init();
+var objPurc = new Purchase();
+objPurc.init();

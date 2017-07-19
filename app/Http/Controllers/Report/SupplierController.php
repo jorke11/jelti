@@ -84,30 +84,19 @@ class SupplierController extends Controller {
         }
 
         $sql = "
-            SELECT 
-                sta.id,sta.business,sum(d.quantity * d.units_sf) totalunidades,
-                SUM(d.quantity * d.value * d.units_sf) + SUM(d.quantity * d.value * d.units_sf * d.tax) +(
-                select coalesce(sum(shipping_cost),0) 
-                    from sales 
-                    where created_at >= '" . $input["init"] . " 00:00' AND created_at <= '" . $input["end"] . " 23:59' 
-                        and status_id='1' and client_id=s.client_id
-                ) as total,
-                (SUM(d.quantity * d.value * d.units_sf) + SUM(d.quantity * d.value * d.units_sf * d.tax) + 
-                (
-                    select coalesce(sum(shipping_cost),0) 
-                    from sales 
-                    where created_at >= '" . $input["init"] . " 00:00' AND created_at <= '" . $input["end"] . " 23:59' 
-                        and status_id='1' and client_id=s.client_id)) as total
-            FROM sales_detail d
-            JOIN sales s ON s.id=d.sale_id
-            JOIN departures dep ON dep.id=s.departure_id
-            JOIN products p ON p.id=d.product_id
-            JOIN stakeholder sta ON sta.id=s.client_id
-            WHERE d.product_id IS NOT NULL
-            AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
-                $pro $sup
-            group by 1,s.client_id
-            order by 3 desc";
+                SELECT sta.id,sta.business,sum(d.quantity * d.units_sf) totalunidades, 
+                    SUM(d.quantity * d.value * d.units_sf) + SUM(d.quantity * d.value * d.units_sf * d.tax) total,json_agg(DISTINCT dep.invoice) invoices
+                FROM sales_detail d 
+                JOIN sales s ON s.id=d.sale_id 
+                JOIN departures dep ON dep.id=s.departure_id and dep.status_id=2 
+                JOIN products p ON p.id=d.product_id 
+                JOIN stakeholder sta ON sta.id=s.client_id 
+                WHERE d.product_id IS NOT NULL 
+                 AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+                  $pro $sup
+                group by 1,s.client_id
+                order by 3 desc
+            ";
 //        echo $sql;exit;
         $res = DB::select($sql);
         

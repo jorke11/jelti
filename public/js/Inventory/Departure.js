@@ -12,18 +12,31 @@ function Sale() {
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
         });
-        $("#frm #client_id").change(function () {
+
+        $("#frm #client_id").on('select2:closing', function (evt) {
             if ($(this).val() != 0) {
                 client_id = $(this).val();
                 $("#btnModalUpload,#btnmodalDetail").attr("disabled", false);
                 obj.getClient($(this).val());
-
             } else {
                 $("#frm #name_client").val("");
                 $("#frm #address_supplier").val("");
                 $("#frm #phone_supplier").val("");
             }
-        });
+        })
+
+//        $("#frm #client_id").change(function () {
+//            if ($(this).val() != 0) {
+//                client_id = $(this).val();
+//                $("#btnModalUpload,#btnmodalDetail").attr("disabled", false);
+//                obj.getClient($(this).val());
+//            } else {
+//                $("#frm #name_client").val("");
+//                $("#frm #address_supplier").val("");
+//                $("#frm #phone_supplier").val("");
+//            }
+//        });
+
         $("#branch_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getBranchAddress($(this).val());
@@ -31,6 +44,8 @@ function Sale() {
 
             }
         });
+
+
         $("#quantity").change(function () {
             $("#quantity_units").val(dataProduct.units_sf * $(this).val());
             $("#value_units").val(dataProduct.units_sf * $(this).val() * dataProduct.price_sf).formatNumber();
@@ -52,6 +67,7 @@ function Sale() {
             $("#frm #status_id").val(1).trigger('change');
             $("#frm #status_id").prop("disabled", true);
         });
+
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
             $(".input-detail").cleanFields();
@@ -60,10 +76,12 @@ function Sale() {
                 $("#frmDetail #real_quantity").attr("disabled", true);
                 $("#frmDetail #description").attr("disabled", true);
             }
-
         });
+
         $("#frmDetail #product_id").change(function () {
             var param = {};
+            client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
+            
             param.client_id = client_id;
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
@@ -80,6 +98,7 @@ function Sale() {
                 }
             })
         });
+
         $("#btnDocument").click(function () {
             if ($("#frm #status_id").val() != 1) {
 
@@ -100,6 +119,7 @@ function Sale() {
                 toastr.error("error")
             }
         });
+
         $("#tabList").click(function () {
             table.ajax.reload();
         })
@@ -751,12 +771,9 @@ function Sale() {
 
     this.table = function () {
         var param = {};
-        if ($("#frm #type").val() == 'r') {
-            param.supplier_id = $("#frm #client_id").val();
-        } else {
-            param.client_id = $("#frm #client_id").val();
-        }
 
+        param.supplier_id = $("#frm #supplier_id").val();
+        param.client_id = $("#frm #client_id").val();
         param.commercial_id = $("#frm #commercial_id").val();
 
         param.init = $("#frm #init").val();

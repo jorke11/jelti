@@ -5,8 +5,8 @@
             .detail {font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size: 12px;border-collapse: collapse;}
             .detail th {font-size: 13px;font-weight: normal;padding: 8px;background: #00b065;border-top: 4px solid #aabcfe;border-bottom: 1px solid #fff; color: #039;color:white;}
             .detail tbody td {padding: 8px;background: #f9f9f9;border-bottom: 1px solid #fff;color: #669;border-top: 1px solid transparent;}
-            .footer tbody td {padding: 8px;background: white;border-bottom: 1px solid #fff;color: #669;border-top: 1px solid transparent;}
-            .header tbody td {font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size: 12px;border-collapse: collapse; padding: 8px;background: white;border-bottom: 1px solid #fff;color: #669;border-top: 1px solid transparent;}
+            .footer tbody td {font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size: 12px;border-collapse: collapse;}
+            .header tbody td {font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size: 13px;border-collapse: collapse; padding: 8px;border-bottom: 1px solid #fff;;border-top: 1px solid transparent;}
         </style>
     </head>
     <body>
@@ -21,12 +21,12 @@
         
         <table align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" class="header">
             <tr>
-                <td width='15%'><img src="{!!asset('assets/images/logo.png')!!}" width="45" style="display:block"></td>
-                <td width='60%'>¡Hola! Feliz día</td>
+                <td width='75%'><img src="{!!asset('assets/images/logo.png')!!}" width="45" style="display:block"></td>
+               
                 <td><strong>Solicitud Compra {!!(isset($id))?$id:0!!}</strong><br> <strong></strong></td>
             </tr>
             <tr>
-                <td><br></td>
+                <td>¡Hola! Feliz día</td>
             </tr>
             <tr>
                 <td colspan="2">Les escribo para solicitar el siguiente pedido para nuestra bodega en {{$city}} 
@@ -51,9 +51,9 @@
                 <tr>
                     <th>Producto</th>
                     <th>Embalaje</th>
-                    <th>Unidades Pedido</th>
-                    <th>Precio Unitario</th>
+                    <th>Pedido</th>
                     <th>Unidades Total</th>
+                    <th>Precio Unitario</th>
                     <th>Total</th>
                 </tr>
             </thead>

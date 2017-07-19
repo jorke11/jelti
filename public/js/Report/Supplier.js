@@ -15,10 +15,16 @@ function Supplier() {
         })
     }
 
-    this.getDetail = function (client_id) {
+    this.getDetail = function (id) {
         var product = ($("#Detail #product_id").val() == null) ? 0 : $("#Detail #product_id").val();
         var supplier = ($("#Detail #supplier_id").val() == null) ? 0 : $("#Detail #supplier_id").val();
-        window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val() + "/" + product + "/" + supplier);
+        window.open("departure/" + id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val() + "/" + product + "/" + supplier);
+
+    }
+    this.getDetailSup = function (id) {
+        var product = ($("#Detail #product_id").val() == null) ? 0 : $("#Detail #product_id").val();
+        var supplier = ($("#Detail #supplier_id").val() == null) ? 0 : $("#Detail #supplier_id").val();
+        window.open("departure/" + id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val() + "/" + product + "/" + supplier);
 
     }
 
@@ -109,7 +115,7 @@ function Supplier() {
                 {
                     aTargets: [0, 1, 2],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.getDetail(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="obj.getDetailSup(' + full.id + ')">' + data + '</a>';
                     }
                 }
             ],

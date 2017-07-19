@@ -453,9 +453,19 @@ class EntryController extends Controller {
     public function update(Request $request, $id) {
         $entry = Entries::FindOrFail($id);
         $input = $request->all();
+        $input["status_id"] = 2;
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = Entries::FindOrFail($id);
+
+            $detailEntry = $this->formatDetail($id);
+
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+            $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+
+            return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
+
+
+
             return response()->json(['success' => true, "data" => $resp]);
         } else {
             return response()->json(['success' => false]);

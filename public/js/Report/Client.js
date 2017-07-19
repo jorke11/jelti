@@ -7,8 +7,8 @@ function Client() {
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
-
-
+//
+//
         $("#btnSearch").click(function () {
             objCli.table();
             objCli.tableTarget();
@@ -33,7 +33,7 @@ function Client() {
                 url: "/api/reportClient",
                 data: obj,
             },
-            scrollX:true,
+            scrollX: true,
             columns: [
                 {data: "client"},
                 {data: "unidades"},
@@ -43,15 +43,13 @@ function Client() {
 
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2],
+                    aTargets: [0, 1],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
                     }
                 }
 
-            ],
-            "decimal": ",",
-            "thousands": ".",
+            ]
         });
     }
     this.tableTarget = function () {
@@ -64,7 +62,7 @@ function Client() {
                 url: "/api/reportClientTarget",
                 data: obj,
             },
-            scrollX:true,
+            scrollX: true,
             columns: [
                 {data: "business"},
                 {data: "seats"},
@@ -98,10 +96,10 @@ function Client() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text: 'Productos x Ventas'
+                        text: 'Ventas por Productos '
                     },
                     subtitle: {
-                        text: 'Ventas totales con IVA'
+                        text: 'Ranking de ventas en COP (con IVA)'
                     },
                     xAxis: [{
                             categories: data.category,
@@ -148,7 +146,7 @@ function Client() {
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Facturado',
+                            name: 'Valor en COP',
                             type: 'column',
                             yAxis: 1,
 //                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
@@ -190,10 +188,10 @@ function Client() {
                         zoomType: 'xy'
                     },
                     title: {
-                        text: 'Total ventas por Mes'
+                        text: 'Ventas por Ciudad '
                     },
                     subtitle: {
-                        text: 'Ventas totales con IVA'
+                        text: 'Ranking de Ventas en COP (con IVA)'
                     },
                     xAxis: [{
                             categories: data.category,
@@ -240,7 +238,7 @@ function Client() {
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
                     series: [{
-                            name: 'Facturado',
+                            name: 'Valor en COP',
                             type: 'column',
                             yAxis: 1,
 //                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],

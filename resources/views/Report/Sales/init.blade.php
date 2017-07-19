@@ -21,7 +21,6 @@
                     @include('Report.Sales.summary')
                 </div>
             </div>
-
         </div>
         <div role="tabpanel" class="tab-pane " id="detail">
             @include('Report.Sales.detail')
@@ -35,8 +34,10 @@
         <div role="tabpanel" class="tab-pane " id="upload">
             @include('Administration.products.management')
         </div>
-
     </div>
 </div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 @endsection

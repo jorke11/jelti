@@ -13,6 +13,6 @@ select d.id,coalesce(d.invoice,'') invoice,  coalesce(s.business_name ,sta.busin
             JOIN stakeholder sta ON sta.id = d.client_id
             JOIN cities c ON c.id = d.city_id
             JOIN users u ON u.id = d.responsible_id
-            WHERE d.status_id=2  and (paid_out = false OR paid_out is null) and d.id=203
+            WHERE d.status_id=2  and (paid_out = false OR paid_out is null)
             ORDER BY  (d.created_at + CAST(s.term || ' days' AS INTERVAL),date_part('day',now()-(d.created_at + CAST(s.term || ' days' AS INTERVAL)))) DESC;
 

@@ -213,7 +213,7 @@ class PurchaseController extends Controller {
 
                     $newId = Entries::create($newIn)->id;
                     $det = PurchasesDetail::where("purchase_id", $in["id"])->get();
-                    
+
                     foreach ($det as $key => $value) {
                         $newDet["entry_id"] = $newId;
                         $newDet["product_id"] = $value->product_id;
@@ -237,7 +237,7 @@ class PurchaseController extends Controller {
                     $input["warehouse"] = $ware->description;
 
                     $user = Users::findOrFail($ware->responsible_id);
-                    
+
                     $input["name"] = $user->name;
                     $input["last_name"] = $user->last_name;
                     $input["phone"] = $user->phone;
@@ -287,11 +287,8 @@ class PurchaseController extends Controller {
     public function testNotification() {
         $data["id"] = "res";
         $data["city"] = "res";
-        $data["detail"] = DB::table("purchases_detail")
-                        ->select("purchases_detail.id", "products.title as producto", "purchases_detail.units_supplier", "products.cost_sf", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier as totalunit"), "purchases_detail.quantity", DB::raw("(purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)
-                                                + ((purchases_detail.quantity *  purchases_detail.units_supplier * purchases_detail.value)*purchases_detail.tax) as total"), "products.bar_code", DB::raw("(products.tax * 100) as tax"), DB::raw("purchases_detail.value * purchases_detail.units_supplier as priceperbox"))
-                        ->join("products", "products.id", "purchases_detail.product_id")
-                        ->where("purchase_id", 18)->get();
+        $data["detail"] = $this->formatDetail(99);
+
         $data["warehouse"] = "";
         $data["address"] = "";
         $data["name"] = "";
@@ -301,6 +298,7 @@ class PurchaseController extends Controller {
         $data["tax5"] = 10;
         $data["tax19"] = 10;
         $data["discount"] = 10;
+        $data["subtotal"] = 10;
         $data["total"] = 10;
         $data["environment"] = "local";
         $data["created_at"] = "local";
@@ -377,7 +375,9 @@ class PurchaseController extends Controller {
 
     public function formatDetail($id) {
         $detail = DB::table("purchases_detail")
-                        ->select("purchases_detail.id", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0) as tax"), "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description", "products.units_supplier")
+                        ->select("purchases_detail.id", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0) as tax"), "purchases_detail.quantity", 
+                                "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description", "products.units_supplier",
+                                DB::raw("purchases_detail.quantity * purchases_detail.units_supplier * purchases_detail.value as valuetotal"))
                         ->where("purchase_id", "=", $id)
                         ->join("products", "purchases_detail.product_id", "products.id")
                         ->orderBy("order", "asc")->get();

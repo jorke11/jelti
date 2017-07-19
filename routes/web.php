@@ -76,6 +76,7 @@ Route::post('/clients/StoreContact', 'Clients\ClientController@storeContact');
 Route::delete('/clients/deleteContact/{id}', 'Clients\ClientController@deleteContact');
 Route::post('/clients/addChage', 'Clients\ClientController@addChanges');
 Route::get('/clients/contact/{id}', 'Clients\ClientController@editContact');
+Route::delete('/clients/branch/{id}', 'Clients\ClientController@destroyBranch');
 
 Route::post('/clients/addTax', 'Clients\ClientController@storeTax');
 Route::put('/clients/UpdateTax', 'Clients\ClientController@updateTax');
@@ -132,6 +133,7 @@ Route::delete('/purchase/detail/{id}', 'Invoicing\PurchaseController@destroyDeta
 Route::get('/purchase/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProductOut']);
 Route::post('/purchase/sendPurchase', 'Invoicing\PurchaseController@sendPurchase');
 Route::get('/purchase/testNotification/{id}', 'Invoicing\PurchaseController@testNotification');
+Route::get('/reportPurchase', 'Report\PurchaseController@index');
 
 Route::resource('/sale', 'Invoicing\SaleController');
 Route::get('/sale/{id}/consecutive', ['uses' => 'Invoicing\SaleController@getConsecutive']);
@@ -487,6 +489,7 @@ Route::get('/reportClient', "Report\ClientController@index");
 Route::get('/api/reportClient', "Report\ClientController@getList");
 Route::get('/api/reportClientTarget', "Report\ClientController@getListTarger");
 Route::get('/api/reportClientProduct', "HomeController@getListProduct");
+Route::get('/api/reportClientProductDash', "HomeController@getListProductDash");
 Route::get('/api/reportClientProductUnits', "HomeController@getListProductUnits");
 Route::get('/api/reportSupplierDash', "HomeController@getListSupplier");
 Route::get('/api/reportClientCities', "Report\ClientController@listCities");
@@ -495,6 +498,9 @@ Route::get('/api/reportClientCities', "Report\ClientController@listCities");
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");
 Route::get('/api/reportCommercialGraph', "Report\CommercialController@listCommercialGraph");
+
+
+Route::get('/api/reportProductByCommercial', "Report\CommercialController@getProductByCommercial");
 
 
 Route::get('/reportSupplier', "Report\SupplierController@index");

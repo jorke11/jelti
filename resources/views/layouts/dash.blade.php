@@ -211,6 +211,7 @@
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Reportes <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/reportSales">Ventas</a></li>
+                                            <li><a href="/reportPurchase">Compras</a></li>
                                         </ul>
                                     </li>
 

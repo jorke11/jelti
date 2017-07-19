@@ -244,17 +244,24 @@ class ClientController extends Controller {
     public function update(Request $request, $id) {
         $input = $request->all();
 
-        if (isset($input["stakeholder_id"]) && $input["stakeholder_id"] == '') {
+        if (!isset($input["stakeholder_id"])) {
+            $input["stakeholder_id"] = null;
             $stakeholder = Stakeholder::Find($id);
         } else {
             $stakeholder = Branch::Find($id);
         }
 
+        $input["shipping_cost"] = (isset($input["shipping_cost"])) ? 1 : 0;
+        $input["price_special"] = (isset($input["price_special"])) ? 1 : 0;
         $input["user_update"] = Auth::user()->id;
 
-        $result = $stakeholder->fill($input)->save();
-        if ($result) {
+        if ($stakeholder == null) {
+            $result = Stakeholder::create($input);
+        } else {
+            $result = $stakeholder->fill($input)->save();
+        }
 
+        if ($result) {
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -264,9 +271,20 @@ class ClientController extends Controller {
     public function destroy($id) {
         $stakeholder = Stakeholder::FindOrFail($id);
 //        $result = $stakeholder->delete();
-        $stakeholder->status_id = 3;
+        $stakeholder->status_id = 4;
         $result = $stakeholder->save();
 //        $result = $stakeholder->delete();
+        if ($result) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function destroyBranch($id) {
+        $stakeholder = Branch::FindOrFail($id);
+        $result = $stakeholder->delete();
+
         if ($result) {
             return response()->json(['success' => true]);
         } else {

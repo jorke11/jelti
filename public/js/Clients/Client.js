@@ -9,6 +9,7 @@ function Client() {
         $("#btnSaveSpecial").click(this.saveSpecial);
         $("#btnNewContact").click(this.newContact);
         $("#btnSaveContact").click(this.saveContact);
+        $("#cleanSelect2").click(this.cleanStakeholder);
         $("#tabInvoice").click(function () {
             obj.tableInvoice($("#frm #id").val());
         });
@@ -222,6 +223,11 @@ function Client() {
         $("#btnComment").click(this.addCommnet);
         $("#btnUpload_code").click(this.uploadExcelCode)
 
+    }
+
+    this.cleanStakeholder = function () {
+
+        $("#frm #stakeholder_id").val('').trigger('change')
     }
 
     this.uploadExcelCode = function () {
@@ -509,6 +515,7 @@ function Client() {
     }
 
     this.save = function () {
+        $("#btnSave").attr("disabled", true);
         var frm = $("#frm");
         var data = frm.serialize();
         var url = "", method = "";
@@ -526,22 +533,31 @@ function Client() {
                 msg = "Edited Record";
             }
 
-            $.ajax({
-                url: url,
-                method: method,
-                data: data,
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.success == true) {
-                        table.ajax.reload();
-                        toastr.success(msg);
-                        $(".input-clients").setFields({data: data.header})
+            if ($("#frm #verification").val() != '') {
+
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: data,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.success == true) {
+                            $("#btnSave").attr("disabled", false);
+                            table.ajax.reload();
+                            toastr.success(msg);
+                            $(".input-clients").setFields({data: data.header})
+                        }
+                    }, error: function (xhr, ajaxOptions, thrownError) {
+                        $("#btnSave").attr("disabled", false);
+                        toastr.error(xhr.responseJSON.msg);
                     }
-                }, error: function (xhr, ajaxOptions, thrownError) {
-                    toastr.error(xhr.responseJSON.msg);
-                }
-            })
+                })
+            } else {
+                $("#btnSave").attr("disabled", false);
+                toastr.error("Campo de verificación vacio!");
+            }
         } else {
+            $("#btnSave").attr("disabled", false);
             toastr.error("Fields Required!");
         }
     }
@@ -626,6 +642,28 @@ function Client() {
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
             var url = "/clients/" + id;
+            $.ajax({
+                url: url,
+                headers: {'X-CSRF-TOKEN': token},
+                method: "DELETE",
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        table.ajax.reload();
+                        toastr.warning("Ok");
+                    }
+                }, error: function (err) {
+                    toastr.error("No se puede borrra Este registro");
+                }
+            })
+        }
+    }
+    
+    this.deleteBranch = function (id) {
+        toastr.remove();
+        if (confirm("Deseas eliminar")) {
+            var token = $("input[name=_token]").val();
+            var url = "/clients/branch/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -777,7 +815,7 @@ function Client() {
     this.format = function (d) {
         var html = '<br><table class="table-detail">';
         html += '<thead>'
-        html += '<tr><th>#</th><th>Cuenta</th><th>Razón Social</th><th>Documento</th><th>Correo</th><th>Dirección</th><th>Plazo de pago</th><th>Ciudad</th></tr></thead>';
+        html += '<tr><th>#</th><th>Cuenta</th><th>Razón Social</th><th>Documento</th><th>Correo</th><th>Dirección</th><th>Plazo de pago</th><th>Ciudad</th><th>Borrar</th></tr></thead>';
         $.ajax({
             url: 'clients/' + d.id + "/getBranch",
             method: "GET",
@@ -795,6 +833,7 @@ function Client() {
                     html += "<td>" + val.address + "</a></td>";
                     html += "<td>" + val.term + "</td>";
                     html += "<td>" + val.city + "</td>";
+                    html += '<td><span class="glyphicon glyphicon-remove" aria-hidden="true" style="cursor:pointer" onclick=obj.deleteBranch('+val.id+')></span></td>';
                     html += "</tr>";
                 });
                 html += "</tbody></table><br>";

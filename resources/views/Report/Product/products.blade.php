@@ -1,21 +1,25 @@
 <div class="container-fluid">
+    {!! Form::open(['id'=>'Detail']) !!}
     <div class="row">
         <div class="col-lg-12">
+
             <div class="panel panel-default">
-                <div class="panel-heading">Unidades por clientes</div>
                 <div class="panel-body">
-                    <table class="table nowrap" cellspacing="0" width="100%" id="tblProduct">
+                    <table class="table" id="tblProducts">
                         <thead>
                             <tr>
+                                <td>Ciudad</td>
                                 <td>Producto</td>
-                                <td>Unidades</td>
+                                <td>Total Unidades</td>
+                                <td>Total Ventas</td>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
+
         </div>
     </div>
-
+    {!!Form::close()!!}
 </div>

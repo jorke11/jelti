@@ -34,7 +34,7 @@ LEFT JOIN users as u ON u.id=s.responsible_id
 LEFT JOIN parameters as typeperson ON typeperson.code=s.type_person_id and typeperson."group"='typeperson'
 LEFT JOIN parameters as typeregime ON typeregime.code=s.type_regime_id and typeregime."group"='typeregime'
 LEFT JOIN parameters as typestakeholder ON typestakeholder.code=s.type_stakeholder and typestakeholder."group"='typestakeholder'
-LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='generic'
+JOIN parameters as status ON status.code=s.status_id and status."group"='generic'
 WHERE s.type_stakeholder=1
 
 
@@ -47,8 +47,8 @@ LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='ge
 
 
 
-create or replace view vdepartures as 
-select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name ,sta.business_name) as client,w.description as warehouse,
+create view vdepartures as 
+select d.id,coalesce(d.invoice,'') invoice, d.created_at, CASE WHEN s.business IS NULL THEN sta.business ELSE sta.business END client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
             (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity,
             
@@ -64,7 +64,7 @@ select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_na
             (select coalesce(sum(quantity * units_sf * value),0) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id) 
             END as subtotalnumeric,
             
-           sta.id as client_id,d.created,dest.description as destination,d.destination_id
+           sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id
@@ -74,7 +74,6 @@ select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_na
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
             ORDER BY d.status_id,d.id asc 
-
 
 create view vcities as 
 select c.id,c.description city,d.description department,c.code

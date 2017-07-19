@@ -87,7 +87,7 @@ class HomeController extends Controller {
             ORDER BY 3 desc";
 
         $commercial = DB::select($sql);
-        
+
         if (count($commercial) > 0) {
             $commercial = $commercial[0];
         }
@@ -167,7 +167,7 @@ class HomeController extends Controller {
     public function getListProduct(Request $req) {
         $input = $req->all();
         $cli = "
-            select d.product_id,p.title product,sum(d.quantity *  coalesce(p.packaging,1)) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
+            select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 
@@ -189,20 +189,20 @@ class HomeController extends Controller {
             $quantity[] = (int) $value->quantity;
         }
 
-        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity,"date"=>date("F")]);
+        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "date" => date("F")]);
     }
-    
-    public function getListProductUnits(Request $req) {
+
+    public function getListProductDash(Request $req) {
         $input = $req->all();
         $cli = "
-            select d.product_id,p.title product,sum(d.quantity *  coalesce(p.packaging,1)) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
+            select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from sales_detail d
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is NOT null
-            AND s.created_at BETWEEN'" . date("Y-m") . "-01 00:00' AND '" . date("Y-m-d") . " 23:59'
+            AND s.created_at BETWEEN'" . date("Y-m-") . "01 00:00' AND '" . date("Y-m-d") . " 23:59'
             group by 1,2
-            order by 3 
+            order by 4 
             desc limit 10";
 
         $res = DB::select($cli);
@@ -216,8 +216,37 @@ class HomeController extends Controller {
             $quantity[] = (int) $value->quantity;
         }
 
-        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity,"date"=>date("F")]);
+        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "date" => date("F")]);
     }
+
+    public function getListProductUnits(Request $req) {
+        $input = $req->all();
+        $cli = "
+            select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
+            from sales_detail d
+            JOIN sales s ON s.id=d.sale_id 
+            JOIN departures dep ON dep.id=s.departure_id ANd dep.status_id=2
+            JOIN products p ON p.id=d.product_id 
+            WHERE d.product_id is NOT null
+            AND s.created_at BETWEEN'" . date("Y-m") . "-01 00:00' AND '" . date("Y-m-d") . " 23:59'
+            group by 1,2
+            order by 3 
+            desc limit 10";
+
+        $res = DB::select($cli);
+//        echo $cli;exit;
+        $cat = array();
+        $total = array();
+        $quantity = array();
+        foreach ($res as $value) {
+            $cat[] = $value->product;
+            $total[] = (int) $value->total;
+            $quantity[] = (int) $value->quantity;
+        }
+
+        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "date" => date("F")]);
+    }
+
     public function getListSupplier(Request $req) {
         $input = $req->all();
         $cli = "
@@ -230,7 +259,7 @@ class HomeController extends Controller {
             AND s.created_at BETWEEN'" . date("Y-m") . "-01 00:00' AND '" . date("Y-m-d") . " 23:59'
             group by 1,2
             order by 4 desc limit 10";
-            
+
         $res = DB::select($cli);
 
         $cat = array();
@@ -242,7 +271,7 @@ class HomeController extends Controller {
             $quantity[] = (int) $value->quantity;
         }
 
-        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity,"date"=>date("F")]);
+        return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "date" => date("F")]);
     }
 
 }

@@ -60,18 +60,6 @@ function Entry() {
             })
         });
 
-        $("#frm #purchase_id").change(function () {
-            if ($(this).val() != null)
-                $.ajax({
-                    url: 'entry/' + $(this).val() + '/getDetailPurchase',
-                    method: 'GET',
-                    dataType: 'JSON',
-                    success: function (resp) {
-                        obj.printDetail(resp, false, false);
-                    }
-                })
-        })
-
         $("#btnUpload").click(this.upload);
 
     }
@@ -100,17 +88,10 @@ function Entry() {
         var total = 0, calc = 0;
 
         $.each(data.detail, function (i, val) {
-            if (btnEdit == true && val.status_id != 3) {
-                htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
-            } else {
-                htmlEdit = '';
-            }
 
-            if (btnDel == true && val.status_id != 3) {
-                htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
-            } else {
-                htmlDel = '';
-            }
+            htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
+
+            htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
 
             val.expiration_date = (val.expiration_date != undefined) ? val.expiration_date : ''
             val.real_quantity = (val.real_quantity != null) ? val.real_quantity : ''
@@ -215,21 +196,10 @@ function Entry() {
 //                    $("#frm #name_supplier").val(resp.response.name + " " + resp.response.last_name);
                     $("#frm #address_supplier").val(resp.response.address);
                     $("#frm #phone_supplier").val(resp.response.phone);
-
-                    obj.loadPurchase(resp.purchases);
                 }
             })
     }
 
-    this.loadPurchase = function (data) {
-        var html = "";
-        $("#frm #purchase_id").empty();
-        html = "<option value='0'>Selection</option>";
-        $.each(data, function (i, val) {
-            html += "<option value='" + val.id + "'>" + val.consecutive + "</option>";
-        })
-        $("#frm #purchase_id").html(html);
-    }
 
     this.save = function () {
         $("#frm #warehouse_id").prop("disabled", false);
@@ -336,7 +306,6 @@ function Entry() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-entry").setFields({data: data.header, disabled: true});
-                $("#btnSend").prop("disabled", false);
 
                 if (data.header.supplier_id != 0) {
                     obj.getSupplier(data.header.supplier_id);
@@ -346,13 +315,15 @@ function Entry() {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
 
+                $("#btnSave").prop("disabled", false);
+
                 obj.printDetail(data, true, true);
 
                 if (data.header.status_id != 1) {
+                    $("#btnSave").prop("disabled", true);
                     $("#btnmodalDetail").prop("disabled", true);
                     $(".btnEditClass").prop("disabled", true);
                     $(".btnDeleteClass").prop("disabled", true);
-                    $("#btnSend").prop("disabled", true);
                 } else {
                     $(".btnEditClass").prop("disabled", false);
                     $(".btnDeleteClass").prop("disabled", false);

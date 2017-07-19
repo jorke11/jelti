@@ -15,6 +15,7 @@ function Client() {
             objCli.tableTarget();
             objCli.tableProduct();
             objCli.tableCities();
+            objCli.tableProductByCategory();
         })
     }
 

@@ -4,6 +4,7 @@ function Client() {
         this.tableTarget();
         this.tableProduct();
         this.tableCities();
+        this.tableProductByCategory();
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
@@ -266,27 +267,35 @@ function Client() {
 
         })
 
-//        return $('#tblCities').DataTable({
-//            destroy: true,
-//            ajax: {
-//                url: "/api/reportClientCities",
-//                data: obj,
-//            },
-//            order: [[1, 'desc']],
-//            columns: [
-//                {data: "city"},
-//                {data: "units"},
-//            ],
-//            aoColumnDefs: [
-//                {
-//                    aTargets: [0, 1],
-//                    mRender: function (data, type, full) {
-//                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
-//                    }
-//                }
-//
-//            ],
-//        });
+
+    }
+
+    this.tableProductByCategory = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        return $('#tblProductbyCategory').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/api/reportProducttByCategory",
+                data: obj,
+            },
+            order: [[1, "desc"]],
+            scrollX: true,
+            columns: [
+                {data: "category"},
+                {data: "facturado", render: $.fn.dataTable.render.number('.', ',', 0)},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
     }
 }
 

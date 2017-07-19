@@ -28,7 +28,7 @@ class ClientController extends Controller {
             group by 1
             ORDER BY 2 DESC
             ";
-        
+
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);
@@ -94,6 +94,26 @@ class ClientController extends Controller {
         }
 
         return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity]);
+    }
+
+    public function getProductByCategory(Request $req) {
+        $input = $req->all();
+        $cli = "
+            SELECT c.description category,sum(d.value*d.units_sf*d.quantity) facturado
+            FROM sales_detail d
+            JOIN sales ON sales.id=d.sale_id
+            JOIN departures dep ON dep.id=sales.departure_id and dep.status_id=2
+            JOIN products p ON p.id=d.product_id
+            JOIN categories c ON c.id = p.category_id
+            WHERE product_id IS NOT NULL AND sales.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            GROUP bY 1,p.category_id
+            ORDER by 2 DESC
+            ";
+
+        $res = DB::select($cli);
+
+
+        return response()->json(["data" => $res]);
     }
 
 }

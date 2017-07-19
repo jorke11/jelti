@@ -2,13 +2,13 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Unidades por clientes</div>
+                <div class="panel-heading">Ventas por Categorias</div>
                 <div class="panel-body">
-                    <table class="table nowrap" cellspacing="0" width="100%" id="tblProduct">
+                    <table class="table nowrap" cellspacing="0" width="100%" id="tblProductbyCategory">
                         <thead>
                             <tr>
-                                <td>Producto</td>
-                                <td>Unidades</td>
+                                <td>Categoria</td>
+                                <td>Facturado</td>
                             </tr>
                         </thead>
                         <tbody></tbody>

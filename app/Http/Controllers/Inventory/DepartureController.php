@@ -550,6 +550,7 @@ class DepartureController extends Controller {
                                 $msj->subject($this->subject);
                                 $msj->to($this->mails);
                             });
+                            
                             $this->log->logClient($client->id, "Genero Orden de venta " . $result);
                         }
                         DB::commit();

@@ -1157,13 +1157,13 @@ class DepartureController extends Controller {
                     if ($book->unidades_total != 0) {
                         if (isset($book->item) && $book->item != '') {
 
-                            $special = PricesSpecial::where("item", (int) $book->item)->where("client_id",$this->in["client_id"])->first();
+                            $special = PricesSpecial::where("item", (int) $book->item)->where("client_id", $this->in["client_id"])->first();
                             if ($special == null) {
                                 $product_id = 0;
                             } else {
                                 $product_id = $special->product_id;
                             }
-                            
+
                             $pro = Products::find($product_id);
                             if ($pro == null) {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
@@ -1178,9 +1178,9 @@ class DepartureController extends Controller {
                             } else {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
                             }
-                            
-                            $special = PricesSpecial::where("item", $pro->item)->where("client_id",$this->in["client_id"])->first();
-                            
+                            if ($pro != null) {
+                                $special = PricesSpecial::where("product_id", $pro->id)->where("client_id", $this->in["client_id"])->first();
+                            }
                         } else {
                             if (isset($book->sf_code) && $book->sf_code != '') {
                                 $pro = Products::where("reference", $book->sf_code)->first();

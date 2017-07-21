@@ -3,10 +3,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add Detail</h4>
+                <h4 class="modal-title">Agregar Detalle</h4>
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmUpload']) !!}
+                <input type="hidden" id="client_id" name="client_id">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">

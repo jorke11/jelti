@@ -641,20 +641,27 @@ class ClientController extends Controller {
             $this->path = "uploads/prices/" . date("Y-m-d") . "/" . $this->name;
 
             $file->move("uploads/prices/" . date("Y-m-d") . "/", $this->name);
-
+            $error = array();
             Excel::load($this->path, function($reader) {
 
                 foreach ($reader->get() as $book) {
+                    $product = '';
+                    $item = null;
+                    if ($book->price_sf != '') {
+                        if ($book->item != '') {
 
-                    if ($book->item != '') {
-                        $product = '';
-                        if (trim($book->sf_code) != '') {
-                            $product = Products::where("reference", trim($book->sf_code))->first();
-                        } else {
-                            if (trim($book->ean) != '') {
-                                $product = Products::where("bar_code", trim($book->ean))->first();
+                            if (trim($book->sf_code) != '') {
+                                $product = Products::where("reference", trim($book->sf_code))->first();
+                            } else {
+                                if (trim($book->ean) != '') {
+                                    $product = Products::where("bar_code", trim($book->ean))->first();
+                                }
                             }
+                            $item = $book->item;
+                        } else if ($book->ean != '') {
+                            $product = Products::where("bar_code", trim($book->ean))->first();
                         }
+
 
                         if ($product != '') {
                             $price = PricesSpecial::where("item", $book->item)->first();
@@ -663,7 +670,7 @@ class ClientController extends Controller {
                             $new["price_sf"] = $book->price_sf;
                             $new["margin"] = 1;
                             $new["margin_sf"] = 1;
-                            $new["item"] = $book->item;
+                            $new["item"] = $item;
                             $new["tax"] = $product->tax;
 
                             if ($price == null) {
@@ -675,6 +682,8 @@ class ClientController extends Controller {
                                 $p->fill($new)->save();
                             }
                         }
+                    } else {
+                        $error[] = array("data" => $book, "error" => "Price Empty");
                     }
                 }
             })->get();
@@ -685,7 +694,7 @@ class ClientController extends Controller {
                     ->get();
 
             return response()->json(["success" => true, "data" => $detail,
-                        "updated" => $this->updated, "inserted" => $this->inserted]);
+                        "updated" => $this->updated, "inserted" => $this->inserted, "error" => $error]);
         }
     }
 

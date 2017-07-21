@@ -47,6 +47,7 @@ class DepartureController extends Controller {
     public $email;
     public $mails;
     public $log;
+    public $in;
 
     public function __construct() {
         $this->middleware("auth");
@@ -62,6 +63,7 @@ class DepartureController extends Controller {
         $this->listProducts = array();
         $this->errors = array();
         $this->email = array();
+        $this->in = array();
         $this->mails = array();
         $this->log = new LogController();
     }
@@ -302,8 +304,8 @@ class DepartureController extends Controller {
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
 //        $pdf->SetProtection(array(), '123', '123');
-        $pdf->SetWatermarkImage('assets/images/logo.png');
-        $pdf->showWatermarkImage = true;
+//        $pdf->SetWatermarkImage('assets/images/logo.png');
+//        $pdf->showWatermarkImage = true;
 //        $pdf->WriteHTML('<watermarkimage src="public/assets/images/logo.png" alpha="0.4" size="200,250" />');
 
         header('Content-Type: application/pdf');
@@ -1138,10 +1140,10 @@ class DepartureController extends Controller {
     public function storeExcel(Request $request) {
         if ($request->ajax()) {
             $error = 0;
-            $input = $request->all();
+            $this->in = $request->all();
             $this->name = '';
             $this->path = '';
-            $file = array_get($input, 'file_excel');
+            $file = array_get($this->in, 'file_excel');
             $this->name = $file->getClientOriginalName();
             $this->name = str_replace(" ", "_", $this->name);
             $this->path = "uploads/departures/" . date("Y-m-d") . "/" . $this->name;
@@ -1155,12 +1157,13 @@ class DepartureController extends Controller {
                     if ($book->unidades_total != 0) {
                         if (isset($book->item) && $book->item != '') {
 
-                            $special = PricesSpecial::where("item", (int) $book->item)->first();
+                            $special = PricesSpecial::where("item", (int) $book->item)->where("client_id",$this->in["client_id"])->first();
                             if ($special == null) {
                                 $product_id = 0;
                             } else {
                                 $product_id = $special->product_id;
                             }
+                            
                             $pro = Products::find($product_id);
                             if ($pro == null) {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
@@ -1175,6 +1178,9 @@ class DepartureController extends Controller {
                             } else {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
                             }
+                            
+                            $special = PricesSpecial::where("item", $pro->item)->where("client_id",$this->in["client_id"])->first();
+                            
                         } else {
                             if (isset($book->sf_code) && $book->sf_code != '') {
                                 $pro = Products::where("reference", $book->sf_code)->first();

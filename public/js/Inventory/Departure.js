@@ -174,6 +174,7 @@ function Sale() {
     }
 
     this.uploadExcel = function () {
+        $("#frmUpload #client_id").val($("#frm #client_id :selected").val());
         var formData = new FormData($("#frmUpload")[0]);
         $.ajax({
             url: 'departure/uploadExcel',

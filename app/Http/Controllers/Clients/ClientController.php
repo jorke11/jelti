@@ -647,6 +647,7 @@ class ClientController extends Controller {
                 foreach ($reader->get() as $book) {
                     $product = '';
                     $item = null;
+                    $price = null;
                     if ($book->price_sf != '') {
                         if ($book->item != '') {
 
@@ -664,7 +665,10 @@ class ClientController extends Controller {
 
 
                         if ($product != '') {
-                            $price = PricesSpecial::where("item", $book->item)->first();
+                            if ($item != '') {
+                                $price = PricesSpecial::where("item", $item)->first();
+                            }
+
                             $new["client_id"] = $this->in["client_id"];
                             $new["product_id"] = $product->id;
                             $new["price_sf"] = $book->price_sf;

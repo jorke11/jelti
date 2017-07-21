@@ -50,8 +50,11 @@ class ClientController extends Controller {
     public function getListProduct(Request $req) {
         $input = $req->all();
         $cli = "
-            select d.product_id,p.title product,sum(d.quantity *  coalesce(p.packaging,1)) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
-            from sales_detail d
+            SELECT 
+                d.product_id,p.title product,
+                sum(d.quantity *  CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,
+                sum(d.quantity * d.value * coalesce(d.units_sf,1)) as total
+            FROM sales_detail d
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is Not null
@@ -99,7 +102,9 @@ class ClientController extends Controller {
     public function getProductByCategory(Request $req) {
         $input = $req->all();
         $cli = "
-            SELECT c.description category,sum(d.value*d.units_sf*d.quantity) facturado
+            SELECT 
+                c.description category,sum(d.quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) unidades,
+                sum(d.value*d.units_sf*d.quantity) facturado
             FROM sales_detail d
             JOIN sales ON sales.id=d.sale_id
             JOIN departures dep ON dep.id=sales.departure_id and dep.status_id=2

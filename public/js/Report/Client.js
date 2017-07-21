@@ -285,6 +285,7 @@ function Client() {
             scrollX: true,
             columns: [
                 {data: "category"},
+                {data: "unidades"},
                 {data: "facturado", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             aoColumnDefs: [

@@ -2,15 +2,18 @@ function Product() {
     this.init = function () {
         this.table();
         this.productbycity();
+        this.productbyclient();
 
         $(".input-find").cleanFields();
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
-        
-        
-        $(".date-report").html("De "+$("#Detail #finit").val()+" hasta "+$("#Detail #fend").val());
+
+
+        $(".date-report").html("De " + $("#Detail #finit").val() + " hasta " + $("#Detail #fend").val());
         $("#btnSearch").click(function () {
             obj.table();
+            obj.productbycity();
+            obj.productbyclient();
         })
     }
 
@@ -44,8 +47,38 @@ function Product() {
             ],
         });
     }
+    this.productbyclient = function () {
 
-    
+        var param = {};
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+        param.city_id = $("#Detail #city_id").val();
+        param.product_id = $("#Detail #product_id").val();
+
+        return $('#tblProductsClient').DataTable({
+            ajax: {
+                url: "/api/reportProductByClient",
+                data: param,
+            },
+            destroy: true,
+            columns: [
+                {data: "client"},
+                {data: "product"},
+                {data: "quantityproducts"},
+            ],
+            order: [[0, 'ASC']],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1, 2],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+            ],
+        });
+    }
+
+
     this.productbycity = function () {
         var obj = {};
 

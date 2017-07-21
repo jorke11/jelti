@@ -301,7 +301,11 @@ class DepartureController extends Controller {
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
-//  
+//        $pdf->SetProtection(array(), '123', '123');
+        $pdf->SetWatermarkImage('assets/images/logo.png');
+        $pdf->showWatermarkImage = true;
+//        $pdf->WriteHTML('<watermarkimage src="public/assets/images/logo.png" alpha="0.4" size="200,250" />');
+
         header('Content-Type: application/pdf');
 //        return $pdf->download('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
         return $pdf->stream('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
@@ -556,7 +560,7 @@ class DepartureController extends Controller {
                                 $msj->subject($this->subject);
                                 $msj->to($this->mails);
                             });
-                            
+
                             $this->log->logClient($client->id, "Genero Orden de venta " . $result);
                         }
                         DB::commit();

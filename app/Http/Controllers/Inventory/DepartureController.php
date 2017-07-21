@@ -489,7 +489,6 @@ class DepartureController extends Controller {
                                         ->first();
                             }
 
-
                             $price_sf = $pro->price_sf;
                             if (Auth::user()->role_id == 1) {
                                 if (isset($val["price_sf"]) && !empty($val["price_sf"])) {

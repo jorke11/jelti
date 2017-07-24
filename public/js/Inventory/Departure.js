@@ -251,7 +251,8 @@ function Sale() {
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.data.client.address_send);
                 $("#frm #phone").val(resp.data.client.phone);
-                $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
+                console.log(resp.data.client);
+                $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.send_city_id}});
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
                 html = "<option value=0>Selection</option>";
                 $.each(resp.data.branch, function (i, val) {

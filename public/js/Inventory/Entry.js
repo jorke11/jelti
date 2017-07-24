@@ -240,7 +240,9 @@ function Entry() {
                         $(".btnEditClass").prop("disabled", false);
 
                     }
-                }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                },
             })
         } else {
             toastr.error("Input required");
@@ -453,6 +455,16 @@ function Entry() {
                         });
                     }
                 });
+            },
+            createdRow: function (row, data, index) {
+
+                if (data.status_id == 1) {
+                    $('td', row).eq(7).addClass('color-new');
+                } else if (data.status_id == 2) {
+                    $('td', row).eq(7).addClass('color-pending');
+                } else if (data.status_id == 3) {
+                    $('td', row).eq(7).addClass('color-checked');
+                }
             },
         });
 

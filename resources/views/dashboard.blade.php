@@ -49,10 +49,11 @@
                             <div class="col-md-9 col-sm-9 text-right">
                                 @if(isset($client))
                                 <div class="huge">Ventas <br>{{(isset($client->client)?$client->client:'SuperFüds')}}</div>
-                                <div> Total Unidades {{(isset($client->unidades)?$client->unidades:0)}}<br>
-                                    @if(count($client)>0)
-                                    Monto: $ {{number_format(round($client->total), 0, ',', '.')}}
-                                    @endif
+                                <div> <p>Total Unidades {{(isset($client->unidades)?$client->unidades:0)}}
+                                        @if(count($client)>0)
+                                        Monto: $ {{number_format(round($client->total), 0, ',', '.')}}
+                                        @endif
+                                    </p>
                                 </div>
                                 @endif
                             </div>
@@ -80,10 +81,11 @@
                             <div class="col-md-9 col-sm-9 text-right">
                                 @if(isset($supplier))
                                 <div class="huge">Compras<br>{{(isset($supplier->proveedor)?$supplier->proveedor:'SuperFüds')}}</div>
-                                <div> Total Unidades {{(isset($supplier->cantidadtotal)?$supplier->cantidadtotal:0)}}<br>
-                                    @if(count($supplier)>0)
-                                    Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}
-                                    @endif
+                                <div><p> Total Unidades {{(isset($supplier->cantidadtotal)?$supplier->cantidadtotal:0)}}<br>
+                                        @if(count($supplier)>0)
+                                        Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}
+                                        @endif
+                                    </p>
                                 </div>
                                 @endif
                             </div>
@@ -187,7 +189,7 @@
                     </div>
                 </a>
             </div>
-            
+
             <div class="col-md-3 col-sm-3">
                 <div class="panel panel-blue" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">
@@ -215,8 +217,8 @@
                 </a>
             </div>
         </div>
-        
-        
+
+
         <br />
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
@@ -268,7 +270,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                         <div id="graph_products" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        <div id="graph_products" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>

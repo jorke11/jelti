@@ -216,20 +216,22 @@ class DepartureController extends Controller {
 
         $dep = Departures::find($id);
 
-        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
+        $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
                 ->where("stakeholder_id", $sale["client_id"])
                 ->first();
 
         if ($cli == null) {
-            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder,business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
                     ->where("stakeholder.id", $sale["client_id"])
                     ->first();
         }
 
 
-        $city = Cities::find($dep->destination_id);
+        $city_send = Cities::find($dep->destination_id);
+        $city_inv = Cities::find($dep->city_id);
 
-        $cli->city = $city->description;
+        $cli->city_send = $city_send->description;
+        $cli->city_inv = $city_inv->description;
 
         $user = Users::find($dep["responsible_id"]);
 
@@ -245,7 +247,8 @@ class DepartureController extends Controller {
 
         $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["dispatched"])));
 
-        $cli["address_invoice"] = $sale["address"];
+        $cli["address_send"] = $sale["address"];
+
         $cli["emition"] = $this->formatDate($sale["dispatched"]);
         $cli["observations"] = $sale["description"];
         $cli["expiration"] = $this->formatDate($expiration);
@@ -281,8 +284,11 @@ class DepartureController extends Controller {
         $totalSum = $totalSum - $dep->discount;
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
-
         $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
+        $cli["business"] = $this->tool->cleanText($cli["business"]);
+        $cli["address_invoice"] = $dep->address_invoice;
+        
+        
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],

@@ -473,7 +473,7 @@ function Entry() {
     }
 
     this.format = function (d) {
-        var url = "/entry/" + d.id + "/detailAll";
+        var url = "/entry/" + d.id + "/detail";
         var html = '<br><table class="table-detail">';
         html += '<thead><tr><th colspan="2">Information</th><th colspan="3" class="center-rowspan">Order</th>'
         html += '<th colspan="3" class="center-rowspan">Dispatched</th></tr>'

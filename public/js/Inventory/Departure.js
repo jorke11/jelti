@@ -81,7 +81,7 @@ function Sale() {
         $("#frmDetail #product_id").change(function () {
             var param = {};
             client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
-            
+
             param.client_id = client_id;
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
@@ -255,7 +255,8 @@ function Sale() {
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
                 html = "<option value=0>Selection</option>";
                 $.each(resp.data.branch, function (i, val) {
-                    html += '<option value="' + val.id + '">' + val.address_invoice + "</option>";
+                    val.business = (val.business == null) ? '' : val.business;
+                    html += '<option value="' + val.id + '">' + val.business + ' ' + val.address_invoice + "</option>";
                 })
 
                 $("#frm #branch_id").html(html);

@@ -453,11 +453,8 @@ class DepartureController extends Controller {
             $input = $request->all();
 //            unset($input["id"]);
 //            $user = Auth::User();
-
             if (isset($input["detail"])) {
-
                 try {
-
                     DB::beginTransaction();
                     $emDetail = null;
 
@@ -557,6 +554,11 @@ class DepartureController extends Controller {
 
                             $this->mails[] = $user->email;
 
+                            if ($input["environment"] == 'local') {
+                                $this->mails = Auth::User()->email;
+                            }
+
+
                             Mail::send("Notifications.departure", $input, function($msj) {
                                 $msj->subject($this->subject);
                                 $msj->to($this->mails);
@@ -600,7 +602,8 @@ class DepartureController extends Controller {
                 if ($val > 0) {
                     $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
                     if ($val == 0) {
-                        if (count($dep) == 0) {
+                        //if (count($dep) == 0) {
+                        if (0 == 0) {
 
                             $id = DB::table("sales")->insertGetId(
                                     ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
@@ -743,6 +746,10 @@ class DepartureController extends Controller {
 
                                 $this->mails[] = $user->email;
 
+                                if ($input["environment"] == 'local') {
+                                    $this->mails = Auth::User()->email;
+                                }
+
                                 Mail::send("Notifications.invoice", $input, function($msj) {
                                     $msj->subject($this->subject);
                                     $msj->to($this->mails);
@@ -864,7 +871,7 @@ class DepartureController extends Controller {
                 ->get();
 
         $this->total = 0;
-
+        $this->subtotal = 0;
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;

@@ -673,7 +673,7 @@ class ClientController extends Controller {
                             $new["product_id"] = $product->id;
                             $new["price_sf"] = $book->price_sf;
                             $new["margin"] = 1;
-                            $new["units_sf"] =$pro->units_sf;
+                            $new["units_sf"] =$product->units_sf;
                             $new["margin_sf"] = 1;
                             $new["item"] = $item;
                             $new["tax"] = $product->tax;

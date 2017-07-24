@@ -222,7 +222,7 @@ class PurchaseController extends Controller {
                         $newDet["value"] = $value->value;
                         $newDet["units_supplier"] = $value->units_supplier;
                         $newDet["lote"] = 'new';
-                        $newDet["status_id"] = 3;
+                        $newDet["status_id"] = 1;
                         EntriesDetail::create($newDet);
                     }
 

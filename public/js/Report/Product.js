@@ -24,6 +24,7 @@ function Product() {
         param.end = $("#Detail #fend").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
 
         return $('#tbl').DataTable({
             ajax: {
@@ -54,7 +55,8 @@ function Product() {
         param.end = $("#Detail #fend").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
-
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        
         return $('#tblProductsClient').DataTable({
             ajax: {
                 url: "/api/reportProductByClient",
@@ -87,6 +89,7 @@ function Product() {
         param.end = $("#Detail #fend").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
 
         return $('#tblProducts').DataTable({
             ajax: {

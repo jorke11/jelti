@@ -213,19 +213,18 @@ class DepartureController extends Controller {
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
-
+         
         $dep = Departures::find($id);
-
+       
         $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
                 ->where("stakeholder_id", $sale["client_id"])
                 ->first();
 
         if ($cli == null) {
-            $cli = Stakeholder::select("stakeholder.id", "stakeholder,business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
                     ->where("stakeholder.id", $sale["client_id"])
                     ->first();
         }
-
 
         $city_send = Cities::find($dep->destination_id);
         $city_inv = Cities::find($dep->city_id);

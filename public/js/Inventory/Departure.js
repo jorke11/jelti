@@ -227,6 +227,8 @@ function Sale() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
+                $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
+
                 $("#frm #address").val(resp.response.address_invoice);
             }
         })
@@ -244,14 +246,12 @@ function Sale() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
-
                 resp.data.client.name = (resp.data.client.name == null) ? '' : resp.data.client.name + " ";
                 resp.data.client.last_name = (resp.data.client.last_name == null) ? '' : resp.data.client.last_name + " ";
                 $("#frm #name_client").val(resp.data.client.name + resp.data.client.last_name + resp.data.client.business_name);
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.data.client.address_send);
                 $("#frm #phone").val(resp.data.client.phone);
-                console.log(resp.data.client);
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.send_city_id}});
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
                 html = "<option value=0>Selection</option>";

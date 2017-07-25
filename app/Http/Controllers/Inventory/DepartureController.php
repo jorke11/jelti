@@ -213,12 +213,19 @@ class DepartureController extends Controller {
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
-         
+
         $dep = Departures::find($id);
-       
-        $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
-                ->where("stakeholder_id", $sale["client_id"])
-                ->first();
+        
+        if ($dep->branch_id != '') {
+            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
+                    ->where("id", $dep->branch_id)
+                    ->first();
+        } else {
+            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
+                    ->where("stakeholder_id", $sale["client_id"])
+                    ->first();
+        }
+
 
         if ($cli == null) {
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
@@ -286,8 +293,8 @@ class DepartureController extends Controller {
         $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
         $cli["business"] = $this->tool->cleanText($cli["business"]);
         $cli["address_invoice"] = $dep->address_invoice;
-        
-        
+//        dd($cli);
+
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],

@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use Datatables;
+use App\Models\Administration\Warehouses;
 
 class ProductController extends Controller {
 
     public function index() {
-        return view("Report.Product.init");
+        $warehouse = Warehouses::all();
+        return view("Report.Product.init", compact("warehouse"));
     }
 
     public function getList(Request $req) {

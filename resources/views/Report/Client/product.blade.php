@@ -8,6 +8,7 @@
                         <thead>
                             <tr>
                                 <td>Categoria</td>
+                                <td>Unidades</td>
                                 <td>Facturado</td>
                             </tr>
                         </thead>

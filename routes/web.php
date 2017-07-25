@@ -501,6 +501,7 @@ Route::get('/api/reportCommercialGraph', "Report\CommercialController@listCommer
 
 
 Route::get('/api/reportProductByCommercial', "Report\CommercialController@getProductByCommercial");
+Route::get('/api/reportProductByCategory', "Report\ClientController@getProductByCategory");
 
 
 Route::get('/reportSupplier', "Report\SupplierController@index");

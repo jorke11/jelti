@@ -28,6 +28,7 @@ function Client() {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
         return $('#tbl').DataTable({
             destroy: true,
             order: [[2, "desc"]],
@@ -58,6 +59,7 @@ function Client() {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
         return $('#tblTarget').DataTable({
             destroy: true,
             ajax: {
@@ -85,7 +87,7 @@ function Client() {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
-
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
 
         $.ajax({
             url: "/api/reportClientProduct",
@@ -179,6 +181,7 @@ function Client() {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
 
         $.ajax({
             url: "/api/reportClientCities",
@@ -275,16 +278,20 @@ function Client() {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        
         return $('#tblProductbyCategory').DataTable({
             destroy: true,
             ajax: {
-                url: "/api/reportProducttByCategory",
+                url: "/api/reportProductByCategory",
                 data: obj,
             },
             order: [[1, "desc"]],
             scrollX: true,
+            "pageLength": 20,
             columns: [
                 {data: "category"},
+                {data: "quantity"},
                 {data: "facturado", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             aoColumnDefs: [

@@ -215,7 +215,7 @@ class DepartureController extends Controller {
                 ->get();
 
         $dep = Departures::find($id);
-        
+
         if ($dep->branch_id != '') {
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
                     ->where("id", $dep->branch_id)
@@ -614,8 +614,8 @@ class DepartureController extends Controller {
                 if ($val > 0) {
                     $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
                     if ($val == 0) {
-                        //if (count($dep) == 0) {
-                        if (0 == 0) {
+                        if (count($dep) == 0) {
+//                        if (0 == 0) {
 
                             $id = DB::table("sales")->insertGetId(
                                     ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
@@ -628,55 +628,21 @@ class DepartureController extends Controller {
 
                             $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
-                            $total = 0;
-                            $cont = 0;
-                            $credit = 0;
-                            $tax = 0;
-                            $totalPar = 0;
 
+                            $cont = 0;
                             $sale = Sales::find($id);
 
                             foreach ($detail as $value) {
                                 $pro = Products::find($value->product_id);
-                                $totalPar = $value->quantity * $value->value * $value->units_sf;
-                                $total += $totalPar;
-
                                 SaleDetail::insert([
                                     "sale_id" => $id, "product_id" => $value->product_id,
                                     "category_id" => $value->category_id, "quantity" => $value->quantity,
                                     "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
                                     "account_id" => 1, "order" => $cont, "type_nature" => 1
                                 ]);
-
-                                $credit += (double) $totalPar;
-                                if ($pro["tax"] != '' && $pro["tax"] > 0) {
-                                    $cont++;
-                                    $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
-                                    SaleDetail::insert([
-                                        "account_id" => 1, "sale_id" => $id, "value" => $tax,
-                                        "order" => $cont, "description" => 'iva', "type_nature" => 1
-                                    ]);
-                                }
-                                $credit += (double) $tax;
                                 $cont++;
                             }
 
-
-                            if ($total > $basetax["base"]) {
-                                $rete = Parameters::where("group", "tax")->where("code", 1)->first();
-                                $rete = ($total * $rete["value"]);
-                                SaleDetail::insert([
-                                    "sale_id" => $id, "account_id" => 2, "value" => ($rete), "order" => $cont, "description" => "rete", "type_nature" => 2
-                                ]);
-
-                                $credit -= $rete;
-                                $cont++;
-                            }
-
-                            SaleDetail::insert([
-                                "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes", "type_nature" => 2
-                            ]);
-                            $credit = 0;
                             $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
 
                             if ($departure->invoice == '') {

@@ -171,6 +171,29 @@
                                 <i class="fa fa-user-circle-o fa-4x"></i>
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
+                                <div class="huge">Operaciones</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="/reportOperations">
+                    <div class="panel-footer" style="background-color:#fff;border-color: blue;">
+                        <span class="pull-left">Ver Detalles</span>
+                        <span class="pull-right">
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3">
+                <div class="panel panel-blue" style="margin-bottom: 0px;">
+                    <div class="panel-heading" style="height: 100px;">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <i class="fa fa-user-circle-o fa-4x"></i>
+                            </div>
+                            <div class="col-md-9 col-sm-9 text-right">
                                 @if(isset($newClient))
                                 <div class="huge">Clientes Nuevos{{$newClient->estemes}}</div>
                                 <div> Total Mes anterior {{$newClient->mesanterior}}</div>

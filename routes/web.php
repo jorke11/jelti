@@ -485,6 +485,7 @@ Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice")
 
 
 Route::get('/reportClient', "Report\ClientController@index");
+Route::get('/reportOperations', "Report\OperationsController@index");
 
 Route::get('/api/reportClient', "Report\ClientController@getList");
 Route::get('/api/reportClientTarget', "Report\ClientController@getListTarger");
@@ -494,6 +495,8 @@ Route::get('/api/reportClientProductUnits', "HomeController@getListProductUnits"
 Route::get('/api/reportSupplierDash', "HomeController@getListSupplier");
 Route::get('/api/reportClientCities', "Report\ClientController@listCities");
 Route::get('api/reportProductByClient', "Report\CommercialController@getProductByClient");
+
+Route::get('/api/reportResponse', "Report\OperationsController@getResponse");
 
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");

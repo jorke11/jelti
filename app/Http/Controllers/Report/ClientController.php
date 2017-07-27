@@ -72,7 +72,7 @@ class ClientController extends Controller {
             group by 1,2
             order by 3 desc limit 10";
 
-        
+
         $res = DB::select($cli);
 
         $cat = array();
@@ -89,7 +89,7 @@ class ClientController extends Controller {
 
     public function listCities(Request $req) {
         $input = $req->all();
-         $ware = "";
+        $ware = "";
         if ($input["warehouse_id"] != 0) {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
         }
@@ -104,7 +104,7 @@ class ClientController extends Controller {
 
         $res = DB::select($cli);
 
-       
+
 //echo $cli;exit;
         $cat = array();
         $total = array();
@@ -120,13 +120,13 @@ class ClientController extends Controller {
 
     public function getProductByCategory(Request $req) {
         $input = $req->all();
-        
+
         $ware = "";
         if ($input["warehouse_id"] != 0) {
             $ware = " AND dep.warehouse_id=" . $input["warehouse_id"];
         }
 
-        
+
         $cli = "
             SELECT c.description category,sum(d.quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.value*d.units_sf*d.quantity) facturado 
 FROM sales_detail d 
@@ -143,6 +143,31 @@ FROM sales_detail d
 
 
         return response()->json(["data" => $res]);
+    }
+
+    public function profile() {
+        $warehouse = Warehouses::all();
+        return view("Report.Profile.init", compact("warehouse"));
+    }
+
+    public function profileClient($client_id) {
+        $client = DB::table("vclient")->where("id", $client_id)->first();
+
+        $detail = DB::table("vdepartures")->where("client_id", $client->id)->orderBy("id","asc")->get();
+        $resta = 0;
+        
+        for ($i = 1; $i < count($detail); $i++) {
+            $resta += $this->dias_transcurridos($detail[$i - 1]->created, $detail[$i]->created);
+        }
+
+        return response()->json(["client" => $client, "frecuency" => ceil($resta / count($detail))]);
+    }
+
+    public function dias_transcurridos($fecha_i, $fecha_f) {
+        $dias = (strtotime($fecha_i) - strtotime($fecha_f)) / 86400;
+        $dias = abs($dias);
+        $dias = floor($dias);
+        return $dias;
     }
 
 }

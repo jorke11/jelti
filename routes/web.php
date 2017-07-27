@@ -13,13 +13,18 @@
 
 use App\Models;
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Route::group(["middleware" => ["auth", "client"]], function() {
+    Route::get('/home', 'HomeController@index');
+});
 
-Route::get('/home', 'HomeController@index');
+
+
 Route::get('/dash', 'DashboardController@index');
 Route::get('/summary', 'Invoicing\SummaryController@index');
 
@@ -27,8 +32,7 @@ Route::get('/resize', 'ToolController@index');
 
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
 
-
-
+Route::resource('/services', 'Suppliers\ServicesController');
 Route::resource('/product', 'Administration\ProductController');
 Route::post('/product/upload', 'Administration\ProductController@uploadImage');
 Route::put('/product/checkmain/{id}', 'Administration\ProductController@checkMain');
@@ -525,4 +529,8 @@ Route::get('/reportCommercial', "Report\CommercialController@index");
 
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");
+
+Route::get('/profileClient', "Report\ClientController@profile");
+Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
+Route::get('api/productByClient', "Report\ClientController@getProductClient");
 

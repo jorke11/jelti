@@ -63,6 +63,7 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
 
+
             try {
                 DB::beginTransaction();
                 $document = Stakeholder::where("document", $input["document"])->first();
@@ -258,6 +259,13 @@ class ClientController extends Controller {
         if ($stakeholder == null) {
             $result = Stakeholder::create($input);
         } else {
+            if ($input["password"] != '') {
+                $input["password"] = bcrypt($input["password"]);
+
+                if ($stakeholder->password == $input["password"]) {
+                    unset($input["password"]);
+                }
+            }
             $result = $stakeholder->fill($input)->save();
         }
 

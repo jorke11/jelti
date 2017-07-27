@@ -13,29 +13,8 @@ function Client() {
         $("#tabInvoice").click(function () {
             obj.tableInvoice($("#frm #id").val());
         });
-        //        $("#tabContact").click(function () {
-        //            $(".input-contact").cleanFields({disabled: true});
-        //
-        //        });
 
         $("#modalImage").click(function () {
-            //
-            //            $("#input-700").fileinput({
-            //                uploadUrl: "clients/upload", // server upload action
-            //                uploadAsync: true,
-            //                maxFileCount: 5,
-            //                uploadExtraData: {
-            //                    id: $("#frm #id").val(),
-            //                    document_id: document_id,
-            //
-            //                },
-            //            }).on('fileuploaded', function (event, data, id, index) {
-            //                $("#modalUpload").modal("hide");
-            //                obj.showImages(data.extra.clients_id);
-            //            }).on('filebrowse', function (event) {
-            //                document_id = $("#frmFile #document_id").val()
-            //            });
-            //
             $("#frmFile #clients_id").val($("#frm #id").val());
             $("#modalUpload").modal("show");
         })
@@ -56,14 +35,6 @@ function Client() {
                 $("#type_person_id option[value=2]").removeClass("hidden");
             }
         });
-        //        $("#frm #stakeholder_id").change(function () {
-        //            if ($(this).val() != 0) {
-        //                if (confirm("La informacion del formulario de Sobreescribira, esta seguro de carga los datos?")) {
-        //                    obj.getCuenta($(this).val());
-        //                }
-        //
-        //            }
-        //        });
 
         $("#frm #stakeholder_id").on('select2:closing', function (evt) {
             var cont = 0;
@@ -516,7 +487,7 @@ function Client() {
 
     this.save = function () {
         $("#btnSave").attr("disabled", true);
-        var frm = $("#frm");
+        var frm = $("#frm"), passwd = true;
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frm #id").val();
@@ -535,23 +506,34 @@ function Client() {
 
             if ($("#frm #verification").val() != '') {
 
-                $.ajax({
-                    url: url,
-                    method: method,
-                    data: data,
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if (data.success == true) {
-                            $("#btnSave").attr("disabled", false);
-                            table.ajax.reload();
-                            toastr.success(msg);
-                            $(".input-clients").setFields({data: data.header})
-                        }
-                    }, error: function (xhr, ajaxOptions, thrownError) {
-                        $("#btnSave").attr("disabled", false);
-                        toastr.error(xhr.responseJSON.msg);
+                if ($("#frm #password").val() != '') {
+                    if ($("#frm #password").val() != $("#frm #confirmation").val()) {
+                        passwd = false;
                     }
-                })
+                }
+
+                if (passwd == true) {
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: data,
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if (data.success == true) {
+                                $("#btnSave").attr("disabled", false);
+                                table.ajax.reload();
+                                toastr.success(msg);
+                                $(".input-clients").setFields({data: data.header})
+                            }
+                        }, error: function (xhr, ajaxOptions, thrownError) {
+                            $("#btnSave").attr("disabled", false);
+                            toastr.error(xhr.responseJSON.msg);
+                        }
+                    })
+                } else {
+                    $("#btnSave").attr("disabled", false);
+                    toastr.error("La clave y la confirmación deben ser iguales!");
+                }
             } else {
                 $("#btnSave").attr("disabled", false);
                 toastr.error("Campo de verificación vacio!");
@@ -575,6 +557,7 @@ function Client() {
                 $("#loading-super").removeClass("hidden");
             },
             success: function (data) {
+                $(".input-clients").cleanFields();
                 $(".input-clients").setFields({data: data.header});
                 obj.printImages(data.images);
                 obj.tableComment(data.comments);
@@ -658,7 +641,7 @@ function Client() {
             })
         }
     }
-    
+
     this.deleteBranch = function (id) {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
@@ -833,7 +816,7 @@ function Client() {
                     html += "<td>" + val.address + "</a></td>";
                     html += "<td>" + val.term + "</td>";
                     html += "<td>" + val.city + "</td>";
-                    html += '<td><span class="glyphicon glyphicon-remove" aria-hidden="true" style="cursor:pointer" onclick=obj.deleteBranch('+val.id+')></span></td>';
+                    html += '<td><span class="glyphicon glyphicon-remove" aria-hidden="true" style="cursor:pointer" onclick=obj.deleteBranch(' + val.id + ')></span></td>';
                     html += "</tr>";
                 });
                 html += "</tbody></table><br>";

@@ -607,9 +607,7 @@ class DepartureController extends Controller {
                 $departure = Departures::find($input["id"]);
 
                 $val = DeparturesDetail::where("departure_id", $departure["id"])->count();
-
                 $dep = Sales::where("departure_id", $input["id"])->get();
-
 
                 if ($val > 0) {
                     $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();

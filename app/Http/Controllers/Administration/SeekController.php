@@ -63,7 +63,7 @@ class SeekController extends Controller {
         $in = $req->all();
         $result = array();
         $query = Stakeholder::select("id", DB::raw("coalesce(document,'') ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
-        
+
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"])) {
@@ -73,7 +73,7 @@ class SeekController extends Controller {
                 $result = array();
             }
         } else {
-            
+
             if (isset($in["q"])) {
                 $query->where("business", "ILIKE", "%" . $in["q"] . "%")
                         ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
@@ -81,7 +81,6 @@ class SeekController extends Controller {
                         ->where("type_stakeholder", 1);
             }
             $result = $query->get();
-            
         }
 
         return response()->json(['items' => $result, "pages" => count($result)]);
@@ -274,7 +273,34 @@ class SeekController extends Controller {
                     ->OrWhere("products.bar_code", "ILIKE", "%" . $in["q"] . "%")
                     ->OrWhere(DB::raw("products.reference::text"), "ILIKE", "%" . $in["q"] . "%");
         }
+        $query->whereNull("type_product_id");
 
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+
+    public function getServices(Request $req) {
+        $in = $req->all();
+        $query = DB::table("vservices")->select("products.id", DB::raw("reference ||' - '|| title || ' - ' || business  as text"));
+
+        if (isset($in["filter"]) && $in["filter"] != '') {
+            foreach ($in["filter"] as $key => $val) {
+                $query->where($key, $val);
+            }
+        } else if (isset($in["id"])) {
+            $query->where("id", $in["id"])->get();
+        }
+
+        if (isset($in["q"]) && $in["q"] != "0") {
+            $query->where("title", "ILIKE", "%" . $in["q"] . "%")
+                    ->OrWhere("business", "ILIKE", "%" . $in["q"] . "%")
+                    ->OrWhere("bar_code", "ILIKE", "%" . $in["q"] . "%")
+                    ->OrWhere(DB::raw("reference::text"), "ILIKE", "%" . $in["q"] . "%");
+        }
+
+
+        $query->where("type_product_id", 1);
         $result = $query->get();
 
         return response()->json(['items' => $result, "pages" => count($result)]);

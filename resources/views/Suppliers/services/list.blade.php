@@ -6,14 +6,8 @@
                 <th>Id</th>
                 <th>Sf code</th>
                 <th>Título</th>
-                <th>Proveedor</th>
-                <th>Código de Barra code</th>
-                <th>Embalaje Proveedor</th>
-                <th>Costo SF</th>
                 <th>Impuesto</th>
-                <th>Embajale SF</th>
                 <th>Precio SF</th>
-                <th>Imagen</th>
                 <th>Estatus</th>
                 <th>Acción</th>
             </tr>

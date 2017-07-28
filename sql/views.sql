@@ -10,6 +10,7 @@ JOIN products p ON p.id=e.product_id
 group by 1,2,e.product_id;
 
 
+
 CREATE VIEW vsupplier AS
 SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address,'') as address,s.phone,
 s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,
@@ -21,6 +22,7 @@ LEFT JOIN parameters as typeregime ON typeregime.code=s.type_regime_id and typer
 LEFT JOIN parameters as typestakeholder ON typestakeholder.code=s.type_stakeholder and typestakeholder."group"='typestakeholder'
 LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='generic'
 WHERE s.type_stakeholder=2;
+
 
 
 --drop view vclient
@@ -42,12 +44,24 @@ JOIN parameters as status ON status.code=s.status_id and status."group"='generic
 WHERE s.type_stakeholder=1
 
 
+
 create view vproducts as
 select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
 p.image,status.description as status
 from products p
 JOIN stakeholder s ON s.id=p.supplier_id
-LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic';
+LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic'
+WHERE p.type_product_id IS NULL
+
+
+
+create view vservices as
+select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
+p.image,status.description as status
+from products p
+JOIN stakeholder s ON s.id=p.supplier_id
+LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic'
+WHERE p.type_product_id IS NOT NULL
 
 
 

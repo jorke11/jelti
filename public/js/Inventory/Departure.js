@@ -77,8 +77,38 @@ function Sale() {
                 $("#frmDetail #description").attr("disabled", true);
             }
         });
+        $("#btnModalServices").click(function () {
+            $("#modalService").modal("show");
+            $(".input-detail").cleanFields();
+            $("#frmDetail #rowItem").val(-1);
+            if ($("#frm #status_id").val() == 1) {
+                $("#frmDetail #real_quantity").attr("disabled", true);
+                $("#frmDetail #description").attr("disabled", true);
+            }
+        });
 
         $("#frmDetail #product_id").change(function () {
+            var param = {};
+            client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
+
+            param.client_id = client_id;
+            $.ajax({
+                url: 'departure/' + $(this).val() + '/getDetailProduct',
+                method: 'GET',
+                data: param,
+                dataType: 'JSON',
+                success: function (resp) {
+                    dataProduct = resp.response;
+                    $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
+                    $("#frmDetail #value").val(resp.response.price_sf).formatNumber()
+                    $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
+
+
+                }
+            })
+        });
+        
+        $("#frmServices #product_id").change(function () {
             var param = {};
             client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
 

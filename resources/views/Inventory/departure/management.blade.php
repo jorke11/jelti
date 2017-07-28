@@ -174,6 +174,9 @@
                 <div class="row">
                     <div class="col-lg-4">Detalle</div>
                     <div class="col-lg-8 text-right">
+                        <button class="btn btn-success btn-sm" type="button" id="btnModalServices">
+                            <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+                        </button>
                         <button class="btn btn-success btn-sm" type="button" id="btnAsociar">
                             Asociar
                         </button>

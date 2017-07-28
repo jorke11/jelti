@@ -1,17 +1,17 @@
 function Services() {
-    var table, product_id = 0, tableSpecial;
+    var table, services_id = 0, tableSpecial;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#tabManagement").click(function () {
-            $(".input-product").val("");
+            $(".input-services").val("");
             $('#myTabs a[href="#management"]').tab('show');
         });
 
         $("#modalImage").click(function () {
             $("#input-700").fileinput({
-                uploadUrl: "product/upload", // server upload action
+                uploadUrl: "services/upload", // server upload action
                 uploadAsync: true,
                 maxFileCount: 5,
                 allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
@@ -32,7 +32,7 @@ function Services() {
         });
 
         $("#tabManagement").click(function () {
-            $(".input-product").cleanFields({disabled: true});
+            $(".input-services").cleanFields({disabled: true});
         });
 
         $("#tabSpecial").click(function () {
@@ -51,7 +51,7 @@ function Services() {
         var formData = new FormData($("#frmFile")[0]);
 
         $.ajax({
-            url: 'product/uploadExcel',
+            url: 'services/uploadExcel',
             method: 'POST',
             data: formData,
             dataType: 'JSON',
@@ -69,7 +69,7 @@ function Services() {
         var formData = new FormData($("#frmFileCode")[0]);
 
         $.ajax({
-            url: 'product/uploadExcelCode',
+            url: 'services/uploadExcelCode',
             method: 'POST',
             data: formData,
             dataType: 'JSON',
@@ -93,7 +93,7 @@ function Services() {
     }
 
     this.new = function () {
-        $(".input-product").cleanFields();
+        $(".input-services").cleanFields();
     }
     this.newSpecial = function () {
         $(".input-special").cleanFields();
@@ -101,7 +101,7 @@ function Services() {
 
     this.showImages = function (id) {
         $.ajax({
-            url: 'product/getImages/' + id,
+            url: 'services/getImages/' + id,
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {
@@ -116,7 +116,7 @@ function Services() {
 
             html += '<div class="col-sm-6 col-lg-3" id="div_' + val.id + '">' +
                     '<div class="thumbnail" style="height:auto">' +
-                    '<img src="/images/product/' + val.path + '" alt="Product">' +
+                    '<img src="/images/services/' + val.path + '" alt="Product">' +
                     '<div class="caption">' +
                     '<h4>Check Main <input type="radio" name="main[]" onclick=obj.checkMain(' + val.id + ',' + val.id + ')></h4>' +
 //                    '<p><button type="button" class="btn btn-primary btn-xs" aria-label="Left Align" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>' +
@@ -129,32 +129,32 @@ function Services() {
         $("#contentImages").html(html);
     }
 
-    this.checkMain = function (id, product_id) {
+    this.checkMain = function (id, services_id) {
         var obj = {};
-        obj.product_id = product_id;
+        obj.services_id = services_id;
         $.ajax({
-            url: 'product/checkmain/' + id,
+            url: 'services/checkmain/' + id,
             method: 'PUT',
             data: obj,
             dataType: 'JSON',
             success: function (data) {
-                $("#imageMain").attr("src", "/images/product/" + data.path.path);
+                $("#imageMain").attr("src", "/images/services/" + data.path.path);
             }
         })
     }
 
-    this.deleteImage = function (id, product_id) {
+    this.deleteImage = function (id, services_id) {
         $("#div_" + id).remove();
         var obj = {};
-        obj.product_id = product_id;
+        obj.services_id = services_id;
         $.ajax({
-            url: 'product/deleteImage/' + id,
+            url: 'services/deleteImage/' + id,
             method: 'DELETE',
             data: obj,
             dataType: 'JSON',
             success: function (data) {
                 toastr.success("Image Deleted")
-//                $("#imageMain").attr("src", "/images/product/" + data.path.path);
+//                $("#imageMain").attr("src", "/images/services/" + data.path.path);
             }
         })
     }
@@ -167,17 +167,17 @@ function Services() {
         var id = $("#frm #id").val();
         var msg = '';
 
-        var validate = $(".input-product").validate();
+        var validate = $(".input-services").validate();
 
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "product";
-                msg = "Created Record";
+                url = "services";
+                msg = "Registro Creado";
             } else {
                 method = 'PUT';
-                url = "product/" + id;
-                msg = "Edited Record";
+                url = "services/" + id;
+                msg = "Registro Editado";
             }
 
             elem = $("#frm #reference");
@@ -193,7 +193,7 @@ function Services() {
                 success: function (data) {
                     if (data.success == true) {
                         table.ajax.reload();
-                        $(".input-product").setFields({data: data.header});
+                        $(".input-services").setFields({data: data.header});
                         $("#error_" + elem.attr("id")).remove();
                         elem.removeClass("error");
                         elem.parent().parent().removeClass("has-error")
@@ -218,7 +218,7 @@ function Services() {
     this.saveSpecial = function () {
         toastr.remove();
         var frm = $("#frmSpecial");
-        $("#frmSpecial #product_id").val($("#frm #id").val());
+        $("#frmSpecial #services_id").val($("#frm #id").val());
         var data = frm.serialize();
         var url = "", method = "";
         var id = $("#frmSpecial #id").val();
@@ -230,11 +230,11 @@ function Services() {
         if (validate.length == 0) {
             if (id == '') {
                 method = 'POST';
-                url = "product/StoreSpecial";
+                url = "services/StoreSpecial";
                 msg = "Created Record";
             } else {
                 method = 'PUT';
-                url = "product/UpdateSpecial/" + id;
+                url = "services/UpdateSpecial/" + id;
                 msg = "Edited Record";
             }
 
@@ -260,7 +260,7 @@ function Services() {
 
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/product/" + id + "/edit";
+        var url = "/services/" + id + "/edit";
         $.ajax({
             url: url,
             method: "GET",
@@ -268,17 +268,17 @@ function Services() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-product").cleanFields();
+                $(".input-services").cleanFields();
                 
                 if ($("#role_id").val() == 1) {
-                    $(".input-product").setFields({data: data.header});
+                    $(".input-services").setFields({data: data.header});
                 } else {
                     
-                    $(".input-product").setFields({data: data.header, disabled: true});
+                    $(".input-services").setFields({data: data.header, disabled: true});
                 }
 
                 if (data.header.image != null) {
-                    $("#imageMain").attr("src", "/images/product/" + data.header.image);
+                    $("#imageMain").attr("src", "/images/services/" + data.header.image);
                 }
                 obj.printImages(data.images);
             }
@@ -289,7 +289,7 @@ function Services() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/product/" + id;
+            var url = "/services/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -311,40 +311,27 @@ function Services() {
         return $('#tblProducts').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": "/api/listProduct",
+            "ajax": "/api/listServices",
             scrollX: true,
             columns: [
                 {data: "id", sWidth: "50px"},
                 {data: "reference", sWidth: "100px"},
                 {data: "title", sWidth: "400px"},
-                {data: "supplier", sWidth: "100px"},
-                {data: "bar_code"},
-                {data: "units_supplier", sWidth: "100px"},
-                {data: "cost_sf", render: $.fn.dataTable.render.number('.', ',', 2)},
                 {data: "tax"},
-                {data: "units_sf"},
                 {data: "price_sf"},
-                {data: "image", width: 10, searchable: false, render: function (data, type, row) {
-
-                        if (data == null) {
-                            data = "default.jpg";
-                        }
-                        return '<img src="/images/product/' + data + '" width="25px">';
-                    }
-                },
                 {data: "status"},
                 {data: "id"},
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    aTargets: [0, 1, 2, 3, 4, 5],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ');return false";>' + data + '</a>';
                     }
                 },
                 {
-                    targets: [12],
+                    targets: [6],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -354,39 +341,6 @@ function Services() {
             ],
         });
     }
-    this.tableSpecial = function (id) {
-        var obj = {};
-        obj.product_id = id;
-        return $('#tblSpecial').DataTable({
-            "processing": true,
-            "serverSide": true,
-            destroy: true,
-            "ajax": {
-                url: "/api/listSpecial",
-                type: 'GET',
-                data: obj,
-            },
-            columns: [
-                {data: "id"},
-                {data: "client_id"},
-                {data: "product_id"},
-                {data: "price_sf"},
-                {data: "margin"},
-                {data: "margin_sf"},
-                {data: "tax"},
-            ],
-            order: [[1, 'ASC']],
-            aoColumnDefs: [
-                {
-                    aTargets: [0],
-                    mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ');return false";>' + data + '</a>';
-                    }
-                }
-            ],
-        });
-    }
-
 }
 
 var obj = new Services();

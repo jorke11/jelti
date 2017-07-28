@@ -32,6 +32,7 @@ class Products extends Model {
         "account_id",
         "packaging",
         "update_id",
+        "type_product_id",
         
     ];
     

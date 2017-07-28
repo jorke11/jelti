@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Suppliers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administration\Parameters;
+use Auth;
+use App\Models\Administration\Products;
 
 class ServicesController extends Controller {
 
@@ -26,11 +28,11 @@ class ServicesController extends Controller {
         return view("Suppliers.services.init", compact("tax"));
     }
 
-    public function store(ProductsCreateRequest $request) {
+    public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
-//            $user = Auth::User();
+
             $input["users_id"] = Auth::User()->id;
 
             if (isset($input["characteristic"])) {
@@ -38,6 +40,13 @@ class ServicesController extends Controller {
             }
 
             $input["status_id"] = (isset($input["status_id"])) ? 1 : 2;
+            $input["type_product_id"] = 1;
+            $input["category_id"] = -1;
+            $input["reference"] = strtotime(date("Y-m-d H:i:s"));
+            $input["units_supplier"] = 1;
+            $input["units_sf"] = 1;
+            $input["cost_sf"] = 0;
+            $input["bar_code"] = strtotime(date("Y-m-d H:i:s"));
 
             $result = Products::create($input)->id;
 
@@ -174,9 +183,7 @@ class ServicesController extends Controller {
     }
 
     public function edit($id) {
-
         $resp["header"] = Products::FindOrFail($id);
-        $resp["images"] = ProductsImage::where("product_id", $id)->get();
         return response()->json($resp);
     }
 

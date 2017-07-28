@@ -32,7 +32,7 @@ Route::get('/resize', 'ToolController@index');
 
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
 
-Route::resource('/services', 'Suppliers\ServicesController');
+Route::resource('services', 'Suppliers\ServicesController');
 Route::resource('/product', 'Administration\ProductController');
 Route::post('/product/upload', 'Administration\ProductController@uploadImage');
 Route::put('/product/checkmain/{id}', 'Administration\ProductController@checkMain');
@@ -350,6 +350,10 @@ Route::get('/api/listProduct', function() {
     $query = DB::table('vproducts');
     return Datatables::queryBuilder($query)->make(true);
 });
+Route::get('/api/listServices', function() {
+    $query = DB::table('vservices');
+    return Datatables::queryBuilder($query)->make(true);
+});
 
 Route::get('/api/listConsecutive', function() {
     return Datatables::eloquent(models\Administration\Consecutives::query())->make(true);
@@ -469,6 +473,7 @@ Route::get('/api/getContact', 'Administration\SeekController@getContact');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
+Route::get('/api/getService', 'Administration\SeekController@getServices');
 Route::get('/api/getCategory', 'Administration\SeekController@getCategory');
 Route::get('/api/getNotification', 'Administration\SeekController@getNotification');
 Route::get('/api/getCommercial', 'Administration\SeekController@getCommercial');

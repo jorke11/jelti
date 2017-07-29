@@ -222,7 +222,7 @@ class PurchaseController extends Controller {
                         $newDet["value"] = $value->value;
                         $newDet["units_supplier"] = $value->units_supplier;
                         $newDet["lote"] = 'new';
-                        $newDet["status_id"] = 3;
+                        $newDet["status_id"] = 1;
                         EntriesDetail::create($newDet);
                     }
 
@@ -243,6 +243,7 @@ class PurchaseController extends Controller {
                     $input["phone"] = $user->phone;
                     $input["environment"] = env("APP_ENV");
                     $input["created_at"] = $purchase->created_at;
+                    $input["description"] = $purchase->description;
 
 
                     $input["detail"] = $this->formatDetail($purchase->id);
@@ -264,6 +265,11 @@ class PurchaseController extends Controller {
 
                         $this->subject = "SuperFuds " . date("d/m") . " " . $sup->business . " " . $cit->description . " " . $pur->id;
                         $input["city"] = $cit->description;
+
+
+                        if ($input["environment"] == 'local') {
+                            $this->mails = Auth::User()->email;
+                        }
 
                         Mail::send("Notifications.purchase", $input, function($msj) {
                             $msj->subject($this->subject);
@@ -302,6 +308,7 @@ class PurchaseController extends Controller {
         $data["total"] = 10;
         $data["environment"] = "local";
         $data["created_at"] = "local";
+        $data["description"] = "description";
         return view("Notifications.purchase", $data);
     }
 
@@ -375,13 +382,12 @@ class PurchaseController extends Controller {
 
     public function formatDetail($id) {
         $detail = DB::table("purchases_detail")
-                        ->select("purchases_detail.id", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0) as tax"), "purchases_detail.quantity", 
-                                "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description", "products.units_supplier",
-                                DB::raw("purchases_detail.quantity * purchases_detail.units_supplier * purchases_detail.value as valuetotal"))
+                        ->select("purchases_detail.id", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0) as tax"), "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description", "products.units_supplier", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier * purchases_detail.value as valuetotal"))
                         ->where("purchase_id", "=", $id)
                         ->join("products", "purchases_detail.product_id", "products.id")
                         ->orderBy("order", "asc")->get();
-
+        $this->subtotal = 0;
+        $this->total = 0;
         foreach ($detail as $i => $value) {
 
             $detail[$i]->total = $value->value * $value->quantity * $value->units_supplier;

@@ -107,20 +107,27 @@ class CommercialController extends Controller {
 
     public function getProductByClient(Request $req) {
         $input = $req->all();
-
+        $client_id = '';
+        if (isset($input["client_id"]) && $input["client_id"] != '') {
+            $client_id = " AND dep.client_id=" . $input["client_id"];
+        }
         $columns = array();
 
         $sql = "
-            SELECT st.business client,p.title product,sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantityproducts
+            SELECT 
+                st.business client,p.title product,
+                sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantityproducts,
+                sum(d.quantity * d.value * d.units_sf) as total
             FROM departures_detail d
             JOIN departures dep ON dep.id=d.departure_id
             JOIN products p ON p.id=d.product_id
             JOIN stakeholder st ON st.id=dep.client_id
-            WHERE d.product_id is not null AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            WHERE d.product_id is not null AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $client_id
             GROUP BY 1,2,dep.client_id
             ORDER BY 1 ASC, 3 DESC
             ";
 
+//        echo $sql;exit;
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);

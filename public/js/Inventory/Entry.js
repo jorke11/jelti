@@ -240,7 +240,9 @@ function Entry() {
                         $(".btnEditClass").prop("disabled", false);
 
                     }
-                }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                },
             })
         } else {
             toastr.error("Input required");
@@ -454,6 +456,16 @@ function Entry() {
                     }
                 });
             },
+            createdRow: function (row, data, index) {
+
+                if (data.status_id == 1) {
+                    $('td', row).eq(7).addClass('color-new');
+                } else if (data.status_id == 2) {
+                    $('td', row).eq(7).addClass('color-pending');
+                } else if (data.status_id == 3) {
+                    $('td', row).eq(7).addClass('color-checked');
+                }
+            },
         });
 
         $('#tbl tbody').on('click', 'td.details-control', function () {
@@ -473,7 +485,7 @@ function Entry() {
     }
 
     this.format = function (d) {
-        var url = "/entry/" + d.id + "/detailAll";
+        var url = "/entry/" + d.id + "/detail";
         var html = '<br><table class="table-detail">';
         html += '<thead><tr><th colspan="2">Information</th><th colspan="3" class="center-rowspan">Order</th>'
         html += '<th colspan="3" class="center-rowspan">Dispatched</th></tr>'

@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="{{ asset('assets/images/icon.png') }}">
         <title>SuperFüds</title>
-        <script>var PATH='{{url("/")}}'</script>
+        <script>var PATH = '{{url("/")}}'</script>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
         {!!Html::script('/vendor/jquery-ui.js')!!}
 
@@ -149,7 +149,6 @@
 
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Administracion <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-
                                             @if(Auth::user()->role_id == 1)
                                             <li><a href="/category">Category</a></li> 
                                             <li><a href="/characteristic">Characterist</a></li>
@@ -164,12 +163,11 @@
                                         </ul>
                                     </li>
 
-
                                     <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Proveedores <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/suppliers">Proveedores</a></li>
                                             <li><a href="/product">Productos</a></li>
-                                            <!--                                            <li><a href="/contact">Contactos</a></li>-->
+                                            <li><a href="/services">Servicios</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-unlock-alt" aria-hidden="true"></i> Clientes <span class="fa fa-chevron-down"></span></a>
@@ -212,6 +210,7 @@
                                         <ul class="nav child_menu">
                                             <li><a href="/reportSales">Ventas</a></li>
                                             <li><a href="/reportPurchase">Compras</a></li>
+                                            <li><a href="/profileClient">Perfil del Cliente</a></li>
                                         </ul>
                                     </li>
 
@@ -268,7 +267,7 @@
                                         <li>
                                             <a href="{{ url('/logout') }}"
                                                onclick="event.preventDefault();
-                                                       document.getElementById('logout-form').submit();">
+                                                               document.getElementById('logout-form').submit();">
                                                 Logout
                                             </a>
 

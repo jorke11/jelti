@@ -63,6 +63,7 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
 
+
             try {
                 DB::beginTransaction();
                 $document = Stakeholder::where("document", $input["document"])->first();
@@ -258,6 +259,13 @@ class ClientController extends Controller {
         if ($stakeholder == null) {
             $result = Stakeholder::create($input);
         } else {
+            if ($input["password"] != '') {
+                $input["password"] = bcrypt($input["password"]);
+
+                if ($stakeholder->password == $input["password"]) {
+                    unset($input["password"]);
+                }
+            }
             $result = $stakeholder->fill($input)->save();
         }
 
@@ -641,29 +649,41 @@ class ClientController extends Controller {
             $this->path = "uploads/prices/" . date("Y-m-d") . "/" . $this->name;
 
             $file->move("uploads/prices/" . date("Y-m-d") . "/", $this->name);
-
+            $error = array();
             Excel::load($this->path, function($reader) {
 
                 foreach ($reader->get() as $book) {
+                    $product = '';
+                    $item = null;
+                    $price = null;
+                    if ($book->price_sf != '') {
+                        if ($book->item != '') {
 
-                    if ($book->item != '') {
-                        $product = '';
-                        if (trim($book->sf_code) != '') {
-                            $product = Products::where("reference", trim($book->sf_code))->first();
-                        } else {
-                            if (trim($book->ean) != '') {
-                                $product = Products::where("bar_code", trim($book->ean))->first();
+                            if (trim($book->sf_code) != '') {
+                                $product = Products::where("reference", trim($book->sf_code))->first();
+                            } else {
+                                if (trim($book->ean) != '') {
+                                    $product = Products::where("bar_code", trim($book->ean))->first();
+                                }
                             }
+                            $item = $book->item;
+                        } else if ($book->ean != '') {
+                            $product = Products::where("bar_code", trim($book->ean))->first();
                         }
 
+
                         if ($product != '') {
-                            $price = PricesSpecial::where("item", $book->item)->first();
+                            if ($item != '') {
+                                $price = PricesSpecial::where("item", $item)->first();
+                            }
+
                             $new["client_id"] = $this->in["client_id"];
                             $new["product_id"] = $product->id;
                             $new["price_sf"] = $book->price_sf;
                             $new["margin"] = 1;
+                            $new["units_sf"] = (int) $product->units_sf;
                             $new["margin_sf"] = 1;
-                            $new["item"] = $book->item;
+                            $new["item"] = $item;
                             $new["tax"] = $product->tax;
 
                             if ($price == null) {
@@ -675,6 +695,8 @@ class ClientController extends Controller {
                                 $p->fill($new)->save();
                             }
                         }
+                    } else {
+                        $error[] = array("data" => $book, "error" => "Price Empty");
                     }
                 }
             })->get();
@@ -685,7 +707,7 @@ class ClientController extends Controller {
                     ->get();
 
             return response()->json(["success" => true, "data" => $detail,
-                        "updated" => $this->updated, "inserted" => $this->inserted]);
+                        "updated" => $this->updated, "inserted" => $this->inserted, "error" => $error]);
         }
     }
 

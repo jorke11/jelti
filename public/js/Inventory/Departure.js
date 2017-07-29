@@ -77,11 +77,41 @@ function Sale() {
                 $("#frmDetail #description").attr("disabled", true);
             }
         });
+        $("#btnModalServices").click(function () {
+            $("#modalService").modal("show");
+            $(".input-detail").cleanFields();
+            $("#frmDetail #rowItem").val(-1);
+            if ($("#frm #status_id").val() == 1) {
+                $("#frmDetail #real_quantity").attr("disabled", true);
+                $("#frmDetail #description").attr("disabled", true);
+            }
+        });
 
         $("#frmDetail #product_id").change(function () {
             var param = {};
             client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
-            
+
+            param.client_id = client_id;
+            $.ajax({
+                url: 'departure/' + $(this).val() + '/getDetailProduct',
+                method: 'GET',
+                data: param,
+                dataType: 'JSON',
+                success: function (resp) {
+                    dataProduct = resp.response;
+                    $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
+                    $("#frmDetail #value").val(resp.response.price_sf).formatNumber()
+                    $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
+
+
+                }
+            })
+        });
+        
+        $("#frmServices #product_id").change(function () {
+            var param = {};
+            client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
+
             param.client_id = client_id;
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
@@ -174,6 +204,7 @@ function Sale() {
     }
 
     this.uploadExcel = function () {
+        $("#frmUpload #client_id").val($("#frm #client_id :selected").val());
         var formData = new FormData($("#frmUpload")[0]);
         $.ajax({
             url: 'departure/uploadExcel',
@@ -226,6 +257,8 @@ function Sale() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
+                $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
+
                 $("#frm #address").val(resp.response.address_invoice);
             }
         })
@@ -243,18 +276,18 @@ function Sale() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
-
                 resp.data.client.name = (resp.data.client.name == null) ? '' : resp.data.client.name + " ";
                 resp.data.client.last_name = (resp.data.client.last_name == null) ? '' : resp.data.client.last_name + " ";
                 $("#frm #name_client").val(resp.data.client.name + resp.data.client.last_name + resp.data.client.business_name);
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.data.client.address_send);
                 $("#frm #phone").val(resp.data.client.phone);
-                $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.city_id}});
+                $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.send_city_id}});
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
                 html = "<option value=0>Selection</option>";
                 $.each(resp.data.branch, function (i, val) {
-                    html += '<option value="' + val.id + '">' + val.address_invoice + "</option>";
+                    val.business = (val.business == null) ? '' : val.business;
+                    html += '<option value="' + val.id + '">' + val.business + ' ' + val.address_invoice + "</option>";
                 })
 
                 $("#frm #branch_id").html(html);

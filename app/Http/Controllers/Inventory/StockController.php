@@ -59,24 +59,23 @@ class StockController extends Controller {
 
     public function getDetailProduct(Request $req, $id) {
         $in = $req->all();
-
-        $special = PricesSpecial::where("product_id", $id)->where("client_id", $in["client_id"])->first();
+        $special = null;
+        if (isset($in["client_id"]) && $in["client_id"] != '') {
+            $special = PricesSpecial::where("product_id", $id)->where("client_id", $in["client_id"])->first();
+        }
 
 
         if ($special) {
 
             $response = DB::table("products")
-                            ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id",
-                                    "prices_special.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
+                            ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
                             ->join("categories", "categories.id", "=", "products.category_id")
                             ->join("prices_special", "prices_special.product_id", "=", "products.id")
                             ->where("products.id", $id)
                             ->where("prices_special.client_id", $in["client_id"])->first();
-            
         } else {
             $response = DB::table("products")
-                    ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", 
-                            "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier","products.margin_sf","products.packaging")
+                    ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier", "products.margin_sf", "products.packaging")
                     ->join("categories", "categories.id", "=", "products.category_id")
                     ->where("products.id", $id)
                     ->first();

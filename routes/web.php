@@ -13,13 +13,18 @@
 
 use App\Models;
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Route::group(["middleware" => ["auth", "client"]], function() {
+    Route::get('/home', 'HomeController@index');
+});
 
-Route::get('/home', 'HomeController@index');
+
+
 Route::get('/dash', 'DashboardController@index');
 Route::get('/summary', 'Invoicing\SummaryController@index');
 
@@ -27,8 +32,7 @@ Route::get('/resize', 'ToolController@index');
 
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
 
-
-
+Route::resource('services', 'Suppliers\ServicesController');
 Route::resource('/product', 'Administration\ProductController');
 Route::post('/product/upload', 'Administration\ProductController@uploadImage');
 Route::put('/product/checkmain/{id}', 'Administration\ProductController@checkMain');
@@ -346,6 +350,10 @@ Route::get('/api/listProduct', function() {
     $query = DB::table('vproducts');
     return Datatables::queryBuilder($query)->make(true);
 });
+Route::get('/api/listServices', function() {
+    $query = DB::table('vservices');
+    return Datatables::queryBuilder($query)->make(true);
+});
 
 Route::get('/api/listConsecutive', function() {
     return Datatables::eloquent(models\Administration\Consecutives::query())->make(true);
@@ -465,6 +473,7 @@ Route::get('/api/getContact', 'Administration\SeekController@getContact');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
+Route::get('/api/getService', 'Administration\SeekController@getServices');
 Route::get('/api/getCategory', 'Administration\SeekController@getCategory');
 Route::get('/api/getNotification', 'Administration\SeekController@getNotification');
 Route::get('/api/getCommercial', 'Administration\SeekController@getCommercial');
@@ -485,6 +494,7 @@ Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice")
 
 
 Route::get('/reportClient', "Report\ClientController@index");
+Route::get('/reportOperations', "Report\OperationsController@index");
 
 Route::get('/api/reportClient', "Report\ClientController@getList");
 Route::get('/api/reportClientTarget', "Report\ClientController@getListTarger");
@@ -495,12 +505,15 @@ Route::get('/api/reportSupplierDash', "HomeController@getListSupplier");
 Route::get('/api/reportClientCities', "Report\ClientController@listCities");
 Route::get('api/reportProductByClient', "Report\CommercialController@getProductByClient");
 
+Route::get('/api/reportResponse', "Report\OperationsController@getResponse");
+
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");
 Route::get('/api/reportCommercialGraph', "Report\CommercialController@listCommercialGraph");
 
 
 Route::get('/api/reportProductByCommercial', "Report\CommercialController@getProductByCommercial");
+Route::get('/api/reportProductByCategory', "Report\ClientController@getProductByCategory");
 
 
 Route::get('/reportSupplier', "Report\SupplierController@index");
@@ -521,4 +534,8 @@ Route::get('/reportCommercial', "Report\CommercialController@index");
 
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");
+
+Route::get('/profileClient', "Report\ClientController@profile");
+Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
+Route::get('api/productByClient', "Report\ClientController@getProductClient");
 

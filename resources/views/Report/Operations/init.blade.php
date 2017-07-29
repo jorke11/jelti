@@ -63,14 +63,14 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                @include('Report.Client.detail')
+                @include('Report.Operations.detail')
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                @include('Report.Client.product')
+                @include('Report.Operations.product')
             </div>
         </div>
     </div>
@@ -80,6 +80,6 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-{!!Html::script('js/Report/Client.js')!!}
+{!!Html::script('js/Report/Operations.js')!!}
 
 @endsection

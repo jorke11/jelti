@@ -453,22 +453,27 @@ class EntryController extends Controller {
     public function update(Request $request, $id) {
         $entry = Entries::FindOrFail($id);
         $input = $request->all();
-        $input["status_id"] = 2;
-        $result = $entry->fill($input)->save();
-        if ($result) {
 
-            $detailEntry = $this->formatDetail($id);
+        $detail = EntriesDetail::where("entry_id", $id)->where("status_id", 1)->get();
 
-            $total = "$ " . number_format($this->total, 2, ',', '.');
-            $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+        if (count($detail) == 0) {
+            $input["status_id"] = 2;
+            $result = $entry->fill($input)->save();
+            if ($result) {
+                $detailEntry = $this->formatDetail($id);
+                $total = "$ " . number_format($this->total, 2, ',', '.');
+                $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
 
-            return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
+                return response()->json(['success' => true, "header" => $entry, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
 
 
 
-            return response()->json(['success' => true, "data" => $resp]);
+                return response()->json(['success' => true, "data" => $resp]);
+            } else {
+                return response()->json(['success' => false, "msg" => "Problemas con la ejecución"], 409);
+            }
         } else {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, "msg" => "El detalle debe estar revisado"], 409);
         }
     }
 

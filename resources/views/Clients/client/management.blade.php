@@ -162,10 +162,7 @@
                                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"  style="top:30px;cursor:pointer" id="cleanSelect2"></span>
                                             </div>
                                         </div>
-
-
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4">
@@ -191,6 +188,21 @@
                                             <input type="checkbox" id="special_price" name="special_price" class="form-control input-clients " disabled>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Clave</label>
+                                            <input type="password" class="form-control input-clients input-sm" id="password" name="password" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Confirmación</label>
+                                            <input type="password" id="confirmation" class="form-control input-clients" disabled>
+                                        </div>
+                                    </div>
+                                   
                                 </div>
                             </div>
                         </div>

@@ -8,14 +8,20 @@ function Product() {
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
 
-
+        $(".input-product").cleanFields();
         $(".date-report").html("De " + $("#Detail #finit").val() + " hasta " + $("#Detail #fend").val());
         $("#btnSearch").click(function () {
             obj.table();
             obj.productbycity();
             obj.productbyclient();
         })
+
+
+        $("#Detail #client_id").on('select2:closing', function (evt) {
+            obj.productbyclient();
+        })
     }
+
 
     this.table = function () {
 
@@ -24,6 +30,7 @@ function Product() {
         param.end = $("#Detail #fend").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
 
         return $('#tbl').DataTable({
             ajax: {
@@ -54,6 +61,8 @@ function Product() {
         param.end = $("#Detail #fend").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.client_id = $("#client_id :selected").val();
 
         return $('#tblProductsClient').DataTable({
             ajax: {
@@ -65,6 +74,7 @@ function Product() {
                 {data: "client"},
                 {data: "product"},
                 {data: "quantityproducts"},
+                {data: "total",render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             order: [[0, 'ASC']],
             aoColumnDefs: [
@@ -87,6 +97,7 @@ function Product() {
         param.end = $("#Detail #fend").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
 
         return $('#tblProducts').DataTable({
             ajax: {

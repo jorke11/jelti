@@ -75,9 +75,11 @@ for ($i = 1; $i <= $count; $i++) {
         <?php
         if (isset($detail) && count($detail) > 0) {
 //        for ($j = 0; $j < count($detail); $j++) {
+            $quantity = 0;
             for ($j = $init; $j < $fin; $j++) {
                 if (isset($detail[$j])) {
                     $cont++;
+                    $quantity += $detail[$j]->quantity;
                     $desc = ($detail[$j]->product_id == '') ? $detail[$j]->description : $detail[$j]->product;
                     $total = number_format(($detail[$j]->valuetotal), 2, ',', '.');
                     $valueUnit = number_format(($detail[$j]->value), 2, ',', '.');
@@ -106,8 +108,6 @@ for ($i = 1; $i <= $count; $i++) {
                                 }
                             }
                             ?>
-
-
                             </table>
                             <br>
                             <br>

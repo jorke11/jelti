@@ -10,6 +10,7 @@ JOIN products p ON p.id=e.product_id
 group by 1,2,e.product_id;
 
 
+
 CREATE VIEW vsupplier AS
 SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address,'') as address,s.phone,
 s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,
@@ -23,19 +24,25 @@ LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='ge
 WHERE s.type_stakeholder=2;
 
 
-drop view vclient
+
+--drop view vclient
 CREATE VIEW vclient AS
 SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address,'') as address,s.phone,
 s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,
-typestakeholder.description as typestakeholder,status.description as status,s.responsible_id,coalesce(u.name,'') ||' '||coalesce(u.last_name,'') as responsible
+typestakeholder.description as typestakeholder,status.description as status,s.responsible_id,coalesce(u.name,'') ||' '||coalesce(u.last_name,'') as responsible,
+s.created_at,s.address_invoice,send.description city_invoice,(select dispatched from sales where client_id=s.id and dispatched is not null order by 1 desc limit 1) last_invoice,s.sector_id,
+sector.description sector
 FROM stakeholder s
 JOIN cities c ON c.id=s.city_id
+JOIN cities send ON send.id=s.invoice_city_id
 LEFT JOIN users as u ON u.id=s.responsible_id
 LEFT JOIN parameters as typeperson ON typeperson.code=s.type_person_id and typeperson."group"='typeperson'
 LEFT JOIN parameters as typeregime ON typeregime.code=s.type_regime_id and typeregime."group"='typeregime'
+LEFT JOIN parameters as sector ON sector.code=s.sector_id and sector."group"='sector'
 LEFT JOIN parameters as typestakeholder ON typestakeholder.code=s.type_stakeholder and typestakeholder."group"='typestakeholder'
 JOIN parameters as status ON status.code=s.status_id and status."group"='generic'
 WHERE s.type_stakeholder=1
+
 
 
 create view vproducts as
@@ -43,12 +50,23 @@ select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as descript
 p.image,status.description as status
 from products p
 JOIN stakeholder s ON s.id=p.supplier_id
-LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic';
+LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic'
+WHERE p.type_product_id IS NULL
+
+
+
+create view vservices as
+select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
+p.image,status.description as status
+from products p
+JOIN stakeholder s ON s.id=p.supplier_id
+LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic'
+WHERE p.type_product_id IS NOT NULL
 
 
 
 create view vdepartures as 
-select d.id,coalesce(d.invoice,'') invoice, d.created_at, CASE WHEN s.business IS NULL THEN sta.business ELSE sta.business END client,w.description as warehouse,
+select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
             (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity,
             
@@ -98,7 +116,7 @@ LEFT JOIN cities ci ON ci.id=c.city_id
 
 
 create view ventries as 
-select e.id, e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code
+select e.id, e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code,e.status_id
 From entries e
 JOIN warehouses w ON w.id=e.warehouse_id
 JOIN cities c ON c.id=e.city_id

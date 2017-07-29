@@ -47,6 +47,7 @@ class DepartureController extends Controller {
     public $email;
     public $mails;
     public $log;
+    public $in;
 
     public function __construct() {
         $this->middleware("auth");
@@ -62,6 +63,7 @@ class DepartureController extends Controller {
         $this->listProducts = array();
         $this->errors = array();
         $this->email = array();
+        $this->in = array();
         $this->mails = array();
         $this->log = new LogController();
     }
@@ -214,20 +216,28 @@ class DepartureController extends Controller {
 
         $dep = Departures::find($id);
 
-        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
-                ->where("stakeholder_id", $sale["client_id"])
-                ->first();
-
-        if ($cli == null) {
-            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
-                    ->where("stakeholder.id", $sale["client_id"])
+        if ($dep->branch_id != '') {
+            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
+                    ->where("id", $dep->branch_id)
+                    ->first();
+        } else {
+            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
+                    ->where("stakeholder_id", $sale["client_id"])
                     ->first();
         }
 
 
-        $city = Cities::find($dep->destination_id);
+        if ($cli == null) {
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
+                    ->where("stakeholder.id", $sale["client_id"])
+                    ->first();
+        }
 
-        $cli->city = $city->description;
+        $city_send = Cities::find($dep->destination_id);
+        $city_inv = Cities::find($dep->city_id);
+
+        $cli->city_send = $city_send->description;
+        $cli->city_inv = $city_inv->description;
 
         $user = Users::find($dep["responsible_id"]);
 
@@ -243,7 +253,8 @@ class DepartureController extends Controller {
 
         $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["dispatched"])));
 
-        $cli["address_invoice"] = $sale["address"];
+        $cli["address_send"] = $sale["address"];
+
         $cli["emition"] = $this->formatDate($sale["dispatched"]);
         $cli["observations"] = $sale["description"];
         $cli["expiration"] = $this->formatDate($expiration);
@@ -279,8 +290,11 @@ class DepartureController extends Controller {
         $totalSum = $totalSum - $dep->discount;
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
-
         $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
+        $cli["business"] = $this->tool->cleanText($cli["business"]);
+        $cli["address_invoice"] = $dep->address_invoice;
+//        dd($cli);
+
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],
@@ -302,8 +316,8 @@ class DepartureController extends Controller {
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
 //        $pdf->SetProtection(array(), '123', '123');
-        $pdf->SetWatermarkImage('assets/images/logo.png');
-        $pdf->showWatermarkImage = true;
+//        $pdf->SetWatermarkImage('assets/images/logo.png');
+//        $pdf->showWatermarkImage = true;
 //        $pdf->WriteHTML('<watermarkimage src="public/assets/images/logo.png" alpha="0.4" size="200,250" />');
 
         header('Content-Type: application/pdf');
@@ -451,11 +465,8 @@ class DepartureController extends Controller {
             $input = $request->all();
 //            unset($input["id"]);
 //            $user = Auth::User();
-
             if (isset($input["detail"])) {
-
                 try {
-
                     DB::beginTransaction();
                     $emDetail = null;
 
@@ -486,7 +497,6 @@ class DepartureController extends Controller {
                                         ->where("prices_special.id", $special->id)
                                         ->first();
                             }
-
 
                             $price_sf = $pro->price_sf;
                             if (Auth::user()->role_id == 1) {
@@ -556,6 +566,11 @@ class DepartureController extends Controller {
 
                             $this->mails[] = $user->email;
 
+                            if ($input["environment"] == 'local') {
+                                $this->mails = Auth::User()->email;
+                            }
+
+
                             Mail::send("Notifications.departure", $input, function($msj) {
                                 $msj->subject($this->subject);
                                 $msj->to($this->mails);
@@ -592,14 +607,13 @@ class DepartureController extends Controller {
                 $departure = Departures::find($input["id"]);
 
                 $val = DeparturesDetail::where("departure_id", $departure["id"])->count();
-
                 $dep = Sales::where("departure_id", $input["id"])->get();
-
 
                 if ($val > 0) {
                     $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
                     if ($val == 0) {
                         if (count($dep) == 0) {
+//                        if (0 == 0) {
 
                             $id = DB::table("sales")->insertGetId(
                                     ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
@@ -612,55 +626,21 @@ class DepartureController extends Controller {
 
                             $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
-                            $total = 0;
-                            $cont = 0;
-                            $credit = 0;
-                            $tax = 0;
-                            $totalPar = 0;
 
+                            $cont = 0;
                             $sale = Sales::find($id);
 
                             foreach ($detail as $value) {
                                 $pro = Products::find($value->product_id);
-                                $totalPar = $value->quantity * $value->value * $value->units_sf;
-                                $total += $totalPar;
-
                                 SaleDetail::insert([
                                     "sale_id" => $id, "product_id" => $value->product_id,
                                     "category_id" => $value->category_id, "quantity" => $value->quantity,
                                     "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
                                     "account_id" => 1, "order" => $cont, "type_nature" => 1
                                 ]);
-
-                                $credit += (double) $totalPar;
-                                if ($pro["tax"] != '' && $pro["tax"] > 0) {
-                                    $cont++;
-                                    $tax = (( $value->value * $value->quantity) * ($pro["tax"] / 100.0));
-                                    SaleDetail::insert([
-                                        "account_id" => 1, "sale_id" => $id, "value" => $tax,
-                                        "order" => $cont, "description" => 'iva', "type_nature" => 1
-                                    ]);
-                                }
-                                $credit += (double) $tax;
                                 $cont++;
                             }
 
-
-                            if ($total > $basetax["base"]) {
-                                $rete = Parameters::where("group", "tax")->where("code", 1)->first();
-                                $rete = ($total * $rete["value"]);
-                                SaleDetail::insert([
-                                    "sale_id" => $id, "account_id" => 2, "value" => ($rete), "order" => $cont, "description" => "rete", "type_nature" => 2
-                                ]);
-
-                                $credit -= $rete;
-                                $cont++;
-                            }
-
-                            SaleDetail::insert([
-                                "account_id" => 2, "sale_id" => $id, "value" => $credit, "order" => $cont, "description" => "Clientes", "type_nature" => 2
-                            ]);
-                            $credit = 0;
                             $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
 
                             if ($departure->invoice == '') {
@@ -741,6 +721,10 @@ class DepartureController extends Controller {
                                 $input["discount"] = $departure->discount;
 
                                 $this->mails[] = $user->email;
+
+                                if ($input["environment"] == 'local') {
+                                    $this->mails = Auth::User()->email;
+                                }
 
                                 Mail::send("Notifications.invoice", $input, function($msj) {
                                     $msj->subject($this->subject);
@@ -863,7 +847,7 @@ class DepartureController extends Controller {
                 ->get();
 
         $this->total = 0;
-
+        $this->subtotal = 0;
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
@@ -1138,10 +1122,10 @@ class DepartureController extends Controller {
     public function storeExcel(Request $request) {
         if ($request->ajax()) {
             $error = 0;
-            $input = $request->all();
+            $this->in = $request->all();
             $this->name = '';
             $this->path = '';
-            $file = array_get($input, 'file_excel');
+            $file = array_get($this->in, 'file_excel');
             $this->name = $file->getClientOriginalName();
             $this->name = str_replace(" ", "_", $this->name);
             $this->path = "uploads/departures/" . date("Y-m-d") . "/" . $this->name;
@@ -1155,12 +1139,13 @@ class DepartureController extends Controller {
                     if ($book->unidades_total != 0) {
                         if (isset($book->item) && $book->item != '') {
 
-                            $special = PricesSpecial::where("item", (int) $book->item)->first();
+                            $special = PricesSpecial::where("item", (int) $book->item)->where("client_id", $this->in["client_id"])->first();
                             if ($special == null) {
                                 $product_id = 0;
                             } else {
                                 $product_id = $special->product_id;
                             }
+
                             $pro = Products::find($product_id);
                             if ($pro == null) {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
@@ -1174,6 +1159,9 @@ class DepartureController extends Controller {
                                 $pro = Products::where("bar_code", $book->ean)->first();
                             } else {
                                 $pro = Products::where("reference", (int) $book->sf_code)->first();
+                            }
+                            if ($pro != null) {
+                                $special = PricesSpecial::where("product_id", $pro->id)->where("client_id", $this->in["client_id"])->first();
                             }
                         } else {
                             if (isset($book->sf_code) && $book->sf_code != '') {

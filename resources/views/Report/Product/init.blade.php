@@ -4,15 +4,26 @@
     {!! Form::open(['id'=>'Detail']) !!}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="col-lg-10 col-center">
-                <div class="col-lg-3">
+            <div class="col-lg-12 col-center">
+                 <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Bodega</label>
+                        <select class="form-control" id="warehouse_id" name="warehouse_id">
+                            <option value="0">SuperFüds</option>
+                            @foreach($warehouse as $val)
+                            <option value="{{$val->id}}">{{$val->description}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Ciudades</label>
                         <select class="form-control input-departure input-find" id="city_id" name='city_id'  data-api="/api/getCity">
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Producto</label>
                         <select class="form-control input-departure input-find" id="product_id" name='product_id'  data-api="/api/getProduct">
@@ -105,7 +116,7 @@
 
         <div class="x_panel">
             <div class="x_title">
-                <h2>Cantidad de Productos Por Cliente<small class="date-report"></small></h2>
+                <h2>Ventas de Productos Por Cliente<small class="date-report"></small></h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>

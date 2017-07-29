@@ -1,10 +1,10 @@
-function Client() {
+function Operations() {
     this.init = function () {
         this.table();
-        this.tableTarget();
-        this.tableProduct();
-        this.tableCities();
-        this.tableProductByCategory();
+//        this.tableTarget();
+//        this.tableProduct();
+//        this.tableCities();
+//        this.tableProductByCategory();
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
@@ -21,7 +21,6 @@ function Client() {
 
     this.getDetail = function (client_id) {
         window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
-
     }
 
     this.table = function () {
@@ -33,17 +32,24 @@ function Client() {
             destroy: true,
             order: [[2, "desc"]],
             ajax: {
-                url: "/api/reportClient",
+                url: "/api/reportResponse",
                 data: obj,
             },
             scrollX: true,
             columns: [
                 {data: "client"},
-                {data: "unidades"},
-                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "invoice"},
+                {data: "created"},
+                {data: "dispatched"},
+                {data: "dias", render: function (data, row, full) {
+                        var html = '';
+                        if (full.dias > 0) {
+                            html+=full.dias + " días"
+                        }
+                        return html;
+                    }
+                },
             ],
-
             aoColumnDefs: [
                 {
                     aTargets: [0, 1],
@@ -88,7 +94,6 @@ function Client() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
-
         $.ajax({
             url: "/api/reportClientProduct",
             method: 'GET',
@@ -171,7 +176,6 @@ function Client() {
 
                     ]
                 });
-
             }
 
         })
@@ -182,7 +186,6 @@ function Client() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
-
         $.ajax({
             url: "/api/reportClientCities",
             method: 'GET',
@@ -265,8 +268,6 @@ function Client() {
 
                     ]
                 });
-
-
             }
 
         })
@@ -279,7 +280,6 @@ function Client() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
-        
         return $('#tblProductbyCategory').DataTable({
             destroy: true,
             ajax: {
@@ -291,11 +291,7 @@ function Client() {
             "pageLength": 20,
             columns: [
                 {data: "category"},
-<<<<<<< HEAD
-                {data: "unidades"},
-=======
                 {data: "quantity"},
->>>>>>> 650145155499dc3076dc97cb37c72e8068000f62
                 {data: "facturado", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             aoColumnDefs: [
@@ -311,5 +307,5 @@ function Client() {
     }
 }
 
-var objCli = new Client();
+var objCli = new Operations();
 objCli.init();

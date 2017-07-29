@@ -30,6 +30,7 @@
     </div>
 </div>
 @include('Inventory.departure.newDetail')
+@include('Inventory.departure.newService')
 @include('Inventory.departure.upload')
 {!!Html::script('js/Inventory/Departure.js')!!}
 @endsection

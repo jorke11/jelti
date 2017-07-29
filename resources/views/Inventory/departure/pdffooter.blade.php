@@ -27,8 +27,7 @@
                     ?>
                     <tr>
                         <td>Iva 5%</td>
-                        <td><?php echo "$ " . number_format((round($tax5)), 0, ',', '.');
-                ; ?></td>
+                        <td><?php echo "$ " . number_format((round($tax5)), 0, ',', '.'); ?></td>
                     </tr>
                     <?php
                 }
@@ -81,6 +80,6 @@
 </table>
 <table>
     <tr>
-        <td><?php echo $textTotal; ?></td>
+        <td><?php echo $textTotal . ', Total artículos: ' . count($detail). ' Total de Items: ' . $quantity ; ?></td>
     </tr>
 </table>

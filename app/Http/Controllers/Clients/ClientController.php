@@ -685,6 +685,7 @@ class ClientController extends Controller {
                             $new["client_id"] = $this->in["client_id"];
                             $new["product_id"] = $product->id;
                             $new["price_sf"] = $book->price_sf;
+                            $new["packaging"] = $book->packaging;
                             $new["margin"] = 1;
                             $new["units_sf"] = (int) $product->units_sf;
                             $new["margin_sf"] = 1;

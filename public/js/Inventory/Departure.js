@@ -6,6 +6,7 @@ function Sale() {
         $("#btnSave").click(this.save);
         $("#btnCancel").click(this.cancelInvoice);
         $("#newDetail").click(this.saveDetail);
+        $("#newService").click(this.saveService);
         $("#btnSend").click(this.send);
         $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
         $("#edit").click(this.edit);
@@ -79,12 +80,8 @@ function Sale() {
         });
         $("#btnModalServices").click(function () {
             $("#modalService").modal("show");
-            $(".input-detail").cleanFields();
-            $("#frmDetail #rowItem").val(-1);
-            if ($("#frm #status_id").val() == 1) {
-                $("#frmDetail #real_quantity").attr("disabled", true);
-                $("#frmDetail #description").attr("disabled", true);
-            }
+            $(".input-service").cleanFields();
+            $("#frmServices #rowItem").val(-1);
         });
 
         $("#frmDetail #product_id").change(function () {
@@ -107,12 +104,12 @@ function Sale() {
                 }
             })
         });
-        
+
         $("#frmServices #product_id").change(function () {
             var param = {};
             client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
-
             param.client_id = client_id;
+
             $.ajax({
                 url: 'departure/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
@@ -120,9 +117,7 @@ function Sale() {
                 dataType: 'JSON',
                 success: function (resp) {
                     dataProduct = resp.response;
-                    $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
-                    $("#frmDetail #value").val(resp.response.price_sf).formatNumber()
-                    $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
+                    $("#frmServices #value").val(resp.response.price_sf).formatNumber()
 
 
                 }
@@ -508,6 +503,101 @@ function Sale() {
                     } else {
                         listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
                         listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
+                        msg += " edited";
+                    }
+                    obj.printDetailTmp();
+                }
+
+
+                toastr.success(msg);
+            }
+
+        } else {
+            toastr.error("input required");
+        }
+    }
+    this.saveService = function () {
+        toastr.remove();
+        $("#frmServices #departure_id").val($("#frm #id").val());
+        var data = {}, value = 0, total = 0;
+        var url = "", method = "";
+        var id = $("#frmServices #id").val();
+        var form = $("#frmServices").serialize()
+        var msg = 'Record Detail';
+        var validate = $(".input-service").validate();
+        if (validate.length == 0) {
+            if (id != '') {
+                var id = $("#frmServices #id").val();
+                var frm = $("#frmServices");
+                var data = frm.serialize();
+                var url = "/departure/detail/" + id;
+                $.ajax({
+                    url: url,
+                    method: "PUT",
+                    data: data,
+                    dataType: 'JSON',
+                    success: function (resp) {
+                        if (resp.success == true) {
+                            $("#modalService").modal("hide");
+                            obj.printDetail(resp);
+                            $("#frmServices #product_id").text("");
+                            $("#frmServices #value").val("");
+                        } else {
+                            toastr.error(resp.success.msg);
+                        }
+                    }, error(xhr, responseJSON, thrown) {
+                        toastr.error(xhr.responseJSON.msg);
+                    }
+                })
+
+            } else {
+                if (statusRecord == true) {
+                    var frm = $("#frmServices");
+                    var data = frm.serialize();
+                    var url = "/departure/storeDetail";
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        data: data,
+                        dataType: 'JSON',
+                        success: function (resp) {
+                            if (resp.success == true) {
+                                $("#modalService").modal("hide");
+                                obj.printDetail(resp);
+                                $("#frmServices #product_id").text("");
+                                $("#frmServices #value").val("");
+                            } else {
+                                toastr.error(resp.success.msg);
+                            }
+                        }, error(xhr, responseJSON, thrown) {
+                            toastr.error(xhr.responseJSON.msg);
+                        }
+                    })
+                } else {
+                    if ($("#frmServices #rowItem").val() == '-1') {
+                        listProducts.push({
+                            row: listProducts.length,
+                            product_id: $("#frmServices #product_id").val(),
+                            product: $.trim($("#frmServices #product_id").text()),
+                            price_tax: dataProduct.price_sf * dataProduct.units_sf * dataProduct.tax,
+                            price_sf: dataProduct.price_sf,
+                            units_sf: parseFloat(dataProduct.units_sf),
+                            quantity: 1,
+                            valueFormated: $("#frmServices #value").val(),
+                            totalFormated: (dataProduct.price_sf * 1 * dataProduct.units_sf),
+                            total: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf) + (dataProduct.price_sf * dataProduct.units_sf * 1 * dataProduct.tax),
+                            real_quantity: '',
+                            totalFormated_real: '',
+                            comment: '',
+                            status: 'new'
+                        });
+
+                        $("#frmDetail #product_id").text("");
+                        $("#frmDetail #value").val("");
+                        msg += " add";
+                    } else {
+                        listProducts[$("#frmServices #rowItem").val()].quantity = 1;
+                        listProducts[$("#frmServices #rowItem").val()].totalFormated = dataProduct.price_sf * 1 * dataProduct.units_sf;
                         msg += " edited";
                     }
                     obj.printDetailTmp();

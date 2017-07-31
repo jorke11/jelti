@@ -63,7 +63,6 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
 
-
             try {
                 DB::beginTransaction();
                 $document = Stakeholder::where("document", $input["document"])->first();
@@ -159,6 +158,12 @@ class ClientController extends Controller {
         $input = $data->all();
         unset($input["id"]);
         $price = PricesSpecial::find($id);
+        if ($input["item"] == '') {
+            unset($input["item"]);
+        }
+        
+        $input["packaging"] = ($input["packaging"] == '') ? 1 : $input["packaging"];
+        $input["units_sf"] = (int) $input["units_sf"];
         $price->fill($input)->save();
 
         return response()->json(["success" => true]);

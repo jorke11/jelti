@@ -29,12 +29,15 @@ class ClientController extends Controller {
         }
 
         $sql = "
-            SELECT client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) unidades
+            SELECT stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) unidades
             FROM vdepartures
-            WHERE created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' AND status_id=2 $ware
-            group by 1
+            JOIN stakeholder ON stakeholder.id=vdepartures.client_id 
+            WHERE created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' AND vdepartures.status_id=2  $ware
+            group by 1,client_id
             ORDER BY 2 DESC
             ";
+       
+//        echo $sql;exit;
 
         $res = DB::select($sql);
 

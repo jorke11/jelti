@@ -60,7 +60,7 @@ class SalesController extends Controller {
         }
 
         $sql = "
-            SELECT sum(sales_detail.quantity) quantity,product_id,p.title
+            SELECT sum(sales_detail.quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) quantity,product_id,p.title
             FROM sales_detail
             JOIN products p ON p.id=sales_detail.product_id
             JOIN sales s ON s.id=sales_detail.sale_id

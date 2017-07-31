@@ -24,7 +24,7 @@ class ProductController extends Controller {
 
         $where = '';
         if ($input["city_id"] != '') {
-            $where = "AND s.destination_id=" . $input["city_id"];
+            $where = "AND dep.destination_id=" . $input["city_id"];
         }
 
 
@@ -34,7 +34,7 @@ class ProductController extends Controller {
 
         $ware = "";
         if ($input["warehouse_id"] != 0) {
-            $ware = " AND s.warehouse_id=" . $input["warehouse_id"];
+            $ware = " AND dep.warehouse_id=" . $input["warehouse_id"];
         }
 
 

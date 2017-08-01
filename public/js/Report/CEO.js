@@ -5,14 +5,14 @@ function CEO() {
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
 
         $("#btnSearch").click(function () {
-           obj.getOverView();
+            obj.getOverView();
 //            obj.tableProduct(); 
         });
         obj.getOverView();
     }
 
     this.getOverView = function () {
-        var param = {};
+        var param = {}, html = '';
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
 
@@ -27,6 +27,50 @@ function CEO() {
                 $("#average").html(data.average);
                 $("#category").html(data.category);
                 $("#supplier").html(data.supplier);
+
+                $.each(data.valuesdates, function (i, val) {
+                    html += '<tr><td>' + val.dates + '  : Ventas ' + val.total + ' - Unidades: ' + val.units + '</td></tr>';
+                });
+
+                $("#tblSales tbody").html(html);
+
+                $("#tblClient tbody").empty();
+                html = '';
+                $.each(data.listClient, function (i, val) {
+                    html += '<tr><td>' + val.client + '</td><td>' + val.unidades + '</td><td>' + val.total + '</td></tr>';
+                });
+
+                $("#tblClient tbody").html(html);
+                
+                html = '';
+                $.each(data.listProducts, function (i, val) {
+                    html += '<tr><td>' + val.product + '</td><td>' + val.totalunidades + '</td><td>' + val.total + '</td></tr>';
+                });
+
+                $("#tblProduct tbody").html(html);
+                
+                html = '';
+                $.each(data.listCategory, function (i, val) {
+                    html += '<tr><td>' + val.category + '</td><td>' + val.quantity + '</td><td>' + val.facturado + '</td></tr>';
+                });
+
+                $("#tblCategory tbody").html(html);
+                html = '';
+                $.each(data.listSupplier, function (i, val) {
+                    html += '<tr><td>' + val.supplier + '</td><td>' + val.quantity + '</td><td>' + val.total + '</td></tr>';
+                });
+
+                $("#tblSuppplier tbody").html(html);
+                
+                html = '';
+                $.each(data.listCommercial, function (i, val) {
+                    html += '<tr><td>' + val.vendedor + '</td><td>' + val.quantity + '</td><td>' + val.total + '</td></tr>';
+                });
+
+                $("#tblCommercial tbody").html(html);
+                
+                
+                
             }
         });
     }

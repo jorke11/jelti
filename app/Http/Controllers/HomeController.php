@@ -249,18 +249,8 @@ class HomeController extends Controller {
 
     public function getListSupplier(Request $req) {
         $input = $req->all();
-        $cli = "
-            select st.id,st.business as supplier,sum(d.quantity *  coalesce(p.packaging,1)) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
-            from sales_detail d
-            JOIN sales s ON s.id=d.sale_id 
-            JOIN products p ON p.id=d.product_id 
-            JOIN stakeholder st ON st.id=p.supplier_id
-            WHERE d.product_id is NOT null
-            AND s.created_at BETWEEN'" . date("Y-m") . "-01 00:00' AND '" . date("Y-m-d") . " 23:59'
-            group by 1,2
-            order by 4 desc limit 10";
 
-        $res = DB::select($cli);
+        $res = $this->getCEOSupplier(date("Y-m") . "-01 00:00'", date("Y-m-d") . "-01 23:59'");
 
         $cat = array();
         $total = array();
@@ -272,6 +262,20 @@ class HomeController extends Controller {
         }
 
         return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "date" => date("F")]);
+    }
+
+    public function getCEOSupplier($init, $end) {
+        $sql = "
+            select st.id,st.business as supplier,sum(d.quantity *  coalesce(p.packaging,1)) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
+            from sales_detail d
+            JOIN sales s ON s.id=d.sale_id 
+            JOIN products p ON p.id=d.product_id 
+            JOIN stakeholder st ON st.id=p.supplier_id
+            WHERE d.product_id is NOT null
+            AND s.created_at BETWEEN '" . $init . "' AND '" . $end . "'
+            group by 1,2
+            order by 4 desc limit 10";
+        return DB::select($sql);
     }
 
 }

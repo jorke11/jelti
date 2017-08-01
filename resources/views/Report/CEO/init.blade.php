@@ -40,25 +40,25 @@
                         </tr>
                     </thead>
                     <tr>
-                        <td>Total Clients</td>
+                        <td>Total Clientes</td>
                         <td><span id="total_client"></span></td>
                         
                     </tr>
                     <tr>
-                        <td>Total invoices</td>
+                        <td>Total Facturas</td>
                         <td><span id="total_invoice"></span></td>
                         
                     </tr>
                     <tr>
-                        <td>Average Ticket Price</td>
+                        <td>Ticket Promedio</td>
                         <td><span id="average"></span></td>
                     </tr>
                     <tr>
-                        <td>Total Categories</td>
+                        <td>Total Categorías</td>
                         <td><span id="category"></span></td>
                     </tr>
                     <tr>
-                        <td>Total Suppliers</td>
+                        <td>Total Proveedores</td>
                         <td><span id="supplier"></span></td>
                     </tr>
                 </table>
@@ -68,30 +68,13 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-user-information">
+                <table class="table table-user-information" id="tblSales">
                     <thead>
                         <tr>
-                            <th colspan="4">Sales vs Units</th>
+                            <th colspan="2">Ventas vs Unidades</th>
                         </tr>
                     </thead>
-                    <tr>
-                        <td>Cliente desde</td>
-                        <td><span id="client_until"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Nombre Cliente</td>
-                        <td><span id="name_client"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Dirección/Ciudad</td>
-                        <td><span id="city_address"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Lead Time</td>
-                        <td><span id="lead_time"></span></td>
-                    </tr>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -102,30 +85,19 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-user-information">
+                <table class="table" id="tblClient">
                     <thead>
+                        <tr >
+                            <th colspan="3">Top 10 Clientes</th>
+                        </tr>
                         <tr>
-                            <th colspan="4">Top 10 Clients</th>
+                            <th>Cliente</th>
+                            <th>Unidades</th>
+                            <th>Facturado</th>
                         </tr>
                     </thead>
-                    <tr>
-                        <td>Cliente desde</td>
-                        <td><span id="client_until"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Nombre Cliente</td>
-                        <td><span id="name_client"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Dirección/Ciudad</td>
-                        <td><span id="city_address"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Lead Time</td>
-                        <td><span id="lead_time"></span></td>
-                    </tr>
+                    <tbody></tbody>
+                   
                 </table>
             </div>
         </div>
@@ -133,30 +105,19 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-user-information">
+               <table class="table" id="tblProduct">
                     <thead>
+                        <tr >
+                            <th colspan="3">Top 10 Productos</th>
+                        </tr>
                         <tr>
-                            <th colspan="4"> Top 10 Products</th>
+                            <th>Producto</th>
+                            <th>Unidades</th>
+                            <th>Facturado</th>
                         </tr>
                     </thead>
-                    <tr>
-                        <td>Cliente desde</td>
-                        <td><span id="client_until"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Nombre Cliente</td>
-                        <td><span id="name_client"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Dirección/Ciudad</td>
-                        <td><span id="city_address"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Lead Time</td>
-                        <td><span id="lead_time"></span></td>
-                    </tr>
+                    <tbody></tbody>
+                   
                 </table>
             </div>
         </div>
@@ -167,30 +128,19 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-user-information">
+                <table class="table" id="tblCategory">
                     <thead>
+                        <tr >
+                            <th colspan="3">Top 5 Categoria</th>
+                        </tr>
                         <tr>
-                            <th colspan="4">Top 5 Categories</th>
+                            <th>Categoria</th>
+                            <th>Unidades</th>
+                            <th>Facturado</th>
                         </tr>
                     </thead>
-                    <tr>
-                        <td>Cliente desde</td>
-                        <td><span id="client_until"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Nombre Cliente</td>
-                        <td><span id="name_client"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Dirección/Ciudad</td>
-                        <td><span id="city_address"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Lead Time</td>
-                        <td><span id="lead_time"></span></td>
-                    </tr>
+                    <tbody></tbody>
+                   
                 </table>
             </div>
         </div>
@@ -198,30 +148,19 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-user-information">
+               <table class="table" id="tblSuppplier">
                     <thead>
+                        <tr >
+                            <th colspan="3">Top 5 Proveedor</th>
+                        </tr>
                         <tr>
-                            <th colspan="4">Top 5 Suppliers</th>
+                            <th>Proveedor</th>
+                            <th>Unidades</th>
+                            <th>Facturado</th>
                         </tr>
                     </thead>
-                    <tr>
-                        <td>Cliente desde</td>
-                        <td><span id="client_until"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Nombre Cliente</td>
-                        <td><span id="name_client"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Dirección/Ciudad</td>
-                        <td><span id="city_address"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Lead Time</td>
-                        <td><span id="lead_time"></span></td>
-                    </tr>
+                    <tbody></tbody>
+                   
                 </table>
             </div>
         </div>
@@ -232,30 +171,19 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-user-information">
+                <table class="table" id="tblCommercial">
                     <thead>
+                        <tr >
+                            <th colspan="3">Top 5 Comercial</th>
+                        </tr>
                         <tr>
-                            <th colspan="4">Sales Team</th>
+                            <th>Comercial</th>
+                            <th>Unidades</th>
+                            <th>Facturado</th>
                         </tr>
                     </thead>
-                    <tr>
-                        <td>Cliente desde</td>
-                        <td><span id="client_until"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Nombre Cliente</td>
-                        <td><span id="name_client"></span></td>
-                        
-                    </tr>
-                    <tr>
-                        <td>Dirección/Ciudad</td>
-                        <td><span id="city_address"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Lead Time</td>
-                        <td><span id="lead_time"></span></td>
-                    </tr>
+                    <tbody></tbody>
+                   
                 </table>
             </div>
         </div>

@@ -13,7 +13,7 @@ class ProductController extends Controller {
     public function __construct() {
         $this->middleware("auth");
     }
-    
+
     public function index() {
         $warehouse = Warehouses::all();
         return view("Report.Product.init", compact("warehouse"));
@@ -32,26 +32,31 @@ class ProductController extends Controller {
             $where .= " AND d.product_id=" . $input["product_id"];
         }
 
-        $ware = "";
+
         if ($input["warehouse_id"] != 0) {
-            $ware = " AND dep.warehouse_id=" . $input["warehouse_id"];
+            $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
         }
 
 
+        $res = $this->getListProduct($input["init"], $input["end"], $where);
+        return response()->json(["data" => $res]);
+    }
+
+    public function getListProduct($init, $end, $where = '', $limit = '') {
         $sql = "
           SELECT p.id,p.title as product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) totalunidades ,round(sum(d.value * d.quantity * coalesce(d.units_sf))) as total 
             FROM departures_detail d 
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id 
             WHERE product_id is not null
-            AND dep.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
-            $where $ware
+            AND dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
+            $where
             GROUP by 1,2
             ORDER BY 3 DESC
+            $limit
             ";
-//        echo $sql;exit;
-        $res = DB::select($sql);
-        return response()->json(["data" => $res]);
+
+        return DB::select($sql);
     }
 
     public function productByCity(Request $req) {

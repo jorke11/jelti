@@ -20,15 +20,19 @@ class CommercialController extends Controller {
     public function listCommercial(Request $req) {
         $input = $req->all();
 
+        $res = $this->getListCommercial($input["init"], $input["end"]);
+        return response()->json(["data" => $res]);
+    }
+
+    function getListCommercial($init, $end) {
         $sql = "
             SELECT responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
             from vdepartures 
-            WHERE created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and status_id=2
+            WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2
             group by responsible
             order by 3 DESC
             ";
-        $res = DB::select($sql);
-        return response()->json(["data" => $res]);
+        return DB::select($sql);
     }
 
     public function listCommercialGraph(Request $req) {

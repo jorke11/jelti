@@ -8,6 +8,9 @@ use App\Models\Invoicing\SaleDetail;
 use Datatables;
 use DB;
 use App\Models\Administration\Warehouses;
+use App\Http\Controllers\Report\ProductController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Report\CommercialController;
 
 class ClientController extends Controller {
 
@@ -28,20 +31,23 @@ class ClientController extends Controller {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
         }
 
+        $res = $this->getListClient($input["init"], $input["end"], $ware);
+
+        return response()->json(["data" => $res]);
+    }
+
+    public function getListClient($init, $end, $where = '', $limit = '') {
         $sql = "
             SELECT stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) unidades
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id 
-            WHERE created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' AND vdepartures.status_id=2  $ware
+            WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
             group by 1,client_id
             ORDER BY 2 DESC
+            $limit
             ";
 
-//        echo $sql;exit;
-
-        $res = DB::select($sql);
-
-        return response()->json(["data" => $res]);
+        return DB::select($sql);
     }
 
     public function getListTarger(Request $req) {
@@ -129,23 +135,26 @@ class ClientController extends Controller {
             $ware = " AND dep.warehouse_id=" . $input["warehouse_id"];
         }
 
+        $res = $this->getCEOProduct($input["init"], $input["end"], $ware);
 
+        return response()->json(["data" => $res]);
+    }
+
+    public function getCEOProduct($init, $end, $where = '', $limit = '') {
         $cli = "
             SELECT c.description category,sum(d.quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.value*d.units_sf*d.quantity) facturado 
-FROM sales_detail d 
+            FROM sales_detail d 
             JOIN sales ON sales.id=d.sale_id
             JOIN departures dep ON dep.id=sales.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id
             JOIN categories c ON c.id = p.category_id
-            WHERE product_id IS NOT NULL AND sales.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
-                $ware
+            WHERE product_id IS NOT NULL AND sales.created_at BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
+                $where
             GROUP bY 1,p.category_id
             ORDER by 2 DESC
-            ";
-        $res = DB::select($cli);
+            $limit";
 
-
-        return response()->json(["data" => $res]);
+        return DB::select($cli);
     }
 
     public function profile() {
@@ -182,12 +191,19 @@ FROM sales_detail d
         $in = $req->all();
 
         $sql = "
-                SELECT count(*) as quantity 
-                FROM stakeholder 
-                WHERE type_stakeholder=1";
-        $res = DB::select($sql);
+            SELECT s.business
+            FROM vdepartures d
+            JOIN stakeholder s ON s.id=d.client_id
+            WHERE created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+                group by 1";
 
-        $client = $res[0]->quantity;
+        $res = DB::select($sql);
+        $client = 0;
+
+        if (count($res) > 0) {
+            $client = count($res) + 1;
+        }
+
 
         $sql = "
                 SELECT count(*) invoices,sum(total) as total
@@ -216,21 +232,51 @@ FROM sales_detail d
         $supplier = $res[0]->quantity;
 
         $div = ($invoices == 0) ? 1 : $invoices;
-        $average = $total / $div;
+        $average = "$ " . number_format(round($total / $div), 0, ",", ".");
 
         $sql = "
             
-                SELECT to_char(created,'YYYY-MM'),count(*),sum(total)::money as total 
+                SELECT to_char(created,'YYYY-MM') dates,count(*) invoices,sum(total)::money as total
                 FROM vdepartures 
                 WHERE status_id=2 AND created_at BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                 group by 1";
+
+
         $res = DB::select($sql);
-//        dd($res);
+        foreach ($res as $i => $value) {
+            list($year, $month) = explode("-", $value->dates);
+            $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
+
+            $sql = "
+                SELECT sum(quantity * packaging) units
+                FROM departures_detail 
+                JOIN departures ON departures.id=departures_detail.departure_id and departures.status_id=2
+                WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
+                ";
+            $res2 = DB::select($sql);
+            $res[$i]->dates = date("Y-F", strtotime($value->dates));
+            $res[$i]->units = $res2[0]->units;
+        }
         $valuesDates = $res;
+
+        $listClient = $this->getListClient($in["init"], $in["end"], '', 'LIMIT 10');
+
+        $obj = new ProductController();
+        $listProduct = $obj->getListProduct($in["init"], $in["end"], '', 'LIMIT 10');
+
+        $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', 'LIMIT 5');
+
+        $home = new HomeController();
+        $listSupplier = $home->getCEOSupplier($in["init"], $in["end"]);
+
+        $comm = new CommercialController();
+        $listCommercial = $comm->getListCommercial($in["init"], $in["end"]);
 
 
         return response()->json(["client" => $client, "invoices" => $invoices, "total" => $total, 'category' => $category,
-                    "supplier" => $supplier, "average" => $average, "valuesdates" => $valuesDates]);
+                    "supplier" => $supplier, "average" => $average, "valuesdates" => $valuesDates,
+                    "listClient" => $listClient, "listProducts" => $listProduct, "listCategory" => $listCategory, "listSupplier" => $listSupplier,
+                    "listCommercial" => $listCommercial]);
     }
 
 }

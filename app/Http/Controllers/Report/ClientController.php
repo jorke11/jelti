@@ -54,7 +54,7 @@ class ClientController extends Controller {
                 SELECT sum(quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) units
                 FROM departures_detail 
                 JOIN departures ON departures.id=departures_detail.departure_id and departures.status_id=2
-                WHERE departures.client_id=" . $value->id;
+                WHERE departures.client_id=" . $value->id . " and created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'";
             $res2 = DB::select($sql);
             $res[$i]->unidades = $res2[0]->units;
         }

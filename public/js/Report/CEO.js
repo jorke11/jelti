@@ -32,6 +32,7 @@ function CEO() {
                     html += '<tr><td>' + val.dates + '  : Ventas ' + val.total + ' - Unidades: ' + val.units + '</td></tr>';
                 });
 
+                html += "<tr><td>Total Facturado " + data.totalvalues + " Unidades " + data.totalquantity + "</td></tr>";
                 $("#tblSales tbody").html(html);
 
                 $("#tblClient tbody").empty();
@@ -40,15 +41,20 @@ function CEO() {
                     html += '<tr><td>' + val.client + '</td><td>' + val.unidades + '</td><td>' + val.total + '</td></tr>';
                 });
 
+                html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitycli + " -> " + data.quantitypercent.toFixed(2)
+                        + "%</td><td>" + data.totalcli + " -> " + data.pertotal.toFixed(2) + " %</td></tr>";
+
                 $("#tblClient tbody").html(html);
-                
+
                 html = '';
                 $.each(data.listProducts, function (i, val) {
                     html += '<tr><td>' + val.product + '</td><td>' + val.totalunidades + '</td><td>' + val.total + '</td></tr>';
                 });
 
+                html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitypro + " -> " + data.perquantitypro.toFixed(2)
+                        + "%</td><td>" + data.totalcli + " -> " + data.pertotalpro.toFixed(2) + " %</td></tr>";
                 $("#tblProduct tbody").html(html);
-                
+
                 html = '';
                 $.each(data.listCategory, function (i, val) {
                     html += '<tr><td>' + val.category + '</td><td>' + val.quantity + '</td><td>' + val.facturado + '</td></tr>';
@@ -61,16 +67,16 @@ function CEO() {
                 });
 
                 $("#tblSuppplier tbody").html(html);
-                
+
                 html = '';
                 $.each(data.listCommercial, function (i, val) {
                     html += '<tr><td>' + val.vendedor + '</td><td>' + val.quantity + '</td><td>' + val.total + '</td></tr>';
                 });
 
                 $("#tblCommercial tbody").html(html);
-                
-                
-                
+
+
+
             }
         });
     }

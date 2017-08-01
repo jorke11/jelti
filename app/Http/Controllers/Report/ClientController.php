@@ -236,13 +236,15 @@ class ClientController extends Controller {
 
         $sql = "
             
-                SELECT to_char(created,'YYYY-MM') dates,count(*) invoices,sum(total)::money as total
+                SELECT to_char(created,'YYYY-MM') dates,count(*) invoices,sum(total) as total
                 FROM vdepartures 
                 WHERE status_id=2 AND created_at BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                 group by 1";
 
 
         $res = DB::select($sql);
+        $totalvalues = 0;
+        $totalquantity = 0;
         foreach ($res as $i => $value) {
             list($year, $month) = explode("-", $value->dates);
             $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
@@ -254,6 +256,9 @@ class ClientController extends Controller {
                 WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";
             $res2 = DB::select($sql);
+            $totalvalues += $value->total;
+            $totalquantity += $res2[0]->units;
+            $res[$i]->total = number_format($value->total, 0, ",", ".");
             $res[$i]->dates = date("Y-F", strtotime($value->dates));
             $res[$i]->units = $res2[0]->units;
         }
@@ -261,8 +266,39 @@ class ClientController extends Controller {
 
         $listClient = $this->getListClient($in["init"], $in["end"], '', 'LIMIT 10');
 
+        $totalcli = 0;
+        $quantitycli = 0;
+        foreach ($listClient as $i => $value) {
+            $totalcli += $value->total;
+            $quantitycli += $value->unidades;
+            $listClient[$i]->total = number_format($value->total, 0, ",", ".");
+        }
+        $totalcli = ($totalcli == 0) ? 1 : $totalcli;
+        $totalvalues = ($totalvalues == 0) ? 1 : $totalvalues;
+        $quantitycli = ($quantitycli == 0) ? 1 : $quantitycli;
+        $totalquantity = ($totalquantity == 0) ? 1 : $totalquantity;
+        $clipercent = ($totalcli / $totalvalues) * 100;
+
+        $quantitypercent = ($quantitycli / $totalquantity) * 100;
+
         $obj = new ProductController();
         $listProduct = $obj->getListProduct($in["init"], $in["end"], '', 'LIMIT 10');
+
+        $totalpro = 0;
+        $quantitypro = 0;
+        foreach ($listProduct as $i => $value) {
+            $totalpro += $value->total;
+            $quantitypro += $value->totalunidades;
+            $listProduct[$i]->total = number_format($value->total, 0, ",", ".");
+        }
+
+
+        $totalpro = ($totalpro == 0) ? 1 : $totalpro;
+        $quantitypro = ($quantitypro == 0) ? 1 : $quantitypro;
+
+        $pertotalpro = ($totalpro / $totalvalues) * 100;
+        
+        $perquantitypro = ($quantitypro / $totalquantity) * 100;
 
         $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', 'LIMIT 5');
 
@@ -274,8 +310,13 @@ class ClientController extends Controller {
 
 
         return response()->json(["client" => $client, "invoices" => $invoices, "total" => $total, 'category' => $category,
-                    "supplier" => $supplier, "average" => $average, "valuesdates" => $valuesDates,
-                    "listClient" => $listClient, "listProducts" => $listProduct, "listCategory" => $listCategory, "listSupplier" => $listSupplier,
+                    "supplier" => $supplier, "average" => $average,
+                    "valuesdates" => $valuesDates, "totalvalues" => number_format($totalvalues, 0, ",", "."), "totalquantity" => number_format($totalquantity, 0, ",", "."),
+                    "listClient" => $listClient, "totalcli" => number_format($totalcli, 0, ",", "."), "quantitycli" => $quantitycli, "pertotal" => $clipercent,
+                    "quantitypercent" => $quantitypercent,
+                    "listProducts" => $listProduct, "totalpro" => $totalpro, "quantitypro" => $quantitypro, "pertotalpro" => $pertotalpro,
+                    "perquantitypro" => $perquantitypro,
+                    "listCategory" => $listCategory, "listSupplier" => $listSupplier,
                     "listCommercial" => $listCommercial]);
     }
 

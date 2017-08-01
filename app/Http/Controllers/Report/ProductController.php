@@ -55,7 +55,7 @@ class ProductController extends Controller {
             ORDER BY 3 DESC
             $limit
             ";
-
+//        echo $sql;exit
         return DB::select($sql);
     }
 

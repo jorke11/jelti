@@ -250,7 +250,7 @@ class ClientController extends Controller {
             $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
 
             $sql = "
-                SELECT sum(quantity * packaging) units
+                SELECT sum(quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) units
                 FROM departures_detail 
                 JOIN departures ON departures.id=departures_detail.departure_id and departures.status_id=2
                 WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'

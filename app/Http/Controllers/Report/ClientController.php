@@ -36,7 +36,7 @@ class ClientController extends Controller {
             group by 1,client_id
             ORDER BY 2 DESC
             ";
-       
+
 //        echo $sql;exit;
 
         $res = DB::select($sql);
@@ -156,9 +156,9 @@ FROM sales_detail d
     public function profileClient($client_id) {
         $client = DB::table("vclient")->where("id", $client_id)->first();
 
-        $detail = DB::table("vdepartures")->where("client_id", $client->id)->orderBy("id","asc")->get();
+        $detail = DB::table("vdepartures")->where("client_id", $client->id)->orderBy("id", "asc")->get();
         $resta = 0;
-        
+
         for ($i = 1; $i < count($detail); $i++) {
             $resta += $this->dias_transcurridos($detail[$i - 1]->created, $detail[$i]->created);
         }
@@ -171,6 +171,66 @@ FROM sales_detail d
         $dias = abs($dias);
         $dias = floor($dias);
         return $dias;
+    }
+
+    public function overview() {
+        $warehouse = Warehouses::all();
+        return view("Report.CEO.init", compact("warehouse"));
+    }
+
+    public function getOverview(Request $req) {
+        $in = $req->all();
+
+        $sql = "
+                SELECT count(*) as quantity 
+                FROM stakeholder 
+                WHERE type_stakeholder=1";
+        $res = DB::select($sql);
+
+        $client = $res[0]->quantity;
+
+        $sql = "
+                SELECT count(*) invoices,sum(total) as total
+                FROM vdepartures 
+                WHERE status_id=2 
+                AND created_at BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'";
+
+        $res = DB::select($sql);
+        $invoices = $res[0]->invoices;
+        $total = $res[0]->total;
+
+        $sql = "
+                SELECT count(*) category
+                FROM categories";
+
+        $res = DB::select($sql);
+        $category = $res[0]->category;
+
+        $sql = "
+                SELECT count(*) as quantity 
+                FROM stakeholder 
+                WHERE type_stakeholder=2";
+
+        $res = DB::select($sql);
+
+        $supplier = $res[0]->quantity;
+
+        $div = ($invoices == 0) ? 1 : $invoices;
+        $average = $total / $div;
+
+        $sql = "
+            
+                SELECT to_char(created,'YYYY-MM'),count(*),sum(total)::money as total 
+                FROM vdepartures 
+                WHERE status_id=2 AND created_at BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+                group by 1";
+        $res = DB::select($sql);
+//        dd($res);
+        $valuesDates = $res;
+
+
+        return response()->json(["client" => $client, "invoices" => $invoices, "total" => $total, 'category' => $category,
+                    "supplier" => $supplier, "average" => $average, "valuesdates" => $valuesDates]);
     }
 
 }

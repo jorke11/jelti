@@ -539,3 +539,6 @@ Route::get('/profileClient', "Report\ClientController@profile");
 Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
+
+Route::get('overview', "Report\ClientController@overview");
+Route::get('overview/getOverview', "Report\ClientController@getOverview");

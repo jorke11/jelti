@@ -38,16 +38,28 @@ class ClientController extends Controller {
 
     public function getListClient($init, $end, $where = '', $limit = '') {
         $sql = "
-            SELECT stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) unidades
+            SELECT stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id 
             WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
             group by 1,client_id
-            ORDER BY 2 DESC
+            ORDER BY 3 DESC
             $limit
             ";
 
-        return DB::select($sql);
+        $res = DB::select($sql);
+
+        foreach ($res as $i => $value) {
+            $sql = "
+                SELECT sum(quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) units
+                FROM departures_detail 
+                JOIN departures ON departures.id=departures_detail.departure_id and departures.status_id=2
+                WHERE departures.client_id=" . $value->id;
+            $res2 = DB::select($sql);
+            $res[$i]->unidades = $res2[0]->units;
+        }
+
+        return $res;
     }
 
     public function getListTarger(Request $req) {
@@ -271,7 +283,7 @@ class ClientController extends Controller {
         foreach ($listClient as $i => $value) {
             $totalcli += $value->total;
             $quantitycli += $value->unidades;
-            $listClient[$i]->total = number_format($value->total, 0, ",", ".");
+            $listClient[$i]->total = number_format($value->total, 0, ".", ",");
         }
         $totalcli = ($totalcli == 0) ? 1 : $totalcli;
         $totalvalues = ($totalvalues == 0) ? 1 : $totalvalues;
@@ -289,7 +301,7 @@ class ClientController extends Controller {
         foreach ($listProduct as $i => $value) {
             $totalpro += $value->total;
             $quantitypro += $value->totalunidades;
-            $listProduct[$i]->total = number_format($value->total, 0, ",", ".");
+            $listProduct[$i]->total = number_format($value->total, 0, ".", ",");
         }
 
 
@@ -297,7 +309,7 @@ class ClientController extends Controller {
         $quantitypro = ($quantitypro == 0) ? 1 : $quantitypro;
 
         $pertotalpro = ($totalpro / $totalvalues) * 100;
-        
+
         $perquantitypro = ($quantitypro / $totalquantity) * 100;
 
         $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', 'LIMIT 5');
@@ -314,7 +326,7 @@ class ClientController extends Controller {
                     "valuesdates" => $valuesDates, "totalvalues" => number_format($totalvalues, 0, ",", "."), "totalquantity" => number_format($totalquantity, 0, ",", "."),
                     "listClient" => $listClient, "totalcli" => number_format($totalcli, 0, ",", "."), "quantitycli" => $quantitycli, "pertotal" => $clipercent,
                     "quantitypercent" => $quantitypercent,
-                    "listProducts" => $listProduct, "totalpro" => $totalpro, "quantitypro" => $quantitypro, "pertotalpro" => $pertotalpro,
+                    "listProducts" => $listProduct, "totalpro" => number_format($totalpro, 0, ",", "."), "quantitypro" => $quantitypro, "pertotalpro" => $pertotalpro,
                     "perquantitypro" => $perquantitypro,
                     "listCategory" => $listCategory, "listSupplier" => $listSupplier,
                     "listCommercial" => $listCommercial]);

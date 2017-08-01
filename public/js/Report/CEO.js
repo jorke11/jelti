@@ -52,7 +52,7 @@ function CEO() {
                 });
 
                 html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitypro + " -> " + data.perquantitypro.toFixed(2)
-                        + "%</td><td>" + data.totalcli + " -> " + data.pertotalpro.toFixed(2) + " %</td></tr>";
+                        + "%</td><td>" + data.totalpro + " -> " + data.pertotalpro.toFixed(2) + " %</td></tr>";
                 $("#tblProduct tbody").html(html);
 
                 html = '';

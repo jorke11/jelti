@@ -52,7 +52,7 @@ class ProductController extends Controller {
             AND dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
             $where
             GROUP by 1,2
-            ORDER BY 3 DESC
+            ORDER BY 4 DESC
             $limit
             ";
 //        echo $sql;exit

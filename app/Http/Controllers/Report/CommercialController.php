@@ -26,13 +26,24 @@ class CommercialController extends Controller {
 
     function getListCommercial($init, $end) {
         $sql = "
-            SELECT responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
+            SELECT responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
             from vdepartures 
             WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2
-            group by responsible
+            group by 1,responsible
             order by 3 DESC
             ";
-        return DB::select($sql);
+        $res = DB::select($sql);
+
+        foreach ($res as $i => $value) {
+            $sql = "
+                   SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
+                   FROM departures_detail d
+                   JOIN vdepartures dep ON dep.id=d.departure_id";
+            $res2 = DB::select($sql);
+            $res[$i]->quantity = $res[0]->quantity;
+        }
+
+        return $res;
     }
 
     public function listCommercialGraph(Request $req) {

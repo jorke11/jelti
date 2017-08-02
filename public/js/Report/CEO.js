@@ -48,7 +48,7 @@ function CEO() {
 
                 html = '';
                 $.each(data.listProducts, function (i, val) {
-                    html += '<tr><td>' + val.product + '</td><td>' + val.totalunidades + '</td><td>' + val.total + '</td></tr>';
+                    html += '<tr><td>' + val.product + '</td><td>' + val.quantity + '</td><td>' + val.total + '</td></tr>';
                 });
 
                 html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitypro + " -> " + data.perquantitypro.toFixed(2)
@@ -57,14 +57,20 @@ function CEO() {
 
                 html = '';
                 $.each(data.listCategory, function (i, val) {
-                    html += '<tr><td>' + val.category + '</td><td>' + val.quantity + '</td><td>' + val.facturado + '</td></tr>';
+                    html += '<tr><td>' + val.category + '</td><td>' + val.quantity + '</td><td>' + val.total + '</td></tr>';
                 });
 
+                html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitycat + " -> " + data.perquantitycat.toFixed(2)
+                        + "%</td><td>" + data.totalcat + " -> " + data.pertotalcat.toFixed(2) + " %</td></tr>";
                 $("#tblCategory tbody").html(html);
+
                 html = '';
                 $.each(data.listSupplier, function (i, val) {
                     html += '<tr><td>' + val.supplier + '</td><td>' + val.quantity + '</td><td>' + val.total + '</td></tr>';
                 });
+
+                html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitysupplier + " -> " + data.perquantitysup.toFixed(2)
+                        + "%</td><td>" + data.totalsupplier + " -> " + data.pertotalsup.toFixed(2) + " %</td></tr>";
 
                 $("#tblSuppplier tbody").html(html);
 
@@ -73,6 +79,8 @@ function CEO() {
                     html += '<tr><td>' + val.vendedor + '</td><td>' + val.quantity + '</td><td>' + val.total + '</td></tr>';
                 });
 
+                html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitycom + " -> " + data.perquantitycom.toFixed(2)
+                        + "%</td><td>" + data.totalcom + " -> " + data.pertotalcom.toFixed(2) + " %</td></tr>";
                 $("#tblCommercial tbody").html(html);
 
 

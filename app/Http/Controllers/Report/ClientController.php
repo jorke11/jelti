@@ -116,7 +116,7 @@ class ClientController extends Controller {
         }
 
         $cli = "
-            SELECT destination_id,destination,sum(total) total,sum(quantity) quantity 
+            SELECT destination_id,destination,sum(subtotalnumeric) substotal,sum(quantity) quantity 
             FROM vdepartures
             WHERE created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                 $ware
@@ -154,16 +154,16 @@ class ClientController extends Controller {
 
     public function getCEOProduct($init, $end, $where = '', $limit = '') {
         $cli = "
-            SELECT c.description category,sum(d.quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.value*d.units_sf*d.quantity) facturado 
-            FROM sales_detail d 
-            JOIN sales ON sales.id=d.sale_id
-            JOIN departures dep ON dep.id=sales.departure_id and dep.status_id=2
+            SELECT c.description category,sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+            sum(d.value * d.units_sf * d.quantity) subtotal 
+            FROM departures_detail d 
+            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id
             JOIN categories c ON c.id = p.category_id
-            WHERE product_id IS NOT NULL AND sales.created_at BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
+            WHERE product_id IS NOT NULL AND dep.created_at BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
                 $where
             GROUP bY 1,p.category_id
-            ORDER by 2 DESC
+            ORDER by 3 DESC
             $limit";
 
         return DB::select($cli);
@@ -218,14 +218,14 @@ class ClientController extends Controller {
 
 
         $sql = "
-                SELECT count(*) invoices,sum(total) as total
+                SELECT count(*) invoices,sum(subtotalnumeric) as subtotal
                 FROM vdepartures 
                 WHERE status_id=2 
-                AND created_at BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'";
+                AND created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'";
 
         $res = DB::select($sql);
         $invoices = $res[0]->invoices;
-        $total = $res[0]->total;
+        $total = $res[0]->subtotal;
 
         $sql = "
                 SELECT count(*) category
@@ -247,32 +247,32 @@ class ClientController extends Controller {
         $average = "$ " . number_format(round($total / $div), 0, ",", ".");
 
         $sql = "
-            
-                SELECT to_char(created,'YYYY-MM') dates,count(*) invoices,sum(total) as total
+                SELECT to_char(created,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal
                 FROM vdepartures 
-                WHERE status_id=2 AND created_at BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+                WHERE status_id=2 AND created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                 group by 1";
 
 
         $res = DB::select($sql);
         $totalvalues = 0;
         $totalquantity = 0;
+//        dd($res);exit;
         foreach ($res as $i => $value) {
             list($year, $month) = explode("-", $value->dates);
             $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
 
             $sql = "
-                SELECT sum(quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) units
+                SELECT sum(quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) quantity
                 FROM departures_detail 
                 JOIN departures ON departures.id=departures_detail.departure_id and departures.status_id=2
                 WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";
             $res2 = DB::select($sql);
-            $totalvalues += $value->total;
-            $totalquantity += $res2[0]->units;
-            $res[$i]->total = number_format($value->total, 0, ",", ".");
+            $totalvalues += $value->subtotal;
+            $totalquantity += $res2[0]->quantity;
+            $res[$i]->total = number_format($value->subtotal, 0, ",", ".");
             $res[$i]->dates = date("Y-F", strtotime($value->dates));
-            $res[$i]->units = $res2[0]->units;
+            $res[$i]->units = $res2[0]->quantity;
         }
         $valuesDates = $res;
 
@@ -281,7 +281,7 @@ class ClientController extends Controller {
         $totalcli = 0;
         $quantitycli = 0;
         foreach ($listClient as $i => $value) {
-            $totalcli += $value->total;
+            $totalcli += $value->subtotal;
             $quantitycli += $value->unidades;
             $listClient[$i]->total = number_format($value->total, 0, ".", ",");
         }
@@ -299,26 +299,64 @@ class ClientController extends Controller {
         $totalpro = 0;
         $quantitypro = 0;
         foreach ($listProduct as $i => $value) {
-            $totalpro += $value->total;
-            $quantitypro += $value->totalunidades;
-            $listProduct[$i]->total = number_format($value->total, 0, ".", ",");
+            $totalpro += $value->subtotal;
+            $quantitypro += $value->quantity;
+            $listProduct[$i]->total = number_format($value->subtotal, 0, ".", ",");
         }
 
 
         $totalpro = ($totalpro == 0) ? 1 : $totalpro;
         $quantitypro = ($quantitypro == 0) ? 1 : $quantitypro;
-
         $pertotalpro = ($totalpro / $totalvalues) * 100;
-
         $perquantitypro = ($quantitypro / $totalquantity) * 100;
 
         $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', 'LIMIT 5');
 
+        $totalcat = 0;
+        $quantitycat = 0;
+        foreach ($listCategory as $i => $value) {
+            $totalcat += $value->subtotal;
+            $quantitycat += $value->quantity;
+            $listCategory[$i]->total = number_format($value->subtotal, 0, ".", ",");
+        }
+        $totalcat = ($totalcat == 0) ? 1 : $totalcat;
+        $quantitycat = ($quantitycat == 0) ? 1 : $quantitycat;
+
+        $pertotalcat = ($totalcat / $totalvalues) * 100;
+        $perquantitycat = ($quantitycat / $totalquantity) * 100;
+
         $home = new HomeController();
         $listSupplier = $home->getCEOSupplier($in["init"], $in["end"]);
 
+        $totalsup = 0;
+        $quantitysup = 0;
+        foreach ($listSupplier as $i => $value) {
+            $totalsup += $value->subtotal;
+            $quantitysup += $value->quantity;
+            $listSupplier[$i]->total = number_format($value->subtotal, 0, ".", ",");
+        }
+        $totalsup = ($totalsup == 0) ? 1 : $totalsup;
+        $quantitysup = ($quantitysup == 0) ? 1 : $quantitysup;
+
+        $pertotalsup = ($totalsup / $totalvalues) * 100;
+        $perquantitysup = ($quantitysup / $totalquantity) * 100;
+
         $comm = new CommercialController();
         $listCommercial = $comm->getListCommercial($in["init"], $in["end"]);
+
+        $totalcom = 0;
+        $quantitycom = 0;
+        foreach ($listCommercial as $i => $value) {
+            $totalcom += $value->subtotal;
+            $quantitycom += $value->quantity;
+            $listSupplier[$i]->total = number_format($value->subtotal, 0, ".", ",");
+        }
+        $totalcom = ($totalcom == 0) ? 1 : $totalcom;
+        $quantitycom = ($quantitycom == 0) ? 1 : $quantitycom;
+
+        $pertotalcom = ($totalcom / $totalvalues) * 100;
+        $perquantitycom = ($quantitycom / $totalquantity) * 100;
+
 
 
         return response()->json(["client" => $client, "invoices" => $invoices, "total" => $total, 'category' => $category,
@@ -328,8 +366,12 @@ class ClientController extends Controller {
                     "quantitypercent" => $quantitypercent,
                     "listProducts" => $listProduct, "totalpro" => number_format($totalpro, 0, ",", "."), "quantitypro" => $quantitypro, "pertotalpro" => $pertotalpro,
                     "perquantitypro" => $perquantitypro,
-                    "listCategory" => $listCategory, "listSupplier" => $listSupplier,
-                    "listCommercial" => $listCommercial]);
+                    "listCategory" => $listCategory, "totalcat" => number_format($totalcat, 0, ",", "."), "quantitycat" => $quantitycat,
+                    "pertotalcat" => $pertotalcat, "perquantitycat" => $perquantitycat,
+                    "listSupplier" => $listSupplier, "totalsupplier" => number_format($totalsup, 0, ",", "."), "quantitysupplier" => $quantitysup,
+                    "pertotalsup" => $pertotalsup, "perquantitysup" => $perquantitysup,
+                    "listCommercial" => $listCommercial, "totalcom" => number_format($totalcom, 0, ",", "."), "quantitycom" => $quantitycom,
+                    "pertotalcom" => $pertotalcom, "perquantitycom" => $perquantitycom]);
     }
 
 }

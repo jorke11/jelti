@@ -44,18 +44,18 @@ class ProductController extends Controller {
 
     public function getListProduct($init, $end, $where = '', $limit = '') {
         $sql = "
-          SELECT p.id,p.title as product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) totalunidades ,round(sum(d.value * d.quantity * coalesce(d.units_sf))) as total 
+          SELECT p.id,p.title as product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
+         sum(d.value * d.quantity * d.units_sf) as subtotal 
             FROM departures_detail d 
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id 
-            WHERE product_id is not null
-            AND dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
+            WHERE dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
             $where
             GROUP by 1,2
             ORDER BY 4 DESC
             $limit
             ";
-       
+//        echo $sql;exit;
         return DB::select($sql);
     }
 

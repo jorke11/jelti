@@ -266,15 +266,17 @@ class HomeController extends Controller {
 
     public function getCEOSupplier($init, $end) {
         $sql = "
-            select st.id,st.business as supplier,sum(d.quantity *  coalesce(p.packaging,1)) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
-            from sales_detail d
-            JOIN sales s ON s.id=d.sale_id 
+            select st.id,st.business as supplier,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+            sum(d.quantity * d.value* d.units_sf) as subtotal
+            from departures_detail d
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 
             JOIN products p ON p.id=d.product_id 
             JOIN stakeholder st ON st.id=p.supplier_id
             WHERE d.product_id is NOT null
-            AND s.created_at BETWEEN '" . $init . "' AND '" . $end . "'
+            AND dep.created_at BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
             group by 1,2
             order by 4 desc limit 10";
+//        echo $sql;exit;
         return DB::select($sql);
     }
 

@@ -116,7 +116,7 @@ class ClientController extends Controller {
         }
 
         $cli = "
-            SELECT destination_id,destination,sum(subtotalnumeric) substotal,sum(quantity) quantity 
+            SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
             FROM vdepartures
             WHERE created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                 $ware
@@ -132,7 +132,7 @@ class ClientController extends Controller {
         $quantity = array();
         foreach ($res as $value) {
             $cat[] = trim($value->destination);
-            $total[] = (int) $value->total;
+            $total[] = (int) $value->subtotal;
             $quantity[] = (int) $value->quantity;
         }
 

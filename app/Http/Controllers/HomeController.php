@@ -249,15 +249,15 @@ class HomeController extends Controller {
 
     public function getListSupplier(Request $req) {
         $input = $req->all();
-
-        $res = $this->getCEOSupplier(date("Y-m") . "-01 00:00'", date("Y-m-d") . "-01 23:59'");
+        $init = date("Y-m") . "-01";
+        $res = $this->getCEOSupplier($init, date("Y-m-d"));
 
         $cat = array();
         $total = array();
         $quantity = array();
         foreach ($res as $value) {
             $cat[] = $value->supplier;
-            $total[] = (int) $value->total;
+            $total[] = (int) $value->subtotal;
             $quantity[] = (int) $value->quantity;
         }
 
@@ -275,8 +275,9 @@ class HomeController extends Controller {
             WHERE d.product_id is NOT null
             AND dep.created_at BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
             group by 1,2
-            order by 4 desc limit 10";
-//        echo $sql;exit;
+            order by 4 desc";
+//        echo $sql;
+//        exit;
         return DB::select($sql);
     }
 

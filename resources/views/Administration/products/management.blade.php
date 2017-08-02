@@ -201,6 +201,20 @@
                                     <input type="text" class="form-control input-product" id="minimum_stock" name='minimum_stock'  data-type="number">
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Precio Sugerido</label>
+                                    <input type="text" class="form-control input-product" id="pvp" name='pvp'  data-type="number">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Bodega</label>
+                                   <select class="form-control input-product" id='warehouse' name="warehouse[]" data-api="/api/getWarehouseProduct" multiple>
+                                    </select>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

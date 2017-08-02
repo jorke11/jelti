@@ -471,6 +471,7 @@ Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacter
 Route::get('/api/getClient', 'Administration\SeekController@getClient');
 Route::get('/api/getContact', 'Administration\SeekController@getContact');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
+Route::get('/api/getWarehouseProduct', 'Administration\SeekController@getWarehouseProduct');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
 Route::get('/api/getService', 'Administration\SeekController@getServices');

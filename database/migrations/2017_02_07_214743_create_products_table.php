@@ -37,6 +37,8 @@ class CreateProductsTable extends Migration {
             $table->json('characteristic')->nullable();
             $table->string('image')->nullable();
             $table->integer('margin_sf')->nullable();
+            $table->json('warehouse')->nullable();
+            $table->integer('pvp')->nullable();
             $table->timestamps();
         });
     }

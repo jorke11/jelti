@@ -152,6 +152,29 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
+    public function getWarehouseProduct(Request $req) {
+        $in = $req->all();
+        $query = Warehouses::select("id", "description as text");
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $query->where("id", Auth::user()->supplier_id)->get();
+        } else if (isset($in["id"])) {
+            if ($in["id"] != '') {
+                $in["id"] = json_decode($in["id"]);
+                if (count($in["id"]) > 1) {
+                    $query->whereIn("id", $in["id"])->get();
+                } else {
+                    $query->where("id", $in["id"])->get();
+                }
+            } else {
+                $query->where("id", 0)->get();
+            }
+        } else {
+            $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+        }
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
 
     public function getNotification(Request $req) {
         $in = $req->all();

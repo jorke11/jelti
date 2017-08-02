@@ -23,6 +23,7 @@ class ProductController extends Controller {
     public $name;
     public $path;
     public $inserted;
+    public $insertedArray;
     public $updated;
 
     public function __construct() {
@@ -98,50 +99,67 @@ class ProductController extends Controller {
 
                 foreach ($reader->get() as $book) {
 
-                    if (trim($book->supplier) != '' && trim($book->category) != '') {
-
-                        $sup = Administration\Stakeholder::where("business", "ILIKE", trim($book->supplier))->first();
-                        $cat = Administration\Categories::where("description", "like", trim($book->category))->first();
-
-                        if (count($sup) > 0 && count($cat) > 0) {
-
-                            $book->ean = (!isset($book->ean)) ? '' : trim($book->ean);
-                            $product["category_id"] = $cat->id;
-                            $product["supplier_id"] = $sup->id;
-                            $product["stakeholder_id"] = $sup->id;
-                            $product["account_id"] = 1;
-                            $product["title"] = trim($book->title);
-                            $product["short_description"] = trim($book->title);
-                            $product["description"] = trim($book->title);
-                            $product["reference"] = (int) trim($book->sf_code);
-                            $product["bar_code"] = (int) trim($book->ean);
-                            $product["tax"] = trim($book->tax);
-                            $product["units_supplier"] = (int) trim($book->supplier_packing);
-                            $product["units_sf"] = (int) trim($book->sf_packing);
-                            $product["cost_sf"] = trim($book->unit_cost);
-                            $product["price_sf"] = trim($book->sf_price);
-                            $product["status_id"] = 2;
-                            $product["margin_sf"] = (double) trim($book->sf_margin);
-                            $product["margin"] = trim($book->margen);
-                            $product["status_id"] = 3;
-                            $product["minimum_stock"] = 15;
-
-                            $pro = Products::where("reference", $product["reference"])->first();
-
-                            if (count($pro) > 0) {
-
-                                $pro->fill($product)->save();
-                                $this->updated++;
-                            } else {
-                                Products::create($product);
-                                $this->inserted++;
-                            }
-                        }
+//                    if (trim($book->supplier) != '') {
+//                        $sup = Administration\Stakeholder::where("business", "ILIKE", trim($book->supplier))->first();
+//                        $cat = Administration\Categories::where("description", "like", trim($book->category))->first();
+//                        if (count($sup) > 0 && count($cat) > 0) {
+//                            $book->ean = (!isset($book->ean)) ? '' : trim($book->ean);
+//                            if($book->ean=='N/A'){
+//                            }
+//                            $product["category_id"] = $cat->id;
+//                            $product["supplier_id"] = $sup->id;
+//                            $product["stakeholder_id"] = $sup->id;
+//                            $product["account_id"] = 1;
+//                            $product["reference"] = (int) trim($book->sf_code);
+//                            $product["bar_code"] = (int) trim($book->ean);
+//                            $product["tax"] = trim($book->tax);
+//                            $product["units_supplier"] = (int) trim($book->supplier_packing);
+//                            $product["units_sf"] = (int) trim($book->sf_packing);
+                    
+                    $product["cost_sf"] = trim($book->packing_cost);
+                    $product["price_sf"] = round(trim($book->sf_price_sin_iva));
+                    
+                    if ($book->pvp_sugerido_iva != '') {
+                        $product["pvp"] = round(trim($book->pvp_sugerido_iva));
                     }
+
+//                            $product["status_id"] = 2;
+//                            $product["margin_sf"] = (double) trim($book->sf_margin);
+//                            $product["margin"] = trim($book->margen);
+//                            $product["status_id"] = 3;
+//                            $product["minimum_stock"] = 15;
+
+
+                    $ware = array(1, 2);
+                    if ($book->status_bog_zona_1 == 'ACTIVE' && $book->status_bqlla_zona_2 == 'INACTIVO') {
+                        $ware = array(1);
+                    } else if ($book->status_bog_zona_1 == 'INACTIVO' && $book->status_bqlla_zona_2 == 'INACTIVO') {
+                        $ware = array(2);
+                    } else {
+                        $product["status_id"] = 2;
+                    }
+
+                    $product["warehouse"] = json_encode($ware);
+//                            dd($book);
+                    $pro = Products::where("reference", $book->sf_code)->first();
+
+                    if (count($pro) > 0) {
+
+                        $pro->fill($product)->save();
+                        $this->updated++;
+                    } else {
+//                                Products::create($product);
+                        $product["description"]=$book->title;
+                        $this->insertedArray[]=$product;
+                        $this->inserted++;
+                    }
+//                        }
+//                    }
                 }
             })->get();
 
-            return response()->json(["success" => true, "data" => Products::where("status_id", 3)->get(), "inserted" => $this->inserted, "updated" => $this->updated]);
+            return response()->json(["success" => true, "data" => Products::where("status_id", 3)->get(), "inserted" => $this->inserted, 
+                "updated" => $this->updated,"inserted_array"=>$this->insertedArray]);
         }
     }
 
@@ -199,6 +217,14 @@ class ProductController extends Controller {
         if (isset($input["characteristic"])) {
             $input["characteristic"] = json_encode($input["characteristic"]);
         }
+        if (isset($input["warehouse"])) {
+            $input["warehouse"] = json_encode($input["warehouse"]);
+        }
+
+        if ($input["pvp"] == '') {
+            unset($input["pvp"]);
+        }
+
         $input["update_id"] = Auth::User()->id;
 
         $input["status_id"] = (isset($input["status_id"])) ? 1 : 2;

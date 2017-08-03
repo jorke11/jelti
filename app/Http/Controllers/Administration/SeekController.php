@@ -22,13 +22,13 @@ use DB;
 use Log;
 
 class SeekController extends Controller {
-    
+
     public $input;
-    
+
     public function __construct() {
         
     }
-    
+
     public function getCity(Request $req) {
         $in = $req->all();
         $query = Cities::select("id", DB::raw("initcap(description) as text"));
@@ -86,6 +86,8 @@ class SeekController extends Controller {
                         ->orWhere("document", "ILIKE", "%" . $in["q"] . "%")
                         ->where("type_stakeholder", 1);
             }
+            
+            $query->where("status_id", 1);
             $result = $query->get();
         }
 
@@ -152,6 +154,7 @@ class SeekController extends Controller {
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
+
     public function getWarehouseProduct(Request $req) {
         $in = $req->all();
         $query = Warehouses::select("id", "description as text");
@@ -326,10 +329,10 @@ class SeekController extends Controller {
 
         if (isset($this->input["q"]) && $this->input["q"] != "0") {
             $query->where(function($query) {
-            $query->where("title", "ILIKE", "%" . $this->input["q"] . "%")
-                    ->OrWhere("business", "ILIKE", "%" . $this->input["q"] . "%")
-                    ->OrWhere("bar_code", "ILIKE", "%" . $this->input["q"] . "%")
-                    ->OrWhere(DB::raw("reference::text"), "ILIKE", "%" . $this->input["q"] . "%");
+                $query->where("title", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere("business", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere("bar_code", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere(DB::raw("reference::text"), "ILIKE", "%" . $this->input["q"] . "%");
             });
         }
 

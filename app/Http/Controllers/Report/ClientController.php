@@ -42,6 +42,7 @@ class ClientController extends Controller {
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id 
             WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
+                AND client_id<>258
             group by 1,client_id
             ORDER BY 3 DESC
             $limit
@@ -51,10 +52,10 @@ class ClientController extends Controller {
 
         foreach ($res as $i => $value) {
             $sql = "
-                SELECT sum(quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) units
-                FROM departures_detail 
-                JOIN departures ON departures.id=departures_detail.departure_id and departures.status_id=2
-                WHERE departures.client_id=" . $value->id . " and created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'";
+                SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) units
+                FROM departures_detail d
+                JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+                WHERE dep.client_id=" . $value->id . " and dep.created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'";
             $res2 = DB::select($sql);
             $res[$i]->unidades = $res2[0]->units;
         }
@@ -250,6 +251,7 @@ class ClientController extends Controller {
                 SELECT to_char(created,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal
                 FROM vdepartures 
                 WHERE status_id=2 AND created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+                    AND client_id <> 258
                 group by 1";
 
 
@@ -262,9 +264,9 @@ class ClientController extends Controller {
             $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
 
             $sql = "
-                SELECT sum(quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) quantity
-                FROM departures_detail 
-                JOIN departures ON departures.id=departures_detail.departure_id and departures.status_id=2
+                SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
+                FROM departures_detail d
+                JOIN departures ON departures.id=d.departure_id and departures.status_id=2
                 WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";
             $res2 = DB::select($sql);
@@ -326,7 +328,7 @@ class ClientController extends Controller {
         $perquantitycat = ($quantitycat / $totalquantity) * 100;
 
         $home = new HomeController();
-        $listSupplier = $home->getCEOSupplier($in["init"], $in["end"]);
+        $listSupplier = $home->getCEOSupplier($in["init"], $in["end"], 'LIMIT 5');
 
         $totalsup = 0;
         $quantitysup = 0;

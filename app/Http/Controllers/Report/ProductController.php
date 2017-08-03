@@ -49,7 +49,7 @@ class ProductController extends Controller {
             FROM departures_detail d 
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id 
-            WHERE dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
+            WHERE dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' and dep.client_id<>258
             $where
             GROUP by 1,2
             ORDER BY 4 DESC

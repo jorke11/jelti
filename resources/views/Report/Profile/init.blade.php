@@ -74,6 +74,7 @@
     <!-- Nav tabs -->
     <div class="col-lg-8 col-center">
         <div class="panel panel-default">
+            <div class="panel-heading personal">Productos Vendidos</div>
             <div class="panel-body">
                 <table class="table table-condensed  table-bordered" id="tblProduct">
                     <thead>

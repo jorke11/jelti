@@ -28,7 +28,7 @@ class CommercialController extends Controller {
         $sql = "
             SELECT responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
             from vdepartures 
-            WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2
+            WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2 AND client_id <> 258
             group by 1,responsible
             order by 3 DESC
             ";
@@ -38,7 +38,8 @@ class CommercialController extends Controller {
             $sql = "
                    SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                    FROM departures_detail d
-                   JOIN vdepartures dep ON dep.id=d.departure_id";
+                   JOIN vdepartures dep ON dep.id=d.departure_id and client_id <> 258
+                   WHERE dep.client_id=" . $value->responsible_id;
             $res2 = DB::select($sql);
             $res[$i]->quantity = $res[0]->quantity;
         }

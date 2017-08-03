@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Información</h4>
                     </div>
                     <div class="panel-body">
@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Meta</h4>
                     </div>
                     <div class="panel-body">
@@ -144,7 +144,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Valores</h4>
                     </div>
                     <div class="panel-body">
@@ -219,7 +219,7 @@
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Imagenes</h4>
                     </div>
                     <div class="panel-body">

@@ -115,10 +115,10 @@ class ProductController extends Controller {
 //                            $product["tax"] = trim($book->tax);
 //                            $product["units_supplier"] = (int) trim($book->supplier_packing);
 //                            $product["units_sf"] = (int) trim($book->sf_packing);
-                    
+
                     $product["cost_sf"] = trim($book->packing_cost);
                     $product["price_sf"] = round(trim($book->sf_price_sin_iva));
-                    
+
                     if ($book->pvp_sugerido_iva != '') {
                         $product["pvp"] = round(trim($book->pvp_sugerido_iva));
                     }
@@ -128,19 +128,23 @@ class ProductController extends Controller {
 //                            $product["margin"] = trim($book->margen);
 //                            $product["status_id"] = 3;
 //                            $product["minimum_stock"] = 15;
-
-
-                    $ware = array(1, 2);
-                    if ($book->status_bog_zona_1 == 'ACTIVE' && $book->status_bqlla_zona_2 == 'INACTIVO') {
-                        $ware = array(1);
-                    } else if ($book->status_bog_zona_1 == 'INACTIVO' && $book->status_bqlla_zona_2 == 'ACTIVE') {
-                        $ware = array(2);
+//                    dd($book);
+                    $ware = array("3", "2");
+                    if (trim($book->status_bog_zona_1) == 'ACTIVE' && trim($book->status_bqlla_zona_2) == 'INACTIVO') {
+                        $ware = array("3");
+                    } else if (trim($book->status_bog_zona_1) == 'INACTIVO' && trim($book->status_bqlla_zona_2) == 'ACTIVE') {
+                        $ware = array("2");
                     } else {
                         $product["status_id"] = 2;
                     }
 
+//                    if ($book->sf_code == '100002') {
+//                        print_r($ware);
+//                        dd($book);
+//                    }
+
                     $product["warehouse"] = json_encode($ware);
-//                            dd($book);
+//                    dd($product);
                     $pro = Products::where("reference", $book->sf_code)->first();
 
                     if (count($pro) > 0) {
@@ -149,8 +153,8 @@ class ProductController extends Controller {
                         $this->updated++;
                     } else {
 //                                Products::create($product);
-                        $product["description"]=$book->title;
-                        $this->insertedArray[]=$product;
+                        $product["description"] = $book->title;
+                        $this->insertedArray[] = $product;
                         $this->inserted++;
                     }
 //                        }
@@ -158,8 +162,8 @@ class ProductController extends Controller {
                 }
             })->get();
 
-            return response()->json(["success" => true, "data" => Products::where("status_id", 3)->get(), "inserted" => $this->inserted, 
-                "updated" => $this->updated,"inserted_array"=>$this->insertedArray]);
+            return response()->json(["success" => true, "data" => Products::where("status_id", 3)->get(), "inserted" => $this->inserted,
+                        "updated" => $this->updated, "inserted_array" => $this->insertedArray]);
         }
     }
 
@@ -214,10 +218,12 @@ class ProductController extends Controller {
         $product = Products::FindOrFail($id);
         $input = $request->all();
 
+
         if (isset($input["characteristic"])) {
             $input["characteristic"] = json_encode($input["characteristic"]);
         }
         if (isset($input["warehouse"])) {
+
             $input["warehouse"] = json_encode($input["warehouse"]);
         }
 

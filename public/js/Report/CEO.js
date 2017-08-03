@@ -5,8 +5,9 @@ function CEO() {
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
 
         $("#btnSearch").click(function () {
+            $(this).attr("disabled",true);
+            $("#loading-super").removeClass("hidden");
             obj.getOverView();
-//            obj.tableProduct(); 
         });
         obj.getOverView();
     }
@@ -21,6 +22,9 @@ function CEO() {
             method: 'GET',
             data: param,
             dataType: 'json',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (data) {
                 $("#total_client").html(data.client);
                 $("#total_invoice").html(data.invoices);
@@ -84,9 +88,12 @@ function CEO() {
                 $("#tblCommercial tbody").html(html);
 
 
-
+                $("#loading-super").addClass("hidden");
+                $("#btnSearch").attr("disabled",false);
             }
         });
+
+
     }
 
     this.getClient = function (id) {

@@ -348,10 +348,12 @@ class ClientController extends Controller {
 
         $totalcom = 0;
         $quantitycom = 0;
+        
+        
         foreach ($listCommercial as $i => $value) {
             $totalcom += $value->subtotal;
             $quantitycom += $value->quantity;
-            $listSupplier[$i]->total = number_format($value->subtotal, 0, ".", ",");
+            $listCommercial[$i]->total = number_format($value->subtotal, 0, ".", ",");
         }
         $totalcom = ($totalcom == 0) ? 1 : $totalcom;
         $quantitycom = ($quantitycom == 0) ? 1 : $quantitycom;

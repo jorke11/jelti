@@ -81,12 +81,14 @@ class SeekController extends Controller {
         } else {
 
             if (isset($in["q"])) {
-                $query->where("business", "ILIKE", "%" . $in["q"] . "%")
-                        ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
-                        ->orWhere("document", "ILIKE", "%" . $in["q"] . "%")
-                        ->where("type_stakeholder", 1);
+                $query->where(function($query) {
+                    $query->where("business", "ILIKE", "%" . $in["q"] . "%")
+                            ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
+                            ->orWhere("document", "ILIKE", "%" . $in["q"] . "%")
+                            ->where("type_stakeholder", 1);
+                });
             }
-            
+
             $query->where("status_id", 1);
             $result = $query->get();
         }

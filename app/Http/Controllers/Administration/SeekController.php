@@ -66,25 +66,25 @@ class SeekController extends Controller {
     }
 
     public function getClient(Request $req) {
-        $in = $req->all();
+        $this->in = $req->all();
         $result = array();
         $query = Stakeholder::select("id", DB::raw("coalesce(document,'') ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
 
-        if (isset($in["q"]) && $in["q"] == "0") {
+        if (isset($this->in["q"]) && $this->in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
-        } else if (isset($in["id"])) {
-            if ($in["id"] != '') {
-                $result = $query->where("id", $in["id"])->get();
+        } else if (isset($this->in["id"])) {
+            if ($this->in["id"] != '') {
+                $result = $query->where("id", $this->in["id"])->get();
             } else {
                 $result = array();
             }
         } else {
 
-            if (isset($in["q"])) {
+            if (isset($this->in["q"])) {
                 $query->where(function($query) {
-                    $query->where("business", "ILIKE", "%" . $in["q"] . "%")
-                            ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
-                            ->orWhere("document", "ILIKE", "%" . $in["q"] . "%")
+                    $query->where("business", "ILIKE", "%" . $this->in["q"] . "%")
+                            ->orWhere("business_name", "ILIKE", "%" . $this->in["q"] . "%")
+                            ->orWhere("document", "ILIKE", "%" . $this->in["q"] . "%")
                             ->where("type_stakeholder", 1);
                 });
             }

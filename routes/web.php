@@ -543,3 +543,7 @@ Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 Route::get('overview', "Report\ClientController@overview");
 Route::get('overview/getOverview', "Report\ClientController@getOverview");
+
+Route::get('CEO/salesunits', "Report\ClientController@getSalesUnits");
+
+

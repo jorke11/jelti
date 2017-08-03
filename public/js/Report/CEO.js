@@ -5,7 +5,7 @@ function CEO() {
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
 
         $("#btnSearch").click(function () {
-            $(this).attr("disabled",true);
+            $(this).attr("disabled", true);
             $("#loading-super").removeClass("hidden");
             obj.getOverView();
         });
@@ -32,12 +32,21 @@ function CEO() {
                 $("#category").html(data.category);
                 $("#supplier").html(data.supplier);
 
+//html += '<tr><td>' + val.dates + 'Total Ventas (' + val.total + ') Subtotal: (' + val.subtotal + ")"
+
                 $.each(data.valuesdates, function (i, val) {
-                    html += '<tr><td>' + val.dates + '  : Ventas ' + val.total + ' - Unidades: ' + val.units + '</td></tr>';
+                    html += '<tr><td>' + val.dates + '</td><td>' + val.total + '</td><td>' + val.subtotal + "</td>"
+                    html += "<td>" + val.tax19 + "</td>";
+                    html += "<td>" + val.tax5 + "</td>";
+                    html += "<td>" + val.shipping_cost + "</td>";
+                    html += '<td>' + val.units + '</td></tr>';
                 });
 
-                html += "<tr><td>Total Facturado " + data.totalvalues + " Unidades " + data.totalquantity + "</td></tr>";
+                
                 $("#tblSales tbody").html(html);
+                html = "<tr><td>Totales</td><td></td><td>" + data.totalvalues + "</td> Unidades " + data.totalquantity + "</td></tr>";
+                $("#tblSales tfoot").html(html);
+                
 
                 $("#tblClient tbody").empty();
                 html = '';
@@ -89,7 +98,7 @@ function CEO() {
 
 
                 $("#loading-super").addClass("hidden");
-                $("#btnSearch").attr("disabled",false);
+                $("#btnSearch").attr("disabled", false);
             }
         });
 

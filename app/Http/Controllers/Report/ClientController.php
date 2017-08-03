@@ -14,8 +14,13 @@ use App\Http\Controllers\Report\CommercialController;
 
 class ClientController extends Controller {
 
+    public $totalvalues;
+    public $totalquantity;
+
     public function __construct() {
         $this->middleware("auth");
+        $this->totalvalues = 0;
+        $this->totalquantity = 0;
     }
 
     public function index() {
@@ -38,7 +43,9 @@ class ClientController extends Controller {
 
     public function getListClient($init, $end, $where = '', $limit = '') {
         $sql = "
-            SELECT stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal
+            SELECT 
+                stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,sum(tax19) tax19,sum(tax5) tax5,
+                sum(vdepartures.shipping_cost) shipping
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id 
             WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
@@ -217,7 +224,6 @@ class ClientController extends Controller {
             $client = count($res) + 1;
         }
 
-
         $sql = "
                 SELECT count(*) invoices,sum(subtotalnumeric) as subtotal
                 FROM vdepartures 
@@ -247,36 +253,8 @@ class ClientController extends Controller {
         $div = ($invoices == 0) ? 1 : $invoices;
         $average = "$ " . number_format(round($total / $div), 0, ",", ".");
 
-        $sql = "
-                SELECT to_char(created,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal
-                FROM vdepartures 
-                WHERE status_id=2 AND created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
-                    AND client_id <> 258
-                group by 1";
 
-
-        $res = DB::select($sql);
-        $totalvalues = 0;
-        $totalquantity = 0;
-//        dd($res);exit;
-        foreach ($res as $i => $value) {
-            list($year, $month) = explode("-", $value->dates);
-            $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
-
-            $sql = "
-                SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
-                FROM departures_detail d
-                JOIN departures ON departures.id=d.departure_id and departures.status_id=2
-                WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
-                ";
-            $res2 = DB::select($sql);
-            $totalvalues += $value->subtotal;
-            $totalquantity += $res2[0]->quantity;
-            $res[$i]->total = number_format($value->subtotal, 0, ",", ".");
-            $res[$i]->dates = date("Y-F", strtotime($value->dates));
-            $res[$i]->units = $res2[0]->quantity;
-        }
-        $valuesDates = $res;
+        $valuesDates = $this->getSalesUnits($in["init"], $in["end"]);
 
         $listClient = $this->getListClient($in["init"], $in["end"], '', 'LIMIT 10');
 
@@ -287,13 +265,14 @@ class ClientController extends Controller {
             $quantitycli += $value->unidades;
             $listClient[$i]->total = number_format($value->total, 0, ".", ",");
         }
-        $totalcli = ($totalcli == 0) ? 1 : $totalcli;
-        $totalvalues = ($totalvalues == 0) ? 1 : $totalvalues;
-        $quantitycli = ($quantitycli == 0) ? 1 : $quantitycli;
-        $totalquantity = ($totalquantity == 0) ? 1 : $totalquantity;
-        $clipercent = ($totalcli / $totalvalues) * 100;
 
-        $quantitypercent = ($quantitycli / $totalquantity) * 100;
+        $totalcli = ($totalcli == 0) ? 1 : $totalcli;
+        $this->totalvalues = ($this->totalvalues == 0) ? 1 : $this->totalvalues;
+        $quantitycli = ($quantitycli == 0) ? 1 : $quantitycli;
+        $this->totalquantity = ($this->totalquantity == 0) ? 1 : $this->totalquantity;
+        $clipercent = ($totalcli / $this->totalvalues ) * 100;
+
+        $quantitypercent = ($quantitycli / $this->totalquantity) * 100;
 
         $obj = new ProductController();
         $listProduct = $obj->getListProduct($in["init"], $in["end"], '', 'LIMIT 10');
@@ -309,8 +288,8 @@ class ClientController extends Controller {
 
         $totalpro = ($totalpro == 0) ? 1 : $totalpro;
         $quantitypro = ($quantitypro == 0) ? 1 : $quantitypro;
-        $pertotalpro = ($totalpro / $totalvalues) * 100;
-        $perquantitypro = ($quantitypro / $totalquantity) * 100;
+        $pertotalpro = ($totalpro / $this->totalvalues) * 100;
+        $perquantitypro = ($quantitypro / $this->totalquantity) * 100;
 
         $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', 'LIMIT 5');
 
@@ -324,8 +303,8 @@ class ClientController extends Controller {
         $totalcat = ($totalcat == 0) ? 1 : $totalcat;
         $quantitycat = ($quantitycat == 0) ? 1 : $quantitycat;
 
-        $pertotalcat = ($totalcat / $totalvalues) * 100;
-        $perquantitycat = ($quantitycat / $totalquantity) * 100;
+        $pertotalcat = ($totalcat / $this->totalvalues) * 100;
+        $perquantitycat = ($quantitycat / $this->totalquantity) * 100;
 
         $home = new HomeController();
         $listSupplier = $home->getCEOSupplier($in["init"], $in["end"], 'LIMIT 5');
@@ -340,16 +319,16 @@ class ClientController extends Controller {
         $totalsup = ($totalsup == 0) ? 1 : $totalsup;
         $quantitysup = ($quantitysup == 0) ? 1 : $quantitysup;
 
-        $pertotalsup = ($totalsup / $totalvalues) * 100;
-        $perquantitysup = ($quantitysup / $totalquantity) * 100;
+        $pertotalsup = ($totalsup / $this->totalvalues) * 100;
+        $perquantitysup = ($quantitysup / $this->totalquantity) * 100;
 
         $comm = new CommercialController();
         $listCommercial = $comm->getListCommercial($in["init"], $in["end"]);
 
         $totalcom = 0;
         $quantitycom = 0;
-        
-        
+
+
         foreach ($listCommercial as $i => $value) {
             $totalcom += $value->subtotal;
             $quantitycom += $value->quantity;
@@ -358,14 +337,14 @@ class ClientController extends Controller {
         $totalcom = ($totalcom == 0) ? 1 : $totalcom;
         $quantitycom = ($quantitycom == 0) ? 1 : $quantitycom;
 
-        $pertotalcom = ($totalcom / $totalvalues) * 100;
-        $perquantitycom = ($quantitycom / $totalquantity) * 100;
+        $pertotalcom = ($totalcom / $this->totalvalues) * 100;
+        $perquantitycom = ($quantitycom / $this->totalquantity) * 100;
 
 
 
         return response()->json(["client" => $client, "invoices" => $invoices, "total" => $total, 'category' => $category,
                     "supplier" => $supplier, "average" => $average,
-                    "valuesdates" => $valuesDates, "totalvalues" => number_format($totalvalues, 0, ",", "."), "totalquantity" => number_format($totalquantity, 0, ",", "."),
+                    "valuesdates" => $valuesDates, "totalvalues" => number_format($this->totalquantity, 0, ",", "."), "totalquantity" => number_format($this->totalquantity, 0, ",", "."),
                     "listClient" => $listClient, "totalcli" => number_format($totalcli, 0, ",", "."), "quantitycli" => $quantitycli, "pertotal" => $clipercent,
                     "quantitypercent" => $quantitypercent,
                     "listProducts" => $listProduct, "totalpro" => number_format($totalpro, 0, ",", "."), "quantitypro" => $quantitypro, "pertotalpro" => $pertotalpro,
@@ -376,6 +355,45 @@ class ClientController extends Controller {
                     "pertotalsup" => $pertotalsup, "perquantitysup" => $perquantitysup,
                     "listCommercial" => $listCommercial, "totalcom" => number_format($totalcom, 0, ",", "."), "quantitycom" => $quantitycom,
                     "pertotalcom" => $pertotalcom, "perquantitycom" => $perquantitycom]);
+    }
+
+    public function getSalesUnits($init, $end) {
+        $sql = "
+                SELECT 
+                    to_char(created,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
+                    sum(tax5) tax5,sum(shipping_cost) shipping_cost
+                FROM vdepartures 
+                WHERE status_id=2 AND created BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
+                    AND client_id <> 258
+                group by 1";
+
+
+        $res = DB::select($sql);
+        
+        
+        foreach ($res as $i => $value) {
+            list($year, $month) = explode("-", $value->dates);
+            $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
+
+            $sql = "
+                SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
+                FROM departures_detail d
+                JOIN departures ON departures.id=d.departure_id and departures.status_id=2
+                WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
+                ";
+            $res2 = DB::select($sql);
+            $this->totalvalues += $value->subtotal;
+            $this->totalquantity += $res2[0]->quantity;
+            $res[$i]->tax5 = number_format($value->tax5, 0, ",", ".");
+            $res[$i]->tax19 = number_format($value->tax19, 0, ",", ".");
+            $res[$i]->shipping_cost = number_format($value->shipping_cost, 0, ",", ".");
+            $res[$i]->subtotal = number_format($value->subtotal, 0, ",", ".");
+            $res[$i]->total = number_format($value->total, 0, ",", ".");
+            $res[$i]->dates = date("Y-F", strtotime($value->dates));
+            $res[$i]->units = $res2[0]->quantity;
+        }
+
+        return $res;
     }
 
 }

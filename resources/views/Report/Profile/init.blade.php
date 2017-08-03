@@ -37,7 +37,7 @@
 </div>
 <div class="row">
     <!-- Nav tabs -->
-    <div class="col-lg-8 col-center">
+    <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
                 <table class="table table-user-information">
@@ -54,27 +54,77 @@
                         <td><span id="last_sale"></span></td>
                     </tr>
                     <tr>
-                        <td>Dirección/Ciudad</td>
-                        <td><span id="city_address"></span></td>
+                        <td>Sector</td>
+                        <td><span id="sector"></span></td>
                         <td>Frecuencia</td>
                         <td><span id="frecuency"></span></td>
                     </tr>
                     <tr>
+                        <td>Dirección/Ciudad</td>
+                        <td><span id="city_address"></span></td>
                         <td>Lead Time</td>
                         <td><span id="lead_time"></span></td>
-                        <td>Sector</td>
-                        <td><span id="sector"></span></td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-user-information">
+                    <tr>
+                        <td>Venta total a Cliente</td>
+                        <td><span id="client_until"></span></td>
+                        <td>Ticker promedio</td>
+                        <td><span id="responsible"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Pedido vs Despachado</td>
+                        <td><span id="name_client"></span></td>
+                        <td>Valor no facturado</td>
+                        <td><span id="last_sale"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Cumplimiento por orden</td>
+                        <td><span id="city_address"></span></td>
+                        <td>Cumplimiento promedio</td>
+                        <td><span id="frecuency"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Devoluciones</td>
+                        <td><span id="retorno"></span></td>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
 <div class="row">
     <!-- Nav tabs -->
-    <div class="col-lg-8 col-center">
+    <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-heading personal">Productos Vendidos</div>
+            <div class="panel-body">
+                <table class="table table-condensed  table-bordered" id="tblProduct">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Unidades</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <body>
+                    </body>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading personal"></div>
             <div class="panel-body">
                 <table class="table table-condensed  table-bordered" id="tblProduct">
                     <thead>

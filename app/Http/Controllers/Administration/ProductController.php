@@ -133,7 +133,7 @@ class ProductController extends Controller {
                     $ware = array(1, 2);
                     if ($book->status_bog_zona_1 == 'ACTIVE' && $book->status_bqlla_zona_2 == 'INACTIVO') {
                         $ware = array(1);
-                    } else if ($book->status_bog_zona_1 == 'INACTIVO' && $book->status_bqlla_zona_2 == 'INACTIVO') {
+                    } else if ($book->status_bog_zona_1 == 'INACTIVO' && $book->status_bqlla_zona_2 == 'ACTIVE') {
                         $ware = array(2);
                     } else {
                         $product["status_id"] = 2;

@@ -71,10 +71,20 @@
                 <table class="table table-user-information" id="tblSales">
                     <thead>
                         <tr>
-                            <th colspan="2">Ventas vs Unidades</th>
+                            <th colspan="7" align="center">Ventas vs Unidades</th>
+                        </tr>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Total facturado</th>
+                            <th>SubTotal</th>
+                            <th>Iva 19%</th>
+                            <th>Iva 5%</th>
+                            <th>Flete</th>
+                            <th>Unidades</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
+                    <tfoot></tfoot>
                 </table>
             </div>
         </div>

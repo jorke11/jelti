@@ -390,10 +390,6 @@ class ClientController extends Controller {
         session(['total'=> $total]);
         session(['quantity'=> $quantity]);
 
-//        $req->session()->put('subtotal', $subtotal);
-//        $req->session()->put('total', $total);
-//        $req->session()->put('quantity', $quantity);
-
         return response()->json(["data" => $res]);
     }
 

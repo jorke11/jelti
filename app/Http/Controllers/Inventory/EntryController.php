@@ -450,6 +450,11 @@ class EntryController extends Controller {
         return response()->json($detail);
     }
 
+    public function getDetailAll($id) {
+        $detail = $this->formatDetail($id);
+        return response()->json($detail);
+    }
+
     public function update(Request $request, $id) {
         $entry = Entries::FindOrFail($id);
         $input = $request->all();

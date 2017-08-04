@@ -12,6 +12,7 @@
                     <tr>
                         <th>Det</th>
                         <th>#</th>
+                        <th>Proveedor</th>
                         <th>Description</th>
                         <th>Date</th>
                         <th>Invoice</th>
@@ -27,6 +28,7 @@
                     <tr>
                         <th></th>
                         <th>#</th>
+                        <th>Proveedor</th>
                         <th>Description</th>
                         <th>Date</th>
                         <th>Invoice</th>

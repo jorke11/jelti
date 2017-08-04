@@ -207,7 +207,9 @@ class ClientController extends Controller {
         $total = $req->session()->get("total");
         $subtotal = $req->session()->get("subtotal");
         $quantity = $req->session()->get("quantity");
-
+        
+        dd($req->session()->all());
+        
         $sql = "
             SELECT s.business
             FROM vdepartures d
@@ -385,6 +387,9 @@ class ClientController extends Controller {
         $subtotal = ($subtotal == 0) ? 1 : $subtotal;
         $total = ($total == 0) ? 1 : $total;
         $quantity = ($quantity == 0) ? 1 : $quantity;
+//        session('subtotal', $subtotal);
+//        session('total', $total);
+//        session('quantity', $quantity);
         $req->session()->put('subtotal', $subtotal);
         $req->session()->put('total', $total);
         $req->session()->put('quantity', $quantity);

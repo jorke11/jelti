@@ -39,7 +39,7 @@ class CommercialController extends Controller {
                    SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                    FROM departures_detail d
                    JOIN vdepartures dep ON dep.id=d.departure_id and client_id <> 258 and dep.status_id=2
-                   WHERE dep.responsible_id=" . $value->responsible_id;
+                   WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.responsible_id=" . $value->responsible_id;
             
             $res2 = DB::select($sql);
             $res[$i]->quantity = $res2[0]->quantity;

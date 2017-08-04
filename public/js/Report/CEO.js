@@ -7,9 +7,135 @@ function CEO() {
         $("#btnSearch").click(function () {
             $(this).attr("disabled", true);
             $("#loading-super").removeClass("hidden");
+            obj.getSalesUnits();
             obj.getOverView();
+            
         });
+        obj.getSalesUnits();
         obj.getOverView();
+    }
+
+    this.getSalesUnits = function () {
+        var param = {}, html = '';
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+
+        return $('#tblSales').DataTable({
+            destroy: true,
+            scrollX: true,
+            order: [[2, "desc"]],
+            ajax: {
+                url: "CEO/getSalesUnits",
+                data: param,
+            },
+            columns: [
+                {data: "dates"},
+                {data: "quantity"},
+                {data: "shipping_cost", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "tax5", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "tax19", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
+            ],
+
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+            footerCallback: function (row, data, start, end, display) {
+                var api = this.api(), subtotal, total, quantity = 0, tax5 = 0, tax19 = 0, shipping = 0;
+
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                };
+
+                quantity = api
+                        .column(1)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+
+                $(api.column(1).footer()).html(
+                        '(' + quantity + ')'
+                        );
+
+                shipping = api
+                        .column(2)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+
+                $(api.column(2).footer()).html(
+                        '(' + obj.formatCurrency(shipping, "$") + ')'
+                        );
+
+
+                tax5 = api
+                        .column(3)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                $(api.column(3).footer()).html(
+                        '(' + obj.formatCurrency(tax5, "$") + ')'
+                        );
+
+
+                tax19 = api
+                        .column(4)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                $(api.column(4).footer()).html(
+                        '(' + obj.formatCurrency(tax19, "$") + ')'
+                        );
+
+                subtotal = api
+                        .column(5)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                $(api.column(5).footer()).html(
+                        '(' + obj.formatCurrency(subtotal, "$") + ')'
+                        );
+
+                total = api
+                        .column(6)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+
+                $(api.column(6).footer()).html(
+                        '(' + obj.formatCurrency(total, "$") + ')'
+                        );
+            }
+        });
+
+    }
+
+    this.formatCurrency = function (n, currency) {
+        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
     }
 
     this.getOverView = function () {
@@ -32,21 +158,6 @@ function CEO() {
                 $("#category").html(data.category);
                 $("#supplier").html(data.supplier);
 
-//html += '<tr><td>' + val.dates + 'Total Ventas (' + val.total + ') Subtotal: (' + val.subtotal + ")"
-
-                $.each(data.valuesdates, function (i, val) {
-                    html += '<tr><td>' + val.dates + '</td><td>' + val.total + '</td><td>' + val.subtotal + "</td>"
-                    html += "<td>" + val.tax19 + "</td>";
-                    html += "<td>" + val.tax5 + "</td>";
-                    html += "<td>" + val.shipping_cost + "</td>";
-                    html += '<td>' + val.units + '</td></tr>';
-                });
-
-                
-                $("#tblSales tbody").html(html);
-                html = "<tr><td>Totales</td><td></td><td>" + data.totalvalues + "</td> Unidades " + data.totalquantity + "</td></tr>";
-                $("#tblSales tfoot").html(html);
-                
 
                 $("#tblClient tbody").empty();
                 html = '';

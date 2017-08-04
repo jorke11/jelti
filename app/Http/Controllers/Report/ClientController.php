@@ -14,13 +14,8 @@ use App\Http\Controllers\Report\CommercialController;
 
 class ClientController extends Controller {
 
-    public $totalvalues;
-    public $totalquantity;
-
     public function __construct() {
         $this->middleware("auth");
-        $this->totalvalues = 0;
-        $this->totalquantity = 0;
     }
 
     public function index() {
@@ -209,7 +204,7 @@ class ClientController extends Controller {
 
     public function getOverview(Request $req) {
         $in = $req->all();
-
+        dd($req->session()->all());
         $sql = "
             SELECT s.business
             FROM vdepartures d
@@ -252,9 +247,6 @@ class ClientController extends Controller {
 
         $div = ($invoices == 0) ? 1 : $invoices;
         $average = "$ " . number_format(round($total / $div), 0, ",", ".");
-
-
-        $valuesDates = $this->getSalesUnits($in["init"], $in["end"]);
 
         $listClient = $this->getListClient($in["init"], $in["end"], '', 'LIMIT 10');
 
@@ -344,7 +336,7 @@ class ClientController extends Controller {
 
         return response()->json(["client" => $client, "invoices" => $invoices, "total" => $total, 'category' => $category,
                     "supplier" => $supplier, "average" => $average,
-                    "valuesdates" => $valuesDates, "totalvalues" => number_format($this->totalquantity, 0, ",", "."), "totalquantity" => number_format($this->totalquantity, 0, ",", "."),
+                    "totalvalues" => number_format($this->totalquantity, 0, ",", "."), "totalquantity" => number_format($this->totalquantity, 0, ",", "."),
                     "listClient" => $listClient, "totalcli" => number_format($totalcli, 0, ",", "."), "quantitycli" => $quantitycli, "pertotal" => $clipercent,
                     "quantitypercent" => $quantitypercent,
                     "listProducts" => $listProduct, "totalpro" => number_format($totalpro, 0, ",", "."), "quantitypro" => $quantitypro, "pertotalpro" => $pertotalpro,
@@ -357,20 +349,22 @@ class ClientController extends Controller {
                     "pertotalcom" => $pertotalcom, "perquantitycom" => $perquantitycom]);
     }
 
-    public function getSalesUnits($init, $end) {
+    public function getSalesUnits(Request $req) {
+        $in = $req->all();
         $sql = "
                 SELECT 
                     to_char(created,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
                     sum(tax5) tax5,sum(shipping_cost) shipping_cost
                 FROM vdepartures 
-                WHERE status_id=2 AND created BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
+                WHERE status_id=2 AND created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                     AND client_id <> 258
                 group by 1";
 
 
         $res = DB::select($sql);
-        
-        
+
+        $total = 0;
+        $subtotal = 0;
         foreach ($res as $i => $value) {
             list($year, $month) = explode("-", $value->dates);
             $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
@@ -382,18 +376,14 @@ class ClientController extends Controller {
                 WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";
             $res2 = DB::select($sql);
-            $this->totalvalues += $value->subtotal;
-            $this->totalquantity += $res2[0]->quantity;
-            $res[$i]->tax5 = number_format($value->tax5, 0, ",", ".");
-            $res[$i]->tax19 = number_format($value->tax19, 0, ",", ".");
-            $res[$i]->shipping_cost = number_format($value->shipping_cost, 0, ",", ".");
-            $res[$i]->subtotal = number_format($value->subtotal, 0, ",", ".");
-            $res[$i]->total = number_format($value->total, 0, ",", ".");
+            $res[$i]->quantity = $res2[0]->quantity;
             $res[$i]->dates = date("Y-F", strtotime($value->dates));
-            $res[$i]->units = $res2[0]->quantity;
+            $subtotal += $value->subtotal;
         }
 
-        return $res;
+        $req->session()->put('total', $subtotal);
+
+        return response()->json(["data" => $res]);
     }
 
 }

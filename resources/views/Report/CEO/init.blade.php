@@ -42,12 +42,12 @@
                     <tr>
                         <td>Total Clientes</td>
                         <td><span id="total_client"></span></td>
-                        
+
                     </tr>
                     <tr>
                         <td>Total Facturas</td>
                         <td><span id="total_invoice"></span></td>
-                        
+
                     </tr>
                     <tr>
                         <td>Ticket Promedio</td>
@@ -67,24 +67,32 @@
     </div>
     <div class="col-lg-6">
         <div class="panel panel-default">
+            <div class="panel-heading">Ventas vs Unidades</div>
             <div class="panel-body">
-                <table class="table table-user-information" id="tblSales">
+                <table class="table nowrap" id="tblSales" style="width: 100%">
                     <thead>
                         <tr>
-                            <th colspan="7" align="center">Ventas vs Unidades</th>
-                        </tr>
-                        <tr>
                             <th>Mes</th>
-                            <th>Total facturado</th>
-                            <th>SubTotal</th>
-                            <th>Iva 19%</th>
-                            <th>Iva 5%</th>
-                            <th>Flete</th>
                             <th>Unidades</th>
+                            <th>Flete</th>
+                            <th>Iva 5%</th>
+                            <th>Iva 19%</th>
+                            <th>SubTotal</th>
+                            <th>Total facturado</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
-                    <tfoot></tfoot>
+                    <tfoot>
+                        <tr>
+                            <th>Totales</th>
+                            <th>Unidades</th>
+                            <th>Flete</th>
+                            <th>Iva 5%</th>
+                            <th>Iva 19%</th>
+                            <th>SubTotal</th>
+                            <th>Total facturado</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -107,7 +115,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                   
+
                 </table>
             </div>
         </div>
@@ -115,7 +123,7 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-               <table class="table" id="tblProduct">
+                <table class="table" id="tblProduct">
                     <thead>
                         <tr >
                             <th colspan="3">Top 10 Productos</th>
@@ -127,7 +135,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                   
+
                 </table>
             </div>
         </div>
@@ -150,7 +158,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                   
+
                 </table>
             </div>
         </div>
@@ -158,7 +166,7 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-               <table class="table" id="tblSuppplier">
+                <table class="table" id="tblSuppplier">
                     <thead>
                         <tr >
                             <th colspan="3">Top 5 Proveedor</th>
@@ -170,7 +178,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                   
+
                 </table>
             </div>
         </div>
@@ -193,7 +201,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                   
+
                 </table>
             </div>
         </div>

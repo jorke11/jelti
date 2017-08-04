@@ -161,7 +161,7 @@ class ClientController extends Controller {
         if ($input["item"] == '') {
             unset($input["item"]);
         }
-        
+
         $input["packaging"] = ($input["packaging"] == '') ? 1 : $input["packaging"];
         $input["units_sf"] = (int) $input["units_sf"];
         $price->fill($input)->save();
@@ -260,6 +260,7 @@ class ClientController extends Controller {
         $input["shipping_cost"] = (isset($input["shipping_cost"])) ? 1 : 0;
         $input["price_special"] = (isset($input["price_special"])) ? 1 : 0;
         $input["user_update"] = Auth::user()->id;
+        $input["status_id"] = 1;
 
         if ($stakeholder == null) {
             $result = Stakeholder::create($input);

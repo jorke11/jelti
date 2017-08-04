@@ -204,11 +204,11 @@ class ClientController extends Controller {
 
     public function getOverview(Request $req) {
         $in = $req->all();
-        $total = $req->session()->get("total");
-        $subtotal = $req->session()->get("subtotal");
-        $quantity = $req->session()->get("quantity");
+        $total = session("total");
+        $subtotal = session("subtotal");
+        $quantity = session("quantity");
         
-        dd($req->session()->all());
+//        dd($total);
         
         $sql = "
             SELECT s.business
@@ -387,12 +387,13 @@ class ClientController extends Controller {
         $subtotal = ($subtotal == 0) ? 1 : $subtotal;
         $total = ($total == 0) ? 1 : $total;
         $quantity = ($quantity == 0) ? 1 : $quantity;
-//        session('subtotal', $subtotal);
-//        session('total', $total);
-//        session('quantity', $quantity);
-        $req->session()->put('subtotal', $subtotal);
-        $req->session()->put('total', $total);
-        $req->session()->put('quantity', $quantity);
+        session(['subtotal'=> $subtotal]);
+        session(['total'=> $total]);
+        session(['quantity'=> $quantity]);
+
+//        $req->session()->put('subtotal', $subtotal);
+//        $req->session()->put('total', $total);
+//        $req->session()->put('quantity', $quantity);
 
         return response()->json(["data" => $res]);
     }

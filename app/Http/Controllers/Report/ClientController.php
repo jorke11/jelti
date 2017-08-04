@@ -204,7 +204,10 @@ class ClientController extends Controller {
 
     public function getOverview(Request $req) {
         $in = $req->all();
-        dd($req->session()->all());
+        $total = $req->session()->get("total");
+        $subtotal = $req->session()->get("subtotal");
+        $quantity = $req->session()->get("quantity");
+
         $sql = "
             SELECT s.business
             FROM vdepartures d
@@ -259,12 +262,10 @@ class ClientController extends Controller {
         }
 
         $totalcli = ($totalcli == 0) ? 1 : $totalcli;
-        $this->totalvalues = ($this->totalvalues == 0) ? 1 : $this->totalvalues;
         $quantitycli = ($quantitycli == 0) ? 1 : $quantitycli;
-        $this->totalquantity = ($this->totalquantity == 0) ? 1 : $this->totalquantity;
-        $clipercent = ($totalcli / $this->totalvalues ) * 100;
 
-        $quantitypercent = ($quantitycli / $this->totalquantity) * 100;
+        $clipercent = ($totalcli / $subtotal ) * 100;
+        $quantitypercent = ($quantitycli / $quantity) * 100;
 
         $obj = new ProductController();
         $listProduct = $obj->getListProduct($in["init"], $in["end"], '', 'LIMIT 10');
@@ -280,8 +281,8 @@ class ClientController extends Controller {
 
         $totalpro = ($totalpro == 0) ? 1 : $totalpro;
         $quantitypro = ($quantitypro == 0) ? 1 : $quantitypro;
-        $pertotalpro = ($totalpro / $this->totalvalues) * 100;
-        $perquantitypro = ($quantitypro / $this->totalquantity) * 100;
+        $pertotalpro = ($totalpro / $subtotal) * 100;
+        $perquantitypro = ($quantitypro / $quantity) * 100;
 
         $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', 'LIMIT 5');
 
@@ -295,8 +296,8 @@ class ClientController extends Controller {
         $totalcat = ($totalcat == 0) ? 1 : $totalcat;
         $quantitycat = ($quantitycat == 0) ? 1 : $quantitycat;
 
-        $pertotalcat = ($totalcat / $this->totalvalues) * 100;
-        $perquantitycat = ($quantitycat / $this->totalquantity) * 100;
+        $pertotalcat = ($totalcat / $subtotal) * 100;
+        $perquantitycat = ($quantitycat / $quantity) * 100;
 
         $home = new HomeController();
         $listSupplier = $home->getCEOSupplier($in["init"], $in["end"], 'LIMIT 5');
@@ -311,8 +312,8 @@ class ClientController extends Controller {
         $totalsup = ($totalsup == 0) ? 1 : $totalsup;
         $quantitysup = ($quantitysup == 0) ? 1 : $quantitysup;
 
-        $pertotalsup = ($totalsup / $this->totalvalues) * 100;
-        $perquantitysup = ($quantitysup / $this->totalquantity) * 100;
+        $pertotalsup = ($totalsup / $subtotal) * 100;
+        $perquantitysup = ($quantitysup / $subtotal) * 100;
 
         $comm = new CommercialController();
         $listCommercial = $comm->getListCommercial($in["init"], $in["end"]);
@@ -329,14 +330,13 @@ class ClientController extends Controller {
         $totalcom = ($totalcom == 0) ? 1 : $totalcom;
         $quantitycom = ($quantitycom == 0) ? 1 : $quantitycom;
 
-        $pertotalcom = ($totalcom / $this->totalvalues) * 100;
-        $perquantitycom = ($quantitycom / $this->totalquantity) * 100;
+        $pertotalcom = ($totalcom / $subtotal) * 100;
+        $perquantitycom = ($quantitycom / $quantity) * 100;
 
 
 
         return response()->json(["client" => $client, "invoices" => $invoices, "total" => $total, 'category' => $category,
                     "supplier" => $supplier, "average" => $average,
-                    "totalvalues" => number_format($this->totalquantity, 0, ",", "."), "totalquantity" => number_format($this->totalquantity, 0, ",", "."),
                     "listClient" => $listClient, "totalcli" => number_format($totalcli, 0, ",", "."), "quantitycli" => $quantitycli, "pertotal" => $clipercent,
                     "quantitypercent" => $quantitypercent,
                     "listProducts" => $listProduct, "totalpro" => number_format($totalpro, 0, ",", "."), "quantitypro" => $quantitypro, "pertotalpro" => $pertotalpro,
@@ -360,11 +360,11 @@ class ClientController extends Controller {
                     AND client_id <> 258
                 group by 1";
 
-
         $res = DB::select($sql);
 
         $total = 0;
         $subtotal = 0;
+        $quantity = 0;
         foreach ($res as $i => $value) {
             list($year, $month) = explode("-", $value->dates);
             $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
@@ -379,9 +379,15 @@ class ClientController extends Controller {
             $res[$i]->quantity = $res2[0]->quantity;
             $res[$i]->dates = date("Y-F", strtotime($value->dates));
             $subtotal += $value->subtotal;
+            $total += $value->total;
+            $quantity += $res[$i]->quantity;
         }
-
-        $req->session()->put('total', $subtotal);
+        $subtotal = ($subtotal == 0) ? 1 : $subtotal;
+        $total = ($total == 0) ? 1 : $total;
+        $quantity = ($quantity == 0) ? 1 : $quantity;
+        $req->session()->put('subtotal', $subtotal);
+        $req->session()->put('total', $total);
+        $req->session()->put('quantity', $quantity);
 
         return response()->json(["data" => $res]);
     }

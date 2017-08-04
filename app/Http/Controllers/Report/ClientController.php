@@ -208,7 +208,7 @@ class ClientController extends Controller {
         $subtotal = session("subtotal");
         $quantity = session("quantity");
         
-//        dd($total);
+//        dd($quantity);
         
         $sql = "
             SELECT s.business
@@ -315,7 +315,7 @@ class ClientController extends Controller {
         $quantitysup = ($quantitysup == 0) ? 1 : $quantitysup;
 
         $pertotalsup = ($totalsup / $subtotal) * 100;
-        $perquantitysup = ($quantitysup / $subtotal) * 100;
+        $perquantitysup = ($quantitysup / $quantity) * 100;
 
         $comm = new CommercialController();
         $listCommercial = $comm->getListCommercial($in["init"], $in["end"]);
@@ -334,7 +334,6 @@ class ClientController extends Controller {
 
         $pertotalcom = ($totalcom / $subtotal) * 100;
         $perquantitycom = ($quantitycom / $quantity) * 100;
-
 
 
         return response()->json(["client" => $client, "invoices" => $invoices, "total" => $total, 'category' => $category,

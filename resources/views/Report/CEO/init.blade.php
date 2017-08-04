@@ -73,6 +73,7 @@
                     <thead>
                         <tr>
                             <th>Mes</th>
+                            <th>Facturas</th>
                             <th>Unidades</th>
                             <th>Flete</th>
                             <th>Iva 5%</th>
@@ -85,6 +86,7 @@
                     <tfoot>
                         <tr>
                             <th>Totales</th>
+                            <th>Facturas</th>
                             <th>Unidades</th>
                             <th>Flete</th>
                             <th>Iva 5%</th>

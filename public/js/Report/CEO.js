@@ -9,7 +9,7 @@ function CEO() {
             $("#loading-super").removeClass("hidden");
             obj.getSalesUnits();
             obj.getOverView();
-            
+
         });
         obj.getSalesUnits();
         obj.getOverView();
@@ -49,7 +49,7 @@ function CEO() {
 
             ],
             footerCallback: function (row, data, start, end, display) {
-                var api = this.api(), subtotal, total, quantity = 0, tax5 = 0, tax19 = 0, shipping = 0;
+                var api = this.api(), subtotal, total, quantity = 0, tax5 = 0, tax19 = 0, shipping = 0, invoices = 0;
 
                 var intVal = function (i) {
                     return typeof i === 'string' ?
@@ -58,19 +58,16 @@ function CEO() {
                             i : 0;
                 };
 
-                quantity = api
+                invoices = api
                         .column(1)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
-
-
                 $(api.column(1).footer()).html(
-                        '(' + quantity + ')'
+                        '(' + invoices + ')'
                         );
-
-                shipping = api
+                quantity = api
                         .column(2)
                         .data()
                         .reduce(function (a, b) {
@@ -79,23 +76,23 @@ function CEO() {
 
 
                 $(api.column(2).footer()).html(
-                        '(' + obj.formatCurrency(shipping, "$") + ')'
+                        '(' + quantity + ')'
                         );
 
-
-                tax5 = api
+                shipping = api
                         .column(3)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
 
+
                 $(api.column(3).footer()).html(
-                        '(' + obj.formatCurrency(tax5, "$") + ')'
+                        '(' + obj.formatCurrency(shipping, "$") + ')'
                         );
 
 
-                tax19 = api
+                tax5 = api
                         .column(4)
                         .data()
                         .reduce(function (a, b) {
@@ -103,10 +100,11 @@ function CEO() {
                         }, 0);
 
                 $(api.column(4).footer()).html(
-                        '(' + obj.formatCurrency(tax19, "$") + ')'
+                        '(' + obj.formatCurrency(tax5, "$") + ')'
                         );
 
-                subtotal = api
+
+                tax19 = api
                         .column(5)
                         .data()
                         .reduce(function (a, b) {
@@ -114,18 +112,29 @@ function CEO() {
                         }, 0);
 
                 $(api.column(5).footer()).html(
-                        '(' + obj.formatCurrency(subtotal, "$") + ')'
+                        '(' + obj.formatCurrency(tax19, "$") + ')'
                         );
 
-                total = api
+                subtotal = api
                         .column(6)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
 
-
                 $(api.column(6).footer()).html(
+                        '(' + obj.formatCurrency(subtotal, "$") + ')'
+                        );
+
+                total = api
+                        .column(7)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+
+                $(api.column(7).footer()).html(
                         '(' + obj.formatCurrency(total, "$") + ')'
                         );
             }

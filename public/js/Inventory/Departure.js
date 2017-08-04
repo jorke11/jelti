@@ -226,6 +226,7 @@ function Sale() {
         $("#loading-super").addClass("hidden");
         client_id = null;
         $("#btnSave").attr("disabled", false);
+        $("#btnmodalDetail, #btnModalUpload").attr("disabled", true);
         $(".input-departure").cleanFields();
         $(".input-detail").cleanFields();
         $(".input-fillable").prop("readonly", false);
@@ -236,7 +237,7 @@ function Sale() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse'});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-
+            
         listProducts = [];
         statusRecord = false;
     }

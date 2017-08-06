@@ -33,6 +33,8 @@ class Products extends Model {
         "packaging",
         "update_id",
         "type_product_id",
+        "warehouse",
+        "pvp",
         
     ];
     

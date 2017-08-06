@@ -154,6 +154,7 @@ Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
 Route::get('/entry/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
 Route::get('/entry/{id}/detail', ['uses' => 'Inventory\EntryController@getDetail']);
+Route::get('/entry/{id}/detailAll', ['uses' => 'Inventory\EntryController@getDetailAll']);
 Route::get('/entry/{id}/getSupplier', ['uses' => 'Inventory\EntryController@getSupplier']);
 Route::get('/entry/{id}/getProducts', ['uses' => 'Inventory\EntryController@getProducts']);
 Route::get('/entry/{id}/getDetailPurchase', ['uses' => 'Inventory\EntryController@getPurchase']);
@@ -471,6 +472,7 @@ Route::get('/api/getCharacteristic', 'Administration\SeekController@getCharacter
 Route::get('/api/getClient', 'Administration\SeekController@getClient');
 Route::get('/api/getContact', 'Administration\SeekController@getContact');
 Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
+Route::get('/api/getWarehouseProduct', 'Administration\SeekController@getWarehouseProduct');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
 Route::get('/api/getService', 'Administration\SeekController@getServices');
@@ -538,4 +540,11 @@ Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@a
 Route::get('/profileClient', "Report\ClientController@profile");
 Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
+
+
+Route::get('overview', "Report\ClientController@overview");
+Route::get('overview/getOverview', "Report\ClientController@getOverview");
+
+Route::get('CEO/getSalesUnits', "Report\ClientController@getSalesUnits");
+
 

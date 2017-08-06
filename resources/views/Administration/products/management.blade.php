@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Información</h4>
                     </div>
                     <div class="panel-body">
@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Meta</h4>
                     </div>
                     <div class="panel-body">
@@ -144,7 +144,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Valores</h4>
                     </div>
                     <div class="panel-body">
@@ -201,11 +201,25 @@
                                     <input type="text" class="form-control input-product" id="minimum_stock" name='minimum_stock'  data-type="number">
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Precio Sugerido</label>
+                                    <input type="text" class="form-control input-product" id="pvp" name='pvp'  data-type="number">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Bodega</label>
+                                   <select class="form-control input-product" id='warehouse' name="warehouse[]" data-api="/api/getWarehouseProduct" multiple>
+                                    </select>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Imagenes</h4>
                     </div>
                     <div class="panel-body">

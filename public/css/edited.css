@@ -83,6 +83,13 @@ table>thead>tr{
     background-color: #00b065;
     /*background-color: #2a3f54;*/
 }
+.panel-default>.panel-heading.personal {
+    background-color: white;
+    max-width: 100%;
+    font-weight: 700;
+    color: #73879C;
+    border-color:#00b065;
+}
 
 .panel-default>.panel-heading{
     color:#fff;
@@ -138,3 +145,6 @@ tr.shown td.details-control {
 .table-user-information > tbody > tr > td {
     border-top: 0;
 }
+
+
+

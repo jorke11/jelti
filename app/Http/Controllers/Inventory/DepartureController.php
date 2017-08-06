@@ -510,7 +510,7 @@ class DepartureController extends Controller {
                             $detail["status_id"] = 1;
                             $detail["quantity"] = $val["quantity"];
                             $detail["units_sf"] = $pro->units_sf;
-                            $detail["packaging"] = $pro->packaging;
+                            $detail["packaging"] = ($pro->packaging == null) ? 1 : $pro->packaging;
                             $detail["tax"] = $pro->tax;
                             $detail["value"] = $price_sf;
 

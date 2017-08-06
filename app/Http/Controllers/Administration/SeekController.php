@@ -23,6 +23,12 @@ use Log;
 
 class SeekController extends Controller {
 
+    public $input;
+
+    public function __construct() {
+        
+    }
+
     public function getCity(Request $req) {
         $in = $req->all();
         $query = Cities::select("id", DB::raw("initcap(description) as text"));
@@ -60,26 +66,30 @@ class SeekController extends Controller {
     }
 
     public function getClient(Request $req) {
-        $in = $req->all();
+        $this->in = $req->all();
         $result = array();
         $query = Stakeholder::select("id", DB::raw("coalesce(document,'') ||' - '|| coalesce(business,'') ||' - '|| coalesce(business_name,'') as text"));
 
-        if (isset($in["q"]) && $in["q"] == "0") {
+        if (isset($this->in["q"]) && $this->in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
-        } else if (isset($in["id"])) {
-            if ($in["id"] != '') {
-                $result = $query->where("id", $in["id"])->get();
+        } else if (isset($this->in["id"])) {
+            if ($this->in["id"] != '') {
+                $result = $query->where("id", $this->in["id"])->get();
             } else {
                 $result = array();
             }
         } else {
 
-            if (isset($in["q"])) {
-                $query->where("business", "ILIKE", "%" . $in["q"] . "%")
-                        ->orWhere("business_name", "ILIKE", "%" . $in["q"] . "%")
-                        ->orWhere("document", "ILIKE", "%" . $in["q"] . "%")
-                        ->where("type_stakeholder", 1);
+            if (isset($this->in["q"])) {
+                $query->where(function($query) {
+                    $query->where("business", "ILIKE", "%" . $this->in["q"] . "%")
+                            ->orWhere("business_name", "ILIKE", "%" . $this->in["q"] . "%")
+                            ->orWhere("document", "ILIKE", "%" . $this->in["q"] . "%")
+                            ->where("type_stakeholder", 1);
+                });
             }
+
+            $query->where("status_id", 1);
             $result = $query->get();
         }
 
@@ -126,6 +136,30 @@ class SeekController extends Controller {
     public function getCharacteristic(Request $req) {
         $in = $req->all();
         $query = Characteristic::select("id", "description as text");
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $query->where("id", Auth::user()->supplier_id)->get();
+        } else if (isset($in["id"])) {
+            if ($in["id"] != '') {
+                $in["id"] = json_decode($in["id"]);
+                if (count($in["id"]) > 1) {
+                    $query->whereIn("id", $in["id"])->get();
+                } else {
+                    $query->where("id", $in["id"])->get();
+                }
+            } else {
+                $query->where("id", 0)->get();
+            }
+        } else {
+            $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+        }
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+
+    public function getWarehouseProduct(Request $req) {
+        $in = $req->all();
+        $query = Warehouses::select("id", "description as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->supplier_id)->get();
         } else if (isset($in["id"])) {
@@ -255,25 +289,27 @@ class SeekController extends Controller {
     }
 
     public function getProduct(Request $req) {
-        $in = $req->all();
+        $this->input = $req->all();
         $query = Products::select("products.id", DB::raw("products.reference ||' - '|| products.title || ' - ' || stakeholder.business  as text"))
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id");
 
-        if (isset($in["filter"]) && $in["filter"] != '') {
-            foreach ($in["filter"] as $key => $val) {
+        if (isset($this->input["filter"]) && $this->input["filter"] != '') {
+            foreach ($this->input["filter"] as $key => $val) {
                 $query->where($key, $val);
             }
-        } else if (isset($in["id"])) {
-            $query->where("products.id", $in["id"])->get();
+        } else if (isset($this->input["id"])) {
+            $query->where("products.id", $this->input["id"])->get();
         }
 
-        if (isset($in["q"]) && $in["q"] != "0") {
-            $query->where("products.title", "ILIKE", "%" . $in["q"] . "%")
-                    ->OrWhere("stakeholder.business", "ILIKE", "%" . $in["q"] . "%")
-                    ->OrWhere("products.bar_code", "ILIKE", "%" . $in["q"] . "%")
-                    ->OrWhere(DB::raw("products.reference::text"), "ILIKE", "%" . $in["q"] . "%");
+        if (isset($this->input["q"]) && $this->input["q"] != "0") {
+            $query->where(function($query) {
+                $query->where("products.title", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere("stakeholder.business", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere("products.bar_code", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere(DB::raw("products.reference::text"), "ILIKE", "%" . $this->input["q"] . "%");
+            });
         }
-        $query->whereNull("type_product_id");
+//        $query->whereNull("type_product_id");
 
         $result = $query->get();
 
@@ -281,24 +317,26 @@ class SeekController extends Controller {
     }
 
     public function getServices(Request $req) {
-        $in = $req->all();
-        $query = DB::table("vservices")->select("products.id", DB::raw("reference ||' - '|| title || ' - ' || business  as text"));
+        $this->input = $req->all();
+        $query = Products::select("products.id", DB::raw("products.reference ||' - '|| products.title || ' - ' || stakeholder.business  as text"))
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id");
 
-        if (isset($in["filter"]) && $in["filter"] != '') {
-            foreach ($in["filter"] as $key => $val) {
+        if (isset($this->input["filter"]) && $this->input["filter"] != '') {
+            foreach ($this->input["filter"] as $key => $val) {
                 $query->where($key, $val);
             }
-        } else if (isset($in["id"])) {
-            $query->where("id", $in["id"])->get();
+        } else if (isset($this->input["id"])) {
+            $query->where("id", $this->input["id"])->get();
         }
 
-        if (isset($in["q"]) && $in["q"] != "0") {
-            $query->where("title", "ILIKE", "%" . $in["q"] . "%")
-                    ->OrWhere("business", "ILIKE", "%" . $in["q"] . "%")
-                    ->OrWhere("bar_code", "ILIKE", "%" . $in["q"] . "%")
-                    ->OrWhere(DB::raw("reference::text"), "ILIKE", "%" . $in["q"] . "%");
+        if (isset($this->input["q"]) && $this->input["q"] != "0") {
+            $query->where(function($query) {
+                $query->where("title", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere("business", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere("bar_code", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere(DB::raw("reference::text"), "ILIKE", "%" . $this->input["q"] . "%");
+            });
         }
-
 
         $query->where("type_product_id", 1);
         $result = $query->get();

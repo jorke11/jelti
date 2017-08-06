@@ -31,11 +31,12 @@ class HomeController extends Controller {
     public function index() {
 
         $sql = "
-            SELECT p.title,sum(d.quantity) cantidadTotal,round(sum(d.value * d.quantity * d.units_sf)) as total
-            FROM sales_detail d
-            JOIN sales s ON s.id=d.sale_id  
+            SELECT p.title,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
+            round(sum(d.value * d.quantity * d.units_sf)) as total
+            FROM departures_detail d
+            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id<>258
             JOIN products p ON p.id=d.product_id  
-            WHERE product_id IS NOT NULL AND s.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE product_id IS NOT NULL AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 2 DESC LIMIT 1";
 //        echo $sql;exit;
@@ -44,11 +45,12 @@ class HomeController extends Controller {
         if (count($product) > 0) {
             $product = $product[0];
         }
-
+        
         $sql = "
             SELECT client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) as unidades
             FROM vdepartures
             WHERE created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59' AND status_id=2
+                AND client_id <>258
             group by 1
             ORDER BY 2 DESC
             LIMIT 1
@@ -61,11 +63,11 @@ class HomeController extends Controller {
 
         $sql = "
             SELECT s.business proveedor,round(sum(d.quantity*d.units_sf)) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
-            FROM sales_detail d
-            JOIN sales sal ON sal.id=d.sale_id  
+            FROM departures_detail d
+            JOIN departures dep ON dep.id=d.departure_id  
             JOIN products p ON p.id=d.product_id  
             JOIN stakeholder s ON s.id=p.supplier_id  
-            WHERE product_id is not null AND sal.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE d.product_id is not null AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 3 desc LIMIT 1";
 
@@ -76,13 +78,12 @@ class HomeController extends Controller {
         }
         $sql = "
             SELECT u.name ||' '|| u.last_name as vendedor,sum(d.quantity*p.packaging) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
-            FROM sales_detail d
+            FROM departures_detail d
             JOIN products p ON p.id=d.product_id
-            JOIN sales s ON s.id=d.sale_id
-            JOIN departures dep ON dep.id=s.departure_id AND dep.status_id=2
-            JOIN users u ON u.id=s.responsible_id
+            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
+            JOIN users u ON u.id=dep.responsible_id
             WHERE d.product_id IS NOT NULL
-            AND s.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 3 desc";
 
@@ -96,7 +97,8 @@ class HomeController extends Controller {
 
 
         $sql = "
-                SELECT count(*) estemes,(select count(*) 
+                SELECT count(*) estemes,(
+                                        select count(*) 
                                         from stakeholder where created_at between '" . $ant . "-01 00:00' and '" . $ant . "-30 23:59') mesanterior 
                 FROM stakeholder where created_at > '" . date("Y-m") . "-01 00:00'";
 
@@ -249,29 +251,37 @@ class HomeController extends Controller {
 
     public function getListSupplier(Request $req) {
         $input = $req->all();
-        $cli = "
-            select st.id,st.business as supplier,sum(d.quantity *  coalesce(p.packaging,1)) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
-            from sales_detail d
-            JOIN sales s ON s.id=d.sale_id 
-            JOIN products p ON p.id=d.product_id 
-            JOIN stakeholder st ON st.id=p.supplier_id
-            WHERE d.product_id is NOT null
-            AND s.created_at BETWEEN'" . date("Y-m") . "-01 00:00' AND '" . date("Y-m-d") . " 23:59'
-            group by 1,2
-            order by 4 desc limit 10";
-
-        $res = DB::select($cli);
+        $init = date("Y-m") . "-01";
+        $res = $this->getCEOSupplier($init, date("Y-m-d"));
 
         $cat = array();
         $total = array();
         $quantity = array();
         foreach ($res as $value) {
             $cat[] = $value->supplier;
-            $total[] = (int) $value->total;
+            $total[] = (int) $value->subtotal;
             $quantity[] = (int) $value->quantity;
         }
 
         return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "date" => date("F")]);
+    }
+
+    public function getCEOSupplier($init, $end, $limit = '') {
+        $sql = "
+            select st.id,st.business as supplier,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+            sum(d.quantity * d.value* d.units_sf) as subtotal
+            from departures_detail d
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 and dep.client_id <> 258
+            JOIN products p ON p.id=d.product_id 
+            JOIN stakeholder st ON st.id=p.supplier_id
+            WHERE d.product_id is NOT null
+            AND dep.created_at BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
+            group by 1,2
+            order by 4 desc
+            $limit";
+//        echo $sql;
+//        exit;
+        return DB::select($sql);
     }
 
 }

@@ -6,7 +6,7 @@
                 <h4 class="modal-title">Agregar Detalle</h4>
             </div>
             <div class="modal-body">
-                {!! Form::open(['id'=>'frmUpload']) !!}
+                {!! Form::open(['id'=>'frmUpload','file'=>true]) !!}
                 <input type="hidden" id="client_id" name="client_id">
                 <div class="row">
                     <div class="col-lg-12">

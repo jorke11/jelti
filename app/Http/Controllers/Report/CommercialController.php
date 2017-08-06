@@ -20,15 +20,32 @@ class CommercialController extends Controller {
     public function listCommercial(Request $req) {
         $input = $req->all();
 
+        $res = $this->getListCommercial($input["init"], $input["end"]);
+        return response()->json(["data" => $res]);
+    }
+
+    function getListCommercial($init, $end) {
         $sql = "
-            SELECT responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
+            SELECT responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
             from vdepartures 
-            WHERE created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and status_id=2
-            group by responsible
+            WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2 AND client_id <> 258
+            group by 1,responsible
             order by 3 DESC
             ";
         $res = DB::select($sql);
-        return response()->json(["data" => $res]);
+
+        foreach ($res as $i => $value) {
+            $sql = "
+                   SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
+                   FROM departures_detail d
+                   JOIN vdepartures dep ON dep.id=d.departure_id and client_id <> 258 and dep.status_id=2
+                   WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.responsible_id=" . $value->responsible_id;
+            
+            $res2 = DB::select($sql);
+            $res[$i]->quantity = $res2[0]->quantity;
+        }
+
+        return $res;
     }
 
     public function listCommercialGraph(Request $req) {

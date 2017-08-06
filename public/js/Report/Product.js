@@ -40,8 +40,8 @@ function Product() {
             destroy: true,
             columns: [
                 {data: "product"},
-                {data: "totalunidades"},
-                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "quantity"},
+                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],
             order: [[2, 'DESC']],
             aoColumnDefs: [

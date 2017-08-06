@@ -63,7 +63,6 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
 
-
             try {
                 DB::beginTransaction();
                 $document = Stakeholder::where("document", $input["document"])->first();
@@ -159,6 +158,12 @@ class ClientController extends Controller {
         $input = $data->all();
         unset($input["id"]);
         $price = PricesSpecial::find($id);
+        if ($input["item"] == '') {
+            unset($input["item"]);
+        }
+
+        $input["packaging"] = ($input["packaging"] == '') ? 1 : $input["packaging"];
+        $input["units_sf"] = (int) $input["units_sf"];
         $price->fill($input)->save();
 
         return response()->json(["success" => true]);
@@ -255,6 +260,7 @@ class ClientController extends Controller {
         $input["shipping_cost"] = (isset($input["shipping_cost"])) ? 1 : 0;
         $input["price_special"] = (isset($input["price_special"])) ? 1 : 0;
         $input["user_update"] = Auth::user()->id;
+        $input["status_id"] = 1;
 
         if ($stakeholder == null) {
             $result = Stakeholder::create($input);
@@ -679,7 +685,8 @@ class ClientController extends Controller {
 
                             $new["client_id"] = $this->in["client_id"];
                             $new["product_id"] = $product->id;
-                            $new["price_sf"] = $book->price_sf;
+                            $new["price_sf"] = round($book->price_sf);
+                            $new["packaging"] = $book->packaging;
                             $new["margin"] = 1;
                             $new["units_sf"] = (int) $product->units_sf;
                             $new["margin_sf"] = 1;

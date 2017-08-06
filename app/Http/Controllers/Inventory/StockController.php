@@ -76,14 +76,12 @@ class StockController extends Controller {
         } else {
             $response = DB::table("products")
                     ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier", "products.margin_sf", "products.packaging")
-                    ->join("categories", "categories.id", "=", "products.category_id")
+                    ->leftjoin("categories", "categories.id", "=", "products.category_id")
                     ->where("products.id", $id)
                     ->first();
         }
 
-
-
-
+        
         $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 3)->sum(DB::raw("quantity * units_supplier"));
         $departure = DB::table("departures_detail")->where("product_id", $id)->where("status_id", 3)->sum("quantity");
         $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");

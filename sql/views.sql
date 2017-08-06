@@ -30,7 +30,7 @@ CREATE VIEW vclient AS
 SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address,'') as address,s.phone,
 s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,
 typestakeholder.description as typestakeholder,status.description as status,s.responsible_id,coalesce(u.name,'') ||' '||coalesce(u.last_name,'') as responsible,
-s.created_at,s.address_invoice,send.description city_invoice,(select dispatched from sales where client_id=s.id and dispatched is not null order by 1 desc limit 1) last_invoice,s.sector_id,
+s.created_at,s.address_invoice,s.address_send,send.description city_invoice,(select dispatched from sales where client_id=s.id and dispatched is not null order by 1 desc limit 1) last_invoice,s.sector_id,
 sector.description sector
 FROM stakeholder s
 JOIN cities c ON c.id=s.city_id
@@ -65,10 +65,12 @@ WHERE p.type_product_id IS NOT NULL
 
 
 
+--drop view vdepartures
 create view vdepartures as 
 select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
             (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity,
+            (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity_packaging,
             
 		CASE WHEN (d.status_id=1) THEN 
 		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
@@ -79,8 +81,18 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
 		CASE WHEN (d.status_id=1) THEN 
 		(select (round(coalesce(sum(quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
 		ELSE
-            (select coalesce(sum(quantity * units_sf * value),0) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id) 
-            END as subtotalnumeric,
+		(select coalesce(sum(quantity * units_sf * value),0) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id) 
+            END as subtotalnumeric,	 
+		CASE WHEN (d.status_id=1) THEN 
+		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.19)
+		ELSE
+		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id and sales_detail.tax=0.19) 
+            END as tax19,
+            CASE WHEN (d.status_id=1) THEN 
+		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.05)
+		ELSE
+		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id and sales_detail.tax=0.05) 
+            END as tax5,
             
            sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost
             from departures d
@@ -91,7 +103,7 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
             JOIN cities dest ON dest.id = d.destination_id
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
-            ORDER BY d.status_id,d.id asc 
+            ORDER BY d.status_id,d.id asc
 
 create view vcities as 
 select c.id,c.description city,d.description department,c.code
@@ -116,9 +128,10 @@ LEFT JOIN cities ci ON ci.id=c.city_id
 
 
 create view ventries as 
-select e.id, e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code,e.status_id
+select e.id, s.business,e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code,e.status_id,e.responsible_id
 From entries e
 JOIN warehouses w ON w.id=e.warehouse_id
+JOIN stakeholder s ON s.id=e.supplier_id
 JOIN cities c ON c.id=e.city_id
 JOIN parameters p ON p.code=e.status_id and p.group='entry'
 ORDER BY p.code

@@ -152,9 +152,6 @@ function CEO() {
         var param = {}, html = '';
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
-        param.total = $("#Detail #total").val();
-        param.subtotal = $("#Detail #subtotal").val();
-        param.quantity = $("#Detail #quantity").val();
 
         $.ajax({
             url: "overview/getOverview",

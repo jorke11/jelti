@@ -210,19 +210,17 @@ class ClientController extends Controller {
 
     public function overview() {
         $warehouse = Warehouses::all();
-        $this->getSalesUnitsData(date("Y-m-") . "-01", date("Y-m-d"));
-        $total = $this->total;
-        $subtotal = $this->subtotal;
-        $quantity = $this->quantity;
-        return view("Report.CEO.init", compact("warehouse", "total", "subtotal", "quantity"));
+        return view("Report.CEO.init", compact("warehouse"));
     }
 
     public function getOverview(Request $req) {
         $in = $req->all();
 
-        $total = $in["total"];
-        $subtotal = $in["subtotal"];
-        $quantity = $in["quantity"];
+        $this->getSalesUnitsData($in["init"], $in["end"]);
+        $total = $this->total;
+        $subtotal = $this->subtotal;
+        $quantity = $this->quantity;
+
 
         $sql = "
             SELECT s.business

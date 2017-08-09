@@ -5,9 +5,6 @@
     {!! Form::open(['id'=>'Detail']) !!}
     <div class="panel panel-default">
         <div class="panel-body">
-            <input type="hidden" id="total" value="{{isset($total)?$total:0}}">
-            <input type="hidden" id="subtotal" value="{{isset($subtotal)?$subtotal:0}}">
-            <input type="hidden" id="quantity" value="{{isset($quantity)?$quantity:0}}">
             
             <div class="col-lg-8 col-center">
                 <div class="col-lg-5">

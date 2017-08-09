@@ -30,7 +30,7 @@ class ClientController extends Controller {
     public function index() {
         $warehouse = Warehouses::all();
 
-        return view("Report.Client.init");
+        return view("Report.Client.init",compact("warehouse"));
     }
 
     public function getList(Request $req) {

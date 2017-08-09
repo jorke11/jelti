@@ -39,6 +39,8 @@ class CreateDeparturesTable extends Migration {
             $table->text('voucher')->nullable();
             $table->integer('discount')->nullable();
             $table->timestamps();
+            $table->dateTime('dispatched');
+            $table->unique('email');
         });
     }
 

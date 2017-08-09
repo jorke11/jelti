@@ -207,7 +207,7 @@ class ClientController extends Controller {
     public function getOverview(Request $req) {
         $in = $req->all();
         $total = session("total_" . Auth::user()->id);
-        $total=$total[0];
+        
         $subtotal = session("subtotal_" . Auth::user()->id);
         $quantity = session("quantity_" . Auth::user()->id);
         echo $total;

@@ -11,6 +11,7 @@ use App\Models\Administration\Warehouses;
 use App\Http\Controllers\Report\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Report\CommercialController;
+use Auth;
 
 class ClientController extends Controller {
 
@@ -204,12 +205,12 @@ class ClientController extends Controller {
 
     public function getOverview(Request $req) {
         $in = $req->all();
-        $total = session("total");
-        $subtotal = session("subtotal");
-        $quantity = session("quantity");
-        
-//        dd($total);
-        
+        $total = session("total_" . Auth::user()->id);
+        $subtotal = session("subtotal_" . Auth::user()->id);
+        $quantity = session("quantity_" . Auth::user()->id);
+
+        dd($total);
+
         $sql = "
             SELECT s.business
             FROM vdepartures d
@@ -386,9 +387,10 @@ class ClientController extends Controller {
         $subtotal = ($subtotal == 0) ? 1 : $subtotal;
         $total = ($total == 0) ? 1 : $total;
         $quantity = ($quantity == 0) ? 1 : $quantity;
-        session(['subtotal'=> $subtotal]);
-        session(['total'=> $total]);
-        session(['quantity'=> $quantity]);
+
+        session(['subtotal_' . Auth::user()->id => $subtotal]);
+        session(['total_' . Auth::user()->id => $total]);
+        session(['quantity_' . Auth::user()->id => $quantity]);
 
         return response()->json(["data" => $res]);
     }

@@ -16,13 +16,21 @@ use Session;
 
 class ClientController extends Controller {
 
+    public $total;
+    public $subtotal;
+    public $quantity;
+
     public function __construct() {
         $this->middleware("auth");
+        $this->total = 0;
+        $this->subtotal = 0;
+        $this->quantity = 0;
     }
 
     public function index() {
         $warehouse = Warehouses::all();
-        return view("Report.Client.init", compact("warehouse"));
+
+        return view("Report.Client.init");
     }
 
     public function getList(Request $req) {
@@ -176,6 +184,7 @@ class ClientController extends Controller {
 
     public function profile() {
         $warehouse = Warehouses::all();
+
         return view("Report.Profile.init", compact("warehouse"));
     }
 
@@ -201,17 +210,19 @@ class ClientController extends Controller {
 
     public function overview() {
         $warehouse = Warehouses::all();
-        return view("Report.CEO.init", compact("warehouse"));
+        $this->getSalesUnitsData(date("Y-m-") . "-01", date("Y-m-d"));
+        $total = $this->total;
+        $subtotal = $this->subtotal;
+        $quantity = $this->quantity;
+        return view("Report.CEO.init", compact("warehouse", "total", "subtotal", "quantity"));
     }
 
     public function getOverview(Request $req) {
         $in = $req->all();
-        $total = Session::get("total_" . Auth::user()->id);
-        
-        $subtotal = Session::get("subtotal_" . Auth::user()->id);
-        $quantity = Session::get("quantity_" . Auth::user()->id);
-        echo $total;
-        dd(session()->all());
+
+        $total = $in["total"];
+        $subtotal = $in["subtotal"];
+        $quantity = $in["quantity"];
 
         $sql = "
             SELECT s.business
@@ -355,12 +366,18 @@ class ClientController extends Controller {
 
     public function getSalesUnits(Request $req) {
         $in = $req->all();
+        $res = $this->getSalesUnitsData($in["init"], $in["end"]);
+
+        return response()->json(["data" => $res]);
+    }
+
+    function getSalesUnitsData($init, $end) {
         $sql = "
                 SELECT 
                     to_char(created,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
                     sum(tax5) tax5,sum(shipping_cost) shipping_cost
                 FROM vdepartures 
-                WHERE status_id=2 AND created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+                WHERE status_id=2 AND created BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id <> 258
                 group by 1";
 
@@ -386,19 +403,11 @@ class ClientController extends Controller {
             $total += $value->total;
             $quantity += $res[$i]->quantity;
         }
-        $subtotal = ($subtotal == 0) ? 1 : $subtotal;
-        $total = ($total == 0) ? 1 : $total;
-        $quantity = ($quantity == 0) ? 1 : $quantity;
 
-        Session::put('subtotal_' . Auth::user()->id, $subtotal);
-//        session(['subtotal_' . Auth::user()->id => $subtotal]);
-        Session::put('total_' . Auth::user()->id, $total);
-//        session(['total_' . Auth::user()->id => $total]);
-//        session(['quantity_' . Auth::user()->id => $quantity]);
-        Session::put('quantity_' . Auth::user()->id, $quantity);
-
-
-        return response()->json(["data" => $res]);
+        $this->subtotal = ($subtotal == 0) ? 1 : $subtotal;
+        $this->total = ($total == 0) ? 1 : $total;
+        $this->quantity = ($quantity == 0) ? 1 : $quantity;
+        return $res;
     }
 
 }

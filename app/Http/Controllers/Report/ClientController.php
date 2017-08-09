@@ -208,7 +208,7 @@ class ClientController extends Controller {
         $subtotal = session("subtotal");
         $quantity = session("quantity");
         
-        dd($total);
+//        dd($total);
         
         $sql = "
             SELECT s.business

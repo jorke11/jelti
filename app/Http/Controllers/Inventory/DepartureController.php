@@ -213,7 +213,7 @@ class DepartureController extends Controller {
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
-
+//        dd($sale);
         $dep = Departures::find($id);
 
         if ($dep->branch_id != '') {

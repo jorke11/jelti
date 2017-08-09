@@ -657,6 +657,8 @@ class DepartureController extends Controller {
                             $sale->dispatched = date("Y-m-d H:i:s");
                             $sale->invoice = $con->consecutive;
                             $sale->save();
+                            $departure->dispatched = $sale->dispatched;
+                            $departure->save();
 
                             $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $con->consecutive);
 

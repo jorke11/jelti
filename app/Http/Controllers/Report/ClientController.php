@@ -388,9 +388,13 @@ class ClientController extends Controller {
         $total = ($total == 0) ? 1 : $total;
         $quantity = ($quantity == 0) ? 1 : $quantity;
 
-        session(['subtotal_' . Auth::user()->id => $subtotal]);
-        session(['total_' . Auth::user()->id => $total]);
-        session(['quantity_' . Auth::user()->id => $quantity]);
+        Session::push('subtotal_' . Auth::user()->id, $subtotal);
+//        session(['subtotal_' . Auth::user()->id => $subtotal]);
+        Session::push('total_' . Auth::user()->id, $total);
+//        session(['total_' . Auth::user()->id => $total]);
+//        session(['quantity_' . Auth::user()->id => $quantity]);
+        Session::push('quantity_' . Auth::user()->id, $quantity);
+
 
         return response()->json(["data" => $res]);
     }

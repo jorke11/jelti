@@ -12,6 +12,7 @@ use App\Http\Controllers\Report\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Report\CommercialController;
 use Auth;
+use Session;
 
 class ClientController extends Controller {
 

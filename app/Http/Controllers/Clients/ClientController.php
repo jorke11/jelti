@@ -257,6 +257,12 @@ class ClientController extends Controller {
             $stakeholder = Branch::Find($id);
         }
 
+        $input["address_send"] = trim($input["address_send"]);
+        $input["address_invoice"] = trim($input["address_invoice"]);
+        $input["web_site"] = trim($input["web_site"]);
+        $input["email"] = trim($input["email"]);
+        $input["business"] = trim($input["business"]);
+        $input["business_name"] = trim($input["business_name"]);
         $input["shipping_cost"] = (isset($input["shipping_cost"])) ? 1 : 0;
         $input["price_special"] = (isset($input["price_special"])) ? 1 : 0;
         $input["user_update"] = Auth::user()->id;

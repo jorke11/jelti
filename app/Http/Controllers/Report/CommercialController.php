@@ -28,7 +28,7 @@ class CommercialController extends Controller {
         $sql = "
             SELECT responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
             from vdepartures 
-            WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2 AND client_id <> 258
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2 AND client_id <> 258
             group by 1,responsible
             order by 3 DESC
             ";
@@ -39,7 +39,7 @@ class CommercialController extends Controller {
                    SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                    FROM departures_detail d
                    JOIN vdepartures dep ON dep.id=d.departure_id and client_id <> 258 and dep.status_id=2
-                   WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.responsible_id=" . $value->responsible_id;
+                   WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.responsible_id=" . $value->responsible_id;
             
             $res2 = DB::select($sql);
             $res[$i]->quantity = $res2[0]->quantity;
@@ -58,7 +58,7 @@ class CommercialController extends Controller {
             JOIN sales s ON s.id=d.sale_id
             JOIN departures dep ON dep.id=s.departure_id AND dep.status_id=2
             JOIN users u ON u.id=s.responsible_id
-            WHERE s.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            WHERE s.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             group by 1
             order by 2 desc";
         $res = DB::select($sql);
@@ -139,7 +139,7 @@ class CommercialController extends Controller {
             JOIN departures dep ON dep.id=d.departure_id
             JOIN products p ON p.id=d.product_id
             JOIN stakeholder st ON st.id=dep.client_id
-            WHERE d.product_id is not null AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $client_id
+            WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $client_id
             GROUP BY 1,2,dep.client_id
             ORDER BY 1 ASC, 3 DESC
             ";

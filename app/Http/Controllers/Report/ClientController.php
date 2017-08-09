@@ -210,8 +210,8 @@ class ClientController extends Controller {
         
         $subtotal = session("subtotal_" . Auth::user()->id);
         $quantity = session("quantity_" . Auth::user()->id);
-        echo $total;
-        dd(session()->all());
+//        echo $total;
+//        dd(session()->all());
 
         $sql = "
             SELECT s.business

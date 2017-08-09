@@ -16,7 +16,7 @@ use App\Models;
 Auth::routes();
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('page');
 });
 
 Route::group(["middleware" => ["auth", "client"]], function() {

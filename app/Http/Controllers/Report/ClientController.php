@@ -391,7 +391,7 @@ class ClientController extends Controller {
             $sql = "
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                 FROM departures_detail d
-                JOIN departures ON departures.id=d.departure_id and departures.status_id=2
+                JOIN departures ON departures.id=d.departure_id and departures.status_id=2 and  departures.client_id<>258
                 WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";
             $res2 = DB::select($sql);

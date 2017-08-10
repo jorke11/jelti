@@ -99,7 +99,7 @@
                         <div class="col-lg-5" style="padding-top:200px;padding-left: 40px;">
                             <div style="width:380px;height:230px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
                         </div>
-                        <div class="col-lg-3 col-lg-offset-3" >
+                        <div class="col-lg-2 col-lg-offset-4" >
                             <div class="row" style="padding-bottom: 20px;padding-top: 20px">
                                 <div class="col-lg-12">
                                     <div style="width:80%;height:120px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>

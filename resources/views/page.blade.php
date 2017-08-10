@@ -94,22 +94,21 @@
         <div class="container-fluid">
             <!--<div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
             <div class="row">
-                <div style="width:100%;height:800px;background-image:url({{ asset('assets/images/fondo1_1280X683.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
+                <div style="width:100%;height:800px;background-image:url({{ asset('assets/images/fondo_init.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
                     <div class="row">
                         <div class="col-lg-5" style="padding-top:200px;padding-left: 40px;">
-                            <div style="width:380px;height:250px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
+                            <div style="width:380px;height:230px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
                         </div>
-                        <div class="col-lg-2 col-lg-offset-4" >
+                        <div class="col-lg-3 col-lg-offset-3" >
                             <div class="row" style="padding-bottom: 20px;padding-top: 20px">
                                 <div class="col-lg-12">
-                                    <div style="width:100%;height:160px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
+                                    <div style="width:80%;height:120px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="panel" style="background: rgba(255, 255, 255, 0.6);">
 
                                     <div class="panel-body">
-
                                         <form>
                                             <div class="row">
                                                 <div class="col-lg-12">

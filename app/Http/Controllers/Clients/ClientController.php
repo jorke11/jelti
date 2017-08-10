@@ -681,6 +681,8 @@ class ClientController extends Controller {
                             $item = $book->item;
                         } else if ($book->ean != '') {
                             $product = Products::where("bar_code", trim($book->ean))->first();
+                        } else if ($book->sf_code != '') {
+                            $product = Products::where("reference", trim($book->sf_code))->first();
                         }
 
 
@@ -688,7 +690,7 @@ class ClientController extends Controller {
                             if ($item != '') {
                                 $price = PricesSpecial::where("item", $item)->first();
                             }
-
+                            
                             $new["client_id"] = $this->in["client_id"];
                             $new["product_id"] = $product->id;
                             $new["price_sf"] = round($book->price_sf);

@@ -286,9 +286,10 @@ class DepartureController extends Controller {
         }
 
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
+        
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
-        $totalSum = $totalSum - $dep->discount;
-        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
+       
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost+(- $dep->discount);
 
         $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
         $cli["business"] = $this->tool->cleanText($cli["business"]);

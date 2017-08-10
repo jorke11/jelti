@@ -100,15 +100,21 @@
                             <div style="width:380px;height:230px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
                         </div>
                         <div class="col-lg-2 col-lg-offset-4" >
-                            <div class="row" style="padding-bottom: 20px;padding-top: 20px">
-                                <div class="col-lg-12">
-                                    <div style="width:80%;height:120px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
+                            <div class="row" style="padding-bottom: 20px;padding-top: 20px;">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                    <div style="width:70%;height:100px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="panel" style="background: rgba(255, 255, 255, 0.6);">
+                                <div class="panel" style="background: rgba(255, 255, 255, 0.6);border: 1px solid #fff">
 
                                     <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <p class="text-center" style="color:white;font-size: 20px;text-shadow: 1px 1px 3px #000;">Registrate como <br>
+                                                 Negocio o Cliente</p>
+                                            </div>
+                                        </div>
                                         <form>
                                             <div class="row">
                                                 <div class="col-lg-12">

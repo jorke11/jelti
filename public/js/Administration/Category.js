@@ -13,7 +13,9 @@ function Category() {
     this.save = function () {
         toastr.remove();
         var frm = $("#frm");
-        var data = frm.serialize();
+//        var data = frm.serialize();
+        var data = new FormData($("#frm")[0]);
+
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
@@ -36,6 +38,9 @@ function Category() {
                 method: method,
                 data: data,
                 dataType: 'JSON',
+                contentType: false,
+                processData: false,
+                cache: false,
                 success: function (data) {
                     if (data.success == true) {
                         $("#modalNew").modal("hide");
@@ -62,6 +67,8 @@ function Category() {
             dataType: 'JSON',
             success: function (data) {
                 $(".input-category").setFields({data: data});
+
+                $("#img_category").attr("src", data.image)
             }
         })
     }

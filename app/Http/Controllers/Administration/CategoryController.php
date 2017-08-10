@@ -26,7 +26,9 @@ class CategoryController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
-//            $user = Auth::User();
+            
+            dd($input);
+//            $$user = Auth::User();
 //            $input["users_id"] = 1;
             $result = Categories::create($input);
             if ($result) {
@@ -45,6 +47,7 @@ class CategoryController extends Controller {
     public function update(Request $request, $id) {
         $category = Categories::FindOrFail($id);
         $input = $request->all();
+        dd($input);
         $result = $category->fill($input)->save();
         if ($result) {
             return response()->json(['success' => true]);

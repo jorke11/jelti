@@ -41,6 +41,24 @@
             .color-superfuds{
                 color: #13b671;
             }
+            .white-label{
+                color:white;
+                font-size: 20px;
+                text-shadow: 1px 1px 3px #000;
+                font-weight:200;
+                font-family: "Helvetica", Georgia, Serif;
+                letter-spacing: 1px
+
+            }
+            .white-check{
+                color:white;
+                font-size: 12px;
+                text-shadow: 1px 1px 3px #000;
+                font-weight:200;
+                font-family: "Helvetica", Georgia, Serif;
+                letter-spacing: 1px
+
+            }
         </style>
         {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
 
@@ -111,15 +129,15 @@
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <p class="text-center" style="color:white;font-size: 20px;text-shadow: 1px 1px 3px #000;">Registrate como <br>
-                                                 Negocio o Cliente</p>
+                                                <p class="text-center white-label">Registrate como <br>
+                                                    Negocio o Cliente</p>
                                             </div>
                                         </div>
                                         <form>
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
-                                                        <label for="email">Compañía</label>
+                                                        <label for="email" class="white-label">Compañía</label>
                                                         <input type="email" class="form-control" id="email" placeholder="Compañía">
                                                     </div>
                                                 </div>
@@ -127,7 +145,7 @@
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
-                                                        <label for="email">Nombre</label>
+                                                        <label for="email" class="white-label">Nombre</label>
                                                         <input type="email" class="form-control" id="email" placeholder="Nombre">
                                                     </div>
                                                 </div>
@@ -135,7 +153,7 @@
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
-                                                        <label for="email">Email</label>
+                                                        <label for="email" class="white-label">Email</label>
                                                         <input type="email" class="form-control" id="email" placeholder="Email">
                                                     </div>
                                                 </div>
@@ -143,7 +161,7 @@
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="form-group">
-                                                        <label for="email">Telefono</label>
+                                                        <label for="email" class="white-label">Telefono</label>
                                                         <input type="email" class="form-control" id="email" placeholder="Telefono">
                                                     </div>
                                                 </div>
@@ -151,7 +169,7 @@
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="checkbox">
-                                                        <label><input type="checkbox"> Acepto terminos de servicio | Leer más</label>
+                                                        <label class="white-check"><input type="checkbox" > Acepto terminos de servicio | Leer más</label>
                                                     </div>
                                                 </div>
                                             </div>

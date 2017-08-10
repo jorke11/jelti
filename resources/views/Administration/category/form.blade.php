@@ -32,6 +32,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="#" class="thumbnail">
+                            <img alt="n/a" id="img_category">
+                        </a>
+                    </div>
+                </div>
+
                 {!!Form::close()!!}
             </div>
             <div class="modal-footer">

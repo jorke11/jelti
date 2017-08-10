@@ -378,7 +378,7 @@ class ClientController extends Controller {
                 WHERE status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id <> 258
                 group by 1";
-        echo $sql;exit;
+        
         $res = DB::select($sql);
 
         $total = 0;

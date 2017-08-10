@@ -372,13 +372,13 @@ class ClientController extends Controller {
     function getSalesUnitsData($init, $end) {
         $sql = "
                 SELECT 
-                    to_char(created,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
+                    to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
                     sum(tax5) tax5,sum(shipping_cost) shipping_cost
                 FROM vdepartures 
-                WHERE status_id=2 AND created BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
+                WHERE status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id <> 258
                 group by 1";
-
+        echo $sql;exit;
         $res = DB::select($sql);
 
         $total = 0;
@@ -392,7 +392,7 @@ class ClientController extends Controller {
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                 FROM departures_detail d
                 JOIN departures ON departures.id=d.departure_id and departures.status_id=2 and  departures.client_id<>258
-                WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
+                WHERE departures.dispatched between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";
             $res2 = DB::select($sql);
             $res[$i]->quantity = $res2[0]->quantity;

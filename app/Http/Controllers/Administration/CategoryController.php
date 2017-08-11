@@ -39,10 +39,10 @@ class CategoryController extends Controller {
                 $id = Categories::create($input)->id;
             }
 
-            $path = "images/category/" . $id;
+            $path = "images/category/" . $id."/";
 
             $file->move($path, $name);
-            $path .= "/" . $name;
+            $path .= $name;
             $row = Categories::find($id);
             $row->image = $path;
             $row->save();

@@ -168,7 +168,10 @@ function Sale() {
             dataType: 'JSON',
             success: function (data) {
                 $(".input-departure").setFields({data: data.header});
-            }
+                toastr.success("Factura reversada!");
+            }, error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(xhr.responseJSON.msg);
+            },
         })
     }
 
@@ -183,8 +186,12 @@ function Sale() {
                 data: param,
                 dataType: 'JSON',
                 success: function (resp) {
+                    $("#modalCancel").modal("hide");
+                    toastr.warning("Factura cancelada!");
                     table.ajax.reload();
-                }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                },
             })
         } else {
             toastr.error("Necesitas dar una justificación!");
@@ -237,7 +244,7 @@ function Sale() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse'});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-            
+
         listProducts = [];
         statusRecord = false;
     }

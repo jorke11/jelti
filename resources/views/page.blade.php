@@ -255,7 +255,7 @@
             <br>
             <br>
             <div class="row">
-                <div class='col-md-12'>
+                <div class='col-md-10 col-lg-offset-1'>
                     <div class="carousel slide media-carousel" id="media">
                         <div class="carousel-inner">
                             <div class="item  active">
@@ -300,7 +300,63 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-12"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-3 col-lg-offset-2"><h4>Lo Nuevo</h4></div>
+                <div class="col-lg-3 col-lg-offset-4"><h4>Ver Todo</h4></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="carousel slide media-carousel" id="newproducts">
+                        <div class="carousel-inner">
+                            <div class="item  active">
+                                <div class="row">
+                                    <?php
+                                    $cont = 0;
+                                    foreach ($category as $i => $val) {
+                                        ?>
+                                        <div class="col-md-2">
+                                            <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
+                                                <img src="{{$val->image}}" alt="">
+                                            </a>
+                                        </div>
+                                        <?php
+                                        $cont++;
+                                        if ($cont == 4) {
+                                            $cont = 0;
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="row">
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
 
+                        <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#newproducts" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+
+                        <!--                        <a data-slide="prev" href="#media" class="left carousel-control">‹</a>
+                                                <a data-slide="next" href="#media" class="right carousel-control">›</a>-->
+                    </div>
+                </div>
+            </div>
         </div>
         <br>
         <br>

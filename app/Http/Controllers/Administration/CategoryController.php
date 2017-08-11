@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Administration\Categories;
 use Session;
 use Mail;
+use App\Models\Administration\Parameters;
 
 class CategoryController extends Controller {
 
@@ -15,7 +16,8 @@ class CategoryController extends Controller {
     }
 
     public function index() {
-        return view("Administration.category.init");
+        $types = Parameters::where("group", "type_category")->get();
+        return view("Administration.category.init", compact("types"));
     }
 
     public function create() {
@@ -29,9 +31,9 @@ class CategoryController extends Controller {
 
             unset($input["id"]);
             $file = array_get($input, 'img');
-            $name = $file->getClientOriginalName();
-
-
+            
+            $input["status_id"] = (isset($input["status_id"])) ? 1 : 0;
+            
             if ($id != '') {
                 $row = Categories::find($id);
                 $row->fill($input)->save();
@@ -39,13 +41,15 @@ class CategoryController extends Controller {
                 $id = Categories::create($input)->id;
             }
 
-            $path = "images/category/" . $id."/";
-
-            $file->move($path, $name);
-            $path .= $name;
-            $row = Categories::find($id);
-            $row->image = $path;
-            $row->save();
+            if ($file != null) {
+                $name = $file->getClientOriginalName();
+                $path = "images/category/" . $id . "/";
+                $file->move($path, $name);
+                $path .= $name;
+                $row = Categories::find($id);
+                $row->image = $path;
+                $row->save();
+            }
 
 
             if ($id) {

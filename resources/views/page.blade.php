@@ -259,87 +259,22 @@
                         <div class="carousel-inner">
                             <div class="item  active">
                                 <div class="row">
-                                    <div class="col-md-2">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
-                                            <img src="http://lorempixel.com/270/151/food" alt="">
-                                        </a>
-
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/150/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/152/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/150/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/150/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/150/food" alt="">
-                                        </a>
-                                    </div>
+                                    <?php
+                                    $cont = 0;
+//                                    dd($category);
+                                    foreach ($category as $i => $val) {
+                                        ?>
+                                        <div class="col-md-2">
+                                            <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
+                                                <img src="{{$val->image}}" alt="">
+                                            </a>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
-                            <div class="item">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/151/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/150/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/153/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a class="fancybox thumbnail" rel="gallery1" href="img/katalog.png">
-                                            <img src="http://lorempixel.com/271/149/food" alt="">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <a class="fancybox thumbnail" href="#">
-                                            <img src="http://lorempixel.com/270/150/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a class="fancybox thumbnail" href="#">
-                                            <img src="http://lorempixel.com/273/150/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a class="fancybox thumbnail" href="#">
-                                            <img src="http://lorempixel.com/273/150/food" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a class="fancybox thumbnail" href="#">
-                                            <img src="http://lorempixel.com/273/150/food" alt="">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                           
                         </div>
 
                         <a class="left carousel-control" href="#media" role="button" data-slide="prev">

@@ -12,11 +12,13 @@
  */
 
 use App\Models;
+use Models\Administration\Categories;
 
 Auth::routes();
 
 Route::get('/', function () {
-    return view('page');
+    $category = Models\Administration\Categories::where("status_id",1)->orderBy("order","asc")->get();
+    return view('page',compact("category"));
 });
 
 Route::group(["middleware" => ["auth", "client"]], function() {

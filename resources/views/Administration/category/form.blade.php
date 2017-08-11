@@ -27,10 +27,32 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
+                            <label for="email">Tipo</label>
+                            <select id="type_category_id" name="type_category_id" class="form-control input-category">
+                                <option value="0">Selecciona</option>
+                                @foreach($types as $val)
+                                <option value="{{$val->code}}">{{$val->description}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label for="email">Order</label>
                             <input type="text" class="form-control input-category" id="order" name='order' required>
                         </div>
                     </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Estado</label>
+                            <input type="checkbox" class="form-control input-category" id="status_id" name='status_id'>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                  
                 </div>
                 <div class="row">
                     <div class="col-lg-12">

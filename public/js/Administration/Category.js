@@ -42,6 +42,11 @@ function Category() {
                     if (data.success == true) {
                         $("#modalNew").modal("hide");
                         $(".input-category").setFields({data: data});
+                        if (data.image != null) {
+                            $("#img_category").attr("src", data.image)
+                        } else {
+                            $("#img_category").attr("src", "")
+                        }
                         table.ajax.reload();
                         toastr.success(msg);
                     }

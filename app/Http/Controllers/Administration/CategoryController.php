@@ -49,7 +49,7 @@ class CategoryController extends Controller {
 
 
             if ($id) {
-                return response()->json(['success' => true, "header" => $row]);
+                return response()->json(['success' => true, "data" => $row]);
             } else {
                 return response()->json(['success' => false]);
             }

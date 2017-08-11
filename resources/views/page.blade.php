@@ -243,16 +243,17 @@
             <br>
 
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid" style="background-color:#fffcf8">
+            <br>
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-5"><h2>Nuestros <u>Productos</u></h2></div>
+                <div class="col-lg-3 col-lg-offset-5"><h1>Nuestros <u>Productos</u></h1></div>
             </div>
+            
             <div class="row">
                 <div class="col-lg-5 col-lg-offset-4"><h4 style="color:#cc">Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
             </div>
-        </div>
-
-        <div class="container-fluid">
+            <br>
+            <br>
             <div class="row">
                 <div class='col-md-12'>
                     <div class="carousel slide media-carousel" id="media">
@@ -261,7 +262,6 @@
                                 <div class="row">
                                     <?php
                                     $cont = 0;
-//                                    dd($category);
                                     foreach ($category as $i => $val) {
                                         ?>
                                         <div class="col-md-2">
@@ -274,7 +274,6 @@
                                     ?>
                                 </div>
                             </div>
-                           
                         </div>
 
                         <a class="left carousel-control" href="#media" role="button" data-slide="prev">
@@ -285,7 +284,6 @@
                             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                             <span class="sr-only">Next</span>
                         </a>
-
 
                         <!--                        <a data-slide="prev" href="#media" class="left carousel-control">‹</a>
                                                 <a data-slide="next" href="#media" class="right carousel-control">›</a>-->

@@ -549,4 +549,8 @@ Route::get('overview/getOverview', "Report\ClientController@getOverview");
 
 Route::get('CEO/getSalesUnits', "Report\ClientController@getSalesUnits");
 
+Route::get('operations/getProductWeek', "Report\OperationsController@ProductWeek");
+Route::get('operations/getProductDay', "Report\OperationsController@ProductDay");
+
+
 

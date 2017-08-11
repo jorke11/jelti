@@ -44,16 +44,15 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <div id="container_product" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                <!--@include('Report.Client.product')-->
+                @include('Report.Operations.productweek')
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <div id="container_cities" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                <!--@include('Report.Client.cities')-->
+                
+                @include('Report.Operations.productday')
             </div>
         </div>
     </div>

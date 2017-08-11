@@ -33,9 +33,47 @@ class OperationsController extends Controller {
             FROM vdepartures d 
             JOIN sales s ON s.departure_id=d.id
             WHERE d.status_id=2
-            AND d.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
+            AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             ";
 //echo $sql;exit;
+        $res = DB::select($sql);
+
+        return response()->json(["data" => $res]);
+    }
+
+    public function ProductWeek(Request $req) {
+        $input = $req->all();
+
+        $ware = "";
+        if ($input["warehouse_id"] != 0) {
+            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+        }
+
+        $sql = "
+            select to_char(dispatched,'YYYY-MM-DD') fecha,to_char(dispatched,'day') dia,sum(subtotalnumeric) subtotal
+            from vdepartures d
+            WHERE status_id=2 AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
+            group by 1,2
+            order by 1";
+        $res = DB::select($sql);
+
+        return response()->json(["data" => $res]);
+    }
+
+    public function ProductDay(Request $req) {
+        $input = $req->all();
+
+        $ware = "";
+        if ($input["warehouse_id"] != 0) {
+            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+        }
+
+        $sql = "
+            select to_char(dispatched,'day') dia,sum(subtotalnumeric) subtotal
+            from vdepartures d
+            WHERE status_id=2 AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
+            group by 1
+            order by 1";
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);

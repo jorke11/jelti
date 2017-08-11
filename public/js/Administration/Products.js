@@ -66,7 +66,6 @@ function Product() {
     }
     this.uploadExcelCode = function () {
         var formData = new FormData($("#frmFileCode")[0]);
-
         $.ajax({
             url: 'product/uploadExcelCode',
             method: 'POST',

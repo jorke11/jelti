@@ -14,7 +14,8 @@ function Category() {
         toastr.remove();
         var frm = $("#frm");
 //        var data = frm.serialize();
-        var data = new FormData($("#frm")[0]);
+        var formData = new FormData($("#frm")[0]);
+
 
         var url = "", method = "";
         var id = $("#frm #id").val();
@@ -24,23 +25,19 @@ function Category() {
 
         if (validate.length == 0) {
             if (id == '') {
-                method = 'POST';
-                url = "category";
                 msg = "Created Record";
             } else {
-                method = 'PUT';
-                url = "category/" + id;
                 msg = "Edited Record";
             }
 
             $.ajax({
-                url: url,
-                method: method,
-                data: data,
+                url: "category",
+                method: "POST",
+                data: formData,
                 dataType: 'JSON',
+                cache: false,
                 contentType: false,
                 processData: false,
-                cache: false,
                 success: function (data) {
                     if (data.success == true) {
                         $("#modalNew").modal("hide");
@@ -67,8 +64,12 @@ function Category() {
             dataType: 'JSON',
             success: function (data) {
                 $(".input-category").setFields({data: data});
+                if (data.image != null) {
+                    $("#img_category").attr("src", data.image)
+                } else {
+                    $("#img_category").attr("src", "")
+                }
 
-                $("#img_category").attr("src", data.image)
             }
         })
     }

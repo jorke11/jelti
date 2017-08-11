@@ -25,14 +25,31 @@ class CategoryController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
+            $id = $input["id"];
+
             unset($input["id"]);
-            
-            dd($input);
-//            $$user = Auth::User();
-//            $input["users_id"] = 1;
-            $result = Categories::create($input);
-            if ($result) {
-                return response()->json(['success' => true]);
+            $file = array_get($input, 'img');
+            $name = $file->getClientOriginalName();
+
+
+            if ($id != '') {
+                $row = Categories::find($id);
+                $row->fill($input)->save();
+            } else {
+                $id = Categories::create($input)->id;
+            }
+
+            $path = "images/category/" . $id;
+
+            $file->move($path, $name);
+            $path .= "/" . $name;
+            $row = Categories::find($id);
+            $row->image = $path;
+            $row->save();
+
+
+            if ($id) {
+                return response()->json(['success' => true, "header" => $row]);
             } else {
                 return response()->json(['success' => false]);
             }

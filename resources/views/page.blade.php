@@ -248,7 +248,7 @@
             <div class="row">
                 <div class="col-lg-3 col-lg-offset-5"><h1>Nuestros <u>Productos</u></h1></div>
             </div>
-            
+
             <div class="row">
                 <div class="col-lg-5 col-lg-offset-4"><h4 style="color:#cc">Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
             </div>
@@ -270,6 +270,16 @@
                                             </a>
                                         </div>
                                         <?php
+                                        $cont++;
+                                        if ($cont == 4) {
+                                            $cont = 0;
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="row">
+                                            <?php
+                                        }
                                     }
                                     ?>
                                 </div>

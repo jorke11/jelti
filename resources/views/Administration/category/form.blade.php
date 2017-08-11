@@ -6,7 +6,7 @@
                 <h4 class="modal-title">Category</h4>
             </div>
             <div class="modal-body">
-                {!! Form::open(['id'=>'frm']) !!}
+                {!! Form::open(['id'=>'frm','files' => true]) !!}
                 <input type="hidden" id="id" name="id" class="input-category">
                 <div class="row">
                     <div class="col-lg-12">
@@ -29,6 +29,14 @@
                         <div class="form-group">
                             <label for="email">Order</label>
                             <input type="text" class="form-control input-category" id="order" name='order' required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Imagen</label>
+                            <input type="file" class="form-control input-category" id="img" name='img'>
                         </div>
                     </div>
                 </div>

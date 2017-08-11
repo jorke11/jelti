@@ -50,6 +50,23 @@ class ProductController extends Controller {
                 $input["characteristic"] = json_encode($input["characteristic"]);
             }
 
+
+            if (isset($input["characteristic"])) {
+                $input["characteristic"] = json_encode($input["characteristic"]);
+            }
+            if (isset($input["warehouse"])) {
+
+                $input["warehouse"] = json_encode($input["warehouse"]);
+            }
+
+            if ($input["pvp"] == '') {
+                unset($input["pvp"]);
+            }
+            
+            
+            $input["packaging"] = ($input["packaging"] == '') ? 0 : $input["packaging"];
+
+
             $input["status_id"] = (isset($input["status_id"])) ? 1 : 2;
 
             $result = Products::create($input)->id;

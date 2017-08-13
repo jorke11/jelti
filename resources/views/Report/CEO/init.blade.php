@@ -5,6 +5,7 @@
     {!! Form::open(['id'=>'Detail']) !!}
     <div class="panel panel-default">
         <div class="panel-body">
+            
             <div class="col-lg-8 col-center">
                 <div class="col-lg-5">
                     <div class="form-group">

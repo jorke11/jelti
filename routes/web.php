@@ -12,11 +12,13 @@
  */
 
 use App\Models;
+use Models\Administration\Categories;
 
 Auth::routes();
 
 Route::get('/', function () {
-    return view('page');
+    $category = Models\Administration\Categories::where("status_id",1)->orderBy("order","asc")->get();
+    return view('page',compact("category"));
 });
 
 Route::group(["middleware" => ["auth", "client"]], function() {
@@ -546,5 +548,9 @@ Route::get('overview', "Report\ClientController@overview");
 Route::get('overview/getOverview', "Report\ClientController@getOverview");
 
 Route::get('CEO/getSalesUnits', "Report\ClientController@getSalesUnits");
+
+Route::get('operations/getProductWeek', "Report\OperationsController@ProductWeek");
+Route::get('operations/getProductDay', "Report\OperationsController@ProductDay");
+
 
 

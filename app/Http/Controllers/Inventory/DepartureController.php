@@ -90,7 +90,7 @@ class DepartureController extends Controller {
 
 
         if (isset($in["init"]) && $in["init"] != '') {
-            $query->whereBetween("created", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
+            $query->whereBetween("dispatched", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
         }
 
         if ($in["client_id"] == 0 && $in["client_id"] != '') {
@@ -213,7 +213,7 @@ class DepartureController extends Controller {
                 ->where("sale_id", $sale["id"])
                 ->orderBy("order", "asc")
                 ->get();
-
+//        dd($sale);
         $dep = Departures::find($id);
 
         if ($dep->branch_id != '') {
@@ -286,9 +286,10 @@ class DepartureController extends Controller {
         }
 
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
+
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
-        $totalSum = $totalSum - $dep->discount;
-        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
+
+        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost + (- $dep->discount);
 
         $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
         $cli["business"] = $this->tool->cleanText($cli["business"]);
@@ -431,27 +432,33 @@ class DepartureController extends Controller {
 
         try {
             DB::beginTransaction();
-            $dep = Departures::find($id);
+            $row = Departures::find($id);
 
-            $sal = Sales::where("departure_id", $id)->first();
-            if ($sal != null) {
-                $detail = SaleDetail::where("sale_id", $sal->id)->get();
+            $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
-                foreach ($detail as $value) {
-                    $det = SaleDetail::find($value->id);
-                    $det->delete();
+            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched)))) {
+                $sal = Sales::where("departure_id", $id)->first();
+                if ($sal != null) {
+                    $detail = SaleDetail::where("sale_id", $sal->id)->get();
+
+                    foreach ($detail as $value) {
+                        $det = SaleDetail::find($value->id);
+                        $det->delete();
+                    }
+                    $sal->delete();
                 }
-                $sal->delete();
-            }
 
-            $dep->status_id = 1;
-            $dep->save();
-            DB::commit();
-            $dep = Departures::find($id);
-            return response()->json(["success" => true, "header" => $dep]);
+                $row->status_id = 1;
+                $row->save();
+                DB::commit();
+                $dep = Departures::find($id);
+                return response()->json(["success" => true, "header" => $dep]);
+            } else {
+                return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+            }
         } catch (Exception $exp) {
             DB::rollback();
-            return response()->json(["success" => false]);
+            return response()->json(["success" => false], 409);
         }
     }
 
@@ -657,6 +664,8 @@ class DepartureController extends Controller {
                             $sale->dispatched = date("Y-m-d H:i:s");
                             $sale->invoice = $con->consecutive;
                             $sale->save();
+                            $departure->dispatched = $sale->dispatched;
+                            $departure->save();
 
                             $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $con->consecutive);
 
@@ -896,12 +905,18 @@ class DepartureController extends Controller {
     public function cancelInvoice(Request $request, $id) {
         $in = $request->all();
         $row = Departures::Find($id);
-        $row->description = "Cancelador: " . $in["description"] . ", " . $row->description;
-        $row->status_id = 4;
-        $row->save();
 
-        $resp = Departures::FindOrFail($id);
-        return response()->json(['success' => true, "data" => $resp]);
+        $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
+
+        if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched)))) {
+            $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
+            $row->status_id = 4;
+            $row->save();
+            $resp = Departures::FindOrFail($id);
+            return response()->json(['success' => true, "data" => $resp]);
+        } else {
+            return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+        }
     }
 
     public function updateDetail(Request $request, $id) {

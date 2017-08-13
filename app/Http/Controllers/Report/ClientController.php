@@ -11,16 +11,26 @@ use App\Models\Administration\Warehouses;
 use App\Http\Controllers\Report\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Report\CommercialController;
+use Auth;
+use Session;
 
 class ClientController extends Controller {
 
+    public $total;
+    public $subtotal;
+    public $quantity;
+
     public function __construct() {
         $this->middleware("auth");
+        $this->total = 0;
+        $this->subtotal = 0;
+        $this->quantity = 0;
     }
 
     public function index() {
         $warehouse = Warehouses::all();
-        return view("Report.Client.init", compact("warehouse"));
+
+        return view("Report.Client.init",compact("warehouse"));
     }
 
     public function getList(Request $req) {
@@ -43,7 +53,7 @@ class ClientController extends Controller {
                 sum(vdepartures.shipping_cost) shipping
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id 
-            WHERE created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
                 AND client_id<>258
             group by 1,client_id
             ORDER BY 3 DESC
@@ -57,7 +67,7 @@ class ClientController extends Controller {
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) units
                 FROM departures_detail d
                 JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
-                WHERE dep.client_id=" . $value->id . " and dep.created BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'";
+                WHERE dep.client_id=" . $value->id . " and dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'";
             $res2 = DB::select($sql);
             $res[$i]->unidades = $res2[0]->units;
         }
@@ -72,7 +82,7 @@ class ClientController extends Controller {
             SELECT business, (select count(*) +1 from branch_office where stakeholder_id=stakeholder.id) seats,created_at as created
             FROM stakeholder
             WHERE type_stakeholder=1 
-            AND created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'";
+            AND dispatcjed BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'";
 
         $res = DB::select($cli);
 
@@ -96,7 +106,7 @@ class ClientController extends Controller {
             JOIN sales s ON s.id=d.sale_id 
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is Not null
-            AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
+            AND s.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             group by 1,2
             order by 3 desc limit 10";
 
@@ -125,7 +135,7 @@ class ClientController extends Controller {
         $cli = "
             SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
             FROM vdepartures
-            WHERE created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                 $ware
             GROUP BY destination_id,2
             ";
@@ -167,7 +177,7 @@ class ClientController extends Controller {
             JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id
             JOIN categories c ON c.id = p.category_id
-            WHERE product_id IS NOT NULL AND dep.created_at BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
+            WHERE product_id IS NOT NULL AND dep.dispatched BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59'
                 $where
             GROUP bY 1,p.category_id
             ORDER by 3 DESC
@@ -178,6 +188,7 @@ class ClientController extends Controller {
 
     public function profile() {
         $warehouse = Warehouses::all();
+
         return view("Report.Profile.init", compact("warehouse"));
     }
 
@@ -208,17 +219,18 @@ class ClientController extends Controller {
 
     public function getOverview(Request $req) {
         $in = $req->all();
-        $total = session("total");
-        $subtotal = session("subtotal");
-        $quantity = session("quantity");
-        
-//        dd($quantity);
-        
+
+        $this->getSalesUnitsData($in["init"], $in["end"]);
+        $total = $this->total;
+        $subtotal = $this->subtotal;
+        $quantity = $this->quantity;
+
+
         $sql = "
             SELECT s.business
             FROM vdepartures d
             JOIN stakeholder s ON s.id=d.client_id
-            WHERE created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+            WHERE dispatched BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                 group by 1";
 
         $res = DB::select($sql);
@@ -232,7 +244,7 @@ class ClientController extends Controller {
                 SELECT count(*) invoices,sum(subtotalnumeric) as subtotal
                 FROM vdepartures 
                 WHERE status_id=2 
-                AND created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'";
+                AND dispatched BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'";
 
         $res = DB::select($sql);
         $invoices = $res[0]->invoices;
@@ -356,15 +368,21 @@ class ClientController extends Controller {
 
     public function getSalesUnits(Request $req) {
         $in = $req->all();
+        $res = $this->getSalesUnitsData($in["init"], $in["end"]);
+
+        return response()->json(["data" => $res]);
+    }
+
+    function getSalesUnitsData($init, $end) {
         $sql = "
                 SELECT 
-                    to_char(created,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
+                    to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
                     sum(tax5) tax5,sum(shipping_cost) shipping_cost
                 FROM vdepartures 
-                WHERE status_id=2 AND created BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+                WHERE status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id <> 258
                 group by 1";
-
+        
         $res = DB::select($sql);
 
         $total = 0;
@@ -377,8 +395,8 @@ class ClientController extends Controller {
             $sql = "
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                 FROM departures_detail d
-                JOIN departures ON departures.id=d.departure_id and departures.status_id=2
-                WHERE departures.created between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
+                JOIN departures ON departures.id=d.departure_id and departures.status_id=2 and  departures.client_id<>258
+                WHERE departures.dispatched between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";
             $res2 = DB::select($sql);
             $res[$i]->quantity = $res2[0]->quantity;
@@ -387,14 +405,11 @@ class ClientController extends Controller {
             $total += $value->total;
             $quantity += $res[$i]->quantity;
         }
-        $subtotal = ($subtotal == 0) ? 1 : $subtotal;
-        $total = ($total == 0) ? 1 : $total;
-        $quantity = ($quantity == 0) ? 1 : $quantity;
-        session(['subtotal'=> $subtotal]);
-        session(['total'=> $total]);
-        session(['quantity'=> $quantity]);
 
-        return response()->json(["data" => $res]);
+        $this->subtotal = ($subtotal == 0) ? 1 : $subtotal;
+        $this->total = ($total == 0) ? 1 : $total;
+        $this->quantity = ($quantity == 0) ? 1 : $quantity;
+        return $res;
     }
 
 }

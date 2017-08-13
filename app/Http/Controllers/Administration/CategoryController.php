@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Administration\Categories;
 use Session;
 use Mail;
+use App\Models\Administration\Parameters;
 
 class CategoryController extends Controller {
 
@@ -15,7 +16,8 @@ class CategoryController extends Controller {
     }
 
     public function index() {
-        return view("Administration.category.init");
+        $types = Parameters::where("group", "type_category")->get();
+        return view("Administration.category.init", compact("types"));
     }
 
     public function create() {
@@ -25,12 +27,33 @@ class CategoryController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
+            $id = $input["id"];
+
             unset($input["id"]);
-//            $user = Auth::User();
-//            $input["users_id"] = 1;
-            $result = Categories::create($input);
-            if ($result) {
-                return response()->json(['success' => true]);
+            $file = array_get($input, 'img');
+            
+            $input["status_id"] = (isset($input["status_id"])) ? 1 : 0;
+            
+            if ($id != '') {
+                $row = Categories::find($id);
+                $row->fill($input)->save();
+            } else {
+                $id = Categories::create($input)->id;
+            }
+
+            if ($file != null) {
+                $name = $file->getClientOriginalName();
+                $path = "images/category/" . $id . "/";
+                $file->move($path, $name);
+                $path .= $name;
+                $row = Categories::find($id);
+                $row->image = $path;
+                $row->save();
+            }
+
+
+            if ($id) {
+                return response()->json(['success' => true, "data" => $row]);
             } else {
                 return response()->json(['success' => false]);
             }
@@ -45,6 +68,7 @@ class CategoryController extends Controller {
     public function update(Request $request, $id) {
         $category = Categories::FindOrFail($id);
         $input = $request->all();
+        dd($input);
         $result = $category->fill($input)->save();
         if ($result) {
             return response()->json(['success' => true]);

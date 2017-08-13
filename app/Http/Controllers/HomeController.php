@@ -275,7 +275,7 @@ class HomeController extends Controller {
             JOIN products p ON p.id=d.product_id 
             JOIN stakeholder st ON st.id=p.supplier_id
             WHERE d.product_id is NOT null
-            AND dep.created_at BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
+            AND dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
             group by 1,2
             order by 4 desc
             $limit";

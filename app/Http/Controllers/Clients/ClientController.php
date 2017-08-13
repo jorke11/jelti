@@ -257,6 +257,12 @@ class ClientController extends Controller {
             $stakeholder = Branch::Find($id);
         }
 
+        $input["address_send"] = trim($input["address_send"]);
+        $input["address_invoice"] = trim($input["address_invoice"]);
+        $input["web_site"] = trim($input["web_site"]);
+        $input["email"] = trim($input["email"]);
+        $input["business"] = trim($input["business"]);
+        $input["business_name"] = trim($input["business_name"]);
         $input["shipping_cost"] = (isset($input["shipping_cost"])) ? 1 : 0;
         $input["price_special"] = (isset($input["price_special"])) ? 1 : 0;
         $input["user_update"] = Auth::user()->id;
@@ -675,6 +681,8 @@ class ClientController extends Controller {
                             $item = $book->item;
                         } else if ($book->ean != '') {
                             $product = Products::where("bar_code", trim($book->ean))->first();
+                        } else if ($book->sf_code != '') {
+                            $product = Products::where("reference", trim($book->sf_code))->first();
                         }
 
 
@@ -682,7 +690,7 @@ class ClientController extends Controller {
                             if ($item != '') {
                                 $price = PricesSpecial::where("item", $item)->first();
                             }
-
+                            
                             $new["client_id"] = $this->in["client_id"];
                             $new["product_id"] = $product->id;
                             $new["price_sf"] = round($book->price_sf);

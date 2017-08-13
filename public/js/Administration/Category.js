@@ -13,7 +13,10 @@ function Category() {
     this.save = function () {
         toastr.remove();
         var frm = $("#frm");
-        var data = frm.serialize();
+//        var data = frm.serialize();
+        var formData = new FormData($("#frm")[0]);
+
+
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
@@ -22,24 +25,28 @@ function Category() {
 
         if (validate.length == 0) {
             if (id == '') {
-                method = 'POST';
-                url = "category";
                 msg = "Created Record";
             } else {
-                method = 'PUT';
-                url = "category/" + id;
                 msg = "Edited Record";
             }
 
             $.ajax({
-                url: url,
-                method: method,
-                data: data,
+                url: "category",
+                method: "POST",
+                data: formData,
                 dataType: 'JSON',
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (data) {
                     if (data.success == true) {
                         $("#modalNew").modal("hide");
                         $(".input-category").setFields({data: data});
+                        if (data.image != null) {
+                            $("#img_category").attr("src", data.image)
+                        } else {
+                            $("#img_category").attr("src", "")
+                        }
                         table.ajax.reload();
                         toastr.success(msg);
                     }
@@ -62,6 +69,12 @@ function Category() {
             dataType: 'JSON',
             success: function (data) {
                 $(".input-category").setFields({data: data});
+                if (data.image != null) {
+                    $("#img_category").attr("src", data.image)
+                } else {
+                    $("#img_category").attr("src", "")
+                }
+
             }
         })
     }

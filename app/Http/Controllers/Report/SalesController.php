@@ -22,7 +22,8 @@ class SalesController extends Controller {
         $sql = "
             SELECT sum(total) totalsales,sum(quantity) quantity,sum(shipping_cost) as shipping_cost,to_char(created,'YYYY-MM') as month_sales
             FROM vdepartures 
-            WHERE created >= '" . $init . " 00:00' AND created <= '" . $end . " 23:59' and status_id=2
+            WHERE ditpatched >= '" . $init . " 00:00' AND ditpatched <= '" . $end . " 23:59' and status_id=2
+                and client_id<>258
             GROUP BY 4
             ";
 
@@ -34,7 +35,8 @@ class SalesController extends Controller {
             UNION
             SELECT sum(total) totalsales,sum(quantity) quantity,sum(shipping_cost) as shipping_cost,to_char(created,'YYYY-MM') as month_sales
             FROM vdepartures 
-            WHERE created >= '" . $newinit . " 00:00' AND created <= '" . $newend . " 23:59' and status_id=2
+            WHERE created >= '" . $newinit . " 00:00' AND dispatched <= '" . $newend . " 23:59' and status_id=2
+                and client_id<>258
             GROUP BY 4
             ";
         }
@@ -53,10 +55,10 @@ class SalesController extends Controller {
         }
 
         if ($init != '') {
-            $where = " AND s.created >= '" . $init . " 00:00'";
+            $where = " AND s.dispatched >= '" . $init . " 00:00'";
         }
         if ($end != '') {
-            $where .= " AND s.created <= '" . $end . " 23:59'";
+            $where .= " AND s.dispatched <= '" . $end . " 23:59'";
         }
 
         $sql = "
@@ -126,13 +128,13 @@ class SalesController extends Controller {
                 id as departure,created,updated_at,date_part('day' ,updated_at-created) days,
                 date_part('hours' ,updated_at-created) hours
             From departures
-            WHERE status_id=2";
+            WHERE status_id=2 and client_id<>258";
 
         if ($init != '') {
-            $sql .= " AND created >= '" . $init . " 00:00'";
+            $sql .= " AND dispatched >= '" . $init . " 00:00'";
         }
         if ($end != '') {
-            $sql .= " AND created <= '" . $end . " 23:59'";
+            $sql .= " AND dispatched <= '" . $end . " 23:59'";
         }
         $sql .= ' ORDER BY 1 desc';
 

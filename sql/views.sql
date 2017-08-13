@@ -94,7 +94,7 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id and sales_detail.tax=0.05) 
             END as tax5,
             
-           sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost
+           sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost,d.dispatched
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id

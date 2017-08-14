@@ -510,6 +510,8 @@ Route::get('/api/reportClientCities', "Report\ClientController@listCities");
 Route::get('api/reportProductByClient', "Report\CommercialController@getProductByClient");
 
 Route::get('/api/reportResponse', "Report\OperationsController@getResponse");
+Route::get('/operations/getAverageTime', "Report\OperationsController@getAverageTime");
+Route::get('/operations/getShippingCostClient', "Report\OperationsController@getShippingCostClient");
 
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");

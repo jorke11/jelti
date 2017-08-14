@@ -26,16 +26,68 @@ class OperationsController extends Controller {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
         }
 
+        if ($input["client_id"] != 0) {
+            $ware .= " AND d.client_id=" . $input["client_id"];
+        }
+
         $sql = "
-            SELECT 
-                d.id,d.client,d.invoice,d.created,s.dispatched,date_part('day',s.dispatched-d.created) as dias,
-                date_part('hour',s.dispatched-d.created)||':'||CASE WHEN date_part('minutes',s.dispatched-d.created)<=9 THEN date_part('minutes',s.dispatched-d.created) ELSE date_part('minutes',s.dispatched-d.created) END tiempo
+            SELECT d.client,d.invoice,d.client_id,s.dispatched, d.created,s.dispatched - d.created as dias
             FROM vdepartures d 
-            JOIN sales s ON s.departure_id=d.id
-            WHERE d.status_id=2
+            JOIN sales s ON s.departure_id=d.id 
+            WHERE d.status_id=2 
             AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             ";
-//echo $sql;exit;
+        $res = DB::select($sql);
+
+        return response()->json(["data" => $res]);
+    }
+    
+    public function getShippingCostClient(Request $req) {
+        $input = $req->all();
+
+        $ware = "";
+        if ($input["warehouse_id"] != 0) {
+            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $ware .= " AND d.client_id=" . $input["client_id"];
+        }
+
+        $sql = "
+            SELECT d.client,count(*) pedidos,sum(d.shipping_cost) as valor
+            FROM vdepartures d 
+            WHERE d.status_id=2 
+            AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
+            group by 1
+            ";
+        $res = DB::select($sql);
+
+        return response()->json(["data" => $res]);
+    }
+
+    public function getAverageTime(Request $req) {
+        $input = $req->all();
+
+        $ware = "";
+        if ($input["warehouse_id"] != 0) {
+            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $ware .= " AND d.client_id=" . $input["client_id"];
+        }
+
+        $sql = "
+            
+            SELECT st.business,sum(date_part('day',s.dispatched - d.created))/count(*) promedio
+            FROM vdepartures d 
+            JOIN sales s ON s.departure_id=d.id 
+            JOIN stakeholder st ON st.id=d.client_id
+            WHERE d.status_id=2 
+            AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
+            group by 1
+            ";
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);
@@ -47,6 +99,10 @@ class OperationsController extends Controller {
         $ware = "";
         if ($input["warehouse_id"] != 0) {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $ware .= " AND d.client_id=" . $input["client_id"];
         }
 
         $sql = "
@@ -66,6 +122,10 @@ class OperationsController extends Controller {
         $ware = "";
         if ($input["warehouse_id"] != 0) {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $ware .= " AND d.client_id=" . $input["client_id"];
         }
 
         $sql = "

@@ -609,18 +609,18 @@ class DepartureController extends Controller {
             try {
                 DB::beginTransaction();
 
-                $basetax = Parameters::where("group", "tax")->where("code", 2)->first();
-                $tax = Parameters::where("group", "tax")->where("code", 1)->first();
                 $departure = Departures::find($input["id"]);
+
 
                 $val = DeparturesDetail::where("departure_id", $departure["id"])->count();
                 $dep = Sales::where("departure_id", $input["id"])->get();
+
+
 
                 if ($val > 0) {
                     $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
                     if ($val == 0) {
                         if (count($dep) == 0) {
-//                        if (0 == 0) {
 
                             $id = DB::table("sales")->insertGetId(
                                     ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
@@ -631,12 +631,15 @@ class DepartureController extends Controller {
                                     ]
                             );
 
+                            
                             $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
 
                             $cont = 0;
                             $sale = Sales::find($id);
-
+                            
+                            
+                            
                             foreach ($detail as $value) {
                                 $pro = Products::find($value->product_id);
                                 SaleDetail::insert([
@@ -650,9 +653,12 @@ class DepartureController extends Controller {
 
                             $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
 
+                            
+                            
                             if ($departure->invoice == '') {
                                 $departure->invoice = $con->consecutive;
                             }
+                            
 
                             $departure->status_id = 2;
                             $departure->save();
@@ -662,12 +668,12 @@ class DepartureController extends Controller {
                             $total = "$ " . number_format($this->total, 0, ",", ".");
 
                             $sale->dispatched = date("Y-m-d H:i:s");
-                            $sale->invoice = $con->consecutive;
+                            $sale->invoice = $departure->invoice;
                             $sale->save();
                             $departure->dispatched = $sale->dispatched;
                             $departure->save();
 
-                            $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $con->consecutive);
+                            $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $departure->invoice);
 
                             $email = Email::where("description", "invoices")->first();
 
@@ -744,12 +750,15 @@ class DepartureController extends Controller {
                             DB::commit();
                             return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" => $total]);
                         } else {
+                            DB::rollback();
                             return response()->json(["success" => false, "msg" => 'Already sended']);
                         }
                     } else {
+                        DB::rollback();
                         return response()->json(["success" => false, "msg" => 'All item detail must be checked'], 409);
                     }
                 } else {
+                    DB::rollback();
                     return response()->json(["success" => false, "msg" => 'Detail empty'], 409);
                 }
             } catch (Exception $exc) {
@@ -1055,6 +1064,9 @@ class DepartureController extends Controller {
     public function generateInvoice($id) {
         $sale = Sales::where("departure_id", $id)->first();
 
+        $dep = Departures::find($id)->toArray();
+
+
         $detail = DB::table("sales_detail")
                 ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
                 ->join("products", "sales_detail.product_id", "products.id")
@@ -1113,7 +1125,7 @@ class DepartureController extends Controller {
             $cit = Cities::find($ware->city_id);
             $this->subject = "SuperFuds " . date("d/m") . " " . $cli->business . " " . $cit->description . " Despacho de Pedido, factura " . $dep["invoice"];
             $input["city"] = $cit->description;
-            $input["consecutive"] = $dep->id;
+            $input["consecutive"] = $dep["id"];
             $input["invoice"] = $dep["invoice"];
 
             $input["name"] = ucwords($user->name);
@@ -1122,6 +1134,9 @@ class DepartureController extends Controller {
             $input["warehouse"] = $ware->description;
             $input["address"] = $ware->address;
             $input["detail"] = $detail;
+            $input["environment"] = env("APP_ENV");
+            $input["created_at"] = date("Y-m-d");
+            
             $this->mails[] = $user->email;
 
 

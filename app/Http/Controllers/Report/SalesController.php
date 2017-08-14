@@ -22,7 +22,7 @@ class SalesController extends Controller {
         $sql = "
             SELECT sum(total) totalsales,sum(quantity) quantity,sum(shipping_cost) as shipping_cost,to_char(created,'YYYY-MM') as month_sales
             FROM vdepartures 
-            WHERE ditpatched >= '" . $init . " 00:00' AND ditpatched <= '" . $end . " 23:59' and status_id=2
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2
                 and client_id<>258
             GROUP BY 4
             ";
@@ -35,7 +35,7 @@ class SalesController extends Controller {
             UNION
             SELECT sum(total) totalsales,sum(quantity) quantity,sum(shipping_cost) as shipping_cost,to_char(created,'YYYY-MM') as month_sales
             FROM vdepartures 
-            WHERE created >= '" . $newinit . " 00:00' AND dispatched <= '" . $newend . " 23:59' and status_id=2
+            WHERE dispatched BETWEEN '" . $newinit . " 00:00' AND <= '" . $newend . " 23:59' and status_id=2
                 and client_id<>258
             GROUP BY 4
             ";

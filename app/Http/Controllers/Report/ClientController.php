@@ -240,10 +240,10 @@ class ClientController extends Controller {
         }
 
         $sql = "
-                SELECT count(*) invoices,sum(subtotalnumeric) as subtotal
+                SELECT count(vdepartures.*) invoices,sum(subtotalnumeric) as subtotal
                 FROM vdepartures 
                 JOIN stakeholder s ON s.id=vdepartures.client_id and s.type_stakeholder=1
-                WHERE status_id=2 
+                WHERE vdepartures.status_id=2 
                 AND dispatched BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'";
 
         $res = DB::select($sql);

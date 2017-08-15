@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Inventory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
-use App\Models\Inventory\Departures;
+use App\Models\Inventory\Sample;
 use App\Models\Inventory\Orders;
-use App\Models\Inventory\DeparturesDetail;
+use App\Models\Inventory\SampleDetail;
 use App\Models\Inventory\OrdersDetail;
 use App\Models\Invoicing\PurchasesDetail;
 use App\Models\Invoicing\SaleDetail;
@@ -31,7 +31,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Administration\PricesSpecial;
 use App\Http\Controllers\LogController;
 
-class DepartureController extends Controller {
+class SampleController extends Controller {
 
     protected $total;
     protected $tool;
@@ -73,21 +73,19 @@ class DepartureController extends Controller {
         $status = Parameters::where("group", "entry")->get();
         $commercial_id = null;
 
-        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id"));
+        return view("Inventory.sample.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id"));
     }
 
     public function listTable(Request $req) {
         $in = $req->all();
 
-        $query = DB::table('vdepartures');
+        $query = DB::table('vsample');
 
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
 
             $query->where("client_id", $in["client_id"])
                     ->where("status_id", 2);
         }
-
-
 
         if (isset($in["init"]) && $in["init"] != '') {
             $query->whereBetween("dispatched", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
@@ -105,19 +103,9 @@ class DepartureController extends Controller {
             $query->where("warehouse_id", Auth::user()->warehouse_id);
         }
 
-
         if (isset($in["commercial_id"]) && $in["commercial_id"] != '') {
             $query->where("status_id", 2)->where("responsible_id", $in["commercial_id"]);
         }
-
-
-//        if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
-//            $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
-//            
-//            DB::select("")
-//            
-//            dd($pro);
-//        }
 
         return Datatables::queryBuilder($query)->make(true);
     }
@@ -153,7 +141,7 @@ class DepartureController extends Controller {
     }
 
     public function getInvoiceHtml($id) {
-        $sale = Sales::where("departure_id", $id)->first();
+        $sale = Sales::where("sample_id", $id)->first();
         $detail = SaleDetail::select("quantity,tax,description,product_id,products.title product")
                 ->join("products", "Sales.product_id", "products_id")
                 ->where("sale_id", $sale["id"])
@@ -205,7 +193,7 @@ class DepartureController extends Controller {
     public function getInvoice($id) {
         $this->mails = array();
 
-        $sale = Sales::where("departure_id", $id)->first();
+        $sale = Sales::where("sample_id", $id)->first();
         $detail = DB::table("sales_detail")
                 ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
                 ->join("products", "sales_detail.product_id", "products.id")
@@ -214,7 +202,7 @@ class DepartureController extends Controller {
                 ->orderBy("order", "asc")
                 ->get();
 //        dd($sale);
-        $dep = Departures::find($id);
+        $dep = Sample::find($id);
 
         if ($dep->branch_id != '') {
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
@@ -329,13 +317,13 @@ class DepartureController extends Controller {
     public function getRemission($id) {
         $this->mails = array();
 
-        $dep = Departures::find($id);
+        $dep = Sample::find($id);
 
-        $detail = DB::table("departures_detail")
-                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
-                ->join("products", "departures_detail.product_id", "products.id")
+        $detail = DB::table("samples_detail")
+                ->select("samples_detail.quantity", DB::raw("samples_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "samples_detail.value", "samples_detail.units_sf", DB::raw("samples_detail.units_sf * samples_detail.quantity as quantityTotal"), DB::raw("samples_detail.value * samples_detail.quantity * samples_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->join("products", "samples_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("departures_detail.departure_id", $id)
+                ->where("samples_detail.sample_id", $id)
                 ->get();
 
 
@@ -420,7 +408,7 @@ class DepartureController extends Controller {
         ];
 
 
-        $pdf = \PDF::loadView('Inventory.departure.remission', [], $data, [
+        $pdf = \PDF::loadView('Inventory.sample.remission', [], $data, [
                     'title' => 'Invoice']);
 //  
         header('Content-Type: application/pdf');
@@ -432,12 +420,12 @@ class DepartureController extends Controller {
 
         try {
             DB::beginTransaction();
-            $row = Departures::find($id);
+            $row = Sample::find($id);
 
             $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
             if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched)))) {
-                $sal = Sales::where("departure_id", $id)->first();
+                $sal = Sales::where("sample_id", $id)->first();
                 if ($sal != null) {
                     $detail = SaleDetail::where("sale_id", $sal->id)->get();
 
@@ -451,7 +439,7 @@ class DepartureController extends Controller {
                 $row->status_id = 1;
                 $row->save();
                 DB::commit();
-                $dep = Departures::find($id);
+                $dep = Sample::find($id);
                 return response()->json(["success" => true, "header" => $dep]);
             } else {
                 return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
@@ -478,42 +466,34 @@ class DepartureController extends Controller {
                     $emDetail = null;
 
                     $input["header"]["status_id"] = 1;
+                    $input["header"]["insert_id"] = Auth::user()->id;
 
                     if (!isset($input["header"]["shipping_cost"])) {
                         $input["header"]["shipping_cost"] = 0;
                     }
 
-                    $result = Departures::create($input["header"])->id;
+                    $result = Sample::create($input["header"])->id;
 
                     if ($result) {
-                        $resp = Departures::Find($result);
+                        $resp = Sample::Find($result);
 
                         $input["detail"] = array_values(array_filter($input["detail"]));
                         $price_sf = 0;
 
                         foreach ($input["detail"] as $i => $val) {
-                            $special = PricesSpecial::where("product_id", $val["product_id"])
-                                            ->where("client_id", $input["header"]["client_id"])->first();
 
-                            if ($special == null) {
-                                $pro = Products::find($val["product_id"]);
-                            } else {
-                                $pro = DB::table("products")
-                                        ->select("products.id", "prices_special.price_sf", "prices_special.units_sf", 'prices_special.tax', "prices_special.packaging")
-                                        ->join("prices_special", "prices_special.product_id", "products.id")
-                                        ->where("prices_special.id", $special->id)
-                                        ->first();
-                            }
+                            $pro = Products::find($val["product_id"]);
 
-                            $price_sf = $pro->price_sf;
-                            if (Auth::user()->role_id == 1) {
-                                if (isset($val["price_sf"]) && !empty($val["price_sf"])) {
-                                    $price_sf = $val["price_sf"];
-                                }
-                            }
+                            $price_sf = $pro->cost_sf / (($pro->packaging == null) ? 1 : $pro->packaging);
+
+//                            if (Auth::user()->role_id == 1) {
+//                                if (isset($val["price_sf"]) && !empty($val["price_sf"])) {
+//                                    $price_sf = $val["price_sf"];
+//                                }
+//                            }
 
                             $detail["product_id"] = $val["product_id"];
-                            $detail["departure_id"] = $result;
+                            $detail["sample_id"] = $result;
                             $detail["status_id"] = 1;
                             $detail["quantity"] = $val["quantity"];
                             $detail["units_sf"] = $pro->units_sf;
@@ -521,7 +501,7 @@ class DepartureController extends Controller {
                             $detail["tax"] = $pro->tax;
                             $detail["value"] = $price_sf;
 
-                            DeparturesDetail::create($detail);
+                            SampleDetail::create($detail);
                         }
 
                         $listdetail = $this->formatDetail($result);
@@ -548,7 +528,7 @@ class DepartureController extends Controller {
 
                             $cit = Cities::find($ware->city_id);
 
-                            $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $result;
+                            $this->subject = "SuperFüds " . date("d/m") . " [Muestras] para Cliente: " . $client->business . " " . $cit->description . " " . $result;
                             $input["city"] = $cit->description;
 
                             $user = Users::find($input["header"]["responsible_id"]);
@@ -578,7 +558,7 @@ class DepartureController extends Controller {
                             }
 
 
-                            Mail::send("Notifications.departure", $input, function($msj) {
+                            Mail::send("Notifications.sample", $input, function($msj) {
                                 $msj->subject($this->subject);
                                 $msj->to($this->mails);
                             });
@@ -609,69 +589,33 @@ class DepartureController extends Controller {
             try {
                 DB::beginTransaction();
 
-                $departure = Departures::find($input["id"]);
+                $departure = Sample::find($input["id"]);
+                $val = SampleDetail::where("sample_id", $departure["id"])->count();
 
 
-                $val = DeparturesDetail::where("departure_id", $departure["id"])->count();
-                $dep = Sales::where("departure_id", $input["id"])->get();
-
+                $dep = Sales::where("id", $input["id"])->where("status_id", 2)->get();
                 if ($val > 0) {
-                    $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
+                    $val = SampleDetail::where("sample_id", $departure["id"])->where("status_id", 1)->count();
                     if ($val == 0) {
                         if (count($dep) == 0) {
 
-                            $id = DB::table("sales")->insertGetId(
-                                    ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
-                                        "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
-                                        "address" => $departure["address"], "phone" => $departure["phone"], "status_id" => $departure["status_id"],
-                                        "created" => $departure["created"], "shipping_cost" => $departure["shipping_cost"],
-                                        "created_at" => date("Y-m-d H:i"), "description" => $departure["description"]
-                                    ]
-                            );
+                            $con = Sample::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
 
-                            
-                            $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
-
-
-                            $cont = 0;
-                            $sale = Sales::find($id);
-                            
-                            
-                            
-                            foreach ($detail as $value) {
-                                $pro = Products::find($value->product_id);
-                                SaleDetail::insert([
-                                    "sale_id" => $id, "product_id" => $value->product_id,
-                                    "category_id" => $value->category_id, "quantity" => $value->quantity,
-                                    "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
-                                    "account_id" => 1, "order" => $cont, "type_nature" => 1
-                                ]);
-                                $cont++;
-                            }
-
-                            $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
-
-                            
-                            
                             if ($departure->invoice == '') {
-                                $departure->invoice = $con->consecutive;
+                                $consecutive = ($con == null) ? 1 : $con->consecutive;
+                                $departure->invoice = $consecutive;
                             }
-                            
 
                             $departure->status_id = 2;
+                            $departure->dispatched = date("Y-m-d H:i:s");
+
                             $departure->save();
 
                             $detail = $this->formatDetail($input["id"]);
-                            $departure = Departures::find($input["id"]);
+                            $departure = Sample::find($input["id"]);
                             $total = "$ " . number_format($this->total, 0, ",", ".");
 
-                            $sale->dispatched = date("Y-m-d H:i:s");
-                            $sale->invoice = $departure->invoice;
-                            $sale->save();
-                            $departure->dispatched = $sale->dispatched;
-                            $departure->save();
-
-                            $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $departure->invoice);
+                            $this->log->logClient($departure->client_id, "Genero Petición de Muestra # " . $departure->invoice);
 
                             $email = Email::where("description", "invoices")->first();
 
@@ -683,7 +627,7 @@ class DepartureController extends Controller {
 
                                 $ware = Warehouses::find($departure->warehouse_id);
                                 $client = Stakeholder::find($departure->client_id);
-                                $sales = Sales::where("departure_id", $departure->id)->first();
+                                $sales = Sales::find($departure->id);
                                 $this->mails = array();
 
                                 $userware = Users::find($ware->responsible_id);
@@ -697,7 +641,7 @@ class DepartureController extends Controller {
 
                                 $cit = Cities::find($ware->city_id);
                                 $commercial = Users::where("id", $departure->responsible_id)->first();
-                                $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $departure->id;
+                                $this->subject = "SuperFüds " . date("d/m") . " [Muestras] para Cliente: " . $client->business . " " . $cit->description . " " . $departure->id . " [Despachado]";
                                 $input["city"] = $cit->description;
 
                                 $user = Users::find($departure->responsible_id);
@@ -711,8 +655,8 @@ class DepartureController extends Controller {
                                 $input["document"] = $client->document;
                                 $input["address_send"] = $client->address_send;
                                 $input["address_invoice"] = $client->address_invoice;
-                                $input["dispatched"] = $sales->dispatched;
-                                $input["expiration"] = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sales->dispatched)));
+                                $input["dispatched"] = $departure->dispatched;
+                                $input["expiration"] = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($departure->dispatched)));
 
                                 $input["responsible"] = $commercial->name . " " . $commercial->last_name;
                                 $input["observation"] = $departure->description;
@@ -739,7 +683,7 @@ class DepartureController extends Controller {
                                     $this->mails = Auth::User()->email;
                                 }
 
-                                Mail::send("Notifications.invoice", $input, function($msj) {
+                                Mail::send("Notifications.sampleDep", $input, function($msj) {
                                     $msj->subject($this->subject);
                                     $msj->to($this->mails);
                                 });
@@ -830,8 +774,8 @@ class DepartureController extends Controller {
                 }
 
 
-                DeparturesDetail::insert([
-                    'departure_id' => $id, "value" => $value->value, "product_id" => $value->product_id, "category_id" => $value->category_id,
+                SampleDetail::insert([
+                    'sample_id' => $id, "value" => $value->value, "product_id" => $value->product_id, "category_id" => $value->category_id,
                     "quantity" => $value->generate
                 ]);
 
@@ -839,26 +783,26 @@ class DepartureController extends Controller {
                 OrdersDetail::where("id", $value->id)->update(["generate" => $value->generate, "pending" => $value->quantity]);
             }
         }
-        $resp = Departures::FindOrFail($id);
-        $detail = DeparturesDetail::where("departure_id", $id)->get();
+        $resp = Sample::FindOrFail($id);
+        $detail = SampleDetail::where("sample_id", $id)->get();
 
         return response()->json(["success" => true, "header" => $resp, "detail" => $detail]);
     }
 
     public function edit($id) {
-        $entry = Departures::FindOrFail($id);
+        $entry = Sample::FindOrFail($id);
         $detail = $this->formatDetail($id);
         $total = "$ " . number_format($this->total, 0, ",", ".");
         return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);
     }
 
     public function formatDetail($id) {
-        $detail = DB::table("departures_detail")
-                ->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "departures_detail.tax")
-                ->join("products", "departures_detail.product_id", "products.id")
+        $detail = DB::table("samples_detail")
+                ->select("samples_detail.id", "samples_detail.status_id", DB::raw("coalesce(samples_detail.description,'') as comment"), "samples_detail.real_quantity", "samples_detail.quantity", "samples_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "samples_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "samples_detail.tax")
+                ->join("products", "samples_detail.product_id", "products.id")
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id")
-                ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
-                ->where("departure_id", $id)
+                ->join("parameters", "samples_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
+                ->where("sample_id", $id)
                 ->orderBy("id", "asc")
                 ->get();
 
@@ -888,7 +832,7 @@ class DepartureController extends Controller {
     }
 
     public function getDetail($id) {
-        $detail = DeparturesDetail::FindOrFail($id);
+        $detail = SampleDetail::FindOrFail($id);
         return response()->json($detail);
     }
 
@@ -898,11 +842,11 @@ class DepartureController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $entry = Departures::Find($id);
+        $entry = Sample::Find($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = Departures::FindOrFail($id);
+            $resp = Sample::FindOrFail($id);
             return response()->json(['success' => true, "data" => $resp]);
         } else {
             return response()->json(['success' => false]);
@@ -911,7 +855,7 @@ class DepartureController extends Controller {
 
     public function cancelInvoice(Request $request, $id) {
         $in = $request->all();
-        $row = Departures::Find($id);
+        $row = Sample::Find($id);
 
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
@@ -919,7 +863,7 @@ class DepartureController extends Controller {
             $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
             $row->status_id = 4;
             $row->save();
-            $resp = Departures::FindOrFail($id);
+            $resp = Sample::FindOrFail($id);
             return response()->json(['success' => true, "data" => $resp]);
         } else {
             return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
@@ -929,9 +873,9 @@ class DepartureController extends Controller {
     public function updateDetail(Request $request, $id) {
         $input = $request->all();
 
-        $header = Departures::find($input["departure_id"]);
+        $header = Sample::find($input["sample_id"]);
 
-        $entry = DeparturesDetail::FindOrFail($id);
+        $entry = SampleDetail::FindOrFail($id);
 
         $special = PricesSpecial::where("product_id", $input["product_id"])
                         ->where("client_id", $header->client_id)->first();
@@ -952,7 +896,7 @@ class DepartureController extends Controller {
         if (Auth::user()->role_id == 4) {
             unset($input["real_quantity"]);
             $result = $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["departure_id"]);
+            $resp = $this->formatDetail($input["sample_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
         }
@@ -967,7 +911,7 @@ class DepartureController extends Controller {
             $input["real_quantity"] = 0;
             $input["description"] = "Inventario no disponible, guarda 0";
             $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["departure_id"]);
+            $resp = $this->formatDetail($input["sample_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
         }
@@ -977,7 +921,7 @@ class DepartureController extends Controller {
             if ($available["quantity"] >= $input["real_quantity"]) {
                 $result = $entry->fill($input)->save();
                 if ($result) {
-                    $resp = $this->formatDetail($input["departure_id"]);
+                    $resp = $this->formatDetail($input["sample_id"]);
                     $total = "$ " . number_format($this->total, 0, ",", ".");
                     return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
                 } else {
@@ -990,18 +934,18 @@ class DepartureController extends Controller {
         } else {
 
             $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["departure_id"]);
+            $resp = $this->formatDetail($input["sample_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
         }
     }
 
     public function destroy($id) {
-        $row = Departures::Find($id);
+        $row = Sample::Find($id);
         $row->delete();
-        $detail = DeparturesDetail::where("departure_id", $row->id)->get();
+        $detail = SampleDetail::where("sample_id", $row->id)->get();
         foreach ($detail as $value) {
-            $det = DeparturesDetail::find($value->id);
+            $det = SampleDetail::find($value->id);
             $det->delete();
         }
 
@@ -1013,11 +957,11 @@ class DepartureController extends Controller {
     }
 
     public function destroyDetail($id) {
-        $entry = DeparturesDetail::FindOrFail($id);
+        $entry = SampleDetail::FindOrFail($id);
         $result = $entry->delete();
         if ($result) {
-            $header = Departures::find($entry["departure_id"]);
-            $resp = $this->formatDetail($entry["departure_id"]);
+            $header = Sample::find($entry["sample_id"]);
+            $resp = $this->formatDetail($entry["sample_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, 'total' => $total]);
         } else {
@@ -1038,11 +982,11 @@ class DepartureController extends Controller {
             $input["units_sf"] = $product->units_sf;
             $input["tax"] = $product->tax;
 
-            $result = DeparturesDetail::create($input);
+            $result = SampleDetail::create($input);
             if ($result) {
-                $resp = $this->formatDetail($input["departure_id"]);
+                $resp = $this->formatDetail($input["sample_id"]);
                 $total = "$ " . number_format($this->total, 0, ",", ".");
-                $header = Departures::find($input["departure_id"]);
+                $header = Sample::find($input["sample_id"]);
                 return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
             } else {
                 return response()->json(['success' => false]);
@@ -1051,8 +995,8 @@ class DepartureController extends Controller {
     }
 
     public function generateRemission($id) {
-        $row = Departures::find($id);
-        $con = Departures::select(DB::raw("count(*) +1 consecutive"))->whereNotNull("remission")->first();
+        $row = Sample::find($id);
+        $con = Sample::select(DB::raw("count(*) +1 consecutive"))->whereNotNull("remission")->first();
         $row->status_id = 5;
         $row->remission = $con->consecutive;
         $row->save();
@@ -1060,9 +1004,9 @@ class DepartureController extends Controller {
     }
 
     public function generateInvoice($id) {
-        $sale = Sales::where("departure_id", $id)->first();
+        $sale = Sales::where("sample_id", $id)->first();
 
-        $dep = Departures::find($id)->toArray();
+        $dep = Sample::find($id)->toArray();
 
 
         $detail = DB::table("sales_detail")
@@ -1134,7 +1078,7 @@ class DepartureController extends Controller {
             $input["detail"] = $detail;
             $input["environment"] = env("APP_ENV");
             $input["created_at"] = date("Y-m-d");
-            
+
             $this->mails[] = $user->email;
 
 

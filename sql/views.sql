@@ -103,7 +103,7 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
             JOIN cities dest ON dest.id = d.destination_id
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
-            ORDER BY d.status_id,d.id asc
+            ORDER BY d.status_id,d.id asc;
 
 create view vcities as 
 select c.id,c.description city,d.description department,c.code

@@ -4,15 +4,15 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDeparturesTable extends Migration {
-
+class CreateSampleTable extends Migration
+{
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up() {
-        Schema::create('departures', function (Blueprint $table) {
+        Schema::create('samples', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('warehouse_id');
             $table->integer('responsible_id');
@@ -22,11 +22,11 @@ class CreateDeparturesTable extends Migration {
             $table->integer('order_id')->nullable();
             $table->integer('branch_id')->nullable();
             $table->string('address');
-            $table->string('description');
-            $table->string('transport');
+            $table->string('description')->nullable();
+            $table->string('transport')->nullable();
             $table->string('phone');
             $table->dateTime('created');
-            $table->dateTime('date_dispatched');
+            $table->dateTime('date_dispatched')->nullable();
             $table->integer('status_id');
             $table->integer('insert_id');
             $table->integer('update_id')->nullable();
@@ -39,8 +39,7 @@ class CreateDeparturesTable extends Migration {
             $table->text('voucher')->nullable();
             $table->integer('discount')->nullable();
             $table->timestamps();
-            $table->dateTime('dispatched');
-            $table->unique('invoice');
+            $table->dateTime('dispatched')->nullable();
         });
     }
 
@@ -50,7 +49,6 @@ class CreateDeparturesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('departures');
+        Schema::dropIfExists('samples');
     }
-
 }

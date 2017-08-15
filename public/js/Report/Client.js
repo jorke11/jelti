@@ -8,8 +8,8 @@ function Client() {
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
-//
-//
+
+
         $("#btnSearch").click(function () {
             objCli.table();
             objCli.tableTarget();

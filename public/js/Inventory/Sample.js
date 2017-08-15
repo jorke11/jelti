@@ -916,7 +916,7 @@ function Sale() {
             "processing": true,
             "serverSide": true,
             ajax: {
-                url: "/api/listDeparture",
+                url: "/api/listSample",
                 data: param
             },
             "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],

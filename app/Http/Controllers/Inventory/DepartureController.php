@@ -998,12 +998,12 @@ class DepartureController extends Controller {
 
     public function destroy($id) {
         $row = Departures::Find($id);
-        $row->delete();
         $detail = DeparturesDetail::where("departure_id", $row->id)->get();
         foreach ($detail as $value) {
             $det = DeparturesDetail::find($value->id);
             $det->delete();
         }
+        $row->delete();
 
         if ($id) {
             return response()->json(['success' => true]);

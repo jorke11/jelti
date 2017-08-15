@@ -195,7 +195,7 @@ Route::put('/departure/{id}/cancelInvoice', ['uses' => 'Inventory\DepartureContr
 Route::get('/departure/{id}/{init}/{end}/', ['uses' => 'Inventory\DepartureController@index']);
 Route::get('/departure/{id}/{init}/{end}/{product}/{supplier}', ['uses' => 'Inventory\DepartureController@index']);
 Route::get('/departure/{id}/{init}/{end}/{user_id}', ['uses' => 'Inventory\DepartureController@index']);
-Route::get('/api/Sample', 'Inventory\DepartureController@listTable');
+Route::get('/api/listDeparture', 'Inventory\DepartureController@listTable');
 Route::put('/departure/{id}/reverseInvoice', 'Inventory\DepartureController@reverse');
 Route::get('/departure/testDepNotification/{id}', 'Inventory\DepartureController@testDepNotification');
 Route::get('/departure/testInvoiceNotification/{id}', 'Inventory\DepartureController@testInvoiceNotification');
@@ -227,7 +227,7 @@ Route::put('/sample/{id}/cancelInvoice', ['uses' => 'Inventory\SampleController@
 Route::get('/sample/{id}/{init}/{end}/', ['uses' => 'Inventory\SampleController@index']);
 Route::get('/sample/{id}/{init}/{end}/{product}/{supplier}', ['uses' => 'Inventory\SampleController@index']);
 Route::get('/sample/{id}/{init}/{end}/{user_id}', ['uses' => 'Inventory\SampleController@index']);
-Route::get('/api/listDeparture', 'Inventory\SampleController@listTable');
+Route::get('/api/listSample', 'Inventory\SampleController@listTable');
 Route::put('/sample/{id}/reverseInvoice', 'Inventory\SampleController@reverse');
 Route::get('/sample/testDepNotification/{id}', 'Inventory\SampleController@testDepNotification');
 Route::get('/sample/testInvoiceNotification/{id}', 'Inventory\SampleController@testInvoiceNotification');

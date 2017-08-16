@@ -59,10 +59,10 @@ class CommercialController extends Controller {
             select u.name ||' '|| u.last_name as name,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::int y,
             sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::money totalFormated
             from departures_detail d
-            JOIN departures dep ON dep.id=s.departure_id AND dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
             JOIN stakeholder sta ON sta.id=dep.client_id and sta.type_stakeholder=1
-            JOIN users u ON u.id=s.responsible_id
-            WHERE s.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            JOIN users u ON u.id=dep.responsible_id
+            WHERE dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             group by 1
             order by 2 desc";
         $res = DB::select($sql);
@@ -97,7 +97,7 @@ class CommercialController extends Controller {
                 $query = "
                     SELECT coalesce(SUM(quantity),0) as quantity,coalesce(sum(quantity * value * units_sf),0) as facturado
                     FROM departures_detail 
-                    JOIN departures dep ON dep.id=sales.departure_id and dep.status_id=2
+                    JOIN departures dep ON dep.id=departures_detail.departure_id and dep.status_id=2
                     WHERE product_id = " . $value->id . " and dep.responsible_id=" . $val->id . "
                     ";
 

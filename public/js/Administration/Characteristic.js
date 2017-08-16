@@ -18,6 +18,7 @@ function Category() {
         toastr.remove();
         var frm = $("#frm");
         var data = frm.serialize();
+        var formData = new FormData($("#frm")[0]);
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
@@ -30,16 +31,19 @@ function Category() {
                 url = "characteristic";
                 msg = "Created Record";
             } else {
-                method = 'PUT';
+                method = 'PATCH';
                 url = "characteristic/" + id;
                 msg = "Edited Record";
             }
 
             $.ajax({
-                url: url,
-                method: method,
-                data: data,
+                url: "characteristic",
+                method: "POST",
+                data: formData,
                 dataType: 'JSON',
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (data) {
                     if (data.success == true) {
                         $("#modalNew").modal("hide");

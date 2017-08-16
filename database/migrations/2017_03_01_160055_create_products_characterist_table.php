@@ -15,6 +15,9 @@ class CreateProductsCharacteristTable extends Migration {
         Schema::create('products_characteristic', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
+            $table->string('image')->nullable();
+            $table->integer('order')->nullable();
+            $table->integer('type_subcategory_id')->nullable();
             $table->timestamps();
         });
     }

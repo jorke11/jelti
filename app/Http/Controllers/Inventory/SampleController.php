@@ -510,7 +510,7 @@ class SampleController extends Controller {
 
                         $client = Stakeholder::find($input["header"]["client_id"]);
 
-                        $email = Email::where("description", "departures")->first();
+                        $email = Email::where("description", "muestras")->first();
 
                         if ($email != null) {
                             $emDetail = EmailDetail::where("email_id", $email->id)->get();
@@ -617,7 +617,7 @@ class SampleController extends Controller {
 
                             $this->log->logClient($departure->client_id, "Genero Petición de Muestra # " . $departure->invoice);
 
-                            $email = Email::where("description", "invoices")->first();
+                            $email = Email::where("description", "muestras")->first();
 
                             if ($email != null) {
                                 $emDetail = EmailDetail::where("email_id", $email->id)->get();

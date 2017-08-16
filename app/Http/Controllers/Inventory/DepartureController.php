@@ -629,15 +629,15 @@ class DepartureController extends Controller {
                                     ]
                             );
 
-                            
+
                             $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
 
 
                             $cont = 0;
                             $sale = Sales::find($id);
-                            
-                            
-                            
+
+
+
                             foreach ($detail as $value) {
                                 $pro = Products::find($value->product_id);
                                 SaleDetail::insert([
@@ -651,12 +651,12 @@ class DepartureController extends Controller {
 
                             $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
 
-                            
-                            
+
+
                             if ($departure->invoice == '') {
                                 $departure->invoice = $con->consecutive;
                             }
-                            
+
 
                             $departure->status_id = 2;
                             $departure->save();
@@ -915,7 +915,8 @@ class DepartureController extends Controller {
 
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
-        if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched)))) {
+
+        if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || Auth::user()->role_id == 1) {
             $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
             $row->status_id = 4;
             $row->save();
@@ -1134,7 +1135,7 @@ class DepartureController extends Controller {
             $input["detail"] = $detail;
             $input["environment"] = env("APP_ENV");
             $input["created_at"] = date("Y-m-d");
-            
+
             $this->mails[] = $user->email;
 
 

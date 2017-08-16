@@ -1,4 +1,4 @@
-function Client() {
+function Sample() {
     this.init = function () {
         this.table();
         this.tableTarget();
@@ -33,7 +33,7 @@ function Client() {
             destroy: true,
             order: [[2, "desc"]],
             ajax: {
-                url: "/api/reportClient",
+                url: "/api/reportSample",
                 data: obj,
             },
             scrollX: true,
@@ -90,7 +90,7 @@ function Client() {
         obj.warehouse_id = $("#Detail #warehouse_id").val();
 
         $.ajax({
-            url: "/api/reportClientProduct",
+            url: "/api/reportSampleProduct",
             method: 'GET',
             data: obj,
             success: function (data) {
@@ -283,7 +283,7 @@ function Client() {
         return $('#tblProductbyCategory').DataTable({
             destroy: true,
             ajax: {
-                url: "/api/reportProductByCategory",
+                url: "/api/reportProductByCategorySample",
                 data: obj,
             },
             order: [[1, "desc"]],
@@ -307,5 +307,5 @@ function Client() {
     }
 }
 
-var objCli = new Client();
+var objCli = new Sample();
 objCli.init();

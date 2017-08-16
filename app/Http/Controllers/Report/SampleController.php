@@ -14,7 +14,7 @@ use App\Http\Controllers\Report\CommercialController;
 use Auth;
 use Session;
 
-class ClientController extends Controller {
+class SampleController extends Controller {
 
     public $total;
     public $subtotal;
@@ -30,7 +30,7 @@ class ClientController extends Controller {
     public function index() {
         $warehouse = Warehouses::all();
 
-        return view("Report.Client.init", compact("warehouse"));
+        return view("Report.Samples.init", compact("warehouse"));
     }
 
     public function getList(Request $req) {
@@ -49,11 +49,11 @@ class ClientController extends Controller {
     public function getListClient($init, $end, $where = '', $limit = '') {
         $sql = "
             SELECT 
-                stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,sum(tax19) tax19,sum(tax5) tax5,
-                sum(vdepartures.shipping_cost) shipping
-            FROM vdepartures
-            JOIN stakeholder ON stakeholder.id=vdepartures.client_id and type_stakeholder=1
-            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
+                stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,
+                sum(vsample.shipping_cost) shipping
+            FROM vsample
+            JOIN stakeholder ON stakeholder.id=vsample.client_id and type_stakeholder=1
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vsample.status_id=2  $where
                 AND client_id<>258
             group by 1,client_id
             ORDER BY 3 DESC
@@ -65,8 +65,8 @@ class ClientController extends Controller {
         foreach ($res as $i => $value) {
             $sql = "
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) units
-                FROM departures_detail d
-                JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+                FROM samples_detail d
+                JOIN vsample dep ON dep.id=d.sample_id and dep.status_id=2
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder = 1
                 WHERE dep.client_id=" . $value->id . " and dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'";
             $res2 = DB::select($sql);
@@ -98,15 +98,17 @@ class ClientController extends Controller {
         }
 
         $cli = "
-            select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
-            from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id 
+            SELECT 
+                d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+                sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
+            FROM samples_detail d
+            JOIN vsample dep ON dep.id=d.sample_id 
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is Not null
             AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware and dep.status_id=2
-            group by 1,2
-            order by 3 desc limit 10";
-
+            GROUP BY 1,2
+            ORDER BY 3 desc 
+            LIMIT 10";
 
         $res = DB::select($cli);
 
@@ -121,7 +123,7 @@ class ClientController extends Controller {
 
         return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity]);
     }
-
+    
     public function listCities(Request $req) {
         $input = $req->all();
         $ware = "";
@@ -131,9 +133,9 @@ class ClientController extends Controller {
 
         $cli = "
             SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
-            FROM vdepartures
-            JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
-            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
+            FROM vsample
+            JOIN stakeholder ON stakeholder.id=vsample.client_id and stakeholder.type_stakeholder = 1 
+            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vsample.status_id=2
                 $ware
             GROUP BY destination_id,2
             ";
@@ -171,8 +173,8 @@ class ClientController extends Controller {
         $cli = "
             SELECT c.description category,sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
             sum(d.value * d.units_sf * d.quantity) subtotal 
-            FROM departures_detail d 
-            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id=2
+            FROM samples_detail d 
+            JOIN vsample dep ON dep.id=d.sample_id and dep.status_id=2
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id
             JOIN categories c ON c.id = p.category_id
@@ -194,7 +196,7 @@ class ClientController extends Controller {
     public function profileClient($client_id) {
         $client = DB::table("vclient")->where("id", $client_id)->first();
 
-        $detail = DB::table("vdepartures")->where("client_id", $client->id)->orderBy("id", "asc")->get();
+        $detail = DB::table("vsample")->where("client_id", $client->id)->orderBy("id", "asc")->get();
         $resta = 0;
 
         for ($i = 1; $i < count($detail); $i++) {
@@ -227,7 +229,7 @@ class ClientController extends Controller {
 
         $sql = "
             SELECT s.business
-            FROM vdepartures d
+            FROM vsample d
             JOIN stakeholder s ON s.id=d.client_id and s.type_stakeholder=1
             WHERE dispatched BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                 group by 1";
@@ -240,10 +242,10 @@ class ClientController extends Controller {
         }
 
         $sql = "
-                SELECT count(vdepartures.*) invoices,sum(subtotalnumeric) as subtotal
-                FROM vdepartures 
-                JOIN stakeholder s ON s.id=vdepartures.client_id and s.type_stakeholder=1
-                WHERE vdepartures.status_id=2 
+                SELECT count(vsample.*) invoices,sum(subtotalnumeric) as subtotal
+                FROM vsample 
+                JOIN stakeholder s ON s.id=vsample.client_id and s.type_stakeholder=1
+                WHERE vsample.status_id=2 
                 AND dispatched BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'";
 
         $res = DB::select($sql);
@@ -376,11 +378,11 @@ class ClientController extends Controller {
     function getSalesUnitsData($init, $end) {
         $sql = "
                 SELECT 
-                    to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
-                    sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost
-                FROM vdepartures 
-                JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
-                WHERE vdepartures.status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
+                    to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(total) total,
+                    sum(vsample.shipping_cost) shipping_cost
+                FROM vsample 
+                JOIN stakeholder ON stakeholder.id=vsample.client_id and stakeholder.type_stakeholder=1
+                WHERE vsample.status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id <> 258
                 group by 1";
 
@@ -395,10 +397,10 @@ class ClientController extends Controller {
 
             $sql = "
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
-                FROM departures_detail d
-                JOIN departures ON departures.id=d.departure_id and departures.status_id=2 and  departures.client_id<>258
-                JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
-                WHERE departures.dispatched between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
+                FROM samples_detail d
+                JOIN vsample ON vsample.id=d.sample_id and vsample.status_id=2 and  vsample.client_id<>258
+                JOIN stakeholder ON stakeholder.id=vsample.client_id and stakeholder.type_stakeholder=1
+                WHERE vsample.dispatched between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";
             $res2 = DB::select($sql);
             $res[$i]->quantity = $res2[0]->quantity;

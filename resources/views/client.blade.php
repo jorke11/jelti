@@ -63,12 +63,23 @@
 
 </style>
 <div class="row">
-    <div class="col-lg-10 col-lg-offset-1">
+    <div class="col-lg-8 col-lg-offset-1">
         <h1>Shopping</h1>
+    </div>
+    <div class="col-lg-3">
+        {{auth()->user()->name}}, <a href="{{ url('/logout') }}"
+           onclick="event.preventDefault();
+                   document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+        </a>
+
+        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-10 col-lg-offset-1"><hr style="border-top: 1px solid #ccc"></div>
+    <div class="col-lg-9 col-lg-offset-1"><hr style="border-top: 1px solid #ccc"></div>
 </div>
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1">

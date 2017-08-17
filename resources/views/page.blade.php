@@ -261,7 +261,7 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-6 col-lg-offset-4 text-center"><h4 style="color:#cc">Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
+                <div class="col-lg-6 col-lg-offset-3 text-center"><h4 style="color:#cc">Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
             </div>
             <br>
             <br>

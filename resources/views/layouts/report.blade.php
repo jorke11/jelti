@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="{{ asset('assets/images/icon.png') }}">
         <title>SuperFüds</title>
-        <script>var PATH='{{url("/")}}'</script>
+        <script>var PATH = '{{url("/")}}'</script>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
         {!!Html::script('/vendor/jquery-ui.js')!!}
 
@@ -211,6 +211,9 @@
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Reportes <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/reportSales">Ventas</a></li>
+                                            <li><a href="/reportPurchase">Compras</a></li>
+                                            <li><a href="/profileClient">Perfil del Cliente</a></li>
+                                            <li><a href="/overview">Resumen CEO</a></li>
                                         </ul>
                                     </li>
 
@@ -267,7 +270,7 @@
                                         <li>
                                             <a href="{{ url('/logout') }}"
                                                onclick="event.preventDefault();
-                                                       document.getElementById('logout-form').submit();">
+                                                               document.getElementById('logout-form').submit();">
                                                 Logout
                                             </a>
 

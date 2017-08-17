@@ -922,6 +922,7 @@ function Sale() {
                 url: "/api/listDeparture",
                 data: param
             },
+            "lengthMenu": [[30,100,300,-1],[30,100,300,'All']],
             columns: [
                 {
                     className: 'details-control',

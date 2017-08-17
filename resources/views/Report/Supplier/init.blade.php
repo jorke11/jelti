@@ -43,8 +43,6 @@
     {!!Form::close()!!}
 </div>
 
-
-
 <div class="row">
     <!-- Nav tabs -->
     <div class="col-lg-6">

@@ -8,6 +8,7 @@ function Profile() {
         $("#btnSearch").click(function () {
             obj.getClient($("#Detail #client_id :selected").val());
             obj.tableProduct();
+            obj.table();
         });
     }
     this.getClient = function (id) {

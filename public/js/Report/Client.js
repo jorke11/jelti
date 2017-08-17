@@ -5,23 +5,22 @@ function Client() {
         this.tableProduct();
         this.tableCities();
         this.tableProductByCategory();
+        this.tableRepeatOrder();
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
-//
-//
+
         $("#btnSearch").click(function () {
             objCli.table();
             objCli.tableTarget();
             objCli.tableProduct();
             objCli.tableCities();
             objCli.tableProductByCategory();
-        })
+        });
     }
 
     this.getDetail = function (client_id) {
         window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
-
     }
 
     this.table = function () {
@@ -55,6 +54,7 @@ function Client() {
             ]
         });
     }
+    
     this.tableTarget = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
@@ -79,7 +79,6 @@ function Client() {
                         return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
                     }
                 }
-
             ],
         });
     }

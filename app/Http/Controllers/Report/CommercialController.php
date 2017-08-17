@@ -21,17 +21,20 @@ class CommercialController extends Controller {
         $input = $req->all();
 
         $res = $this->getListCommercial($input["init"], $input["end"]);
+//        echo "asd";exit;
         return response()->json(["data" => $res]);
     }
 
     function getListCommercial($init, $end) {
         $sql = "
-            SELECT responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
+            SELECT vdepartures.responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
             from vdepartures 
-            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and status_id=2 AND client_id <> 258
+            JOIN stakeholder sta ON sta.id=vdepartures.client_id and sta.type_stakeholder=1
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id=2 AND client_id <> 258
             group by 1,responsible
             order by 3 DESC
             ";
+        
         $res = DB::select($sql);
 
         foreach ($res as $i => $value) {
@@ -39,6 +42,7 @@ class CommercialController extends Controller {
                    SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                    FROM departures_detail d
                    JOIN vdepartures dep ON dep.id=d.departure_id and client_id <> 258 and dep.status_id=2
+                   JOIN stakeholder s ON s.id=dep.client_id and s.type_stakeholder=1
                    WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.responsible_id=" . $value->responsible_id;
             
             $res2 = DB::select($sql);
@@ -54,11 +58,11 @@ class CommercialController extends Controller {
         $sql = "
             select u.name ||' '|| u.last_name as name,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::int y,
             sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::money totalFormated
-            from sales_detail d
-            JOIN sales s ON s.id=d.sale_id
-            JOIN departures dep ON dep.id=s.departure_id AND dep.status_id=2
-            JOIN users u ON u.id=s.responsible_id
-            WHERE s.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            from departures_detail d
+            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
+            JOIN stakeholder sta ON sta.id=dep.client_id and sta.type_stakeholder=1
+            JOIN users u ON u.id=dep.responsible_id
+            WHERE dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             group by 1
             order by 2 desc";
         $res = DB::select($sql);
@@ -92,10 +96,9 @@ class CommercialController extends Controller {
             foreach ($users as $val) {
                 $query = "
                     SELECT coalesce(SUM(quantity),0) as quantity,coalesce(sum(quantity * value * units_sf),0) as facturado
-                    FROM sales_detail 
-                    JOIN sales ON sales.id=sales_detail.sale_id
-                    JOIN departures dep ON dep.id=sales.departure_id and dep.status_id=2
-                    WHERE product_id = " . $value->id . " and sales.responsible_id=" . $val->id . "
+                    FROM departures_detail 
+                    JOIN departures dep ON dep.id=departures_detail.departure_id and dep.status_id=2
+                    WHERE product_id = " . $value->id . " and dep.responsible_id=" . $val->id . "
                     ";
 
                 $result = DB::select($query);
@@ -136,9 +139,9 @@ class CommercialController extends Controller {
                 sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantityproducts,
                 sum(d.quantity * d.value * d.units_sf) as total
             FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id
-            JOIN stakeholder st ON st.id=dep.client_id
+            JOIN stakeholder st ON st.id=dep.client_id and dep.status_id=2 and st.type_stakeholder=1
             WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $client_id
             GROUP BY 1,2,dep.client_id
             ORDER BY 1 ASC, 3 DESC

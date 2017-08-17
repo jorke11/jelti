@@ -81,7 +81,38 @@ class StockController extends Controller {
                     ->first();
         }
 
-        
+
+        $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 3)->sum(DB::raw("quantity * units_supplier"));
+        $departure = DB::table("departures_detail")->where("product_id", $id)->where("status_id", 3)->sum("quantity");
+        $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");
+        $sales = DB::table("sales_detail")->where("product_id", $id)->whereNotNull("product_id")->sum("quantity");
+        $quantity = $entry - $sales;
+
+        return response()->json(["response" => $response, "quantity" => $quantity]);
+    }
+
+    public function getDetailSample(Request $req, $id) {
+        $in = $req->all();
+        $special = null;
+//        if (isset($in["client_id"]) && $in["client_id"] != '') {
+//            $special = PricesSpecial::where("product_id", $id)->where("client_id", $in["client_id"])->first();
+//        }
+//        if ($special) {
+//            $response = DB::table("products")
+//                            ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
+//                            ->join("categories", "categories.id", "=", "products.category_id")
+//                            ->join("prices_special", "prices_special.product_id", "=", "products.id")
+//                            ->where("products.id", $id)
+//                            ->where("prices_special.client_id", $in["client_id"])->first();
+//        } else {
+        $response = DB::table("products")
+                ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier", "products.margin_sf", "products.packaging")
+                ->leftjoin("categories", "categories.id", "=", "products.category_id")
+                ->where("products.id", $id)
+                ->first();
+//        }
+
+
         $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 3)->sum(DB::raw("quantity * units_supplier"));
         $departure = DB::table("departures_detail")->where("product_id", $id)->where("status_id", 3)->sum("quantity");
         $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");

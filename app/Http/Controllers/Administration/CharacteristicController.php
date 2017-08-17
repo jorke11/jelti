@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administration;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administration\Characteristic;
+use App\Models\Administration\Parameters;
 use Session;
 
 class CharacteristicController extends Controller {
@@ -14,7 +15,8 @@ class CharacteristicController extends Controller {
     }
 
     public function index() {
-        return view("Administration.characteristic.init");
+        $types = Parameters::where("group", "type_category")->get();
+        return view("Administration.characteristic.init", compact("types"));
     }
 
     public function create() {
@@ -24,14 +26,34 @@ class CharacteristicController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            unset($input["id"]);
-//            $user = Auth::User();
-//            $input["users_id"] = 1;
-            $result = Characteristic::create($input);
-            if ($result) {
+            try {
+
+                $id = $input["id"];
+                unset($input["id"]);
+                $file = array_get($input, 'img');
+
+                $input["status_id"] = (isset($input["status_id"])) ? 1 : 0;
+                if ($id != '') {
+                    $row = Characteristic::find($id);
+                    $row->fill($input)->save();
+                } else {
+                    $id = Characteristic::create($input)->id;
+                }
+
+                if ($file != null) {
+                    $name = $file->getClientOriginalName();
+                    $path = "images/characteristic/" . $id . "/";
+                    $file->move($path, $name);
+                    $path .= $name;
+                    $row = Characteristic::find($id);
+                    $row->img = $path;
+                    $row->save();
+                }
+
                 return response()->json(['success' => true]);
-            } else {
-                return response()->json(['success' => false]);
+            } catch (Exception $ex) {
+
+                return response()->json(['success' => true, "msg" => "Wrong"], 500);
             }
         }
     }
@@ -43,7 +65,10 @@ class CharacteristicController extends Controller {
 
     public function update(Request $request, $id) {
         $category = Characteristic::FindOrFail($id);
+
+
         $input = $request->all();
+
         $result = $category->fill($input)->save();
         if ($result) {
             return response()->json(['success' => true]);

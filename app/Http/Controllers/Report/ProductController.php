@@ -48,14 +48,15 @@ class ProductController extends Controller {
          sum(d.value * d.quantity * d.units_sf) as subtotal 
             FROM departures_detail d 
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+            JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id 
-            WHERE dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' and dep.client_id<>258
+            WHERE dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' and dep.client_id<>258 and p.category_id<>-1
             $where
             GROUP by 1,2
             ORDER BY 4 DESC
             $limit
             ";
-//        echo $sql;exit;
+        
         return DB::select($sql);
     }
 
@@ -74,7 +75,8 @@ class ProductController extends Controller {
             destination_id,(
                             SELECT sum(d.value* d.quantity * d.units_sf) 
                             FROM departures_detail d
-                            JOIN departures ON departures.id=d.departure_id and departures.status_id=2                            
+                            JOIN departures ON departures.id=d.departure_id and departures.status_id=2      
+                            JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
                             JOIN products p ON p.id=d.product_id
                             WHERE departures.destination_id=dep.destination_id
                             AND departures.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'

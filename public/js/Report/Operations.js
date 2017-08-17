@@ -3,20 +3,26 @@ function Operations() {
         this.table();
         this.tableProductWeek();
         this.tableProductDay();
-//        this.tableProduct();
-//        this.tableCities();
-//        this.tableProductByCategory();
+        this.tableClientAverage();
+        this.tableShipping_cost();
+
+        var init = $("#Detail #finit").val();
+        var end = $("#Detail #fend").val();
+
+        $(".input-operations").cleanFields();
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
-//
-//
+
+        $("#Detail #finit").val(init);
+        $("#Detail #fend").val(end);
+
         $("#btnSearch").click(function () {
             objCli.table();
-            objCli.tableTarget();
-            objCli.tableProduct();
-            objCli.tableCities();
-            objCli.tableProductByCategory();
+            objCli.tableProductWeek();
+            objCli.tableProductDay();
+            objCli.tableClientAverage();
+//            objCli.tableShipping_cost();
         })
     }
 
@@ -24,11 +30,73 @@ function Operations() {
         window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
     }
 
+    this.tableShipping_cost = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        
+        return $('#tblShipping_cost').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/operations/getShippingCostClient",
+                data: obj,
+            },
+            scrollX: true,
+            columns: [
+                {data: "client"},
+                {data: "pedidos"},
+                {data: "valor",render: $.fn.dataTable.render.number(',', '.', 0)},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
+    }
+    
+    this.tableClientAverage = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        return $('#tblAverageClient').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/operations/getAverageTime",
+                data: obj,
+            },
+            scrollX: true,
+            columns: [
+                {data: "business"},
+                {data: "promedio"},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
+    }
+
     this.table = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        
         return $('#tbl').DataTable({
             destroy: true,
             order: [[2, "desc"]],
@@ -42,14 +110,7 @@ function Operations() {
                 {data: "invoice"},
                 {data: "created"},
                 {data: "dispatched"},
-                {data: "dias", render: function (data, row, full) {
-                        var html = '';
-                        if (full.dias > 0) {
-                            html+=full.dias + " días"
-                        }
-                        return html;
-                    }
-                },
+                {data: "dias"},
             ],
             aoColumnDefs: [
                 {
@@ -62,11 +123,15 @@ function Operations() {
             ]
         });
     }
+
+
     this.tableProductWeek = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        
         return $('#tblproductweek').DataTable({
             destroy: true,
             ajax: {
@@ -90,11 +155,14 @@ function Operations() {
             ],
         });
     }
+
     this.tableProductDay = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        
         return $('#tblproductday').DataTable({
             destroy: true,
             ajax: {
@@ -117,12 +185,14 @@ function Operations() {
             ],
         });
     }
-    
+
     this.tableProduct = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        
         $.ajax({
             url: "/api/reportClientProduct",
             method: 'GET',
@@ -215,6 +285,8 @@ function Operations() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        
         $.ajax({
             url: "/api/reportClientCities",
             method: 'GET',
@@ -309,6 +381,8 @@ function Operations() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        
         return $('#tblProductbyCategory').DataTable({
             destroy: true,
             ajax: {

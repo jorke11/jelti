@@ -11,7 +11,7 @@
                                 <td>Factura</td>
                                 <td>Fecha Creado</td>
                                 <td>Fecha Facturado</td>
-                                <td>Tiempoº</td>
+                                <td>Tiempo</td>
                             </tr>
                         </thead>
                         <tbody></tbody>

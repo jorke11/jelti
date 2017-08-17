@@ -40,7 +40,7 @@ class CreateDeparturesTable extends Migration {
             $table->integer('discount')->nullable();
             $table->timestamps();
             $table->dateTime('dispatched');
-            $table->unique('email');
+            $table->unique('invoice');
         });
     }
 

@@ -41,7 +41,9 @@ class Stakeholder extends Model {
         "user_insert",
         "user_update",
         "send_city_id",
-        "sector_id"
+        "sector_id",
+        "password",
+        "login_web"
     ];
 
 }

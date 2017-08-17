@@ -22,13 +22,7 @@ class Client {
      * @return mixed
      */
     public function handle($request, Closure $next) {
-        
-        if (in_array(Auth::User()->role_id, array(1, 4, 5, 6, 7))) {
-            return $next($request);
-        }else{
-            return $next("/client");
-        }
-        
+        return $next($request);
     }
 
 }

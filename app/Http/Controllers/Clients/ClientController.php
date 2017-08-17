@@ -15,6 +15,7 @@ use Datatables;
 use App\Models\Administration\Branch;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Administration\Products;
+use App\Models\Security\Users;
 
 class ClientController extends Controller {
 
@@ -250,6 +251,17 @@ class ClientController extends Controller {
     public function update(Request $request, $id) {
         $input = $request->all();
 
+        $input["login_web"] = (isset($input["login_web"])) ? 1 : 0;
+
+        if (isset($input["login_web"])) {
+            $input["login_web"] = 1;
+            $user = Users::where("email", $input["email"])->first();
+        } else {
+            $input["login_web"] = 0;
+        }
+
+
+
         if (!isset($input["stakeholder_id"])) {
             $input["stakeholder_id"] = null;
             $stakeholder = Stakeholder::Find($id);
@@ -279,6 +291,21 @@ class ClientController extends Controller {
                 }
             }
             $result = $stakeholder->fill($input)->save();
+        }
+
+        $new["name"] = $input["business"];
+        $new["email"] = $input["email"];
+        $new["document"] = $input["document"];
+        $new["password"] = $input["password"];
+        $new["status_id"] = $input["status_id"];
+        $new["role_id"] = 2;
+
+        if ($user == null) {
+            Users::create($new);
+        } else {
+            $users = Users::find($user->id);
+            $users->fill($new)->save();
+            
         }
 
         if ($result) {
@@ -690,7 +717,7 @@ class ClientController extends Controller {
                             if ($item != '') {
                                 $price = PricesSpecial::where("item", $item)->first();
                             }
-                            
+
                             $new["client_id"] = $this->in["client_id"];
                             $new["product_id"] = $product->id;
                             $new["price_sf"] = round($book->price_sf);

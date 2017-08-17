@@ -17,10 +17,14 @@ use Models\Administration\Categories;
 Auth::routes();
 
 Route::get('/', function () {
-    $category = Models\Administration\Categories::where("status_id",1)->orderBy("order","asc")->get();
-    return view('page',compact("category"));
-
+    $category = Models\Administration\Categories::where("status_id", 1)->orderBy("order", "asc")->get();
+    $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
+    return view('page', compact("category","subcategory"));
 });
+
+Route::get("/admins/login", "AdministratorsController@showLoginForm");
+Route::post("/admins/login", "AdministratorsController@login");
+Route::get("/admins/home", "AdministratorsController@index");
 
 Route::group(["middleware" => ["auth", "client"]], function() {
     Route::get('/home', 'HomeController@index');
@@ -597,6 +601,3 @@ Route::get('CEO/getSalesUnits', "Report\ClientController@getSalesUnits");
 
 Route::get('operations/getProductWeek', "Report\OperationsController@ProductWeek");
 Route::get('operations/getProductDay', "Report\OperationsController@ProductDay");
-
-
-

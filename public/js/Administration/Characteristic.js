@@ -68,8 +68,13 @@ function Category() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                $("#frm #id").val(data.id);
-                $("#frm #description").val(data.description);
+                $(".input-characteristic").setFields({data: data});
+                console.log(data.img)
+                if (data.img != null) {
+                    $("#img_category").attr("src", data.img)
+                } else {
+                    $("#img_category").attr("src", "")
+                }
             }
         })
     }

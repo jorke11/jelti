@@ -47,6 +47,8 @@ class CreateStakeholderTable extends Migration {
             $table->integer('lead_time')->nullable();
             $table->integer("user_insert");
             $table->integer("user_update")->nullable();
+            $table->integer("login_web")->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }

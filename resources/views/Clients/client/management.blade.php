@@ -179,13 +179,13 @@
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="address">Flete *</label>
-                                            <input type="checkbox" id="shipping_cost" name="shipping_cost" class="form-control input-clients" checked disabled>
+                                            <input type="checkbox" id="shipping_cost" name="shipping_cost" class="input-clients" checked disabled>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="address">Precio Especial *</label>
-                                            <input type="checkbox" id="special_price" name="special_price" class="form-control input-clients " disabled>
+                                            <input type="checkbox" id="special_price" name="special_price" class="input-clients " disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -202,7 +202,12 @@
                                             <input type="password" id="confirmation" class="form-control input-clients" disabled>
                                         </div>
                                     </div>
-                                   
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label for="address">Login Web</label>
+                                            <input type="checkbox" id="login_web" name="login_web" class="input-clients">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

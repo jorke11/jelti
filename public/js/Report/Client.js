@@ -290,16 +290,9 @@ function Client() {
             "pageLength": 20,
             columns: [
                 {data: "category"},
-<<<<<<< HEAD
-                {data: "unidades"},
-=======
                 {data: "quantity"},
-<<<<<<< HEAD
->>>>>>> 650145155499dc3076dc97cb37c72e8068000f62
                 {data: "facturado", render: $.fn.dataTable.render.number('.', ',', 0)},
-=======
                 {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 0)},
->>>>>>> fc45251c6461ca6015fbe7ea81848805ee546ea5
             ],
             aoColumnDefs: [
                 {

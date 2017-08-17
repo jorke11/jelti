@@ -2,34 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Session;
-//use App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Administration\Comment;
-use App\Models\Security\Users;
-use App\Models\Security\Roles;
-use App\Models\Administration\Warehouses;
-use App\Models\Administration\Categories;
-use App\Models\Administration\Characteristic;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use DB;
 
-class HomeController extends Controller {
+class AdministratorsController extends Controller {
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() {
-        $this->middleware('auth');
+    use AuthenticatesUsers;
+
+    protected $guard = 'admins';
+    protected $redirectTo = '/admins/home';
+
+    public function showLoginForm() {
+        
+        return view('administrators.login');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function login(Request $request) {
+
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if ($this->attemptLogin($request)) {
+            return $this->sendLoginResponse($request);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    protected function validateLogin(Request $request) {
+        $this->validate($request, [
+            $this->username() => 'required', 'password' => 'required',
+        ]);
+    }
+
+    public function username() {
+        return 'email';
+    }
+
+    public function authenticated(Request $request, $user) {
+        redirect("admins/area");
+    }
+
     public function index() {
 
         $sql = "
@@ -137,10 +166,7 @@ class HomeController extends Controller {
             $samples = $samples[0];
         }
 
-
-        $category = Categories::where("status_id", 1)->orderBy("order", "asc")->get();
-        $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
-
+//        dd($purchase);
         if (Auth::user()->status_id == 3) {
             $users = Auth::user();
             $roles = Roles::where("id", $users->role_id)->get();
@@ -152,9 +178,10 @@ class HomeController extends Controller {
             }
         } else {
             if (Auth::user()->role_id == 2) {
-                return view('client', compact("product", "client", "supplier", "commercial", "samples","category","subcategory"));
+                return view('client', compact("product", "client", "supplier", "commercial", "samples"));
             } else {
-                return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples","category"));
+                return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples"));
+//                return view('dashboard');
             }
         }
     }

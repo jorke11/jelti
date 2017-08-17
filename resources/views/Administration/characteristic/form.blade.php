@@ -7,12 +7,12 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frm','files'=>true]) !!}
-                <input type="hidden" id="id" name="id" class="input-characteristc">
+                <input type="hidden" id="id" name="id" class="input-characteristic">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Description</label>
-                            <input type="text" class="form-control input-characteristc" id="description" name='description' required>
+                            <input type="text" class="form-control input-characteristic" id="description" name='description' required>
                         </div>
                     </div>
                 </div>
@@ -49,6 +49,13 @@
                             <label for="email">Imagen</label>
                             <input type="file" class="form-control input-characteristic" id="img" name='img'>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="#" class="thumbnail">
+                            <img alt="" id="img_category">
+                        </a>
                     </div>
                 </div>
                 {!!Form::close()!!}

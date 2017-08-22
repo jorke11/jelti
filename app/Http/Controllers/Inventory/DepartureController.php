@@ -433,7 +433,8 @@ class DepartureController extends Controller {
 
             $ayer = date("Y-m-d", strtotime("-5 day", strtotime(date("Y-m-d"))));
 
-            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched)))) {
+
+            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 5) {
                 $sal = Sales::where("departure_id", $id)->first();
                 if ($sal != null) {
                     $detail = SaleDetail::where("sale_id", $sal->id)->get();

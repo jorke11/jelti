@@ -143,6 +143,7 @@ class CommercialController extends Controller {
             JOIN products p ON p.id=d.product_id
             JOIN stakeholder st ON st.id=dep.client_id and dep.status_id=2 and st.type_stakeholder=1
             WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $client_id
+                AND p.category_id<>-1
             GROUP BY 1,2,dep.client_id
             ORDER BY 1 ASC, 3 DESC
             ";

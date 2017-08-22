@@ -291,7 +291,7 @@ function Client() {
             columns: [
                 {data: "category"},
                 {data: "quantity"},
-                {data: "facturado", render: $.fn.dataTable.render.number('.', ',', 0)},
+//                {data: "facturado", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             aoColumnDefs: [

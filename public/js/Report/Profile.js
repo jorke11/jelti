@@ -8,13 +8,36 @@ function Profile() {
         $("#btnSearch").click(function () {
             obj.getClient($("#Detail #client_id :selected").val());
             obj.tableProduct();
-            obj.table();
+            obj.tableRepurchase($("#Detail #client_id :selected").val());
         });
     }
+    this.tableRepurchase = function (id) {
+        var param = {};
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+        $.ajax({
+            url: "profile/" + id + "/getRepurchase",
+            method: 'GET',
+            data: param,
+            dataType: 'json',
+            success: function (data) {
+                var html = '<tr><td>Productos</td>';
+                $(data.products[0].quantity_dep, function (i, val) {
+                    html += '<td>' + i + ' : ' + val + '</td>';
+                })
+                html += '<tr>';
+                $("#tblRepurchase thead").html(html);
+
+                console.log(data.products[0].quantity_dep);
+            }
+        });
+    }
+
     this.getClient = function (id) {
         $.ajax({
             url: "/profile/" + id + "/getClient",
             method: 'GET',
+            dataType: 'json',
             success: function (data) {
                 $("#client_until").html(data.client.created_at);
                 $("#responsible").html(data.client.responsible);

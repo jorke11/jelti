@@ -594,6 +594,7 @@ Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@a
 
 Route::get('/profileClient', "Report\ClientController@profile");
 Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
+Route::get('profile/{id}/getRepurchase', "Report\ClientController@getRepurchase");
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 

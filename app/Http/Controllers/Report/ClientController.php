@@ -204,6 +204,33 @@ class ClientController extends Controller {
         return response()->json(["client" => $client, "frecuency" => ceil($resta / count($detail))]);
     }
 
+    public function getRepurchase(Request $req, $client_id) {
+        $in = $req->all();
+        $sql = " select id,title from products where category_id<>-1";
+        $pro = DB::select($sql);
+
+        $sql = "select id from vdepartures where status_id=2 AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59' and client_id=" . $client_id;
+        $dep = DB::select($sql);
+
+        $arrDep = array();
+        foreach ($pro as $i => $value) {
+            foreach ($dep as $val) {
+                $sql = "SELECT count(*) total
+                        from departures_detail d
+                        JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+                        where departure_id=" . $val->id . " and product_id = " . $value->id . " 
+                        AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+                        AND dep.client_id=" . $client_id;
+                $quantity = DB::select($sql);
+                $quantity = $quantity[0];
+                $arrDep[$val->id] = $quantity->total;
+            }
+            $pro[$i]->quantity_dep = $arrDep;
+        }
+
+        return response()->json(["products" => $pro]);
+    }
+
     public function dias_transcurridos($fecha_i, $fecha_f) {
         $dias = (strtotime($fecha_i) - strtotime($fecha_f)) / 86400;
         $dias = abs($dias);

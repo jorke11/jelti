@@ -139,7 +139,7 @@ class SampleController extends Controller {
                 $ware
             GROUP BY destination_id,2
             ";
-        echo $cli;exit;
+      
 
         $res = DB::select($cli);
 

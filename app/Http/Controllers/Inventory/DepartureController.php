@@ -87,8 +87,6 @@ class DepartureController extends Controller {
                     ->where("status_id", 2);
         }
 
-
-
         if (isset($in["init"]) && $in["init"] != '') {
             $query->whereBetween("dispatched", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
         }
@@ -434,7 +432,7 @@ class DepartureController extends Controller {
             DB::beginTransaction();
             $row = Departures::find($id);
 
-            $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
+            $ayer = date("Y-m-d", strtotime("-5 day", strtotime(date("Y-m-d"))));
 
             if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched)))) {
                 $sal = Sales::where("departure_id", $id)->first();

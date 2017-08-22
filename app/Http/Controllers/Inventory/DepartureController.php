@@ -427,7 +427,6 @@ class DepartureController extends Controller {
     }
 
     public function reverse($id) {
-
         try {
             DB::beginTransaction();
             $row = Departures::find($id);

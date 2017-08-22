@@ -31,17 +31,19 @@ class SeekController extends Controller {
 
     public function getCity(Request $req) {
         $in = $req->all();
-        $query = Cities::select("id", DB::raw("initcap(description) as text"));
+        $query = Cities::select("cities.id", DB::raw("initcap(cities.description || ' '||departments.description) as text"))
+                ->join("departments","departments.id","cities.department_id")
+                ;
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->city_id)->get();
         } else if (isset($in["id"])) {
             if ($in["id"] != '') {
-                $query->where("id", $in["id"])->get();
+                $query->where("cities.id", $in["id"])->get();
             } else {
                 $query->where("id", -1)->get();
             }
         } else {
-            $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+            $query->where(DB::raw("cities.description || ' '||departments.description"), "ilike", "%" . $in["q"] . "%")->get();
         }
 
         $result = $query->get();

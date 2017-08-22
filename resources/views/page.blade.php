@@ -74,6 +74,44 @@
                 background: #fffcf8;
             }
 
+            #img-main{
+                background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;
+                background-size: cover;
+                color:white;
+                /*height:100%;*/
+                height:800px;
+                /*text-align: center;*/
+                display: flex;
+                /*align-items: center;*/
+            }
+
+            @media screen and (min-width:1340px) {
+                #img-main{
+                    background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;
+                    background-size: cover;
+                    color:white;
+                    height:600px;
+                    display: flex;
+                }
+            }
+
+            #img-marketplace{
+                background: url('assets/images/marketplace.png') center center no-repeat;
+                background-size: auto;
+                color:white;
+                height:200px;
+                display: flex;
+                margin-top: 180px;
+            }
+            #img-superfuds{
+                background: url('assets/images/sf_blanco.png') center center no-repeat;
+                background-size: 155px;
+
+                color:white;
+                height:100px;
+                display: flex;
+            }
+
         </style>
         {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
 
@@ -120,97 +158,110 @@
             </div><!-- /.container-fluid -->
         </nav>
 
+        <style>
 
-        <div class="container-fluid">
-            <!--<div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
-            <div class="row">
-                <div style="width:100%;height:800px;background-image:url({{ asset('assets/images/fondo_init.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
-                    <div class="row">
-                        <div class="col-lg-5" style="padding-top:200px;padding-left: 40px;">
-                            <div style="width:380px;height:230px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
-                        </div>
-                        <div class="col-lg-3 col-lg-offset-3" >
-                            <div class="row" style="padding-bottom: 20px;padding-top: 20px;">
-                                <div class="col-lg-10 col-lg-offset-2">
-                                    <div style="width:70%;height:100px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>
-                                </div>
-                            </div>
+
+        </style>
+        <section>
+            <div class="container-fluid">
+                <!--<div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
+                <div class="row">
+                    <div id="img-main">
+                        <div class="col-lg-12">
                             <div class="row">
-                                <div class="panel" style="background: rgba(255, 255, 255, 0.6);border: 1px solid #fff">
+                                <div class="col-lg-5">
+                                    <!--<div style="width:380px;height:230px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>-->
+                                    <div id="img-marketplace"></div>
+                                </div>
+                                <div class="col-lg-4 col-lg-offset-2">
+                                    <div class="row">
+                                        <div class="col-lg-12 text-center">
+                                            <!--<div style="width:70%;height:100px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>-->
+                                            <div id="img-superfuds"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="panel" style="background: rgba(255, 255, 255, 0.6);border: 1px solid #fff">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <p class="text-center white-label">Registrate como <br>
+                                                            Negocio o Cliente</p>
+                                                    </div>
+                                                </div>
+                                                <form>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label for="email" class="white-label">Compañía</label>
+                                                                <input type="email" class="form-control" id="email" placeholder="Compañía">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label for="email" class="white-label">Nombre</label>
+                                                                <input type="email" class="form-control" id="email" placeholder="Nombre">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label for="email" class="white-label">Email</label>
+                                                                <input type="email" class="form-control" id="email" placeholder="Email">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label for="email" class="white-label">Telefono</label>
+                                                                <input type="email" class="form-control" id="email" placeholder="Telefono">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="checkbox">
+                                                                <label class="white-check"><input type="checkbox" > Acepto terminos de servicio | Leer más</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-lg-offset-4">
+                                                            <button type="submit" class="btn btn-success">Registrarse</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
 
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <p class="text-center white-label">Registrate como <br>
-                                                    Negocio o Cliente</p>
+
                                             </div>
                                         </div>
-                                        <form>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <label for="email" class="white-label">Compañía</label>
-                                                        <input type="email" class="form-control" id="email" placeholder="Compañía">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <label for="email" class="white-label">Nombre</label>
-                                                        <input type="email" class="form-control" id="email" placeholder="Nombre">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <label for="email" class="white-label">Email</label>
-                                                        <input type="email" class="form-control" id="email" placeholder="Email">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <label for="email" class="white-label">Telefono</label>
-                                                        <input type="email" class="form-control" id="email" placeholder="Telefono">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="checkbox">
-                                                        <label class="white-check"><input type="checkbox" > Acepto terminos de servicio | Leer más</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-3 col-lg-offset-4">
-                                                    <button type="submit" class="btn btn-success">Registrarse</button>
-                                                </div>
-                                            </div>
-                                        </form>
-
-
                                     </div>
+
+
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
+                    <!--<img id="estirada" style="top: 0; left: 0; width: 100%; height: 90%" src="{{ asset('assets/images/fondo1_1260X555.png') }}" />-->
+                      <!--<img src="{{ asset('assets/images/fondo1_1280X683.png') }}">-->
                 </div>
-                <!--<img id="estirada" style="top: 0; left: 0; width: 100%; height: 90%" src="{{ asset('assets/images/fondo1_1260X555.png') }}" />-->
-                  <!--<img src="{{ asset('assets/images/fondo1_1280X683.png') }}">-->
             </div>
-        </div>
-
+        </section>
+        <br>
+        <br>
         <div class="container-fluid">
             <br>
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-5"><h3>Industria de alimentos <u>Saludables</u></h3></div>
+                <div class="col-lg-12"><h1 class="text-center" style="color:#13b671">Industria de alimentos <u>Saludables</u></h1></div>
             </div>
+            <br>
+            <br>
+            <br>
+            <br>
             <br>
             <br>
             <div class="row">
@@ -244,6 +295,10 @@
                         </div>
                     </div>
                     <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                     <div class="row">
                         <div class="col-lg-10 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
                     </div>
@@ -252,16 +307,17 @@
 
             </div>
             <br>
+            <br>
 
         </div>
         <div class="container-fluid" style="background-color:#fffcf8">
             <br>
             <div class="row">
-                <div class="col-lg-4 col-lg-offset-4"><h1>Nuestros <u>Productos</u></h1></div>
+                <div class="col-lg-12"><h1 class="text-center">Nuestros <u>Productos</u></h1></div>
             </div>
 
             <div class="row">
-                <div class="col-lg-6 col-lg-offset-3 text-center"><h4 style="color:#cc">Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
+                <div class="col-lg-12"><h4 class="text-center" style="color:#cc">Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
             </div>
             <br>
             <br>
@@ -392,65 +448,68 @@
             <br>
 
             <div class="row green-bk">
-                <div class="row">
-                    <div class="col-lg-12"><h2 class="text-center" style="color:white"><u>Negocios</u></h2></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12"><p class="text-center" style="color:white">Concéntrate en tu producto, nosotros nos encargamos del negocio.</p></div>
-                </div>
-                <div class="row">
-                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12"><h2 class="text-center" style="color:white"><u>Negocios</u></h2></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12"><p class="text-center" style="color:white">Concéntrate en tu producto, nosotros nos encargamos del negocio.</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="myCarousel" class="carousel slide" data-ride="carousel">
 
-                        <ol class="carousel-indicators">
-                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                            <li data-target="#myCarousel" data-slide-to="1"></li>
-                        </ol>
+                                <ol class="carousel-indicators">
+                                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                                </ol>
 
 
-                        <div class="carousel-inner">
-                            <div class="item active">
+                                <div class="carousel-inner">
+                                    <div class="item active">
 
-                                <div class="header-text hidden-xs">
-                                    <div class="col-md-12 col-center">
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <h3>
-                                            <h2 class="text-center" style="color:#ffffff">
-                                                1 Factura para 300+ Productos Saludables de 40+ Marcas.</h2>
-                                        </h3>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
+                                        <div class="header-text hidden-xs">
+                                            <div class="col-md-12 col-center">
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <h3>
+                                                    <h2 class="text-center" style="color:#ffffff">
+                                                        1 Factura para 300+ Productos Saludables de 40+ Marcas.</h2>
+                                                </h3>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                            </div>
+                                        </div> 
                                     </div>
-                                </div> 
+                                </div>
+
+
+                                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+
+                                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
                             </div>
                         </div>
-
-
-                        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-
-                        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
                     </div>
+
                 </div>
-
-
             </div>
         </div>                        
         <br>
@@ -527,69 +586,71 @@
 
         <div class="container-fluid">
             <div class="row green-bk">
-                <div class="row">
-                    <div class="col-lg-12"><h2 class="text-center" style="color:white"><u>Proveedores</u></h2></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12"><p class="text-center" style="color:white">Entregamos todas tus marcas favoritas directamente a tu negocio.</p></div>
-                </div>
-                <div class="row">
-                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                        <!-- Indicators -->
-                        <ol class="carousel-indicators">
-                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                            <li data-target="#myCarousel" data-slide-to="1"></li>
-                        </ol>
-
-                        <!-- Wrapper for slides -->
-                        <div class="carousel-inner">
-                            <div class="item active">
-
-                                <div class="header-text hidden-xs">
-                                    <div class="col-md-12 col-center">
-                                        <br>
-                                        <br>
-                                        <br>
-
-                                        <h3>
-                                            <h2 class="text-center" style="color:#ffffff">
-                                                ¡Tus ventas se dispararán! Distribuimos a más de 400 puntos en 16 ciudades.
-                                        </h3>
-
-
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                    </div>
-                                </div><!-- /header-text -->
-                            </div>
-                        </div>
-
-                        <!-- Left and right controls -->
-                        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-
-                        <!-- Left and right controls -->
-                        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12"><h2 class="text-center" style="color:white"><u>Proveedores</u></h2></div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12"><p class="text-center" style="color:white">Entregamos todas tus marcas favoritas directamente a tu negocio.</p></div>
+                    </div>
+                    <div class="row">
+                        <div id="myCarousel2" class="carousel slide" data-ride="carousel">
+
+                            <ol class="carousel-indicators">
+                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#myCarousel" data-slide-to="1"></li>
+                            </ol>
+
+
+                            <div class="carousel-inner">
+                                <div class="item active">
+
+                                    <div class="header-text hidden-xs">
+                                        <div class="col-md-12 col-center">
+                                            <br>
+                                            <br>
+                                            <br>
+
+                                            <h3>
+                                                <h2 class="text-center" style="color:#ffffff">
+                                                    ¡Tus ventas se dispararán! Distribuimos a más de 400 puntos en 16 ciudades.
+                                            </h3>
+
+
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                        </div>
+                                    </div><!-- /header-text -->
+                                </div>
+                            </div>
+
+                            <!-- Left and right controls -->
+                            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+
+                            <!-- Left and right controls -->
+                            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+
+
                 </div>
-
-
             </div>
         </div>
         <br>
@@ -874,4 +935,13 @@
 
 
     </body>
+    <script>
+        $(document).ready(function ($) {
+            var ventana_ancho = $(window).width();
+            var ventana_alto = $(window).height();
+            console.log(ventana_ancho);
+            console.log(ventana_alto);
+        });
+    </script>
+
 </html>

@@ -173,7 +173,7 @@
                                     <!--<div style="width:380px;height:230px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>-->
                                     <div id="img-marketplace"></div>
                                 </div>
-                                <div class="col-lg-4 col-lg-offset-2">
+                                <div class="col-lg-3 col-lg-offset-3">
                                     <div class="row">
                                         <div class="col-lg-12 text-center">
                                             <!--<div style="width:70%;height:100px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>-->
@@ -194,7 +194,7 @@
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
                                                                 <label for="email" class="white-label">Compañía</label>
-                                                                <input type="email" class="form-control" id="email" placeholder="Compañía">
+                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Compañía">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -202,7 +202,7 @@
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
                                                                 <label for="email" class="white-label">Nombre</label>
-                                                                <input type="email" class="form-control" id="email" placeholder="Nombre">
+                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Nombre">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -210,7 +210,7 @@
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
                                                                 <label for="email" class="white-label">Email</label>
-                                                                <input type="email" class="form-control" id="email" placeholder="Email">
+                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Email">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -218,7 +218,7 @@
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
                                                                 <label for="email" class="white-label">Telefono</label>
-                                                                <input type="email" class="form-control" id="email" placeholder="Telefono">
+                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Telefono">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -231,7 +231,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-lg-3 col-lg-offset-4">
-                                                            <button type="submit" class="btn btn-success">Registrarse</button>
+                                                            <button type="submit" class="btn btn-success btn-sm">Registrarse</button>
                                                         </div>
                                                     </div>
                                                 </form>

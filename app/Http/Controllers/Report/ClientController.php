@@ -191,7 +191,8 @@ class ClientController extends Controller {
         return view("Report.Profile.init", compact("warehouse"));
     }
 
-    public function profileClient($client_id) {
+    public function profileClient(Request $req, $client_id) {
+        $input = $req->all();
         $client = DB::table("vclient")->where("id", $client_id)->first();
 
         $detail = DB::table("vdepartures")->where("client_id", $client->id)->orderBy("id", "asc")->get();
@@ -201,7 +202,29 @@ class ClientController extends Controller {
             $resta += $this->dias_transcurridos($detail[$i - 1]->created, $detail[$i]->created);
         }
 
-        return response()->json(["client" => $client, "frecuency" => ceil($resta / count($detail))]);
+        $sql = "SELECT sum(subtotalnumeric) subtotal,sum(quantity) quantity 
+            FROM vdepartures
+            JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
+            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
+                and client_id=" . $client_id;
+
+        $totales = DB::select($sql);
+        $totales = $totales[0];
+        $totales->subtotalFormated = "$ " . number_format($totales->subtotal, 0, ",", ".");
+
+        $sql = "SELECT count(*) total
+            FROM vdepartures
+            JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
+            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
+                and client_id=" . $client_id;
+
+        $quantity = DB::select($sql);
+        $quantity = $quantity[0];
+
+        $ticket = $totales->subtotal / $quantity->total;
+        $ticket = "$ " . number_format($ticket, 0, ",", ".");
+        return response()->json(["client" => $client, "frecuency" => ceil($resta / count($detail)), "totales" => $totales,
+                    "ticket" => $ticket, "total_request" => $quantity->total]);
     }
 
     public function getRepurchase(Request $req, $client_id) {
@@ -209,13 +232,13 @@ class ClientController extends Controller {
         $sql = " select id,title from products where category_id<>-1";
         $pro = DB::select($sql);
 
-        $sql = "select id,invoice from vdepartures where status_id=2 AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59' and client_id=" . $client_id;
+        $sql = "select id,invoice,dispatched from vdepartures where status_id=2 AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59' and client_id=" . $client_id;
         $dep = DB::select($sql);
 
         $arrDep = array();
         foreach ($pro as $i => $value) {
             foreach ($dep as $val) {
-                $sql = "SELECT count(*) total
+                $sql = "SELECT sum(quantity) total
                         from departures_detail d
                         JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
                         where departure_id=" . $val->id . " and product_id = " . $value->id . " 
@@ -223,7 +246,7 @@ class ClientController extends Controller {
                         AND dep.client_id=" . $client_id;
                 $quantity = DB::select($sql);
                 $quantity = $quantity[0];
-                $arrDep[$val->invoice] = $quantity->total;
+                $arrDep[$val->invoice] = array("quantity" => ($quantity->total == null) ? '0' : $quantity->total, "date" => date("d-M", strtotime($val->dispatched)));
             }
             $pro[$i]->quantity_dep = $arrDep;
         }

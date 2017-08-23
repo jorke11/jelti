@@ -25,20 +25,28 @@ function Profile() {
             success: function (data) {
                 var html = '<tr><td>Productos</td>';
                 $.each(data.products[0].quantity_dep, function (i, val) {
-                    html += '<td>' + i + '</td>';
+                    html += '<td>' + i + ' (' + val.date + ')</td>';
                 })
+                html += '<td>Sumatoria</td>';
+                html += '<td>Promedio</td>';
                 html += '<tr>';
                 $("#tblRepurchase thead").html(html);
 
                 html = '';
-                var cont = 0, del = [];
+                var cont = 0, del = [], quant = 0;
                 $.each(data.products, function (i, val) {
                     cont = 0;
+                    quant = 0;
                     html += "<tr id='row_" + i + "'><td>" + val.title + "</td>";
                     $.each(val.quantity_dep, function (j, value) {
-                        html += "<td>" + value + "</td>";
-                        cont += value;
+                        html += "<td>" + value.quantity + "</td>";
+                        cont += parseInt(value.quantity);
+                        quant++;
                     })
+
+                    html += "<td>" + cont + "</td>";
+                    html += "<td>" + cont / quant + "</td>";
+                    quant = 0;
                     if (cont == 0) {
                         del.push(i);
                     }
@@ -59,9 +67,14 @@ function Profile() {
     }
 
     this.getClient = function (id) {
+        var param = {};
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+
         $.ajax({
             url: "/profile/" + id + "/getClient",
             method: 'GET',
+            data: param,
             dataType: 'json',
             success: function (data) {
                 $("#client_until").html(data.client.created_at);
@@ -72,6 +85,9 @@ function Profile() {
                 $("#last_sale").html(0);
                 $("#frecuency").html(data.frecuency + " días");
                 $("#sector").html(data.client.sector);
+                $("#total_sales").html(data.totales.subtotalFormated);
+                $("#ticket").html(data.ticket);
+                $("#total_request").html(data.total_request);
             }
         });
     }

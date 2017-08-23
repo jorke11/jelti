@@ -76,23 +76,27 @@
                 <table class="table table-user-information">
                     <tr>
                         <td>Venta total a Cliente</td>
-                        <td><span id="client_until"></span></td>
-                        <td>Ticker promedio</td>
-                        <td><span id="responsible"></span></td>
+                        <td><span id="total_sales"></span></td>
+                        <td>Ticket promedio</td>
+                        <td><span id="ticket"></span></td>
                     </tr>
                     <tr>
+                        <td>Total pedidos</td>
+                        <td><span id="total_request"></span></td>
                         <td>Pedido vs Despachado</td>
                         <td><span id="name_client"></span></td>
+
+                    </tr>
+                    <tr>
                         <td>Valor no facturado</td>
                         <td><span id="last_sale"></span></td>
-                    </tr>
-                    <tr>
                         <td>Cumplimiento por orden</td>
                         <td><span id="city_address"></span></td>
-                        <td>Cumplimiento promedio</td>
-                        <td><span id="frecuency"></span></td>
+
                     </tr>
                     <tr>
+                        <td>Cumplimiento promedio</td>
+                        <td><span id="frecuency"></span></td>
                         <td>Devoluciones</td>
                         <td><span id="retorno"></span></td>
                     </tr>

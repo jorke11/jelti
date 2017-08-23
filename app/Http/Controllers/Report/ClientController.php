@@ -209,7 +209,7 @@ class ClientController extends Controller {
         $sql = " select id,title from products where category_id<>-1";
         $pro = DB::select($sql);
 
-        $sql = "select id from vdepartures where status_id=2 AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59' and client_id=" . $client_id;
+        $sql = "select id,invoice from vdepartures where status_id=2 AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59' and client_id=" . $client_id;
         $dep = DB::select($sql);
 
         $arrDep = array();
@@ -223,7 +223,7 @@ class ClientController extends Controller {
                         AND dep.client_id=" . $client_id;
                 $quantity = DB::select($sql);
                 $quantity = $quantity[0];
-                $arrDep[$val->id] = $quantity->total;
+                $arrDep[$val->invoice] = $quantity->total;
             }
             $pro[$i]->quantity_dep = $arrDep;
         }

@@ -12,6 +12,8 @@ function Profile() {
         });
     }
     this.tableRepurchase = function (id) {
+        $("#tblRepurchase thead").html("");
+        $("#tblRepurchase tbody").html("");
         var param = {};
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
@@ -22,13 +24,36 @@ function Profile() {
             dataType: 'json',
             success: function (data) {
                 var html = '<tr><td>Productos</td>';
-                $(data.products[0].quantity_dep, function (i, val) {
-                    html += '<td>' + i + ' : ' + val + '</td>';
+                $.each(data.products[0].quantity_dep, function (i, val) {
+                    html += '<td>' + i + '</td>';
                 })
                 html += '<tr>';
                 $("#tblRepurchase thead").html(html);
 
-                console.log(data.products[0].quantity_dep);
+                html = '';
+                var cont = 0, del = [];
+                $.each(data.products, function (i, val) {
+                    cont = 0;
+                    html += "<tr id='row_" + i + "'><td>" + val.title + "</td>";
+                    $.each(val.quantity_dep, function (j, value) {
+                        html += "<td>" + value + "</td>";
+                        cont += value;
+                    })
+                    if (cont == 0) {
+                        del.push(i);
+                    }
+
+                    html += "</tr>";
+
+                })
+
+
+                $("#tblRepurchase tbody").html(html);
+                $.each(del, function (i, val) {
+                    $("#row_" + val).remove();
+                })
+
+//                console.log(data.products[0].quantity_dep);
             }
         });
     }

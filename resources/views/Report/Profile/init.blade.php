@@ -130,16 +130,16 @@
         <div class="panel panel-default">
             <div class="panel-heading personal"></div>
             <div class="panel-body">
-                <table class="table table-condensed  table-bordered" id="tblProduct">
+                <table class="table table-condensed  table-bordered" id="tblCategory">
                     <thead>
                         <tr>
-                            <th>Producto</th>
-                            <th>Unidades</th>
-                            <th>Total</th>
+                            <th>Categoria</th>
+                            <th>Pedidas</th>
+                            <th>Total Categorias</th>
                         </tr>
                     </thead>
-                    <body>
-                    </body>
+                    <tbody>
+                    </tbody>
                 </table>
             </div>
         </div>

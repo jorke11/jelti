@@ -13,6 +13,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Report\CommercialController;
 use Auth;
 use Session;
+use App\Models\Administration\Categories;
 
 class ClientController extends Controller {
 
@@ -223,8 +224,31 @@ class ClientController extends Controller {
 
         $ticket = $totales->subtotal / $quantity->total;
         $ticket = "$ " . number_format($ticket, 0, ",", ".");
+
+        $sql = "
+            SELECT c.id,c.description,count(*)
+            FROM products p
+            JOIN categories c ON c.id=p.category_id
+            GROUP by 1
+            ORDER BY 2";
+        $categories = DB::select($sql);
+        foreach ($categories as $i => $value) {
+            $sql = "
+                select count(*) total
+                from departures_detail d  
+                JOIN products p ON p.id=d.product_id
+                JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+                JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1 
+                WHERE dep.client_id=34 and p.category_id = " . $value->id . " AND dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' ";
+
+            $q = DB::select($sql);
+            $q = $q[0]->total;
+            $categories[$i]->total = $q;
+        }
+
+
         return response()->json(["client" => $client, "frecuency" => ceil($resta / count($detail)), "totales" => $totales,
-                    "ticket" => $ticket, "total_request" => $quantity->total]);
+                    "ticket" => $ticket, "total_request" => $quantity->total, "categories" => $categories]);
     }
 
     public function getRepurchase(Request $req, $client_id) {
@@ -238,7 +262,7 @@ class ClientController extends Controller {
         $arrDep = array();
         foreach ($pro as $i => $value) {
             foreach ($dep as $val) {
-                $sql = "SELECT sum(quantity) total
+                $sql = "SELECT sum(quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) total
                         from departures_detail d
                         JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
                         where departure_id=" . $val->id . " and product_id = " . $value->id . " 

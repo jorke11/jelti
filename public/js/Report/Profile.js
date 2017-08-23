@@ -98,7 +98,7 @@ function Profile() {
 
                 var html = "";
                 $.each(data.categories, function (i, val) {
-                    html += "<tr><td>" + val.description + "</td><td>" + val.count + "</td><td>" + val.total + "</td></tr>";
+                    html += "<tr><td>" + val.description + "</td><td>" + val.total + "</td><td>" + val.count + "</td></tr>";
                 });
 
                 

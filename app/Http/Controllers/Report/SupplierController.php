@@ -41,27 +41,25 @@ class SupplierController extends Controller {
 
         $cat = array();
         $series = array();
-        
+
         foreach ($res as $value) {
             $cat[] = $value->business;
             $series[] = array("name" => $value->business, "data" => array((int) $value->mesanterior, (int) $value->estemes));
         }
-        
+
         return response()->json(["data" => $res, "category" => $cat, "series" => $series]);
     }
-    
-    
-     public function getListSales(Request $req) {
+
+    public function getListSales(Request $req) {
         $input = $req->all();
         $sql = "
             SELECT sta.id,sta.business,
             round(sum(d.quantity::numeric * d.units_sf)) AS totalunidades,
             coalesce(round(sum(d.value * d.quantity::numeric * d.units_sf)),0) AS total
             FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id 
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id = d.product_id
             JOIN stakeholder sta ON sta.id = p.supplier_id
-            JOIN departures dep ON dep.id=s.departure_id 
             AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             WHERE d.product_id IS NOT NULL
             GROUP BY 1
@@ -87,18 +85,18 @@ class SupplierController extends Controller {
                 SELECT sta.id,sta.business,sum(d.quantity * d.units_sf) totalunidades, 
                     SUM(d.quantity * d.value * d.units_sf) + SUM(d.quantity * d.value * d.units_sf * d.tax) total,json_agg(DISTINCT dep.invoice) invoices
                 FROM departures_detail d 
-                JOIN departures dep ON dep.id=s.departure_id and dep.status_id=2 
+                JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 
                 JOIN products p ON p.id=d.product_id 
-                JOIN stakeholder sta ON sta.id=s.client_id 
+                JOIN stakeholder sta ON sta.id=dep.client_id 
                 WHERE d.product_id IS NOT NULL 
                  AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                   $pro $sup
-                group by 1,s.client_id
+                group by 1,dep.client_id
                 order by 3 desc
             ";
 //        echo $sql;exit;
         $res = DB::select($sql);
-        
+
         return response()->json(["data" => $res]);
     }
 

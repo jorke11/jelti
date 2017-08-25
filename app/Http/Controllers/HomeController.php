@@ -165,7 +165,7 @@ class HomeController extends Controller {
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             WHERE vdepartures.status_id=2  AND client_id <>258
-            GROUP BY to_char(dispatched,'YYYY-Month') 
+            GROUP BY to_char(vdepartures.dispatched,'YYYY-Month') 
             ORDER BY 1 DESC
                 ";
 

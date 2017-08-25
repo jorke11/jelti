@@ -231,28 +231,28 @@ function Briefcase() {
                     }
                 }
             ],
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var type = $(column.header()).attr('rowspan');
-                    if (type != undefined) {
-                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
-                                .appendTo($(column.footer()).empty())
-                                .on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                            $(this).val()
-                                            );
-                                    column
-//                                            .search(val ? val : '', true, false)
-                                            .search(val ? '^' + val + '$' : '', true, false)
-                                            .draw();
-                                });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        });
-                    }
-                });
-            },
+//            initComplete: function () {
+//                this.api().columns().every(function () {
+//                    var column = this;
+//                    var type = $(column.header()).attr('rowspan');
+//                    if (type != undefined) {
+//                        var select = $('<select class="form-control"><option value="">' + $(column.header()).text() + '</option></select>')
+//                                .appendTo($(column.footer()).empty())
+//                                .on('change', function () {
+//                                    var val = $.fn.dataTable.util.escapeRegex(
+//                                            $(this).val()
+//                                            );
+//                                    column
+////                                            .search(val ? val : '', true, false)
+//                                            .search(val ? '^' + val + '$' : '', true, false)
+//                                            .draw();
+//                                });
+//                        column.data().unique().sort().each(function (d, j) {
+//                            select.append('<option value="' + d + '">' + d + '</option>')
+//                        });
+//                    }
+//                });
+//            },
             createdRow: function (row, data, index) {
 
                 if (data.dias_vencidos >= 0 && data.dias_vencidos <= 3) {
@@ -262,9 +262,36 @@ function Briefcase() {
                 } else if (data.status_id == 3) {
                     $('td', row).eq(8).addClass('color-checked');
                 }
+            },
+            footerCallback: function (row, data, start, end, display) {
+                var api = this.api(), data, total;
+
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                };
+
+                total = api
+                        .column(7)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                        
+                $(api.column(7).footer()).html('(' + obj.formatCurrency(total, "$") + ')');
+
+//                console.log(api)
             }
         });
         return table;
+    }
+
+    this.formatCurrency = function (n, currency) {
+        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
     }
 }
 

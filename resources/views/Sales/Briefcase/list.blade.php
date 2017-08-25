@@ -4,7 +4,6 @@
             <table class="table table-condensed  table-hover" id="tbl" width='100%'>
                 <thead>
                     <tr>
-
                         <th>#</th>
                         <th>Factura</th>
                         <th>Fecha</th>
@@ -22,21 +21,23 @@
                 </thead>
                 <tbody>
                 </tbody>
-<!--                <tfoot>
+                <tfoot>
                     <tr>
-                        <th>#</th>
-                        <th>Factura</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Comercial</th>
-                        <th>Ciudad</th>
-                        <th>dias_vencidos</th>
-                        <th>Valor a Pagar</th>
-                        <th>Estado</th>
-                        <th tipo="prueba">Factura</th>
-                        <th tipo="prueba">Pagar</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                        <th></th>
+                        <th style="text-align:center">Total:</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>    </th>
+                        <th></th>
                     </tr>
-                </tfoot>-->
+                </tfoot>
             </table>
         </div>
     </div>

@@ -2,7 +2,7 @@ function Briefcase() {
     var invoice = [], tableBrief, dep = '';
     this.init = function () {
         tableBrief = obj.table();
-        var html = '', param = {};
+        var html = '', param = {}, total = 0;
 
 
         $("#btnModalUpload").click(function () {
@@ -14,13 +14,17 @@ function Briefcase() {
 
             $(".selected-invoice").each(function () {
                 if ($(this).is(":checked")) {
+
                     html += "<tr><td>" + $(this).attr("invoice") + '<input type="hidden" name="invoices[]" value="' + $(this).val() + '"></td>';
                     html += '<td>' + $(this).attr("totalformated") + '</td><td><input type="text" class="form-control" name="values[]" value="' + $(this).attr("total") + '"></td></tr>';
                     invoice.push({id: $(this).val(), invoice: $(this).attr("invoice"), total: $(this).attr("total"), totalforamted: $(this).attr("totalforamted")})
                     dep += (dep == '') ? '' : ',';
                     dep += $(this).val();
+                    total += parseFloat($(this).attr("total"));
                 }
             })
+            html += '<tr><td>Total</td><td>' + obj.formatCurrency(total, "$") + '</td></tr>';
+
             param.departures = dep;
 
             $.ajax({
@@ -39,6 +43,12 @@ function Briefcase() {
         $("#btnSave").click(this.uploadExcel);
         $("#btnPay").click(this.pay);
 
+    }
+
+    this.formatCurrency = function (n, currency) {
+        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
     }
 
     this.pay = function () {
@@ -279,7 +289,7 @@ function Briefcase() {
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
-                        
+
                 $(api.column(7).footer()).html('(' + obj.formatCurrency(total, "$") + ')');
 
 //                console.log(api)

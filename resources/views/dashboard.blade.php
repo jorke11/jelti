@@ -114,7 +114,7 @@
                             </div>
                             <div class="col-md-9 col-sm-9 text-right">
                                 @if(isset($product))
-                                <div class="huge">Producto<br>{{(isset($product->title)?$product->title:'')}}</div>
+                                <div class="huge">Producto<br>{{(isset($product->title)?substr($product->title,0,25)."...":'')}}</div>
                                 <div> Unidades Vendidas {{(isset($product->cantidadtotal)?$product->cantidadtotal:0)}}<br>
                                     @if(count($product)>0)
                                     Monto: $ {{number_format(round($product->total), 0, ',', '.')}}

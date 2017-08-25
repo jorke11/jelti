@@ -9,6 +9,7 @@
                         <th>Factura</th>
                         <th>Fecha</th>
                         <th>Cliente</th>
+                        <th>Razón Social</th>
                         <th>Comercial</th>
                         <th>Ciudad</th>
                         <th>Valor a Pagar</th>

@@ -4,6 +4,7 @@ function Briefcase() {
         tableBrief = obj.table();
         var html = '', param = {};
 
+
         $("#btnModalUpload").click(function () {
             $("#modalUpload").modal("show");
         })
@@ -176,6 +177,7 @@ function Briefcase() {
                 {data: "invoice"},
                 {data: "created_at"},
                 {data: "client"},
+                {data: "business_name"},
                 {data: "responsible"},
                 {data: "city"},
                 {data: "totalformated"},
@@ -219,8 +221,12 @@ function Briefcase() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">'
-                        html += '&nbsp;&nbsp;<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
+                        html = '';
+                        if ($("#role_id").val() == 1) {
+                            html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">'
+                            html += '&nbsp;&nbsp;<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
+                        }
+
                         return html;
                     }
                 }

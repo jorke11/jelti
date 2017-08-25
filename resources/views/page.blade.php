@@ -79,7 +79,7 @@
                 background-size: cover;
                 color:white;
                 /*height:100%;*/
-                height:800px;
+                height:600px;
                 /*text-align: center;*/
                 display: flex;
                 /*align-items: center;*/
@@ -90,7 +90,8 @@
                     background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;
                     background-size: cover;
                     color:white;
-                    height:600px;
+                    /*height:600px;*/
+                    height:850px;
                     display: flex;
                 }
             }
@@ -113,6 +114,14 @@
             }
 
         </style>
+        <script>
+            $(document).ready(function ($) {
+                var ventana_ancho = $(window).width();
+                var ventana_alto = $(window).height();
+                console.log(ventana_ancho);
+                console.log(ventana_alto);
+            });
+        </script>
         {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
 
         <!-- Add the slick-theme.css if you want default styling -->
@@ -253,6 +262,7 @@
         </section>
         <br>
         <br>
+        <br>
         <div class="container-fluid">
             <br>
             <div class="row">
@@ -263,6 +273,9 @@
             <br>
             <br>
             <br>
+            <br>
+            <br>
+            
             <br>
             <div class="row">
                 <div class="col-lg-9 col-lg-offset-1">
@@ -279,21 +292,24 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <p class="text-center">
+                            <h4 class="text-center">
                                 "88% de las personas estan dispuestas a pagar más por alimentos saludables." Forbes 2017
-                            </p>
+                            </h4>
                         </div>
                         <div class="col-lg-4">
-                            <p class="text-center">
-                                "Para el 2017, las ventas globales de alimentos saludables llegarán a un trillón de dolares." . Forbes 2017
-                            </p>
+                            <h4 class="text-center">"Para el 2017, las ventas globales de alimentos saludables llegarán a un trillón de dolares." . Forbes 2017</h4>
                         </div>
                         <div class="col-lg-4">
-                            <p class="text-center">
+                            <h4 class="text-center">
                                 "7 de cada 10 colombianos desean bajar de peso y ser más saludables." Nielsen 2017
-                            </p>
+                            </h4>
                         </div>
                     </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                     <br>
                     <br>
                     <br>

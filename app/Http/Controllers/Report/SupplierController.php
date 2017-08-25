@@ -57,12 +57,12 @@ class SupplierController extends Controller {
             SELECT sta.id,sta.business,
             round(sum(d.quantity::numeric * d.units_sf)) AS totalunidades,
             coalesce(round(sum(d.value * d.quantity::numeric * d.units_sf)),0) AS total
-            FROM sales_detail d
-            JOIN sales s ON s.id=d.sale_id 
+            FROM departures_detail d
+            JOIN departures dep ON dep.id=d.departure_id 
             JOIN products p ON p.id = d.product_id
             JOIN stakeholder sta ON sta.id = p.supplier_id
             JOIN departures dep ON dep.id=s.departure_id 
-            AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
             WHERE d.product_id IS NOT NULL
             GROUP BY 1
             ORDER BY 3 DESC";
@@ -86,13 +86,12 @@ class SupplierController extends Controller {
         $sql = "
                 SELECT sta.id,sta.business,sum(d.quantity * d.units_sf) totalunidades, 
                     SUM(d.quantity * d.value * d.units_sf) + SUM(d.quantity * d.value * d.units_sf * d.tax) total,json_agg(DISTINCT dep.invoice) invoices
-                FROM sales_detail d 
-                JOIN sales s ON s.id=d.sale_id 
+                FROM departures_detail d 
                 JOIN departures dep ON dep.id=s.departure_id and dep.status_id=2 
                 JOIN products p ON p.id=d.product_id 
                 JOIN stakeholder sta ON sta.id=s.client_id 
                 WHERE d.product_id IS NOT NULL 
-                 AND dep.created BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+                 AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                   $pro $sup
                 group by 1,s.client_id
                 order by 3 desc

@@ -102,39 +102,9 @@
                     </div>
                 </a>
             </div>
-            
-            
-<!--            <div class="col-md-3 col-sm-3">
-                <div class="panel panel-primary" style="margin-bottom: 0px;">
-                    <div class="panel-heading" style="height: 100px;">
-                        <div class="row">
-                            <div class="col-md-3 col-sm-3">
-                                <i class="fa fa-suitcase fa-4x"></i>
-                            </div>
-                            <div class="col-md-9 col-sm-9 text-right">
-                                @if(isset($supplier))
-                                <div class="huge">Compras<br>{{(isset($supplier->proveedor)?$supplier->proveedor:'SuperFüds')}}</div>
-                                <div><p> Total Unidades {{(isset($supplier->cantidadtotal)?$supplier->cantidadtotal:0)}}<br>
-                                        @if(count($supplier)>0)
-                                        Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}
-                                        @endif
-                                    </p>
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a href="/reportSupplier">
-                    <div class="panel-footer" style="background-color:#fff;border-color: blue;">
-                        <span class="pull-left">View Details</span>
-                        <span class="pull-right">
-                            <i class="fa fa-arrow-circle-right"></i>
-                        </span>
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-            </div>-->
+
+
+
             <div class="col-md-3 col-sm-3">
                 <div class="panel panel-yellow" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">
@@ -195,7 +165,39 @@
             </div>
         </div>
         <br />
+
         <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <div class="panel panel-primary" style="margin-bottom: 0px;">
+                    <div class="panel-heading" style="height: 100px;">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <i class="fa fa-suitcase fa-4x"></i>
+                            </div>
+                            <div class="col-md-9 col-sm-9 text-right">
+                                @if(isset($supplier))
+                                <div class="huge">Compras<br>{{(isset($supplier->proveedor)?$supplier->proveedor:'SuperFüds')}}</div>
+                                <div><p> Total Unidades {{(isset($supplier->cantidadtotal)?$supplier->cantidadtotal:0)}}<br>
+                                        @if(count($supplier)>0)
+                                        Monto: $ {{number_format(round($supplier->total), 0, ',', '.')}}
+                                        @endif
+                                    </p>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="/reportSupplier">
+                    <div class="panel-footer" style="background-color:#fff;border-color: blue;">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right">
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
             <div class="col-md-3 col-sm-3">
                 <div class="panel panel-blue" style="margin-bottom: 0px;">
                     <div class="panel-heading" style="height: 100px;">

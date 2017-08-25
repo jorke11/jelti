@@ -146,5 +146,9 @@ tr.shown td.details-control {
     border-top: 0;
 }
 
+a.btn-danger, a.btn-primary, a.btn-success, a.btn-warning{
+    color:#000;
+}
+
 
 

@@ -6,7 +6,9 @@
             <th>Id</th>
             <th>Factura</th>
             <th>Fecha</th>
+            <th>Despachado</th>
             <th>Cliente</th>
+            <th>Razon Social</th>
             <th>Comercial</th>
             <th>Bodega</th>
             <th>Ciudad</th>
@@ -21,6 +23,7 @@
     </tbody>
     <tfoot>
         <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>

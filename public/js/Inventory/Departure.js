@@ -26,17 +26,6 @@ function Sale() {
             }
         })
 
-//        $("#frm #client_id").change(function () {
-//            if ($(this).val() != 0) {
-//                client_id = $(this).val();
-//                $("#btnModalUpload,#btnmodalDetail").attr("disabled", false);
-//                obj.getClient($(this).val());
-//            } else {
-//                $("#frm #name_client").val("");
-//                $("#frm #address_supplier").val("");
-//                $("#frm #phone_supplier").val("");
-//            }
-//        });
 
         $("#branch_id").change(function () {
             if ($(this).val() != 0) {
@@ -157,6 +146,21 @@ function Sale() {
         $("#uploadRequest").click(this.uploadExcel)
         $("#btnReverse").click(this.reverse)
 
+        $("#col-dispatched").click(function (e) {
+            e.preventDefault();
+            // Get the column API object
+            var column = table.column($(this).attr('data-column'));
+            // Toggle the visibility
+            column.visible(!column.visible());
+        })
+        
+        $("#col-business_name").click(function (e) {
+            e.preventDefault();
+            // Get the column API object
+            var column = table.column($(this).attr('data-column'));
+            // Toggle the visibility
+            column.visible(!column.visible());
+        })
     }
 
 
@@ -922,7 +926,7 @@ function Sale() {
                 url: "/api/listDeparture",
                 data: param
             },
-            "lengthMenu": [[30,100,300,-1],[30,100,300,'All']],
+            "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
             columns: [
                 {
                     className: 'details-control',
@@ -934,7 +938,9 @@ function Sale() {
                 {data: "id"},
                 {data: "invoice"},
                 {data: "created_at"},
+                {data: "dispatched", "visible": false, },
                 {data: "client"},
+                {data: "business_name", "visible": false },
                 {data: "responsible"},
                 {data: "warehouse"},
                 {data: "city"},
@@ -945,10 +951,19 @@ function Sale() {
             ],
 
             buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
+                {
+
+                    className: 'btn btn-primary glyphicon glyphicon-eye-open',
+                    action: function (e, dt, node, config) {
+                        $("#modalColumns").modal("show");
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
             ],
             order: [[1, 'DESC']],
             aoColumnDefs: [
@@ -959,7 +974,7 @@ function Sale() {
                     }
                 },
                 {
-                    targets: [12],
+                    targets: [14],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -983,11 +998,11 @@ function Sale() {
 
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
-                    $('td', row).eq(11).addClass('color-new');
+                    $('td', row).eq(12).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(11).addClass('color-pending');
+                    $('td', row).eq(12).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(11).addClass('color-checked');
+                    $('td', row).eq(12).addClass('color-checked');
                 }
             },
             footerCallback: function (row, data, start, end, display) {

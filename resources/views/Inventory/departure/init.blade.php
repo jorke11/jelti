@@ -29,6 +29,27 @@
 
     </div>
 </div>
+
+<div class="modal fade" id="modalColumns" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Opcion para quitar columnas</h4>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li><a id="col-dispatched" style="cursor: pointer" data-column="4">Despachado</a></li>
+                    <li><a id="col-business_name" style="cursor: pointer" data-column="6">Razón Social</a></li>
+                </ul>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 @include('Inventory.departure.newDetail')
 @include('Inventory.departure.newService')
 @include('Inventory.departure.upload')

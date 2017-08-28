@@ -194,6 +194,7 @@ function Briefcase() {
                 {data: "totalformated"},
                 {data: "payedformated"},
                 {data: "dias_vencidos"},
+                {data: "term"},
                 {data: "paid_out", render: function (data, type, row) {
                         var msg = '';
                         if (row.paid_out == null || row.paid_out == false) {

@@ -15,6 +15,7 @@
                         <th>Valor a Pagar</th>
                         <th>Valor a Pagado</th>
                         <th>dias_vencidos</th>
+                        <th>Plazo</th>
                         <th>Estado</th>
                         <th tipo="prueba">Factura</th>
                         <th tipo="prueba">Pagar</th>
@@ -36,7 +37,8 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>    </th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </tfoot>

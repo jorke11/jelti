@@ -3,8 +3,8 @@ create view vbriefcase as
 select d.id,coalesce(d.invoice,'') invoice, 
   CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,sta.business_name,
             c.description as city,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,
-            s.term, d.created_at,d.created_at + CAST(s.term || ' days' AS INTERVAL) as fecha_vencimiento,
-            date_part('day',now()-(d.created_at + CAST(s.term || ' days' AS INTERVAL))) as dias_vencidos,d.paid_out,d.client_id,
+            s.term, d.created_at,d.dispatched + CAST(s.term || ' days' AS INTERVAL) as fecha_vencimiento,
+            date_part('day',now() - (d.dispatched + CAST(s.term || ' days' AS INTERVAL))) as dias_vencidos,d.paid_out,d.client_id,
             (select (coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0) + d.shipping_cost)::money from departures_detail where departure_id=d.id and product_id is not null) totalFormated,
            (select (ceil(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0)) + d.shipping_cost) from departures_detail where departure_id=d.id and product_id is not null) total,
            (select sum(value) from briefcase where departure_id=d.id) payed,(select sum(value)::money from briefcase where departure_id=d.id) payedformated
@@ -14,5 +14,5 @@ select d.id,coalesce(d.invoice,'') invoice,
             JOIN cities c ON c.id = d.city_id
             JOIN users u ON u.id = d.responsible_id
             WHERE d.status_id=2  and (paid_out = false OR paid_out is null)
-            ORDER BY  (d.created_at + CAST(s.term || ' days' AS INTERVAL),date_part('day',now()-(d.created_at + CAST(s.term || ' days' AS INTERVAL)))) DESC;
+            ORDER BY  (d.dispatched + CAST(s.term || ' days' AS INTERVAL),date_part('day',now()-(d.dispatched + CAST(s.term || ' days' AS INTERVAL)))) DESC;
             

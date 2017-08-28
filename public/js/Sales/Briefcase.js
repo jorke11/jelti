@@ -186,6 +186,7 @@ function Briefcase() {
                 {data: "id"},
                 {data: "invoice"},
                 {data: "created_at"},
+                {data: "dispatched"},
                 {data: "client"},
                 {data: "business_name"},
                 {data: "responsible"},
@@ -208,7 +209,7 @@ function Briefcase() {
                     }
                 },
             ],
-            order: [[8, 'DESC']],
+            order: [[9, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [1, 2, 3, 4],
@@ -217,7 +218,7 @@ function Briefcase() {
                     }
                 },
                 {
-                    targets: [10],
+                    targets: [12],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -227,7 +228,7 @@ function Briefcase() {
                 }
                 ,
                 {
-                    targets: [11],
+                    targets: [13],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

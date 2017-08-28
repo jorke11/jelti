@@ -5,7 +5,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-9 col-md-6">
-                    #: <label><span id="consecutive" class="input-purchase"></span></label>
                 </div>
                 <div class="col-lg-3 col-md-6 text-right">
                     <button type="button" class="btn btn-success btn-sm" id='btnNew'>
@@ -31,6 +30,12 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group">
+                                    <label for="email">#:</label>
+                                    <input type="text" class="form-control input-purchase input-sm" id="id" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
                                     <label for="email">Proveedor*:</label>
                                     <select class="form-control input-purchase  input-sm" id="supplier_id" name='supplier_id' data-api="/api/getSupplier" required>
                                     </select>
@@ -42,12 +47,7 @@
                                     <input type="text" class="form-control input-purchase input-sm" id="name_supplier" readonly="">
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label for="email">Entrega:</label>
-                                    <input type="text" class="form-control input-purchase input-sm" id="delivery" readonly="">
-                                </div>
-                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-lg-3">
@@ -63,6 +63,12 @@
                                 <div class="form-group">
                                     <label for="email">Observaciones:</label>
                                     <input type="text" class="form-control input-purchase input-sm" id="description" name='description'>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="email">Entrega:</label>
+                                    <input type="text" class="form-control input-purchase input-sm" id="delivery" readonly="">
                                 </div>
                             </div>
                         </div>

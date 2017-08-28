@@ -7,6 +7,7 @@
                         <th>#</th>
                         <th>Factura</th>
                         <th>Fecha</th>
+                        <th>F. Despacho</th>
                         <th>Cliente</th>
                         <th>Razón Social</th>
                         <th>Comercial</th>
@@ -23,6 +24,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>

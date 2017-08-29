@@ -350,7 +350,7 @@ function Purchase() {
         $.each(data.detail, function (i, val) {
             units_total = val.units_supplier * val.quantity;
             html += "<tr>";
-            html += "<td>" + val.id + "</td>";
+            html += "<td>" + i + "</td>";
             html += "<td>" + val.product + "</td>";
             html += "<td>" + val.units_supplier + "</td>";
 

@@ -1016,38 +1016,38 @@ function Sale() {
                 };
 
                 quantity = api
-                        .column(8)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                subtotal = api
-                        .column(9)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                total = api
                         .column(10)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
 
+                subtotal = api
+                        .column(11)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                total = api
+                        .column(12)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
                 // Update footer
-                $(api.column(8).footer()).html(
+                $(api.column(10).footer()).html(
                         '(' + quantity + ')'
                         );
 
 
-                $(api.column(9).footer()).html(
+                $(api.column(11).footer()).html(
                         '(' + obj.formatCurrency(subtotal, '$') + ')'
                         );
 
 
-                $(api.column(10).footer()).html(
+                $(api.column(12).footer()).html(
                         '(' + obj.formatCurrency(total, "$") + ')'
 
                         );

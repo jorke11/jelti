@@ -40,7 +40,7 @@ function Commercial() {
                 {
                     aTargets: [0, 1, 2],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="objCom.see(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="objCom.see(' + full.responsible_id + ')">' + data + '</a>';
                     }
                 }
             ],

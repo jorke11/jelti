@@ -86,16 +86,19 @@ class PurchaseController extends Controller {
                         $input["detail"][$i]["type_nature"] = 1;
                         $input["detail"][$i]["order"] = $i;
                         $input["detail"][$i]["value"] = $val["cost_sf"];
-                        $input["detail"][$i]["quantity"] = $val["quantity"];
                         $input["detail"][$i]["units_supplier"] = (int) $input["detail"][$i]["units_supplier"];
                         unset($input["detail"][$i]["cost_sf"]);
                         unset($input["detail"][$i]["title"]);
                         unset($input["detail"][$i]["debt"]);
                         unset($input["detail"][$i]["credit"]);
                         unset($input["detail"][$i]["total"]);
+
+                        for ($j = 0; $j < $val["quantity"]; $j++) {
+                            $input["detail"][$i]["quantity"] = 1;
                             $detail_id = PurchasesDetail::create($input["detail"][$i])->id;
                         }
                     }
+                }
 
                 $detail = $this->formatDetail($purchase_id);
                 $header = Purchases::findOrFail($purchase_id);
@@ -216,13 +219,16 @@ class PurchaseController extends Controller {
                     foreach ($det as $key => $value) {
                         $newDet["entry_id"] = $newId;
                         $newDet["product_id"] = $value->product_id;
-                        $newDet["quantity"] = $value->quantity;
+                        $newDet["quantity"] = 1;
                         $newDet["quantity_real"] = 0;
                         $newDet["value"] = $value->value;
                         $newDet["units_supplier"] = $value->units_supplier;
                         $newDet["lote"] = 'new';
                         $newDet["status_id"] = 1;
-                        EntriesDetail::create($newDet);
+
+                        for ($j = 0; $j < $value->quantity; $j++) {
+                            $detail_id = EntriesDetail::create($newDet);
+                        }
                     }
 
                     $purchase = Purchases::findOrFail($in["id"]);
@@ -380,23 +386,29 @@ class PurchaseController extends Controller {
     }
 
     public function formatDetail($id) {
-        $detail = DB::table("purchases_detail")
-                        ->select("purchases_detail.id", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0) as tax"), "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description", "products.units_supplier", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier * purchases_detail.value as valuetotal"))
-                        ->where("purchase_id", "=", $id)
-                        ->join("products", "purchases_detail.product_id", "products.id")
-                        ->orderBy("order", "asc")->get();
+//        $detail = DB::table("purchases_detail")
+//                        ->select("purchases_detail.id", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0) as tax"), "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description", "products.units_supplier", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier * purchases_detail.value as valuetotal"))
+//                        ->where("purchase_id", "=", $id)
+//                        ->join("products", "purchases_detail.product_id", "products.id")
+//                        ->orderBy("order", "asc")->get();
+        $sql = "
+            select p.id as product_id,p.title as product,sum(d.quantity) quantity,d.units_supplier,d.tax,d.value,d.quantity * d.units_supplier quantity_total,
+            sum(d.value * d.units_supplier * d.quantity)  as total
+            from purchases_detail d 
+            JOIN products p On p.id=d.product_id
+            where d.purchase_id=" . $id . "
+            group by 1,2,4,5,6,7";
+        $detail = DB::select($sql);
+
         $this->subtotal = 0;
         $this->total = 0;
         foreach ($detail as $i => $value) {
-
-            $detail[$i]->total = $value->value * $value->quantity * $value->units_supplier;
             $this->subtotal += $detail[$i]->total;
-
-            $this->total += $detail[$i]->total + ($value->value * $value->quantity * $value->units_supplier * $value->tax);
+            $this->total += $value->total + ($detail[$i]->total * $value->tax);
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
             $detail[$i]->costFormated = "$ " . number_format($detail[$i]->value, 2, ",", ".");
-            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
-            $detail[$i]->totalunits = $value->quantity * $value->units_supplier;
+            $detail[$i]->totalFormated = "$ " . number_format($value->total, 2, ",", ".");
+            $detail[$i]->totalunits = $value->quantity_total;
 
 
             if ($value->tax == 0) {

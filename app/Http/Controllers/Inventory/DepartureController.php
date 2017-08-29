@@ -72,6 +72,12 @@ class DepartureController extends Controller {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
         $commercial_id = null;
+        if (strpos($client_id, "_") == false) {
+            $commercial_id = str_replace("_", "", $client_id);
+            $client_id = null;
+        }
+        
+        
 
         return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id"));
     }

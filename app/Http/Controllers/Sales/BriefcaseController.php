@@ -36,14 +36,15 @@ class BriefcaseController extends Controller {
 
     public function getBriefcase(Request $req) {
         $input = $req->all();
-        $departures = explode(",", $input["departures"]);
 
-        $resp = $this->formatDetail($departures);
+        $resp = $this->formatDetail($input["departures"]);
         return response()->json(["success" => true, "data" => $resp]);
     }
 
     public function formatDetail($departures) {
-
+        
+        $departures = explode(",", $departures);
+        
         $dep = BriefCase::select("briefcase.id", "departures.invoice", "briefcase.value", "briefcase.created_at", DB::raw("briefcase.value::money as valuepayed"), "briefcase.img")
                 ->join("departures", "departures.id", "briefcase.departure_id")
                 ->orderBy("departures.invoice");
@@ -55,7 +56,6 @@ class BriefcaseController extends Controller {
         }
 
         $dep = $dep->get();
-
         $resp = array();
         $cont = 0;
         $total = 0;
@@ -110,7 +110,6 @@ class BriefcaseController extends Controller {
 
     public function delete(Request $req, $id) {
         $in = $req->all();
-
         $departures = $in["departures"];
         $brief = BriefCase::find($id);
         $brief->delete();

@@ -11,7 +11,7 @@ function Briefcase() {
         $("#insideManagement").click(function () {
             invoice = [], html = '', dep = '';
             $("#table-invoices tbody").empty();
-
+            total = 0;
             $(".selected-invoice").each(function () {
                 if ($(this).is(":checked")) {
 

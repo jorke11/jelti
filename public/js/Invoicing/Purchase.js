@@ -13,7 +13,8 @@ function Purchase() {
             $('#myTabs a[href="#management"]').tab('show');
         });
 
-        $("#supplier_id").change(function () {
+        $("#supplier_id").on('select2:closing', function (evt) {
+
             if ($(this).val() != 0) {
                 obj.getSupplier($(this).val());
             } else {
@@ -152,7 +153,7 @@ function Purchase() {
             color = (listProducts[i].quantity == 0) ? '' : 'info';
             quantityTotal = val.units_supplier * val.quantity;
             html += '<tr id="row_' + val.product_id + '" class="' + color + '">';
-            html += "<td>" + i + "</td><td>" + val.title + "</td>";
+            html += "<td>" + (i + 1) + "</td><td>" + val.title + "</td>";
             html += "<td>" + val.units_supplier + "</td><td>" + val.tax + "</td><td>" + val.quantity + "</td>";
             html += "<td>" + val.cost_sf + "</td><td>" + (quantityTotal) + "</td><td>" + (quantityTotal * val.cost_sf) + "</td>";
             html += '<td ><button class="btn btn-info btn-xs" onclick=obj.edit(' + val.product_id + ')><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>';
@@ -360,8 +361,8 @@ function Purchase() {
             html += "<td>" + units_total + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
 
-            html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
-            html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.id + ')>Delete</button></td>';
+            html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.product_id + ',' + val.purchase_id + ')>Edit</button>';
+            html += '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteDetail(' + val.product_id + ',' + val.purchase_id + ')>Delete</button></td>';
             html += "</tr>";
         });
 

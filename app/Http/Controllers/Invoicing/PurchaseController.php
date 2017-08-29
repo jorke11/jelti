@@ -284,7 +284,15 @@ class PurchaseController extends Controller {
 
                     DB::commit();
 
-                    return response()->json(["success" => true, "header" => $pur]);
+                    $detail = $this->formatDetail($pur->id);
+                    $header = Purchases::findOrFail($pur->id);
+                    $this->subtotal = "$ " . number_format($this->subtotal, 0, ',', '.');
+                    $this->total = "$ " . number_format($this->total, 0, ',', '.');
+                    $this->tax5 = "$ " . number_format($this->tax5, 0, ',', '.');
+                    $this->tax19 = "$ " . number_format($this->tax19, 0, ',', '.');
+
+                    return response()->json(['success' => true, "header" => $header, "detail" => $detail, "total" => $this->total,
+                                "subtotal" => $this->subtotal, "tax5" => $this->tax5, "tax19" => $this->tax19]);
                 } catch (Exception $exp) {
                     DB::rollback();
                     return response()->json(['success' => false, "msg" => "Wrong"], 409);
@@ -392,12 +400,13 @@ class PurchaseController extends Controller {
 //                        ->join("products", "purchases_detail.product_id", "products.id")
 //                        ->orderBy("order", "asc")->get();
         $sql = "
-            select p.id as product_id,p.title as product,sum(d.quantity) quantity,d.units_supplier,d.tax,d.value,d.quantity * d.units_supplier quantity_total,
+            select p.id as product_id,p.title as product,sum(d.quantity) quantity,d.units_supplier,d.tax,d.value,d.quantity * d.units_supplier quantity_total,d.purchase_id,
             sum(d.value * d.units_supplier * d.quantity)  as total
             from purchases_detail d 
             JOIN products p On p.id=d.product_id
             where d.purchase_id=" . $id . "
-            group by 1,2,4,5,6,7";
+            group by 1,2,4,5,6,7,8";
+        
         $detail = DB::select($sql);
 
         $this->subtotal = 0;

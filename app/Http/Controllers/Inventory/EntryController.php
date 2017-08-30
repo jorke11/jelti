@@ -410,7 +410,8 @@ class EntryController extends Controller {
 
         $sql = "
             SELECT 
-                p.id,p.title as product,sum(d.quantity) as quantity,sum(d.quantity * d.units_supplier) quantity_total,sum(d.value*d.quantity * d.units_supplier) as value,coalesce(sum(d.real_quantity * d.units_supplier),0) as real_quantity,
+                p.id,p.title as product,sum(d.quantity) as quantity,sum(d.quantity * d.units_supplier) quantity_total,
+                sum(d.value*d.quantity * d.units_supplier) as value,coalesce(sum(d.real_quantity * d.units_supplier),0) as real_quantity,
                 coalesce(sum(d.value*d.real_quantity * d.units_supplier),0) real_value,d.units_supplier
             FROM entries_detail d
             JOIN products p ON p.id=d.product_id
@@ -456,7 +457,6 @@ class EntryController extends Controller {
 
     public function getDetail($product_id, $entry_id) {
         $detail = EntriesDetail::where("entry_id", $entry_id)->where("product_id", $product_id)->get();
-        dd($detail);
         return response()->json($detail);
     }
 

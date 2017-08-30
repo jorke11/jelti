@@ -335,7 +335,7 @@ class PurchaseController extends Controller {
     }
 
     public function getDetail($id) {
-        $detail = PurchasesDetail::FindOrFail($id);
+        $detail = PurchasesDetail::find($id);
         return response()->json($detail);
     }
 

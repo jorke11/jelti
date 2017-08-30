@@ -92,7 +92,7 @@ function Entry() {
             val.real_quantity = (val.real_quantity != null) ? val.real_quantity : ''
             val.status = (val.status != undefined) ? val.status : 'new'
 
-            html += "<tr>";
+            html += '<tr id="row_' + val.id + '">';
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.product + "</td>";
             html += "<td>" + val.quantity + "</td>";
@@ -108,7 +108,7 @@ function Entry() {
         });
 
         $("#tblDetail tbody").html(html);
-        $("#tblDetail tfoot").html('<tr><td colspan="5">Total</td><td>' + data.total + '</td><td colspan="2"></td><td>' + data.total_real + '</td></tr>');
+        $("#tblDetail tfoot").html('<tr><td colspan="4">Total</td><td>' + data.total + '</td><td colspan="2"></td><td>' + data.total_real + '</td></tr>');
 
     }
 
@@ -319,7 +319,7 @@ function Entry() {
 
     this.editDetail = function (id) {
         var url = "/entry/" + id + "/" + $("#frm #id").val() + "/detail";
-        var param = {};
+        var param = {}, html = "<tr><table>";
 
         $.ajax({
             url: url,
@@ -327,9 +327,18 @@ function Entry() {
             dataType: 'JSON',
             success: function (data) {
 //                $("#modalDetail").modal("show");
+                $.each(data, function (i, val) {
+                    val.real_quantity = (val.real_quantity == null) ? '' : val.real_quantity;
+                    val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date;
+                    html += "<tr style='background-color:#ddd'><td colspan='3'></td><td></td>";
+                    html += "<td><input class='form-control input-sm form_datetime' value='" + val.expiration_date + "' placeholder='Fecha Vencimiento'></td>";
+                    html += "<td><input class='form-control input-sm' value='" + val.real_quantity + "' placeholder='Cantidad'></td></tr>";
+                });
 
-                $(".input-detail").setFields({data: data});
-                $("#frmDetail #real_quantity").val(data.quantity);
+                html += "</table></tr>";
+                console.log(html)
+                $("#row_" + id).after(html);
+
             }
         })
     }

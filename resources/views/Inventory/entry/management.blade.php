@@ -129,7 +129,7 @@
                 <table class="table table-bordered table-condensed" id="tblDetail">
                     <thead>
                         <tr>
-                            <th colspan="4" class="center-rowspan">Information</th>
+                            <th colspan="2" class="center-rowspan">Information</th>
                             <th colspan="3" class="center-rowspan">Order</th>
                             <th colspan="3" class="center-rowspan">Real</th>
                             <th rowspan="2" class="center-rowspan">Status</th>
@@ -138,8 +138,6 @@
                         <tr>
                             <th>#</th>
                             <th>Product</th>
-                            <th>Comment</th>
-                            <th>Expiration</th>
                             <th>Quantity</th>
                             <th>Value</th>
                             <th>Total</th>

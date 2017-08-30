@@ -119,15 +119,8 @@ class creditnoteController extends Controller {
                 ->where("id", $cre->id)
                 ->get();
 
-//        dd($detail);
-//        $detail = DB::table("sales_detail")
-//                ->select(DB::raw("credit_note_detail.quantity as quantity"), DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * (credit_note_detail.quantity) * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
-//                ->join("products", "sales_detail.product_id", "products.id")
-//                ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-//                ->join("credit_note_detail", "credit_note_detail.product_id", "sales_detail.product_id")
-//                ->where("sale_id", $cre->sale_id)
-//                ->orderBy("order", "asc")
-//                ->get();
+
+        
         
         
         $dep = Departures::find($cre->departure_id);
@@ -150,10 +143,10 @@ class creditnoteController extends Controller {
             $term = $cli["term"];
         }
 
-        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["created"])));
+        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($cre["created_at"])));
 
         $cli["address_invoice"] = $sale["address"];
-        $cli["emition"] = $this->formatDate($sale["created"]);
+        $cli["emition"] = $this->formatDate($cre["created_at"]);
         $cli["observations"] = $sale["description"];
         $cli["expiration"] = $this->formatDate($expiration);
 

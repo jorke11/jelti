@@ -27,13 +27,11 @@ function Entry() {
             $(".input-entry").cleanFields({disabled: true});
             $("#btnSave").attr("disabled", true);
             $("#btnSend").attr("disabled", true);
-            $("#frm #consecutive").val(1);
             $("#frm #supplier_id").prop("disabled", true);
             $("#frm #status_id").prop("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-            obj.consecutive();
         });
 
         $("#btnmodalDetail").click(function () {
@@ -88,20 +86,15 @@ function Entry() {
         var total = 0, calc = 0;
 
         $.each(data.detail, function (i, val) {
-
             htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
-
             htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
 
-            val.expiration_date = (val.expiration_date != undefined) ? val.expiration_date : ''
             val.real_quantity = (val.real_quantity != null) ? val.real_quantity : ''
             val.status = (val.status != undefined) ? val.status : 'new'
 
             html += "<tr>";
             html += "<td>" + val.id + "</td>";
             html += "<td>" + val.product + "</td>";
-            html += "<td>" + val.comment + "</td>";
-            html += "<td>" + val.expiration_date + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
@@ -119,17 +112,6 @@ function Entry() {
 
     }
 
-    this.consecutive = function () {
-        $.ajax({
-            url: 'entry/1/consecutive',
-            method: 'GET',
-            dataType: 'JSON',
-            success: function (resp) {
-                $("#frm #consecutive").val(resp.response);
-            }
-        })
-    }
-
     this.new = function () {
         toastr.remove();
 
@@ -144,7 +126,7 @@ function Entry() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-        obj.consecutive();
+
     }
 
     this.send = function () {
@@ -336,13 +318,16 @@ function Entry() {
     }
 
     this.editDetail = function (id) {
-        var url = "/entry/" + id + "/detail";
+        var url = "/entry/" + id + "/" + $("#frm #id").val() + "/detail";
+        var param = {};
+
         $.ajax({
             url: url,
             method: "GET",
             dataType: 'JSON',
             success: function (data) {
-                $("#modalDetail").modal("show");
+//                $("#modalDetail").modal("show");
+
                 $(".input-detail").setFields({data: data});
                 $("#frmDetail #real_quantity").val(data.quantity);
             }

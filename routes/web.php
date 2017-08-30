@@ -163,7 +163,7 @@ Route::put('/checkedSale/{id}', 'Invoicing\SaleController@checkedSale');
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
 Route::get('/entry/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
-Route::get('/entry/{id}/detail', ['uses' => 'Inventory\EntryController@getDetail']);
+Route::get('/entry/{product_id}/{entry_id}/detail', ['uses' => 'Inventory\EntryController@getDetail']);
 Route::get('/entry/{id}/detailAll', ['uses' => 'Inventory\EntryController@getDetailAll']);
 Route::get('/entry/{id}/getSupplier', ['uses' => 'Inventory\EntryController@getSupplier']);
 Route::get('/entry/{id}/getProducts', ['uses' => 'Inventory\EntryController@getProducts']);

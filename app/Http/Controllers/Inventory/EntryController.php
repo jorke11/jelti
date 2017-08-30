@@ -45,10 +45,6 @@ class EntryController extends Controller {
         return view("Inventory.entry.init", compact("category", "status", "warehouse", "users"));
     }
 
-    public function getConsecutive($id) {
-        return response()->json(["response" => $this->createConsecutive(2)]);
-    }
-
     public function getDetailProduct($id) {
         $category = DB::table("products")
                 ->select("products.id", "products.title", "products.category_id", "categories.description as caterory", "products.price_sf")
@@ -406,11 +402,23 @@ class EntryController extends Controller {
 
     public function formatDetail($id) {
 
-        $detail = DB::table("entries_detail")
-                        ->select("entries_detail.id", "entries_detail.status_id", "entries_detail.real_quantity", "expiration_date", "quantity", "entries_detail.value", "products.title as product", "entries_detail.description as comment", "parameters.description as status")
-                        ->join("products", "entries_detail.product_id", "products.id")
-                        ->join("parameters", "entries_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
-                        ->where("entry_id", $id)->get();
+//        $detail = DB::table("entries_detail")
+//                        ->select("entries_detail.id", "entries_detail.status_id", "entries_detail.real_quantity", "expiration_date", "quantity", "entries_detail.value", "products.title as product", "entries_detail.description as comment", "parameters.description as status")
+//                        ->join("products", "entries_detail.product_id", "products.id")
+//                        ->join("parameters", "entries_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
+//                        ->where("entry_id", $id)->get();
+
+        $sql = "
+            SELECT 
+                p.id,p.title as product,sum(d.quantity * d.units_supplier) quantity,sum(d.value*d.quantity * d.units_supplier) as value,coalesce(sum(d.real_quantity * d.units_supplier),0) as real_quantity,
+                coalesce(sum(d.value*d.real_quantity * d.units_supplier),0) real_value
+            FROM entries_detail d
+            JOIN products p ON p.id=d.product_id
+            WHERE d.entry_id=$id
+            group by p.id
+
+              ";
+        $detail = DB::select($sql);
         $this->total = 0;
         $this->total_real = 0;
         foreach ($detail as $i => $val) {

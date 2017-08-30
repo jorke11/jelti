@@ -30,6 +30,7 @@ class Sample extends Model {
         "outstanding",
         "remission",
         "discount",
+        "type_inventory_id",
     ];
 
 }

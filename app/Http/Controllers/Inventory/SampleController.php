@@ -71,9 +71,10 @@ class SampleController extends Controller {
     public function index($client_id = null, $init = null, $end = null, $product_id = null, $supplier_id = null) {
         $category = \App\Models\Administration\Categories::all();
         $status = Parameters::where("group", "entry")->get();
+        $type_inventory = Parameters::where("group", "type_inventory")->get();
         $commercial_id = null;
 
-        return view("Inventory.sample.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id"));
+        return view("Inventory.sample.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id","type_inventory"));
     }
 
     public function listTable(Request $req) {

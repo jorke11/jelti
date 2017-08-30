@@ -161,6 +161,17 @@
                     <input type="text" class="form-control input-sample" id="discount" name="discount">
                 </div>
             </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="email">Tipo Salida:</label>
+                    <select class="form-control input-sample input-sm" id="type_inventory_id" name='type_inventory_id' required>
+                        <option value="0">Selection</option>
+                        @foreach($type_inventory as $val)
+                        <option value="{{$val->code}}">{{$val->description}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
         {!!Form::close()!!}
     </div>

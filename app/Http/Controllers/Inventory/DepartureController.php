@@ -76,8 +76,8 @@ class DepartureController extends Controller {
             $commercial_id = str_replace("_", "", $client_id);
             $client_id = null;
         }
-        
-        
+
+
 
         return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id"));
     }
@@ -640,27 +640,24 @@ class DepartureController extends Controller {
                             $cont = 0;
                             $sale = Sales::find($id);
 
-
-
                             foreach ($detail as $value) {
-                                $pro = Products::find($value->product_id);
-                                SaleDetail::insert([
-                                    "sale_id" => $id, "product_id" => $value->product_id,
-                                    "category_id" => $value->category_id, "quantity" => $value->quantity,
-                                    "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
-                                    "account_id" => 1, "order" => $cont, "type_nature" => 1
-                                ]);
-                                $cont++;
+                                if ($value->real_quantity > 0) {
+                                    $pro = Products::find($value->product_id);
+                                    SaleDetail::insert([
+                                        "sale_id" => $id, "product_id" => $value->product_id,
+                                        "category_id" => $value->category_id, "quantity" => $value->real_quantity,
+                                        "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
+                                        "account_id" => 1, "order" => $cont, "type_nature" => 1
+                                    ]);
+                                    $cont++;
+                                }
                             }
 
                             $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
 
-
-
                             if ($departure->invoice == '') {
                                 $departure->invoice = $con->consecutive;
                             }
-
 
                             $departure->status_id = 2;
                             $departure->save();
@@ -683,7 +680,7 @@ class DepartureController extends Controller {
                                 $emDetail = EmailDetail::where("email_id", $email->id)->get();
                             }
 
-                            if (count($emDetail) > 0) {
+                            if (count($emDetail) > 0 && $cont != 0) {
 
                                 $ware = Warehouses::find($departure->warehouse_id);
                                 $client = Stakeholder::find($departure->client_id);
@@ -697,7 +694,7 @@ class DepartureController extends Controller {
                                     $this->mails[] = $value->description;
                                 }
 
-                                $listdetail = $this->formatDetail($departure->id);
+                                $listdetail = $this->formatDetailSales($id);
 
                                 $cit = Cities::find($ware->city_id);
                                 $commercial = Users::where("id", $departure->responsible_id)->first();
@@ -747,6 +744,9 @@ class DepartureController extends Controller {
                                     $msj->subject($this->subject);
                                     $msj->to($this->mails);
                                 });
+                            } else {
+                                DB::rollback();
+                                return response()->json(["success" => false, "msg" => 'No hay items para facturar']);
                             }
 
                             DB::commit();
@@ -795,7 +795,7 @@ class DepartureController extends Controller {
         $id = 1;
         $created_at = date("Y-m-d H:i");
         $warehouse = "jorge";
-        $detail = $this->formatDetail(297);
+        $detail = $this->formatDetailSales(726);
         $subtotal = "$ " . number_format($this->subtotal, 0, ",", ".");
         $total = "$ " . number_format($this->total, 0, ",", ".");
         $exento = "$ " . number_format($this->total, 0, ",", ".");
@@ -806,7 +806,9 @@ class DepartureController extends Controller {
         $flete = "$ " . number_format(100000, 0, ",", ".");
         $environment = "production";
         $invoice = "3022";
-        return view("Notifications.invoice", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "invoice"));
+        $flete = 0;
+        $discount = 0;
+        return view("Notifications.invoice", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "invoice", "flete","discount"));
     }
 
     public function storeExtern(Request $request) {
@@ -877,6 +879,38 @@ class DepartureController extends Controller {
             $this->subtotal += $detail[$i]->total;
             $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
             $this->total_real += $detail[$i]->total_real;
+
+            if ($value->tax == 0) {
+                $this->exento += $detail[$i]->total;
+            }
+            if ($value->tax == 0.05) {
+                $this->tax5 += $detail[$i]->total * $value->tax;
+            }
+            if ($value->tax == 0.19) {
+                $this->tax19 += $detail[$i]->total * $value->tax;
+            }
+        }
+        return $detail;
+    }
+
+    public function formatDetailSales($id) {
+        $detail = DB::table("sales_detail")
+                ->select("sales_detail.id","sales_detail.quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "sales_detail.tax")
+                ->join("products", "sales_detail.product_id", "products.id")
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id")
+                ->where("sale_id", $id)
+                ->orderBy("id", "asc")
+                ->get();
+
+        $this->total = 0;
+        $this->subtotal = 0;
+        foreach ($detail as $i => $value) {
+            $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
+            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
+            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
+            
+            $this->subtotal += $detail[$i]->total;
+            $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
 
             if ($value->tax == 0) {
                 $this->exento += $detail[$i]->total;
@@ -968,37 +1002,42 @@ class DepartureController extends Controller {
         $available = $available->getData(true);
 
         $input["status_id"] = 3;
-        if ($available["quantity"] == 0 && Auth::user()->role_id != 4) {
-            $input["real_quantity"] = 0;
-            $input["description"] = "Inventario no disponible, guarda 0";
-            $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["departure_id"]);
-            $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
-        }
+//        if ($available["quantity"] == 0 && Auth::user()->role_id != 4) {
+//        if (Auth::user()->role_id != 4) {
+//            $input["real_quantity"] = 0;
+//            $input["description"] = "Inventario no disponible, guarda 0";
+//            $entry->fill($input)->save();
+//            $resp = $this->formatDetail($input["departure_id"]);
+//            $total = "$ " . number_format($this->total, 0, ",", ".");
+//            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
+//        }
+//        if ($input["real_quantity"] != 0) {
+//
+//            if ($available["quantity"] >= $input["real_quantity"]) {
+//                $result = $entry->fill($input)->save();
+//                if ($result) {
+//                    $resp = $this->formatDetail($input["departure_id"]);
+//                    $total = "$ " . number_format($this->total, 0, ",", ".");
+//                    return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
+//                } else {
+//                    return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
+//                }
+//            } else {
+//                $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];
+//                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
+//            }
+//        } else {
+//
+//            $entry->fill($input)->save();
+//            $resp = $this->formatDetail($input["departure_id"]);
+//            $total = "$ " . number_format($this->total, 0, ",", ".");
+//            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
+//        }
 
-        if ($input["real_quantity"] != 0) {
-
-            if ($available["quantity"] >= $input["real_quantity"]) {
-                $result = $entry->fill($input)->save();
-                if ($result) {
-                    $resp = $this->formatDetail($input["departure_id"]);
-                    $total = "$ " . number_format($this->total, 0, ",", ".");
-                    return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-                } else {
-                    return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
-                }
-            } else {
-                $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];
-                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
-            }
-        } else {
-
-            $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["departure_id"]);
-            $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-        }
+        $entry->fill($input)->save();
+        $resp = $this->formatDetail($input["departure_id"]);
+        $total = "$ " . number_format($this->total, 0, ",", ".");
+        return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
     }
 
     public function destroy($id) {

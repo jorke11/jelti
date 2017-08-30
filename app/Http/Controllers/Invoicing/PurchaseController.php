@@ -421,7 +421,7 @@ class PurchaseController extends Controller {
 
 
             if ($value->tax == 0) {
-                $this->exempt += $value->valuetotal;
+                $this->exempt += $value->total;
             }
             if ($value->tax == 0.05) {
                 $this->tax5 += $detail[$i]->total * $value->tax;

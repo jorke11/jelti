@@ -53,7 +53,7 @@ function Sale() {
             $(".input-fillable").attr("disabled", true);
             $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
             $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
-            $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+            $("#frm #city_id").getSeeker({default: true, api: '/api/getCity'});
             $("#frm #status_id").val(1).trigger('change');
             $("#frm #status_id").prop("disabled", true);
         });
@@ -247,7 +247,7 @@ function Sale() {
         $("#frm #supplier_id").prop("disabled", false);
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse'});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
-        $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
+        $("#frm #city_id").getSeeker({default: true, api: '/api/getCity'});
 
         listProducts = [];
         statusRecord = false;
@@ -432,6 +432,7 @@ function Sale() {
         var form = $("#frmDetail").serialize()
         var msg = 'Record Detail';
         var validate = $(".input-detail").validate();
+        
         if (validate.length == 0) {
             if (id != '') {
                 var id = $("#frmDetail #id").val();

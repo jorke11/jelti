@@ -59,7 +59,7 @@ $fin = $rows;
 $cont = 0;
 for ($i = 1; $i <= $count; $i++) {
     ?>
-    @include('Inventory.departure.pdfheader')
+    @include('Inventory.sample.pdfheader')
     <br>
     <br>
     <table width='100%' id="detail">
@@ -113,7 +113,7 @@ for ($i = 1; $i <= $count; $i++) {
                             <br>
                             <br>
                             <br>
-                            @include('Inventory.departure.pdffooter')
+                            @include('Inventory.sample.pdffooter')
                             <table>
                                 <tr>
                                     <td class="resolution">La presente Factura se asemeja en todos sus efectos a un Título Valor Art. 1 Ley 1231 de 2008. En caso de

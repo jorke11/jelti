@@ -20,7 +20,6 @@ use App\Models\Administration\EmailDetail;
 use App\Models\Administration\Warehouses;
 use App\Models\Administration\Cities;
 use App\Models\Security\Users;
-use App\Models\Invoicing\Sales;
 use Session;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Inventory\StockController;
@@ -142,8 +141,8 @@ class SampleController extends Controller {
     }
 
     public function getInvoiceHtml($id) {
-        $sale = Sales::where("sample_id", $id)->first();
-        $detail = SaleDetail::select("quantity,tax,description,product_id,products.title product")
+        $sale = Sample::where("sample_id", $id)->first();
+        $detail = SampleDetail::select("quantity,tax,description,product_id,products.title product")
                 ->join("products", "Sales.product_id", "products_id")
                 ->where("sale_id", $sale["id"])
                 ->get();
@@ -194,16 +193,17 @@ class SampleController extends Controller {
     public function getInvoice($id) {
         $this->mails = array();
 
-        $sale = Sales::where("sample_id", $id)->first();
-        $detail = DB::table("sales_detail")
-                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
-                ->join("products", "sales_detail.product_id", "products.id")
+        $sale = SampleDetail::where("sample_id", $id)->first();
+        
+        $detail = DB::table("samples_detail")
+                ->select("quantity", DB::raw("samples_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "samples_detail.value", "samples_detail.units_sf", DB::raw("samples_detail.units_sf * samples_detail.quantity as quantityTotal"), DB::raw("samples_detail.value * samples_detail.quantity * samples_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->join("products", "samples_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("sale_id", $sale["id"])
-                ->orderBy("order", "asc")
+                ->where("sample_id", $sale["id"])
                 ->get();
-//        dd($sale);
+
         $dep = Sample::find($id);
+        
 
         if ($dep->branch_id != '') {
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
@@ -211,20 +211,22 @@ class SampleController extends Controller {
                     ->first();
         } else {
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
-                    ->where("stakeholder_id", $sale["client_id"])
+                    ->where("stakeholder_id", $dep["client_id"])
                     ->first();
         }
 
 
         if ($cli == null) {
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
-                    ->where("stakeholder.id", $sale["client_id"])
+                    ->where("stakeholder.id", $dep["client_id"])
                     ->first();
         }
 
+
         $city_send = Cities::find($dep->destination_id);
         $city_inv = Cities::find($dep->city_id);
-
+        
+        
         $cli->city_send = $city_send->description;
         $cli->city_inv = $city_inv->description;
 
@@ -274,7 +276,7 @@ class SampleController extends Controller {
             }
         }
 
-        $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
+        $rete = SampleDetail::where("description", "rete")->where("sample_id", $sale["id"])->first();
 
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
 
@@ -426,7 +428,7 @@ class SampleController extends Controller {
             $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
             if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched)))) {
-                $sal = Sales::where("sample_id", $id)->first();
+                $sal = Sample::where("sample_id", $id)->first();
                 if ($sal != null) {
                     $detail = SaleDetail::where("sale_id", $sal->id)->get();
 
@@ -1010,8 +1012,8 @@ class SampleController extends Controller {
         $dep = Sample::find($id)->toArray();
 
 
-        $detail = DB::table("sales_detail")
-                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(sales_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+        $detail = DB::table("samples_detail")
+                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
                 ->where("sale_id", $sale["id"])

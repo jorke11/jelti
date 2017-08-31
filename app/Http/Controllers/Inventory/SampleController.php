@@ -73,7 +73,7 @@ class SampleController extends Controller {
         $type_inventory = Parameters::where("group", "type_inventory")->get();
         $commercial_id = null;
 
-        return view("Inventory.sample.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id","type_inventory"));
+        return view("Inventory.sample.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id", "type_inventory"));
     }
 
     public function listTable(Request $req) {
@@ -194,7 +194,7 @@ class SampleController extends Controller {
         $this->mails = array();
 
         $sale = SampleDetail::where("sample_id", $id)->first();
-        
+
         $detail = DB::table("samples_detail")
                 ->select("quantity", DB::raw("samples_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "samples_detail.value", "samples_detail.units_sf", DB::raw("samples_detail.units_sf * samples_detail.quantity as quantityTotal"), DB::raw("samples_detail.value * samples_detail.quantity * samples_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
                 ->join("products", "samples_detail.product_id", "products.id")
@@ -203,7 +203,7 @@ class SampleController extends Controller {
                 ->get();
 
         $dep = Sample::find($id);
-        
+
 
         if ($dep->branch_id != '') {
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
@@ -225,8 +225,8 @@ class SampleController extends Controller {
 
         $city_send = Cities::find($dep->destination_id);
         $city_inv = Cities::find($dep->city_id);
-        
-        
+
+
         $cli->city_send = $city_send->description;
         $cli->city_inv = $city_inv->description;
 
@@ -242,7 +242,7 @@ class SampleController extends Controller {
             $term = $cli["term"];
         }
 
-        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($sale["dispatched"])));
+        $expiration = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($dep->dispatched)));
 
         $cli["address_send"] = $sale["address"];
 

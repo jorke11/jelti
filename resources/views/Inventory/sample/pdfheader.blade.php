@@ -67,7 +67,7 @@
                     <tr>
                         <td class="font-detail">Cuenta</td>
                         <td class="font-detail-cont" width="38%"><?php echo $client["business"]; ?></td>
-                        <td class="font-detail">Emisión</td>
+                        <td class="font-detail" width="30%">Emisión</td>
                         <td class="font-detail-cont"><?php echo $client["emition"]; ?></td>
                     </tr>
                     <tr>

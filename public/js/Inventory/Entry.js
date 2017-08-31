@@ -1,5 +1,5 @@
 function Entry() {
-    var table;
+    var table, showDetail = true;
     this.init = function () {
         table = this.table();
 
@@ -318,29 +318,142 @@ function Entry() {
     }
 
     this.editDetail = function (id) {
+
         var url = "/entry/" + id + "/" + $("#frm #id").val() + "/detail";
-        var param = {}, html = "<tr><table>";
+        var param = {}, html = "<tr class='add_" + id + "'><table>";
 
-        $.ajax({
-            url: url,
-            method: "GET",
-            dataType: 'JSON',
-            success: function (data) {
+        if (showDetail) {
+            $.ajax({
+                url: url,
+                method: "GET",
+                dataType: 'JSON',
+                success: function (data) {
 //                $("#modalDetail").modal("show");
-                $.each(data, function (i, val) {
-                    val.real_quantity = (val.real_quantity == null) ? '' : val.real_quantity;
-                    val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date;
-                    html += "<tr style='background-color:#ddd'><td colspan='3'></td><td></td>";
-                    html += "<td><input class='form-control input-sm form_datetime' value='" + val.expiration_date + "' placeholder='Fecha Vencimiento'></td>";
-                    html += "<td><input class='form-control input-sm' value='" + val.real_quantity + "' placeholder='Cantidad'></td></tr>";
-                });
+                    $(".add_" + id).remove();
 
-                html += "</table></tr>";
-                console.log(html)
-                $("#row_" + id).after(html);
+                    html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='6'><br></td></tr>";
+                    html += "<tr class='add_" + id + "'><td style='background-color:#ddd' colspan='3'></td>";
+                    html += "<td align='center'><button class='btn btn-info input-sm' onclick='obj.repeatData(" + id + ")'>Replicar</button></td>";
+                    html += "<td align='center'><button class='btn btn-success input-sm' onclick='obj.saveData(" + id + ")'>Actualizar</button></td></tr>";
 
-            }
-        })
+                    $.each(data, function (i, val) {
+                        val.real_quantity = (val.real_quantity == null) ? '' : val.real_quantity;
+                        val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date;
+                        val.lot = (val.lot == null) ? '' : val.lot;
+                        html += "<tr style='background-color:#ddd' class='add_" + id + "'><td colspan='3'></td>";
+                        html += "<td><input class='form-control input-sm detail_lot_" + id + "' value='" + val.lot + "' placeholder='Lote' name='lot_" + id + "' id='lot_" + id + "'></td>";
+                        html += "<td><input class='form-control input-sm detail_date_" + id + " form_datetime' value='" + val.expiration_date + "' placeholder='Fecha Vencimiento'></td>";
+                        html += "<td><input class='form-control input-sm detail_quantity_" + id + "' value='" + val.real_quantity + "' placeholder='Cantidad'></td></tr>";
+                    });
+
+
+                    html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='6'><br></td></tr>";
+                    html += "</table></tr>";
+                    $("#row_" + id).after(html);
+
+                    $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
+                }
+            })
+            showDetail = false;
+        } else {
+            $(".add_" + id).remove();
+            showDetail = true;
+        }
+    }
+
+    this.saveData = function (id) {
+        var lot = '';
+        var exp = '';
+        var quantity = '';
+        var cont = 0;
+        if ($(".detail_lot_" + id)[0].value != '') {
+
+            $(".detail_lot_" + id).each(function () {
+
+                if (cont > 0) {
+                    $(this).val(lot)
+                } else {
+                    lot = $(this).val();
+                }
+                cont++;
+            })
+        }
+
+        cont = 0;
+
+        if ($(".detail_date_" + id)[0].value != '') {
+
+            $(".detail_date_" + id).each(function () {
+
+                if (cont > 0) {
+                    $(this).val(lot)
+                } else {
+                    lot = $(this).val();
+                }
+                cont++;
+            })
+        }
+
+        cont = 0;
+
+        if ($(".detail_quantity_" + id)[0].value != '') {
+
+            $(".detail_quantity_" + id).each(function () {
+                if (cont > 0) {
+                    $(this).val(lot)
+                } else {
+                    lot = $(this).val();
+                }
+                cont++;
+            })
+        }
+    }
+
+    this.repeatData = function (id) {
+        var lot = '';
+        var exp = '';
+        var quantity = '';
+        var cont = 0;
+        if ($(".detail_lot_" + id)[0].value != '') {
+
+            $(".detail_lot_" + id).each(function () {
+
+                if (cont > 0) {
+                    $(this).val(lot)
+                } else {
+                    lot = $(this).val();
+                }
+                cont++;
+            })
+        }
+        cont = 0;
+
+        if ($(".detail_date_" + id)[0].value != '') {
+
+            $(".detail_date_" + id).each(function () {
+
+                if (cont > 0) {
+                    $(this).val(lot)
+                } else {
+                    lot = $(this).val();
+                }
+                cont++;
+            })
+        }
+
+        cont = 0;
+
+        if ($(".detail_quantity_" + id)[0].value != '') {
+
+            $(".detail_quantity_" + id).each(function () {
+                if (cont > 0) {
+                    $(this).val(lot)
+                } else {
+                    lot = $(this).val();
+                }
+                cont++;
+            })
+        }
     }
 
 

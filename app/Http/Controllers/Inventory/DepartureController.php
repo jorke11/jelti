@@ -219,23 +219,18 @@ class DepartureController extends Controller {
                 ->get();
 //        dd($sale);
         $dep = Departures::find($id);
-
+        $cli = null;
         if ($dep->branch_id != '') {
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
                     ->where("id", $dep->branch_id)
                     ->first();
         } else {
-            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
-                    ->where("stakeholder_id", $sale["client_id"])
-                    ->first();
-        }
-
-
-        if ($cli == null) {
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
                     ->where("stakeholder.id", $sale["client_id"])
                     ->first();
         }
+
+
 
         $city_send = Cities::find($dep->destination_id);
         $city_inv = Cities::find($dep->city_id);
@@ -808,7 +803,7 @@ class DepartureController extends Controller {
         $invoice = "3022";
         $flete = 0;
         $discount = 0;
-        return view("Notifications.invoice", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "invoice", "flete","discount"));
+        return view("Notifications.invoice", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "invoice", "flete", "discount"));
     }
 
     public function storeExtern(Request $request) {
@@ -895,7 +890,7 @@ class DepartureController extends Controller {
 
     public function formatDetailSales($id) {
         $detail = DB::table("sales_detail")
-                ->select("sales_detail.id","sales_detail.quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "sales_detail.tax")
+                ->select("sales_detail.id", "sales_detail.quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "sales_detail.tax")
                 ->join("products", "sales_detail.product_id", "products.id")
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id")
                 ->where("sale_id", $id)
@@ -908,7 +903,7 @@ class DepartureController extends Controller {
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
-            
+
             $this->subtotal += $detail[$i]->total;
             $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
 

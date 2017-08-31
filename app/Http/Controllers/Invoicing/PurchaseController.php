@@ -400,7 +400,7 @@ class PurchaseController extends Controller {
 //                        ->join("products", "purchases_detail.product_id", "products.id")
 //                        ->orderBy("order", "asc")->get();
         $sql = "
-            select p.id as product_id,p.title as product,sum(d.quantity) quantity,d.units_supplier,d.tax,d.value,d.quantity * d.units_supplier quantity_total,d.purchase_id,
+            select p.id as product_id,p.title as product,sum(d.quantity * d.units_supplier) quantity,d.units_supplier,d.tax,d.value,d.quantity * d.units_supplier quantity_total,d.purchase_id,
             sum(d.value * d.units_supplier * d.quantity)  as total
             from purchases_detail d 
             JOIN products p On p.id=d.product_id

@@ -23,7 +23,7 @@ class OperationsController extends Controller {
 
         $ware = "";
         if ($input["warehouse_id"] != 0) {
-            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+            $ware = " AND d.warehouse_id=" . $input["warehouse_id"];
         }
 
         if ($input["client_id"] != 0) {
@@ -47,7 +47,7 @@ class OperationsController extends Controller {
 
         $ware = "";
         if ($input["warehouse_id"] != 0) {
-            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+            $ware = " AND d.warehouse_id=" . $input["warehouse_id"];
         }
 
         if ($input["client_id"] != 0) {
@@ -71,7 +71,7 @@ class OperationsController extends Controller {
 
         $ware = "";
         if ($input["warehouse_id"] != 0) {
-            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+            $ware = " AND d.warehouse_id=" . $input["warehouse_id"];
         }
 
         if ($input["client_id"] != 0) {
@@ -98,7 +98,7 @@ class OperationsController extends Controller {
 
         $ware = "";
         if ($input["warehouse_id"] != 0) {
-            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+            $ware = " AND d.warehouse_id=" . $input["warehouse_id"];
         }
 
         if ($input["client_id"] != 0) {
@@ -121,7 +121,7 @@ class OperationsController extends Controller {
 
         $ware = "";
         if ($input["warehouse_id"] != 0) {
-            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+            $ware = " AND d.warehouse_id=" . $input["warehouse_id"];
         }
 
         if ($input["client_id"] != 0) {

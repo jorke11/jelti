@@ -199,7 +199,7 @@ class SampleController extends Controller {
                 ->select("quantity", DB::raw("samples_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "samples_detail.value", "samples_detail.units_sf", DB::raw("samples_detail.units_sf * samples_detail.quantity as quantityTotal"), DB::raw("samples_detail.value * samples_detail.quantity * samples_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
                 ->join("products", "samples_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("sample_id", $sale["id"])
+                ->where("sample_id", $id)
                 ->get();
 
         $dep = Sample::find($id);

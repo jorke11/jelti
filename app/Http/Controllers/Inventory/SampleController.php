@@ -305,7 +305,7 @@ class SampleController extends Controller {
         ];
 //dd($data);
 
-        $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
+        $pdf = \PDF::loadView('Inventory.sample.pdf', [], $data, [
                     'title' => 'Invoice']);
 //        $pdf->SetProtection(array(), '123', '123');
 //        $pdf->SetWatermarkImage('assets/images/logo.png');

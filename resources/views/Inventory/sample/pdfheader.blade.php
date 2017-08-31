@@ -56,8 +56,8 @@
     <br>
     <table width='100%'>
         <tr>
-            <td class="font-subtitle" width="60%">Factura a nombre de:</td>
-            <td class="font-invoice" width="40%">Factura de venta: <?php echo $invoice ?></td>
+            <td class="font-subtitle" width="60%">Muestra a nombre de:</td>
+            <td class="font-invoice" width="40%">Muestra: <?php echo $invoice ?></td>
         </tr>
     </table>
     <table>

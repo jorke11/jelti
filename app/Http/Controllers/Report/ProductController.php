@@ -62,10 +62,7 @@ class ProductController extends Controller {
 
         $ware = "";
         $ware2 = '';
-//        if ($input["warehouse_id"] != 0) {
-//            $ware = " AND dep.warehouse_id=" . $input["warehouse_id"];
-//            $ware2 = " AND dep.warehouse_id=" . $input["warehouse_id"];
-//        }
+
 
         $sql = "
             SELECT c.id,c.description city,

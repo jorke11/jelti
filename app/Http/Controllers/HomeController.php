@@ -41,7 +41,7 @@ class HomeController extends Controller {
             WHERE product_id IS NOT NULL AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 2 DESC LIMIT 1";
-//        echo $sql;exit;
+
         $product = DB::select($sql);
 
         if (count($product) > 0) {

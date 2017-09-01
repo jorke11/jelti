@@ -395,11 +395,6 @@ class PurchaseController extends Controller {
     }
 
     public function formatDetail($id) {
-//        $detail = DB::table("purchases_detail")
-//                        ->select("purchases_detail.id", "products.title as product", DB::raw("coalesce(purchases_detail.tax,0) as tax"), "purchases_detail.quantity", "purchases_detail.value", "purchases_detail.type_nature", "purchases_detail.description", "products.units_supplier", DB::raw("purchases_detail.quantity * purchases_detail.units_supplier * purchases_detail.value as valuetotal"))
-//                        ->where("purchase_id", "=", $id)
-//                        ->join("products", "purchases_detail.product_id", "products.id")
-//                        ->orderBy("order", "asc")->get();
         $sql = "
             select p.id as product_id,p.title as product,d.units_supplier,d.tax,d.value,sum(d.quantity * d.units_supplier) quantity_total,d.purchase_id, sum(d.value * d.units_supplier * d.quantity) as total,sum(d.quantity) as quantity 
             from purchases_detail d 

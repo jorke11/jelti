@@ -36,9 +36,9 @@ class HomeController extends Controller {
             SELECT p.title,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
             round(sum(d.value * d.quantity * d.units_sf)) as total
             FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id NOT IT (258,264)
+            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id NOT IN (258,264)
             JOIN products p ON p.id=d.product_id  
-            WHERE product_id IS NOT NULL AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE product_id IS NOT NULL AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 2 DESC LIMIT 1";
 
@@ -51,8 +51,8 @@ class HomeController extends Controller {
         $sql = "
             SELECT client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) as unidades
             FROM vdepartures
-            WHERE created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59' AND status_id=2
-                AND client_id <>258
+            WHERE dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59' AND status_id=2
+                AND client_id NOT IN(258,264)
             group by 1
             ORDER BY 2 DESC
             LIMIT 1
@@ -69,7 +69,7 @@ class HomeController extends Controller {
             JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
             JOIN products p ON p.id=d.product_id  
             JOIN stakeholder s ON s.id=p.supplier_id  
-            WHERE d.product_id is not null AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 3 desc LIMIT 1";
 
@@ -79,13 +79,13 @@ class HomeController extends Controller {
             $supplier = $supplier[0];
         }
         $sql = "
-            SELECT u.name ||' '|| u.last_name as vendedor,sum(d.quantity*p.packaging) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
+            SELECT u.name ||' '|| u.last_name as vendedor,sum(d.quantity * p.packaging) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
             FROM departures_detail d
             JOIN products p ON p.id=d.product_id
             JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
             JOIN users u ON u.id=dep.responsible_id
-            WHERE d.product_id IS NOT NULL and client_id <>258
-            AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE d.product_id IS NOT NULL and client_id NOT IN (258,264)
+            AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 3 desc";
 
@@ -117,7 +117,7 @@ class HomeController extends Controller {
             where d.product_id is not null and p.created_at between '" . $ant . "-01 00:00' and '" . $ant . "-30 23:59') mesanterior
             from purchases_detail  d
             JOIN purchases p ON p.id=d.purchase_id
-            where d.product_id is not null and p.created_at > '" . date("Y-m") . "-01 00:00'
+            where d.product_id is not null and p.created > '" . date("Y-m") . "-01 00:00'
         ";
         $purchase = DB::select($sql);
         if (count($purchase) > 0) {
@@ -181,7 +181,6 @@ class HomeController extends Controller {
             $total[] = (int) $value->total;
             $subtotal[] = round($value->subtotal);
             $quantity[] = (int) $value->quantity;
-
         }
         return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "subtotal" => $subtotal]);
     }
@@ -214,7 +213,7 @@ class HomeController extends Controller {
             group by 1,2
             order by 4 
             desc limit 10";
-        
+
         $res = DB::select($sql);
 
         $cat = array();

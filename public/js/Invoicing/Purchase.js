@@ -74,7 +74,7 @@ function Purchase() {
             var obj = {};
             obj.id = $("#frm #id").val();
             $.ajax({
-                url: 'sendPurchase',
+                url: PATH + '/purchase/sendPurchase',
                 method: 'POST',
                 data: obj,
                 dataType: 'JSON',

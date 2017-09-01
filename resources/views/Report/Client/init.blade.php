@@ -5,8 +5,8 @@
     {!! Form::open(['id'=>'Detail']) !!}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="col-lg-10 col-center">
-                <div class="col-lg-3">
+            <div class="row">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Bodega</label>
                         <select class="form-control" id="warehouse_id" name="warehouse_id">
@@ -17,16 +17,47 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Cliente</label>
+                        <select class="form-control input-client" id="client_id" name='client_id' data-api="/api/getClient" required> 
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Ciudades</label>
+                        <select class="form-control input-client input-find" id="city_id" name='city_id'  data-api="/api/getCity">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Producto</label>
+                        <select class="form-control input-client input-find" id="product_id" name='product_id'  data-api="/api/getProduct">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Inicio</label>
                         <input type="text" class="form-control input-sm" id="finit" name='finit' value="<?php echo date("Y-m-") . "01" ?>">
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Final</label>
                         <input type="text" class="form-control input-sm" id="fend" name='fend' value="<?php echo date("Y-m-d") ?>">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Comericial</label>
+                        <select class="form-control input-client input-find" id="commercial_id" name='commercial_id'  data-api="/api/getCommercial">
+                        </select>
                     </div>
                 </div>
                 <div class="col-lg-2">
@@ -34,6 +65,7 @@
                         <button class="btn btn-success btn-sm" id="btnSearch" type="button">Search</button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

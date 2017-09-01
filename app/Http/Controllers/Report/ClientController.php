@@ -36,10 +36,21 @@ class ClientController extends Controller {
 
     public function getList(Request $req) {
         $input = $req->all();
-
+        
         $ware = "";
         if ($input["warehouse_id"] != 0) {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $ware .= " AND client_id=" . $input["client_id"];
+        }
+
+        if ($input["city_id"] != 0) {
+            $ware .= " AND destination_id=" . $input["city_id"];
+        }
+        if ($input["commercial_id"] != 0) {
+            $ware .= " AND vdepartures.responsible_id=" . $input["commercial_id"];
         }
 
         $res = $this->getListClient($input["init"], $input["end"], $ware);
@@ -48,6 +59,7 @@ class ClientController extends Controller {
     }
 
     public function getListClient($init, $end, $where = '', $limit = '') {
+        
         $sql = "
             SELECT 
                 stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,sum(tax19) tax19,sum(tax5) tax5,
@@ -60,7 +72,6 @@ class ClientController extends Controller {
             ORDER BY 3 DESC
             $limit
             ";
-
         $res = DB::select($sql);
 
         foreach ($res as $i => $value) {
@@ -97,6 +108,16 @@ class ClientController extends Controller {
         if ($input["warehouse_id"] != 0) {
             $ware = " AND s.warehouse_id=" . $input["warehouse_id"];
         }
+        if ($input["client_id"] != 0) {
+            $ware .= " AND dep.client_id=" . $input["client_id"];
+        }
+
+        if ($input["city_id"] != 0) {
+            $ware .= " AND dep.destination_id=" . $input["city_id"];
+        }
+        if ($input["product_id"] != 0) {
+            $ware .= " AND d.product_id=" . $input["product_id"];
+        }
 
         $cli = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
@@ -130,6 +151,17 @@ class ClientController extends Controller {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
         }
 
+        if ($input["client_id"] != 0) {
+            $ware .= " AND client_id=" . $input["client_id"];
+        }
+
+        if ($input["city_id"] != 0) {
+            $ware .= " AND destination_id=" . $input["city_id"];
+        }
+        if ($input["commercial_id"] != 0) {
+            $ware .= " AND vdepartures.responsible_id=" . $input["commercial_id"];
+        }
+
         $cli = "
             SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
             FROM vdepartures
@@ -161,6 +193,17 @@ class ClientController extends Controller {
         $ware = "";
         if ($input["warehouse_id"] != 0) {
             $ware = " AND dep.warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $ware .= " AND dep.client_id=" . $input["client_id"];
+        }
+
+        if ($input["city_id"] != 0) {
+            $ware .= " AND dep.destination_id=" . $input["city_id"];
+        }
+        if ($input["product_id"] != 0) {
+            $ware .= " AND d.product_id=" . $input["product_id"];
         }
 
         $res = $this->getCEOProduct($input["init"], $input["end"], $ware);

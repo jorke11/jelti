@@ -5,10 +5,12 @@ function Client() {
         this.tableProduct();
         this.tableCities();
         this.tableProductByCategory();
-        this.tableRepeatOrder();
+//        this.tableRepeatOrder();
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
+
+        $(".input-client").cleanFields();
 
         $("#btnSearch").click(function () {
             objCli.table();
@@ -25,9 +27,15 @@ function Client() {
 
     this.table = function () {
         var obj = {};
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        obj.city_id = $("#Detail #city_id").val();
+        obj.product_id = $("#Detail #product_id").val();
+        obj.commercial_id = $("#Detail #commercial_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
-        obj.warehouse_id = $("#Detail #warehouse_id").val();
+
+
         return $('#tbl').DataTable({
             destroy: true,
             order: [[2, "desc"]],
@@ -54,12 +62,17 @@ function Client() {
             ]
         });
     }
-    
+
     this.tableTarget = function () {
         var obj = {};
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        obj.city_id = $("#Detail #city_id").val();
+        obj.product_id = $("#Detail #product_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
-        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.commercial_id = $("#Detail #commercial_id").val();
+
         return $('#tblTarget').DataTable({
             destroy: true,
             ajax: {
@@ -84,9 +97,13 @@ function Client() {
     }
     this.tableProduct = function () {
         var obj = {};
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        obj.city_id = $("#Detail #city_id").val();
+        obj.product_id = $("#Detail #product_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
-        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.commercial_id = $("#Detail #commercial_id").val();
 
         $.ajax({
             url: "/api/reportClientProduct",
@@ -178,9 +195,13 @@ function Client() {
 
     this.tableCities = function () {
         var obj = {};
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        obj.city_id = $("#Detail #city_id").val();
+        obj.product_id = $("#Detail #product_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
-        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.commercial_id = $("#Detail #commercial_id").val();
 
         $.ajax({
             url: "/api/reportClientCities",
@@ -275,10 +296,14 @@ function Client() {
 
     this.tableProductByCategory = function () {
         var obj = {};
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+        obj.city_id = $("#Detail #city_id").val();
+        obj.product_id = $("#Detail #product_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
-        obj.warehouse_id = $("#Detail #warehouse_id").val();
-        
+        obj.commercial_id = $("#Detail #commercial_id").val();
+
         return $('#tblProductbyCategory').DataTable({
             destroy: true,
             ajax: {

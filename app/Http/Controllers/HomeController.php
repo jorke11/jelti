@@ -152,21 +152,23 @@ class HomeController extends Controller {
             }
         } else {
             if (Auth::user()->role_id == 2) {
-                return view('client', compact("product", "client", "supplier", "commercial", "samples","category","subcategory"));
+                return view('client', compact("product", "client", "supplier", "commercial", "samples", "category", "subcategory"));
             } else {
-                return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples","category"));
+                return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples", "category"));
             }
         }
     }
 
     public function getSales() {
         $sql = "
-            SELECT to_char(dispatched,'YYYY-Month') as fecha,sum(subtotalnumeric) subtotal ,sum(total) total,sum(quantity) as quantity
+            SELECT 
+                to_char(dispatched,'YYYY-Month') as fecha,to_char(dispatched,'YYYY-MM') as fecha_order,
+                sum(subtotalnumeric) subtotal ,sum(total) total,sum(quantity) as quantity
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             WHERE vdepartures.status_id=2  AND client_id <>258
-            GROUP BY to_char(vdepartures.dispatched,'YYYY-Month') 
-            ORDER BY 1 DESC
+            GROUP BY to_char(vdepartures.dispatched,'YYYY-Month'),to_char(dispatched,'YYYY-MM') 
+            ORDER BY 2 ASC
                 ";
 
         $sales = DB::select($sql);
@@ -180,32 +182,40 @@ class HomeController extends Controller {
             $subtotal[] = round($value->subtotal);
             $quantity[] = (int) $value->quantity;
 
-//            $sql = "
-//                SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) units
-//                FROM departures_detail d
-//                JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
-//                JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder = 1
-//                WHERE dep.client_id=" . $value->id . " and dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'";
-//            $res2 = DB::select($sql);
-//            $res[$i]->unidades = $res2[0]->units;
         }
         return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "subtotal" => $subtotal]);
     }
 
     public function getListProduct(Request $req) {
         $input = $req->all();
-        $cli = "
-            select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
-            from sales_detail d
-            JOIN sales s ON s.id=d.sale_id 
+
+
+        $where = "";
+        if ($input["warehouse_id"] != 0) {
+            $where = " AND warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $where .= " AND client_id=" . $input["client_id"];
+        }
+
+        if ($input["city_id"] != 0) {
+            $where .= " AND destination_id=" . $input["city_id"];
+        }
+
+
+        $sql = "
+            select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
+            from departures_detail d
+            JOIN departures dep ON dep.id=d.departure_id 
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is NOT null
-            AND s.created_at BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
             group by 1,2
             order by 4 
             desc limit 10";
-
-        $res = DB::select($cli);
+        
+        $res = DB::select($sql);
 
         $cat = array();
         $total = array();
@@ -221,18 +231,17 @@ class HomeController extends Controller {
 
     public function getListProductDash(Request $req) {
         $input = $req->all();
-        $cli = "
+        $sql = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 and dep.client_id<>258
             JOIN products p ON p.id=d.product_id 
-            WHERE d.product_id is NOT null
+            WHERE d.product_id is NOT null and p.category_id<>-1
             AND dep.dispatched BETWEEN'" . date("Y-m-") . "01 00:00' AND '" . date("Y-m-d") . " 23:59'
             group by 1,2
             order by 4 
             desc limit 10";
-
-        $res = DB::select($cli);
+        $res = DB::select($sql);
 
         $cat = array();
         $total = array();
@@ -300,7 +309,7 @@ class HomeController extends Controller {
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 and dep.client_id <> 258
             JOIN products p ON p.id=d.product_id 
             JOIN stakeholder st ON st.id=p.supplier_id
-            WHERE d.product_id is NOT null
+            WHERE d.product_id is NOT null and p.category_id<>-1
             AND dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
             group by 1,2
             order by 4 desc

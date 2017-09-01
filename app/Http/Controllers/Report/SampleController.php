@@ -130,6 +130,9 @@ class SampleController extends Controller {
         if ($input["warehouse_id"] != 0) {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
         }
+        if ($input["warehouse_id"] != 0) {
+            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+        }
 
         $cli = "
             SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 

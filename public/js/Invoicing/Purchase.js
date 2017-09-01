@@ -37,7 +37,7 @@ function Purchase() {
 
         $("#frmDetail #product_id").change(function () {
             $.ajax({
-                url: $(this).val() + '/getDetailProduct',
+                url: PATH + "/purchase/" + $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
@@ -108,9 +108,9 @@ function Purchase() {
     }
 
     this.getSupplier = function (id) {
-        console.log("asdsadsad");
+
         $.ajax({
-            url: id + '/getSupplier',
+            url: PATH + "/purchase/" + id + '/getSupplier',
             method: 'GET',
             dataType: 'JSON',
             async: false,

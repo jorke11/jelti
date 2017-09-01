@@ -53,6 +53,7 @@ class PurchaseController extends Controller {
     public function getSupplier($id) {
         $stakeholder = \App\Models\Administration\Stakeholder::findOrFail($id);
         $stakeholder->delivery = date('Y-m-d', strtotime('+' . $stakeholder->lead_time . ' days', strtotime(date('Y-m-d'))));
+        
         $products = Products::select("id as product_id", "tax", "title", "cost_sf", "units_supplier", "category_id")
                         ->where("supplier_id", $stakeholder->id)->orderBy("title", "asc")->get();
         return response()->json(["response" => $stakeholder, "products" => $products]);
@@ -306,8 +307,8 @@ class PurchaseController extends Controller {
     public function testNotification() {
         $data["id"] = "res";
         $data["city"] = "res";
-        $data["detail"] = $this->formatDetail(99);
-
+        $data["detail"] = $this->formatDetail(207);
+//        dd($data);
         $data["warehouse"] = "";
         $data["address"] = "";
         $data["name"] = "";
@@ -400,12 +401,11 @@ class PurchaseController extends Controller {
 //                        ->join("products", "purchases_detail.product_id", "products.id")
 //                        ->orderBy("order", "asc")->get();
         $sql = "
-            select p.id as product_id,p.title as product,sum(d.quantity * d.units_supplier) quantity,d.units_supplier,d.tax,d.value,d.quantity * d.units_supplier quantity_total,d.purchase_id,
-            sum(d.value * d.units_supplier * d.quantity)  as total
+            select p.id as product_id,p.title as product,d.units_supplier,d.tax,d.value,d.quantity * d.units_supplier quantity_total,d.purchase_id, sum(d.value * d.units_supplier * d.quantity) as total,d.quantity
             from purchases_detail d 
-            JOIN products p On p.id=d.product_id
+            JOIN products p On p.id=d.product_id 
             where d.purchase_id=" . $id . "
-            group by 1,2,4,5,6,7,8";
+            group by 1,2,3,4,5,6,7,9";
         
         $detail = DB::select($sql);
 
@@ -417,8 +417,6 @@ class PurchaseController extends Controller {
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
             $detail[$i]->costFormated = "$ " . number_format($detail[$i]->value, 2, ",", ".");
             $detail[$i]->totalFormated = "$ " . number_format($value->total, 2, ",", ".");
-            $detail[$i]->totalunits = $value->quantity_total;
-
 
             if ($value->tax == 0) {
                 $this->exempt += $value->total;

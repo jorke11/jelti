@@ -37,7 +37,7 @@ function Purchase() {
 
         $("#frmDetail #product_id").change(function () {
             $.ajax({
-                url: 'purchase/' + $(this).val() + '/getDetailProduct',
+                url: $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
@@ -74,7 +74,7 @@ function Purchase() {
             var obj = {};
             obj.id = $("#frm #id").val();
             $.ajax({
-                url: 'purchase/sendPurchase',
+                url: 'sendPurchase',
                 method: 'POST',
                 data: obj,
                 dataType: 'JSON',
@@ -108,8 +108,9 @@ function Purchase() {
     }
 
     this.getSupplier = function (id) {
+        console.log("asdsadsad");
         $.ajax({
-            url: 'purchase/' + id + '/getSupplier',
+            url: id + '/getSupplier',
             method: 'GET',
             dataType: 'JSON',
             async: false,
@@ -129,7 +130,7 @@ function Purchase() {
     }
 
     this.loadProducts = function () {
-        var html = "", color = "", quantityTotal = 0;
+        var html = "", color = "", quantity_total = 0, price_total = 0;
 
         $("#tblDetail tbody").empty();
 
@@ -151,11 +152,12 @@ function Purchase() {
             }
 
             color = (listProducts[i].quantity == 0) ? '' : 'info';
-            quantityTotal = val.units_supplier * val.quantity;
+            quantity_total = val.units_supplier * val.quantity;
+            price_total = val.cost_sf * quantity_total;
             html += '<tr id="row_' + val.product_id + '" class="' + color + '">';
             html += "<td>" + (i + 1) + "</td><td>" + val.title + "</td>";
             html += "<td>" + val.units_supplier + "</td><td>" + val.tax + "</td><td>" + val.quantity + "</td>";
-            html += "<td>" + val.cost_sf + "</td><td>" + (quantityTotal) + "</td><td>" + (quantityTotal * val.cost_sf) + "</td>";
+            html += "<td>" + val.cost_sf + "</td><td>" + quantity_total + "</td><td>" + price_total + "</td>";
             html += '<td ><button class="btn btn-info btn-xs" onclick=obj.edit(' + val.product_id + ')><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>';
             html += '<button class="btn btn-danger btn-xs" onclick=obj.deleteNew(' + val.product_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>';
             html += "</tr>";
@@ -223,12 +225,11 @@ function Purchase() {
 
             if (id == '') {
                 method = 'POST';
-                url = "purchase";
                 msg = "Created Record";
 
             } else {
                 method = 'PUT';
-                url = "purchase/" + id;
+                url = "/" + id;
                 msg = "Edited Record";
             }
 
@@ -346,10 +347,10 @@ function Purchase() {
     }
 
     this.printDetail = function (data) {
-        var html = "", total = 0, units_total = 0;
+        var html = "", total = 0;
         $("#tblDetail tbody").empty();
+
         $.each(data.detail, function (i, val) {
-            units_total = val.units_supplier * val.quantity;
             html += "<tr>";
             html += "<td>" + i + "</td>";
             html += "<td>" + val.product + "</td>";
@@ -358,7 +359,7 @@ function Purchase() {
             html += "<td>" + val.tax + "</td>";
             html += "<td>" + val.quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
-            html += "<td>" + units_total + "</td>";
+            html += "<td>" + val.quantity_total + "</td>";
             html += "<td>" + val.totalFormated + "</td>";
 
             html += '<td><button type="button" class="btn btn-xs btn-primary" onclick=obj.editDetail(' + val.product_id + ',' + val.purchase_id + ')>Edit</button>';

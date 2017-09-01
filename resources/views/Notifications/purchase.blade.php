@@ -65,7 +65,7 @@
                         <td>{{$val->product}}</td>
                         <td align="center">{{$val->units_supplier}}</td>
                         <td align="center">{{$val->quantity}}</td>
-                        <td align="center">{{$val->totalunits}}</td>
+                        <td align="center">{{$val->quantity_total}}</td>
                         <td align="center">{{$val->costFormated}}</td>
                         <td align="right">{{$val->totalFormated}}</td>
                     </tr>

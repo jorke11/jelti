@@ -226,16 +226,16 @@ function Purchase() {
             if (id == '') {
                 method = 'POST';
                 msg = "Created Record";
-
+                url = "/purchase";
             } else {
                 method = 'PUT';
-                url = "/" + id;
+                url = "/purchase/" + id;
                 msg = "Edited Record";
             }
 
 
             $.ajax({
-                url: url,
+                url: PATH + url,
                 method: method,
                 data: data,
                 dataType: 'JSON',

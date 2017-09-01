@@ -5,6 +5,8 @@ function Profile() {
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
         $("#Detail #client_id").cleanFields();
 
+        $(".input-client").cleanFields();
+
         $("#btnSearch").click(function () {
             obj.getClient($("#Detail #client_id :selected").val());
             obj.tableProduct();
@@ -15,8 +17,15 @@ function Profile() {
         $("#tblRepurchase thead").html("");
         $("#tblRepurchase tbody").html("");
         var param = {};
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.client_id = $("#Detail #client_id").val();
+        param.city_id = $("#Detail #city_id").val();
+        param.product_id = $("#Detail #product_id").val();
+        param.supplier_id = $("#Detail #supplier_id").val();
+        param.commercial_id = $("#Detail #commercial_id").val();
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
+
         $.ajax({
             url: "profile/" + id + "/getRepurchase",
             method: 'GET',
@@ -30,7 +39,7 @@ function Profile() {
                 $.each(data.products[0].quantity_dep, function (i, val) {
                     html += '<td>' + i + ' (' + val.date + ')</td>';
                 })
-                
+
                 html += '<td>Sumatoria</td>';
 
                 html += '<tr>';
@@ -76,6 +85,12 @@ function Profile() {
 
     this.getClient = function (id) {
         var param = {};
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.client_id = $("#Detail #client_id").val();
+        param.city_id = $("#Detail #city_id").val();
+        param.product_id = $("#Detail #product_id").val();
+        param.supplier_id = $("#Detail #supplier_id").val();
+        param.commercial_id = $("#Detail #commercial_id").val();
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
 
@@ -102,23 +117,29 @@ function Profile() {
                     html += "<tr><td>" + val.description + "</td><td>" + val.total + "</td><td>" + val.count + "</td></tr>";
                 });
 
-                
+
                 $("#tblCategory tbody").html(html);
             }
         });
     }
 
     this.tableProduct = function () {
-        var obj = {};
-        obj.init = $("#Detail #finit").val();
-        obj.end = $("#Detail #fend").val();
-        obj.client_id = $("#Detail #client_id").val();
+        var param = {};
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.client_id = $("#Detail #client_id").val();
+        param.city_id = $("#Detail #city_id").val();
+        param.product_id = $("#Detail #product_id").val();
+        param.supplier_id = $("#Detail #supplier_id").val();
+        param.commercial_id = $("#Detail #commercial_id").val();
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+
         return $('#tblProduct').DataTable({
             destroy: true,
             order: [[2, "desc"]],
             ajax: {
                 url: "api/reportProductByClient",
-                data: obj,
+                data: param,
             },
             columns: [
                 {data: "product"},

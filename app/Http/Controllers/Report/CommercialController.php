@@ -118,9 +118,6 @@ class CommercialController extends Controller {
             $columns[] = $i;
         }
 
-
-
-
         return response()->json(["data" => $data, "columns" => $columns]);
     }
 

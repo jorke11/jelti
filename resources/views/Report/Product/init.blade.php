@@ -65,12 +65,13 @@
                         <input type="text" class="form-control input-sm" id="fend" name='fend' value="<?php echo date("Y-m-d") ?>">
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <button class="btn btn-success btn-sm" id="btnSearch" type="button">Search</button>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <button class="btn btn-success btn-sm" id="btnSearch" type="button">Search</button>
+                    </div>
                 </div>
             </div>
+
 
         </div>
     </div>

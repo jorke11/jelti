@@ -36,7 +36,7 @@ class HomeController extends Controller {
             SELECT p.title,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
             round(sum(d.value * d.quantity * d.units_sf)) as total
             FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id<>258
+            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id NOT IT (258,264)
             JOIN products p ON p.id=d.product_id  
             WHERE product_id IS NOT NULL AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1

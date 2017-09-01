@@ -26,11 +26,17 @@ function Product() {
     this.table = function () {
 
         var param = {};
-        param.init = $("#Detail #finit").val();
-        param.end = $("#Detail #fend").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.client_id = $("#Detail #client_id").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
-        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.supplier_id = $("#Detail #supplier_id").val();
+        param.commercial_id = $("#Detail #commercial_id").val();
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+
+        param.product_id = $("#Detail #product_id").val();
+
 
         return $('#tbl').DataTable({
             ajax: {
@@ -57,12 +63,14 @@ function Product() {
     this.productbyclient = function () {
 
         var param = {};
-        param.init = $("#Detail #finit").val();
-        param.end = $("#Detail #fend").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.client_id = $("#Detail #client_id").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
-        param.warehouse_id = $("#Detail #warehouse_id").val();
-        param.client_id = $("#client_id :selected").val();
+        param.supplier_id = $("#Detail #supplier_id").val();
+        param.commercial_id = $("#Detail #commercial_id").val();
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
 
         return $('#tblProductsClient').DataTable({
             ajax: {
@@ -74,7 +82,7 @@ function Product() {
                 {data: "client"},
                 {data: "product"},
                 {data: "quantityproducts"},
-                {data: "total",render: $.fn.dataTable.render.number('.', ',', 0)},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             order: [[0, 'ASC']],
             aoColumnDefs: [
@@ -93,11 +101,15 @@ function Product() {
         var obj = {};
 
         var param = {};
-        param.init = $("#Detail #finit").val();
-        param.end = $("#Detail #fend").val();
+
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.client_id = $("#Detail #client_id").val();
         param.city_id = $("#Detail #city_id").val();
         param.product_id = $("#Detail #product_id").val();
-        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.supplier_id = $("#Detail #supplier_id").val();
+        param.commercial_id = $("#Detail #commercial_id").val();
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
 
         return $('#tblProducts').DataTable({
             ajax: {
@@ -121,12 +133,6 @@ function Product() {
                 }
             ],
         });
-
-
-
-
-
-
     }
 }
 

@@ -285,13 +285,9 @@ function Client() {
 
                     ]
                 });
-
-
             }
 
         })
-
-
     }
 
     this.tableProductByCategory = function () {

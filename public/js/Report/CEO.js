@@ -142,11 +142,6 @@ function CEO() {
 
     }
 
-    this.formatCurrency = function (n, currency) {
-        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
-            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-        });
-    }
 
     this.getOverView = function () {
         var param = {}, html = '';
@@ -172,7 +167,7 @@ function CEO() {
                 $("#tblClient tbody").empty();
                 html = '';
                 $.each(data.listClient, function (i, val) {
-                    html += '<tr><td>' + val.client + '</td><td>' + val.unidades + '</td><td>' + val.total + '</td></tr>';
+                    html += '<tr><td>' + val.client + '</td><td>' + val.unidades + '</td><td>' + obj.formatCurrency(parseFloat(val.subtotal),"$") + '</td></tr>';
                 });
 
                 html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitycli + " -> " + data.quantitypercent.toFixed(2)
@@ -224,6 +219,12 @@ function CEO() {
         });
 
 
+    }
+
+    this.formatCurrency = function (n, currency) {
+        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
     }
 
     this.getClient = function (id) {

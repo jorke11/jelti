@@ -21,22 +21,19 @@ class ProductController extends Controller {
 
     public function getList(Request $req) {
         $input = $req->all();
-
         $where = '';
-        if ($input["city_id"] != '') {
-            $where = "AND dep.destination_id=" . $input["city_id"];
-        }
-
-
-        if ($input["product_id"] != '') {
-            $where .= " AND d.product_id=" . $input["product_id"];
-        }
-
 
         if ($input["warehouse_id"] != 0) {
             $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
         }
 
+        if ($input["city_id"] != '') {
+            $where = "AND dep.destination_id=" . $input["city_id"];
+        }
+
+        if ($input["product_id"] != '') {
+            $where .= " AND d.product_id=" . $input["product_id"];
+        }
 
         $res = $this->getListProduct($input["init"], $input["end"], $where);
         return response()->json(["data" => $res]);
@@ -50,7 +47,7 @@ class ProductController extends Controller {
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id 
-            WHERE dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' and dep.client_id<>258 and p.category_id<>-1
+            WHERE dep.created BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.client_id NOT IN(258,264) AND p.category_id<>-1
             $where
             GROUP by 1,2
             ORDER BY 4 DESC
@@ -78,7 +75,7 @@ class ProductController extends Controller {
                             JOIN departures ON departures.id=d.departure_id and departures.status_id=2      
                             JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1
-                            WHERE departures.destination_id=dep.destination_id
+                            WHERE departures.destination_id=dep.destination_id and departures.client_id NOT IN(258,264)
                             AND departures.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                                 $ware
                             group by product_id
@@ -89,7 +86,7 @@ class ProductController extends Controller {
                             FROM departures_detail d
                             JOIN departures ON departures.id=d.departure_id and departures.status_id=2
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1
-                            WHERE departures.destination_id=dep.destination_id
+                            WHERE departures.destination_id=dep.destination_id AND departures.client_id NOT IN(258,264)
                             AND departures.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
                             group by 1,product_id
                             order by sum(d.value* d.quantity * d.units_sf)  desc
@@ -99,7 +96,7 @@ class ProductController extends Controller {
                             FROM departures_detail d
                             JOIN departures ON departures.id=d.departure_id and departures.status_id=2
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1
-                            WHERE departures.destination_id=dep.destination_id
+                            WHERE departures.destination_id=dep.destination_id AND departures.client_id NOT IN(258,264)
                             AND departures.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
                             group by product_id
                             order by sum(d.value* d.quantity * d.units_sf)  desc
@@ -108,7 +105,7 @@ class ProductController extends Controller {
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN cities c ON c.id=dep.destination_id
              JOIN products p ON p.id=d.product_id and p.category_id<>-1
-            WHERE dep.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
+            WHERE dep.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and dep.client_id NOT IN(258,264)
                 $ware2
             GROUP BY 1,2,3
             ORDER by 4 DESC

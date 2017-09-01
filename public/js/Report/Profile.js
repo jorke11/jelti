@@ -30,6 +30,7 @@ function Profile() {
                 $.each(data.products[0].quantity_dep, function (i, val) {
                     html += '<td>' + i + ' (' + val.date + ')</td>';
                 })
+                
                 html += '<td>Sumatoria</td>';
 
                 html += '<tr>';

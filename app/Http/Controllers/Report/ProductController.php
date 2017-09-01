@@ -56,7 +56,7 @@ class ProductController extends Controller {
             ORDER BY 4 DESC
             $limit
             ";
-        
+
         return DB::select($sql);
     }
 
@@ -77,7 +77,7 @@ class ProductController extends Controller {
                             FROM departures_detail d
                             JOIN departures ON departures.id=d.departure_id and departures.status_id=2      
                             JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
-                            JOIN products p ON p.id=d.product_id
+                            JOIN products p ON p.id=d.product_id and p.category_id<>-1
                             WHERE departures.destination_id=dep.destination_id
                             AND departures.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                                 $ware
@@ -88,7 +88,7 @@ class ProductController extends Controller {
                             SELECT p.title 
                             FROM departures_detail d
                             JOIN departures ON departures.id=d.departure_id and departures.status_id=2
-                            JOIN products p ON p.id=d.product_id
+                            JOIN products p ON p.id=d.product_id and p.category_id<>-1
                             WHERE departures.destination_id=dep.destination_id
                             AND departures.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
                             group by 1,product_id
@@ -98,7 +98,7 @@ class ProductController extends Controller {
                             SELECT sum(d.quantity*CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) 
                             FROM departures_detail d
                             JOIN departures ON departures.id=d.departure_id and departures.status_id=2
-                            JOIN products p ON p.id=d.product_id
+                            JOIN products p ON p.id=d.product_id and p.category_id<>-1
                             WHERE departures.destination_id=dep.destination_id
                             AND departures.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
                             group by product_id
@@ -107,6 +107,7 @@ class ProductController extends Controller {
             FROM departures_detail d
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN cities c ON c.id=dep.destination_id
+             JOIN products p ON p.id=d.product_id and p.category_id<>-1
             WHERE dep.created BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                 $ware2
             GROUP BY 1,2,3

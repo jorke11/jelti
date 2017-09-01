@@ -36,7 +36,7 @@ class ClientController extends Controller {
 
     public function getList(Request $req) {
         $input = $req->all();
-        
+
         $ware = "";
         if ($input["warehouse_id"] != 0) {
             $ware = " AND warehouse_id=" . $input["warehouse_id"];
@@ -49,6 +49,7 @@ class ClientController extends Controller {
         if ($input["city_id"] != 0) {
             $ware .= " AND destination_id=" . $input["city_id"];
         }
+
         if ($input["commercial_id"] != 0) {
             $ware .= " AND vdepartures.responsible_id=" . $input["commercial_id"];
         }
@@ -59,7 +60,7 @@ class ClientController extends Controller {
     }
 
     public function getListClient($init, $end, $where = '', $limit = '') {
-        
+
         $sql = "
             SELECT 
                 stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,sum(tax19) tax19,sum(tax5) tax5,
@@ -67,7 +68,7 @@ class ClientController extends Controller {
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and type_stakeholder=1
             WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
-                AND client_id<>258
+                AND client_id NOT IN(258,264)
             group by 1,client_id
             ORDER BY 3 DESC
             $limit
@@ -79,6 +80,7 @@ class ClientController extends Controller {
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) units
                 FROM departures_detail d
                 JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+                JOIN products p ON p.id=d.product_id and p.category_id<>-1
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder = 1
                 WHERE dep.client_id=" . $value->id . " and dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'";
             $res2 = DB::select($sql);

@@ -10,7 +10,7 @@
         <div class="thumbnail">
             <img src="https://placeholdit.imgix.net/~text?txtsize=39&txt=420%C3%97250&w=420&h=250">
             <div class="caption">
-                <h4 class="pull-right">$ {{number_format($val->price_cust,2,",",".")}}</h4>
+                <h4 class="pull-right">$ {{number_format($val->price_sf,2,",",".")}}</h4>
                 <h4><a href="/productDetail/{{$val->id}}">{{$val->title}}</a></h4>
                 <p>
                     See more snippets like this online store item at 

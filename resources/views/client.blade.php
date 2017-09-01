@@ -122,7 +122,7 @@
                         foreach ($category as $i => $val) {
                             ?>
                             <div class="col-md-2">
-                                <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
+                                <a class="fancybox thumbnail" rel="gallery1" href="shopping/<?php echo $val->id?>">
                                     <img src="{{$val->image}}" alt="">
                                 </a>
                             </div>
@@ -172,7 +172,7 @@
                         foreach ($category as $i => $val) {
                             ?>
                             <div class="col-md-2">
-                                <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
+                                <a class="fancybox thumbnail" rel="gallery1" href="page/category/<?php echo $val->id?>">
                                     <img src="{{$val->image}}" alt="">
                                 </a>
                             </div>

@@ -4,7 +4,7 @@ function Product() {
         this.productbycity();
         this.productbyclient();
 
-        $(".input-find").cleanFields();
+        $(".input-client").cleanFields();
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
 

@@ -73,7 +73,6 @@ Route::post('/suppliers/addTax', 'Suppliers\SupplierController@storeTax');
 Route::put('/suppliers/UpdateTax', 'Suppliers\SupplierController@updateTax');
 Route::delete('/suppliers/deleteTax/{id}', 'Suppliers\SupplierController@deleteTax');
 
-
 Route::resource('/clients', 'Clients\ClientController');
 Route::post('/clients/upload', 'Clients\ClientController@uploadImage');
 Route::post('/clients/uploadExcel', 'Clients\ClientController@uploadExcel');

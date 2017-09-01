@@ -40,6 +40,24 @@
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
+                        <label for="title" class="control-label">Proveedor</label>
+                        <select class="form-control input-client input-find" id="supplier_id" name='supplier_id'  data-api="/api/getSupplier">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Comercial</label>
+                        <select class="form-control input-client input-find" id="commercial_id" name='commercial_id'  data-api="/api/getCommercial">
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="form-group">
                         <label for="title" class="control-label">Fecha Inicio</label>
                         <input type="text" class="form-control input-sm" id="finit" name='finit' value="<?php echo date("Y-m-") . "01" ?>">
                     </div>
@@ -48,16 +66,6 @@
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Final</label>
                         <input type="text" class="form-control input-sm" id="fend" name='fend' value="<?php echo date("Y-m-d") ?>">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="title" class="control-label">Comericial</label>
-                        <select class="form-control input-client input-find" id="commercial_id" name='commercial_id'  data-api="/api/getCommercial">
-                        </select>
                     </div>
                 </div>
                 <div class="col-lg-2">

@@ -34,7 +34,7 @@ class CommercialController extends Controller {
             group by 1,responsible
             order by 3 DESC
             ";
-        
+
         $res = DB::select($sql);
 
         foreach ($res as $i => $value) {
@@ -44,7 +44,7 @@ class CommercialController extends Controller {
                    JOIN vdepartures dep ON dep.id=d.departure_id and client_id <> 258 and dep.status_id=2
                    JOIN stakeholder s ON s.id=dep.client_id and s.type_stakeholder=1
                    WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.responsible_id=" . $value->responsible_id;
-            
+
             $res2 = DB::select($sql);
             $res[$i]->quantity = $res2[0]->quantity;
         }
@@ -127,10 +127,25 @@ class CommercialController extends Controller {
 
     public function getProductByClient(Request $req) {
         $input = $req->all();
-        $client_id = '';
+        $where = '';
         if (isset($input["client_id"]) && $input["client_id"] != '') {
-            $client_id = " AND dep.client_id=" . $input["client_id"];
+            $where = " AND dep.client_id=" . $input["client_id"];
         }
+
+        if ($input["city_id"] != '') {
+            $where .= "AND dep.destination_id=" . $input["city_id"];
+        }
+
+
+        if ($input["product_id"] != '') {
+            $where .= " AND d.product_id=" . $input["product_id"];
+        }
+
+
+        if ($input["warehouse_id"] != 0) {
+            $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
+        }
+
         $columns = array();
 
         $sql = "
@@ -142,7 +157,7 @@ class CommercialController extends Controller {
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id
             JOIN stakeholder st ON st.id=dep.client_id and dep.status_id=2 and st.type_stakeholder=1
-            WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $client_id
+            WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
                 AND p.category_id<>-1
             GROUP BY 1,2,dep.client_id
             ORDER BY 1 ASC, 3 DESC

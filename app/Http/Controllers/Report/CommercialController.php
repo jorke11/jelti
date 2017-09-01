@@ -21,7 +21,6 @@ class CommercialController extends Controller {
         $input = $req->all();
 
         $res = $this->getListCommercial($input["init"], $input["end"]);
-//        echo "asd";exit;
         return response()->json(["data" => $res]);
     }
 

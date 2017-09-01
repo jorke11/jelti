@@ -147,7 +147,7 @@
                                 @if(isset($commercial))
                                 <div class="huge">Mejor Vendedor<br>{{(isset($commercial->vendedor)?$commercial->vendedor:'')}}</div>
                                 <div> Total Unidades {{(isset($commercial->cantidadtotal)?$commercial->cantidadtotal:0)}}<br>
-                                    Monto: $ {{number_format(round((isset($commercial->cantidadtotal)?$commercial->cantidadtotal:0)), 0, ',', '.')}}</div>
+                                    Monto: $ {{number_format(round((isset($commercial->total)?$commercial->total:0)), 0, ',', '.')}}</div>
                                 @endif
                             </div>
                         </div>

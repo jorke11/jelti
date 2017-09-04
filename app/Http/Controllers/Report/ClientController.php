@@ -68,8 +68,8 @@ class ClientController extends Controller {
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and type_stakeholder=1
             WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
-                AND client_id NOT IN(258,264)
-            group by 1,client_id
+                AND vdepartures.client_id NOT IN(258,264)
+            group by 1,vdepartures.client_id
             ORDER BY 3 DESC
             $limit
             ";
@@ -83,7 +83,7 @@ class ClientController extends Controller {
                 JOIN products p ON p.id=d.product_id and p.category_id<>-1
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder = 1 
                 WHERE dep.client_id=" . $value->id . " and dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
-                    AND departures.client_id NOT IN(258,264)";
+                    AND dep.client_id NOT IN(258,264)";
             $res2 = DB::select($sql);
             $res[$i]->unidades = $res2[0]->units;
         }
@@ -171,7 +171,7 @@ class ClientController extends Controller {
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
             WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
-                AND departures.client_id NOT IN(258,264)
+                AND vdepartures.client_id NOT IN(258,264)
                 $ware 
             GROUP BY destination_id,2
             ";

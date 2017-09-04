@@ -57,10 +57,11 @@ class OperationsController extends Controller {
         $sql = "
             SELECT d.client,count(*) pedidos,sum(d.shipping_cost) as valor
             FROM vdepartures d 
-            WHERE d.status_id=2 and d.client_id NOT IN(258,264)
+            WHERE d.status_id=2 and d.client_id NOT IN(258,264,24)
             AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             group by 1
             ";
+//        echo $sql;exit;
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);

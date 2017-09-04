@@ -150,13 +150,13 @@ class ClientController extends Controller {
 
     public function listCities(Request $req) {
         $input = $req->all();
-        $ware = "";
+        $where = "";
         if ($input["warehouse_id"] != 0) {
             $where .= " AND vdepartures.warehouse_id=" . $input["warehouse_id"];
         }
 
         if ($input["client_id"] != '') {
-            $where .= " AND vdepartures.client_id=" . $input["product_id"];
+            $where .= " AND vdepartures.client_id=" . $input["client_id"];
         }
 
         if ($input["city_id"] != '') {
@@ -182,7 +182,7 @@ class ClientController extends Controller {
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
             WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
                 AND vdepartures.client_id NOT IN(258,264)
-                $ware 
+                $where 
             GROUP BY destination_id,2
             ";
 

@@ -32,6 +32,7 @@ function Client() {
         obj.city_id = $("#Detail #city_id").val();
         obj.product_id = $("#Detail #product_id").val();
         obj.commercial_id = $("#Detail #commercial_id").val();
+        obj.supplier_id = $("#Detail #supplier_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
 
@@ -69,6 +70,7 @@ function Client() {
         obj.client_id = $("#Detail #client_id").val();
         obj.city_id = $("#Detail #city_id").val();
         obj.product_id = $("#Detail #product_id").val();
+        obj.supplier_id = $("#Detail #supplier_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.commercial_id = $("#Detail #commercial_id").val();
@@ -101,6 +103,7 @@ function Client() {
         obj.client_id = $("#Detail #client_id").val();
         obj.city_id = $("#Detail #city_id").val();
         obj.product_id = $("#Detail #product_id").val();
+        obj.supplier_id = $("#Detail #supplier_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.commercial_id = $("#Detail #commercial_id").val();
@@ -199,6 +202,7 @@ function Client() {
         obj.client_id = $("#Detail #client_id").val();
         obj.city_id = $("#Detail #city_id").val();
         obj.product_id = $("#Detail #product_id").val();
+        obj.supplier_id = $("#Detail #supplier_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.commercial_id = $("#Detail #commercial_id").val();
@@ -296,6 +300,7 @@ function Client() {
         obj.client_id = $("#Detail #client_id").val();
         obj.city_id = $("#Detail #city_id").val();
         obj.product_id = $("#Detail #product_id").val();
+        obj.supplier_id = $("#Detail #supplier_id").val();
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.commercial_id = $("#Detail #commercial_id").val();

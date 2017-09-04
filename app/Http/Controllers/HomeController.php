@@ -213,9 +213,7 @@ class HomeController extends Controller {
         if ($input["commercial_id"] != '') {
             $where .= " AND dep.responsible_id=" . $input["commercial_id"];
         }
-        if ($input["commercial_id"] != '') {
-            $where .= " AND dep.responsible_id=" . $input["commercial_id"];
-        }
+       
 
         $sql = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
@@ -227,7 +225,7 @@ class HomeController extends Controller {
             group by 1,2
             order by 4 
             desc limit 10";
-        echo $sql;exit;
+//        echo $sql;exit;
         $res = DB::select($sql);
 
         $cat = array();

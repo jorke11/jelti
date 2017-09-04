@@ -213,19 +213,18 @@ class HomeController extends Controller {
         if ($input["commercial_id"] != '') {
             $where .= " AND dep.responsible_id=" . $input["commercial_id"];
         }
-       
+
 
         $sql = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from departures_detail d
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id 
-            WHERE d.product_id is NOT null AND dep.client_id NOT IN(258,264)
+            WHERE d.product_id is NOT null AND dep.client_id NOT IN(258,264,24)
             AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
             group by 1,2
             order by 4 
             desc limit 10";
-//        echo $sql;exit;
         $res = DB::select($sql);
 
         $cat = array();
@@ -245,7 +244,7 @@ class HomeController extends Controller {
         $sql = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 and dep.client_id<>258
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 and dep.client_id NOT IN(258,264)
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is NOT null and p.category_id<>-1
             AND dep.dispatched BETWEEN'" . date("Y-m-") . "01 00:00' AND '" . date("Y-m-d") . " 23:59'

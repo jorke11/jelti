@@ -195,7 +195,7 @@ class HomeController extends Controller {
         }
 
         if ($input["client_id"] != '') {
-            $where .= " AND dep.client_id=" . $input["product_id"];
+            $where .= " AND dep.client_id=" . $input["client_id"];
         }
 
         if ($input["city_id"] != '') {

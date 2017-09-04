@@ -105,7 +105,7 @@ function Profile() {
                 $("#name_client").html(data.client.business);
                 $("#city_address").html(data.client.address_invoice + " / " + data.client.city_invoice);
                 $("#lead_time").html(0);
-                $("#last_sale").html(0);
+                $("#last_sale").html(data.last_dispatched);
                 $("#frecuency").html(data.frecuency + " días");
                 $("#sector").html(data.client.sector);
                 $("#total_sales").html(data.totales.subtotalFormated);

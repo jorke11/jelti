@@ -258,7 +258,8 @@ class ClientController extends Controller {
 
     public function profileClient(Request $req, $client_id) {
         $input = $req->all();
-        $client = DB::table("vclient")->where("id", $client_id)->first();
+
+        $client = DB::table("vclient")->where("id", $input["client_id"])->first();
 
         $detail = DB::table("vdepartures")->where("client_id", $client->id)->orderBy("id", "asc")->get();
         $resta = 0;
@@ -269,10 +270,11 @@ class ClientController extends Controller {
 
         $sql = "SELECT sum(subtotalnumeric) subtotal,sum(quantity) quantity 
             FROM vdepartures
-            JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 and vdepartures.client_id NOT IN(258,264)
-            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
+            JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
+            and vdepartures.client_id NOT IN(258,264)
+            WHERE dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
                 and client_id=" . $client_id;
-
+        
         $totales = DB::select($sql);
         $totales = $totales[0];
         $totales->subtotalFormated = "$ " . number_format($totales->subtotal, 0, ",", ".");
@@ -281,12 +283,13 @@ class ClientController extends Controller {
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 and vdepartures.client_id NOT IN(258,264)
             WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
-                and client_id=" . $client_id;
+                and client_id=" . $input["client_id"];
 
         $quantity = DB::select($sql);
-        $quantity = $quantity[0];
 
-        $ticket = $totales->subtotal / $quantity->total;
+        $quantity = ($quantity[0]->total == 0) ? 1 : $quantity[0]->total;
+
+        $ticket = $totales->subtotal / $quantity;
         $ticket = "$ " . number_format($ticket, 0, ",", ".");
 
         $sql = "
@@ -303,7 +306,7 @@ class ClientController extends Controller {
                 JOIN products p ON p.id=d.product_id
                 JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1 
-                WHERE dep.client_id=$client_id and p.category_id = " . $value->id . "
+                WHERE dep.client_id=" . $input["client_id"] . " and p.category_id = " . $value->id . "
                     AND dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' ";
 
             $q = DB::select($sql);
@@ -311,9 +314,18 @@ class ClientController extends Controller {
             $categories[$i]->total = $q;
         }
 
+        $sql = "
+            select dispatched
+            from vdepartures 
+            where status_id=2 and client_id not in(254,264)  and client_id=" . $input["client_id"] . "
+            order by dispatched desc limit 1";
+
+        $last_sale = DB::select($sql);
+        $last_sale = $last_sale[0]->dispatched;
+
 
         return response()->json(["client" => $client, "frecuency" => ceil($resta / count($detail)), "totales" => $totales,
-                    "ticket" => $ticket, "total_request" => $quantity->total, "categories" => $categories]);
+                    "ticket" => $ticket, "total_request" => $quantity, "categories" => $categories, "last_dispatched" => $last_sale]);
     }
 
     public function getRepurchase(Request $req, $client_id) {

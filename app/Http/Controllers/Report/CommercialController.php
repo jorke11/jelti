@@ -126,30 +126,30 @@ class CommercialController extends Controller {
         $input = $req->all();
 
         $where = '';
-        if ($input["warehouse_id"] != 0) {
+        if (isset($input["warehouse_id"]) && $input["warehouse_id"] != 0) {
             $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
         }
 
-        if ($input["client_id"] != '') {
+        if (isset($input["client_id"]) && $input["client_id"] != '') {
             $where .= " AND dep.client_id=" . $input["client_id"];
         }
 
-        if ($input["city_id"] != '') {
+        if (isset($input["city_id"]) && $input["city_id"] != '') {
             $where = "AND dep.destination_id=" . $input["city_id"];
         }
 
-        if ($input["product_id"] != '') {
+        if (isset($input["product_id"]) && $input[""] != '') {
             $where .= " AND d.product_id=" . $input["product_id"];
         }
 
-        if ($input["supplier_id"] != '') {
+        if (isset($input["supplier_id"]) && $input["supplier_id"] != '') {
             $where .= " AND p.supplier_id= " . $input["supplier_id"];
         }
 
-        if ($input["commercial_id"] != '') {
+        if (isset($input["commercial_id"]) && $input["commercial_id"] != '') {
             $where .= " AND dep.responsible_id=" . $input["commercial_id"];
         }
-      
+
 
         $columns = array();
 

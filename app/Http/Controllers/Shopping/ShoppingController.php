@@ -26,6 +26,7 @@ class ShoppingController extends Controller {
 
     public function getDetailProduct($id) {
         $category = Categories::find($id);
+//        dd($category);
         $products = Products::where("category_id", $id)->get();
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
         return view("Ecommerce.shopping.detail", compact("products", "category", "subcategory"));

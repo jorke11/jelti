@@ -3,7 +3,7 @@
 <br>
 <div class="row">
     <div class="col-lg-12" style="padding: 0;">
-        <img src="/{{$category->image_title}}" class="img-responsive" style="width: 100%">
+        <img src="/{{$category->banner}}" class="img-responsive" style="width: 100%">
     </div>
 </div>
 <br>

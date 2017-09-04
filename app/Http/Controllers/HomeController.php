@@ -191,29 +191,43 @@ class HomeController extends Controller {
 
         $where = "";
         if ($input["warehouse_id"] != 0) {
-            $where = " AND warehouse_id=" . $input["warehouse_id"];
+            $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
         }
 
-        if ($input["client_id"] != 0) {
-            $where .= " AND client_id=" . $input["client_id"];
+        if ($input["client_id"] != '') {
+            $where .= " AND dep.client_id=" . $input["product_id"];
         }
 
-        if ($input["city_id"] != 0) {
-            $where .= " AND destination_id=" . $input["city_id"];
+        if ($input["city_id"] != '') {
+            $where = "AND dep.destination_id=" . $input["city_id"];
         }
 
+        if ($input["product_id"] != '') {
+            $where .= " AND d.product_id=" . $input["product_id"];
+        }
+
+        if ($input["supplier_id"] != '') {
+            $where .= " AND p.supplier_id= " . $input["supplier_id"];
+        }
+
+        if ($input["commercial_id"] != '') {
+            $where .= " AND dep.responsible_id=" . $input["commercial_id"];
+        }
+        if ($input["commercial_id"] != '') {
+            $where .= " AND dep.responsible_id=" . $input["commercial_id"];
+        }
 
         $sql = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id 
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id 
-            WHERE d.product_id is NOT null
+            WHERE d.product_id is NOT null AND dep.client_id NOT IN(258,264)
             AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
             group by 1,2
             order by 4 
             desc limit 10";
-
+        echo $sql;exit;
         $res = DB::select($sql);
 
         $cat = array();

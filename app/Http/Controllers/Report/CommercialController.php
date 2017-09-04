@@ -32,6 +32,7 @@ class CommercialController extends Controller {
             WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id=2 AND client_id NOT IN(258,264)
             group by 1,responsible
             order by 3 DESC
+            LIMIT 5
             ";
 //            echo $sql;exit;
         $res = DB::select($sql);

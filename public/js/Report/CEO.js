@@ -35,11 +35,11 @@ function CEO() {
                 {data: "dates"},
                 {data: "invoices"},
                 {data: "quantity"},
-                {data: "shipping_cost", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "tax5", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "tax19", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "shipping_cost", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "tax5", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "tax19", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "subtotal", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
             ],
 
             aoColumnDefs: [
@@ -162,11 +162,11 @@ function CEO() {
                 {data: "dates"},
                 {data: "invoices"},
                 {data: "quantity"},
-                {data: "shipping_cost", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "tax5", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "tax19", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "shipping_cost", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "tax5", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "tax19", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "subtotal", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
             ],
 
             aoColumnDefs: [

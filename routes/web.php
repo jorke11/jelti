@@ -552,7 +552,6 @@ Route::get('/api/reportClientCities', "Report\ClientController@listCities");
 Route::get('api/reportProductByClient', "Report\CommercialController@getProductByClient");
 
 
-
 Route::get('/api/reportSample', "Report\SampleController@getList");
 Route::get('/api/reportClientTarget', "Report\SampleController@getListTarger");
 Route::get('/api/reportSampleProduct', "Report\SampleController@getListProduct");
@@ -600,6 +599,7 @@ Route::get('overview', "Report\ClientController@overview");
 Route::get('overview/getOverview', "Report\ClientController@getOverview");
 
 Route::get('CEO/getSalesUnits', "Report\ClientController@getSalesUnits");
+Route::get('CEO/getSalesUnitsWare', "Report\ClientController@getSalesUnitsWare");
 
 Route::get('operations/getProductWeek', "Report\OperationsController@ProductWeek");
 Route::get('operations/getProductDay', "Report\OperationsController@ProductDay");

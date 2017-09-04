@@ -515,6 +515,56 @@ class ClientController extends Controller {
         return response()->json(["data" => $res]);
     }
 
+    public function getSalesUnitsWare(Request $req) {
+        $in = $req->all();
+        $res = $this->getSalesUnitsDataWare($in["init"], $in["end"]);
+
+        return response()->json(["data" => $res]);
+    }
+
+    function getSalesUnitsDataWare($init, $end) {
+        $sql = "
+                SELECT 
+                    warehouse,to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,
+                    sum(tax19) tax19,sum(total) total, sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost,warehouse_id
+                FROM vdepartures 
+                JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
+                WHERE vdepartures.status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
+                    AND client_id  NOT IN(258,264)
+                group by 2,warehouse_id,warehouse";
+//        echo $sql;
+//        exit;
+        $res = DB::select($sql);
+
+        $total = 0;
+        $subtotal = 0;
+        $quantity = 0;
+        foreach ($res as $i => $value) {
+            list($year, $month) = explode("-", $value->dates);
+            $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
+
+            $sql = "
+                SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
+                FROM departures_detail d
+                JOIN departures ON departures.id=d.departure_id and departures.status_id=2 and  departures.client_id NOT IN(258,264)
+                JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
+                WHERE departures.dispatched between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
+                    and departures.warehouse_id=" . $value->warehouse_id . "
+                ";
+            $res2 = DB::select($sql);
+            $res[$i]->quantity = $res2[0]->quantity;
+            $res[$i]->dates = date("Y-F", strtotime($value->dates));
+            $subtotal += $value->subtotal;
+            $total += $value->total;
+            $quantity += $res[$i]->quantity;
+        }
+
+        $this->subtotal = ($subtotal == 0) ? 1 : $subtotal;
+        $this->total = ($total == 0) ? 1 : $total;
+        $this->quantity = ($quantity == 0) ? 1 : $quantity;
+        return $res;
+    }
+
     function getSalesUnitsData($init, $end) {
         $sql = "
                 SELECT 

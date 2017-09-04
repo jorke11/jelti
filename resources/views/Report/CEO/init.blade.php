@@ -5,7 +5,7 @@
     {!! Form::open(['id'=>'Detail']) !!}
     <div class="panel panel-default">
         <div class="panel-body">
-            
+
             <div class="col-lg-8 col-center">
                 <div class="col-lg-5">
                     <div class="form-group">
@@ -205,6 +205,42 @@
                     </thead>
                     <tbody></tbody>
 
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Ventas vs Unidades x Bodega</div>
+            <div class="panel-body">
+                <table class="table nowrap" id="tblSalesWare" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>Bodega</th>
+                            <th>Mes</th>
+                            <th>Facturas</th>
+                            <th>Unidades</th>
+                            <th>Flete</th>
+                            <th>Iva 5%</th>
+                            <th>Iva 19%</th>
+                            <th>SubTotal</th>
+                            <th>Total facturado</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+<!--                    <tfoot>
+                        <tr>
+                            <th>Totales</th>
+                            <th>Facturas</th>
+                            <th>Unidades</th>
+                            <th>Flete</th>
+                            <th>Iva 5%</th>
+                            <th>Iva 19%</th>
+                            <th>SubTotal</th>
+                            <th>Total facturado</th>
+                        </tr>
+                    </tfoot>-->
+                    
                 </table>
             </div>
         </div>

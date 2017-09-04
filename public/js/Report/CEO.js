@@ -8,11 +8,141 @@ function CEO() {
             $(this).attr("disabled", true);
             $("#loading-super").removeClass("hidden");
             obj.getSalesUnits();
+            obj.getSalesUnitsWare();
             obj.getOverView();
 
         });
         obj.getSalesUnits();
+        obj.getSalesUnitsWare();
         obj.getOverView();
+    }
+
+ this.getSalesUnitsWare = function () {
+        var param = {}, html = '';
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+
+        return $('#tblSalesWare').DataTable({
+            destroy: true,
+            scrollX: true,
+            order: [[2, "desc"]],
+            ajax: {
+                url: "CEO/getSalesUnitsWare",
+                data: param,
+            },
+            columns: [
+                {data: "warehouse"},
+                {data: "dates"},
+                {data: "invoices"},
+                {data: "quantity"},
+                {data: "shipping_cost", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "tax5", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "tax19", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
+            ],
+
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+            footerCallback: function (row, data, start, end, display) {
+                var api = this.api(), subtotal, total, quantity = 0, tax5 = 0, tax19 = 0, shipping = 0, invoices = 0;
+
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                };
+
+                invoices = api
+                        .column(1)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                $(api.column(1).footer()).html(
+                        '(' + invoices + ')'
+                        );
+                quantity = api
+                        .column(2)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+
+                $(api.column(2).footer()).html(
+                        '(' + quantity + ')'
+                        );
+
+                shipping = api
+                        .column(3)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+
+                $(api.column(3).footer()).html(
+                        '(' + obj.formatCurrency(shipping, "$") + ')'
+                        );
+
+
+                tax5 = api
+                        .column(4)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                $(api.column(4).footer()).html(
+                        '(' + obj.formatCurrency(tax5, "$") + ')'
+                        );
+
+
+                tax19 = api
+                        .column(5)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                $(api.column(5).footer()).html(
+                        '(' + obj.formatCurrency(tax19, "$") + ')'
+                        );
+
+                subtotal = api
+                        .column(6)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                $(api.column(6).footer()).html(
+                        '(' + obj.formatCurrency(subtotal, "$") + ')'
+                        );
+
+                total = api
+                        .column(7)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+
+                $(api.column(7).footer()).html(
+                        '(' + obj.formatCurrency(total, "$") + ')'
+                        );
+            }
+        });
+
     }
 
     this.getSalesUnits = function () {

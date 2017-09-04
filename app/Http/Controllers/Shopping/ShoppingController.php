@@ -8,6 +8,7 @@ use App\Models\Administration\Categories;
 use App\Models\Administration\Products;
 use App\Models\Administration\ProductsImage;
 use App\Models\Administration\Comment;
+use App\Models\Administration\Characteristic;
 use App\Models\Inventory\Orders;
 use App\Models\Inventory\OrdersDetail;
 use Auth;
@@ -24,8 +25,10 @@ class ShoppingController extends Controller {
     }
 
     public function getDetailProduct($id) {
+        $category = Categories::find($id);
         $products = Products::where("category_id", $id)->get();
-        return view("Ecommerce.shopping.detail", compact("products"));
+        $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
+        return view("Ecommerce.shopping.detail", compact("products", "category", "subcategory"));
     }
 
     public function getCategories() {
@@ -50,6 +53,7 @@ class ShoppingController extends Controller {
         $data = $req->all();
 
         $order = Orders::where("stakeholder_id", Auth::user()->id)->where("status_id", 1)->first();
+
         if (count($order) > 0) {
             $order_id = $order["id"];
         } else {
@@ -62,13 +66,18 @@ class ShoppingController extends Controller {
         $pro = Products::findOrFail($data["product_id"]);
         $data["order_id"] = $order_id;
         $data["tax"] = $pro["tax"];
-        $data["value"] = $pro["price_cust"];
+        $data["value"] = $pro["price_sf"];
         OrdersDetail::create($data);
 
-        return $this->getCountOrders();
+        return $this->getDataCountOrders();
     }
 
     public function getCountOrders() {
+        $count = $this->getDataCountOrders();
+        return response()->json(["quantity" => $count]);
+    }
+
+    public function getDataCountOrders() {
         $order = Orders::where("stakeholder_id", Auth::user()->id)->where("status_id", 1)->first();
         return OrdersDetail::where("order_id", $order["id"])->sum("quantity");
     }

@@ -23,9 +23,13 @@
         .navbar-brand {
             padding: 4px 15px;
         }
+        body{
+            margin: 0 auto;
+            padding: 0;
+        }
     </style>
 </head>
-<body>
+<body style="background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;background-size:100%">
     <div id="app">
         {!!Html::image('/assets/images/logo.png','foto',array("class"=>"img-responsive center-block","width"=>'80'))!!}
         <br>

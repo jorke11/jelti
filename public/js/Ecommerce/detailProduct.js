@@ -4,6 +4,7 @@ function detailProduct() {
         $("#AddProduct").click(this.addProduct);
         $("#contentComment").empty();
         this.getComment();
+        this.getQuantity();
     }
 
     this.addProduct = function () {
@@ -11,14 +12,27 @@ function detailProduct() {
         var obj = {};
         obj.product_id = $("#product_id").val();
         obj.quantity = $("#quantity").val();
+
         $.ajax({
-            url: '../addDetail',
+            url: PATH + '/addDetail',
             method: 'POST',
             data: obj,
             dataType: 'JSON',
             success: function (data) {
-               $("#quantityOrders").html(data);
-               toastr.success("Item add")
+                $("#quantityOrders").html(data);
+                toastr.success("Item add")
+            }
+        })
+    }
+
+    this.getQuantity = function () {
+        var html = "";
+        $.ajax({
+            url: PATH + '/getCounter',
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (data) {
+                $("#quantityOrders").html(data.quantity);
             }
         })
     }

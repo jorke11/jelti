@@ -1,8 +1,5 @@
-@extends('layouts.dash')
-
+@extends('layouts.client')
 @section('content')
-@section('title','Shop')
-@section('subtitle','Management')
 
 <div id="content-category"></div>
 

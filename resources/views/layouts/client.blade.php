@@ -10,7 +10,8 @@
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
+        <script>var PATH = '{{url("/")}}'</script>
+        
         <!-- Styles -->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
         <style>
@@ -75,6 +76,10 @@
             }
 
         </style>
+
+        {!!Html::script('/vendor/toastr/toastr.min.js')!!}
+        {!!Html::style('/vendor/toastr/toastr.min.css')!!}
+
         {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
 
         <!-- Add the slick-theme.css if you want default styling -->
@@ -84,7 +89,7 @@
         </script>
     </head>
     <body>
-        <div class="container body">
+        <div class="container-fluid body">
             @yield('content')
         </div>
     </body>

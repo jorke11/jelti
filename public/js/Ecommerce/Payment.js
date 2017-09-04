@@ -1,8 +1,9 @@
 function Payment() {
     this.init = function () {
-        $("#addComment").click(this.addComment);
+        $("#btnPay").click(this.pay);
         this.getDetail();
     }
+    
 
     this.getDetail = function () {
         var html = "", image = "";

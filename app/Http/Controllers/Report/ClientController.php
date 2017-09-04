@@ -166,7 +166,6 @@ class ClientController extends Controller {
 //        if ($input["product_id"] != '') {
 //            $where .= " AND d.product_id=" . $input["product_id"];
 //        }
-
 //        if ($input["supplier_id"] != '') {
 //            $where .= " AND p.supplier_id= " . $input["supplier_id"];
 //        }
@@ -174,7 +173,7 @@ class ClientController extends Controller {
         if ($input["commercial_id"] != '') {
             $where .= " AND vdepartures.responsible_id=" . $input["commercial_id"];
         }
-        
+
 
         $cli = "
             SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
@@ -217,8 +216,15 @@ class ClientController extends Controller {
         if ($input["city_id"] != 0) {
             $ware .= " AND dep.destination_id=" . $input["city_id"];
         }
+
         if ($input["product_id"] != 0) {
             $ware .= " AND d.product_id=" . $input["product_id"];
+        }
+        if ($input["commercial_id"] != 0) {
+            $ware .= " AND dep.responsible_id=" . $input["commercial_id"];
+        }
+        if ($input["supplier_id"] != 0) {
+            $ware .= " AND p.supplier_id=" . $input["supplier_id"];
         }
 
         $res = $this->getCEOProduct($input["init"], $input["end"], $ware);

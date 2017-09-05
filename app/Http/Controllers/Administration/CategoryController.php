@@ -45,7 +45,8 @@ class CategoryController extends Controller {
             $row = Categories::find($id);
 
             if ($file != null) {
-                unlink($row->image);
+                if (file_exists($row->image))
+                    unlink($row->image);
                 $name = $file->getClientOriginalName();
                 $path = "images/category/" . $id . "/";
                 $name = str_replace(" ", "", $name);
@@ -55,7 +56,8 @@ class CategoryController extends Controller {
             }
 
             if ($banner != null) {
-                unlink($row->banner);
+                if (file_exists($row->banner))
+                    unlink($row->banner);
                 $namebanner = $banner->getClientOriginalName();
                 $pathbanner = "images/category/" . $id . "/header/";
                 $namebanner = str_replace(" ", "", $namebanner);

@@ -72,12 +72,12 @@ function Category() {
                 if (data.image != null) {
                     $("#img_category").attr("src", data.image)
                 } else {
-                    $("#img_category").attr("src", "")
+                    $("#img_category").val("")
                 }
                 if (data.image != null) {
                     $("#img_banner").attr("src", data.banner)
                 } else {
-                    $("#img_banner").attr("src", "")
+                    $("#img_banner").val("")
                 }
 
             }

@@ -252,6 +252,8 @@ class ClientController extends Controller {
     public function update(Request $request, $id) {
         $input = $request->all();
 
+        $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
+        $input["special_price"] = isset($input["special_price"]) ? true : false;
         $input["login_web"] = (isset($input["login_web"])) ? 1 : 0;
 
         if (isset($input["login_web"])) {

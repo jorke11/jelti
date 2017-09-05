@@ -410,16 +410,16 @@ class EntryController extends Controller {
 
         $sql = "
             SELECT 
-                p.id,p.title as product,sum(d.quantity) as quantity,sum(d.quantity * d.units_supplier) quantity_total,
-                sum(d.value*d.quantity * d.units_supplier) as value,coalesce(sum(d.real_quantity * d.units_supplier),0) as real_quantity,
-                coalesce(sum(d.value*d.real_quantity * d.units_supplier),0) real_value,d.units_supplier
+                p.id,p.title as product,sum(d.quantity)*d.units_supplier as quantity,sum(d.quantity)*d.units_supplier quantity_total, 
+                sum(d.value * d.quantity) * d.units_supplier as value,coalesce(sum(d.real_quantity * d.units_supplier),0) as real_quantity, 
+                coalesce(sum(d.value*d.real_quantity * d.units_supplier),0) real_value,d.units_supplier 
             FROM entries_detail d
             JOIN products p ON p.id=d.product_id
             WHERE d.entry_id=$id
             group by p.id,d.units_supplier
-
               ";
-        
+//        echo $sql;
+//        exit;
         $detail = DB::select($sql);
         $this->total = 0;
         $this->total_real = 0;
@@ -513,6 +513,64 @@ class EntryController extends Controller {
             }
         } else {
             return response()->json(['success' => false, "msg" => "Can not exceeded the amount " . $input["quantity"]], 409);
+        }
+    }
+
+    public function setDetail(Request $request, $id) {
+
+        $input = $request->all();
+        $entry_id = $input["entry_id"];
+        unset($input["entry_id"]);
+        unset($input["_token"]);
+
+        $lot = array();
+        $exp = array();
+        $qua = array();
+        $cont = 0;
+        foreach ($input as $i => $value) {
+            if ($value != '') {
+                if (strpos($i, "lot_") !== false) {
+                    $lot[str_replace("lot_", "", $i)] = $value;
+                }
+                if (strpos($i, "exp_") !== false) {
+                    $exp[str_replace("exp_", "", $i)] = $value;
+                }
+
+                if (strpos($i, "qua_") !== false) {
+                    $qua[str_replace("qua_", "", $i)] = $value;
+                    $cont += $value;
+                }
+            }
+        }
+
+        $sql = "
+                SELECT sum(quantity) total
+                FROM entries_detail WHERE entry_id=$entry_id AND product_id=$id";
+        $total = DB::select($sql);
+        $total = $total[0]->total;
+
+        if ($total >= $cont) {
+
+            foreach ($lot as $i => $value) {
+                $det = EntriesDetail::find($i);
+                $det->lot = $value;
+                $det->save();
+            }
+
+            foreach ($exp as $i => $value) {
+                $det = EntriesDetail::find($i);
+                $det->expiration_date = $value;
+                $det->save();
+            }
+            foreach ($qua as $i => $value) {
+                $det = EntriesDetail::find($i);
+                $det->real_quantity = $value;
+                $det->save();
+            }
+
+            return response()->json(['success' => true, "msg" => "Datos actualizados"]);
+        } else {
+            return response()->json(['success' => false, "msg" => "Solo se permiten " . $total . " items, ingresaste " . $cont], 409);
         }
     }
 

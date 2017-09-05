@@ -173,6 +173,7 @@ Route::put('/entry/detail/{id}', 'Inventory\EntryController@updateDetail');
 Route::delete('/entry/detail/{id}', 'Inventory\EntryController@destroyDetail');
 Route::post('/entry/setPurchase', 'Inventory\EntryController@sendPurchase');
 Route::post('/entry/uploadExcel', 'Inventory\EntryController@storeExcel');
+Route::put('/entry/{id}/setDetail', 'Inventory\EntryController@setDetail');
 
 
 Route::resource('/departure', 'Inventory\DepartureController');
@@ -453,9 +454,8 @@ Route::get('/api/listEntry', function() {
 
     $query = DB::table('ventries');
 
-
-    if (Auth::user()->role_id != 1 && Auth::user()->role_id == 5) {
-        $query->where("responsible_id", Auth::user()->id);
+    if (Auth::user()->role_id != 1) {
+        $query->where("warehouse_id", Auth::user()->warehouse_id);
     }
 
     return Datatables::queryBuilder($query)->make(true);

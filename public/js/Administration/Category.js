@@ -74,6 +74,11 @@ function Category() {
                 } else {
                     $("#img_category").attr("src", "")
                 }
+                if (data.image != null) {
+                    $("#img_banner").attr("src", data.banner)
+                } else {
+                    $("#img_banner").attr("src", "")
+                }
 
             }
         })

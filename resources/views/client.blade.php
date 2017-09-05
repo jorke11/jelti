@@ -68,7 +68,7 @@
     </div>
     <div class="col-lg-3">
         {{auth()->user()->name}}, <a href="{{ url('/logout') }}"
-           onclick="event.preventDefault();
+                                     onclick="event.preventDefault();
                    document.getElementById('logout-form').submit();">
             Cerrar Sesión
         </a>
@@ -122,7 +122,7 @@
                         foreach ($category as $i => $val) {
                             ?>
                             <div class="col-md-2">
-                                <a class="fancybox thumbnail" rel="gallery1" href="shopping/<?php echo $val->id?>">
+                                <a class="fancybox thumbnail" rel="gallery1" href="shopping/<?php echo $val->id ?>">
                                     <img src="{{$val->image}}" alt="">
                                 </a>
                             </div>
@@ -172,7 +172,7 @@
                         foreach ($category as $i => $val) {
                             ?>
                             <div class="col-md-2">
-                                <a class="fancybox thumbnail" rel="gallery1" href="page/category/<?php echo $val->id?>">
+                                <a class="fancybox thumbnail" rel="gallery1" href="page/category/<?php echo $val->id ?>">
                                     <img src="{{$val->image}}" alt="">
                                 </a>
                             </div>

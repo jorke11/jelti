@@ -151,7 +151,8 @@ LEFT JOIN cities ci ON ci.id=c.city_id
 
 
 create view ventries as 
-select e.id, s.business,e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code,e.status_id,e.responsible_id
+select e.id, s.business,e.description,e.created_at,e.invoice, w.description as warehouse,c.description as city, p.description as status,p.code,e.status_id,
+e.responsible_id,e.warehouse_id
 From entries e
 JOIN warehouses w ON w.id=e.warehouse_id
 JOIN stakeholder s ON s.id=e.supplier_id

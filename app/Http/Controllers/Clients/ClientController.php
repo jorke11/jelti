@@ -64,6 +64,8 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
             $input["login_web"] = isset($input["login_web"]) ? true : false;
+            $input["document"] = trim($input["document"]);
+            $input["email"] = trim($input["email"]);
 
             try {
                 DB::beginTransaction();

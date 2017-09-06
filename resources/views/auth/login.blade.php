@@ -16,19 +16,19 @@
                             <div class="col-lg-4">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <img  src="{{ asset('assets/images/sf.png') }}" style="width: 90%">
+                                        <a href="/"><img  src="{{ asset('assets/images/sf.png') }}" style="width: 90%"></a>
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col-lg-4">
-                                        <img  src="{{ asset('assets/images/fb_icon.png') }}">
+                                        <a href="#"><img  src="{{ asset('assets/images/fb_icon.png') }}"></a>
                                     </div>
                                     <div class="col-lg-4">
-                                        <img  src="{{ asset('assets/images/ig_icon.png') }}">
+                                        <a href="#"><img  src="{{ asset('assets/images/ig_icon.png') }}"></a>
                                     </div>
                                     <div class="col-lg-4">
-                                        <img  src="{{ asset('assets/images/tw_icon.png') }}">
+                                        <a href=""><img  src="{{ asset('assets/images/tw_icon.png') }}"></a>
                                     </div>
                                 </div>
 

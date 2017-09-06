@@ -29,17 +29,22 @@ echo json_encode([
                 margin: 0 auto;
                 padding: 0;
                 background: url('assets/images/fondo_init.png') center center no-repeat;
-                background-size:100%
+                background-size:100% 1280px;
             }
 
+            @media screen and (min-width:1340px) {
+                margin: 0 auto;
+                padding: 0;
+                background: url('assets/images/fondo_init.png') center center no-repeat;
+                background-size:100%;
+            }
+            
         </style>
     </head>
     <!--<body style="background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;background-size:100%">-->
     <body >
         <div id="app">
-            {!!Html::image('/assets/images/logo.png','foto',array("class"=>"img-responsive center-block","width"=>'80'))!!}
-            <br>
-
+            
             @yield('content')
         </div>
 

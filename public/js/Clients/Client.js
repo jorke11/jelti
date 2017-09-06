@@ -733,6 +733,8 @@ function Client() {
                 {data: "responsible"},
                 {data: "typeperson"},
                 {data: "typeregime"},
+                {data: "created_at"},
+                {data: "updated_at"},
                 {data: "status"},
             ],
             buttons: [
@@ -744,13 +746,13 @@ function Client() {
             order: [[2, 'ASC']],
             aoColumnDefs: [
                 {
-                    aTargets: [1, 2, 3, 4, 5, 6],
+                    aTargets: [1, 2, 3, 4, 5, 6, 7, 8, 9],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [12],
+                    targets: [14],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

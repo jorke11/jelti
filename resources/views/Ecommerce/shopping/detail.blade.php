@@ -35,8 +35,8 @@
 <br>
 <br>
 <br>
-<div style="background: #fffcf8;width: 100%;padding-top: 20px;padding-left: 20px;padding-right: 20px">
-    <div class="row">
+<div style="background: #fffcf8;width: 100%;">
+    <div class="row " style="padding-top: 20px;padding-left:50px;padding-right:50px;">
         @if (count($products)>0)
         <?php
         $cont = 0;
@@ -62,12 +62,11 @@
         </div>
         <?php
         $cont++;
-
         if ($cont == 4) {
             $cont = 0;
             ?>
         </div>
-        <div class="row">
+        <div class="row" style="padding-top: 20px;padding-left:50px;padding-right:50px;">
             <?php
         }
         ?>

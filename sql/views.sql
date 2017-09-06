@@ -31,7 +31,7 @@ SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.la
 s.contact,s.phone_contact,s.term,c.description as city,s.web_site,coalesce(typeperson.description,'') as typeperson,typeregime.description as typeregime,
 typestakeholder.description as typestakeholder,status.description as status,s.responsible_id,coalesce(u.name,'') ||' '||coalesce(u.last_name,'') as responsible,
 s.created_at,s.address_invoice,s.address_send,send.description city_invoice,(select dispatched from sales where client_id=s.id and dispatched is not null order by 1 desc limit 1) last_invoice,s.sector_id,
-sector.description sector
+sector.description sector,s.updated_at
 FROM stakeholder s
 JOIN cities c ON c.id=s.city_id
 LEFT JOIN cities send ON send.id=s.invoice_city_id

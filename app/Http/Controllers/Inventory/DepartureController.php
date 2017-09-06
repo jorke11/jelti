@@ -667,7 +667,11 @@ class DepartureController extends Controller {
                             $departure->dispatched = $sale->dispatched;
                             $departure->save();
 
+                            //Log 
                             $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $departure->invoice);
+
+                            $cli = Stakeholder::find($departure->client_id);
+                            $cli->update_at = $sale->dispatched;
 
                             $email = Email::where("description", "invoices")->first();
 

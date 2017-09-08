@@ -299,7 +299,7 @@ class ToolController extends Controller {
     }
 
     public function addInventory($warehouse_id, $reference, $quantity, $lot = null) {
-        $lot=($lot==null)?'system':$lot;
+        $lot = ($lot == null) ? 'system' : $lots;
         $sql = "
             select 
                 p.id,

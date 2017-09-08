@@ -17,15 +17,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Short Description</label>
                             <input type="text" class="form-control input-category" id="short_description" name='short_description' required>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Tipo</label>
                             <select id="type_category_id" name="type_category_id" class="form-control input-category">
@@ -63,6 +61,21 @@
                     <div class="col-lg-12">
                         <a href="#" class="thumbnail">
                             <img alt="" id="img_category">
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Banner</label>
+                            <input type="file" class="form-control input-category" id="banner" name='banner'>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="#" class="thumbnail">
+                            <img alt="" id="img_banner">
                         </a>
                     </div>
                 </div>

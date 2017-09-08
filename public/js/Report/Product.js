@@ -36,7 +36,7 @@ function Product() {
         param.end = $("#Detail #fend").val();
 
         param.product_id = $("#Detail #product_id").val();
-
+        
 
         return $('#tbl').DataTable({
             ajax: {

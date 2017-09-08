@@ -15,6 +15,8 @@
                         <th>Responsable</th>
                         <th>Tipo persona</th>
                         <th>Regimen</th>
+                        <th>Creacion</th>
+                        <th>Ultimo Evento</th>
                         <th>Estado</th>
                         <th>Actiones</th>
                     </tr>

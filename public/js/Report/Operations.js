@@ -22,7 +22,7 @@ function Operations() {
             objCli.tableProductWeek();
             objCli.tableProductDay();
             objCli.tableClientAverage();
-//            objCli.tableShipping_cost();
+            objCli.tableShipping_cost();
         })
     }
 

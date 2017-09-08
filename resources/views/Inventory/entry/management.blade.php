@@ -113,6 +113,8 @@
 </div>
 
 <div class="row">
+    {!! Form::open(['id'=>'frmSetDetail']) !!}
+    <input id="entry_id" name="entry_id">
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -151,9 +153,9 @@
                     <tfoot></tfoot>
                 </table>
             </div>
-        </div
+        </div>
     </div>
-</div>
+    {!!Form::close()!!}
 </div>
 
 

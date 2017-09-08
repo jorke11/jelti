@@ -173,6 +173,7 @@ Route::put('/entry/detail/{id}', 'Inventory\EntryController@updateDetail');
 Route::delete('/entry/detail/{id}', 'Inventory\EntryController@destroyDetail');
 Route::post('/entry/setPurchase', 'Inventory\EntryController@sendPurchase');
 Route::post('/entry/uploadExcel', 'Inventory\EntryController@storeExcel');
+Route::put('/entry/{id}/setDetail', 'Inventory\EntryController@setDetail');
 
 
 Route::resource('/departure', 'Inventory\DepartureController');
@@ -453,9 +454,8 @@ Route::get('/api/listEntry', function() {
 
     $query = DB::table('ventries');
 
-
-    if (Auth::user()->role_id != 1 && Auth::user()->role_id == 5) {
-        $query->where("responsible_id", Auth::user()->id);
+    if (Auth::user()->role_id != 1) {
+        $query->where("warehouse_id", Auth::user()->warehouse_id);
     }
 
     return Datatables::queryBuilder($query)->make(true);
@@ -552,7 +552,6 @@ Route::get('/api/reportClientCities', "Report\ClientController@listCities");
 Route::get('api/reportProductByClient', "Report\CommercialController@getProductByClient");
 
 
-
 Route::get('/api/reportSample', "Report\SampleController@getList");
 Route::get('/api/reportClientTarget', "Report\SampleController@getListTarger");
 Route::get('/api/reportSampleProduct', "Report\SampleController@getListProduct");
@@ -600,6 +599,7 @@ Route::get('overview', "Report\ClientController@overview");
 Route::get('overview/getOverview', "Report\ClientController@getOverview");
 
 Route::get('CEO/getSalesUnits', "Report\ClientController@getSalesUnits");
+Route::get('CEO/getSalesUnitsWare', "Report\ClientController@getSalesUnitsWare");
 
 Route::get('operations/getProductWeek', "Report\OperationsController@ProductWeek");
 Route::get('operations/getProductDay', "Report\OperationsController@ProductDay");

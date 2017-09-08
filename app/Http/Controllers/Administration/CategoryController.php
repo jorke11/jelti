@@ -31,9 +31,10 @@ class CategoryController extends Controller {
 
             unset($input["id"]);
             $file = array_get($input, 'img');
-            
+            $banner = array_get($input, 'banner');
+
             $input["status_id"] = (isset($input["status_id"])) ? 1 : 0;
-            
+
             if ($id != '') {
                 $row = Categories::find($id);
                 $row->fill($input)->save();
@@ -41,16 +42,31 @@ class CategoryController extends Controller {
                 $id = Categories::create($input)->id;
             }
 
+            $row = Categories::find($id);
+
             if ($file != null) {
+                if (file_exists($row->image))
+                    unlink($row->image);
                 $name = $file->getClientOriginalName();
                 $path = "images/category/" . $id . "/";
+                $name = str_replace(" ", "", $name);
                 $file->move($path, $name);
                 $path .= $name;
-                $row = Categories::find($id);
                 $row->image = $path;
-                $row->save();
             }
 
+            if ($banner != null) {
+                if (file_exists($row->banner))
+                    unlink($row->banner);
+                $namebanner = $banner->getClientOriginalName();
+                $pathbanner = "images/category/" . $id . "/header/";
+                $namebanner = str_replace(" ", "", $namebanner);
+                $banner->move($pathbanner, $namebanner);
+                $pathbanner .= $namebanner;
+                $row->banner = $pathbanner;
+            }
+
+            $row->save();
 
             if ($id) {
                 return response()->json(['success' => true, "data" => $row]);

@@ -331,22 +331,26 @@ function Entry() {
 //                $("#modalDetail").modal("show");
                     $(".add_" + id).remove();
 
-                    html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='6'><br></td></tr>";
+                    html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='7'><br></td></tr>";
                     html += "<tr class='add_" + id + "'><td style='background-color:#ddd' colspan='3'></td>";
-                    html += "<td align='center'><button class='btn btn-info input-sm' onclick='obj.repeatData(" + id + ")'>Replicar</button></td>";
-                    html += "<td align='center'><button class='btn btn-success input-sm' onclick='obj.saveData(" + id + ")'>Actualizar</button></td></tr>";
-
+                    html += "<td align='center'><button type='button' class='btn btn-info input-sm' onclick='obj.repeatData(" + id + ")'>Replicar</button></td>";
+                    html += "<td align='center'><button type='button' class='btn btn-success input-sm' onclick='obj.saveData(" + id + ")'>Actualizar</button></td><td></td><td></td></tr>";
+                    html += "<tr class='add_" + id + "' align='center'><td colspan='3' style='background-color:#ddd'></td><td>Lote</td><td>Fecha Vencimiento</td><td>Cantidad</td><td>Cantidad X Embalaje</td></tr>";
+                    var cont = 0;
                     $.each(data, function (i, val) {
                         val.real_quantity = (val.real_quantity == null) ? '' : val.real_quantity;
                         val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date;
                         val.lot = (val.lot == null) ? '' : val.lot;
                         html += "<tr style='background-color:#ddd' class='add_" + id + "'><td colspan='3'></td>";
-                        html += "<td><input class='form-control input-sm detail_lot_" + id + "' value='" + val.lot + "' placeholder='Lote' name='lot_" + id + "' id='lot_" + id + "'></td>";
-                        html += "<td><input class='form-control input-sm detail_date_" + id + " form_datetime' value='" + val.expiration_date + "' placeholder='Fecha Vencimiento'></td>";
-                        html += "<td><input class='form-control input-sm detail_quantity_" + id + "' value='" + val.real_quantity + "' placeholder='Cantidad'></td></tr>";
+                        html += "<td><input class='form-control input-sm detail_lot_" + id + "' value='" + val.lot + "' placeholder='Lote' name='lot_" + val.id + "' id='lot_" + val.id + "'></td>";
+                        html += "<td><input class='form-control input-sm detail_date_" + id + " form_datetime' name='exp_" + val.id + "' id='exp_" + val.id + "' value='" + val.expiration_date + "' placeholder='Fecha Vencimiento'></td>";
+                        html += "<td><input class='form-control input-sm detail_quantity_" + id + "' value='" + val.real_quantity + "'  name='qua_" + val.id + "' id='quantity_" + val.id + "' placeholder='Cantidad'></td>";
+                        html += "<td><input class='form-control input-sm' value='" + (val.real_quantity * val.units_supplier) + "' readonly></td>";
+                        html += "</tr>";
+                        cont += parseInt(val.real_quantity);
                     });
 
-
+                    html += "<tr class='add_" + id + "'><td colspan='3' style='background-color:#ddd'></td><td></td><td><b>Total</b> x" + data[0].units_supplier + "</td><td>" + (cont) + "</td><td>" + (data[0].units_supplier * cont) + "</td></tr>";
                     html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='6'><br></td></tr>";
                     html += "</table></tr>";
                     $("#row_" + id).after(html);
@@ -362,51 +366,28 @@ function Entry() {
     }
 
     this.saveData = function (id) {
-        var lot = '';
-        var exp = '';
-        var quantity = '';
-        var cont = 0;
-        if ($(".detail_lot_" + id)[0].value != '') {
+        $("#entry_id").val($("#frm #id").val());
+        var data = $("#frmSetDetail").serialize();
 
-            $(".detail_lot_" + id).each(function () {
 
-                if (cont > 0) {
-                    $(this).val(lot)
+        $.ajax({
+            url: 'entry/' + id + '/setDetail',
+            method: "PUT",
+            data: data,
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.success == true) {
+                    toastr.success(data.msg);
+                    obj.editDetail(id);
                 } else {
-                    lot = $(this).val();
+                    toastr.warning("Wrong");
                 }
-                cont++;
-            })
-        }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(xhr.responseJSON.msg);
+            }
+        })
 
-        cont = 0;
-
-        if ($(".detail_date_" + id)[0].value != '') {
-
-            $(".detail_date_" + id).each(function () {
-
-                if (cont > 0) {
-                    $(this).val(lot)
-                } else {
-                    lot = $(this).val();
-                }
-                cont++;
-            })
-        }
-
-        cont = 0;
-
-        if ($(".detail_quantity_" + id)[0].value != '') {
-
-            $(".detail_quantity_" + id).each(function () {
-                if (cont > 0) {
-                    $(this).val(lot)
-                } else {
-                    lot = $(this).val();
-                }
-                cont++;
-            })
-        }
     }
 
     this.repeatData = function (id) {

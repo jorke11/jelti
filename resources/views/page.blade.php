@@ -275,7 +275,7 @@
             <br>
             <br>
             <br>
-            
+
             <br>
             <div class="row">
                 <div class="col-lg-9 col-lg-offset-1">
@@ -344,24 +344,27 @@
                             <div class="item  active">
                                 <div class="row">
                                     <?php
+//                                    dd($category);
                                     $cont = 0;
                                     foreach ($category as $i => $val) {
-                                        ?>
-                                        <div class="col-md-2">
-                                            <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
-                                                <img src="{{$val->image}}" alt="">
-                                            </a>
-                                        </div>
-                                        <?php
-                                        $cont++;
-                                        if ($cont == 4) {
-                                            $cont = 0;
+                                        if ($val->image != '') {
                                             ?>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
+                                                    <img src="{{$val->image}}" alt="">
+                                                </a>
+                                            </div>
                                             <?php
+                                            if ($cont == 5) {
+                                                $cont = 0;
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="row">
+                                                <?php
+                                            }
+                                            $cont++;
                                         }
                                     }
                                     ?>
@@ -433,8 +436,6 @@
                             <span class="sr-only">Next</span>
                         </a>
 
-                        <a data-slide="prev" href="#media" class="left carousel-control">‹</a>
-                        <a data-slide="next" href="#media" class="right carousel-control">›</a>
                     </div>
                 </div>
             </div>

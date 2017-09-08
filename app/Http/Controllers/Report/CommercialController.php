@@ -32,6 +32,7 @@ class CommercialController extends Controller {
             WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id=2 AND client_id NOT IN(258,264)
             group by 1,responsible
             order by 3 DESC
+            LIMIT 5
             ";
 //            echo $sql;exit;
         $res = DB::select($sql);
@@ -123,24 +124,32 @@ class CommercialController extends Controller {
 
     public function getProductByClient(Request $req) {
         $input = $req->all();
+
         $where = '';
-        if (isset($input["client_id"]) && $input["client_id"] != '') {
-            $where = " AND dep.client_id=" . $input["client_id"];
-        }
-
-        if ($input["city_id"] != '') {
-            $where .= "AND dep.destination_id=" . $input["city_id"];
-        }
-
-
-        if ($input["product_id"] != '') {
-            $where .= " AND d.product_id=" . $input["product_id"];
-        }
-
-
-        if ($input["warehouse_id"] != 0) {
+        if (isset($input["warehouse_id"]) && $input["warehouse_id"] != 0) {
             $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
         }
+
+        if (isset($input["client_id"]) && $input["client_id"] != '') {
+            $where .= " AND dep.client_id=" . $input["client_id"];
+        }
+
+//        if (isset($input["city_id"]) && $input["city_id"] != '') {
+//            $where = "AND dep.destination_id=" . $input["city_id"];
+//        }
+
+//        if (isset($input["product_id"]) && $input[""] != '') {
+//            $where .= " AND d.product_id=" . $input["product_id"];
+//        }
+
+//        if (isset($input["supplier_id"]) && $input["supplier_id"] != '') {
+//            $where .= " AND p.supplier_id= " . $input["supplier_id"];
+//        }
+
+        if (isset($input["commercial_id"]) && $input["commercial_id"] != '') {
+            $where .= " AND dep.responsible_id=" . $input["commercial_id"];
+        }
+
 
         $columns = array();
 
@@ -159,7 +168,8 @@ class CommercialController extends Controller {
             ORDER BY 1 ASC, 3 DESC
             ";
 
-//        echo $sql;exit;
+//        echo $sql;
+//        exit;
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);

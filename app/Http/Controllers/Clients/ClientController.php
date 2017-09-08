@@ -63,6 +63,9 @@ class ClientController extends Controller {
             $input["type_stakeholder"] = 1;
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
+            $input["login_web"] = isset($input["login_web"]) ? true : false;
+            $input["document"] = trim($input["document"]);
+            $input["email"] = trim($input["email"]);
 
             try {
                 DB::beginTransaction();
@@ -251,6 +254,8 @@ class ClientController extends Controller {
     public function update(Request $request, $id) {
         $input = $request->all();
 
+        $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
+        $input["special_price"] = isset($input["special_price"]) ? true : false;
         $input["login_web"] = (isset($input["login_web"])) ? 1 : 0;
 
         if (isset($input["login_web"])) {
@@ -305,7 +310,6 @@ class ClientController extends Controller {
         } else {
             $users = Users::find($user->id);
             $users->fill($new)->save();
-            
         }
 
         if ($result) {

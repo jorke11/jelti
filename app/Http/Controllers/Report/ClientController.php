@@ -68,8 +68,8 @@ class ClientController extends Controller {
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and type_stakeholder=1
             WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
-                AND client_id NOT IN(258,264)
-            group by 1,client_id
+                AND vdepartures.client_id NOT IN(258,264)
+            group by 1,vdepartures.client_id
             ORDER BY 3 DESC
             $limit
             ";
@@ -83,7 +83,7 @@ class ClientController extends Controller {
                 JOIN products p ON p.id=d.product_id and p.category_id<>-1
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder = 1 
                 WHERE dep.client_id=" . $value->id . " and dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
-                    AND departures.client_id NOT IN(258,264)";
+                    AND dep.client_id NOT IN(258,264)";
             $res2 = DB::select($sql);
             $res[$i]->unidades = $res2[0]->units;
         }
@@ -150,29 +150,38 @@ class ClientController extends Controller {
 
     public function listCities(Request $req) {
         $input = $req->all();
-        $ware = "";
+        $where = "";
         if ($input["warehouse_id"] != 0) {
-            $ware = " AND warehouse_id=" . $input["warehouse_id"];
+            $where .= " AND vdepartures.warehouse_id=" . $input["warehouse_id"];
         }
 
-        if ($input["client_id"] != 0) {
-            $ware .= " AND client_id=" . $input["client_id"];
+        if ($input["client_id"] != '') {
+            $where .= " AND vdepartures.client_id=" . $input["client_id"];
         }
 
-        if ($input["city_id"] != 0) {
-            $ware .= " AND destination_id=" . $input["city_id"];
+        if ($input["city_id"] != '') {
+            $where = "AND vdepartures.destination_id=" . $input["city_id"];
         }
-        if ($input["commercial_id"] != 0) {
-            $ware .= " AND vdepartures.responsible_id=" . $input["commercial_id"];
+
+//        if ($input["product_id"] != '') {
+//            $where .= " AND d.product_id=" . $input["product_id"];
+//        }
+//        if ($input["supplier_id"] != '') {
+//            $where .= " AND p.supplier_id= " . $input["supplier_id"];
+//        }
+
+        if ($input["commercial_id"] != '') {
+            $where .= " AND vdepartures.responsible_id=" . $input["commercial_id"];
         }
+
 
         $cli = "
             SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
             WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
-                AND departures.client_id NOT IN(258,264)
-                $ware 
+                AND vdepartures.client_id NOT IN(258,264)
+                $where 
             GROUP BY destination_id,2
             ";
 
@@ -207,8 +216,15 @@ class ClientController extends Controller {
         if ($input["city_id"] != 0) {
             $ware .= " AND dep.destination_id=" . $input["city_id"];
         }
+
         if ($input["product_id"] != 0) {
             $ware .= " AND d.product_id=" . $input["product_id"];
+        }
+        if ($input["commercial_id"] != 0) {
+            $ware .= " AND dep.responsible_id=" . $input["commercial_id"];
+        }
+        if ($input["supplier_id"] != 0) {
+            $ware .= " AND p.supplier_id=" . $input["supplier_id"];
         }
 
         $res = $this->getCEOProduct($input["init"], $input["end"], $ware);
@@ -242,7 +258,8 @@ class ClientController extends Controller {
 
     public function profileClient(Request $req, $client_id) {
         $input = $req->all();
-        $client = DB::table("vclient")->where("id", $client_id)->first();
+
+        $client = DB::table("vclient")->where("id", $input["client_id"])->first();
 
         $detail = DB::table("vdepartures")->where("client_id", $client->id)->orderBy("id", "asc")->get();
         $resta = 0;
@@ -253,10 +270,11 @@ class ClientController extends Controller {
 
         $sql = "SELECT sum(subtotalnumeric) subtotal,sum(quantity) quantity 
             FROM vdepartures
-            JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 and vdepartures.client_id NOT IN(258,264)
-            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
+            JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
+            and vdepartures.client_id NOT IN(258,264)
+            WHERE dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
                 and client_id=" . $client_id;
-
+        
         $totales = DB::select($sql);
         $totales = $totales[0];
         $totales->subtotalFormated = "$ " . number_format($totales->subtotal, 0, ",", ".");
@@ -265,12 +283,13 @@ class ClientController extends Controller {
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 and vdepartures.client_id NOT IN(258,264)
             WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
-                and client_id=" . $client_id;
+                and client_id=" . $input["client_id"];
 
         $quantity = DB::select($sql);
-        $quantity = $quantity[0];
 
-        $ticket = $totales->subtotal / $quantity->total;
+        $quantity = ($quantity[0]->total == 0) ? 1 : $quantity[0]->total;
+
+        $ticket = $totales->subtotal / $quantity;
         $ticket = "$ " . number_format($ticket, 0, ",", ".");
 
         $sql = "
@@ -287,7 +306,7 @@ class ClientController extends Controller {
                 JOIN products p ON p.id=d.product_id
                 JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1 
-                WHERE dep.client_id=$client_id and p.category_id = " . $value->id . "
+                WHERE dep.client_id=" . $input["client_id"] . " and p.category_id = " . $value->id . "
                     AND dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' ";
 
             $q = DB::select($sql);
@@ -295,9 +314,18 @@ class ClientController extends Controller {
             $categories[$i]->total = $q;
         }
 
+        $sql = "
+            select dispatched
+            from vdepartures 
+            where status_id=2 and client_id not in(254,264)  and client_id=" . $input["client_id"] . "
+            order by dispatched desc limit 1";
+
+        $last_sale = DB::select($sql);
+        $last_sale = $last_sale[0]->dispatched;
+
 
         return response()->json(["client" => $client, "frecuency" => ceil($resta / count($detail)), "totales" => $totales,
-                    "ticket" => $ticket, "total_request" => $quantity->total, "categories" => $categories]);
+                    "ticket" => $ticket, "total_request" => $quantity, "categories" => $categories, "last_dispatched" => $last_sale]);
     }
 
     public function getRepurchase(Request $req, $client_id) {
@@ -497,6 +525,56 @@ class ClientController extends Controller {
         $res = $this->getSalesUnitsData($in["init"], $in["end"]);
 
         return response()->json(["data" => $res]);
+    }
+
+    public function getSalesUnitsWare(Request $req) {
+        $in = $req->all();
+        $res = $this->getSalesUnitsDataWare($in["init"], $in["end"]);
+
+        return response()->json(["data" => $res]);
+    }
+
+    function getSalesUnitsDataWare($init, $end) {
+        $sql = "
+                SELECT 
+                    warehouse,to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,
+                    sum(tax19) tax19,sum(total) total, sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost,warehouse_id
+                FROM vdepartures 
+                JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
+                WHERE vdepartures.status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
+                    AND client_id  NOT IN(258,264)
+                group by 2,warehouse_id,warehouse";
+//        echo $sql;
+//        exit;
+        $res = DB::select($sql);
+
+        $total = 0;
+        $subtotal = 0;
+        $quantity = 0;
+        foreach ($res as $i => $value) {
+            list($year, $month) = explode("-", $value->dates);
+            $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
+
+            $sql = "
+                SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
+                FROM departures_detail d
+                JOIN departures ON departures.id=d.departure_id and departures.status_id=2 and  departures.client_id NOT IN(258,264)
+                JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
+                WHERE departures.dispatched between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
+                    and departures.warehouse_id=" . $value->warehouse_id . "
+                ";
+            $res2 = DB::select($sql);
+            $res[$i]->quantity = $res2[0]->quantity;
+            $res[$i]->dates = date("Y-F", strtotime($value->dates));
+            $subtotal += $value->subtotal;
+            $total += $value->total;
+            $quantity += $res[$i]->quantity;
+        }
+
+        $this->subtotal = ($subtotal == 0) ? 1 : $subtotal;
+        $this->total = ($total == 0) ? 1 : $total;
+        $this->quantity = ($quantity == 0) ? 1 : $quantity;
+        return $res;
     }
 
     function getSalesUnitsData($init, $end) {

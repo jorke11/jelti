@@ -23,6 +23,9 @@
                         <tr>
                             <th></th>
                             <th>Description</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th>Alternative</th>
                             <th>Action</th>
                         </tr>
                     </thead>

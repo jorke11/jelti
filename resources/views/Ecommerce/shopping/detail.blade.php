@@ -9,10 +9,14 @@
         transition: .3s ease-in-out;
     }
     .hover01 figure:hover img {
-        -webkit-transform: scale(1.3);
-        transform: scale(1.3);
+        -webkit-transform: scale(1.2);
+        transform: scale(1.2);
     }
 </style>
+
+<div class="row">
+
+</div>
 <div class="row">
     <div class="col-lg-12" style="padding: 0;">
         <img src="/{{$category->banner}}" class="img-responsive" style="width: 100%">
@@ -25,7 +29,7 @@
         @foreach($subcategory as $val)
         <div class="col-lg-2">
             <div class="row"><div class="col-lg-12"><p class="text-center">{{ucwords($val->description)}}</p></div></div>
-            <div class="row hover01"><div class="col-lg-12"><figure><img src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer"></figure></div></div>
+            <div class="row hover01"><div class="col-lg-12"><figure><img id="sub_{{$val->id}}]" src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer" onclick="obj.selectedSubcategory()"></figure></div></div>
         </div>
         @endforeach
     </div>
@@ -77,4 +81,5 @@
 
     </div>
 </div>
+{!!Html::script('js/Ecommerce/Detail.js')!!}
 @endsection

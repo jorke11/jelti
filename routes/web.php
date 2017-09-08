@@ -267,6 +267,7 @@ Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 Route::get('/payment', 'Shopping\PaymentController@index');
 Route::post('payment/target', 'Shopping\PaymentController@payment');
 Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
+Route::put('/getDetailQuantity/{order_id}', 'Shopping\PaymentController@setQuantity');
 Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
 

@@ -15,14 +15,10 @@ function Category() {
         var frm = $("#frm");
 //        var data = frm.serialize();
         var formData = new FormData($("#frm")[0]);
-
-
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
-
         var validate = $(".input-category").validate();
-
         if (validate.length == 0) {
             if (id == '') {
                 msg = "Created Record";
@@ -115,6 +111,18 @@ function Category() {
                 {data: "id"},
                 {data: "description"},
                 {data: "short_description"},
+                {data: "status_id", render: function (data, type, row) {
+                        return (row.status_id == 1) ? 'Enable' : 'Disabled';
+                    }
+                },
+                {data: "image", render: function (data, type, row) {
+                        return (row.image == '') ? '' : "<img src='" + row.image + "' width=80%>";
+                    }
+                },
+                {data: "banner", render: function (data, type, row) {
+                        return (row.image == '') ? '' : "<img src='" + row.banner + "' width=80%>";
+                    }
+                },
                 {data: "order"}
             ],
             order: [[1, 'ASC']],
@@ -126,7 +134,7 @@ function Category() {
                     }
                 },
                 {
-                    targets: [4],
+                    targets: [7],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

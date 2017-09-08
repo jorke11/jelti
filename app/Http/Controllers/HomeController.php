@@ -152,6 +152,7 @@ class HomeController extends Controller {
             }
         } else {
             if (Auth::user()->role_id == 2) {
+                
                 return view('client', compact("product", "client", "supplier", "commercial", "samples", "category", "subcategory"));
             } else {
                 return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples", "category"));

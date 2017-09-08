@@ -18,9 +18,15 @@ function detailProduct() {
             method: 'POST',
             data: obj,
             dataType: 'JSON',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (data) {
                 $("#quantityOrders").html(data);
                 toastr.success("Item add")
+                $("#loading-super").addClass("hidden");
+            }, error: function (xhr, ajaxOptions, thrownError) {
+
             }
         })
     }

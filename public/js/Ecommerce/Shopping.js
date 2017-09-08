@@ -2,6 +2,8 @@ function Shop() {
     this.init = function () {
         $("#addComment").click(this.addComment);
         var html = "";
+        
+        this.getQuantity();
         $.ajax({
             url: 'getCategories/',
             method: 'GET',
@@ -20,6 +22,19 @@ function Shop() {
                 html += '</div>';
 
                 $("#content-category").html(html);
+            }
+        })
+    }
+    
+     this.getQuantity = function () {
+         console.log("as");
+        var html = "";
+        $.ajax({
+            url: PATH + '/getCounter',
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (data) {
+                $("#quantityOrders").html(data.quantity);
             }
         })
     }

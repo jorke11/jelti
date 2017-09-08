@@ -24,6 +24,9 @@
                             <th></th>
                             <th>Description</th>
                             <th>Short Description</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th>Baner</th>
                             <th>Order</th>
                             <th>Action</th>
                         </tr>

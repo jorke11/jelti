@@ -39,7 +39,8 @@ class ShoppingController extends Controller {
     public function getProduct($id) {
         $product = Products::findOrFail($id);
         $detail = ProductsImage::where("product_id", $id)->get();
-        return view("Ecommerce.shopping.product", compact("product", "detail"));
+        $relations = Products::where("category_id", $product->category_id)->get();
+        return view("Ecommerce.shopping.product", compact("product", "detail", "relations"));
     }
 
     public function addComment(Request $req) {

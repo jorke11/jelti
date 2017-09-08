@@ -254,6 +254,9 @@ class ToolController extends Controller {
 
     public function getProduct($warehouse_id, $reference) {
 
+        $ware = Warehouses::find($warehouse_id);
+        var_dump($ware->description);
+
         $sql = "
             select 
                 p.id,
@@ -287,6 +290,7 @@ class ToolController extends Controller {
                     and sales.warehouse_id=$warehouse_id
                 ) Total
             from products p
+            
             where p.reference=$reference
             order by p.title asc";
         $res = DB::select($sql);
@@ -294,8 +298,8 @@ class ToolController extends Controller {
         dd($res);
     }
 
-    public function addInventory($warehouse_id, $reference, $quantity) {
-
+    public function addInventory($warehouse_id, $reference, $quantity, $lot = null) {
+        $lot = ($lot == null) ? 'system' : $lot;
         $sql = "
             select 
                 p.id,
@@ -366,7 +370,7 @@ class ToolController extends Controller {
         $det["quantity"] = $quantity;
         $det["real_quantity"] = $quantity;
         $det["value"] = $pro->price_sf;
-        $det["lot"] = "system";
+        $det["lot"] = $lot;
         $det["description"] = "system";
         $det["status_id"] = 3;
         $det["created_at"] = date("Y-m-d H:i:s");
@@ -377,7 +381,7 @@ class ToolController extends Controller {
 
         $res = DB::select($sql);
         $res = $res[0];
-        
+
         dd($res);
     }
 

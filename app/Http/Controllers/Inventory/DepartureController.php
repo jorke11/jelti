@@ -510,7 +510,7 @@ class DepartureController extends Controller {
     public function processDeparture($header, $detail) {
         try {
             DB::beginTransaction();
-            
+
             $result = Departures::create($header)->id;
 
             if ($result) {
@@ -571,7 +571,7 @@ class DepartureController extends Controller {
 
                 if (count($emDetail) > 0) {
                     $this->mails = array();
-                    
+
                     $userware = Users::find($ware->responsible_id);
                     $this->mails[] = $userware->email;
 
@@ -754,7 +754,7 @@ class DepartureController extends Controller {
                                 $input["created_at"] = $departure->created_at;
                                 $input["textTotal"] = trim($this->tool->to_word(round($this->total)));
 
-                                $input["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
+                                $input["subtotal"] = "$ " . number_format($this->subtotal - $departure->discount, 0, ",", ".");
                                 $input["total"] = "$ " . number_format($this->total, 0, ",", ".");
                                 $input["exento"] = "$ " . number_format($this->exento, 0, ",", ".");
                                 $input["tax5f"] = "$ " . number_format($this->tax5, 0, ",", ".");

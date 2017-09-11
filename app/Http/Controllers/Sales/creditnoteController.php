@@ -59,19 +59,23 @@ class creditnoteController extends Controller {
         $new["sale_id"] = $sales->id;
         $new["departure_id"] = $input["id"];
         $new["description"] = $input["description"];
-        $id = CreditNote::create($new)->id;
-        foreach ($input["detail"] as $value) {
-            if (isset($value["quantity"]) && $value["quantity"] != 0) {
-                $cre = new CreditNoteDetail();
-                $cre->creditnote_id = $id;
-                $cre->row_id = $value["id"];
-                $cre->quantity = $value["quantity"];
-                $cre->product_id = $value["product_id"];
-                $cre->save();
+        if (count($input["detail"]) > 0) {
+            $id = CreditNote::create($new)->id;
+            foreach ($input["detail"] as $value) {
+                if (isset($value["quantity"]) && $value["quantity"] != 0) {
+                    $cre = new CreditNoteDetail();
+                    $cre->creditnote_id = $id;
+                    $cre->row_id = $value["id"];
+                    $cre->quantity = $value["quantity"];
+                    $cre->product_id = $value["product_id"];
+                    $cre->save();
+                }
             }
-        }
 
-        return response()->json(["success" => true]);
+            return response()->json(["success" => true]);
+        } else {
+            return response()->json(["success" => false, "msg" => "Detalle debe contener información!"], 500);
+        }
     }
 
     public function editCreditNote($id) {
@@ -113,6 +117,7 @@ class creditnoteController extends Controller {
 
         $sale = Sales::where("departure_id", $cre->departure_id)->first();
 
+
         $detail = DB::table("vcreditnote_detail_row")
                 ->select("id", "quantity", "tax", "product", "product_id", "value", "units_sf", "stakeholder", "quantitytotal", "valuetotal")
                 ->whereNotNull("product_id")
@@ -120,9 +125,7 @@ class creditnoteController extends Controller {
                 ->get();
 
 
-        
-        
-        
+
         $dep = Departures::find($cre->departure_id);
 
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")

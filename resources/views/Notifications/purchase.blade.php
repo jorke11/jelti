@@ -49,6 +49,7 @@
         <table align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" class="detail">
             <thead>
                 <tr>
+                    <th>EAN</th>
                     <th>Producto</th>
                     <th>Embalaje</th>
                     <th>Pedido</th>
@@ -62,6 +63,7 @@
                 foreach ($detail as $val) {
                     ?>
                     <tr>
+                        <td>{{$val->ean}}</td>
                         <td>{{$val->product}}</td>
                         <td align="center">{{$val->units_supplier}}</td>
                         <td align="center">{{$val->quantity}}</td>

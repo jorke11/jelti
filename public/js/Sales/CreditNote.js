@@ -465,6 +465,35 @@ function CreditNote() {
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "status"},
+                {data: "invoice", render: function (data, type, row) {
+                        if (row.status_id != 1) {
+                            html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + row.id + ')">';
+                        } else {
+                            html = ''
+                        }
+                        return html;
+                    }
+                }, {
+                    data: 'credit_note', render: function (data, type, row) {
+                        var note = '', links = '';
+                        if (row.credit_note != 0) {
+                            note = (row.credit_note_dep.replace("{", "")).replace("}", "");
+
+                            note = note.split(",");
+
+                            for (var i = 0; i < note.length; i++) {
+                                links += (links == '') ? '' : ', ';
+                                links += '<a href="' + PATH + '/creditnote/' + note[i] + '/getInvoice" target="_blank">' + note[i] + '</a>';
+                            }
+
+                            html = '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"> ' + links + '</span>';
+                        } else {
+                            html = ''
+                        }
+                        return html;
+                    }
+                }
+
             ],
             order: [[1, 'DESC']],
             aoColumnDefs: [
@@ -472,34 +501,6 @@ function CreditNote() {
                     aTargets: [1, 2, 3, 4, 5],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
-                    }
-                },
-                {
-                    targets: [9],
-                    searchable: false,
-                    mData: null,
-                    mRender: function (data, type, full) {
-                        if (data.status_id != 1) {
-                            html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')">';
-                        } else {
-                            html = ''
-                        }
-                        return html;
-                    }
-                }
-                ,
-                {
-                    targets: [10],
-                    searchable: false,
-                    mData: null,
-                    mRender: function (data, type, full) {
-                        if (data.credit_note != 0) {
-                            html = '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>';
-                        } else {
-                            html = ''
-                        }
-
-                        return html;
                     }
                 }
             ],

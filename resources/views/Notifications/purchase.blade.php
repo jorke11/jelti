@@ -76,20 +76,20 @@
                 ?>
 
                 <tr align="right">
-                    <td colspan="4"</td>
+                    <td colspan="5"</td>
                     <td ><b>SubTotal</b></td>
                     <td>{{"$ " . number_format($subtotal, 0, ",", ".")}}</td>
                 </tr>
                 @if($tax5!=0)
                 <tr align="right">
-                    <td colspan="4"</td>
+                    <td colspan="5"</td>
                     <td ><b>Iva 5%</b></td>
                     <td>{{"$ " . number_format($tax5, 0, ",", ".")}}</td>
                 </tr>
                 @endif
                 @if($tax19!=0)
                 <tr align="right">
-                    <td colspan="4"</td>
+                    <td colspan="5"</td>
                     <td ><b>Iva 19%</b></td>
                     <td >{{"$ " . number_format($tax19, 0, ",", ".")}}</td>
                 </tr>

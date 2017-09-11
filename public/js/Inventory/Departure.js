@@ -153,7 +153,7 @@ function Sale() {
             // Toggle the visibility
             column.visible(!column.visible());
         })
-        
+
         $("#col-business_name").click(function (e) {
             e.preventDefault();
             // Get the column API object
@@ -432,7 +432,7 @@ function Sale() {
         var form = $("#frmDetail").serialize()
         var msg = 'Record Detail';
         var validate = $(".input-detail").validate();
-        
+
         if (validate.length == 0) {
             if (id != '') {
                 var id = $("#frmDetail #id").val();
@@ -768,6 +768,8 @@ function Sale() {
                     $("#frm #shipping_cost").attr("disabled", false);
                 }
 
+                obj.getClient(data.header.client_id);
+
                 obj.printDetail(data, btnEdit, btnDel);
             }
         })
@@ -941,7 +943,7 @@ function Sale() {
                 {data: "created_at"},
                 {data: "dispatched", "visible": false, },
                 {data: "client"},
-                {data: "business_name", "visible": false },
+                {data: "business_name", "visible": false},
                 {data: "responsible"},
                 {data: "warehouse"},
                 {data: "city"},

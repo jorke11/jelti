@@ -568,7 +568,15 @@ class EntryController extends Controller {
                 $det->save();
             }
 
-            return response()->json(['success' => true, "msg" => "Datos actualizados"]);
+            $header = Entries::find($entry_id);
+            $detailEntry = $this->formatDetail($entry_id);
+
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+            $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+
+
+            return response()->json(['success' => true, "msg" => "Datos actualizados", "header" => $header, "detail" => $detailEntry,
+                        "total" => $total, "total_real" => $total_real]);
         } else {
             return response()->json(['success' => false, "msg" => "Solo se permiten " . $total . " items, ingresaste " . $cont], 409);
         }

@@ -114,7 +114,7 @@
 
 <div class="row">
     {!! Form::open(['id'=>'frmSetDetail']) !!}
-    <input id="entry_id" name="entry_id">
+    <input id="entry_id" name="entry_id" type="hidden">
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">

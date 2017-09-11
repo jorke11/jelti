@@ -320,7 +320,7 @@ function Entry() {
     this.editDetail = function (id) {
 
         var url = "/entry/" + id + "/" + $("#frm #id").val() + "/detail";
-        var param = {}, html = "<tr class='add_" + id + "'><table>";
+        var param = {};
 
         if (showDetail) {
             $.ajax({
@@ -328,34 +328,7 @@ function Entry() {
                 method: "GET",
                 dataType: 'JSON',
                 success: function (data) {
-//                $("#modalDetail").modal("show");
-                    $(".add_" + id).remove();
-
-                    html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='7'><br></td></tr>";
-                    html += "<tr class='add_" + id + "'><td style='background-color:#ddd' colspan='3'></td>";
-                    html += "<td align='center'><button type='button' class='btn btn-info input-sm' onclick='obj.repeatData(" + id + ")'>Replicar</button></td>";
-                    html += "<td align='center'><button type='button' class='btn btn-success input-sm' onclick='obj.saveData(" + id + ")'>Actualizar</button></td><td></td><td></td></tr>";
-                    html += "<tr class='add_" + id + "' align='center'><td colspan='3' style='background-color:#ddd'></td><td>Lote</td><td>Fecha Vencimiento</td><td>Cantidad</td><td>Cantidad X Embalaje</td></tr>";
-                    var cont = 0;
-                    $.each(data, function (i, val) {
-                        val.real_quantity = (val.real_quantity == null) ? '' : val.real_quantity;
-                        val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date;
-                        val.lot = (val.lot == null) ? '' : val.lot;
-                        html += "<tr style='background-color:#ddd' class='add_" + id + "'><td colspan='3'></td>";
-                        html += "<td><input class='form-control input-sm detail_lot_" + id + "' value='" + val.lot + "' placeholder='Lote' name='lot_" + val.id + "' id='lot_" + val.id + "'></td>";
-                        html += "<td><input class='form-control input-sm detail_date_" + id + " form_datetime' name='exp_" + val.id + "' id='exp_" + val.id + "' value='" + val.expiration_date + "' placeholder='Fecha Vencimiento'></td>";
-                        html += "<td><input class='form-control input-sm detail_quantity_" + id + "' value='" + val.real_quantity + "'  name='qua_" + val.id + "' id='quantity_" + val.id + "' placeholder='Cantidad'></td>";
-                        html += "<td><input class='form-control input-sm' value='" + (val.real_quantity * val.units_supplier) + "' readonly></td>";
-                        html += "</tr>";
-                        cont += parseInt(val.real_quantity);
-                    });
-
-                    html += "<tr class='add_" + id + "'><td colspan='3' style='background-color:#ddd'></td><td></td><td><b>Total</b> x" + data[0].units_supplier + "</td><td>" + (cont) + "</td><td>" + (data[0].units_supplier * cont) + "</td></tr>";
-                    html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='6'><br></td></tr>";
-                    html += "</table></tr>";
-                    $("#row_" + id).after(html);
-
-                    $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
+                    obj.reloadTableDetail(id, data);
                 }
             })
             showDetail = false;
@@ -363,6 +336,46 @@ function Entry() {
             $(".add_" + id).remove();
             showDetail = true;
         }
+    }
+
+    this.reloadTableDetail = function (id, data) {
+
+
+        var html = "<tr class='add_" + id + "'><table>";
+        $(".add_" + id).remove();
+
+        html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='7'><br></td></tr>";
+        html += "<tr class='add_" + id + "'><td style='background-color:#ddd' colspan='3'></td>";
+        html += "<td align='center'><button type='button' class='btn btn-info input-sm' onclick='obj.repeatData(" + id + ")'>Replicar</button></td>";
+        html += "<td align='center'><button type='button' class='btn btn-success input-sm' onclick='obj.saveData(" + id + ")'>Actualizar</button></td><td></td><td></td></tr>";
+        html += "<tr class='add_" + id + "' align='center'><td colspan='3' style='background-color:#ddd'></td><td>Lote</td><td>Fecha Vencimiento</td><td>Cantidad x" + data[0].units_supplier + "</td><td>Cantidad X Embalaje</td></tr>";
+        var cont = 0;
+        $.each(data, function (i, val) {
+            val.real_quantity = (val.real_quantity == null) ? 0 : val.real_quantity;
+            val.expiration_date = (val.expiration_date == null) ? '' : val.expiration_date;
+            val.lot = (val.lot == null) ? '' : val.lot;
+            html += "<tr style='background-color:#ddd' class='add_" + id + "'><td colspan='3'></td>";
+            html += "<td><input class='form-control input-sm detail_lot_" + id + "' value='" + val.lot + "' placeholder='Lote' name='lot_" + val.id + "' id='lot_" + val.id + "'></td>";
+            html += "<td><input class='form-control input-sm detail_date_" + id + " form_datetime' name='exp_" + val.id + "' id='exp_" + val.id + "' value='" + val.expiration_date + "' placeholder='Fecha Vencimiento'></td>";
+            html += "<td><input class='form-control input-sm detail_quantity_" + id + "' value='" + val.real_quantity + "'  name='qua_" + val.id + "' id='quantity_" + val.id + "' placeholder='Cantidad' onblur=obj.reCalculate(this," + val.id + "," + val.units_supplier + ")></td>";
+            html += "<td><input class='form-control input-sm' value='" + (val.real_quantity * val.units_supplier) + "' id='real_" + val.id + "' readonly></td>";
+            html += "</tr>";
+            cont += parseInt(val.real_quantity);
+        });
+
+        html += "<tr class='add_" + id + "'><td colspan='3' style='background-color:#ddd'></td><td></td><td><b>Total</b> x" + data[0].units_supplier + "</td><td>" + (cont) + "</td><td>" + (data[0].units_supplier * cont) + "</td></tr>";
+        html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='6'><br></td></tr>";
+        html += "</table></tr>";
+        $("#row_" + id).after(html);
+
+        $(".form_datetime").datetimepicker({format: 'Y-m-d'});
+
+
+    }
+
+    this.reCalculate = function (elem, id, units_supplier) {
+        var _elem = $(elem);
+        $("#real_" + id).val(_elem.val() * units_supplier);
     }
 
     this.saveData = function (id) {

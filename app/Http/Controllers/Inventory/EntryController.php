@@ -596,21 +596,29 @@ class EntryController extends Controller {
         }
     }
 
-    public function destroyDetail($id) {
-        $entry = EntriesDetail::FindOrFail($id);
-        $entry_id = $entry["entry_id"];
-        $result = $entry->delete();
-        if ($result) {
-            $detail = DB::table("entries_detail")
-                            ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
-                            ->join("products", "entries_detail.product_id", "products.id")
-                            ->where("entry_id", $entry_id)->get();
-            $detail = $this->formatDetail($detail);
-            $total = "$ " . number_format($this->total, 2, ',', '.');
+    public function destroyDetail(Request $req, $id) {
+        $in = $req->all();
 
-            return response()->json(['success' => true, "detail" => $detail, "total" => $total]);
+        $entry = EntriesDetail::where("product_id", $id)->where("entry_id", $in["entry_id"])->get();
+        $header = Entries::find($in["entry_id"]);
+
+        $entry_id = $in["entry_id"];
+
+        if ($header->status_id == 1) {
+
+            foreach ($entry as $value) {
+                $det = EntriesDetail::find($value->id);
+                $det->delete();
+            }
+
+
+            $detail = $this->formatDetail($in["entry_id"]);
+
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+            $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+            return response()->json(['success' => true, "header" => $header, "detail" => $detail, "total" => $total, "total_real" => $total_real]);
         } else {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, "msg" => "No se puede eliminar, porque este item ya ha sido ingresado"], 500);
         }
     }
 

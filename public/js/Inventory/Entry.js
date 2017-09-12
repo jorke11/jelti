@@ -92,9 +92,7 @@ function Entry() {
                 htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
             }
 
-
             val.real_quantity = (val.real_quantity != null) ? val.real_quantity : ''
-
 
             html += '<tr id="row_' + val.id + '">';
             html += "<td>" + val.id + "</td>";
@@ -137,32 +135,34 @@ function Entry() {
 
         var obj = {};
         obj.id = $("#frm #id").val()
-        $.ajax({
-            url: 'entry/setPurchase',
-            method: 'POST',
-            data: obj,
-            dataType: 'JSON',
-            beforeSend: function () {
-                $("#loading-super").removeClass("hidden");
-            },
-            success: function (resp) {
-                if (resp.success == true) {
-                    toastr.success("Sended");
-                    $(".input-entry").setFields({data: resp.header, disabled: true});
-                    $("#btnmodalDetail").attr("disabled", true);
-                    $("#btnSend").attr("disabled", true);
-                    table.ajax.reload();
-                } else {
-                    toastr.warning(resp.msg);
+        if (confirm("¿Deseas ingresar el pedido?")) {
+            $.ajax({
+                url: 'entry/setPurchase',
+                method: 'POST',
+                data: obj,
+                dataType: 'JSON',
+                beforeSend: function () {
+                    $("#loading-super").removeClass("hidden");
+                },
+                success: function (resp) {
+                    if (resp.success == true) {
+                        toastr.success("Sended");
+                        $(".input-entry").setFields({data: resp.header, disabled: true});
+                        $("#btnmodalDetail").attr("disabled", true);
+                        $("#btnSend").attr("disabled", true);
+                        table.ajax.reload();
+                    } else {
+                        toastr.warning(resp.msg);
+                    }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                },
+                complete: function () {
+                    $("#loading-super").addClass("hidden");
                 }
-            }, error: function (xhr, ajaxOptions, thrownError) {
-                toastr.error(xhr.responseJSON.msg);
-            },
-            complete: function () {
-                $("#loading-super").addClass("hidden");
-            }
 
-        })
+            })
+        }
 
     }
 
@@ -285,43 +285,43 @@ function Entry() {
         var frm = $("#frmEdit");
         var data = frm.serialize();
         var url = "/entry/" + id + "/edit";
-        if (confirm("¿Deseas ingresar el pedido?")) {
-            $.ajax({
-                url: url,
-                method: "GET",
-                data: data,
-                dataType: 'JSON',
-                success: function (data) {
-                    $('#myTabs a[href="#management"]').tab('show');
-                    $(".input-entry").setFields({data: data.header, disabled: true});
 
-                    if (data.header.supplier_id != 0) {
-                        obj.getSupplier(data.header.supplier_id);
-                    }
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: data,
+            dataType: 'JSON',
+            success: function (data) {
+                $('#myTabs a[href="#management"]').tab('show');
+                $(".input-entry").setFields({data: data.header, disabled: true});
 
-                    if (data.header.status_id == 1) {
-                        $("#btnSend").prop("disabled", false);
-                    }
-
-                    if (data.header.id != '') {
-                        $("#btnmodalDetail").attr("disabled", false);
-                    }
-
-                    obj.printDetail(data, true, true);
-
-                    if (data.header.status_id != 1) {
-
-                        $("#btnmodalDetail").prop("disabled", true);
-                        $(".btnEditClass").prop("disabled", true);
-                        $(".btnDeleteClass").prop("disabled", true);
-                    } else {
-                        $(".btnEditClass").prop("disabled", false);
-                        $(".btnDeleteClass").prop("disabled", false);
-                        $("#btnmodalDetail").prop("disabled", false);
-                    }
+                if (data.header.supplier_id != 0) {
+                    obj.getSupplier(data.header.supplier_id);
                 }
-            })
-        }
+
+                if (data.header.status_id == 1) {
+                    $("#btnSend").prop("disabled", false);
+                }
+
+                if (data.header.id != '') {
+                    $("#btnmodalDetail").attr("disabled", false);
+                }
+
+                obj.printDetail(data, true, true);
+
+                if (data.header.status_id != 1) {
+
+                    $("#btnmodalDetail").prop("disabled", true);
+                    $(".btnEditClass").prop("disabled", true);
+                    $(".btnDeleteClass").prop("disabled", true);
+                } else {
+                    $(".btnEditClass").prop("disabled", false);
+                    $(".btnDeleteClass").prop("disabled", false);
+                    $("#btnmodalDetail").prop("disabled", false);
+                }
+            }
+        })
+
     }
 
     this.editDetail = function (id) {
@@ -408,6 +408,7 @@ function Entry() {
             }
         })
 
+
     }
 
     this.repeatData = function (id) {
@@ -475,7 +476,7 @@ function Entry() {
                         toastr.warning("Ok");
                         obj.printDetail(data);
                     }
-                }, error: function (err) {
+                }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error("No se puede borrra Este registro");
                 }
             })
@@ -487,18 +488,22 @@ function Entry() {
         if (confirm("Do you want delete this record?")) {
             var token = $("input[name=_token]").val();
             var url = "/entry/detail/" + id;
+            var param = {};
+            param.entry_id = $("#frm #id").val();
+
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
                 method: "DELETE",
+                data: param,
                 dataType: 'JSON',
                 success: function (data) {
                     if (data.success == true) {
                         toastr.warning("Record deleted");
                         obj.printDetail(data);
                     }
-                }, error: function (err) {
-                    toastr.error("No se puede borrra Este registro");
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
                 }
             })
         }

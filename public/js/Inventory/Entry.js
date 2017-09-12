@@ -86,11 +86,15 @@ function Entry() {
         var total = 0, calc = 0;
 
         $.each(data.detail, function (i, val) {
-            htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
-            htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
+
+            if (data.header.status_id == 1) {
+                htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
+                htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
+            }
+
 
             val.real_quantity = (val.real_quantity != null) ? val.real_quantity : ''
-            val.status = (val.status != undefined) ? val.status : 'new'
+
 
             html += '<tr id="row_' + val.id + '">';
             html += "<td>" + val.id + "</td>";
@@ -101,7 +105,6 @@ function Entry() {
             html += "<td>" + val.real_quantity + "</td>";
             html += "<td>" + val.valueFormated + "</td>";
             html += "<td>" + val.totalFormated_real + "</td>";
-            html += "<td>" + val.status + "</td>";
             html += '<td>' + htmlEdit + htmlDel + "</td>";
             html += '</td>';
             html += "</tr>";
@@ -282,39 +285,43 @@ function Entry() {
         var frm = $("#frmEdit");
         var data = frm.serialize();
         var url = "/entry/" + id + "/edit";
-        $.ajax({
-            url: url,
-            method: "GET",
-            data: data,
-            dataType: 'JSON',
-            success: function (data) {
-                $('#myTabs a[href="#management"]').tab('show');
-                $(".input-entry").setFields({data: data.header, disabled: true});
+        if (confirm("¿Deseas ingresar el pedido?")) {
+            $.ajax({
+                url: url,
+                method: "GET",
+                data: data,
+                dataType: 'JSON',
+                success: function (data) {
+                    $('#myTabs a[href="#management"]').tab('show');
+                    $(".input-entry").setFields({data: data.header, disabled: true});
 
-                if (data.header.supplier_id != 0) {
-                    obj.getSupplier(data.header.supplier_id);
+                    if (data.header.supplier_id != 0) {
+                        obj.getSupplier(data.header.supplier_id);
+                    }
+
+                    if (data.header.status_id == 1) {
+                        $("#btnSend").prop("disabled", false);
+                    }
+
+                    if (data.header.id != '') {
+                        $("#btnmodalDetail").attr("disabled", false);
+                    }
+
+                    obj.printDetail(data, true, true);
+
+                    if (data.header.status_id != 1) {
+
+                        $("#btnmodalDetail").prop("disabled", true);
+                        $(".btnEditClass").prop("disabled", true);
+                        $(".btnDeleteClass").prop("disabled", true);
+                    } else {
+                        $(".btnEditClass").prop("disabled", false);
+                        $(".btnDeleteClass").prop("disabled", false);
+                        $("#btnmodalDetail").prop("disabled", false);
+                    }
                 }
-
-                if (data.header.id != '') {
-                    $("#btnmodalDetail").attr("disabled", false);
-                }
-
-                $("#btnSave").prop("disabled", false);
-
-                obj.printDetail(data, true, true);
-
-                if (data.header.status_id != 1) {
-                    $("#btnSave").prop("disabled", true);
-                    $("#btnmodalDetail").prop("disabled", true);
-                    $(".btnEditClass").prop("disabled", true);
-                    $(".btnDeleteClass").prop("disabled", true);
-                } else {
-                    $(".btnEditClass").prop("disabled", false);
-                    $(".btnDeleteClass").prop("disabled", false);
-                    $("#btnmodalDetail").prop("disabled", false);
-                }
-            }
-        })
+            })
+        }
     }
 
     this.editDetail = function (id) {
@@ -391,7 +398,7 @@ function Entry() {
             success: function (data) {
                 if (data.success == true) {
                     toastr.success(data.msg);
-                    obj.editDetail(id);
+                    obj.showModal(data.header.id);
                 } else {
                     toastr.warning("Wrong");
                 }

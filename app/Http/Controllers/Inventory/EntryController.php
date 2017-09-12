@@ -288,27 +288,31 @@ class EntryController extends Controller {
     public function sendPurchase(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            $entry = Entries::findOrFail($input["id"]);
+            $entry = Entries::find($input["id"]);
 
             $exist = Purchases::find($entry->purchase_id);
 
-            $val = EntriesDetail::where("entry_id", $entry["id"])->where("status_id", 1)->count();
+            $val = EntriesDetail::where("entry_id", $entry["id"])->where("status_id", 1)->get();
 
-            if ($val == 0) {
-                if ($entry["status_id"] != 2) {
-                    $entry->status_id = 2;
-                    $entry->save();
-                    if (count($exist) > 0) {
-                        $exist->status_id = 4;
-                        $exist->save();
-                    }
-
-                    return response()->json(["success" => true, "header" => $entry]);
-                } else {
-                    return response()->json(["success" => false, "msg" => "Entry is already generate"], 404);
+            if ($entry["status_id"] != 2) {
+                foreach ($val as $value) {
+                    $det = EntriesDetail::find($value->id);
+                    $det->status_id = 2;
+                    $det->save();
                 }
+
+                $entry->status_id = 2;
+                $entry->save();
+                if (count($exist) > 0) {
+                    $exist->status_id = 4;
+                    $exist->save();
+                }
+
+                $entry = Entries::find($input["id"]);
+
+                return response()->json(["success" => true, "header" => $entry]);
             } else {
-                return response()->json(["success" => false, "msg" => "All Entry detail must be checked"], 409);
+                return response()->json(["success" => false, "msg" => "Entry is already generate"], 404);
             }
         } else {
             return response()->json(["success" => false, "msg" => "Wrong"]);

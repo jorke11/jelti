@@ -25,9 +25,9 @@ function Stock() {
                 {data: "id"},
                 {data: "reference"},
                 {data: "product"},
-                {data: "entry"},
-                {data: "departure"},
-                {data: "total"},
+                {data: "entries"},
+                {data: "sales"},
+                {data: "available"},
             ],
             order: [[5, 'ASC']],
             aoColumnDefs: [

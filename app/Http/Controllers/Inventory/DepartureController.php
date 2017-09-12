@@ -510,7 +510,7 @@ class DepartureController extends Controller {
     public function processDeparture($header, $detail) {
         try {
             DB::beginTransaction();
-
+            $header["insert_id"] = Auth::user()->id;
             $result = Departures::create($header)->id;
 
             if ($result) {

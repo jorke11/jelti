@@ -14,6 +14,10 @@ use App\Models\Administration\Warehouses;
 
 class StockController extends Controller {
 
+    public function __construct() {
+        $this->middleware("auth");
+    }
+
     public function index() {
         $warehouse = Warehouses::all();
         return view("Inventory.stock.init", compact("warehouse"));

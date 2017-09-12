@@ -498,7 +498,7 @@ Route::get('/api/listPuc', function() {
 });
 
 Route::get('/stock', 'Inventory\StockController@index');
-Route::get('/api/listStock', 'Inventory\StockController@getStock');
+Route::get('/api/listStock', 'Inventory\StockController@getStock')->middleware("auth");
 
 Route::get('/api/listSpecial', 'Clients\ClientController@getSpecial');
 Route::get('/api/listBranch', 'Administration\StakeholderController@getBranch');

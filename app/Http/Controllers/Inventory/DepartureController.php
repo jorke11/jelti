@@ -509,8 +509,15 @@ class DepartureController extends Controller {
      */
     public function processDeparture($header, $detail) {
         try {
+
             DB::beginTransaction();
             $header["insert_id"] = Auth::user()->id;
+
+            if (isset($header["branch_id"])) {
+                $bra = Branch::find($header["branch_id"]);
+                $header["responsible_id"] = $bra->responsible_id;
+            }
+            
             $result = Departures::create($header)->id;
 
             if ($result) {

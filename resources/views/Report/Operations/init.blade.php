@@ -97,6 +97,16 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <!-- Nav tabs -->
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @include('Report.Operations.maxmin')
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script src="https://code.highcharts.com/highcharts.js"></script>

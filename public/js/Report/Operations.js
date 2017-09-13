@@ -5,6 +5,7 @@ function Operations() {
         this.tableProductDay();
         this.tableClientAverage();
         this.tableShipping_cost();
+        this.tableMaxMin();
 
         var init = $("#Detail #finit").val();
         var end = $("#Detail #fend").val();
@@ -30,13 +31,78 @@ function Operations() {
         window.open("departure/" + client_id + "/" + $("#Detail #finit").val() + "/" + $("#Detail #fend").val());
     }
 
+    this.tableMaxMin = function () {
+        var param = {};
+        param.init = $("#Detail #finit").val();
+        param.end = $("#Detail #fend").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
+        param.client_id = $("#Detail #client_id").val();
+
+
+        $.ajax({
+            url: "operations/getMaxMin/",
+            method: 'GET',
+            data: param,
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
+            dataType: 'json',
+            success: function (data) {
+                var html = '<tr><td>Productos</td>';
+                $.each(data.products[0].quantity_dep, function (i, val) {
+                    html += '<td>' + i + ' (' + val.date + ')</td>';
+                })
+
+                html += '<td>Sumatoria</td>';
+
+                html += '<tr>';
+                $("#tblRepurchase thead").html(html);
+
+                html = '';
+                var cont = 0, del = [];
+                $.each(data.products, function (i, val) {
+                    cont = 0;
+
+                    html += "<tr id='row_" + i + "'><td>" + val.title + "</td>";
+                    $.each(val.quantity_dep, function (j, value) {
+                        html += "<td>" + value.quantity + "</td>";
+                        cont += parseInt(value.quantity);
+
+                    })
+
+                    html += "<td>" + cont + "</td>";
+
+                    if (cont == 0) {
+                        del.push(i);
+                    }
+
+                    html += "</tr>";
+
+                })
+
+
+                $("#tblRepurchase tbody").html(html);
+                $.each(del, function (i, val) {
+                    $("#row_" + val).remove();
+                });
+
+
+
+//                console.log(data.products[0].quantity_dep);
+            },
+            complete: function () {
+                $("#loading-super").addClass("hidden");
+            }
+        });
+    }
+
     this.tableShipping_cost = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
-        
+
         return $('#tblShipping_cost').DataTable({
             destroy: true,
             ajax: {
@@ -47,7 +113,7 @@ function Operations() {
             columns: [
                 {data: "client"},
                 {data: "pedidos"},
-                {data: "valor",render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "valor", render: $.fn.dataTable.render.number(',', '.', 0)},
             ],
             aoColumnDefs: [
                 {
@@ -60,7 +126,7 @@ function Operations() {
             ],
         });
     }
-    
+
     this.tableClientAverage = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
@@ -96,7 +162,7 @@ function Operations() {
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
-        
+
         return $('#tbl').DataTable({
             destroy: true,
             order: [[2, "desc"]],
@@ -131,7 +197,7 @@ function Operations() {
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
-        
+
         return $('#tblproductweek').DataTable({
             destroy: true,
             ajax: {
@@ -162,7 +228,7 @@ function Operations() {
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
-        
+
         return $('#tblproductday').DataTable({
             destroy: true,
             ajax: {
@@ -192,7 +258,7 @@ function Operations() {
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
-        
+
         $.ajax({
             url: "/api/reportClientProduct",
             method: 'GET',
@@ -286,7 +352,7 @@ function Operations() {
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
-        
+
         $.ajax({
             url: "/api/reportClientCities",
             method: 'GET',
@@ -382,7 +448,7 @@ function Operations() {
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
-        
+
         return $('#tblProductbyCategory').DataTable({
             destroy: true,
             ajax: {

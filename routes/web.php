@@ -563,6 +563,7 @@ Route::get('/api/reportProductByCategorySample', "Report\SampleController@getPro
 Route::get('/api/reportResponse', "Report\OperationsController@getResponse");
 Route::get('/operations/getAverageTime', "Report\OperationsController@getAverageTime");
 Route::get('/operations/getShippingCostClient', "Report\OperationsController@getShippingCostClient");
+Route::get('/operations/getMaxMin', "Report\OperationsController@getMinMax");
 
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");

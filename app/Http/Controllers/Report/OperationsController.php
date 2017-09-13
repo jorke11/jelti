@@ -141,4 +141,37 @@ class OperationsController extends Controller {
         return response()->json(["data" => $res]);
     }
 
+    public function getMinMax(Request $req) {
+        $input = $req->all();
+
+        $ware = "";
+        if ($input["warehouse_id"] != 0) {
+            $ware = " AND d.warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $ware .= " AND d.client_id=" . $input["client_id"];
+        }
+
+
+        $sql = "
+            select *
+            from products";
+
+        $res = DB::select($sql);
+        foreach ($res as $value) {
+            $sql = "
+            select sum(quantity * packaging) as total
+            from departures_detail where product_id=" . $value->id;
+            
+            $det = DB::select($sql);
+            dd($det);
+            echo $sql;
+            exit;
+        }
+        dd($res);
+
+        return response()->json(["data" => $res]);
+    }
+
 }

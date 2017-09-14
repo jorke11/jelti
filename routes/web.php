@@ -587,7 +587,6 @@ Route::get('/api/reportProduct', "Report\ProductController@getList");
 
 Route::get('/reportCommercial', "Report\CommercialController@index");
 
-
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}', "ToolController@addInventory");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");

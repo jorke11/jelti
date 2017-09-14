@@ -164,15 +164,12 @@ ORDER BY p.code
 
 drop view vcreditnote
             create view vcreditnote as 
-             select d.id,coalesce(d.invoice,'') invoice, d.created_at, coalesce(s.business_name,'') as client,w.description as warehouse,
-            c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,
+            select d.id,coalesce(d.invoice,'') invoice, d.created_at, d.client,d.warehouse,
+            d.city,p.description status,d.status_id,d.responsible_id, d.responsible,d.subtotalnumeric,d.total,
             (select count(*) from credit_note where credit_note.departure_id=d.id) credit_note,
             (select array_agg(id) from credit_note where credit_note.departure_id=d.id) credit_note_dep
 
-            from departures d
-            LEFT JOIN branch_office s ON s.id = d.branch_id
-            JOIN warehouses w ON w.id = d.warehouse_id
-            JOIN cities c ON c.id = d.city_id
+            from vdepartures d
             JOIN parameters p ON p.id = d.status_id
             JOIN users u ON u.id = d.responsible_id
             WHERE p.group='entry' and d.invoice IS NOT NULL

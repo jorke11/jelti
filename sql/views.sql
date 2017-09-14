@@ -94,7 +94,7 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id and sales_detail.tax=0.05) 
             END as tax5,
             
-           sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost,coalesce(d.dispatched::text,'') as dispatched
+           sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost,coalesce(d.dispatched::text,'') as dispatched,d.paid_out
             from departures d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id
@@ -104,6 +104,8 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
             ORDER BY d.status_id,d.id asc;
+
+
 
 create view vsample as 
 select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,w.description as warehouse,

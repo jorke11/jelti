@@ -178,11 +178,15 @@ function Briefcase() {
     this.table = function () {
         var html = '';
         table = $('#tbl').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "processing": true,
             "serverSide": true,
             "ajax": "/briefcase/getInvoices",
+            "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
             columns: [
-
                 {data: "id"},
                 {data: "invoice"},
                 {data: "created_at"},
@@ -191,7 +195,7 @@ function Briefcase() {
                 {data: "business_name"},
                 {data: "responsible"},
                 {data: "city"},
-                {data: "totalformated"},
+                {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "payedformated"},
                 {data: "dias_vencidos"},
                 {data: "term"},
@@ -210,6 +214,15 @@ function Briefcase() {
                     }
                 },
             ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
+
             order: [[9, 'DESC']],
             aoColumnDefs: [
                 {
@@ -267,12 +280,12 @@ function Briefcase() {
 //            },
             createdRow: function (row, data, index) {
 
-                if (data.dias_vencidos >= 0 && data.dias_vencidos <= 3) {
-                    $('td', row).eq(8).addClass('color-green');
-                } else if (data.dias_vencidos < 0) {
-                    $('td', row).eq(8).addClass('color-red');
+                if (data.dias_vencidos < 0) {
+                    $('td', row).eq(10).addClass('color-green');
+                } else if (data.dias_vencidos > 0) {
+                    $('td', row).eq(10).addClass('color-red');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(8).addClass('color-checked');
+                    $('td', row).eq(10).addClass('color-checked');
                 }
             },
             footerCallback: function (row, data, start, end, display) {

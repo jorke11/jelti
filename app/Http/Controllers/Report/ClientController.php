@@ -70,9 +70,11 @@ class ClientController extends Controller {
             WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
                 AND vdepartures.client_id NOT IN(258,264)
             group by 1,vdepartures.client_id
-            ORDER BY 3 DESC
+            ORDER BY 4 DESC
             $limit
             ";
+        
+//        echo $sql;exit;
         $res = DB::select($sql);
 
         foreach ($res as $i => $value) {

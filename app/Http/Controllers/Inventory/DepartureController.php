@@ -488,20 +488,7 @@ class DepartureController extends Controller {
 
     /**
      * 
-     * array:12 [
-      "warehouse_id" => "3"
-      "responsible_id" => "14"
-      "city_id" => "149"
-      "created" => "2017-09-08 11:11"
-      "client_id" => "135"
-      "destination_id" => "126"
-      "address" => "Cra 59B # 84 - 52"
-      "phone" => "3205790793"
-      "branch_id" => "171"
-      "status_id" => 1
-      "shipping_cost" => 0
-      "type_request" => "web"
-      ]
+
      * 
      * @param type $header
      * @param type $detail
@@ -517,7 +504,7 @@ class DepartureController extends Controller {
                 $bra = Branch::find($header["branch_id"]);
                 $header["responsible_id"] = $bra->responsible_id;
             }
-            
+
             $result = Departures::create($header)->id;
 
             if ($result) {
@@ -680,7 +667,7 @@ class DepartureController extends Controller {
                                         "sale_id" => $id, "product_id" => $value->product_id,
                                         "category_id" => $value->category_id, "quantity" => $value->real_quantity,
                                         "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
-                                        "account_id" => 1, "order" => $cont, "type_nature" => 1
+                                        "account_id" => 1, "order" => $cont, "type_nature" => 1, "packaging" => $value->packaging
                                     ]);
                                     $cont++;
                                 }

@@ -957,8 +957,26 @@ function Departure() {
                 {data: "city"},
                 {data: "quantity"},
                 {data: "subtotalnumeric", render: $.fn.dataTable.render.number(',', '.', 0)},
-                {data: "total", render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "status"},
+                {data: "total", render: function (data, type, row) {
+                        if (row.status_id == 5) {
+                            html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + row.id + ')"></i>';
+                        } else {
+                            if (row.status_id != 1) {
+
+                                html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + row.id + ')" title="Ver Factura">';
+                                if (row.status_id != 4) {
+                                    html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + row.id + ')" title="Anular Factura"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
+                                }
+                            } else {
+                                html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + row.id + ')" title="Borrar Orden"></i>&nbsp;&nbsp;<i style="cursor:pointer" class="fa fa-file-text fa-lg" aria-hidden="true" onclick="obj.tempInvoice(' + row.id + ')" title="Generar Remisión"></i>';
+                            }
+                        }
+                        return html;
+
+                    }
+                },
             ],
 
             buttons: [
@@ -991,27 +1009,6 @@ function Departure() {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
-                {
-                    targets: [14],
-                    searchable: false,
-                    mData: null,
-                    mRender: function (data, type, full) {
-                        if (data.status_id == 5) {
-                            html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + data.id + ')"></i>';
-                        } else {
-                            if (data.status_id != 1) {
-
-                                html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')" title="Ver Factura">';
-                                if (data.status_id != 4) {
-                                    html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + data.id + ')" title="Anular Factura"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
-                                }
-                            } else {
-                                html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + data.id + ')" title="Borrar Orden"></i>&nbsp;&nbsp;<i style="cursor:pointer" class="fa fa-file-text fa-lg" aria-hidden="true" onclick="obj.tempInvoice(' + data.id + ')" title="Generar Remisión"></i>';
-                            }
-                        }
-                        return html;
-                    }
-                }
             ],
 
             createdRow: function (row, data, index) {

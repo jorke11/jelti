@@ -4,7 +4,7 @@
         <tr>
             <th>Detail</th>
             <th>Id</th>
-            <th>Factura</th>
+            <th width="1%">Factura</th>
             <th>Fecha</th>
             <th>Despachado</th>
             <th>Cliente</th>
@@ -16,7 +16,7 @@
             <th>SubTotal</th>
             <th>Total</th>
             <th>Estatus</th>
-            <th tipo="prueba">Action</th>
+            <th tipo="prueba" width="1%">Action</th>
         </tr>
     </thead>
     <tbody>

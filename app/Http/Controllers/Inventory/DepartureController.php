@@ -48,6 +48,7 @@ class DepartureController extends Controller {
     public $mails;
     public $log;
     public $in;
+    public $initdate;
 
     public function __construct() {
         $this->middleware("auth");
@@ -66,6 +67,7 @@ class DepartureController extends Controller {
         $this->in = array();
         $this->mails = array();
         $this->log = new LogController();
+        $this->initdate = date('Y-m-d', strtotime('-2 month', strtotime(date('Y-m-d'))));
     }
 
     public function index($client_id = null, $init = null, $end = null, $product_id = null, $supplier_id = null) {
@@ -77,9 +79,10 @@ class DepartureController extends Controller {
             $client_id = null;
         }
 
+        $initdate = $this->initdate;
 
 
-        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id"));
+        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id", "initdate"));
     }
 
     public function listTable(Request $req) {
@@ -95,6 +98,11 @@ class DepartureController extends Controller {
 
         if (isset($in["init"]) && $in["init"] != '') {
             $query->whereBetween("dispatched", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
+        }
+        if (isset($in["initdep"]) && $in["initdep"] != '') {
+            $query->where("created_at", ">=", $in["initdep"] . " 00:00");
+        } else {
+            $query->where("created_at", ">=", $this->initdate . " 00:00");
         }
 
         if ($in["client_id"] == 0 && $in["client_id"] != '') {

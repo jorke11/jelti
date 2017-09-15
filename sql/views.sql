@@ -162,18 +162,15 @@ JOIN parameters p ON p.code=e.status_id and p.group='entry'
 ORDER BY p.code
 
 
-drop view vcreditnote
-            create view vcreditnote as 
-            select d.id,coalesce(d.invoice,'') invoice, d.created_at, d.client,d.warehouse,
-            d.city,p.description status,d.status_id,d.responsible_id, d.responsible,d.subtotalnumeric,d.total,
-            (select count(*) from credit_note where credit_note.departure_id=d.id) credit_note,
-            (select array_agg(id) from credit_note where credit_note.departure_id=d.id) credit_note_dep
-
-            from vdepartures d
-            JOIN parameters p ON p.id = d.status_id
-            JOIN users u ON u.id = d.responsible_id
-            WHERE p.group='entry' and d.invoice IS NOT NULL
-            ORDER BY d.id DESC;
+--drop view vcreditnote
+create view  vcreditnote as 
+            select id,coalesce(invoice,'') invoice, created_at, client,warehouse,
+            city,status,status_id,responsible_id, responsible,subtotalnumeric,total,
+            (select count(*) from credit_note where credit_note.departure_id=vdepartures.id) credit_note,
+            (select array_agg(id) from credit_note where credit_note.departure_id=vdepartures.id) credit_note_dep            
+            from vdepartures
+            WHERE status_id=2
+            ORDER BY id DESC;
 
 
 create view vcreditnote_detail as 

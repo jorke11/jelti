@@ -1,4 +1,4 @@
-function Sale() {
+function Departure() {
     var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false, client_id = null;
     this.init = function () {
         table = this.table();
@@ -9,10 +9,16 @@ function Sale() {
         $("#newService").click(this.saveService);
         $("#btnSend").click(this.send);
         $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
+        $(".form_date").datetimepicker({format: 'Y-m-d'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
         });
+        $("#btnFilter").click(function () {
+
+            table = obj.table();
+
+        })
 
         $("#frm #client_id").on('select2:closing', function (evt) {
             if ($(this).val() != 0) {
@@ -916,6 +922,7 @@ function Sale() {
 
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
+        param.initdep = $("#frmFilterDep #finitdep").val();
 
         var html = '';
         table = $('#tbl').DataTable({
@@ -925,6 +932,7 @@ function Sale() {
                     "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "processing": true,
             "serverSide": true,
+            destroy: true,
             ajax: {
                 url: "/api/listDeparture",
                 data: param
@@ -948,12 +956,19 @@ function Sale() {
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "quantity"},
-                {data: "subtotalnumeric", render: $.fn.dataTable.render.number(',', '.', 2)},
-                {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "subtotalnumeric", render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "total", render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: "status"},
             ],
 
             buttons: [
+                {
+
+                    className: 'btn btn-primary glyphicon glyphicon-filter',
+                    action: function (e, dt, node, config) {
+                        $("#modalFilter").modal("show");
+                    }
+                },
                 {
 
                     className: 'btn btn-primary glyphicon glyphicon-eye-open',
@@ -1120,5 +1135,5 @@ function Sale() {
 
 }
 
-var obj = new Sale();
+var obj = new Departure();
 obj.init();

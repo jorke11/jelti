@@ -465,6 +465,7 @@ function CreditNote() {
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "status"},
+                {data: "total", render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: "invoice", render: function (data, type, row) {
                         if (row.status_id != 1) {
                             html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + row.id + ')">';

@@ -984,6 +984,7 @@ class SampleController extends Controller {
             $input["value"] = $product->price_sf;
             $input["units_sf"] = $product->units_sf;
             $input["tax"] = $product->tax;
+            $input["packaging"] = $product->packaging;
 
             $result = SampleDetail::create($input);
             if ($result) {

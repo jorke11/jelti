@@ -159,16 +159,27 @@ class OperationsController extends Controller {
             from products";
 
         $res = DB::select($sql);
-        foreach ($res as $value) {
-            $sql = "
-            select sum(quantity * packaging) as total
-            from departures_detail where product_id=" . $value->id;
-            
-            $det = DB::select($sql);
-            dd($det);
-            echo $sql;
-            exit;
+
+        $diasql = date('Y-m-d', strtotime($input['init']));
+
+        while ($diasql <= $input['end']) {
+            //Sentencia(s) SQL
+            $date = array();
+            foreach ($res as $i => $value) {
+                $sql = "
+                    select sum(d.quantity * d.packaging) as total
+                    from sales_detail d
+                    JOIN sales s ON s.id=d.sale_id and s.created_at between '" . $diasql . " 00:00' and '" . $diasql . " 23:59'
+                    where product_id=" . $value->id;
+
+                $det = DB::select($sql);
+                $res[$i]->$diasql = ($det[0]->total == null) ? 0 : $det[0]->total;
+            }
+            $diasql = date('Y-m-d', strtotime($diasql . '+1 day'));
         }
+
+
+
         dd($res);
 
         return response()->json(["data" => $res]);

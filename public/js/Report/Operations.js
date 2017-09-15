@@ -48,47 +48,54 @@ function Operations() {
             },
             dataType: 'json',
             success: function (data) {
-                var html = '<tr><td>Productos</td>';
-                $.each(data.products[0].quantity_dep, function (i, val) {
-                    html += '<td>' + i + ' (' + val.date + ')</td>';
+                var html = '<tr><td>SF</td><td>Proveedor</td><td>Producto</td>';
+                $.each(data.date, function (i, val) {
+                    html += '<td>' + val + '</td>';
                 })
 
-                html += '<td>Sumatoria</td>';
+                html += '<td>Cantidad</td>';
+                html += '<td>Total</td>';
 
                 html += '<tr>';
-                $("#tblRepurchase thead").html(html);
+                $("#tblmaxmin thead").html(html);
 
                 html = '';
                 var cont = 0, del = [];
-                $.each(data.products, function (i, val) {
+
+                $.each(data.data, function (i, val) {
                     cont = 0;
 
-                    html += "<tr id='row_" + i + "'><td>" + val.title + "</td>";
-                    $.each(val.quantity_dep, function (j, value) {
-                        html += "<td>" + value.quantity + "</td>";
-                        cont += parseInt(value.quantity);
+                    html += "<tr id='row_" + i + "'><td>" + val.reference + "</td>";
 
+
+                    html += "<td>" + val.supplier + "</td>";
+                    html += "<td>" + val.title + "</td>";
+
+                    $.each(val.date, function (j, val) {
+                        let det = Object.entries(val)[0]
+                        html += "<td>" + det[1] + "</td>";
+//                        cont += parseInt(value.quantity);
+//
                     })
-
-                    html += "<td>" + cont + "</td>";
 
                     if (cont == 0) {
                         del.push(i);
                     }
-
+                    
+                    console.log(val.quantity);
+                    html += "<td>" + val.quantity + "</td>";
+                    html += "<td>" + val.totalF + "</td>";
                     html += "</tr>";
 
                 })
 
 
-                $("#tblRepurchase tbody").html(html);
-                $.each(del, function (i, val) {
-                    $("#row_" + val).remove();
-                });
 
+                $("#tblmaxmin tbody").html(html);
+//                $.each(del, function (i, val) {
+//                    $("#row_" + val).remove();
+//                });
 
-
-//                console.log(data.products[0].quantity_dep);
             },
             complete: function () {
                 $("#loading-super").addClass("hidden");

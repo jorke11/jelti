@@ -155,34 +155,42 @@ class OperationsController extends Controller {
 
 
         $sql = "
-            select *
-            from products";
+            select p.*,s.business_name as supplier
+            from products p
+            JOIN stakeholder s ON s.id=p.supplier_id";
 
         $res = DB::select($sql);
 
-        $diasql = date('Y-m-d', strtotime($input['init']));
 
-        while ($diasql <= $input['end']) {
-            //Sentencia(s) SQL
+
+        //Sentencia(s) SQL
+        foreach ($res as $i => $value) {
             $date = array();
-            foreach ($res as $i => $value) {
+            $diasql = date('Y-m-d', strtotime($input['init']));
+            $total = 0;
+            $quantity = 0;
+            $day = array();
+            while ($diasql <= $input['end']) {
                 $sql = "
-                    select sum(d.quantity * d.packaging) as total
+                    select sum(d.quantity * d.packaging) as quantity,sum(d.quantity * d.packaging*value) total
                     from sales_detail d
                     JOIN sales s ON s.id=d.sale_id and s.created_at between '" . $diasql . " 00:00' and '" . $diasql . " 23:59'
                     where product_id=" . $value->id;
 
                 $det = DB::select($sql);
-                $res[$i]->$diasql = ($det[0]->total == null) ? 0 : $det[0]->total;
+                $date[][$diasql] = ($det[0]->quantity == null) ? 0 : $det[0]->quantity;
+                $quantity += ($det[0]->quantity == null) ? 0 : $det[0]->quantity;
+                $total += ($det[0]->total == null) ? 0 : $det[0]->total;
+                $day[] = date("d-m", strtotime($diasql));
+                $diasql = date('Y-m-d', strtotime($diasql . '+1 day'));
             }
-            $diasql = date('Y-m-d', strtotime($diasql . '+1 day'));
+            $res[$i]->date = $date;
+            $res[$i]->total = $total;
+            $res[$i]->totalF = number_format($total, 0, ".", ",");
+            $res[$i]->quantity = $quantity;
         }
 
-
-
-        dd($res);
-
-        return response()->json(["data" => $res]);
+        return response()->json(["data" => $res, "date" => $day]);
     }
 
 }

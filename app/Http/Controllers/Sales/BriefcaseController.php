@@ -28,9 +28,19 @@ class BriefcaseController extends Controller {
         return view("Sales.Briefcase.init", compact("category", "status"));
     }
 
-    public function getList() {
-        $query = DB::table("vbriefcase")
-                ->orderBy("id", "asc");
+    public function getList(Request $req) {
+        $in = $req->all();
+
+        $query = DB::table("vbriefcase");
+
+        if ($in["status_id"] == 0) {
+            $query->whereNull("paid_out");
+        } else if ($in["status_id"] == 1) {
+            $query->whereNotNull("paid_out");
+        }
+
+        $query->orderBy("id", "asc");
+
         return Datatables::queryBuilder($query)->make(true);
     }
 
@@ -42,9 +52,9 @@ class BriefcaseController extends Controller {
     }
 
     public function formatDetail($departures) {
-        
+
         $departures = explode(",", $departures);
-        
+
         $dep = BriefCase::select("briefcase.id", "departures.invoice", "briefcase.value", "briefcase.created_at", DB::raw("briefcase.value::money as valuepayed"), "briefcase.img")
                 ->join("departures", "departures.id", "briefcase.departure_id")
                 ->orderBy("departures.invoice");

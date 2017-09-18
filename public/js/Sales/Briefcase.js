@@ -40,6 +40,12 @@ function Briefcase() {
             $("#table-invoices tbody").html(html);
         })
 
+        $("#btnFilter").click(function () {
+
+            table = obj.table();
+
+        })
+
         $("#btnSave").click(this.uploadExcel);
         $("#btnPay").click(this.pay);
 
@@ -176,7 +182,8 @@ function Briefcase() {
     }
 
     this.table = function () {
-        var html = '';
+        var html = '', param = {};
+        param.status_id = $("#frmFilter #status_id").val();
         table = $('#tbl').DataTable({
             "dom":
                     "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
@@ -184,7 +191,12 @@ function Briefcase() {
                     "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "processing": true,
             "serverSide": true,
-            "ajax": "/briefcase/getInvoices",
+            destroy: true,
+
+            ajax: {
+                url: "/briefcase/getInvoices",
+                data: param
+            },
             "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
             columns: [
                 {data: "id"},
@@ -197,15 +209,18 @@ function Briefcase() {
                 {data: "city"},
                 {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "payedformated"},
-                {data: "dias_vencidos"},
+                {data: "dias_vencidos", render: function (data, type, row) {
+                        return (row.paid_out == true) ? 0 : data;
+                    }
+                },
                 {data: "term"},
                 {data: "paid_out", render: function (data, type, row) {
                         var msg = '';
                         if (row.paid_out == null || row.paid_out == false) {
                             if (row.dias_vencidos < 0) {
-                                msg = 'En mora';
+                                msg = 'No Pago';
                             } else {
-                                msg = 'No Pago'
+                                msg = 'En mora'
                             }
                         } else {
                             msg = 'Pago'
@@ -215,6 +230,13 @@ function Briefcase() {
                 },
             ],
             buttons: [
+                {
+
+                    className: 'btn btn-primary glyphicon glyphicon-filter',
+                    action: function (e, dt, node, config) {
+                        $("#modalFilter").modal("show");
+                    }
+                },
                 {
                     extend: 'excelHtml5',
 //                    text: '<i class="fa fa-file-excel-o"></i>',
@@ -247,7 +269,8 @@ function Briefcase() {
                     mData: null,
                     mRender: function (data, type, full) {
                         html = '';
-                        if ($("#role_id").val() == 1) {
+                        
+                        if ($("#role_id").val() == 1 && data.paid_out != true) {
                             html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">'
                             html += '&nbsp;&nbsp;<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
                         }
@@ -281,11 +304,13 @@ function Briefcase() {
             createdRow: function (row, data, index) {
 
                 if (data.dias_vencidos < 0) {
-                    $('td', row).eq(10).addClass('color-green');
-                } else if (data.dias_vencidos > 0) {
+                    $('td', row).eq(10).addClass('color-orange');
+                } else if (data.dias_vencidos > 0 & data.paid_out != true) {
                     $('td', row).eq(10).addClass('color-red');
                 } else if (data.status_id == 3) {
                     $('td', row).eq(10).addClass('color-checked');
+                } else if (data.paid_out == true) {
+                    $('td', row).eq(10).addClass('color-green');
                 }
             },
             footerCallback: function (row, data, start, end, display) {

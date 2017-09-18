@@ -16,8 +16,8 @@ function Briefcase() {
                 if ($(this).is(":checked")) {
 
                     html += "<tr><td>" + $(this).attr("invoice") + '<input type="hidden" name="invoices[]" value="' + $(this).val() + '"></td>';
-                    html += '<td>' + $(this).attr("totalformated") + '</td><td><input type="text" class="form-control" name="values[]" value="' + $(this).attr("total") + '"></td></tr>';
-                    invoice.push({id: $(this).val(), invoice: $(this).attr("invoice"), total: $(this).attr("total"), totalforamted: $(this).attr("totalforamted")})
+                    html += '<td>' + obj.formatCurrency($(this).attr("total"), "$") + '</td><td><input type="text" class="form-control" name="values[]" value="' + $(this).attr("total") + '"></td></tr>';
+                    invoice.push({id: $(this).val(), invoice: $(this).attr("invoice"), total: $(this).attr("total"), totalforamted: $(this).attr("total")})
                     dep += (dep == '') ? '' : ',';
                     dep += $(this).val();
                     total += parseFloat($(this).attr("total"));
@@ -52,10 +52,12 @@ function Briefcase() {
     }
 
     this.formatCurrency = function (n, currency) {
+        n = parseFloat(n);
         return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
             return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
         });
     }
+
 
     this.pay = function () {
         var param = {};
@@ -158,7 +160,7 @@ function Briefcase() {
     this.showModal = function (id) {
         var frm = $("#frmEdit"), btnEdit = true, btnDel = true;
         var data = frm.serialize();
-        var url = "/departure/" + id + "/edit";
+        var url = "/briefcase/" + id + "/edit";
         $.ajax({
             url: url,
             method: "GET",
@@ -166,10 +168,8 @@ function Briefcase() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-departure").setFields({data: data.header, disabled: true});
-                if (data.header.id != '') {
-                    $("#btnmodalDetail").attr("disabled", false);
-                }
+                obj.loadTable(data);
+
             }
         })
     }
@@ -269,7 +269,7 @@ function Briefcase() {
                     mData: null,
                     mRender: function (data, type, full) {
                         html = '';
-                        
+
                         if ($("#role_id").val() == 1 && data.paid_out != true) {
                             html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">'
                             html += '&nbsp;&nbsp;<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
@@ -336,12 +336,6 @@ function Briefcase() {
             }
         });
         return table;
-    }
-
-    this.formatCurrency = function (n, currency) {
-        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
-            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-        });
     }
 }
 

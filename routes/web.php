@@ -535,6 +535,7 @@ Route::get('/briefcase', 'Sales\BriefcaseController@index');
 Route::get('/briefcase/getInvoices', "Sales\BriefcaseController@getList");
 Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment");
 Route::get('/briefcase/getBriefcase', "Sales\BriefcaseController@getBriefcase");
+Route::get('/briefcase/{id}/edit', "Sales\BriefcaseController@edit");
 Route::delete('/briefcase/{id}', "Sales\BriefcaseController@delete");
 Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice");
 

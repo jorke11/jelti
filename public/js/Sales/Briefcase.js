@@ -270,9 +270,9 @@ function Briefcase() {
                     mRender: function (data, type, full) {
                         html = '';
 
+                        html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">&nbsp;&nbsp;'
                         if ($("#role_id").val() == 1 && data.paid_out != true) {
-                            html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">'
-                            html += '&nbsp;&nbsp;<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
+                            html += '<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
                         }
 
                         return html;

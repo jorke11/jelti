@@ -598,7 +598,7 @@ class DepartureController extends Controller {
                     $header["id"] = $result;
                     $header["environment"] = env("APP_ENV");
                     $header["created_at"] = $resp->created_at;
-                    $this->subtotal = $this->subtotal + $resp->shipping_cost;
+                    $this->subtotal = $this->subtotal + $resp->shipping_cost - $resp->discount;
                     $header["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
                     $header["total"] = "$ " . number_format($this->total, 0, ",", ".");
                     $header["exento"] = "$ " . number_format($this->total, 0, ",", ".");
@@ -761,6 +761,7 @@ class DepartureController extends Controller {
                                 $input["created_at"] = $departure->created_at;
                                 $input["textTotal"] = trim($this->tool->to_word(round($this->total)));
 
+                                $this->total += $departure->shipping_cost - $departure->discount;
                                 $input["subtotal"] = "$ " . number_format($this->subtotal - $departure->discount, 0, ",", ".");
                                 $input["total"] = "$ " . number_format($this->total, 0, ",", ".");
                                 $input["exento"] = "$ " . number_format($this->exento, 0, ",", ".");

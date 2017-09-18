@@ -53,6 +53,10 @@ class BriefcaseController extends Controller {
 
     public function formatDetail($departures) {
 
+        if (strpos($departures, ",") !== false) {
+            $departures = explode(",", $departures);
+        }
+
         $dep = BriefCase::select("briefcase.id", "departures.invoice", "briefcase.value", "briefcase.created_at", DB::raw("briefcase.value::money as valuepayed"), "briefcase.img")
                 ->join("departures", "departures.id", "briefcase.departure_id")
                 ->orderBy("departures.invoice");
@@ -125,7 +129,7 @@ class BriefcaseController extends Controller {
 
         return response()->json(["success" => true, "data" => $resp]);
     }
-    
+
     public function edit($id) {
         return $this->formatDetail($id);
     }

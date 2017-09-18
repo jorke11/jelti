@@ -52,8 +52,8 @@ class BriefcaseController extends Controller {
     }
 
     public function formatDetail($departures) {
-
-        if (strpos($departures, ",") !== false) {
+        
+        if (!is_array($departures) && strpos($departures, ",") !== false) {
             $departures = explode(",", $departures);
         }
 

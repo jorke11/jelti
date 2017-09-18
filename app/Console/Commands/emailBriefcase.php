@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Log;
+use Illuminate\Support\Facades\Log;
 
-class emailBriefcase extends Command
-{
+class emailBriefcase extends Command {
+
     /**
      * The name and signature of the console command.
      *
@@ -26,8 +26,7 @@ class emailBriefcase extends Command
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
 
@@ -36,9 +35,9 @@ class emailBriefcase extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
         echo "testing handle";
-        Log.info("asdasd ");
+        Log::info("asdas");
     }
+
 }

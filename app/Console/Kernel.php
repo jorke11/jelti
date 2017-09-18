@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel {
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\emailBriefcase::class
+        \App\Console\Commands\emailBriefcase::class,
     ];
 
     /**
@@ -23,8 +23,10 @@ class Kernel extends ConsoleKernel {
      * @return void
      */
     protected function schedule(Schedule $schedule) {
-        echo "entro a schedule";
-        $schedule->command('briefcase:get')->daily();
+
+        $schedule->command('briefcase:get')->everyMinute();
+//        $schedule->command('briefcase:get')->dailyAt('12:31');
+//        $chedule->command(\App\Console\Commands\emailBriefcase::class)->daily();
     }
 
     /**

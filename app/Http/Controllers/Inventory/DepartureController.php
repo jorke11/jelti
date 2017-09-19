@@ -968,10 +968,13 @@ class DepartureController extends Controller {
     public function update(Request $request, $id) {
         $entry = Departures::Find($id);
         $input = $request->all();
-        $result = $entry->fill($input)->save();
+        unset($input["header"]["created_at"]);
+
+        $result = $entry->fill($input["header"])->save();
         if ($result) {
-            $resp = Departures::FindOrFail($id);
-            return response()->json(['success' => true, "data" => $resp]);
+            $detail = $this->formatDetail($id);
+            $total = "$ " . number_format($this->total, 0, ",", ".");
+            return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "success" => true]);
         } else {
             return response()->json(['success' => false]);
         }

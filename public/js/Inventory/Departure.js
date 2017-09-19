@@ -764,6 +764,7 @@ function Departure() {
                     $("#btnSend,#btnmodalDetail").attr("disabled", false);
                 }
 
+                listProducts = data.detail;
 
                 if ($("#role_id").val() == 1 || $("#role_id").val() == 5) {
                     btnEdit = true;
@@ -772,6 +773,7 @@ function Departure() {
 
                 if ($("#role_id").val() == 1) {
                     $("#frm #shipping_cost").attr("disabled", false);
+                    $("#frm #description").attr("disabled", false);
                 }
 
                 obj.getClient(data.header.client_id);

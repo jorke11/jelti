@@ -752,7 +752,7 @@ function Departure() {
                     btnDel = true;
                 }
                 if (data.header.status_id != 1) {
-                    $("#btnSave, #btnmodalDetail").attr("disabled", true);
+                    $("#btnmodalDetail").attr("disabled", true);
                 }
 
                 if (data.header.status_id == 2) {

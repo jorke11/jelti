@@ -483,7 +483,7 @@ class DepartureController extends Controller {
 //            $user = Auth::User();
             if (isset($input["detail"])) {
                 $input["header"]["status_id"] = 1;
-
+                
                 if (!isset($input["header"]["shipping_cost"])) {
                     $input["header"]["shipping_cost"] = 0;
                 }
@@ -970,7 +970,7 @@ class DepartureController extends Controller {
         $entry = Departures::Find($id);
         $input = $request->all();
         unset($input["header"]["created_at"]);
-
+        
         $result = $entry->fill($input["header"])->save();
         if ($result) {
             $detail = $this->formatDetail($id);

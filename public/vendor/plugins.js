@@ -306,7 +306,8 @@ jQuery.fn.getData = function () {
     this.each(function () {
         var elem = $(this);
         if (elem.attr("name") != '' && elem.attr("name") != undefined) {
-            if (elem.val() != 0 && elem.val() != '') {
+//            if (elem.val() != 0 && elem.val() != '') {
+            if (elem.val() != '') {
                 id = elem.attr("id");
                 resp += (resp == '') ? '' : ',';
                 resp += '"' + id + '":"' + elem.val() + '"';

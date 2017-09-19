@@ -771,10 +771,10 @@ function Departure() {
                     btnDel = true;
                 }
 
-                if ($("#role_id").val() == 1) {
+//                if ($("#role_id").val() == 1) {
                     $("#frm #shipping_cost").attr("disabled", false);
                     $("#frm #description").attr("disabled", false);
-                }
+//                }
 
                 obj.getClient(data.header.client_id);
 
@@ -925,7 +925,7 @@ function Departure() {
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
         param.initdep = $("#finitdep").val();
-        console.log(param)
+        
         var html = '';
         table = $('#tbl').DataTable({
             "dom":

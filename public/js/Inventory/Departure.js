@@ -15,7 +15,7 @@ function Departure() {
             $('#myTabs a[href="#management"]').tab('show');
         });
         $("#btnFilter").click(function () {
-
+            
             table = obj.table();
 
         })
@@ -924,8 +924,8 @@ function Departure() {
 
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
-        param.initdep = $("#frmFilterDep #finitdep").val();
-
+        param.initdep = $("#finitdep").val();
+        console.log(param)
         var html = '';
         table = $('#tbl').DataTable({
             "dom":

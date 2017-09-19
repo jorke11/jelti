@@ -229,7 +229,7 @@ function CreditNote() {
         var quantity = listProductsStatic[rowItem].quantity;
 
 //        if (quantity >= $("#frmDetail #quantity").val()) {
-        listProducts[rowItem].quantity = $("#frmDetail #quantity").val();
+        listProducts[rowItem].real_quantity = $("#frmDetail #quantity").val();
         obj.printDetailTmp();
         toastr.success("Proceso realizado");
         $("#modalDetail").modal("hide");
@@ -537,6 +537,7 @@ function CreditNote() {
                 }
             }
         });
+        
         $('#tbl tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = table.row(tr);

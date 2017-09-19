@@ -90,7 +90,8 @@ class DepartureController extends Controller {
         $in = $req->all();
 
         $query = DB::table('vdepartures');
-
+        
+        
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
 
             $query->where("client_id", $in["client_id"])

@@ -15,7 +15,7 @@ function Departure() {
             $('#myTabs a[href="#management"]').tab('show');
         });
         $("#btnFilter").click(function () {
-            
+
             table = obj.table();
 
         })
@@ -772,8 +772,8 @@ function Departure() {
                 }
 
 //                if ($("#role_id").val() == 1) {
-                    $("#frm #shipping_cost").attr("disabled", false);
-                    $("#frm #description").attr("disabled", false);
+                $("#frm #shipping_cost").attr("disabled", false);
+                $("#frm #description").attr("disabled", false);
 //                }
 
                 obj.getClient(data.header.client_id);
@@ -819,7 +819,8 @@ function Departure() {
                 $("#modalDetail").modal("show");
                 $(".input-detail").setFields({data: resp})
             }, error(xhr, responseJSON, thrown) {
-                console.log(responseJSON)
+                toastr.error(responseJSON.msg)
+
             }
         })
     }
@@ -925,7 +926,7 @@ function Departure() {
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
         param.initdep = $("#finitdep").val();
-        
+
         var html = '';
         table = $('#tbl').DataTable({
             "dom":
@@ -958,6 +959,7 @@ function Departure() {
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "quantity"},
+                {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: "subtotalnumeric", render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "status"},
@@ -1069,7 +1071,6 @@ function Departure() {
 
                         );
 
-//                console.log(api)
             }
 
         });

@@ -162,12 +162,12 @@ JOIN parameters p ON p.code=e.status_id and p.group='entry'
 ORDER BY p.code
 
 
---drop view vcreditnote
+--     drop view vcreditnote
 create view  vcreditnote as 
             select id,coalesce(invoice,'') invoice, created_at, client,warehouse,
             city,status,status_id,responsible_id, responsible,subtotalnumeric,total,
-            (select count(*) from credit_note where credit_note.departure_id=vdepartures.id) credit_note,
-            (select array_agg(id) from credit_note where credit_note.departure_id=vdepartures.id) credit_note_dep            
+            (select count(*) from credit_note where credit_note.departure_id=vdepartures.id) credit_note_quantity,
+            (select array_agg(id) from credit_note where credit_note.departure_id=vdepartures.id) credit_note_dep,credit_note
             from vdepartures
             WHERE status_id=2
             ORDER BY id DESC;
@@ -197,8 +197,10 @@ JOIN stakeholder stake On stake.id=s.client_id
 JOIN products p On p.id=s.product_id;
 
 
+drop view vcreditnote_detail_row
 create view vcreditnote_detail_row as 
-select c.id,d.quantity,s.tax,p.title product,s.product_id,s.value,s.units_sf,st.business as stakeholder,d.quantity * s.units_sf as  quantitytotal,d.quantity * s.units_sf* s.value as valuetotal,c.created_at
+select c.id,d.quantity,s.tax,p.title product,s.product_id,s.value,s.units_sf,st.business as stakeholder,d.quantity * s.units_sf as  quantitytotal,
+d.quantity * s.units_sf* s.value as valuetotal,(d.quantity * s.units_sf* s.value * s.tax) + (d.quantity * s.units_sf* s.value) as valuetotaltax,c.created_at
 from credit_note_detail d
 JOIN credit_note c ON c.id=d.creditnote_id
 JOIN sales_detail s ON s.id=d.row_id

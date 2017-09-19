@@ -466,6 +466,7 @@ function CreditNote() {
                 {data: "city"},
                 {data: "status"},
                 {data: "total", render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: "invoice", render: function (data, type, row) {
                         if (row.status_id != 1) {
                             html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + row.id + ')">';
@@ -477,7 +478,7 @@ function CreditNote() {
                 }, {
                     data: 'credit_note', render: function (data, type, row) {
                         var note = '', links = '';
-                        if (row.credit_note != 0) {
+                        if (row.credit_note_quantity != 0) {
                             note = (row.credit_note_dep.replace("{", "")).replace("}", "");
 
                             note = note.split(",");

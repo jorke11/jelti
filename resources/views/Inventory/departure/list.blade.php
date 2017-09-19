@@ -13,6 +13,7 @@
             <th>Bodega</th>
             <th>Ciudad</th>
             <th>Unidades</th>
+            <th>Nota Credito</th>
             <th>SubTotal</th>
             <th>Total</th>
             <th>Estatus</th>
@@ -23,6 +24,7 @@
     </tbody>
     <tfoot>
         <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>

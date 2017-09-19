@@ -1017,11 +1017,11 @@ function Departure() {
 
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
-                    $('td', row).eq(11).addClass('color-new');
+                    $('td', row).eq(12).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(11).addClass('color-pending');
+                    $('td', row).eq(12).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(11).addClass('color-checked');
+                    $('td', row).eq(12).addClass('color-checked');
                 }
             },
             footerCallback: function (row, data, start, end, display) {

@@ -260,10 +260,7 @@ function Departure() {
     }
 
     this.getBranchAddress = function (id, path) {
-        var url = 'departure/' + id + '/getBranch';
-        if (path == undefined) {
-            url = '../../departure/' + id + '/getBranch';
-        }
+        var url = PATH + 'departure/' + id + '/getBranch';
 
         $.ajax({
             url: url,
@@ -271,18 +268,14 @@ function Departure() {
             dataType: 'JSON',
             success: function (resp) {
                 $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
-
                 $("#frm #address").val(resp.response.address_invoice);
             }
         })
     }
 
-    this.getClient = function (id, path) {
-        var html = "";
-        var url = 'departure/' + id + '/getClient';
-        if (path == undefined) {
-            url = '../../departure/' + id + '/getClient';
-        }
+    this.getClient = function (id, branch_id) {
+        var url = PATH + '/departure/' + id + '/getClient';
+
 
         $.ajax({
             url: url,
@@ -297,15 +290,40 @@ function Departure() {
                 $("#frm #phone").val(resp.data.client.phone);
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.send_city_id}});
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
-                html = "<option value=0>Selection</option>";
-                $.each(resp.data.branch, function (i, val) {
-                    val.business = (val.business == null) ? '' : val.business;
-                    html += '<option value="' + val.id + '">' + val.business + ' ' + val.address_invoice + "</option>";
-                })
-
-                $("#frm #branch_id").html(html);
+                obj.loadSelectBranch(resp.data.branch, branch_id)
             }
         })
+    }
+
+    this.loadSelectBranch = function (data, selected_id) {
+
+        var html = "<option value=0>Selection</option>";
+        selected_id = selected_id | null;
+        var selected = '';
+
+        $.each(data, function (i, val) {
+            val.business = (val.business == null) ? '' : val.business;
+            selected = (val.id == selected_id) ? 'selected' : '';
+            html += '<option value="' + val.id + '" ' + selected + '>' + val.business + ' ' + val.address_invoice + "</option>";
+        })
+
+        $("#frm #branch_id").html(html);
+
+        if (selected_id != null) {
+            $.ajax({
+                url: 'departure/' + selected_id + '/getBranch',
+                method: 'GET',
+                dataType: 'JSON',
+                success: function (resp) {
+
+
+                    $("#frm #address").val(resp.response.address_send);
+                    $("#frm #phone").val(resp.response.phone);
+                    $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
+                    $("#frm #responsible_id").setFields({data: {responsible_id: resp.response.responsible_id}});
+                }
+            })
+        }
     }
 
     this.send = function () {
@@ -764,6 +782,7 @@ function Departure() {
                     $("#btnSend,#btnmodalDetail").attr("disabled", false);
                 }
 
+
                 listProducts = data.detail;
 
                 if ($("#role_id").val() == 1 || $("#role_id").val() == 5) {
@@ -776,7 +795,8 @@ function Departure() {
                 $("#frm #description").attr("disabled", false);
 //                }
 
-                obj.getClient(data.header.client_id);
+                obj.getClient(data.header.client_id, data.header.branch_id);
+
 
                 obj.printDetail(data, btnEdit, btnDel);
             }
@@ -960,8 +980,18 @@ function Departure() {
                 {data: "city"},
                 {data: "quantity"},
                 {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0)},
-                {data: "subtotalnumeric", render: $.fn.dataTable.render.number(',', '.', 0)},
-                {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "subtotalnumeric", render: function (data, type, row) {
+                        var total = (row.subtotalnumeric == 0) ? row.subtotalnew : row.subtotalnumeric;
+                        total = parseFloat(total)
+                        return obj.formatCurrency(total, '$')
+                    }
+                },
+                {data: "total", render: function (data, type, row) {
+                        var total = (row.total == 0) ? row.totalnew : row.total;
+                        total = parseFloat(total)
+                        return obj.formatCurrency(total, '$')
+                    }
+                },
                 {data: "status"},
                 {data: "total", render: function (data, type, row) {
                         if (row.status_id == 5) {
@@ -1025,7 +1055,7 @@ function Departure() {
                 }
             },
             footerCallback: function (row, data, start, end, display) {
-                var api = this.api(), data, subtotal, total, quantity = 0;
+                var api = this.api(), data, subtotal, total, quantity = 0, note = 0;
 
                 var intVal = function (i) {
                     return typeof i === 'string' ?
@@ -1040,16 +1070,22 @@ function Departure() {
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
-
-                subtotal = api
+                note = api
                         .column(11)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
 
-                total = api
+                subtotal = api
                         .column(12)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                total = api
+                        .column(13)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
@@ -1062,11 +1098,15 @@ function Departure() {
 
 
                 $(api.column(11).footer()).html(
+                        '(' + obj.formatCurrency(note, '$') + ')'
+                        );
+
+                $(api.column(12).footer()).html(
                         '(' + obj.formatCurrency(subtotal, '$') + ')'
                         );
 
 
-                $(api.column(12).footer()).html(
+                $(api.column(13).footer()).html(
                         '(' + obj.formatCurrency(total, "$") + ')'
 
                         );

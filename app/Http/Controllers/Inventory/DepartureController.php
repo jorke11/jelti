@@ -90,8 +90,8 @@ class DepartureController extends Controller {
         $in = $req->all();
 
         $query = DB::table('vdepartures');
-        
-        
+
+
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
 
             $query->where("client_id", $in["client_id"])
@@ -483,7 +483,7 @@ class DepartureController extends Controller {
 //            $user = Auth::User();
             if (isset($input["detail"])) {
                 $input["header"]["status_id"] = 1;
-                
+
                 if (!isset($input["header"]["shipping_cost"])) {
                     $input["header"]["shipping_cost"] = 0;
                 }
@@ -897,8 +897,14 @@ class DepartureController extends Controller {
     public function edit($id) {
         $entry = Departures::FindOrFail($id);
         $detail = $this->formatDetail($id);
+        $branch = '';
+        $data_branch = '';
+        if ($entry->branch_id != null) {
+            $branch = Branch::where("stakeholder_id", $entry->client_id)->get();
+            $data_branch = Branch::find($entry->branch_id);
+        }
         $total = "$ " . number_format($this->total, 0, ",", ".");
-        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);
+        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "branch" => $branch, "data_branch" => $data_branch]);
     }
 
     public function formatDetail($id) {
@@ -970,7 +976,7 @@ class DepartureController extends Controller {
         $entry = Departures::Find($id);
         $input = $request->all();
         unset($input["header"]["created_at"]);
-        
+
         $result = $entry->fill($input["header"])->save();
         if ($result) {
             $detail = $this->formatDetail($id);

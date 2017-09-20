@@ -60,6 +60,8 @@ function Briefcase() {
 
 
     this.pay = function () {
+        var elem = $(this);
+        elem.attr("disabled", true);
         var param = {};
         param.description = $("#frmPay #comment").val()
         param.saldo = $("#frmPay #saldo").val()
@@ -69,6 +71,9 @@ function Briefcase() {
             method: "PUT",
             data: param,
             dataType: 'JSON',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (data) {
                 if (data.success == true) {
                     table.ajax.reload();
@@ -77,6 +82,10 @@ function Briefcase() {
                 }
             }, error: function (err) {
                 toastr.error("No se puede borrra Este registro");
+            },
+            complete: function () {
+                elem.attr("disabled", false);
+                $("#loading-super").addClass("hidden");
             }
         })
     }
@@ -132,6 +141,8 @@ function Briefcase() {
 
 
     this.uploadExcel = function () {
+        var elem = $(this);
+        elem.attr("disabled", true);
         var formData = new FormData($("#frm")[0]);
 //        formData.append("invoices", invoice);
         $.ajax({
@@ -142,12 +153,19 @@ function Briefcase() {
             processData: false,
             cache: false,
             contentType: false,
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (data) {
                 if (data.success == true) {
                     toastr.success("Ok");
                     obj.loadTable(data.data)
                     tableBrief.ajax.reload();
                 }
+            },
+            complete: function () {
+                elem.attr("disabled", false);
+                $("#loading-super").addClass("hidden");
             }
         })
 

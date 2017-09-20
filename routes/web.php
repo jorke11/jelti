@@ -538,6 +538,8 @@ Route::get('/briefcase/getBriefcase', "Sales\BriefcaseController@getBriefcase");
 Route::get('/briefcase/{id}/edit', "Sales\BriefcaseController@edit");
 Route::delete('/briefcase/{id}', "Sales\BriefcaseController@delete");
 Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice");
+Route::get('/briefcase/testnotificaction/{id}/{commercial}', "Sales\BriefcaseController@testNotification");
+Route::get('/briefcase/testPaidout/{id}', "Sales\BriefcaseController@testPaidout");
 
 
 Route::get('/reportClient', "Report\ClientController@index");

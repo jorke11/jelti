@@ -987,7 +987,7 @@ function Departure() {
                     }
                 },
                 {data: "total", render: function (data, type, row) {
-                        var total = (row.stataus_id == 1) ? row.totalnew : row.total;
+                        var total = (row.status_id == 1) ? row.totalnew : row.total;
                         total = parseFloat(total);
                         return obj.formatCurrency(total, '$')
                     }

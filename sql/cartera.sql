@@ -11,6 +11,6 @@ select d.id,invoice,client,d.business_name,
            (select sum(value) from briefcase where departure_id=d.id) payed,(select sum(value)::money from briefcase where departure_id=d.id) payedformated
             from vdepartures d
             JOIN stakeholder s ON s.id=d.client_id
-            WHERE d.status_id=2 
+            WHERE d.status_id IN(2,7) 
             ORDER BY  date_part('day',now() - (d.dispatched + CAST(s.term || ' days' AS INTERVAL))) DESC,d.dispatched
             

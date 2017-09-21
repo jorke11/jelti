@@ -981,14 +981,14 @@ function Departure() {
                 {data: "quantity"},
                 {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: "subtotalnumeric", render: function (data, type, row) {
-                        var total = (row.subtotalnumeric == 0) ? row.subtotalnew : row.subtotalnumeric;
+                        var total = (row.status_id == 1) ? row.subtotalnew : row.subtotalnumeric;
                         total = parseFloat(total)
                         return obj.formatCurrency(total, '$')
                     }
                 },
                 {data: "total", render: function (data, type, row) {
-                        var total = (row.total == 0) ? row.totalnew : row.total;
-                        total = parseFloat(total)
+                        var total = (row.stataus_id == 1) ? row.totalnew : row.total;
+                        total = parseFloat(total);
                         return obj.formatCurrency(total, '$')
                     }
                 },

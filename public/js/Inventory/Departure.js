@@ -36,8 +36,6 @@ function Departure() {
         $("#branch_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getBranchAddress($(this).val());
-            } else {
-
             }
         });
 
@@ -259,8 +257,9 @@ function Departure() {
         statusRecord = false;
     }
 
-    this.getBranchAddress = function (id, path) {
-        var url = PATH + 'departure/' + id + '/getBranch';
+    this.getBranchAddress = function (id) {
+
+        var url = PATH + '/departure/' + id + '/getBranch';
 
         $.ajax({
             url: url,

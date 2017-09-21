@@ -1052,6 +1052,8 @@ function Departure() {
                     $('td', row).eq(12).addClass('color-pending');
                 } else if (data.status_id == 3) {
                     $('td', row).eq(12).addClass('color-checked');
+                } else if (data.status_id == 7) {
+                    $('td', row).eq(12).addClass('color-green');
                 }
             },
             footerCallback: function (row, data, start, end, display) {

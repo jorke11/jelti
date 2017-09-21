@@ -65,7 +65,7 @@ function Briefcase() {
         var param = {};
         param.description = $("#frmPay #comment").val()
         param.saldo = $("#frmPay #saldo").val()
-
+        
         $.ajax({
             url: "briefcase/payInvoice/" + $("#frmPay #departure_id").val(),
             method: "PUT",
@@ -194,6 +194,8 @@ function Briefcase() {
 
     this.payed = function (id) {
         $("#modalPayed").modal("show");
+        $("#frmPay #saldo").val("");
+        $("#frmPay #departure_id").val("");
         var total = $("#row_" + id).attr("total") - (($("#row_" + id).attr("payed") == "null") ? 0 : $("#row_" + id).attr("payed"));
         $("#frmPay #saldo").val(total);
         $("#frmPay #departure_id").val(id);

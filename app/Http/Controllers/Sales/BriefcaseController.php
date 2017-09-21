@@ -195,7 +195,7 @@ class BriefcaseController extends Controller {
 
         return view("Notifications.deposit", compact("responsible", "client", "environment", "detail", "subtotal"));
     }
-    
+
     public function testPaidout($departure_id) {
         $detail = BriefCase::whereIn("briefcase.id", array(162, 163))
                 ->join("vdepartures", "vdepartures.id", "departure_id")
@@ -236,11 +236,12 @@ class BriefcaseController extends Controller {
             $row->description = "Pagado: " . $in["description"] . ", " . $row->description;
             $row->outstanding = $in["saldo"];
             $row->update_id = Auth::user()->id;
+            $row->status_id = 7;
             $row->save();
 
             $row = Departures::find($id);
 
-            
+            DB::commit();
             return response()->json(["success" => true, "data" => $row]);
         } catch (Exception $exp) {
             DB::rollback();

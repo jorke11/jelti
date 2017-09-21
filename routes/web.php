@@ -16,8 +16,11 @@ use Models\Administration\Categories;
 
 Auth::routes();
 
-Route::get('/api/users/{email}', 'Movil\UserController@getUser');
-Route::get('/api/movil/categories', 'Movil\UserController@getCategories');
+Route::group(['namespace' => 'Api'], function () {
+    Route::post('/user/login', 'UserController@login');
+    Route::post('/details', 'UserController@details')->middleware('auth:api');
+});
+
 
 Route::get('/', function () {
     $category = Models\Administration\Categories::where("status_id", 1)->orderBy("order", "asc")->get();

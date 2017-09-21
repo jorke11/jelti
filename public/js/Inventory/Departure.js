@@ -315,12 +315,12 @@ function Departure() {
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
-
-
-                    $("#frm #address").val(resp.response.address_send);
-                    $("#frm #phone").val(resp.response.phone);
-                    $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
-                    $("#frm #responsible_id").setFields({data: {responsible_id: resp.response.responsible_id}});
+                    if (resp.response != null) {
+                        $("#frm #address").val(resp.response.address_send);
+                        $("#frm #phone").val(resp.response.phone);
+                        $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
+                        $("#frm #responsible_id").setFields({data: {responsible_id: resp.response.responsible_id}});
+                    }
                 }
             })
         }

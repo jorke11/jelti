@@ -509,8 +509,8 @@ class DepartureController extends Controller {
 
             DB::beginTransaction();
             $header["insert_id"] = Auth::user()->id;
-
-            if (isset($header["branch_id"])) {
+            
+            if (isset($header["branch_id"]) && $header["branch_id"] != 0) {
                 $bra = Branch::find($header["branch_id"]);
                 $header["responsible_id"] = $bra->responsible_id;
             }

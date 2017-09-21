@@ -11,7 +11,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <script>var PATH = '{{url("/")}}'</script>
-        
+
         <!-- Styles -->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
         <style>
@@ -74,7 +74,13 @@
             .grey-bk{
                 background: #fffcf8;
             }
-
+            #loading-super{
+                display:scroll;
+                position:fixed;
+                z-index: 10000;
+                left: 50%;
+                top: 40%
+            }
         </style>
 
         {!!Html::script('/vendor/toastr/toastr.min.js')!!}
@@ -89,7 +95,39 @@
         </script>
     </head>
     <body>
+        <div id="loading-super" class="hidden" >
+            <img src="{!!asset('images/Gif_final.gif')!!}" width='60%' >
+            <input id="role_id" type="hidden" value="{{Auth::user()->role_id}}">
+        </div>
         <div class="container-fluid body">
+            <br>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-1">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <h2>Compras</h2>
+                        </div>
+                        <div class="col-lg-3">
+                            <a href="/payment">
+                                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                                <span class="badge">
+                                    <span id="quantityOrders"></span>
+                                </span></a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-3">
+                    {{auth()->user()->name}}, <a href="{{ url('/logout') }}"
+                                                 onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
+                        Cerrar Sesión</a>
+
+                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                </div>
+            </div>
             @yield('content')
         </div>
     </body>

@@ -1,4 +1,4 @@
-function Sale() {
+function Departure() {
     var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false, client_id = null;
     this.init = function () {
         table = this.table();
@@ -9,10 +9,16 @@ function Sale() {
         $("#newService").click(this.saveService);
         $("#btnSend").click(this.send);
         $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
+        $(".form_date").datetimepicker({format: 'Y-m-d'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
         });
+        $("#btnFilter").click(function () {
+
+            table = obj.table();
+
+        })
 
         $("#frm #client_id").on('select2:closing', function (evt) {
             if ($(this).val() != 0) {
@@ -153,7 +159,7 @@ function Sale() {
             // Toggle the visibility
             column.visible(!column.visible());
         })
-        
+
         $("#col-business_name").click(function (e) {
             e.preventDefault();
             // Get the column API object
@@ -254,10 +260,7 @@ function Sale() {
     }
 
     this.getBranchAddress = function (id, path) {
-        var url = 'departure/' + id + '/getBranch';
-        if (path == undefined) {
-            url = '../../departure/' + id + '/getBranch';
-        }
+        var url = PATH + 'departure/' + id + '/getBranch';
 
         $.ajax({
             url: url,
@@ -265,18 +268,14 @@ function Sale() {
             dataType: 'JSON',
             success: function (resp) {
                 $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
-
                 $("#frm #address").val(resp.response.address_invoice);
             }
         })
     }
 
-    this.getClient = function (id, path) {
-        var html = "";
-        var url = 'departure/' + id + '/getClient';
-        if (path == undefined) {
-            url = '../../departure/' + id + '/getClient';
-        }
+    this.getClient = function (id, branch_id) {
+        var url = PATH + '/departure/' + id + '/getClient';
+
 
         $.ajax({
             url: url,
@@ -291,15 +290,40 @@ function Sale() {
                 $("#frm #phone").val(resp.data.client.phone);
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.send_city_id}});
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
-                html = "<option value=0>Selection</option>";
-                $.each(resp.data.branch, function (i, val) {
-                    val.business = (val.business == null) ? '' : val.business;
-                    html += '<option value="' + val.id + '">' + val.business + ' ' + val.address_invoice + "</option>";
-                })
-
-                $("#frm #branch_id").html(html);
+                obj.loadSelectBranch(resp.data.branch, branch_id)
             }
         })
+    }
+
+    this.loadSelectBranch = function (data, selected_id) {
+
+        var html = "<option value=0>Selection</option>";
+        selected_id = selected_id | null;
+        var selected = '';
+
+        $.each(data, function (i, val) {
+            val.business = (val.business == null) ? '' : val.business;
+            selected = (val.id == selected_id) ? 'selected' : '';
+            html += '<option value="' + val.id + '" ' + selected + '>' + val.business + ' ' + val.address_invoice + "</option>";
+        })
+
+        $("#frm #branch_id").html(html);
+
+        if (selected_id != null) {
+            $.ajax({
+                url: 'departure/' + selected_id + '/getBranch',
+                method: 'GET',
+                dataType: 'JSON',
+                success: function (resp) {
+
+
+                    $("#frm #address").val(resp.response.address_send);
+                    $("#frm #phone").val(resp.response.phone);
+                    $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
+                    $("#frm #responsible_id").setFields({data: {responsible_id: resp.response.responsible_id}});
+                }
+            })
+        }
     }
 
     this.send = function () {
@@ -432,7 +456,7 @@ function Sale() {
         var form = $("#frmDetail").serialize()
         var msg = 'Record Detail';
         var validate = $(".input-detail").validate();
-        
+
         if (validate.length == 0) {
             if (id != '') {
                 var id = $("#frmDetail #id").val();
@@ -746,7 +770,7 @@ function Sale() {
                     btnDel = true;
                 }
                 if (data.header.status_id != 1) {
-                    $("#btnSave, #btnmodalDetail").attr("disabled", true);
+                    $("#btnmodalDetail").attr("disabled", true);
                 }
 
                 if (data.header.status_id == 2) {
@@ -759,14 +783,20 @@ function Sale() {
                 }
 
 
+                listProducts = data.detail;
+
                 if ($("#role_id").val() == 1 || $("#role_id").val() == 5) {
                     btnEdit = true;
                     btnDel = true;
                 }
 
-                if ($("#role_id").val() == 1) {
-                    $("#frm #shipping_cost").attr("disabled", false);
-                }
+//                if ($("#role_id").val() == 1) {
+                $("#frm #shipping_cost").attr("disabled", false);
+                $("#frm #description").attr("disabled", false);
+//                }
+
+                obj.getClient(data.header.client_id, data.header.branch_id);
+
 
                 obj.printDetail(data, btnEdit, btnDel);
             }
@@ -809,7 +839,8 @@ function Sale() {
                 $("#modalDetail").modal("show");
                 $(".input-detail").setFields({data: resp})
             }, error(xhr, responseJSON, thrown) {
-                console.log(responseJSON)
+                toastr.error(responseJSON.msg)
+
             }
         })
     }
@@ -914,6 +945,7 @@ function Sale() {
 
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
+        param.initdep = $("#finitdep").val();
 
         var html = '';
         table = $('#tbl').DataTable({
@@ -923,6 +955,7 @@ function Sale() {
                     "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "processing": true,
             "serverSide": true,
+            destroy: true,
             ajax: {
                 url: "/api/listDeparture",
                 data: param
@@ -941,17 +974,53 @@ function Sale() {
                 {data: "created_at"},
                 {data: "dispatched", "visible": false, },
                 {data: "client"},
-                {data: "business_name", "visible": false },
+                {data: "business_name", "visible": false},
                 {data: "responsible"},
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "quantity"},
-                {data: "subtotalnumeric", render: $.fn.dataTable.render.number(',', '.', 2)},
-                {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
+                {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "subtotalnumeric", render: function (data, type, row) {
+                        var total = (row.subtotalnumeric == 0) ? row.subtotalnew : row.subtotalnumeric;
+                        total = parseFloat(total)
+                        return obj.formatCurrency(total, '$')
+                    }
+                },
+                {data: "total", render: function (data, type, row) {
+                        var total = (row.total == 0) ? row.totalnew : row.total;
+                        total = parseFloat(total)
+                        return obj.formatCurrency(total, '$')
+                    }
+                },
                 {data: "status"},
+                {data: "total", render: function (data, type, row) {
+                        if (row.status_id == 5) {
+                            html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + row.id + ')"></i>';
+                        } else {
+                            if (row.status_id != 1) {
+
+                                html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + row.id + ')" title="Ver Factura">';
+                                if (row.status_id != 4) {
+                                    html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + row.id + ')" title="Anular Factura"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
+                                }
+                            } else {
+                                html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + row.id + ')" title="Borrar Orden"></i>&nbsp;&nbsp;<i style="cursor:pointer" class="fa fa-file-text fa-lg" aria-hidden="true" onclick="obj.tempInvoice(' + row.id + ')" title="Generar Remisión"></i>';
+                            }
+                        }
+                        return html;
+
+                    }
+                },
             ],
 
             buttons: [
+                {
+
+                    className: 'btn btn-primary glyphicon glyphicon-filter',
+                    action: function (e, dt, node, config) {
+                        $("#modalFilter").modal("show");
+                    }
+                },
                 {
 
                     className: 'btn btn-primary glyphicon glyphicon-eye-open',
@@ -974,40 +1043,19 @@ function Sale() {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
-                {
-                    targets: [14],
-                    searchable: false,
-                    mData: null,
-                    mRender: function (data, type, full) {
-                        if (data.status_id == 5) {
-                            html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + data.id + ')"></i>';
-                        } else {
-                            if (data.status_id != 1) {
-
-                                html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')" title="Ver Factura">';
-                                if (data.status_id != 4) {
-                                    html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + data.id + ')" title="Anular Factura"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
-                                }
-                            } else {
-                                html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + data.id + ')" title="Borrar Orden"></i>&nbsp;&nbsp;<i style="cursor:pointer" class="fa fa-file-text fa-lg" aria-hidden="true" onclick="obj.tempInvoice(' + data.id + ')" title="Generar Remisión"></i>';
-                            }
-                        }
-                        return html;
-                    }
-                }
             ],
 
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
-                    $('td', row).eq(11).addClass('color-new');
+                    $('td', row).eq(12).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(11).addClass('color-pending');
+                    $('td', row).eq(12).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(11).addClass('color-checked');
+                    $('td', row).eq(12).addClass('color-checked');
                 }
             },
             footerCallback: function (row, data, start, end, display) {
-                var api = this.api(), data, subtotal, total, quantity = 0;
+                var api = this.api(), data, subtotal, total, quantity = 0, note = 0;
 
                 var intVal = function (i) {
                     return typeof i === 'string' ?
@@ -1022,16 +1070,22 @@ function Sale() {
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
-
-                subtotal = api
+                note = api
                         .column(11)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
 
-                total = api
+                subtotal = api
                         .column(12)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                total = api
+                        .column(13)
                         .data()
                         .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
@@ -1044,16 +1098,19 @@ function Sale() {
 
 
                 $(api.column(11).footer()).html(
+                        '(' + obj.formatCurrency(note, '$') + ')'
+                        );
+
+                $(api.column(12).footer()).html(
                         '(' + obj.formatCurrency(subtotal, '$') + ')'
                         );
 
 
-                $(api.column(12).footer()).html(
+                $(api.column(13).footer()).html(
                         '(' + obj.formatCurrency(total, "$") + ')'
 
                         );
 
-//                console.log(api)
             }
 
         });
@@ -1118,5 +1175,5 @@ function Sale() {
 
 }
 
-var obj = new Sale();
+var obj = new Departure();
 obj.init();

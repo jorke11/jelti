@@ -3,13 +3,13 @@
         <div class="row">
             <div class="col-lg-12 text-right">
                 <button class="btn btn-success btn-sm" id='btnNew'>
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"> New</span>
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"> Nuevo</span>
                 </button>
                 <button class="btn btn-success btn-sm" id='btnSave' disabled>
-                    <span class="glyphicon glyphicon-save" aria-hidden="true" > Save</span>
+                    <span class="glyphicon glyphicon-save" aria-hidden="true" > Guardar</span>
                 </button>
-                <button class="btn btn-success btn-sm" id='btnSend' disabled>
-                    <span class="glyphicon glyphicon-send" aria-hidden="true" > Send</span>
+                <button class="btn btn-success btn-sm" id='btnSend'>
+                    <span class="glyphicon glyphicon-send" aria-hidden="true" > Ingresar</span>
                 </button>
             </div>
         </div>
@@ -114,7 +114,7 @@
 
 <div class="row">
     {!! Form::open(['id'=>'frmSetDetail']) !!}
-    <input id="entry_id" name="entry_id">
+    <input id="entry_id" name="entry_id" type="hidden">
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -134,7 +134,6 @@
                             <th colspan="2" class="center-rowspan">Information</th>
                             <th colspan="3" class="center-rowspan">Order</th>
                             <th colspan="3" class="center-rowspan">Real</th>
-                            <th rowspan="2" class="center-rowspan">Status</th>
                             <th rowspan="2" class="center-rowspan">Actions</th>
                         </tr>
                         <tr>

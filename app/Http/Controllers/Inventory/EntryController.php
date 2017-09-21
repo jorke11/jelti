@@ -288,27 +288,31 @@ class EntryController extends Controller {
     public function sendPurchase(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            $entry = Entries::findOrFail($input["id"]);
+            $entry = Entries::find($input["id"]);
 
             $exist = Purchases::find($entry->purchase_id);
 
-            $val = EntriesDetail::where("entry_id", $entry["id"])->where("status_id", 1)->count();
+            $val = EntriesDetail::where("entry_id", $entry["id"])->where("status_id", 1)->get();
 
-            if ($val == 0) {
-                if ($entry["status_id"] != 2) {
-                    $entry->status_id = 2;
-                    $entry->save();
-                    if (count($exist) > 0) {
-                        $exist->status_id = 4;
-                        $exist->save();
-                    }
-
-                    return response()->json(["success" => true, "header" => $entry]);
-                } else {
-                    return response()->json(["success" => false, "msg" => "Entry is already generate"], 404);
+            if ($entry["status_id"] != 2) {
+                foreach ($val as $value) {
+                    $det = EntriesDetail::find($value->id);
+                    $det->status_id = 2;
+                    $det->save();
                 }
+
+                $entry->status_id = 2;
+                $entry->save();
+                if (count($exist) > 0) {
+                    $exist->status_id = 4;
+                    $exist->save();
+                }
+
+                $entry = Entries::find($input["id"]);
+
+                return response()->json(["success" => true, "header" => $entry]);
             } else {
-                return response()->json(["success" => false, "msg" => "All Entry detail must be checked"], 409);
+                return response()->json(["success" => false, "msg" => "Entry is already generate"], 404);
             }
         } else {
             return response()->json(["success" => false, "msg" => "Wrong"]);
@@ -568,7 +572,15 @@ class EntryController extends Controller {
                 $det->save();
             }
 
-            return response()->json(['success' => true, "msg" => "Datos actualizados"]);
+            $header = Entries::find($entry_id);
+            $detailEntry = $this->formatDetail($entry_id);
+
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+            $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+
+
+            return response()->json(['success' => true, "msg" => "Datos actualizados", "header" => $header, "detail" => $detailEntry,
+                        "total" => $total, "total_real" => $total_real]);
         } else {
             return response()->json(['success' => false, "msg" => "Solo se permiten " . $total . " items, ingresaste " . $cont], 409);
         }
@@ -584,21 +596,29 @@ class EntryController extends Controller {
         }
     }
 
-    public function destroyDetail($id) {
-        $entry = EntriesDetail::FindOrFail($id);
-        $entry_id = $entry["entry_id"];
-        $result = $entry->delete();
-        if ($result) {
-            $detail = DB::table("entries_detail")
-                            ->select("entries_detail.id", "expiration_date", "quantity", "value", "products.title as product")
-                            ->join("products", "entries_detail.product_id", "products.id")
-                            ->where("entry_id", $entry_id)->get();
-            $detail = $this->formatDetail($detail);
-            $total = "$ " . number_format($this->total, 2, ',', '.');
+    public function destroyDetail(Request $req, $id) {
+        $in = $req->all();
 
-            return response()->json(['success' => true, "detail" => $detail, "total" => $total]);
+        $entry = EntriesDetail::where("product_id", $id)->where("entry_id", $in["entry_id"])->get();
+        $header = Entries::find($in["entry_id"]);
+
+        $entry_id = $in["entry_id"];
+
+        if ($header->status_id == 1) {
+
+            foreach ($entry as $value) {
+                $det = EntriesDetail::find($value->id);
+                $det->delete();
+            }
+
+
+            $detail = $this->formatDetail($in["entry_id"]);
+
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+            $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+            return response()->json(['success' => true, "header" => $header, "detail" => $detail, "total" => $total, "total_real" => $total_real]);
         } else {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, "msg" => "No se puede eliminar, porque este item ya ha sido ingresado"], 500);
         }
     }
 

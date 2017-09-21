@@ -14,6 +14,10 @@ use App\Models\Administration\Warehouses;
 
 class StockController extends Controller {
 
+    public function __construct() {
+        $this->middleware("auth");
+    }
+
     public function index() {
         $warehouse = Warehouses::all();
         return view("Inventory.stock.init", compact("warehouse"));
@@ -21,40 +25,46 @@ class StockController extends Controller {
 
     public function getStock(Request $req) {
         $in = $req->all();
-        $warehouse_entry = '';
-        $warehouse_departure = '';
+        $entry_ware = '';
+        $sales_ware = '';
         if ($in["warehouse_id"] != 0) {
-            $warehouse_entry = ' AND entries.warehouse_id=' . $in["warehouse_id"];
-            $warehouse_departure = ' AND sales.warehouse_id=' . $in["warehouse_id"];
+            $entry_ware = ' AND entries.warehouse_id=' . $in["warehouse_id"];
+            $sales_ware = ' AND sales.warehouse_id=' . $in["warehouse_id"];
         }
         $bar_code = '';
+
+
         if ($in["bar_code"] != '') {
-            $bar_code = " WHERE products.bar_code='" . $in["bar_code"] . "'";
+            $pro = Products::where("bar_code", $in["bar_code"])->first();
+            $bar_code = "WHERE id=" . $pro->id;
         }
 
-        $sql = "
-            select products.id,products.reference,products.title as product,sum(entries_detail.quantity) entry,
-            coalesce((
-                    select sum(quantity) 
-                    from sales_detail 
-                    JOIN sales ON sales.id=sales_detail.sale_id 
-                    where product_id=products.id and product_id IS NOT NULL " . $warehouse_departure . "),0) departure,
-            sum(entries_detail.quantity) - coalesce((
-                                                    select sum(quantity) 
-                                                    from sales_detail 
-                                                    JOIN sales ON sales.id=sales_detail.sale_id 
-                                                    where product_id=products.id 
-                                                    and product_id IS NOT NULL " . $warehouse_departure . "),0) total
-            from products
-            JOIN entries_detail ON entries_detail.product_id=products.id
-            JOIN entries ON entries.id = entries_detail.entry_id and entries.status_id=2 " . $warehouse_entry . "
-                $bar_code
-            group by 1
-            order by 6 desc";
-//        echo $sql;exit;
-        $resp = DB::select($sql);
 
-        return response()->json(["data" => $resp]);
+        $sql = "
+            select id,reference,title as product
+            from products $bar_code";
+        $products = DB::select($sql);
+        foreach ($products as $i => $value) {
+            $sql = "
+                    select coalesce(sum(quantity),0) as total
+                    from entries_detail
+                    JOIN entries ON entries.id=entries_detail.entry_id 
+                    WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
+            $entry = DB::select($sql);
+
+            $sql = "
+                    select coalesce(sum(quantity),0) as total
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE product_id=" . $value->id . " $sales_ware";
+            $sale = DB::select($sql);
+
+            $products[$i]->entries = $entry[0]->total;
+            $products[$i]->sales = $sale[0]->total;
+            $products[$i]->available = $products[$i]->entries - $products[$i]->sales;
+        }
+
+        return response()->json(["data" => $products]);
     }
 
     public function getDetailProduct(Request $req, $id) {

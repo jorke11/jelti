@@ -23,7 +23,8 @@ class SaleDetail extends Model {
         "account_id",
         "type_nature",
         "parent_id",
-        "description"
+        "description",
+        "packaging"
     ];
 
 }

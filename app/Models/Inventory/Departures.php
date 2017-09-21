@@ -30,6 +30,7 @@ class Departures extends Model {
         "outstanding",
         "remission",
         "discount",
+        "type_request",
         ];
 
 }

@@ -396,11 +396,17 @@ class PurchaseController extends Controller {
 
     public function formatDetail($id) {
         $sql = "
-            select p.id as product_id,p.title as product,d.units_supplier,d.tax,d.value,sum(d.quantity * d.units_supplier) quantity_total,d.purchase_id, sum(d.value * d.units_supplier * d.quantity) as total,sum(d.quantity) as quantity 
+            select 
+                p.id as product_id,
+                p.title as product,
+                d.units_supplier,
+                d.tax,d.value,
+                sum(d.quantity * d.units_supplier) quantity_total,d.purchase_id, sum(d.value * d.units_supplier * d.quantity) as total,sum(d.quantity) as quantity,
+                p.bar_code as ean
             from purchases_detail d 
             JOIN products p On p.id=d.product_id 
             where d.purchase_id=" . $id . "
-            group by 1,2,3,4,5,7";
+            group by 1,2,3,4,5,7,10";
         
         $detail = DB::select($sql);
 

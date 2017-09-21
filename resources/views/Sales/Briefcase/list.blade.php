@@ -1,7 +1,7 @@
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-body">
-            <table class="table table-condensed  table-hover" id="tbl" width='100%'>
+            <table class="table table-condensed  table-hover nowrap display" id="tbl" width='100%'>
                 <thead>
                     <tr>
                         <th>#</th>

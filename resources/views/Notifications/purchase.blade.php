@@ -49,6 +49,7 @@
         <table align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" class="detail">
             <thead>
                 <tr>
+                    <th>EAN</th>
                     <th>Producto</th>
                     <th>Embalaje</th>
                     <th>Pedido</th>
@@ -62,6 +63,7 @@
                 foreach ($detail as $val) {
                     ?>
                     <tr>
+                        <td>{{$val->ean}}</td>
                         <td>{{$val->product}}</td>
                         <td align="center">{{$val->units_supplier}}</td>
                         <td align="center">{{$val->quantity}}</td>
@@ -74,20 +76,20 @@
                 ?>
 
                 <tr align="right">
-                    <td colspan="4"</td>
+                    <td colspan="5"</td>
                     <td ><b>SubTotal</b></td>
                     <td>{{"$ " . number_format($subtotal, 0, ",", ".")}}</td>
                 </tr>
                 @if($tax5!=0)
                 <tr align="right">
-                    <td colspan="4"</td>
+                    <td colspan="5"</td>
                     <td ><b>Iva 5%</b></td>
                     <td>{{"$ " . number_format($tax5, 0, ",", ".")}}</td>
                 </tr>
                 @endif
                 @if($tax19!=0)
                 <tr align="right">
-                    <td colspan="4"</td>
+                    <td colspan="5"</td>
                     <td ><b>Iva 19%</b></td>
                     <td >{{"$ " . number_format($tax19, 0, ",", ".")}}</td>
                 </tr>

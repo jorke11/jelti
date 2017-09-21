@@ -103,7 +103,7 @@ class ClientController extends Controller {
     }
 
     public function getBranchId($id) {
-        $response = Branch::select("branch_office.id", "stakeholder.type_person_id", "stakeholder.type_regime_id", "stakeholder.responsible_id", "stakeholder.type_document", "branch_office.document", "branch_office.verification", "branch_office.business", "branch_office.business_name", "stakeholder.sector_id", "branch_office.city_id", "branch_office.term", "branch_office.stakeholder_id", "branch_office.email", "branch_office.web_site", "branch_office.send_city_id", "branch_office.invoice_city_id", "branch_office.address_send", "branch_office.address_invoice")
+        $response = Branch::select("branch_office.id", "stakeholder.type_person_id", "stakeholder.type_regime_id", "branch_office.responsible_id", "stakeholder.type_document", "branch_office.document", "branch_office.verification", "branch_office.business", "branch_office.business_name", "stakeholder.sector_id", "branch_office.city_id", "branch_office.term", "branch_office.stakeholder_id", "branch_office.email", "branch_office.web_site", "branch_office.send_city_id", "branch_office.invoice_city_id", "branch_office.address_send", "branch_office.address_invoice")
                         ->join("stakeholder", "stakeholder.id", "branch_office.stakeholder_id")
                         ->where("branch_office.id", $id)->first();
         return response()->json(["response" => $response]);
@@ -265,12 +265,13 @@ class ClientController extends Controller {
             $input["login_web"] = 0;
         }
 
-
-
+       
         if (!isset($input["stakeholder_id"])) {
+            
             $input["stakeholder_id"] = null;
             $stakeholder = Stakeholder::Find($id);
         } else {
+            
             $stakeholder = Branch::Find($id);
         }
 
@@ -286,8 +287,10 @@ class ClientController extends Controller {
         $input["status_id"] = 1;
 
         if ($stakeholder == null) {
+           
             $result = Stakeholder::create($input);
         } else {
+            
             if ($input["password"] != '') {
                 $input["password"] = bcrypt($input["password"]);
 
@@ -295,6 +298,7 @@ class ClientController extends Controller {
                     unset($input["password"]);
                 }
             }
+            
             $result = $stakeholder->fill($input)->save();
         }
 
@@ -313,7 +317,7 @@ class ClientController extends Controller {
         }
 
         if ($result) {
-            return response()->json(['success' => true]);
+            return response()->json(['success' => true,"header"=>$result]);
         } else {
             return response()->json(['success' => false]);
         }

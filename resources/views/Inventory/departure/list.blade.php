@@ -1,10 +1,10 @@
 
-<table class="table table-condensed  table-hover nowrap" id="tbl" width='100%'>
+<table class="table table-condensed  table-hover nowrap display" cellspacing="0" cellpadding="3"  id="tbl" width='100%'>
     <thead>
         <tr>
             <th>Detail</th>
             <th>Id</th>
-            <th>Factura</th>
+            <th width="1%">Factura</th>
             <th>Fecha</th>
             <th>Despachado</th>
             <th>Cliente</th>
@@ -13,16 +13,18 @@
             <th>Bodega</th>
             <th>Ciudad</th>
             <th>Unidades</th>
+            <th>Nota Credito</th>
             <th>SubTotal</th>
             <th>Total</th>
             <th>Estatus</th>
-            <th tipo="prueba">Action</th>
+            <th tipo="prueba" width="1%">Action</th>
         </tr>
     </thead>
     <tbody>
     </tbody>
     <tfoot>
         <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>

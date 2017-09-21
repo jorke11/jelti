@@ -16,8 +16,8 @@ function Briefcase() {
                 if ($(this).is(":checked")) {
 
                     html += "<tr><td>" + $(this).attr("invoice") + '<input type="hidden" name="invoices[]" value="' + $(this).val() + '"></td>';
-                    html += '<td>' + $(this).attr("totalformated") + '</td><td><input type="text" class="form-control" name="values[]" value="' + $(this).attr("total") + '"></td></tr>';
-                    invoice.push({id: $(this).val(), invoice: $(this).attr("invoice"), total: $(this).attr("total"), totalforamted: $(this).attr("totalforamted")})
+                    html += '<td>' + obj.formatCurrency($(this).attr("total"), "$") + '</td><td><input type="text" class="form-control" name="values[]" value="' + $(this).attr("total") + '"></td></tr>';
+                    invoice.push({id: $(this).val(), invoice: $(this).attr("invoice"), total: $(this).attr("total"), totalforamted: $(this).attr("total")})
                     dep += (dep == '') ? '' : ',';
                     dep += $(this).val();
                     total += parseFloat($(this).attr("total"));
@@ -40,18 +40,28 @@ function Briefcase() {
             $("#table-invoices tbody").html(html);
         })
 
+        $("#btnFilter").click(function () {
+
+            table = obj.table();
+
+        })
+
         $("#btnSave").click(this.uploadExcel);
         $("#btnPay").click(this.pay);
 
     }
 
     this.formatCurrency = function (n, currency) {
+        n = parseFloat(n);
         return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
             return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
         });
     }
 
+
     this.pay = function () {
+        var elem = $(this);
+        elem.attr("disabled", true);
         var param = {};
         param.description = $("#frmPay #comment").val()
         param.saldo = $("#frmPay #saldo").val()
@@ -61,6 +71,9 @@ function Briefcase() {
             method: "PUT",
             data: param,
             dataType: 'JSON',
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (data) {
                 if (data.success == true) {
                     table.ajax.reload();
@@ -69,6 +82,10 @@ function Briefcase() {
                 }
             }, error: function (err) {
                 toastr.error("No se puede borrra Este registro");
+            },
+            complete: function () {
+                elem.attr("disabled", false);
+                $("#loading-super").addClass("hidden");
             }
         })
     }
@@ -124,6 +141,8 @@ function Briefcase() {
 
 
     this.uploadExcel = function () {
+        var elem = $(this);
+        elem.attr("disabled", true);
         var formData = new FormData($("#frm")[0]);
 //        formData.append("invoices", invoice);
         $.ajax({
@@ -134,12 +153,19 @@ function Briefcase() {
             processData: false,
             cache: false,
             contentType: false,
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+            },
             success: function (data) {
                 if (data.success == true) {
                     toastr.success("Ok");
                     obj.loadTable(data.data)
                     tableBrief.ajax.reload();
                 }
+            },
+            complete: function () {
+                elem.attr("disabled", false);
+                $("#loading-super").addClass("hidden");
             }
         })
 
@@ -152,7 +178,7 @@ function Briefcase() {
     this.showModal = function (id) {
         var frm = $("#frmEdit"), btnEdit = true, btnDel = true;
         var data = frm.serialize();
-        var url = "/departure/" + id + "/edit";
+        var url = "/briefcase/" + id + "/edit";
         $.ajax({
             url: url,
             method: "GET",
@@ -160,10 +186,8 @@ function Briefcase() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-departure").setFields({data: data.header, disabled: true});
-                if (data.header.id != '') {
-                    $("#btnmodalDetail").attr("disabled", false);
-                }
+                obj.loadTable(data);
+
             }
         })
     }
@@ -176,13 +200,23 @@ function Briefcase() {
     }
 
     this.table = function () {
-        var html = '';
+        var html = '', param = {};
+        param.status_id = $("#frmFilter #status_id").val();
         table = $('#tbl').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "processing": true,
             "serverSide": true,
-            "ajax": "/briefcase/getInvoices",
-            columns: [
+            destroy: true,
 
+            ajax: {
+                url: "/briefcase/getInvoices",
+                data: param
+            },
+            "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
+            columns: [
                 {data: "id"},
                 {data: "invoice"},
                 {data: "created_at"},
@@ -191,17 +225,20 @@ function Briefcase() {
                 {data: "business_name"},
                 {data: "responsible"},
                 {data: "city"},
-                {data: "totalformated"},
+                {data: "total", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "payedformated"},
-                {data: "dias_vencidos"},
+                {data: "dias_vencidos", render: function (data, type, row) {
+                        return (row.paid_out == true) ? 0 : data;
+                    }
+                },
                 {data: "term"},
                 {data: "paid_out", render: function (data, type, row) {
                         var msg = '';
                         if (row.paid_out == null || row.paid_out == false) {
                             if (row.dias_vencidos < 0) {
-                                msg = 'En mora';
+                                msg = 'No Pago';
                             } else {
-                                msg = 'No Pago'
+                                msg = 'En mora'
                             }
                         } else {
                             msg = 'Pago'
@@ -210,6 +247,22 @@ function Briefcase() {
                     }
                 },
             ],
+            buttons: [
+                {
+
+                    className: 'btn btn-primary glyphicon glyphicon-filter',
+                    action: function (e, dt, node, config) {
+                        $("#modalFilter").modal("show");
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
+
             order: [[9, 'DESC']],
             aoColumnDefs: [
                 {
@@ -234,9 +287,10 @@ function Briefcase() {
                     mData: null,
                     mRender: function (data, type, full) {
                         html = '';
-                        if ($("#role_id").val() == 1) {
-                            html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">'
-                            html += '&nbsp;&nbsp;<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
+
+                        html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">&nbsp;&nbsp;'
+                        if ($("#role_id").val() == 1 && data.paid_out != true) {
+                            html += '<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
                         }
 
                         return html;
@@ -267,12 +321,14 @@ function Briefcase() {
 //            },
             createdRow: function (row, data, index) {
 
-                if (data.dias_vencidos >= 0 && data.dias_vencidos <= 3) {
-                    $('td', row).eq(8).addClass('color-green');
-                } else if (data.dias_vencidos < 0) {
-                    $('td', row).eq(8).addClass('color-red');
+                if (data.dias_vencidos < 0) {
+                    $('td', row).eq(10).addClass('color-orange');
+                } else if (data.dias_vencidos > 0 & data.paid_out != true) {
+                    $('td', row).eq(10).addClass('color-red');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(8).addClass('color-checked');
+                    $('td', row).eq(10).addClass('color-checked');
+                } else if (data.paid_out == true) {
+                    $('td', row).eq(10).addClass('color-green');
                 }
             },
             footerCallback: function (row, data, start, end, display) {
@@ -298,12 +354,6 @@ function Briefcase() {
             }
         });
         return table;
-    }
-
-    this.formatCurrency = function (n, currency) {
-        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
-            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-        });
     }
 }
 

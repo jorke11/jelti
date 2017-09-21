@@ -62,20 +62,16 @@
     }
 
 </style>
-<div class="row">
-    <div class="col-lg-8 col-lg-offset-1">
-        <h1>Shopping</h1>
-    </div>
-    <div class="col-lg-3">
-        {{auth()->user()->name}}, <a href="{{ url('/logout') }}"
-                                     onclick="event.preventDefault();
-                   document.getElementById('logout-form').submit();">
-            Cerrar Sesión
-        </a>
 
-        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-        </form>
+<div class="row">
+    <div class="col-lg-9 col-lg-offset-1">
+        @if(Session::has('success'))
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="alert alert-success"><strong>Compra Realizada!</strong></div>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 <div class="row">
@@ -89,7 +85,6 @@
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                 <li data-target="#myCarousel" data-slide-to="1"></li>
             </ol>
-
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
                 <div class="item active">
@@ -231,5 +226,5 @@
     <br>
     <br>
 </div> 
-
+{!!Html::script('js/Ecommerce/Shopping.js')!!}
 @endsection

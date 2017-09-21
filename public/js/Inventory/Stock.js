@@ -16,6 +16,7 @@ function Stock() {
 //            processing: true,
 //            serverSide: true,
             destroy: true,
+            lengthMenu: [[30, 100, 300, -1], [30, 100, 300, 'All']],
             ajax: {
                 url: "/api/listStock",
                 data: param
@@ -24,9 +25,9 @@ function Stock() {
                 {data: "id"},
                 {data: "reference"},
                 {data: "product"},
-                {data: "entry"},
-                {data: "departure"},
-                {data: "total"},
+                {data: "entries"},
+                {data: "sales"},
+                {data: "available"},
             ],
             order: [[5, 'ASC']],
             aoColumnDefs: [

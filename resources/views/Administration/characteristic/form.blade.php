@@ -51,10 +51,26 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-lg-12">
                         <a href="#" class="thumbnail">
                             <img alt="" id="img_category">
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Alternative</label>
+                            <input type="file" class="form-control input-characteristic" id="alter" name='alter'>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="#" class="thumbnail">
+                            <img alt="" id="img_alternative">
                         </a>
                     </div>
                 </div>

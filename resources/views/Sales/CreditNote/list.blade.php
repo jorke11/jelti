@@ -12,6 +12,8 @@
                 <th>Warehouse</th>
                 <th>City</th>
                 <th>Status</th>
+                <th>Total Factura</th>
+                <th>Total Nota</th>
                 <th tipo="prueba">Factura</th>
                 <th tipo="prueba">Nota credito</th>
             </tr>
@@ -28,6 +30,8 @@
                 <th>Warehouse</th>
                 <th>City</th>
                 <th>Status</th>
+                <th>Total Factura</th>
+                <th>Total Nota</th>
                 <th></th>
                 <th tipo="prueba">Nota credito</th>
             </tr>

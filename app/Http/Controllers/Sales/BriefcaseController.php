@@ -10,6 +10,10 @@ use App\Models\Sales\BriefCase;
 use DB;
 use Datatables;
 use Auth;
+use App\Models\Security\Users;
+use Mail;
+use App\Models\Administration\Email;
+use App\Models\Administration\EmailDetail;
 
 class BriefcaseController extends Controller {
 
@@ -28,9 +32,19 @@ class BriefcaseController extends Controller {
         return view("Sales.Briefcase.init", compact("category", "status"));
     }
 
-    public function getList() {
-        $query = DB::table("vbriefcase")
-                ->orderBy("id", "asc");
+    public function getList(Request $req) {
+        $in = $req->all();
+
+        $query = DB::table("vbriefcase");
+
+        if ($in["status_id"] == 0) {
+            $query->whereNull("paid_out");
+        } else if ($in["status_id"] == 1) {
+            $query->whereNotNull("paid_out");
+        }
+
+        $query->orderBy("id", "asc");
+
         return Datatables::queryBuilder($query)->make(true);
     }
 
@@ -42,9 +56,11 @@ class BriefcaseController extends Controller {
     }
 
     public function formatDetail($departures) {
-        
-        $departures = explode(",", $departures);
-        
+
+        if (!is_array($departures) && strpos($departures, ",") !== false) {
+            $departures = explode(",", $departures);
+        }
+
         $dep = BriefCase::select("briefcase.id", "departures.invoice", "briefcase.value", "briefcase.created_at", DB::raw("briefcase.value::money as valuepayed"), "briefcase.img")
                 ->join("departures", "departures.id", "briefcase.departure_id")
                 ->orderBy("departures.invoice");
@@ -84,28 +100,117 @@ class BriefcaseController extends Controller {
         $departures = $input["invoices"];
         $values = $input["values"];
 
-        $this->name = '';
-        $this->path = '';
-        $file = array_get($input, 'document_file');
+        try {
+            DB::beginTransaction();
 
-        if ($file) {
-            $this->name = $file->getClientOriginalName();
-            $this->name = str_replace(" ", "_", $this->name);
-            $this->path = "uploads/invoice/" . date("Y-m-d") . "/" . $this->name;
-            $file->move("uploads/invoice/" . date("Y-m-d") . "/", $this->name);
-        }
+            $this->name = '';
+            $this->path = '';
+            $file = array_get($input, 'document_file');
 
-        foreach ($departures as $i => $value) {
-            $new["departure_id"] = $value;
-            $new["value"] = $values[$i];
             if ($file) {
-                $new["img"] = $this->path;
+                $this->name = $file->getClientOriginalName();
+                $this->name = str_replace(" ", "_", $this->name);
+                $this->path = "uploads/invoice/" . date("Y-m-d") . "/" . $this->name;
+                $file->move("uploads/invoice/" . date("Y-m-d") . "/", $this->name);
             }
-            BriefCase::create($new);
-        }
+            $emDetail = null;
+            $newin = array();
 
-        $response = $this->formatDetail($departures);
-        return response()->json(["success" => true, "data" => $response]);
+            foreach ($departures as $i => $value) {
+                $new["departure_id"] = $value;
+                $new["value"] = $values[$i];
+                if ($file) {
+                    $new["img"] = $this->path;
+                }
+                $newin[] = BriefCase::create($new)->id;
+            }
+
+
+            $email = Email::where("description", "payments")->first();
+
+            if ($email != null) {
+                $emDetail = EmailDetail::where("email_id", $email->id)->get();
+            }
+
+            if (count($emDetail) > 0) {
+                $this->mails = array();
+
+                foreach ($emDetail as $value) {
+                    $this->mails[] = $value->description;
+                }
+
+                $detail = BriefCase::whereIn("briefcase.id", $newin)
+                        ->join("vdepartures", "vdepartures.id", "departure_id")
+                        ->get();
+                $subtotal = 0;
+                foreach ($detail as $value) {
+                    $subtotal += $value["value"];
+                }
+                $header["subtotal"] = number_format($subtotal, 0, ".", ",");
+
+                $header["client"] = $detail[0]->client;
+                $header["responsible"] = $detail[0]->responsible;
+
+                $this->subject = "SuperFuds " . date("d/m") . " Pago cartera " + $detail[0]->client;
+
+                $header["detail"] = $detail;
+                $header["environment"] = env("APP_ENV");
+
+                $user = Users::find($detail[0]->responsible_id);
+
+                $this->mails[] = $user->email;
+
+                if ($header["environment"] == 'local') {
+                    $this->mails = Auth::User()->email;
+                }
+
+                Mail::send("Notifications.deposit", $header, function($msj) {
+                    $msj->subject($this->subject);
+                    $msj->to($this->mails);
+                });
+            }
+
+            $response = $this->formatDetail($departures);
+            DB::commit();
+            return response()->json(["success" => true, "data" => $response]);
+        } catch (Exception $exp) {
+            DB::rollback();
+            return response()->json(["success" => false, "msg" => "Problemas con la ejecución"], 401);
+        }
+    }
+
+    public function testNotification($departure_id) {
+        $detail = BriefCase::whereIn("briefcase.id", array(162, 163))
+                ->join("vdepartures", "vdepartures.id", "departure_id")
+                ->get();
+        $subtotal = 0;
+        foreach ($detail as $value) {
+            $subtotal += $value["value"];
+        }
+        $subtotal = number_format($subtotal, 0, ".", ",");
+
+        $client = $detail[0]->client;
+        $responsible = $detail[0]->responsible;
+        $environment = "production";
+
+        return view("Notifications.deposit", compact("responsible", "client", "environment", "detail", "subtotal"));
+    }
+    
+    public function testPaidout($departure_id) {
+        $detail = BriefCase::whereIn("briefcase.id", array(162, 163))
+                ->join("vdepartures", "vdepartures.id", "departure_id")
+                ->get();
+        $subtotal = 0;
+        foreach ($detail as $value) {
+            $subtotal += $value["value"];
+        }
+        $subtotal = number_format($subtotal, 0, ".", ",");
+
+        $client = $detail[0]->client;
+        $responsible = $detail[0]->responsible;
+        $environment = "production";
+
+        return view("Notifications.paidout", compact("responsible", "client", "environment", "detail", "subtotal"));
     }
 
     public function delete(Request $req, $id) {
@@ -118,19 +223,29 @@ class BriefcaseController extends Controller {
         return response()->json(["success" => true, "data" => $resp]);
     }
 
+    public function edit($id) {
+        return $this->formatDetail($id);
+    }
+
     public function payInvoice(Request $req, $id) {
         $in = $req->all();
+        try {
+            DB::beginTransaction();
+            $row = Departures::find($id);
+            $row->paid_out = true;
+            $row->description = "Pagado: " . $in["description"] . ", " . $row->description;
+            $row->outstanding = $in["saldo"];
+            $row->update_id = Auth::user()->id;
+            $row->save();
 
-        $row = Departures::find($id);
-        $row->paid_out = true;
-        $row->description = "Pagado: " . $in["description"] . ", " . $row->description;
-        $row->outstanding = $in["saldo"];
-        $row->update_id = Auth::user()->id;
-        $row->save();
+            $row = Departures::find($id);
 
-        $row = Departures::find($id);
-
-        return response()->json(["success" => true, "data" => $row]);
+            
+            return response()->json(["success" => true, "data" => $row]);
+        } catch (Exception $exp) {
+            DB::rollback();
+            return response()->json(["success" => false, "msg" => "Problemas con la ejecución"], 401);
+        }
     }
 
 }

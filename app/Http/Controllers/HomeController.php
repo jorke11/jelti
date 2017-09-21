@@ -32,15 +32,27 @@ class HomeController extends Controller {
      */
     public function index() {
 
+        
+//        $sql = "
+//            SELECT p.title,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
+//            round(sum(d.value * d.quantity * d.units_sf)) as total
+//            FROM departures_detail d
+//            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id NOT IN (258,264)
+//            JOIN products p ON p.id=d.product_id  
+//            WHERE product_id IS NOT NULL AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+//            GROUP BY 1
+//            ORDER BY 2 DESC 
+//            LIMIT 1";
         $sql = "
             SELECT p.title,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
             round(sum(d.value * d.quantity * d.units_sf)) as total
-            FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id NOT IN (258,264)
+            FROM sales_detail d
+            JOIN sales s ON s.id=d.sale_id  ANd s.client_id NOT IN (258,264)
             JOIN products p ON p.id=d.product_id  
-            WHERE product_id IS NOT NULL AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE product_id IS NOT NULL AND s.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
-            ORDER BY 2 DESC LIMIT 1";
+            ORDER BY 2 DESC 
+            LIMIT 1";
 
         $product = DB::select($sql);
 
@@ -152,6 +164,7 @@ class HomeController extends Controller {
             }
         } else {
             if (Auth::user()->role_id == 2) {
+
                 return view('client', compact("product", "client", "supplier", "commercial", "samples", "category", "subcategory"));
             } else {
                 return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples", "category"));

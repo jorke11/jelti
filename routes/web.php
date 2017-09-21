@@ -270,6 +270,7 @@ Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 Route::get('/payment', 'Shopping\PaymentController@index');
 Route::post('payment/target', 'Shopping\PaymentController@payment');
 Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
+Route::put('/getDetailQuantity/{order_id}', 'Shopping\PaymentController@setQuantity');
 Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
 
@@ -537,8 +538,11 @@ Route::get('/briefcase', 'Sales\BriefcaseController@index');
 Route::get('/briefcase/getInvoices', "Sales\BriefcaseController@getList");
 Route::post('/briefcase/uploadSupport', "Sales\BriefcaseController@storePayment");
 Route::get('/briefcase/getBriefcase', "Sales\BriefcaseController@getBriefcase");
+Route::get('/briefcase/{id}/edit', "Sales\BriefcaseController@edit");
 Route::delete('/briefcase/{id}', "Sales\BriefcaseController@delete");
 Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice");
+Route::get('/briefcase/testnotificaction/{id}/{commercial}', "Sales\BriefcaseController@testNotification");
+Route::get('/briefcase/testPaidout/{id}', "Sales\BriefcaseController@testPaidout");
 
 
 Route::get('/reportClient', "Report\ClientController@index");
@@ -565,6 +569,7 @@ Route::get('/api/reportProductByCategorySample', "Report\SampleController@getPro
 Route::get('/api/reportResponse', "Report\OperationsController@getResponse");
 Route::get('/operations/getAverageTime', "Report\OperationsController@getAverageTime");
 Route::get('/operations/getShippingCostClient', "Report\OperationsController@getShippingCostClient");
+Route::get('/operations/getMaxMin', "Report\OperationsController@getMinMax");
 
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");
@@ -587,7 +592,6 @@ Route::get('/api/reportProductCity', "Report\ProductController@productByCity");
 Route::get('/api/reportProduct', "Report\ProductController@getList");
 
 Route::get('/reportCommercial', "Report\CommercialController@index");
-
 
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}', "ToolController@addInventory");

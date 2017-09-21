@@ -69,11 +69,16 @@ function Category() {
             dataType: 'JSON',
             success: function (data) {
                 $(".input-characteristic").setFields({data: data});
-                console.log(data.img)
+                
                 if (data.img != null) {
                     $("#img_category").attr("src", data.img)
                 } else {
                     $("#img_category").attr("src", "")
+                }
+                if (data.alternative != null) {
+                    $("#img_alternative").attr("src", data.alternative)
+                } else {
+                    $("#img_alternative").attr("src", "")
                 }
             }
         })
@@ -108,7 +113,19 @@ function Category() {
             "ajax": "/api/listCharacterist",
             columns: [
                 {data: "id"},
-                {data: "description"}
+                {data: "description"},
+                {data: "status_id", render: function (data, type, row) {
+                        return (row.status_id == 1) ? 'Enable' : 'Disabled';
+                    }
+                },
+                {data: "image", render: function (data, type, row) {
+                        return (row.img == '') ? '' : "<img src='" + row.img + "' width=70%>";
+                    }
+                },
+                {data: "alternative", render: function (data, type, row) {
+                        return (row.alternative == '') ? '' : "<img src='" + row.alternative + "' width=70%>";
+                    }
+                },
             ],
             order: [[1, 'ASC']],
             aoColumnDefs: [
@@ -119,7 +136,7 @@ function Category() {
                     }
                 },
                 {
-                    targets: [2],
+                    targets: [4],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

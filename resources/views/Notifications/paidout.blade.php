@@ -27,7 +27,7 @@
                 <td><br></td>
             </tr>
             <tr>
-                <td colspan="2">Se generó un pago de: (<b>{{(isset($client))?$client:''}}</b>) asociado a:  <b>{{(isset($responsible))?$responsible:''}}</b> 
+                <td colspan="2">Se generó un pago completo de: (<b>{{(isset($client))?$client:''}}</b>) asociado a:  <b>{{(isset($responsible))?$responsible:''}}</b> 
                 </td>
             </tr>
         </table>
@@ -40,21 +40,16 @@
                 </tr>
             </thead>
             <tbody>
-
-                @if(isset($detail))
-                @foreach($detail as $val)
                 <tr>
-                    <td align="center" >{{$val->invoice}}</td>
-                    <td align="center">{{number_format($val->value,0,".",",")}}</td>
+                    <td align="center" >{{$invoice}}</td>
+                    <td align="center">{{$total}}</td>
                 </tr>
-
-                @endforeach
-                <tr>
-                    <td align="center"><b>SubTotal</b></td>
-                    <td align="center">{{(isset($subtotal))?$subtotal:0}}</td>
-                </tr>
-                @endif
                 </body>
+        </table>
+        <br>
+        <table class="detail" align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
+            <td>Comentario:</td>
+            <td>{{$description}}</td>
         </table>
     </body>
 </html>

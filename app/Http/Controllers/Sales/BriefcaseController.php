@@ -126,7 +126,7 @@ class BriefcaseController extends Controller {
             }
 
 
-            $email = Email::where("description", "payments")->first();
+            $email = Email::where("description", "deposit")->first();
 
             if ($email != null) {
                 $emDetail = EmailDetail::where("email_id", $email->id)->get();
@@ -151,7 +151,7 @@ class BriefcaseController extends Controller {
                 $header["client"] = $detail[0]->client;
                 $header["responsible"] = $detail[0]->responsible;
 
-                $this->subject = "SuperFuds " . date("d/m") . " Pago cartera " + $detail[0]->client;
+                $this->subject = "SuperFuds " . date("d/m") . " Abono cartera " . $detail[0]->client;
 
                 $header["detail"] = $detail;
                 $header["environment"] = env("APP_ENV");
@@ -196,23 +196,6 @@ class BriefcaseController extends Controller {
         return view("Notifications.deposit", compact("responsible", "client", "environment", "detail", "subtotal"));
     }
 
-    public function testPaidout($departure_id) {
-        $detail = BriefCase::whereIn("briefcase.id", array(162, 163))
-                ->join("vdepartures", "vdepartures.id", "departure_id")
-                ->get();
-        $subtotal = 0;
-        foreach ($detail as $value) {
-            $subtotal += $value["value"];
-        }
-        $subtotal = number_format($subtotal, 0, ".", ",");
-
-        $client = $detail[0]->client;
-        $responsible = $detail[0]->responsible;
-        $environment = "production";
-
-        return view("Notifications.paidout", compact("responsible", "client", "environment", "detail", "subtotal"));
-    }
-
     public function delete(Request $req, $id) {
         $in = $req->all();
         $departures = $in["departures"];
@@ -239,7 +222,44 @@ class BriefcaseController extends Controller {
             $row->status_id = 7;
             $row->save();
 
-            $row = Departures::find($id);
+
+
+            $email = Email::where("description", "payments")->first();
+
+            if ($email != null) {
+                $emDetail = EmailDetail::where("email_id", $email->id)->get();
+            }
+
+            if (count($emDetail) > 0) {
+                $this->mails = array();
+
+
+                $row = DB::table("vdepartures")->where("id", $id)->first();
+
+                $header["invoice"] = $row->invoice;
+                $header["total"] = number_format($row->total, 0, ".", ",");
+                $header["client"] = $row->client;
+                $header["responsible"] = $row->responsible;
+                $header["description"] = $row->description;
+                
+
+                $this->subject = "SuperFuds " . date("d/m") . " Pago cartera " . $row->client;
+
+                $header["environment"] = env("APP_ENV");
+
+                $user = Users::find($row->responsible_id);
+
+                $this->mails[] = $user->email;
+
+                if ($header["environment"] == 'local') {
+                    $this->mails = Auth::User()->email;
+                }
+
+                Mail::send("Notifications.paidout", $header, function($msj) {
+                    $msj->subject($this->subject);
+                    $msj->to($this->mails);
+                });
+            }
 
             DB::commit();
             return response()->json(["success" => true, "data" => $row]);
@@ -247,6 +267,21 @@ class BriefcaseController extends Controller {
             DB::rollback();
             return response()->json(["success" => false, "msg" => "Problemas con la ejecución"], 401);
         }
+    }
+
+    public function testPaidout($id) {
+
+        $row = DB::table("vdepartures")->where("invoice", $id)->first();
+
+        $invoice = $row->invoice;
+        $description = $row->description;
+        $total = number_format($row->total, 0, ".", ",");
+
+        $client = $row->client;
+        $responsible = $row->responsible;
+        $environment = "production";
+
+        return view("Notifications.paidout", compact("responsible", "client", "environment", "total", "invoice", "description"));
     }
 
 }

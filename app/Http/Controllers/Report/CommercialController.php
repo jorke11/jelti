@@ -29,7 +29,7 @@ class CommercialController extends Controller {
             SELECT vdepartures.responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity) quantity
             from vdepartures 
             JOIN stakeholder sta ON sta.id=vdepartures.client_id and sta.type_stakeholder=1
-            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id=2 AND client_id NOT IN(258,264)
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id IN(2,7) AND client_id NOT IN(258,264)
             group by 1,responsible
             order by 3 DESC
             LIMIT 5
@@ -41,7 +41,7 @@ class CommercialController extends Controller {
             $sql = "
                    SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                    FROM departures_detail d
-                   JOIN vdepartures dep ON dep.id=d.departure_id and client_id NOT IN(258,264) and dep.status_id=2
+                   JOIN vdepartures dep ON dep.id=d.departure_id and client_id NOT IN(258,264) and dep.status_id IN(2,7)
                    JOIN stakeholder s ON s.id=dep.client_id and s.type_stakeholder=1
                    WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.responsible_id=" . $value->responsible_id;
 
@@ -59,7 +59,7 @@ class CommercialController extends Controller {
             select u.name ||' '|| u.last_name as name,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::int y,
             sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::money totalFormated
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id IN(2,7)
             JOIN stakeholder sta ON sta.id=dep.client_id and sta.type_stakeholder=1
             JOIN users u ON u.id=dep.responsible_id
             WHERE dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
@@ -97,7 +97,7 @@ class CommercialController extends Controller {
                 $query = "
                     SELECT coalesce(SUM(quantity),0) as quantity,coalesce(sum(quantity * value * units_sf),0) as facturado
                     FROM departures_detail 
-                    JOIN departures dep ON dep.id=departures_detail.departure_id and dep.status_id=2 and dep.client_id NOT IN(258,264)
+                    JOIN departures dep ON dep.id=departures_detail.departure_id and dep.status_id IN(2,7) and dep.client_id NOT IN(258,264)
                     WHERE product_id = " . $value->id . " and dep.responsible_id=" . $val->id . "
                     ";
 
@@ -159,7 +159,7 @@ class CommercialController extends Controller {
                 sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantityproducts,
                 sum(d.quantity * d.value * d.units_sf) as total
             FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
             JOIN products p ON p.id=d.product_id
             JOIN stakeholder st ON st.id=dep.client_id and dep.status_id=2 and st.type_stakeholder=1
             WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where

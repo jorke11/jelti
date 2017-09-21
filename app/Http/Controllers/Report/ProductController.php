@@ -57,7 +57,7 @@ class ProductController extends Controller {
           SELECT p.id,p.title as product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
          sum(d.value * d.quantity * d.units_sf) as subtotal 
             FROM departures_detail d 
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id 
             WHERE dep.dispatched BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.client_id NOT IN(258,264) AND p.category_id<>-1
@@ -114,7 +114,7 @@ class ProductController extends Controller {
             destination_id,(
                             SELECT sum(d.value* d.quantity * d.units_sf) 
                             FROM departures_detail d
-                            JOIN departures ON departures.id=d.departure_id and departures.status_id=2      
+                            JOIN departures ON departures.id=d.departure_id and departures.status_id IN(2,7)      
                             JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1
                             WHERE departures.destination_id=dep.destination_id and departures.client_id NOT IN(258,264)
@@ -126,7 +126,7 @@ class ProductController extends Controller {
                             (
                             SELECT p.title 
                             FROM departures_detail d
-                            JOIN departures ON departures.id=d.departure_id and departures.status_id=2
+                            JOIN departures ON departures.id=d.departure_id and departures.status_id IN(2,7)
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1
                             WHERE departures.destination_id=dep.destination_id AND departures.client_id NOT IN(258,264)
                             AND departures.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
@@ -136,7 +136,7 @@ class ProductController extends Controller {
                             (
                             SELECT sum(d.quantity*CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) 
                             FROM departures_detail d
-                            JOIN departures ON departures.id=d.departure_id and departures.status_id=2
+                            JOIN departures ON departures.id=d.departure_id and departures.status_id IN(2,7)
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1
                             WHERE departures.destination_id=dep.destination_id AND departures.client_id NOT IN(258,264)
                             AND departures.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
@@ -144,7 +144,7 @@ class ProductController extends Controller {
                             order by sum(d.value* d.quantity * d.units_sf)  desc
                             LIMIT 1) as quantity
             FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
             JOIN cities c ON c.id=dep.destination_id
              JOIN products p ON p.id=d.product_id and p.category_id<>-1
             WHERE dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and dep.client_id NOT IN(258,264)

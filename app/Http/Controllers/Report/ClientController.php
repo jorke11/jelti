@@ -67,7 +67,7 @@ class ClientController extends Controller {
                 sum(vdepartures.shipping_cost) shipping
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and type_stakeholder=1
-            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id=2  $where
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' AND vdepartures.status_id IN(2,7)  $where
                 AND vdepartures.client_id NOT IN(258,264)
             group by 1,vdepartures.client_id
             ORDER BY 4 DESC
@@ -81,7 +81,7 @@ class ClientController extends Controller {
             $sql = "
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) units
                 FROM departures_detail d
-                JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+                JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
                 JOIN products p ON p.id=d.product_id and p.category_id<>-1
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder = 1 
                 WHERE dep.client_id=" . $value->id . " and dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
@@ -130,7 +130,7 @@ class ClientController extends Controller {
             JOIN departures dep ON dep.id=d.departure_id 
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is Not null
-            AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware and dep.status_id=2 
+            AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware and dep.status_id IN(2,7) 
                 AND dep.client_id NOT IN(258,264)
             group by 1,2
             order by 3 desc limit 10";
@@ -181,7 +181,7 @@ class ClientController extends Controller {
             SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
-            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
+            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id IN(2,7)
                 AND vdepartures.client_id NOT IN(258,264)
                 $where 
             GROUP BY destination_id,2
@@ -239,7 +239,7 @@ class ClientController extends Controller {
             SELECT c.description category,sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
             sum(d.value * d.units_sf * d.quantity) subtotal 
             FROM departures_detail d 
-            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id=2
+            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id
             JOIN categories c ON c.id = p.category_id
@@ -274,7 +274,7 @@ class ClientController extends Controller {
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
             and vdepartures.client_id NOT IN(258,264)
-            WHERE dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
+            WHERE dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id IN(2,7)
                 and client_id=" . $client_id;
         
         $totales = DB::select($sql);
@@ -284,7 +284,7 @@ class ClientController extends Controller {
         $sql = "SELECT count(*) total
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 and vdepartures.client_id NOT IN(258,264)
-            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id=2
+            WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id IN(2,7)
                 and client_id=" . $input["client_id"];
 
         $quantity = DB::select($sql);
@@ -306,7 +306,7 @@ class ClientController extends Controller {
                 select count(*) total
                 from departures_detail d  
                 JOIN products p ON p.id=d.product_id
-                JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+                JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1 
                 WHERE dep.client_id=" . $input["client_id"] . " and p.category_id = " . $value->id . "
                     AND dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' ";
@@ -319,7 +319,7 @@ class ClientController extends Controller {
         $sql = "
             select dispatched
             from vdepartures 
-            where status_id=2 and client_id not in(254,264)  and client_id=" . $input["client_id"] . "
+            where status_id IN(2,7) and client_id not in(254,264)  and client_id=" . $input["client_id"] . "
             order by dispatched desc limit 1";
 
         $last_sale = DB::select($sql);
@@ -338,7 +338,7 @@ class ClientController extends Controller {
         $sql = "select 
                     id,invoice,dispatched
                 from vdepartures 
-                where status_id=2 AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59' and client_id=" . $client_id;
+                where status_id IN(2,7) AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59' and client_id=" . $client_id;
         $dep = DB::select($sql);
 
         $arrDep = array();
@@ -346,7 +346,7 @@ class ClientController extends Controller {
             foreach ($dep as $val) {
                 $sql = "SELECT sum(quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) total
                         from departures_detail d
-                        JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+                        JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
                         where departure_id=" . $val->id . " and product_id = " . $value->id . " 
                         AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                         AND dep.client_id=" . $client_id;
@@ -384,7 +384,7 @@ class ClientController extends Controller {
         $sql = "
             SELECT s.business
             FROM vdepartures d
-            JOIN stakeholder s ON s.id=d.client_id and s.type_stakeholder=1 and d.status_id=2
+            JOIN stakeholder s ON s.id=d.client_id and s.type_stakeholder=1 and d.status_id IN(2,7)
             WHERE dispatched BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59' AND d.client_id NOT IN(258,264)
                 group by 1";
 
@@ -399,7 +399,7 @@ class ClientController extends Controller {
                 SELECT count(vdepartures.*) invoices,sum(subtotalnumeric) as subtotal
                 FROM vdepartures 
                 JOIN stakeholder s ON s.id=vdepartures.client_id and s.type_stakeholder=1
-                WHERE vdepartures.status_id=2  AND vdepartures.client_id NOT IN(258,264)
+                WHERE vdepartures.status_id IN(2,7)  AND vdepartures.client_id NOT IN(258,264)
                 AND dispatched BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'";
 
         $res = DB::select($sql);
@@ -543,7 +543,7 @@ class ClientController extends Controller {
                     sum(tax19) tax19,sum(total) total, sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost,warehouse_id
                 FROM vdepartures 
                 JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
-                WHERE vdepartures.status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
+                WHERE vdepartures.status_id IN(2,7) AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id  NOT IN(258,264)
                 group by 2,warehouse_id,warehouse";
 //        echo $sql;
@@ -560,7 +560,7 @@ class ClientController extends Controller {
             $sql = "
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                 FROM departures_detail d
-                JOIN departures ON departures.id=d.departure_id and departures.status_id=2 and  departures.client_id NOT IN(258,264)
+                JOIN departures ON departures.id=d.departure_id and departures.status_id IN(2,7) and  departures.client_id NOT IN(258,264)
                 JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
                 WHERE departures.dispatched between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                     and departures.warehouse_id=" . $value->warehouse_id . "
@@ -586,7 +586,7 @@ class ClientController extends Controller {
                     sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost
                 FROM vdepartures 
                 JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
-                WHERE vdepartures.status_id=2 AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
+                WHERE vdepartures.status_id IN(2,7) AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id  NOT IN(258,264)
                 group by 1";
 
@@ -602,7 +602,7 @@ class ClientController extends Controller {
             $sql = "
                 SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity
                 FROM departures_detail d
-                JOIN departures ON departures.id=d.departure_id and departures.status_id=2 and  departures.client_id NOT IN(258,264)
+                JOIN departures ON departures.id=d.departure_id and departures.status_id IN(2,7) and  departures.client_id NOT IN(258,264)
                 JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
                 WHERE departures.dispatched between '" . $value->dates . "-01 00:00' AND '" . $value->dates . "-$day 23:59'
                 ";

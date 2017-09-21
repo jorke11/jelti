@@ -34,7 +34,7 @@ class OperationsController extends Controller {
             SELECT d.client,d.invoice,d.client_id,s.dispatched, d.created,s.dispatched - d.created as dias
             FROM vdepartures d 
             JOIN sales s ON s.departure_id=d.id 
-            WHERE d.status_id=2 and d.client_id NOT IN(258,264)
+            WHERE d.status_id IN(2,7) and d.client_id NOT IN(258,264)
             AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             ";
         $res = DB::select($sql);
@@ -57,7 +57,7 @@ class OperationsController extends Controller {
         $sql = "
             SELECT d.client,count(*) pedidos,sum(d.shipping_cost) as valor
             FROM vdepartures d 
-            WHERE d.status_id=2 and d.client_id NOT IN(258,264,24)
+            WHERE d.status_id IN(2,7) and d.client_id NOT IN(258,264,24)
             AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             group by 1
             ";
@@ -85,7 +85,7 @@ class OperationsController extends Controller {
             FROM vdepartures d 
             JOIN sales s ON s.departure_id=d.id 
             JOIN stakeholder st ON st.id=d.client_id
-            WHERE d.status_id=2 and d.client_id NOT IN(258,264)
+            WHERE d.status_id IN(2,7) and d.client_id NOT IN(258,264)
             AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             group by 1
             ";
@@ -109,7 +109,7 @@ class OperationsController extends Controller {
         $sql = "
             select to_char(dispatched,'YYYY-MM-DD') fecha,to_char(dispatched,'day') dia,sum(subtotalnumeric) subtotal
             from vdepartures d
-            WHERE status_id=2 AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and d.client_id NOT IN(258,264) $ware
+            WHERE status_id IN(2,7) AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and d.client_id NOT IN(258,264) $ware
             group by 1,2
             order by 1";
         $res = DB::select($sql);
@@ -132,7 +132,7 @@ class OperationsController extends Controller {
         $sql = "
             select to_char(dispatched,'day') dia,sum(subtotalnumeric) subtotal
             from vdepartures d
-            WHERE status_id=2 AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and d.client_id NOT IN(258,264)
+            WHERE status_id IN(2,7) AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and d.client_id NOT IN(258,264)
                 $ware
             group by 1
             order by 1";

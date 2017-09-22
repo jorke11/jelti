@@ -174,80 +174,36 @@
             <?php
         }
         ?>
+    </tbody>
 </table>
-
-
 <br>
 <table align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
     <tr>
-        <td colspan="2"><h4>Cartera</h4>
+        <td colspan="2"><h4>Cartera desde ({{date("Y-m")}}-01) hasta ({{date("Y-m-d")}})</h4></td>
         </td>
     </tr>
 </table>
 <table class="detailpay" align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
     <thead>
         <tr>
-            <th>Factura</th>
-            <th>Comercial</th>
-            <th>Cliente</th>
-            <th>Iva 5%</th>
-            <th>Iva 19%</th>
-            <th>Subtotal</th>
-            <th>Total</th>
+            <th># de Facturas</th>
+            <th>Facturado</th>
+            <th>Cartera Recuperada</th>
         </tr>
-    </thead>
     <tbody>
-        <?php
-        if (isset($arrpay)) {
-            $total = 0;
-            $subtotal = 0;
-            foreach ($arrpay as $val) {
-                $totalnew = 0;
-                $subtotalnew = 0;
-                foreach ($val as $value) {
-                    $totalnew += $value->totalnew;
-                    $subtotalnew += $value->subtotalnew
-                    ?>
-                    <tr align="center">
-                        <td>{{$value->id}}</td>
-                        <td>{{$value->responsible}}</td>
-                        <td>{{$value->client}}</td>
-                        <td>{{number_format($value->tax5,0,".",",")}}</td>
-                        <td>{{number_format($value->tax19,0,".",",")}}</td>
-                        <td>{{number_format($value->subtotalnew,0,".",",")}}</td>
-                        <td>{{number_format($value->totalnew,0,".",",")}}</td>
-                    </tr>
-                    <?php
-                }
-                $subtotal += $subtotalnew;
-                $total += $totalnew;
-                ?>
-                <tr align="center">
-                    <td colspan="5" ><b>Total {{$val[0]->responsible}}</b></td>
-                    <td><b>$ {{number_format($subtotalnew,0,".",",")}}</b></td>
-                    <td><b>$ {{number_format($totalnew,0,".",",")}}</b></td>
-                </tr>
-                <?php
-            }
-            ?>
-            <tr>
-                <td colspan="7"></td>
-            </tr>
-            <tr >
-                <td colspan="5" align="right"><b>Total General</b></td>
-                <td align="center"><b>$ {{number_format($subtotal,0,".",",")}}</b></td>
-                <td align="center"><b>$ {{number_format($total,0,".",",")}}</b></td>
-            </tr>
-            <?php
-        }
-        ?>
+        <tr align="center">
+            <td>{{$briefcase->invoices}}</td>
+            <td>{{number_format($briefcase->total,0,".",",")}}</td>
+            <td>{{number_format($briefcase->cartera,0,".",",")}}</td>
+        </tr>
+    </tbody>
+</tbody>
 </table>
 <br>
 
 <table align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
     <tr>
-        <td colspan="2"><h4>Ventas desde ({{date("Y-m")}}-01) hasta ({{date("Y-m-d")}})</h4>
-        </td>
+        <td colspan="2"><h4>Ventas desde ({{date("Y-m")}}-01) hasta ({{date("Y-m-d")}})</h4></td>
     </tr>
 </table>
 <br>

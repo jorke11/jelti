@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Console\Commands;
+
 use Illuminate\Console\Command;
 use App\Http\Controllers\Report\CronController;
+use Illuminate\Support\Facades\Log;
 
 class emailOverview extends Command {
 
@@ -37,6 +39,7 @@ class emailOverview extends Command {
     public function handle() {
         $obj = new CronController();
         $obj->emailoverview();
+        Log::info("end Email");
     }
 
 }

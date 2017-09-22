@@ -75,10 +75,10 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
 		(select (round(coalesce(sum(real_quantity * units_sf * value * tax),0) + coalesce(sum(real_quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
 		 ELSE 
 		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where departure_id=d.id)
-		 END+d.shipping_cost as total,
+		 END+coalesce(d.shipping_cost,0)-coalesce(d.discount,0) as total,
 		 
 		 (select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id) 
-		 as totalnew,
+		 +coalesce(d.shipping_cost,0)-coalesce(d.discount,0) as totalnew,
 		 
 		CASE WHEN (d.status_id=1) THEN 
 		(select (round(coalesce(sum(real_quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
@@ -107,7 +107,7 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
              ( SELECT sum(vcreditnote_detail_row.valuetotaltax) AS sum
            FROM vcreditnote_detail_row
              JOIN credit_note c_1 ON c_1.id = vcreditnote_detail_row.id
-          WHERE c_1.departure_id = d.id) AS credit_note,
+          WHERE c_1.departure_id = d.id) AS credit_note,d.discount,
             
            sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost,d.dispatched ,d.paid_out,d.description
             from departures d

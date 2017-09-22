@@ -73,7 +73,7 @@ class ClientController extends Controller {
             ORDER BY 4 DESC
             $limit
             ";
-        
+
 //        echo $sql;exit;
         $res = DB::select($sql);
 
@@ -276,7 +276,7 @@ class ClientController extends Controller {
             and vdepartures.client_id NOT IN(258,264)
             WHERE dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id IN(2,7)
                 and client_id=" . $client_id;
-        
+
         $totales = DB::select($sql);
         $totales = $totales[0];
         $totales->subtotalFormated = "$ " . number_format($totales->subtotal, 0, ",", ".");

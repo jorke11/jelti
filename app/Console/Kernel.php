@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel {
      */
     protected $commands = [
         \App\Console\Commands\emailBriefcase::class,
+        \App\Console\Commands\emailOverview::class,
     ];
 
     /**
@@ -24,7 +25,8 @@ class Kernel extends ConsoleKernel {
      */
     protected function schedule(Schedule $schedule) {
 
-        $schedule->command('briefcase:get')->everyMinute();
+//        $schedule->command('briefcase:get')->everyMinute();
+        $schedule->command('ovewview:get')->everyMinute();
 //        $schedule->command('briefcase:get')->dailyAt('12:31');
 //        $chedule->command(\App\Console\Commands\emailBriefcase::class)->daily();
     }

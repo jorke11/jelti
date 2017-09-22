@@ -611,3 +611,6 @@ Route::get('CEO/getSalesUnitsWare', "Report\ClientController@getSalesUnitsWare")
 
 Route::get('operations/getProductWeek', "Report\OperationsController@ProductWeek");
 Route::get('operations/getProductDay', "Report\OperationsController@ProductDay");
+
+
+Route::get('overview/email', "Report\CronController@emailoverview");

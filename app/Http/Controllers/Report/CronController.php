@@ -129,11 +129,11 @@ class CronController extends Controller {
             $header["arrpay"] = $arrpay;
             $header["overview"] = $total;
 
-            return view("Notifications.overview", $header);
-//            Mail::send("Notifications.overview", $header, function($msj) {
-//                $msj->subject($this->subject);
-//                $msj->to($this->mails);
-//            });
+//            return view("Notifications.overview", $header);
+            Mail::send("Notifications.overview", $header, function($msj) {
+                $msj->subject($this->subject);
+                $msj->to($this->mails);
+            });
         }
     }
 

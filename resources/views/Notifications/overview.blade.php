@@ -18,6 +18,10 @@
             .detailpay th {font-size: 13px;font-weight: normal;padding: 8px;background: #00b065;border-top: 4px solid #aabcfe;border-bottom: 1px solid #fff; color: #039;color:white;}
             .detailpay tbody td {padding: 8px;background: #f9f9f9;border-bottom: 1px solid #fff;color: #669;border-top: 1px solid transparent;}
 
+            .detailsales {font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size: 12px;border-collapse: collapse;}
+            .detailsales th {font-size: 13px;font-weight: normal;padding: 8px;background: #2EFEF7;border-top: 4px solid #aabcfe;border-bottom: 1px solid #fff; color: #039;color:black;}
+            .detailsales tbody td {padding: 8px;background: #f9f9f9;border-bottom: 1px solid #fff;color: #669;border-top: 1px solid transparent;}
+
             .footer tbody td {padding: 8px;background: white;border-bottom: 1px solid #fff;color: #669;border-top: 1px solid transparent;}
         </style>
     </head>
@@ -58,7 +62,7 @@
             <body>
                 <?php
                 if (isset($arrpend)) {
-                    
+
                     $total = 0;
                     $subtotal = 0;
                     foreach ($arrpend as $val) {
@@ -238,7 +242,36 @@
         }
         ?>
 </table>
+<br>
 
+<table align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
+    <tr>
+        <td colspan="2"><h4>Ventas desde ({{date("Y-m")}}-01) hasta ({{date("Y-m-d")}})</h4>
+        </td>
+    </tr>
+</table>
+<br>
+
+<table class="detailsales" align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
+    <thead>
+        <tr>
+            <th># de Facturas</th>
+            <th>Iva 5%</th>
+            <th>Iva 19%</th>
+            <th>Subtotal</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr align="center">
+            <td>{{$overview->invoices}}</td>
+            <td>{{number_format($overview->tax5,0,".",",")}}</td>
+            <td>{{number_format($overview->tax19,0,".",",")}}</td>
+            <td>{{number_format($overview->subtotalnumeric,0,".",",")}}</td>
+            <td>{{number_format($overview->total,0,".",",")}}</td>
+        </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

@@ -614,3 +614,5 @@ Route::get('operations/getProductDay', "Report\OperationsController@ProductDay")
 
 
 Route::get('overview/email', "Report\CronController@emailoverview");
+Route::get('overview/emailbriefcaseclient', "Report\CronController@emailbriefcaseclient");
+Route::get('overview/testnotificaction/{id}', "Report\CronController@notificacionBriefcaseClient");

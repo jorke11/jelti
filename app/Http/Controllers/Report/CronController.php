@@ -81,7 +81,7 @@ class CronController extends Controller {
             where dispatched BETWEEN '" . date("Y-m-") . "01 00:00' AND '$date_report 23:59' 
             and status_id IN (2)
             ";
-        
+
         $briefcase = DB::select($sql);
         $briefcase = $briefcase[0];
 
@@ -123,6 +123,34 @@ class CronController extends Controller {
                 $msj->to($this->mails);
             });
         }
+    }
+
+    public function emailbriefcaseclient() {
+        $sql = "
+                SELECT client_id 
+                FROM vbriefcase 
+                WHERE paid_out IS NULL group by client_id order by 1";
+        $cli = DB::select($sql);
+
+        foreach ($cli as $value) {
+            $sql = "
+                SELECT * 
+                FROM vbriefcase 
+                WHERE paid_out IS NULL and client_id=" . $value->client_id;
+            echo $sql;
+            exit;
+            $brief = DB::select($sql);
+            dd($brief);
+        }
+    }
+
+    public function notificacionBriefcaseClient($id) {
+        $header["date_report"] = date("Y-m-d");
+        $sql = "SELECT * FROM vbriefcase WHERE paid_out IS NULL and client_id=24";
+        $header["detail"] = DB::select($sql);
+
+//        dd($header["detail"]);
+        return view("Notifications.briefcase_client", $header);
     }
 
 }

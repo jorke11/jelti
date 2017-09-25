@@ -185,7 +185,7 @@ create view  vcreditnote as
             (select count(*) from credit_note where credit_note.departure_id=vdepartures.id) credit_note_quantity,
             (select array_agg(id) from credit_note where credit_note.departure_id=vdepartures.id) credit_note_dep,credit_note
             from vdepartures
-            WHERE status_id=2
+            WHERE status_id IN (2,7)
             ORDER BY id DESC;
 
 

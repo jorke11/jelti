@@ -18,7 +18,7 @@ class CronController extends Controller {
         $init = $date_report . " 00:00";
         $end = $date_report . " 23:59";
         $new = DB::table("vdepartures")
-                ->whereBetween("created_at", array($init, $end))
+//                ->whereBetween("created_at", array($init, $end))
                 ->where("status_id", 1)
                 ->orderBy("responsible")
                 ->get();

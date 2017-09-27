@@ -445,7 +445,7 @@ class DepartureController extends Controller {
             $ayer = date("Y-m-d", strtotime("-5 day", strtotime(date("Y-m-d"))));
 
 
-            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 5) {
+            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 5 || Auth::user()->id == 2) {
                 $sal = Sales::where("departure_id", $id)->first();
                 if ($sal != null) {
                     $detail = SaleDetail::where("sale_id", $sal->id)->get();
@@ -509,7 +509,7 @@ class DepartureController extends Controller {
 
             DB::beginTransaction();
             $header["insert_id"] = Auth::user()->id;
-            
+
             if (isset($header["branch_id"]) && $header["branch_id"] != 0) {
                 $bra = Branch::find($header["branch_id"]);
                 $header["responsible_id"] = $bra->responsible_id;

@@ -44,7 +44,7 @@ class CronController extends Controller {
         }
 
         $pend = DB::table("vdepartures")
-                ->whereBetween("created_at", array($init, $end))
+                ->whereBetween("dispatched", array($init, $end))
                 ->where("status_id", 2)
                 ->orderBy("responsible")
                 ->get();

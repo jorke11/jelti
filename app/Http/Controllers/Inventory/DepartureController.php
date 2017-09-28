@@ -758,8 +758,10 @@ class DepartureController extends Controller {
                                 $input["city"] = $cit->description;
                                 $input["detail"] = $listdetail;
                                 $input["id"] = $departure->id;
+                                $input["invoice"] = $departure->invoice;
                                 $input["environment"] = env("APP_ENV");
                                 $input["created_at"] = $departure->created_at;
+                                $input["dispatched"] = $departure->dispatched;
                                 $input["textTotal"] = trim($this->tool->to_word(round($this->total)));
 
                                 $this->total += $departure->shipping_cost - $departure->discount;

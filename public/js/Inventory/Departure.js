@@ -281,9 +281,7 @@ function Departure() {
             method: 'GET',
             dataType: 'JSON',
             success: function (resp) {
-                resp.data.client.name = (resp.data.client.name == null) ? '' : resp.data.client.name + " ";
-                resp.data.client.last_name = (resp.data.client.last_name == null) ? '' : resp.data.client.last_name + " ";
-                $("#frm #name_client").val(resp.data.client.name + resp.data.client.last_name + resp.data.client.business_name);
+                $("#frm #name_client").val(resp.data.client.business_name);
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.data.client.address_send);
                 $("#frm #phone").val(resp.data.client.phone);

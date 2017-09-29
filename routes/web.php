@@ -362,15 +362,6 @@ Route::get('/api/listTicket', function() {
 Route::get('/api/listSupplier', function() {
 
     $query = DB::table('vsupplier');
-
-//    $query = DB::table('stakeholder')
-//            ->select(
-//                    "stakeholder.business_name", "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", "status.description as status_id")
-//            ->leftjoin("cities", "cities.id", "stakeholder.city_id")
-//            ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
-//            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
-//            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
-//            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
     if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
         $query->where("responsible_id", Auth::user()->id);
     }
@@ -381,14 +372,6 @@ Route::get('/api/listClient', function() {
 
     $query = DB::table('vclient');
 
-//    $query = DB::table('stakeholder')
-//            ->select(
-//                    "stakeholder.business_name", "stakeholder.id", "stakeholder.name", "stakeholder.last_name", "stakeholder.document", "stakeholder.email", "stakeholder.address", "stakeholder.phone", "stakeholder.contact", "stakeholder.phone_contact", "stakeholder.term", "cities.description as city", "stakeholder.web_site", "typeperson.description as typeperson", "typeregime.description as typeregime", "typestakeholder.description as type_stakeholder", "status.description as status_id")
-//            ->leftjoin("cities", "cities.id", "stakeholder.city_id")
-//            ->leftjoin("parameters as typeregime", DB::raw("typeregime.code"), "=", DB::raw("stakeholder.type_regime_id and typeregime.group='typeregimen'"))
-//            ->leftjoin("parameters as typeperson", DB::raw("typeperson.code"), "=", DB::raw("stakeholder.type_person_id and typeperson.group='typeperson'"))
-//            ->leftjoin("parameters as typestakeholder", DB::raw("typestakeholder.code"), "=", DB::raw("stakeholder.type_stakeholder and typestakeholder.group='typestakeholder'"))
-//            ->leftjoin("parameters as status", DB::raw("status.code"), "=", DB::raw("stakeholder.status_id and status.group='generic'"));
     if (Auth::user()->role_id != 1) {
         $query->where("responsible_id", Auth::user()->id);
     }
@@ -613,6 +596,6 @@ Route::get('operations/getProductWeek', "Report\OperationsController@ProductWeek
 Route::get('operations/getProductDay', "Report\OperationsController@ProductDay");
 
 
-Route::get('overview/email', "Report\CronController@emailoverview");
-Route::get('overview/emailbriefcaseclient', "Report\CronController@emailbriefcaseclient");
-Route::get('overview/testnotificaction/{id}', "Report\CronController@notificacionBriefcaseClient");
+Route::get('payment', "Payments\PaymentsController@index");
+
+require __DIR__ . '/cron.php';

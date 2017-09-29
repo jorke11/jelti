@@ -89,8 +89,8 @@ class CronController extends Controller {
         $sql = "
             SELECT count(id) invoices,sum(tax5) as tax5,sum(tax19) tax19,sum(shipping_cost) as shipping_cost,sum(subtotalnumeric) as subtotalnumeric,sum(total) as total
             FROM vdepartures 
-            WHERE dispatched BETWEEN '" . date("Y-m-") . "01 00:00' AND '$date_report 23:59' 
-            AND status_id IN (2,7)";
+            WHERE dispatched BETWEEN '" . date("Y-m-") . "01 00:00' AND '$end' 
+            AND status_id IN (2,7) AND client_id NOT IN(258,264)";
 
         $total = DB::select($sql);
         $total = $total[0];
@@ -117,11 +117,11 @@ class CronController extends Controller {
             $header["briefcase"] = $briefcase;
             $header["overview"] = $total;
 
-//            return view("Notifications.overview", $header);
-            Mail::send("Notifications.overview", $header, function($msj) {
-                $msj->subject($this->subject);
-                $msj->to($this->mails);
-            });
+            return view("Notifications.overview", $header);
+//            Mail::send("Notifications.overview", $header, function($msj) {
+//                $msj->subject($this->subject);
+//                $msj->to($this->mails);
+//            });
         }
     }
 

@@ -54,8 +54,8 @@ class ProductController extends Controller {
 
     public function getListProduct($init, $end, $where = '', $limit = '') {
         $sql = "
-          SELECT p.id,p.title as product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
-         sum(d.value * d.quantity * d.units_sf) as subtotal 
+          SELECT p.id,p.title as product, sum(d.real_quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
+         sum(d.value * d.real_quantity * d.units_sf) as subtotal 
             FROM departures_detail d 
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1

@@ -176,13 +176,15 @@ class HomeController extends Controller {
         $sql = "
             SELECT 
                 to_char(dispatched,'YYYY-Month') as fecha,to_char(dispatched,'YYYY-MM') as fecha_order,
-                sum(subtotalnumeric) subtotal ,sum(total) total,sum(quantity) as quantity
+                sum(subtotalnumeric) subtotal ,sum(total) total,sum(quantity_packaging) as quantity
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
-            WHERE vdepartures.status_id=2  AND client_id <>258
+            WHERE vdepartures.status_id IN (2,7)  AND client_id NOT IN (258,264)
             GROUP BY to_char(vdepartures.dispatched,'YYYY-Month'),to_char(dispatched,'YYYY-MM') 
             ORDER BY 2 ASC
                 ";
+        
+//        echo $sql;exit;
 
         $sales = DB::select($sql);
         $cat = array();

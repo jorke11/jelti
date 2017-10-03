@@ -17,7 +17,7 @@ function CEO() {
         obj.getOverView();
     }
 
- this.getSalesUnitsWare = function () {
+    this.getSalesUnitsWare = function () {
         var param = {}, html = '';
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
@@ -34,7 +34,7 @@ function CEO() {
                 {data: "warehouse"},
                 {data: "dates"},
                 {data: "invoices"},
-                {data: "quantity"},
+                {data: "quantity_packaging"},
                 {data: "shipping_cost", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "tax5", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "tax19", render: $.fn.dataTable.render.number(',', '.', 2)},
@@ -161,7 +161,7 @@ function CEO() {
             columns: [
                 {data: "dates"},
                 {data: "invoices"},
-                {data: "quantity"},
+                {data: "quantity_packaging"},
                 {data: "shipping_cost", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "tax5", render: $.fn.dataTable.render.number(',', '.', 2)},
                 {data: "tax19", render: $.fn.dataTable.render.number(',', '.', 2)},
@@ -297,7 +297,7 @@ function CEO() {
                 $("#tblClient tbody").empty();
                 html = '';
                 $.each(data.listClient, function (i, val) {
-                    html += '<tr><td>' + val.client + '</td><td>' + val.unidades + '</td><td>' + obj.formatCurrency(parseFloat(val.subtotal),"$") + '</td></tr>';
+                    html += '<tr><td>' + val.client + '</td><td>' + val.quantity_packaging + '</td><td>' + obj.formatCurrency(parseFloat(val.subtotal), "$") + '</td></tr>';
                 });
 
                 html += "<tr><td colspan='3'><hr></td></tr><tr><td>Total</td><td>" + data.quantitycli + " -> " + data.quantitypercent.toFixed(2)

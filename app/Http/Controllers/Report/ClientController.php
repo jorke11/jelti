@@ -79,7 +79,7 @@ class ClientController extends Controller {
 
         foreach ($res as $i => $value) {
             $sql = "
-                SELECT sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) units
+                SELECT sum(d.real_quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) units
                 FROM departures_detail d
                 JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
                 JOIN products p ON p.id=d.product_id and p.category_id<>-1

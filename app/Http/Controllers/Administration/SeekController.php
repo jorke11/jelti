@@ -32,8 +32,8 @@ class SeekController extends Controller {
     public function getCity(Request $req) {
         $in = $req->all();
         $query = Cities::select("cities.id", DB::raw("initcap(cities.description || ' '||departments.description) as text"))
-                ->join("departments","departments.id","cities.department_id")
-                ;
+                ->join("departments", "departments.id", "cities.department_id")
+        ;
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("cities.id", Auth::user()->city_id)->get();
         } else if (isset($in["id"])) {
@@ -249,7 +249,7 @@ class SeekController extends Controller {
             if (isset($in["q"]))
                 $query->where("name", "ilike", "%" . $in["q"] . "%")
 //                    ->where("role_id", 4)
-                    ->get();
+                        ->get();
         }
         $result = $query->get();
 
@@ -257,18 +257,21 @@ class SeekController extends Controller {
     }
 
     public function getResponsable(Request $req) {
-        $in = $req->all();
-        $query = Users::select("id", DB::raw("coalesce(name,'') || ' ' || coalesce(last_name,'') || ' ' || email as text"));
-        if (isset($in["q"]) && $in["q"] == "0") {
-            $city = $query->where("id", Auth::user()->id)->get();
-        } else if (isset($in["id"]) && $in["id"] != '') {
-            $query->where("id", $in["id"])->get();
+        $this->input = $req->all();
+
+        $query = Users::select("id", DB::raw("coalesce(name,'') || ' ' || coalesce(last_name,'') || ' ' || email as text"))->whereIn("role_id", [1,4]);
+        if (isset($this->input["q"]) && $this->input["q"] == "0") {
+            $city = $query->where("id", Auth::user()->id);
+        } else if (isset($this->input["id"]) && $this->input["id"] != '') {
+            $query->where("id", $this->input["id"]);
         } else {
-            if (isset($in["q"]))
-                $query->where("name", "ilike", "%" . $in["q"] . "%")
-                        ->Orwhere("last_name", "ilike", "%" . $in["q"] . "%")
-                        ->Orwhere("email", "ilike", "%" . $in["q"] . "%")
-                        ->get();
+            if (isset($this->input["q"])) {
+                $query->where(function($query) {
+                    $query->where("name", "ilike", "%" . $this->input["q"] . "%")
+                            ->Orwhere("last_name", "ilike", "%" . $this->input["q"] . "%")
+                            ->Orwhere("email", "ilike", "%" . $this->input["q"] . "%");
+                });
+            }
         }
         $result = $query->get();
 

@@ -265,13 +265,13 @@ class ClientController extends Controller {
             $input["login_web"] = 0;
         }
 
-       
+
         if (!isset($input["stakeholder_id"])) {
-            
+
             $input["stakeholder_id"] = null;
             $stakeholder = Stakeholder::Find($id);
         } else {
-            
+
             $stakeholder = Branch::Find($id);
         }
 
@@ -287,10 +287,10 @@ class ClientController extends Controller {
         $input["status_id"] = 1;
 
         if ($stakeholder == null) {
-           
+
             $result = Stakeholder::create($input);
         } else {
-            
+
             if ($input["password"] != '') {
                 $input["password"] = bcrypt($input["password"]);
 
@@ -298,7 +298,7 @@ class ClientController extends Controller {
                     unset($input["password"]);
                 }
             }
-            
+
             $result = $stakeholder->fill($input)->save();
         }
 
@@ -317,7 +317,7 @@ class ClientController extends Controller {
         }
 
         if ($result) {
-            return response()->json(['success' => true,"header"=>$result]);
+            return response()->json(['success' => true, "header" => $result]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -329,6 +329,17 @@ class ClientController extends Controller {
         $stakeholder->status_id = 4;
         $result = $stakeholder->save();
 //        $result = $stakeholder->delete();
+        if ($result) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function destroyPrice($id) {
+        $row = PricesSpecial::find($id);
+        $result = $row->delete();
+
         if ($result) {
             return response()->json(['success' => true]);
         } else {

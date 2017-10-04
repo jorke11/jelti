@@ -82,7 +82,6 @@ Route::post('/clients/uploadExcel', 'Clients\ClientController@uploadExcel');
 Route::post('/clients/uploadClient', 'Clients\ClientController@uploadclient');
 Route::put('/clients/checkmain/{id}', 'Clients\ClientController@checkMain');
 Route::delete('/clients/deleteImage/{id}', 'Clients\ClientController@deleteImage');
-Route::delete('clients/deletePrice/{id}', 'Clients\ClientController@destroyPrice');
 Route::get('/clients/getImages/{id}', 'Clients\ClientController@getImages');
 
 Route::post('/clients/StoreSpecial', 'Clients\ClientController@storeSpecial');
@@ -546,6 +545,7 @@ Route::get('api/reportProductByClient', "Report\CommercialController@getProductB
 Route::get('/api/reportSample', "Report\SampleController@getList");
 Route::get('/api/reportClientTarget', "Report\SampleController@getListTarger");
 Route::get('/api/reportSampleProduct', "Report\SampleController@getListProduct");
+Route::get('/api/reportClientProductUnits', "HomeController@getListProductUnits");
 Route::get('/api/reportSampleCities', "Report\ClientController@listCities");
 Route::get('/api/reportProductByCategorySample', "Report\SampleController@getProductByCategory");
 
@@ -599,4 +599,3 @@ Route::get('operations/getProductDay', "Report\OperationsController@ProductDay")
 Route::get('payment', "Payments\PaymentsController@index");
 
 require __DIR__ . '/cron.php';
-require __DIR__ . '/report.php';

@@ -35,7 +35,7 @@ class ComparativeController extends Controller {
             WHERE vdepartures.status_id IN(2,7) AND client_id  NOT IN(258,264)
             group by 1,client
             order by 3 DESC
-            LIMIT 10
+            
             ";
         $cli = DB::select($sql);
 

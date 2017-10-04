@@ -81,14 +81,16 @@
 </div>
 <div class="row">
     <!-- Nav tabs -->
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <div id="container_product" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                <!--@include('Report.Client.product')-->
+                <!--<div id="container_product" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
+                @include('Report.Comparative.client')
             </div>
         </div>
     </div>
+</div>
+<div class="row">
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -121,6 +123,6 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-{!!Html::script('js/Report/Client.js')!!}
+{!!Html::script('js/Report/Comparative.js')!!}
 
 @endsection

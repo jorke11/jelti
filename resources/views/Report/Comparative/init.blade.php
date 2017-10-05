@@ -6,13 +6,14 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
+
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Bodega</label>
                         <select class="form-control" id="warehouse_id" name="warehouse_id">
                             <option value="0">SuperFüds</option>
                             @foreach($warehouse as $val)
-                            <option value="{{$val->id}}">{{$val->description}}</option>
+                            <option value="{{$val->id}}" >{{$val->description}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -52,10 +53,10 @@
                         </select>
                     </div>
                 </div>
-
             </div>
 
             <div class="row">
+
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Inicio</label>
@@ -68,11 +69,23 @@
                         <input type="text" class="form-control input-sm" id="fend" name='fend' value="<?php echo date("Y-m-d") ?>">
                     </div>
                 </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Tipo reporte</label>
+                        <select class="form-control" id="type_report" name="type_report">
+                            @foreach($report as $val)
+                            <option value="{{$val["id"]}}" >{{$val["description"]}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <div class="form-group">
                         <button class="btn btn-success btn-sm" id="btnSearch" type="button">Search</button>
                     </div>
                 </div>
+
 
             </div>
         </div>

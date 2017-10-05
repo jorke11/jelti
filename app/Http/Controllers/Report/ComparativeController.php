@@ -119,7 +119,7 @@ class ComparativeController extends Controller {
 
     function reportSalesClient($data) {
         $sql = "
-            SELECT client_id,client,sum(subtotalnumeric) total,sum(quantity_packaging) as quantity_packaging
+            SELECT client_id,client,sum(subtotalnumeric)::money total,sum(quantity_packaging) as quantity_packaging
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             WHERE vdepartures.status_id IN(2,7) AND client_id  NOT IN(258,264)

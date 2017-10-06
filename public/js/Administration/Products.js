@@ -267,11 +267,11 @@ function Product() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-product").cleanFields();
-                
+
                 if ($("#role_id").val() == 1) {
                     $(".input-product").setFields({data: data.header});
                 } else {
-                    
+
                     $(".input-product").setFields({data: data.header, disabled: true});
                 }
 
@@ -308,9 +308,14 @@ function Product() {
     this.table = function () {
         return $('#tblProducts').DataTable({
             "processing": true,
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "serverSide": true,
             "ajax": "/api/listProduct",
             scrollX: true,
+            "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
             columns: [
                 {data: "id", sWidth: "50px"},
                 {data: "reference", sWidth: "100px"},
@@ -349,6 +354,14 @@ function Product() {
                         return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + full.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
             ],
         });
     }

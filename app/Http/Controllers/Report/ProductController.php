@@ -46,13 +46,13 @@ class ProductController extends Controller {
         if ($input["commercial_id"] != '') {
             $where .= " AND dep.responsible_id=" . $input["commercial_id"];
         }
-        
+
 
         $res = $this->getListProduct($input["init"], $input["end"], $where);
         return response()->json(["data" => $res]);
     }
 
-    public function getListProduct($init, $end, $where = '', $limit = '') {
+    public function getListProduct($init, $end, $where = '', $limit = 'LIMIT 10') {
         $sql = "
           SELECT p.id,p.title as product, sum(d.real_quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
          sum(d.value * d.real_quantity * d.units_sf) as subtotal 
@@ -152,6 +152,10 @@ class ProductController extends Controller {
             GROUP BY 1,2,3
             ORDER by 4 DESC
             ";
+//        $sql = "
+//            SELET 
+//        
+//                ";
 
         $res = DB::select($sql);
         return response()->json(["data" => $res]);

@@ -9,15 +9,20 @@ use DB;
 
 class ComparativeController extends Controller {
 
-      public function __construct() {
+    public function __construct() {
         $this->middleware("auth");
-      
     }
+
     public function index() {
         $warehouse = Warehouses::all();
         $report = array(array("id" => 1, "description" => "Clientes"),
             array("id" => 2, "description" => "Productos"),
-            array("id" => 3, "description" => "Categoria"));
+            array("id" => 3, "description" => "Categoria"),
+            array("id" => 4, "description" => "Proveedor"),
+            array("id" => 5, "description" => "Comercial"),
+            array("id" => 6, "description" => "Cartera"),
+            array("id" => 7, "description" => "Sector"),
+        );
         return view("Report.Comparative.init", compact("warehouse", "report"));
     }
 
@@ -32,6 +37,14 @@ class ComparativeController extends Controller {
             $data = $this->reportSalesProduct($input);
         } else if ($input["type_report"] == 3) {
             $data = $this->reportSalesCategory($input);
+        } else if ($input["type_report"] == 4) {
+            $data = $this->reportSalesSupplier($input);
+        } else if ($input["type_report"] == 5) {
+            $data = $this->reportSalesCommercial($input);
+        } else if ($input["type_report"] == 6) {
+            $data = $this->reportBriefcase($input);
+        } else if ($input["type_report"] == 7) {
+            $data = $this->reportSalesSector($input);
         }
 
         return response()->json(["data" => $data, "header" => $header]);
@@ -49,9 +62,136 @@ class ComparativeController extends Controller {
         return $header;
     }
 
+    function reportSalesSector($data) {
+        $sql = "
+            select par.code id,par.description,sum(det.value * det.real_quantity * det.units_sf)::money as total,sum(det.quantity * CASE  WHEN det.packaging=0 THEN 1 WHEN det.packaging IS NULL THEN 1 ELSE det.packaging END) as quantity_packaging
+            from departures_detail det
+            JOIN vdepartures d ON d.id=det.departure_id and d.status_id IN(2,7) and d.client_id NOT IN(258,264)
+            JOIN stakeholder ON stakeholder.id=d.client_id and stakeholder.type_stakeholder=1
+            JOIN products p ON p.id=det.product_id
+            JOIN parameters par ON par.code=stakeholder.sector_id and par.group ='sector'
+            group by 1,2
+            order by 3 desc
+            ";
+
+        $pro = DB::select($sql);
+
+        foreach ($pro as $i => $value) {
+            $sql = "
+            select 
+                to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,
+                sum(det.value * det.real_quantity * det.units_sf)::money as total,sum(det.quantity * CASE  WHEN det.packaging=0 THEN 1 WHEN det.packaging IS NULL THEN 1 ELSE det.packaging END) as quantity_packaging
+            from departures_detail det
+            JOIN vdepartures d ON d.id=det.departure_id and d.status_id IN(2,7) and d.client_id NOT IN(258,264)
+            JOIN stakeholder ON stakeholder.id=d.client_id and stakeholder.type_stakeholder=1
+            JOIN products p ON p.id=det.product_id
+            JOIN parameters par ON par.code=stakeholder.sector_id and par.group ='sector'
+            WHERE par.code=" . $value->id . "
+            group by 1,2
+            order by 1
+                ";
+
+
+
+            $det = DB::select($sql);
+            $pro[$i]->detail = $det;
+        }
+
+        return $pro;
+    }
+
+    function reportBriefcase($data) {
+        $sql = "
+            select client_id as id,client as description,sum(total)::money as total,sum(payed)::money as totalpayed
+            from vbriefcase
+            group by 1,2
+            order by 3 desc
+            ";
+
+        $pro = DB::select($sql);
+
+        foreach ($pro as $i => $value) {
+            $sql = "
+           select to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,sum(total)::money as total,sum(coalesce(payed,0))::money totalpayed
+            from vbriefcase
+            where client_id=" . $value->id . "
+            group by 1,2
+            order by 1
+                ";
+            $det = DB::select($sql);
+            $pro[$i]->detail = $det;
+        }
+
+        return $pro;
+    }
+
+    function reportSalesCommercial($data) {
+        $sql = "
+            select d.responsible_id as id,d.responsible as description,sum(subtotalnumeric)::money as total,sum(quantity_packaging) as quantity_packaging
+            from vdepartures d
+            WHERE d.status_id IN(2,7) and d.client_id NOT IN(258,264)
+            group by 1,2
+            order by 3 desc
+            ";
+
+        $pro = DB::select($sql);
+
+        foreach ($pro as $i => $value) {
+            $sql = "
+           select to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,sum(subtotalnumeric)::money as total,sum(d.quantity_packaging) as quantity_packaging
+            from vdepartures d
+            WHERE d.responsible_id=" . $value->id . "
+            AND d.status_id IN(2,7) and d.client_id NOT IN(258,264)
+            group by 1,2
+            order by 1
+                ";
+
+            $det = DB::select($sql);
+            $pro[$i]->detail = $det;
+        }
+
+        return $pro;
+    }
+
+    function reportSalesSupplier($data) {
+        $sql = "
+            select sup.id,sup.business as description,sum(det.value * det.real_quantity * det.units_sf)::money as total,sum(det.quantity * CASE  WHEN det.packaging=0 THEN 1 WHEN det.packaging IS NULL THEN 1 ELSE det.packaging END) as quantity_packaging
+            from departures_detail det
+            JOIN vdepartures d ON d.id=det.departure_id and d.status_id IN(2,7) and d.client_id NOT IN(258,264)
+            JOIN stakeholder ON stakeholder.id=d.client_id and stakeholder.type_stakeholder=1
+            JOIN products p ON p.id=det.product_id
+            JOIN stakeholder sup ON sup.id=p.supplier_id
+            group by 1,2
+            order by 3 desc
+            ";
+
+        $pro = DB::select($sql);
+
+        foreach ($pro as $i => $value) {
+            $sql = "
+            select to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,sum(det.value * det.real_quantity * det.units_sf)::money as total,sum(det.quantity * CASE  WHEN det.packaging=0 THEN 1 WHEN det.packaging IS NULL THEN 1 ELSE det.packaging END) as quantity_packaging
+            from departures_detail det
+            JOIN vdepartures d ON d.id=det.departure_id and d.status_id IN(2,7) and d.client_id NOT IN(258,264)
+            JOIN stakeholder ON stakeholder.id=d.client_id and stakeholder.type_stakeholder=1
+            JOIN products p ON p.id=det.product_id
+            JOIN stakeholder sup ON sup.id=p.supplier_id
+            WHERE p.supplier_id=" . $value->id . "
+            group by 1,2
+            order by 1
+                ";
+
+
+
+            $det = DB::select($sql);
+            $pro[$i]->detail = $det;
+        }
+
+        return $pro;
+    }
+
     function reportSalesCategory($data) {
         $sql = "
-            select c.id,c.description as category,sum(det.value * det.real_quantity * det.units_sf)::money as total,sum(det.quantity * CASE  WHEN det.packaging=0 THEN 1 WHEN det.packaging IS NULL THEN 1 ELSE det.packaging END) as quantity_packaging
+            select c.id,c.description,sum(det.value * det.real_quantity * det.units_sf)::money as total,sum(det.quantity * CASE  WHEN det.packaging=0 THEN 1 WHEN det.packaging IS NULL THEN 1 ELSE det.packaging END) as quantity_packaging
             from departures_detail det
             JOIN vdepartures d ON d.id=det.departure_id and d.status_id IN(2,7) and d.client_id NOT IN(258,264)
             JOIN stakeholder ON stakeholder.id=d.client_id and stakeholder.type_stakeholder=1
@@ -75,8 +215,8 @@ class ComparativeController extends Controller {
             group by 1,2
             order by 1
                 ";
-            
-            
+
+
 
             $det = DB::select($sql);
             $pro[$i]->detail = $det;
@@ -87,7 +227,7 @@ class ComparativeController extends Controller {
 
     function reportSalesProduct($data) {
         $sql = "
-            select p.id,substring(p.title from 0 for 40)|| '..' as product,sum(det.value * det.real_quantity * det.units_sf)::money as total,sum(det.quantity * det.packaging) as quantity_packaging
+            select p.id,substring(p.title from 0 for 40)|| '..' as description,sum(det.value * det.real_quantity * det.units_sf)::money as total,sum(det.quantity * det.packaging) as quantity_packaging
             from departures_detail det
             JOIN vdepartures d ON d.id=det.departure_id and d.status_id IN(2,7) and d.client_id NOT IN(258,264)
             JOIN stakeholder ON stakeholder.id=d.client_id and stakeholder.type_stakeholder=1
@@ -119,7 +259,7 @@ class ComparativeController extends Controller {
 
     function reportSalesClient($data) {
         $sql = "
-            SELECT client_id,client,sum(subtotalnumeric)::money total,sum(quantity_packaging) as quantity_packaging
+            SELECT client_id,client as description,sum(subtotalnumeric)::money total,sum(quantity_packaging) as quantity_packaging
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             WHERE vdepartures.status_id IN(2,7) AND client_id  NOT IN(258,264)

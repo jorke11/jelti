@@ -428,7 +428,7 @@ class ClientController extends Controller {
         $quantitypercent = ($quantitycli / $quantity) * 100;
 
         $obj = new ProductController();
-        $listProduct = $obj->getListProduct($in["init"], $in["end"], '', 'LIMIT 10');
+        $listProduct = $obj->getListProduct($in["init"], $in["end"], '');
 
         $totalpro = 0;
         $quantitypro = 0;

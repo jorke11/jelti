@@ -32,7 +32,7 @@ class HomeController extends Controller {
      */
     public function index() {
 
-        
+
 //        $sql = "
 //            SELECT p.title,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
 //            round(sum(d.value * d.quantity * d.units_sf)) as total
@@ -183,7 +183,7 @@ class HomeController extends Controller {
             GROUP BY to_char(vdepartures.dispatched,'YYYY-Month'),to_char(dispatched,'YYYY-MM') 
             ORDER BY 2 ASC
                 ";
-        
+
 //        echo $sql;exit;
 
         $sales = DB::select($sql);
@@ -233,8 +233,9 @@ class HomeController extends Controller {
         $sql = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2
+            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id=2
             JOIN products p ON p.id=d.product_id 
+            JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             WHERE d.product_id is NOT null AND dep.client_id NOT IN(258,264,24)
             AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
             group by 1,2
@@ -257,9 +258,12 @@ class HomeController extends Controller {
     public function getListProductDash(Request $req) {
         $input = $req->all();
         $sql = "
-            select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
+            select 
+                d.product_id,p.title product,sum(d.real_quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+                sum(d.real_quantity * d.value * coalesce(d.units_sf,1)) as total
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 and dep.client_id NOT IN(258,264)
+            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id=2 and dep.client_id NOT IN(258,264)
+            JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder = 1
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is NOT null and p.category_id<>-1
             AND dep.dispatched BETWEEN'" . date("Y-m-") . "01 00:00' AND '" . date("Y-m-d") . " 23:59'
@@ -284,10 +288,10 @@ class HomeController extends Controller {
         $input = $req->all();
         $cli = "
             select 
-            d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
-            sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
+            d.product_id,p.title product,sum(d.real_quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+            sum(d.real_quantity * d.value*coalesce(d.units_sf,1)) as total
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id ANd dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id ANd dep.status_id IN (2,7)
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is NOT null
             AND dep.dispatched BETWEEN'" . date("Y-m") . "-01 00:00' AND '" . date("Y-m-d") . " 23:59'
@@ -328,8 +332,8 @@ class HomeController extends Controller {
 
     public function getCEOSupplier($init, $end, $limit = '') {
         $sql = "
-            select st.id,st.business as supplier,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
-            sum(d.quantity * d.value* d.units_sf) as subtotal
+            select st.id,st.business as supplier,sum(d.real_quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+            sum(d.real_quantity * d.value* d.units_sf) as subtotal
             from departures_detail d
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id=2 and dep.client_id <> 258
             JOIN products p ON p.id=d.product_id 
@@ -338,7 +342,7 @@ class HomeController extends Controller {
             AND dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
             group by 1,2
             order by 4 desc
-            $limit";
+            ";
 //        echo $sql;
 //        exit;
         return DB::select($sql);

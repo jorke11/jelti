@@ -13,6 +13,7 @@ function Client() {
     }
 
     this.table = function (obj) {
+        $("#btnSearch").attr("disabled", true);
         var obj = {};
         obj.type_report = $("#Detail #type_report").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
@@ -27,19 +28,40 @@ function Client() {
             url: "comparatives/salesClient",
             method: 'GET',
             data: obj,
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+
+            },
             success: function (data) {
+                var title = "";
                 if (obj.type_report == 1) {
-                    objCli.dataClient(data);
+                    title = "Clientes";
                 } else if (obj.type_report == 2) {
-                    objCli.dataProduct(data);
+                    title = "Productos";
                 } else if (obj.type_report == 3) {
-                    objCli.dataCategory(data);
-                }
+                    title = "Categoria";
+                } else if (obj.type_report == 4) {
+                    title = "Proveedor";
+                } else if (obj.type_report == 5) {
+                    title = "Comercial";
+                } else if (obj.type_report == 6) {
+                    objCli.setBriefacase(data);
+                    $("#loading-super").addClass("hidden");
+                    $("#btnSearch").attr("disabled", false);
+                    return;
+                }else if (obj.type_report == 7) {
+                    title = "Sector";
+                } 
+
+                objCli.setData(data, title);
+
+                $("#loading-super").addClass("hidden");
+                $("#btnSearch").attr("disabled", false);
             }
         });
     }
 
-    this.dataClient = function (data) {
+    this.setBriefacase = function (data) {
         var html = "<tr><td>Cliente</td>";
         html += '<td colspan="2" align="center">Total</td>';
         var subheader = '<tr><td></td>';
@@ -47,11 +69,10 @@ function Client() {
         header = data.header;
         $.each(data.header, function (i, val) {
             html += '<td colspan="2" align="center">' + val.dates + "</td>";
-            subheader += "<td align='center'>Unidades</td><td align='center'>Subtotal</td>";
+            subheader += "<td align='center'>Total</td><td align='center'>Total Pagado</td>";
         });
 
         html += "</tr>";
-
 
         subheader += "</tr>";
 
@@ -64,11 +85,11 @@ function Client() {
 
         $.each(data.data, function (i, val) {
 
-            html += "<tr><td>" + val.client + "</td>";
-            html += '<td align="center">' + val.quantity_packaging + "</td><td>" + val.total + "</td>";
+            html += "<tr><td>" + val.description + "</td>";
+            html += '<td align="center">' + val.total + "</td><td>" + val.totalpayed + "</td>";
             for (var j = 0; j < val.detail.length; j++) {
                 if (data.header[cont].dates == val.detail[j].dates) {
-                    html += "<td align='center'>" + val.detail[j].quantity_packaging + "</td><td align='center'>" + val.detail[j].total + "</td>";
+                    html += "<td align='center'>" + val.detail[j].total + "</td><td align='center'>" + val.detail[j].totalpayed + "</td>";
                 } else {
                     html += "<td align='center'>0</td><td align='center'>0</td>";
                     j--;
@@ -83,8 +104,8 @@ function Client() {
         $("#tblClient tbody").html(html);
     }
 
-    this.dataProduct = function (data) {
-        var html = "<tr><td>Productos</td>";
+    this.setData = function (data, title) {
+        var html = "<tr><td>" + title + "</td>";
         html += '<td colspan="2" align="center">Total</td>';
         var subheader = '<tr><td></td>';
         subheader += "<td align='center'>Unidades</td><td align='center'>Subtotal</td>";
@@ -95,7 +116,6 @@ function Client() {
         });
 
         html += "</tr>";
-
 
         subheader += "</tr>";
 
@@ -108,7 +128,7 @@ function Client() {
 
         $.each(data.data, function (i, val) {
 
-            html += "<tr><td>" + val.product + "</td>";
+            html += "<tr><td>" + val.description + "</td>";
             html += '<td align="center">' + val.quantity_packaging + "</td><td>" + val.total + "</td>";
             for (var j = 0; j < val.detail.length; j++) {
                 if (data.header[cont].dates == val.detail[j].dates) {
@@ -118,52 +138,6 @@ function Client() {
                     j--;
                 }
                 cont++;
-            }
-            cont = 0;
-
-
-            html += "</tr>";
-        });
-        $("#tblClient tbody").html(html);
-    }
-
-    this.dataCategory = function (data) {
-        var html = "<tr><td>Categorias</td>";
-        html += '<td colspan="2" align="center">Total</td>';
-        var subheader = '<tr><td></td>';
-        subheader += "<td align='center'>Unidades</td><td align='center'>Subtotal</td>";
-        header = data.header;
-        $.each(data.header, function (i, val) {
-            html += '<td colspan="2" align="center">' + val.dates + "</td>";
-            subheader += "<td align='center'>Unidades</td><td align='center'>Subtotal</td>";
-        });
-
-        html += "</tr>";
-
-
-        subheader += "</tr>";
-
-        html += subheader;
-
-        $("#tblClient thead").html(html);
-
-        html = '';
-        var cont = 0;
-
-        $.each(data.data, function (i, val) {
-
-            html += "<tr><td>" + val.category + "</td>";
-            html += '<td align="center">' + val.quantity_packaging + "</td><td>" + val.total + "</td>";
-            for (var j = 0; j < ((val.detail).length) > 0; j++) {
-                if (data.header[cont] != undefined) {
-                    if (data.header[cont].dates == val.detail[j].dates) {
-                        html += "<td align='center'>" + val.detail[j].quantity_packaging + "</td><td align='center'>" + val.detail[j].total + "</td>";
-                    } else {
-                        html += "<td align='center'>0</td><td align='center'>0</td>";
-                        j--;
-                    }
-                    cont++;
-                }
             }
             cont = 0;
 

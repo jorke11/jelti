@@ -18,10 +18,17 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-4">
                     <div class="form-group">
                         <label for="title" class="control-label">Cliente</label>
-                        <select class="form-control input-client" id="client_id" name='client_id' data-api="/api/getClient" required> 
+                        <select class="form-control input-client" id="client_id" name='client_id[]' data-api="/api/getClient" multiple> 
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Producto</label>
+                        <select class="form-control input-client input-find" id="product_id" name='product_id'  data-api="/api/getProduct" multiple="">
                         </select>
                     </div>
                 </div>
@@ -32,13 +39,12 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label for="title" class="control-label">Producto</label>
-                        <select class="form-control input-client input-find" id="product_id" name='product_id'  data-api="/api/getProduct">
-                        </select>
-                    </div>
-                </div>
+
+
+
+            </div>
+
+            <div class="row">
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Proveedor</label>
@@ -53,10 +59,6 @@
                         </select>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Inicio</label>
@@ -103,34 +105,6 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div id="container_cities" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                <!--@include('Report.Client.cities')-->
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <!-- Nav tabs -->
-    <div class="col-lg-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                @include('Report.Client.detail')
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                @include('Report.Client.product')
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <script src="https://code.highcharts.com/highcharts.js"></script>

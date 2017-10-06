@@ -59,6 +59,7 @@
         {!!Html::script('/vendor/select2/js/select2.js')!!}
         {!!Html::script('/vendor/plugins.js')!!}
         {!!Html::style('/css/edited.css')!!}
+        {!!Html::style('/css/client.css')!!}
     </head>
     <body>
         <nav class="navbar navbar-default">

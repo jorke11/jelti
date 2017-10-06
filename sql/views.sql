@@ -68,8 +68,19 @@ WHERE p.type_product_id IS NOT NULL
 create view vdepartures as 
 select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,sta.business_name,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
-            (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity,
-            (select coalesce(sum(quantity),0)::int from departures_detail where departure_id=d.id) quantity_packaging,
+
+	CASE WHEN (d.status_id=1) THEN 
+		(select sum(quantity) from departures_detail where departure_id=d.id)
+		 ELSE 
+		(select sum(real_quantity) from departures_detail where departure_id=d.id)
+		 END as quantity,
+           
+            
+		CASE WHEN (d.status_id=1) THEN 
+		(select sum(quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
+		 ELSE 
+		(select sum(real_quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
+		 END as quantity_packaging,
             
 		CASE WHEN (d.status_id=1) THEN 
 		(select (round(coalesce(sum(real_quantity * units_sf * value * tax),0) + coalesce(sum(real_quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
@@ -118,8 +129,6 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
             JOIN cities dest ON dest.id = d.destination_id
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
-            ORDER BY d.status_id,d.id asc;
-
 
 
 create view vsample as 

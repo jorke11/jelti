@@ -1000,7 +1000,8 @@ class DepartureController extends Controller {
                     "tax19_real" => "$ " . number_format($this->tax19_real, 0, ",", "."),
                     "exento" => "$ " . number_format($this->exento, 0, ",", "."),
                     "exento_real" => "$ " . number_format($this->exento_real, 0, ",", "."),
-                    "discount" => "$ " . number_format($departure->discount, 0, ",", ".")
+                    "discount" => "$ " . number_format($departure->discount, 0, ",", "."),
+                    "shipping_cost" => "$ " . number_format($departure->shipping_cost, 0, ",", ".")
         ]);
     }
 

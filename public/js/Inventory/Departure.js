@@ -1166,10 +1166,20 @@ function Departure() {
                     html += "<td>" + val.totalFormated_real + "</td>";
                     html += "</tr>";
                 });
-                html += '<tr><td colspan="5" align="right"><b>Exento</b></td><td>' + data.exento + '</td><td></td><td></td><td>' + data.exento_real + '</td><tr>';
-                html += '<tr><td colspan="5" align="right"><b>Iva 5%</b></td><td>' + data.tax5 + '</td><td></td><td></td><td>' + data.tax5_real + '</td><tr>';
+                if (data.exento != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Exento</b></td><td>' + data.exento + '</td><td></td><td></td><td>' + data.exento_real + '</td><tr>';
+                }
+                if (data.tax5 != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Iva 5%</b></td><td>' + data.tax5 + '</td><td></td><td></td><td>' + data.tax5_real + '</td><tr>';
+                }
                 html += '<tr><td colspan="5" align="right"><b>Iva 19%</b></td><td>' + data.tax19 + '</td><td></td><td></td><td>' + data.tax19_real + '</td><tr>';
-                html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.discount + '</td><td></td><td></td><td>' + data.discount + '</td><tr>';
+                if (data.discount != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.discount + '</td><td></td><td></td><td>' + data.discount + '</td><tr>';
+                }
+                if (data.shipping_cost != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.shipping_cost + '</td><td></td><td></td><td>' + data.shipping_cost + '</td><tr>';
+                }
+                
                 html += '<tr><td colspan="5" align="right"><b>Subtotal</b></td><td>' + data.subtotal + '</td><td></td><td></td><td>' + data.subtotal_real + '</td><tr>';
                 html += '<tr><td colspan="5" align="right"><b>Total</b></td><td>' + data.total + '</td><td></td><td></td><td>' + data.total_real + '</td><tr>';
                 html += "</tbody></table><br>";

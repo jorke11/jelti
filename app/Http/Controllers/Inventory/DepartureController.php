@@ -35,12 +35,16 @@ use App\Models\Sales\BriefCase;
 class DepartureController extends Controller {
 
     protected $total;
+    protected $total_real;
     protected $tool;
     protected $subtotal;
+    protected $subtotal_real;
     protected $exento;
+    protected $exento_real;
     protected $tax19;
+    protected $tax19_real;
     protected $tax5;
-    public $total_real;
+    protected $tax5_real;
     public $path;
     public $name;
     public $listProducts;
@@ -55,8 +59,11 @@ class DepartureController extends Controller {
         $this->middleware("auth");
         $this->tool = new ToolController();
         $this->exento = 0;
+        $this->exento_real = 0;
         $this->tax19 = 0;
+        $this->tax19_real = 0;
         $this->tax5 = 0;
+        $this->tax5_real = 0;
         $this->total = 0;
         $this->subtotal = 0;
         $this->total_real = 0;
@@ -910,28 +917,36 @@ class DepartureController extends Controller {
     }
 
     public function formatDetail($id) {
-        $detail = DB::table("departures_detail")->select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "departures_detail.tax")->join("products", "departures_detail.product_id", "products.id")->join("stakeholder", "stakeholder.id", "products.supplier_id")->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))->where("departure_id", $id)->orderBy("id", "asc")->get();
+        $detail = DB::table("departures_detail")->
+                        select("departures_detail.id", "departures_detail.status_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "departures_detail.tax")->join("products", "departures_detail.product_id", "products.id")
+                        ->join("stakeholder", "stakeholder.id", "products.supplier_id")->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))->where("departure_id", $id)->orderBy("id", "asc")->get();
 
         $this->total = 0;
         $this->subtotal = 0;
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
+            $detail[$i]->total_real = $detail[$i]->real_quantity * $detail[$i]->value * $detail[$i]->units_sf;
+
             $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
-            $detail[$i]->total_real = $detail[$i]->real_quantity * $detail[$i]->value;
             $detail[$i]->totalFormated_real = "$ " . number_format($detail[$i]->total_real, 2, ",", ".");
             $this->subtotal += $detail[$i]->total;
+            $this->subtotal_real += $detail[$i]->total_real;
+
             $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
-            $this->total_real += $detail[$i]->total_real;
+            $this->total_real += $detail[$i]->total_real + ($detail[$i]->total_real * $value->tax);
 
             if ($value->tax == 0) {
                 $this->exento += $detail[$i]->total;
+                $this->exento_real += $detail[$i]->total_real;
             }
             if ($value->tax == 0.05) {
                 $this->tax5 += $detail[$i]->total * $value->tax;
+                $this->tax5_real += $detail[$i]->total_real * $value->tax;
             }
             if ($value->tax == 0.19) {
                 $this->tax19 += $detail[$i]->total * $value->tax;
+                $this->tax19_real += $detail[$i]->total_real * $value->tax;
             }
         }
 
@@ -939,7 +954,8 @@ class DepartureController extends Controller {
     }
 
     public function formatDetailSales($id) {
-        $detail = DB::table("sales_detail")->select("sales_detail.id", "sales_detail.quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "sales_detail.tax")->join("products", "sales_detail.product_id", "products.id")->join("stakeholder", "stakeholder.id", "products.supplier_id")->where("sale_id", $id)->orderBy("id", "asc")->get();
+        $detail = DB::table("sales_detail")->
+                        select("sales_detail.id", "sales_detail.quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "sales_detail.tax")->join("products", "sales_detail.product_id", "products.id")->join("stakeholder", "stakeholder.id", "products.supplier_id")->where("sale_id", $id)->orderBy("id", "asc")->get();
 
         $this->total = 0;
         $this->subtotal = 0;
@@ -970,8 +986,22 @@ class DepartureController extends Controller {
     }
 
     public function getAllDetail($departue_id) {
+        $departure = Departures::find($departue_id);
         $detail = $this->formatDetail($departue_id);
-        return response()->json(["detail" => $detail, "total" => "$ " . number_format($this->total, 2, ",", ".")]);
+
+        return response()->json(["detail" => $detail,
+                    "total" => "$ " . number_format($this->total - $departure->discount, 0, ",", "."),
+                    "total_real" => "$ " . number_format($this->total_real - $departure->discount, 0, ",", "."),
+                    "subtotal" => "$ " . number_format($this->subtotal, 0, ",", "."),
+                    "subtotal_real" => "$ " . number_format($this->subtotal_real, 0, ",", "."),
+                    "tax5" => "$ " . number_format($this->tax5, 0, ",", "."),
+                    "tax5_real" => "$ " . number_format($this->tax5_real, 0, ",", "."),
+                    "tax19" => "$ " . number_format($this->tax19, 0, ",", "."),
+                    "tax19_real" => "$ " . number_format($this->tax19_real, 0, ",", "."),
+                    "exento" => "$ " . number_format($this->exento, 0, ",", "."),
+                    "exento_real" => "$ " . number_format($this->exento_real, 0, ",", "."),
+                    "discount" => "$ " . number_format($departure->discount, 0, ",", ".")
+        ]);
     }
 
     public function update(Request $request, $id) {

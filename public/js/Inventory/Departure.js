@@ -1142,9 +1142,9 @@ function Departure() {
     this.format = function (d) {
         var url = "/departure/" + d.id + "/detailAll";
         var html = '<br><table class="table-detail">';
-        html += '<thead><tr><th colspan="2">Information</th><th colspan="3" class="center-rowspan">Order</th>'
-        html += '<th colspan="3" class="center-rowspan">Dispatched</th></tr>'
-        html += '<tr><th>#</th><th>Product</th><th>Quantity</th><th>Unit</th><th>Total</th><th>Quantity</th><th>Unit</th><th>Total</th></tr></thead>';
+        html += '<thead><tr><th colspan="3">Information</th><th colspan="3" class="center-rowspan">Orden</th>'
+        html += '<th colspan="3" class="center-rowspan">Despachado</th></tr>'
+        html += '<tr><th>#</th><th>Producto</th><th>Iva</th><th>Cantidad</th><th>Unit</th><th>Total</th><th>Cantidad</th><th>Unidades</th><th>Total</th></tr></thead>';
         $.ajax({
             url: url,
             method: "GET",
@@ -1157,6 +1157,7 @@ function Departure() {
                     html += "<tr>";
                     html += "<td>" + val.id + "</td>";
                     html += "<td>" + val.product + "</td>";
+                    html += "<td>" + (val.tax * 100) + "%</td>";
                     html += "<td>" + val.quantity + "</td>";
                     html += "<td>" + val.valueFormated + "</td>";
                     html += "<td>" + val.totalFormated + "</td>";
@@ -1165,7 +1166,12 @@ function Departure() {
                     html += "<td>" + val.totalFormated_real + "</td>";
                     html += "</tr>";
                 });
-                html += '<tr><td colspan="4">Total</td><td>' + data.total + '</td></td>';
+                html += '<tr><td colspan="5" align="right"><b>Exento</b></td><td>' + data.exento + '</td><td></td><td></td><td>' + data.exento_real + '</td><tr>';
+                html += '<tr><td colspan="5" align="right"><b>Iva 5%</b></td><td>' + data.tax5 + '</td><td></td><td></td><td>' + data.tax5_real + '</td><tr>';
+                html += '<tr><td colspan="5" align="right"><b>Iva 19%</b></td><td>' + data.tax19 + '</td><td></td><td></td><td>' + data.tax19_real + '</td><tr>';
+                html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.discount + '</td><td></td><td></td><td>' + data.discount + '</td><tr>';
+                html += '<tr><td colspan="5" align="right"><b>Subtotal</b></td><td>' + data.subtotal + '</td><td></td><td></td><td>' + data.subtotal_real + '</td><tr>';
+                html += '<tr><td colspan="5" align="right"><b>Total</b></td><td>' + data.total + '</td><td></td><td></td><td>' + data.total_real + '</td><tr>';
                 html += "</tbody></table><br>";
             }
         })

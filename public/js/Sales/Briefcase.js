@@ -65,7 +65,7 @@ function Briefcase() {
         var param = {};
         param.description = $("#frmPay #comment").val()
         param.saldo = $("#frmPay #saldo").val()
-        
+
         $.ajax({
             url: "briefcase/payInvoice/" + $("#frmPay #departure_id").val(),
             method: "PUT",
@@ -289,9 +289,8 @@ function Briefcase() {
                     mData: null,
                     mRender: function (data, type, full) {
                         html = '';
-
                         html = '<input type="checkbox" class="selected-invoice" value="' + data.id + '" invoice="' + data.invoice + '" payed="' + data.payed + '" total="' + data.total + '" totalformated="' + data.totalformated + '" id="row_' + data.id + '">&nbsp;&nbsp;'
-                        if ($("#role_id").val() == 1 && data.paid_out != true) {
+                        if ($("#role_id").val() == 1 && data.paid_out != true && (parseInt(data.payed) >= data.total)) {
                             html += '<span style="cursor:pointer" class="glyphicon glyphicon-ok" aria-hidden="true" onclick=obj.payed(' + data.id + ')></span>';
                         }
 

@@ -75,7 +75,8 @@
             }
 
             #img-main{
-                background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;
+
+                background: #13b671 url('assets/images/foto_logo_1280x683.png') center center no-repeat;
                 background-size: cover;
                 color:white;
                 /*height:100%;*/
@@ -87,31 +88,33 @@
 
             @media screen and (min-width:1340px) {
                 #img-main{
-                    background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;
+                    width: 100%;
+                    padding-top: 100px;  
+                    background: #13b671 url('assets/images/foto-paginaweb.png')  no-repeat;
+                    background-image: 100%;
                     background-size: cover;
                     color:white;
-                    /*height:600px;*/
                     height:850px;
-                    display: flex;
+                    /*                    display: flex;*/
                 }
             }
 
-            #img-marketplace{
-                background: url('assets/images/marketplace.png') center center no-repeat;
-                background-size: auto;
-                color:white;
-                height:200px;
-                display: flex;
-                margin-top: 180px;
-            }
-            #img-superfuds{
-                background: url('assets/images/sf_blanco.png') center center no-repeat;
-                background-size: 155px;
-
-                color:white;
-                height:100px;
-                display: flex;
-            }
+            /*            #img-marketplace{
+                            background: url('assets/images/marketplace.png') center center no-repeat;
+                            background-size: auto;
+                            color:white;
+                            height:200px;
+                            display: flex;
+                            margin-top: 180px;
+                        }
+                        #img-superfuds{
+                            background: url('assets/images/sf_blanco.png') center center no-repeat;
+                            background-size: 155px;
+            
+                            color:white;
+                            height:100px;
+                            display: flex;
+                        }*/
 
         </style>
         <script>
@@ -129,11 +132,16 @@
         <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
         <script>
         </script>
+        <style>
+            body{
+                font-family: "helvetica" !important;
+            }
+        </style>
     </head>
 
 
     <body>
-        <nav class="navbar navbar-default" style="margin-bottom:0px">
+        <nav class="navbar navbar-default" style="margin-bottom:0px;padding-top: 4px;min-height: 60px">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -144,24 +152,30 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">
-                        <img alt="Brand" src="{{ asset('assets/images/SF50X.png') }}" class="title"> SuperFuds
+                        <img alt="Brand" src="{{ asset('assets/images/SF50X.png') }}">
                     </a>
 
                 </div>
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control search" placeholder="">
-                    </div>
-                    <button type="submit" class="btn btn-success input-sm">Buscar</button>
-                </form>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"></a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px" >Inicio</a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px">Productos</a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px">Blog</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
-                        <li><a href="/login">Iniciar Sesión</a></li>
+                        <li style="padding-top: 12px"><a href="/login" class="btn btn-success" style="margin: 0;padding-bottom: 6px;padding-top: 6px;color:white;font-weight: 300;
+                                                         border-bottom-left-radius: 1em 1em 1em 1em;width: 100%;
+                                                         border: 0;  
+                                                         background: rgba(241,111,92,1);
+                                                         background: -moz-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                                                         background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(241,111,92,1)), color-stop(0%, rgba(246,41,12,1)), color-stop(0%, rgba(231,56,39,1)), color-stop(0%, rgba(52,205,159,1)), color-stop(49%, rgba(142,222,174,1)), color-stop(100%, rgba(142,222,174,1)));
+                                                         background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                                                         background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                                                         background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                                                         font-size:20px;
+                                                         ">Iniciar Sesión</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -172,91 +186,13 @@
 
         </style>
         <section>
-            <div class="container-fluid">
-                <!--<div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
-                <div class="row">
-                    <div id="img-main">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-5">
-                                    <!--<div style="width:380px;height:230px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>-->
-                                    <div id="img-marketplace"></div>
-                                </div>
-                                <div class="col-lg-3 col-lg-offset-3">
-                                    <div class="row">
-                                        <div class="col-lg-12 text-center">
-                                            <!--<div style="width:70%;height:100px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>-->
-                                            <div id="img-superfuds"></div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="panel" style="background: rgba(255, 255, 255, 0.6);border: 1px solid #fff">
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <p class="text-center white-label">Registrate como <br>
-                                                            Negocio o Cliente</p>
-                                                    </div>
-                                                </div>
-                                                <form>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label for="email" class="white-label">Compañía</label>
-                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Compañía">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label for="email" class="white-label">Nombre</label>
-                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Nombre">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label for="email" class="white-label">Email</label>
-                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Email">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label for="email" class="white-label">Telefono</label>
-                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Telefono">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="checkbox">
-                                                                <label class="white-check"><input type="checkbox" > Acepto terminos de servicio | Leer más</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-3 col-lg-offset-4">
-                                                            <button type="submit" class="btn btn-success btn-sm">Registrarse</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
+            <div class="container-fluid" style="padding-left: 0;padding-right: 0">
+                <!--
+                <div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
+                <div id="img-main">
 
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--<img id="estirada" style="top: 0; left: 0; width: 100%; height: 90%" src="{{ asset('assets/images/fondo1_1260X555.png') }}" />-->
-                      <!--<img src="{{ asset('assets/images/fondo1_1280X683.png') }}">-->
+<!--<img id="estirada" style="top: 0; left: 0; width: 100%; height: 90%" src="{{ asset('assets/images/fondo1_1260X555.png') }}" />-->
+  <!--<img src="{{ asset('assets/images/fondo1_1280X683.png') }}">-->
                 </div>
             </div>
         </section>

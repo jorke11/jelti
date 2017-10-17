@@ -43,7 +43,8 @@ class Stakeholder extends Model {
         "send_city_id",
         "sector_id",
         "password",
-        "login_web"
+        "login_web",
+        "exclude_report"
     ];
 
 }

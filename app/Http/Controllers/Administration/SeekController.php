@@ -87,8 +87,8 @@ class SeekController extends Controller {
                     $query->where("business", "ILIKE", "%" . $this->in["q"] . "%")
                             ->orWhere("business_name", "ILIKE", "%" . $this->in["q"] . "%")
                             ->orWhere("document", "ILIKE", "%" . $this->in["q"] . "%");
-//                            ->where("type_stakeholder", 1);
                 });
+                $query->where("type_stakeholder", 1);
             }
 
             $query->where("status_id", 1);
@@ -259,7 +259,7 @@ class SeekController extends Controller {
     public function getResponsable(Request $req) {
         $this->input = $req->all();
 
-        $query = Users::select("id", DB::raw("coalesce(name,'') || ' ' || coalesce(last_name,'') || ' ' || email as text"))->whereIn("role_id", [1,4]);
+        $query = Users::select("id", DB::raw("coalesce(name,'') || ' ' || coalesce(last_name,'') || ' ' || email as text"))->whereIn("role_id", [1, 4]);
         if (isset($this->input["q"]) && $this->input["q"] == "0") {
             $city = $query->where("id", Auth::user()->id);
         } else if (isset($this->input["id"]) && $this->input["id"] != '') {

@@ -88,7 +88,7 @@ class SeekController extends Controller {
                             ->orWhere("business_name", "ILIKE", "%" . $this->in["q"] . "%")
                             ->orWhere("document", "ILIKE", "%" . $this->in["q"] . "%");
                 });
-                $query->where("type_stakeholder", 1);
+                $query->where("type_stakeholder", 1)->whereNull("exclude_report");
             }
 
             $query->where("status_id", 1);

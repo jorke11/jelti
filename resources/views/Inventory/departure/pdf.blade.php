@@ -80,16 +80,15 @@ for ($i = 1; $i <= $count; $i++) {
                 if (isset($detail[$j])) {
                     $cont++;
                     $quantity += $detail[$j]->quantity;
-                    $desc = ($detail[$j]->product_id == '') ? $detail[$j]->description : $detail[$j]->product;
-                    $total = number_format(($detail[$j]->valuetotal), 2, ',', '.');
+                    $total = number_format(($detail[$j]->total), 2, ',', '.');
                     $valueUnit = number_format(($detail[$j]->value), 2, ',', '.');
                     ?>
                     <tr>
                         <td align='center'><?php echo $detail[$j]->quantity; ?></td>
-                        <td><?php echo $desc; ?><br><span class="title-supplier"><?php echo $detail[$j]->stakeholder; ?><span></td>
-                                    <td align='center'><?php echo (int) $detail[$j]->tax; ?></td>
-                                    <td align='right'><?php echo "$ " . $valueUnit; ?></td>
-                                    <td align='right'><?php echo "$ " . ($total) ?></td>
+                        <td><?php echo $detail[$j]->product; ?><br><span class="title-supplier"><?php echo $detail[$j]->stakeholder; ?><span></td>
+                                    <td align='center'><?php echo ($detail[$j]->tax * 100); ?></td>
+                                    <td align='right'><?php echo "$" . $valueUnit; ?></td>
+                                    <td align='right'><?php echo "$" . ($total) ?></td>
                                     </tr>
                                     <?php
                                 }

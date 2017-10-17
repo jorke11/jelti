@@ -132,7 +132,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Flete:</label>
-                    <input type="text" class="form-control input-departure" id="shipping_cost" name="shipping_cost" data-type="number" required>
+                    <input type="text" class="form-control input-departure" id="shipping_cost" name="shipping_cost" data-type="number">
                 </div>
             </div>
             <div class="col-lg-4">

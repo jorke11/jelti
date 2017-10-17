@@ -957,6 +957,7 @@ class DepartureController extends Controller {
 
     public function edit($id) {
         $entry = Departures::FindOrFail($id);
+        
         $detail = $this->formatDetail($id);
         $branch = '';
         $data_branch = '';

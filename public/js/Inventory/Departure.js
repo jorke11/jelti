@@ -32,12 +32,14 @@ function Departure() {
             }
         })
 
-
-        $("#branch_id").change(function () {
+        $("#frm #branch_id").on('select2:closing', function (evt) {
             if ($(this).val() != 0) {
                 obj.getBranchAddress($(this).val());
             }
         });
+//        $("#branch_id").change(function () {
+//
+//        });
 
 
         $("#quantity").change(function () {
@@ -314,7 +316,10 @@ function Departure() {
                 success: function (resp) {
                     if (resp.response != null) {
                         $("#frm #address").val(resp.response.address_send);
-                        $("#frm #phone").val(resp.response.phone);
+                        if (resp.response.phone != null) {
+                            $("#frm #phone").val(resp.response.phone);
+                        }
+
                         $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
                         $("#frm #responsible_id").setFields({data: {responsible_id: resp.response.responsible_id}});
                     }
@@ -756,6 +761,7 @@ function Departure() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
+
                 $(".input-departure").setFields({data: data.header, disabled: true});
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
@@ -794,8 +800,15 @@ function Departure() {
 
                 obj.getClient(data.header.client_id, data.header.branch_id);
 
-
                 obj.printDetail(data, btnEdit, btnDel);
+            },
+            error(xhr, responseJSON, thrown) {
+
+                if (thrown == 'Unauthorized') {
+                    location.href = "/";
+                }
+
+
             }
         })
     }
@@ -1179,7 +1192,7 @@ function Departure() {
                 if (data.shipping_cost != '$ 0') {
                     html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.shipping_cost + '</td><td></td><td></td><td>' + data.shipping_cost + '</td><tr>';
                 }
-                
+
                 html += '<tr><td colspan="5" align="right"><b>Subtotal</b></td><td>' + data.subtotal + '</td><td></td><td></td><td>' + data.subtotal_real + '</td><tr>';
                 html += '<tr><td colspan="5" align="right"><b>Total</b></td><td>' + data.total + '</td><td></td><td></td><td>' + data.total_real + '</td><tr>';
                 html += "</tbody></table><br>";

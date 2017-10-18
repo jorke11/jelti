@@ -140,18 +140,15 @@ class CommercialController extends Controller {
 
 
         $sql = "
-            SELECT 
-                st.business client,p.title product,
-                sum(d.real_quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantityproducts,
-                sum(d.real_quantity * d.value * d.units_sf) as total
-            FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
-            JOIN products p ON p.id=d.product_id
-            JOIN stakeholder st ON st.id=dep.client_id and dep.client_id NOT IN(258,264) and st.type_stakeholder=1
-            WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
-                AND p.category_id<>-1
-            GROUP BY 1,2,dep.client_id
-            ORDER BY 1 ASC, 3 DESC
+
+        SELECT st.business client,p.title product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantityproducts, sum(d.quantity * d.value * d.units_sf) as total 
+        FROM sales_detail d 
+        JOIN sales s ON s.id=d.sale_id and s.status_id ='1' 
+        JOIN products p ON p.id=d.product_id JOIN stakeholder st ON st.id=s.client_id and s.client_id NOT IN(258,264) and st.type_stakeholder=1 
+        WHERE d.product_id is not null AND s.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
+        AND p.supplier_id= 29 AND p.category_id<>-1 
+        GROUP BY 1,2,s.client_id 
+        ORDER BY 1 ASC, 3 DESC
             ";
 
         $res = DB::select($sql);

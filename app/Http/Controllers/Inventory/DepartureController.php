@@ -150,6 +150,19 @@ class DepartureController extends Controller {
     public function getClient($id) {
         $resp["client"] = Stakeholder::find($id);
         $resp["branch"] = Branch::where("stakeholder_id", $resp["client"]->id)->get();
+        
+         $query = DB::table("vbriefcase")
+                    ->where("client_id", $id)
+                    ->where("dias_vencidos", ">", 0);
+
+
+            $query->where(function($query) {
+                $query->whereNull("paid_out")
+                        ->orWhere("paid_out", "=", false);
+            });
+
+        $resp["briefcase"] =  $query->get();
+        
         return response()->json(["success" => true, "data" => $resp]);
     }
 
@@ -495,14 +508,31 @@ class DepartureController extends Controller {
             $input = $request->all();
 //            unset($input["id"]);
 //            $user = Auth::User();
+
+            $query = DB::table("vbriefcase")
+                    ->where("client_id", $input["header"]["client_id"])
+                    ->where("dias_vencidos", ">", 0);
+
+
+            $query->where(function($query) {
+                $query->whereNull("paid_out")
+                        ->orWhere("paid_out", "=", false);
+            });
+
+
+            $validateBriefcase = $query->get();
+
             if (isset($input["detail"])) {
-                $input["header"]["status_id"] = 1;
+
+                $status = (count($validateBriefcase) > 0) ? 8 : 1;
+                $input["header"]["status_id"] = $status;
 
                 if (!isset($input["header"]["shipping_cost"])) {
                     $input["header"]["shipping_cost"] = 0;
                 }
                 $input["detail"] = array_values(array_filter($input["detail"]));
                 $input["header"]["type_request"] = "web";
+
                 return $this->processDeparture($input["header"], $input["detail"]);
             } else {
                 return response()->json(['success' => false, "msg" => "detail Empty"], 409);
@@ -654,6 +684,7 @@ class DepartureController extends Controller {
                     $header["tax19"] = $this->tax19;
                     $header["flete"] = $resp->shipping_cost;
                     $header["discount"] = $resp->discount;
+                    $header["status_id"] = $resp->status_id;
 
                     $this->mails[] = $user->email;
 
@@ -888,7 +919,8 @@ class DepartureController extends Controller {
         $flete = 10000;
         $environment = "production";
         $discount = 0;
-        return view("Notifications.departure", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "flete", "discount"));
+        $status_id=1;
+        return view("Notifications.departure", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "flete", "discount","status_id"));
     }
 
     public function testInvoiceNotification($id) {
@@ -957,7 +989,7 @@ class DepartureController extends Controller {
 
     public function edit($id) {
         $entry = Departures::FindOrFail($id);
-        
+
         $detail = $this->formatDetail($id);
         $branch = '';
         $data_branch = '';

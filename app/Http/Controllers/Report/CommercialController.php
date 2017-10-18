@@ -138,7 +138,6 @@ class CommercialController extends Controller {
             $where .= " AND dep.responsible_id=" . $input["commercial_id"];
         }
 
-
         $sql = "
 
         SELECT st.business client,p.title product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantityproducts, sum(d.quantity * d.value * d.units_sf) as total 

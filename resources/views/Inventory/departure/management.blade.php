@@ -161,6 +161,12 @@
                     <input type="text" class="form-control input-departure" id="discount" name="discount">
                 </div>
             </div>
+               <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="email">Novedad:</label>
+                    <input type="text" class="form-control" id="novelty" readonly="">
+                </div>
+            </div>
         </div>
         {!!Form::close()!!}
     </div>

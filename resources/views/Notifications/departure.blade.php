@@ -17,6 +17,13 @@
             </tr>
         </table>
         @endif
+        @if($status_id==1)
+        <table align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" style="background-color:red;">
+            <tr align='center'>
+                <td colspan="7" style="color:white;vertical-align:bottom;padding-bottom: 10px;padding-top: 30px;" valign="middle"><h3>El Pedido fue generado pero no se podra facturar porque el cliente tiene pendientes en cartera, por favor solucionar pago con cliente para que pueda ser despachado</h3></td>
+            </tr>
+        </table>
+        @endif
         <table align="center" width="850" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
             <tr>
                 <td width='15%'><img src="{!!asset('assets/images/logo.png')!!}" width="45" style="display:block"></td>

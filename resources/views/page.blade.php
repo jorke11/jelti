@@ -75,17 +75,15 @@
                             background: #fffcf8;
                         }*/
 
-            /*            #img-main{
-            
-                            background: #13b671 url('assets/images/foto_logo_1280x683.png') center center no-repeat;
-                            background-size: cover;
-                            color:white;
-                            height:100%;
-                            height:60%;
-                            text-align: center;
-                            display: flex;
-                            align-items: center;
-                        }*/
+            #img-main{
+
+                background: #13b671 url('assets/images/foto-paginaweb.png')  no-repeat;
+                background-image: 100%;
+                background-size: cover;
+                color:white;
+                /*height:60%;*/
+                height:650px;
+            }
 
             @media screen and (min-width:1340px) {
                 #img-main{
@@ -150,7 +148,7 @@
             body{
                 font-family: "helvetica" !important;
             }
-            
+
         </style>
     </head>
 
@@ -176,7 +174,7 @@
                     <ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100" >Inicio</a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100" ><span class="underline">Inicio</span></a></li>
                         <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Productos</a></li>
                         <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Blog</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>

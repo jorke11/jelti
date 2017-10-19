@@ -32,14 +32,12 @@ function Departure() {
             }
         })
 
-        $("#frm #branch_id").on('select2:closing', function (evt) {
+        
+        $("#branch_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getBranchAddress($(this).val());
             }
         });
-//        $("#branch_id").change(function () {
-//
-//        });
 
 
         $("#quantity").change(function () {
@@ -293,7 +291,7 @@ function Departure() {
 
                 if ((resp.data.briefcase).length > 0) {
                     $("#frm #novelty").val("Novedades en cartera");
-                }else{
+                } else {
                     $("#frm #novelty").val("Ok");
                 }
 

@@ -150,19 +150,19 @@ class DepartureController extends Controller {
     public function getClient($id) {
         $resp["client"] = Stakeholder::find($id);
         $resp["branch"] = Branch::where("stakeholder_id", $resp["client"]->id)->get();
-        
-         $query = DB::table("vbriefcase")
-                    ->where("client_id", $id)
-                    ->where("dias_vencidos", ">", 0);
+
+        $query = DB::table("vbriefcase")
+                ->where("client_id", $id)
+                ->where("dias_vencidos", ">", 0);
 
 
-            $query->where(function($query) {
-                $query->whereNull("paid_out")
-                        ->orWhere("paid_out", "=", false);
-            });
+        $query->where(function($query) {
+            $query->whereNull("paid_out")
+                    ->orWhere("paid_out", "=", false);
+        });
 
-        $resp["briefcase"] =  $query->get();
-        
+        $resp["briefcase"] = $query->get();
+
         return response()->json(["success" => true, "data" => $resp]);
     }
 
@@ -320,7 +320,7 @@ class DepartureController extends Controller {
             'formatRete' => "$ " . number_format(($rete["value"]), 2, ',', '.'),
             'client' => $cli,
             'detail' => $detail,
-            'exept' => "$ " . number_format(($totalExemp), 2, ',', '.'),
+            'exept' => $this->exento,
             'tax5' => $this->tax5,
             'tax19' => $this->tax19,
             'totalInvoice' => "$ " . number_format(($this->subtotal), 0, ',', '.'),
@@ -330,7 +330,6 @@ class DepartureController extends Controller {
             'textTotal' => trim($this->tool->to_word(round($totalWithTax))),
             'discount' => $dep->discount
         ];
-//dd($data);
 
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice']);
@@ -919,8 +918,8 @@ class DepartureController extends Controller {
         $flete = 10000;
         $environment = "production";
         $discount = 0;
-        $status_id=1;
-        return view("Notifications.departure", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "flete", "discount","status_id"));
+        $status_id = 1;
+        return view("Notifications.departure", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "flete", "discount", "status_id"));
     }
 
     public function testInvoiceNotification($id) {

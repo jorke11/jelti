@@ -16,9 +16,9 @@ use DB;
 
 class ShoppingController extends Controller {
 
-    public function __construct() {
-        $this->middleware("auth");
-    }
+//    public function __construct() {
+//        $this->middleware("auth");
+//    }
 
     public function index() {
         return view("Ecommerce.shopping.init");
@@ -75,7 +75,12 @@ class ShoppingController extends Controller {
     }
 
     public function getCountOrders() {
-        $count = $this->getDataCountOrders();
+        $count = 0;
+
+        if (Auth::user() != null) {
+            $count = $this->getDataCountOrders();
+        }
+        
         return response()->json(["quantity" => $count]);
     }
 

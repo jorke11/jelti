@@ -28,7 +28,7 @@ echo json_encode([
             body{
                 margin: 0 auto;
                 padding: 0;
-                background: url('assets/images/fondo_init.png') center center no-repeat;
+                background: url('assets/images/foto_final_1507x850.png') center center no-repeat;
                 background-size:100% 1280px;
             }
 
@@ -38,13 +38,13 @@ echo json_encode([
                 background: url('assets/images/fondo_init.png') center center no-repeat;
                 background-size:100%;
             }
-            
+
         </style>
     </head>
     <!--<body style="background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;background-size:100%">-->
     <body >
         <div id="app">
-            
+
             @yield('content')
         </div>
 

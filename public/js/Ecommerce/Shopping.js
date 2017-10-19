@@ -27,7 +27,7 @@ function Shop() {
     }
     
      this.getQuantity = function () {
-         console.log("as");
+         console.log("desde shopping");
         var html = "";
         $.ajax({
             url: PATH + '/getCounter',

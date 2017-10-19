@@ -51,7 +51,7 @@
 </style>
 
 <?php
-$rows = 12;
+$rows = 11;
 $rest = $rows - count($detail);
 $count = ceil(count($detail) / $rows);
 $init = 0;
@@ -80,8 +80,8 @@ for ($i = 1; $i <= $count; $i++) {
                 if (isset($detail[$j])) {
                     $cont++;
                     $quantity += $detail[$j]->quantity;
-                    $total = number_format(($detail[$j]->total), 2, ',', '.');
-                    $valueUnit = number_format(($detail[$j]->value), 2, ',', '.');
+                    $total = number_format(($detail[$j]->total), 0, ',', '.');
+                    $valueUnit = number_format(($detail[$j]->value), 0, ',', '.');
                     ?>
                     <tr>
                         <td align='center'><?php echo $detail[$j]->quantity; ?></td>
@@ -97,11 +97,11 @@ for ($i = 1; $i <= $count; $i++) {
                             $init = $i * $rows;
                             $fin += $rows;
 
-                            if ($cont != 12) {
-                                for ($a = 0; $a <= (12 - $cont); $a++) {
+                            if ($cont != 11) {
+                                for ($a = 0; $a <= (11 - $cont); $a++) {
                                     ?>
                                     <tr>
-                                        <td align='center'>&nbsp;</td>
+                                        <td align='center'>&nbsp;<br><br><br></td>
                                     </tr>
                                     <?php
                                 }
@@ -140,8 +140,6 @@ for ($i = 1; $i <= $count; $i++) {
                             <br>
                             <br>
                             <br>
-                            <br>
-
                             <?php
                             $cont = 0;
                         }

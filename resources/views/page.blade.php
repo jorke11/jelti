@@ -249,7 +249,7 @@
 
         </style>
         <section>
-            <div class="container-fluid" style="padding-left: 0;padding-right: 0" id="img-main">
+            <div class="container-fluid" style="padding-left: 0;padding-right: 0; background-attachment: fixed;" id="img-main">
                 <!--
                 <div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
                 <!--<div >-->

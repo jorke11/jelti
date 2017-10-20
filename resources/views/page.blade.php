@@ -166,54 +166,33 @@
                 font-family: "helvetica" !important;
             }
 
-        </style>
-    </head>
-
-
-    <body>
-        <nav class="navbar navbar-default" style="margin-bottom:0px;padding-top: 4px;min-height: 60px">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header" style='padding-left: 2%'>
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">
-                        <img alt="Brand" src="{{ asset('assets/images/SF50X.png') }}">
-                    </a>
-
-                </div>
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right: 5%">
-                    <ul class="nav navbar-nav">
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100" ><span class="underline">Inicio</span></a></li>
-                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Productos</a></li>
-                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Blog</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
-                        <li style="padding-top: 12px"><a href="/login" class="btn btn-success" style="margin: 0;padding-bottom: 6px;padding-top: 6px;color:white;font-weight: 300;
-                                                         border-bottom-left-radius: 1em 1em 1em 1em;width: 100%;
-                                                         border: 0;  
-                                                         background: rgba(241,111,92,1);
-                                                         background: -moz-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
-                                                         background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(241,111,92,1)), color-stop(0%, rgba(246,41,12,1)), color-stop(0%, rgba(231,56,39,1)), color-stop(0%, rgba(52,205,159,1)), color-stop(49%, rgba(142,222,174,1)), color-stop(100%, rgba(142,222,174,1)));
-                                                         background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
-                                                         background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
-                                                         background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
-                                                         font-size:20px;
-                                                         font-weight: 100;
-                                                         ">Iniciar Sesión</a></li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-
-        <style>
-
+            .login-button{
+                margin: 0 !important;
+                padding-bottom: 6px !important;
+                padding-top: 6px !important;
+                color:white !important;
+                font-weight: 300;
+                border-bottom-left-radius: 1em 1em 1em 1em !important;
+                width: 100% !important;
+                border: 0 !important;  
+                background: rgba(241,111,92,1) !important;
+                background: -moz-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
+                background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(241,111,92,1)), color-stop(0%, rgba(246,41,12,1)), color-stop(0%, rgba(231,56,39,1)), color-stop(0%, rgba(52,205,159,1)), color-stop(49%, rgba(142,222,174,1)), color-stop(100%, rgba(142,222,174,1))) !important;
+                background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
+                background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
+                background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
+                font-size:20px !important;
+                font-weight: 100 !important;
+                -webkit-transition: all 0.3s ease-in-out !important;
+                -moz-transition: all 0.3s ease-in-out !important;
+                transition: all 0.3s ease-in-out !important;
+            }
+            .login-button:hover{
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+                color: #00c98a! important;
+                border: 1px solid #00c98a !important;
+            }
             .row-space{
                 padding-bottom: 20px;
             }
@@ -261,6 +240,44 @@
                 width:2%;
                 /*left:0px*/
             }
+        </style>
+    </head>
+
+
+    <body>
+        <nav class="navbar navbar-default" style="margin-bottom:0px;padding-top: 4px;min-height: 60px">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header" style='padding-left: 2%'>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <img alt="Brand" src="{{ asset('assets/images/SF50X.png') }}">
+                    </a>
+
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right: 5%">
+                    <ul class="nav navbar-nav">
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100" ><span class="underline">Inicio</span></a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Productos</a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Blog</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
+                        <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <style>
+
+
 
         </style>
         <section>

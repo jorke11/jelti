@@ -229,16 +229,17 @@
             }
             .carousel-control{
                 opacity:.9;
+                width:6%
             }
             .carousel-control.left{
                 left: -6%;
                 bottom: 10%;
             }
             .carousel-control.right{
-                right: 1%;
+                right: -3%;
                 bottom: 10%;
                 width:2%;
-                /*left:0px*/
+                
             }
         </style>
     </head>
@@ -275,11 +276,6 @@
             </div><!-- /.container-fluid -->
         </nav>
 
-        <style>
-
-
-
-        </style>
         <section>
             <div class="container-fluid" style="padding-left: 0;padding-right: 0; background-attachment: fixed;" id="img-main">
                 <!--
@@ -569,7 +565,7 @@
                                         </div> 
                                     </div>
                                 </div>
-                                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                <a class="left carousel-control" href="#myCarousel" data-slide="prev" stuel>
                                     <span class="glyphicon glyphicon-chevron-left"></span>
                                     <span class="sr-only">Previous</span>
                                 </a>

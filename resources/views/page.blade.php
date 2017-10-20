@@ -82,7 +82,7 @@
                 background-size: cover;
                 color:white;
                 /*height:60%;*/
-                height:650px;
+                height:800px;
             }
 
             @media screen and (min-width:1340px) {
@@ -109,6 +109,23 @@
                 width:80%;
                 font-weight: 100;
                 font-size:16px;
+            }
+
+            @media (max-width: 1300px) {
+                .buttons-page {
+                    border-bottom-left-radius: 1em 1em 1em 1em;
+                    border: 0;  
+                    background: rgba(0,0,0,1);
+                    background: -moz-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(241,111,92,1)), color-stop(0%, rgba(246,41,12,1)), color-stop(0%, rgba(231,56,39,1)), color-stop(0%, rgba(52,205,159,1)), color-stop(49%, rgba(142,222,174,1)), color-stop(100%, rgba(142,222,174,1)));
+                    background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                    background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                    background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                    width:100%;
+                    font-weight: 100;
+                    font-size:12px;
+                    padding-left: 18%;
+                }
             }
 
             /*            #img-marketplace{
@@ -252,17 +269,17 @@
                 <div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
                 <!--<div >-->
                 <div class="row">
-                    <div class="col-lg-6" style="padding-top: 13%;padding-left: 4%">
+                    <div class="col-lg-6 col-md-6" style="padding-top: 13%;padding-left: 4%">
                         <img src="{{ asset('assets/images/marketplace.png') }}" >
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="row" style="padding-top: 5%;">
-                            <div class="col-lg-6 col-lg-offset-6">
+                            <div class="col-lg-6 col-lg-offset-6 col-md-7 col-md-offset-4">
                                 <p class="text-center"><img src="{{ asset('assets/images/sf_blanco.png') }}"></p>
                             </div>
                         </div>
                         <div class="row" style="padding-top: 3%;">
-                            <div class="col-lg-5 col-lg-offset-6">
+                            <div class="col-lg-5 col-lg-offset-6 col-md-8 col-md-offset-3">
                                 <div class="panel" style=" background-color:rgba(255,255,255,.4);border-color: white;padding: 0% 5% 0% 5%;border-radius: 10px">
                                     <div class="panel-body">
                                         <div class="row row-space">
@@ -271,15 +288,13 @@
                                             </div>
                                         </div>
                                         <div class="row row-space">
-                                            <div class="col-lg-6">
-                                                <p class="text-center">
-                                                    <button class="btn buttons-page btn-lg">Proveedor</button>
-                                                </p>
+                                            <div class="col-lg-6 col-md-6">
+                                                <button class="btn buttons-page btn-lg text-center">Proveedor</button>
                                             </div>
 
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-6 col-md-6">
                                                 <p class="text-center">
-                                                    <button class="btn buttons-page btn-lg">Negocio</button>
+                                                    <button class="btn buttons-page btn-lg text-center">Negocio</button>
                                                 </p>
                                             </div>
                                         </div>
@@ -309,10 +324,8 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12">
-                                                <p class="text-center">
-                                                    <button type="button" class="btn buttons-page btn-lg" style="width: 40%">Registrate</button>
-                                                </p>
+                                            <div class="col-lg-6 col-md-6 col-md-offset-3">
+                                                <button type="button" class="btn buttons-page btn-lg text-center">Registrate</button>
                                             </div>
                                         </div>
                                     </div>
@@ -346,15 +359,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 col-md-4">
                                 <h4 class="text-center color-font" >
                                     "88% de las personas estan dispuestas a pagar más por alimentos saludables." <br><b>Forbes 2017</b>
                                 </h4>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 col-md-4">
                                 <h4 class="text-center color-font">"Para el 2017, las ventas globales de alimentos saludables llegarán a un trillón de dolares." . <br><b>Forbes 2017</b></h4>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 col-md-4">
                                 <h4 class="text-center color-font">
                                     "7 de cada 10 colombianos desean bajar de peso y ser más saludables." <br><b>Nielsen 2017</b>
                                 </h4>
@@ -383,7 +396,7 @@
             <br>
             <br>
             <div class="row">
-                <div class='col-md-10 col-lg-offset-1'>
+                <div class='col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1'>
                     <div class="carousel slide media-carousel" id="media">
                         <div class="carousel-inner">
                             <div class="item  active">
@@ -432,14 +445,14 @@
             </div>
             <br>
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-2"><h4>Lo Nuevo</h4></div>
-                <div class="col-lg-3 col-lg-offset-4"><h4>Ver Todo</h4></div>
+                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2"><h4>Lo Nuevo</h4></div>
+                <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3"><h4>Ver Todo</h4></div>
             </div>
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
             </div>
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
+                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
                     <div class="carousel slide media-carousel" id="newproducts">
                         <div class="carousel-inner">
                             <div class="item  active">
@@ -488,18 +501,18 @@
         <br>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-2"><h4 class="color-font">Sub-categorias</h4></div>
+                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1"><h4 class="color-font">Sub-categorias</h4></div>
             </div>
 
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
             </div>
             <div class="row row-space">
-                <div class="col-lg-8 col-lg-offset-2">
+                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
                     @foreach($subcategory as $val)
-                    <div class="col-lg-2">
-                        <div class="row"><div class="col-lg-12"><p class="text-center color-font">{{ucwords($val->description)}}</p></div></div>
-                        <div class="row"><div class="col-lg-12"><img src="{{$val->alternative}}" alt="" class="img-responsive center-block" width="55%" ></div></div>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="row"><div class="col-lg-12 col-md-12"><p class="text-center color-font">{{ucwords($val->description)}}</p></div></div>
+                        <div class="row"><div class="col-lg-12 col-md-12"><img src="{{$val->alternative}}" alt="" class="img-responsive center-block"></div></div>
                     </div>
                     @endforeach
                 </div>
@@ -521,11 +534,8 @@
                                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                                     <li data-target="#myCarousel" data-slide-to="1"></li>
                                 </ol>
-
-
                                 <div class="carousel-inner">
                                     <div class="item active">
-
                                         <div class="header-text hidden-xs">
                                             <div class="col-md-12 col-center">
                                                 <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
@@ -534,7 +544,6 @@
                                         </div> 
                                     </div>
                                     <div class="item">
-
                                         <div class="header-text hidden-xs">
                                             <div class="col-md-12 col-center">
                                                 <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
@@ -543,8 +552,6 @@
                                         </div> 
                                     </div>
                                 </div>
-
-
                                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
                                     <span class="glyphicon glyphicon-chevron-left"></span>
                                     <span class="sr-only">Previous</span>
@@ -576,13 +583,13 @@
                     <div class="col-lg-12"><h2 class="text-center color-font">Lo que dic<span class="underline">en nuestro</span>s clientes</h2></div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <div class="row row-space">
-                            <div class="col-lg-12 text-center"><img src="/images/click_clack.png"></div>
+                            <div class="col-lg-12 text-center col-md-12"><img src="/images/click_clack.png"></div>
                         </div>
 
                         <div class="row row-space">
-                            <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
+                            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2" style="color:#56be7f">
                                 <p class="text-center"><b>Sergio Saavedra<br>
                                         Director General | Hotel Click Clack</b>
                                 </p>
@@ -590,14 +597,14 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-8 col-lg-offset-2">
+                            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
                                 <p class="text-center color-font">
                                     Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <div class="row  row-space">
                             <div class="col-lg-12 text-center"><img src="/images/farmatado.png"></div>
                         </div>
@@ -619,7 +626,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <div class="row">
                             <div class="col-lg-12 text-center"><img src="/images/rappi.png"></div>
                         </div>
@@ -642,17 +649,17 @@
                     </div>
                 </div>
                 <div class="row row-space">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <p class="text-center color-font">
                             <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
                         </p>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <p class="text-center color-font">
                             <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
                         </p>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <p class="text-center color-font">
                             <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
                         </p>
@@ -737,7 +744,7 @@
                     <div class="col-lg-12"><h2 class="text-center color-font">Lo que dic<span class="underline">en nuestros pr</span>oveedores ...</h2></div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <div class="row row-space">
                             <div class="col-lg-12 text-center"><img src="/images/terra_fertil.png"></div>
                         </div>
@@ -758,7 +765,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <div class="row  row-space">
                             <div class="col-lg-12 text-center"><img src="/images/chocolov.png"></div>
                         </div>
@@ -781,7 +788,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <div class="row">
                             <div class="col-lg-12 text-center"><img src="/images/segalco.png"></div>
                         </div>
@@ -805,17 +812,17 @@
                     </div>
                 </div>
                 <div class="row row-space">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <p class="text-center color-font">
                             <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
                         </p>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <p class="text-center color-font">
                             <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
                         </p>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4">
                         <p class="text-center color-font">
                             <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
                         </p>
@@ -830,10 +837,10 @@
         <section>
             <div class="container-fluid grey-bk" style="background-color:#fffcf8">
                 <div class="row">
-                    <div class="col-lg-5">
+                    <div class="col-lg-5 col-md-5">
                         <p class="text-center col-lg-offset-5"><img src="/images/movil.png"></p>
                     </div>
-                    <div class="col-lg-7" style="padding-top: 5%">
+                    <div class="col-lg-7 col-md-7" style="padding-top: 5%">
                         <div class="row">
                             <div class="col-lg-12">
                                 <h2 class="text-center" style="color:#4a4a4a">DELICIOSAMENTE SALUDABLE</h2>
@@ -864,14 +871,14 @@
 
         <div class="container-fluid green-bk">
             <div class="row row-space" style="padding-top: 1%">
-                <div class="col-lg-5">
+                <div class="col-lg-5 col-md-5">
                     <h2 class="col-lg-offset-2" style="color:white">
                         Boletín. <br>
                         Regístrate y recibe tips, recetas <br>
                         y mucho más!
                     </h2>
                 </div>
-                <div class="col-lg-7">
+                <div class="col-lg-7 col-md-7">
                     <br>
                     <div class="row">
                         <div class="col-lg-10">
@@ -892,15 +899,15 @@
         <br>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-5 col-lg-offset-4">
+                <div class="col-lg-5 col-lg-offset-4 col-md-5 col-md-offset-4">
                     <div class="row">
-                        <div class="col-lg-3 ">
+                        <div class="col-lg-3 col-md-3">
                             <img src="/images/facebook.png">
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-3">
                             <img src="/images/instagram.png">
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-3">
                             <img src="/images/twitter.png">
                         </div>
                     </div>
@@ -912,7 +919,7 @@
         <br>
         <div class="container-fluid">
             <div class="row grey-bk" style="background-color:#fffcf8">
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-4">
                     <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%;">
                         <div class="row">
                             <div class="col-lg-12">
@@ -920,14 +927,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 col-md-12">
                                 <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1">
                                     Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-4">
                     <div class="row">
                         <div class="col-lg-12 text-center">
                             <h3>Aliados</h3>
@@ -953,7 +960,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-4">
                     <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
                         <br>
                         <br>
@@ -972,12 +979,12 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-12 col-md-12">
                     <hr>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-12 col-md-12">
                     <p class="fancybox">SuperFüds 2017. Todos los Derechos Reservados.</p>
                 </div>
             </div>

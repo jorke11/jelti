@@ -62,14 +62,19 @@
                 <img src="https://placeholdit.imgix.net/~text?txtsize=39&txt=420%C3%97250&w=420&h=250">
                 <div class="caption">
                     <h5 class="text-center"><a href="/productDetail/{{$val->id}}" style="color:black;font-weight: 400">{{$val->title}}</a></h5>
-                    @if(Auth::user()!=null)
+                    @if(Auth::guest())
                     <p>
                     <h4 class="text-center" style="color:black;font-weight: 400">$ {{number_format($val->price_sf,2,",",".")}}</h4>
                     </p>
                     @endif
                     <div class="row">
                         <div class="col-lg-12">
+                            @if(Auth::guest())
                             <a href="/productDetail/{{$val->id}}" class="btn btn-success form-control">Comprar</a>
+                            @else
+                            <a href="/login" class="btn btn-success form-control">Comprar</a>
+                            @endif
+
                         </div>
                     </div>
 

@@ -274,7 +274,7 @@ function Briefcase() {
                     }
                 },
                 {
-                    targets: [12],
+                    targets: [13],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -284,7 +284,7 @@ function Briefcase() {
                 }
                 ,
                 {
-                    targets: [13],
+                    targets: [14],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

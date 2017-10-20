@@ -11,6 +11,7 @@ use App\Models\Administration\Comment;
 use App\Models\Administration\Characteristic;
 use App\Models\Inventory\Orders;
 use App\Models\Inventory\OrdersDetail;
+use App\Models\Administration\Stakeholder;
 use Auth;
 use DB;
 
@@ -40,7 +41,8 @@ class ShoppingController extends Controller {
         $product = Products::findOrFail($id);
         $detail = ProductsImage::where("product_id", $id)->get();
         $relations = Products::where("category_id", $product->category_id)->get();
-        return view("Ecommerce.shopping.product", compact("product", "detail", "relations"));
+        $supplier = Stakeholder::find($product->supplier_id);
+        return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier"));
     }
 
     public function addComment(Request $req) {
@@ -80,7 +82,7 @@ class ShoppingController extends Controller {
         if (Auth::user() != null) {
             $count = $this->getDataCountOrders();
         }
-        
+
         return response()->json(["quantity" => $count]);
     }
 

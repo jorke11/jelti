@@ -78,7 +78,7 @@ class CronController extends Controller {
                 WHERE dispatched BETWEEN '" . date("Y-m-") . "01 00:00' AND '$date_report 23:59'  
                     and status_id IN (7)) cartera
             FROM vdepartures 
-            where dispatched BETWEEN '" . date("Y-m-") . "01 00:00' AND '$date_report 23:59' 
+            where dispatched BETWEEN '" . date("Y-m-") . "01 00:00' AND '$date_report 23:59' AND client_id NOT IN(258,264)
             and status_id IN (2)
             ";
 

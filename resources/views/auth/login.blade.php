@@ -24,7 +24,7 @@
 
 </style>
 <div class="container" >
-    <div class="row" style="padding-top: 200px;">
+    <div class="row" style="padding-top: 10% ;">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default" style="background: rgba(255, 255, 255, 0.9);border-radius:20px">
                 <div class="panel-body" >

@@ -15,7 +15,6 @@
         <!-- Styles -->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
         <style>
-
             .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
                 margin-left:150px;
                 color: #13b671;          
@@ -83,6 +82,8 @@
             }
         </style>
 
+        {!!Html::style('/css/client.css')!!}
+
         {!!Html::script('/vendor/toastr/toastr.min.js')!!}
         {!!Html::style('/vendor/toastr/toastr.min.css')!!}
 
@@ -97,10 +98,13 @@
     <body>
         <div id="loading-super" class="hidden" >
             <img src="{!!asset('images/Gif_final.gif')!!}" width='60%' >
+            @if(Auth::user()!=null)
             <input id="role_id" type="hidden" value="{{Auth::user()->role_id}}">
+            @endif
         </div>
         <div class="container-fluid body">
             <br>
+            @if(Auth::user()!=null)
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-1">
                     <div class="row">
@@ -117,6 +121,7 @@
                     </div>
 
                 </div>
+
                 <div class="col-lg-3">
                     {{auth()->user()->name}}, <a href="{{ url('/logout') }}"
                                                  onclick="event.preventDefault();
@@ -127,7 +132,9 @@
                         {{ csrf_field() }}
                     </form>
                 </div>
+
             </div>
+            @endif
             @yield('content')
         </div>
     </body>

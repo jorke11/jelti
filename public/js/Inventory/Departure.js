@@ -32,7 +32,7 @@ function Departure() {
             }
         })
 
-
+        
         $("#branch_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getBranchAddress($(this).val());
@@ -287,6 +287,14 @@ function Departure() {
                 $("#frm #phone").val(resp.data.client.phone);
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.send_city_id}});
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
+
+
+                if ((resp.data.briefcase).length > 0) {
+                    $("#frm #novelty").val("Novedades en cartera");
+                } else {
+                    $("#frm #novelty").val("Ok");
+                }
+
                 obj.loadSelectBranch(resp.data.branch, branch_id)
             }
         })
@@ -314,7 +322,10 @@ function Departure() {
                 success: function (resp) {
                     if (resp.response != null) {
                         $("#frm #address").val(resp.response.address_send);
-                        $("#frm #phone").val(resp.response.phone);
+                        if (resp.response.phone != null) {
+                            $("#frm #phone").val(resp.response.phone);
+                        }
+
                         $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
                         $("#frm #responsible_id").setFields({data: {responsible_id: resp.response.responsible_id}});
                     }
@@ -756,6 +767,7 @@ function Departure() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
+
                 $(".input-departure").setFields({data: data.header, disabled: true});
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
@@ -794,8 +806,15 @@ function Departure() {
 
                 obj.getClient(data.header.client_id, data.header.branch_id);
 
-
                 obj.printDetail(data, btnEdit, btnDel);
+            },
+            error(xhr, responseJSON, thrown) {
+
+                if (thrown == 'Unauthorized') {
+                    location.href = "/";
+                }
+
+
             }
         })
     }
@@ -994,12 +1013,14 @@ function Departure() {
                         if (row.status_id == 5) {
                             html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + row.id + ')"></i>';
                         } else {
-                            if (row.status_id != 1) {
+                            if (row.status_id != 1 && row.status_id != 8) {
 
                                 html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + row.id + ')" title="Ver Factura">';
                                 if (row.status_id != 4) {
                                     html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + row.id + ')" title="Anular Factura"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
                                 }
+                            } else if (row.status_id == 8) {
+                                html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + row.id + ')" title="Borrar Orden"></i>';
                             } else {
                                 html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + row.id + ')" title="Borrar Orden"></i>&nbsp;&nbsp;<i style="cursor:pointer" class="fa fa-file-text fa-lg" aria-hidden="true" onclick="obj.tempInvoice(' + row.id + ')" title="Generar Remisión"></i>';
                             }
@@ -1051,6 +1072,8 @@ function Departure() {
                     $('td', row).eq(12).addClass('color-checked');
                 } else if (data.status_id == 7) {
                     $('td', row).eq(12).addClass('color-green');
+                } else if (data.status_id == 8) {
+                    $('td', row).eq(12).addClass('color-red');
                 }
             },
             footerCallback: function (row, data, start, end, display) {
@@ -1142,9 +1165,9 @@ function Departure() {
     this.format = function (d) {
         var url = "/departure/" + d.id + "/detailAll";
         var html = '<br><table class="table-detail">';
-        html += '<thead><tr><th colspan="2">Information</th><th colspan="3" class="center-rowspan">Order</th>'
-        html += '<th colspan="3" class="center-rowspan">Dispatched</th></tr>'
-        html += '<tr><th>#</th><th>Product</th><th>Quantity</th><th>Unit</th><th>Total</th><th>Quantity</th><th>Unit</th><th>Total</th></tr></thead>';
+        html += '<thead><tr><th colspan="3">Information</th><th colspan="3" class="center-rowspan">Orden</th>'
+        html += '<th colspan="3" class="center-rowspan">Despachado</th></tr>'
+        html += '<tr><th>#</th><th>Producto</th><th>Iva</th><th>Cantidad</th><th>Unit</th><th>Total</th><th>Cantidad</th><th>Unidades</th><th>Total</th></tr></thead>';
         $.ajax({
             url: url,
             method: "GET",
@@ -1157,6 +1180,7 @@ function Departure() {
                     html += "<tr>";
                     html += "<td>" + val.id + "</td>";
                     html += "<td>" + val.product + "</td>";
+                    html += "<td>" + (val.tax * 100) + "%</td>";
                     html += "<td>" + val.quantity + "</td>";
                     html += "<td>" + val.valueFormated + "</td>";
                     html += "<td>" + val.totalFormated + "</td>";
@@ -1165,7 +1189,22 @@ function Departure() {
                     html += "<td>" + val.totalFormated_real + "</td>";
                     html += "</tr>";
                 });
-                html += '<tr><td colspan="4">Total</td><td>' + data.total + '</td></td>';
+                if (data.exento != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Exento</b></td><td>' + data.exento + '</td><td></td><td></td><td>' + data.exento_real + '</td><tr>';
+                }
+                if (data.tax5 != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Iva 5%</b></td><td>' + data.tax5 + '</td><td></td><td></td><td>' + data.tax5_real + '</td><tr>';
+                }
+                html += '<tr><td colspan="5" align="right"><b>Iva 19%</b></td><td>' + data.tax19 + '</td><td></td><td></td><td>' + data.tax19_real + '</td><tr>';
+                if (data.discount != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.discount + '</td><td></td><td></td><td>' + data.discount + '</td><tr>';
+                }
+                if (data.shipping_cost != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.shipping_cost + '</td><td></td><td></td><td>' + data.shipping_cost + '</td><tr>';
+                }
+
+                html += '<tr><td colspan="5" align="right"><b>Subtotal</b></td><td>' + data.subtotal + '</td><td></td><td></td><td>' + data.subtotal_real + '</td><tr>';
+                html += '<tr><td colspan="5" align="right"><b>Total</b></td><td>' + data.total + '</td><td></td><td></td><td>' + data.total_real + '</td><tr>';
                 html += "</tbody></table><br>";
             }
         })

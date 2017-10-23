@@ -106,31 +106,34 @@
 </div>
 <br>
 <br>
+
 <div class="row">
     <div class='col-md-10 col-lg-offset-1'>
-        <div class="carousel slide media-carousel" id="mediaa">
+        <div class="carousel slide media-carousel" id="media">
             <div class="carousel-inner">
                 <div class="item  active">
                     <div class="row">
                         <?php
                         $cont = 0;
                         foreach ($category as $i => $val) {
-                            ?>
-                            <div class="col-md-2">
-                                <a class="fancybox thumbnail" rel="gallery1" href="shopping/<?php echo $val->id ?>">
-                                    <img src="{{$val->image}}" alt="">
-                                </a>
-                            </div>
-                            <?php
-                            $cont++;
-                            if ($cont == 4) {
-                                $cont = 0;
+                            if ($val->image != '') {
                                 ?>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="row">
+                                <div class="col-md-2" style="padding:0px">
+                                    <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
+                                        <img src="{{$val->image}}" alt="">
+                                    </a>
+                                </div>
                                 <?php
+                                if ($cont == 5) {
+                                    $cont = 0;
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="row">
+                                    <?php
+                                }
+                                $cont++;
                             }
                         }
                         ?>
@@ -167,7 +170,7 @@
                         foreach ($category as $i => $val) {
                             ?>
                             <div class="col-md-2">
-                                <a class="fancybox thumbnail" rel="gallery1" href="page/category/<?php echo $val->id ?>">
+                                <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="img/frezedetay.png">
                                     <img src="{{$val->image}}" alt="">
                                 </a>
                             </div>
@@ -198,8 +201,6 @@
                 <span class="sr-only">Next</span>
             </a>
 
-            <a data-slide="prev" href="#media" class="left carousel-control">‹</a>
-            <a data-slide="next" href="#media" class="right carousel-control">›</a>
         </div>
     </div>
 </div>
@@ -218,7 +219,7 @@
             @foreach($subcategory as $val)
             <div class="col-lg-2">
                 <div class="row"><div class="col-lg-12"><p class="text-center">{{ucwords($val->description)}}</p></div></div>
-                <div class="row"><div class="col-lg-12"><img src="{{$val->img}}" alt="" class="img-responsive center-block" ></div></div>
+                <div class="row hover01"><div class="col-lg-12"><figure><img id="sub_{{$val->id}}]" src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer" onclick="obj.selectedSubcategory()"></figure></div></div>
             </div>
             @endforeach
         </div>

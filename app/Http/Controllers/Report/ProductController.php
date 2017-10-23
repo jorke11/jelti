@@ -46,16 +46,16 @@ class ProductController extends Controller {
         if ($input["commercial_id"] != '') {
             $where .= " AND dep.responsible_id=" . $input["commercial_id"];
         }
-        
+
 
         $res = $this->getListProduct($input["init"], $input["end"], $where);
         return response()->json(["data" => $res]);
     }
 
-    public function getListProduct($init, $end, $where = '', $limit = '') {
+    public function getListProduct($init, $end, $where = '', $limit = 'LIMIT 10') {
         $sql = "
-          SELECT p.id,p.title as product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
-         sum(d.value * d.quantity * d.units_sf) as subtotal 
+          SELECT p.id,p.title as product, sum(d.real_quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
+         sum(d.value * d.real_quantity * d.units_sf) as subtotal 
             FROM departures_detail d 
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
@@ -152,6 +152,10 @@ class ProductController extends Controller {
             GROUP BY 1,2,3
             ORDER by 4 DESC
             ";
+//        $sql = "
+//            SELET 
+//        
+//                ";
 
         $res = DB::select($sql);
         return response()->json(["data" => $res]);

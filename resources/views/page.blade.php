@@ -14,27 +14,28 @@
         <!-- Styles -->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
         <style>
-
-            .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
-                margin-left:150px;
-                color: #13b671;          
-                font-size: 20px;
-                font-weight: bold;
-
+            body{
+                font-family: "helvetica";
             }
+
+            /*            .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+                            margin-left:150px;
+                            color: #13b671;          
+                            font-size: 20px;
+                            font-weight: bold;
+            
+                        }*/
             .navbar-brand>img {
                 display: inline;
             }
             .navbar-brand {
                 padding: 10px 10px;
             }
-            .navbar-default {
-                background-color: white;
-                box-shadow: 0 4px 4px -4px #9B9B9B;
-            }
-            .h3, h3 {
-                color: #13b671;          
-            }
+            /*            .navbar-default {
+                            background-color: white;
+                            box-shadow: 0 4px 4px -4px #9B9B9B;
+                        }*/
+
             .navbar-form .form-control.search {
                 width: 500px;
             }
@@ -70,48 +71,79 @@
                 background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(85,185,117,1) 0%, rgba(92,230,214,1) 100%);
                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#5ce6d6', GradientType=1 );
             }
-            .grey-bk{
-                background: #fffcf8;
-            }
+            /*            .grey-bk{
+                            background: #fffcf8;
+                        }*/
 
             #img-main{
-                background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;
+
+                background: #13b671 url('assets/images/foto-paginaweb.png')  no-repeat;
+                background-image: 100%;
                 background-size: cover;
                 color:white;
-                /*height:100%;*/
-                height:600px;
-                /*text-align: center;*/
-                display: flex;
-                /*align-items: center;*/
+                /*height:60%;*/
+                height:800px;
             }
 
             @media screen and (min-width:1340px) {
                 #img-main{
-                    background: #13b671 url('assets/images/fondo_init.png') center center no-repeat;
+                    background: #13b671 url('assets/images/foto-paginaweb.png')  no-repeat;
+                    background-image: 100%;
                     background-size: cover;
                     color:white;
-                    /*height:600px;*/
+                    /*height:60%;*/
                     height:850px;
-                    display: flex;
+                    /*                    display: flex;*/
                 }
             }
 
-            #img-marketplace{
-                background: url('assets/images/marketplace.png') center center no-repeat;
-                background-size: auto;
-                color:white;
-                height:200px;
-                display: flex;
-                margin-top: 180px;
+            .buttons-page{
+                border-bottom-left-radius: 1em 1em 1em 1em;
+                border: 0;  
+                background: rgba(241,111,92,1);
+                background: -moz-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(241,111,92,1)), color-stop(0%, rgba(246,41,12,1)), color-stop(0%, rgba(231,56,39,1)), color-stop(0%, rgba(52,205,159,1)), color-stop(49%, rgba(142,222,174,1)), color-stop(100%, rgba(142,222,174,1)));
+                background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                width:80%;
+                font-weight: 100;
+                font-size:16px;
             }
-            #img-superfuds{
-                background: url('assets/images/sf_blanco.png') center center no-repeat;
-                background-size: 155px;
 
-                color:white;
-                height:100px;
-                display: flex;
+            @media (max-width: 1300px) {
+                .buttons-page {
+                    border-bottom-left-radius: 1em 1em 1em 1em;
+                    border: 0;  
+                    background: rgba(0,0,0,1);
+                    background: -moz-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(241,111,92,1)), color-stop(0%, rgba(246,41,12,1)), color-stop(0%, rgba(231,56,39,1)), color-stop(0%, rgba(52,205,159,1)), color-stop(49%, rgba(142,222,174,1)), color-stop(100%, rgba(142,222,174,1)));
+                    background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                    background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                    background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
+                    width:100%;
+                    font-weight: 100;
+                    font-size:12px;
+                    padding-left: 18%;
+                }
             }
+
+            /*            #img-marketplace{
+                            background: url('assets/images/marketplace.png') center center no-repeat;
+                            background-size: auto;
+                            color:white;
+                            height:200px;
+                            display: flex;
+                            margin-top: 180px;
+                        }
+                        #img-superfuds{
+                            background: url('assets/images/sf_blanco.png') center center no-repeat;
+                            background-size: 155px;
+            
+                            color:white;
+                            height:100px;
+                            display: flex;
+                        }*/
 
         </style>
         <script>
@@ -129,14 +161,95 @@
         <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
         <script>
         </script>
+        <style>
+            body{
+                font-family: "helvetica" !important;
+            }
+
+            .login-button{
+                margin: 0 !important;
+                padding-bottom: 6px !important;
+                padding-top: 6px !important;
+                color:white !important;
+                font-weight: 300;
+                border-bottom-left-radius: 1em 1em 1em 1em !important;
+                width: 100% !important;
+                border: 0 !important;  
+                background: rgba(241,111,92,1) !important;
+                background: -moz-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
+                background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(241,111,92,1)), color-stop(0%, rgba(246,41,12,1)), color-stop(0%, rgba(231,56,39,1)), color-stop(0%, rgba(52,205,159,1)), color-stop(49%, rgba(142,222,174,1)), color-stop(100%, rgba(142,222,174,1))) !important;
+                background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
+                background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
+                background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
+                font-size:20px !important;
+                font-weight: 100 !important;
+                -webkit-transition: all 0.3s ease-in-out !important;
+                -moz-transition: all 0.3s ease-in-out !important;
+                transition: all 0.3s ease-in-out !important;
+            }
+            .login-button:hover{
+                background-color: #ffffff !important;
+                background: #ffffff !important;
+                color: #00c98a! important;
+                border: 1px solid #00c98a !important;
+            }
+            .row-space{
+                padding-bottom: 20px;
+            }
+            .row-center{
+                display: flex;
+                justify-content: center;
+            }
+            .color-font{
+                color:#747175;
+                font-weight: 100;
+            }
+            .underline{
+                border-bottom: solid 2px #000000;
+                display: inline;
+                padding-bottom: 3px;
+            }
+            .underline-white{
+                border-bottom: solid 2px #fff;
+                display: inline;
+                padding-bottom: 3px;
+            }
+            .title-color{
+                color:#4c4b49;
+                font-weight:100;
+            }
+
+            .carousel-control.left{
+                background-image:-webkit-gradient(linear,left top,right top,from(rgba(0,0,0,.0001)),to(rgba(0,0,0,.0001)));
+                background-image:linear-gradient(to right,rgba(0,0,0,.0001) 0,rgba(0,0,0,.0001) 100%)
+            }
+            .carousel-control.right{
+                background-image:-webkit-gradient(linear,left top,right top,from(rgba(0,0,0,.0001)),to(rgba(0,0,0,.0001)));
+                background-image:linear-gradient(to right,rgba(0,0,0,.0001) 0,rgba(0,0,0,.0001) 100%)
+            }
+            .carousel-control{
+                opacity:.9;
+                width:6%
+            }
+            .carousel-control.left{
+                left: -6%;
+                bottom: 10%;
+            }
+            .carousel-control.right{
+                right: -3%;
+                bottom: 10%;
+                width:2%;
+                
+            }
+        </style>
     </head>
 
 
     <body>
-        <nav class="navbar navbar-default" style="margin-bottom:0px">
+        <nav class="navbar navbar-default" style="margin-bottom:0px;padding-top: 4px;min-height: 60px">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
+                <div class="navbar-header" style='padding-left: 2%'>
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -144,213 +257,170 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">
-                        <img alt="Brand" src="{{ asset('assets/images/SF50X.png') }}" class="title"> SuperFuds
+                        <img alt="Brand" src="{{ asset('assets/images/SF50X.png') }}">
                     </a>
 
                 </div>
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control search" placeholder="">
-                    </div>
-                    <button type="submit" class="btn btn-success input-sm">Buscar</button>
-                </form>
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right: 5%">
                     <ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"></a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100" ><span class="underline">Inicio</span></a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Productos</a></li>
+                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Blog</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
-                        <li><a href="/login">Iniciar Sesión</a></li>
+                        <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
 
-        <style>
-
-
-        </style>
         <section>
-            <div class="container-fluid">
-                <!--<div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
+            <div class="container-fluid" style="padding-left: 0;padding-right: 0; background-attachment: fixed;" id="img-main">
+                <!--
+                <div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
+                <!--<div >-->
                 <div class="row">
-                    <div id="img-main">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-5">
-                                    <!--<div style="width:380px;height:230px;background-image:url({{ asset('assets/images/marketplace.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>-->
-                                    <div id="img-marketplace"></div>
-                                </div>
-                                <div class="col-lg-3 col-lg-offset-3">
-                                    <div class="row">
-                                        <div class="col-lg-12 text-center">
-                                            <!--<div style="width:70%;height:100px;background-image:url({{ asset('assets/images/sf_blanco.png') }}); background-repeat: no-repeat;background-size: 100% 100%;"></div>-->
-                                            <div id="img-superfuds"></div>
+                    <div class="col-lg-6 col-md-6" style="padding-top: 13%;padding-left: 4%">
+                        <img src="{{ asset('assets/images/marketplace.png') }}" >
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="row" style="padding-top: 5%;">
+                            <div class="col-lg-6 col-lg-offset-6 col-md-7 col-md-offset-4">
+                                <p class="text-center"><img src="{{ asset('assets/images/sf_blanco.png') }}"></p>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 3%;">
+                            <div class="col-lg-5 col-lg-offset-6 col-md-8 col-md-offset-3">
+                                <div class="panel" style=" background-color:rgba(255,255,255,.4);border-color: white;padding: 0% 5% 0% 5%;border-radius: 10px">
+                                    <div class="panel-body">
+                                        <div class="row row-space">
+                                            <div class="col-lg-10 col-lg-offset-1">
+                                                <p style="color:white;font-size:25px; text-shadow: 2px 1px 5px #575757;font-weight: 100" class="text-center">Registrate como Cliente o Negocio</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="panel" style="background: rgba(255, 255, 255, 0.6);border: 1px solid #fff">
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <p class="text-center white-label">Registrate como <br>
-                                                            Negocio o Cliente</p>
-                                                    </div>
-                                                </div>
-                                                <form>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label for="email" class="white-label">Compañía</label>
-                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Compañía">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label for="email" class="white-label">Nombre</label>
-                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Nombre">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label for="email" class="white-label">Email</label>
-                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Email">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="form-group">
-                                                                <label for="email" class="white-label">Telefono</label>
-                                                                <input type="email" class="form-control input-sm" id="email" placeholder="Telefono">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="checkbox">
-                                                                <label class="white-check"><input type="checkbox" > Acepto terminos de servicio | Leer más</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-3 col-lg-offset-4">
-                                                            <button type="submit" class="btn btn-success btn-sm">Registrarse</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                        <div class="row row-space">
+                                            <div class="col-lg-6 col-md-6">
+                                                <button class="btn buttons-page btn-lg text-center">Proveedor</button>
+                                            </div>
 
-
+                                            <div class="col-lg-6 col-md-6">
+                                                <p class="text-center">
+                                                    <button class="btn buttons-page btn-lg text-center">Negocio</button>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row row-space">
+                                            <div class="col-lg-12 ">
+                                                <input class="form-control input-lg" placeholder="Compañia">
+                                            </div>
+                                        </div>
+                                        <div class="row row-space">
+                                            <div class="col-lg-12">
+                                                <input class="form-control input-lg" placeholder="Nombre">
+                                            </div>
+                                        </div>
+                                        <div class="row row-space">
+                                            <div class="col-lg-12">
+                                                <input class="form-control input-lg" placeholder="Email">
+                                            </div>
+                                        </div>
+                                        <div class="row row-space">
+                                            <div class="col-lg-12">
+                                                <input class="form-control input-lg" placeholder="Telefono">
+                                            </div>
+                                        </div>
+                                        <div class="row row-space">
+                                            <div class="col-lg-12">
+                                                <input type="checkbox"><span style="color:white"> Acepto términas de servicio | Leer mas</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-md-offset-3">
+                                                <button type="button" class="btn buttons-page btn-lg text-center">Registrate</button>
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
+
                     </div>
-                    <!--<img id="estirada" style="top: 0; left: 0; width: 100%; height: 90%" src="{{ asset('assets/images/fondo1_1260X555.png') }}" />-->
-                      <!--<img src="{{ asset('assets/images/fondo1_1280X683.png') }}">-->
                 </div>
+
             </div>
         </section>
-        <br>
-        <br>
-        <br>
-        <div class="container-fluid">
-            <br>
-            <div class="row">
-                <div class="col-lg-12"><h1 class="text-center" style="color:#13b671">Industria de alimentos <u>Saludables</u></h1></div>
-            </div>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
+        <section>
+            <div class="container-fluid">
 
-            <br>
-            <div class="row">
-                <div class="col-lg-9 col-lg-offset-1">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <img src="{{ asset('assets/images/group8.png') }}" class="img-responsive center-block"/>
-                        </div>
-                        <div class="col-lg-4">
-                            <img src="{{ asset('assets/images/group9.png') }}" class="img-responsive center-block"/>
-                        </div>
-                        <div class="col-lg-4">
-                            <img src="{{ asset('assets/images/group11.png') }}" class="img-responsive center-block"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <h4 class="text-center">
-                                "88% de las personas estan dispuestas a pagar más por alimentos saludables." Forbes 2017
-                            </h4>
-                        </div>
-                        <div class="col-lg-4">
-                            <h4 class="text-center">"Para el 2017, las ventas globales de alimentos saludables llegarán a un trillón de dolares." . Forbes 2017</h4>
-                        </div>
-                        <div class="col-lg-4">
-                            <h4 class="text-center">
-                                "7 de cada 10 colombianos desean bajar de peso y ser más saludables." Nielsen 2017
-                            </h4>
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-10 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
-                    </div>
-                    <br>
+                <div class="row" style="padding-bottom:7%;padding-top: 2%">
+                    <div class="col-lg-10 col-lg-offset-1"><h1 class="text-center title-color" >Industria de alimentos <span class="underline">Saludables</span></h1></div>
                 </div>
 
-            </div>
-            <br>
-            <br>
+                <div class="row" style="padding-bottom:5%;">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <img src="{{ asset('assets/images/group8.png') }}" class="img-responsive center-block"/>
+                            </div>
+                            <div class="col-lg-4">
+                                <img src="{{ asset('assets/images/group9.png') }}" class="img-responsive center-block"/>
+                            </div>
+                            <div class="col-lg-4">
+                                <img src="{{ asset('assets/images/group11.png') }}" class="img-responsive center-block"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4">
+                                <h4 class="text-center color-font" >
+                                    "88% de las personas estan dispuestas a pagar más por alimentos saludables." <br><b>Forbes 2017</b>
+                                </h4>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <h4 class="text-center color-font">"Para el 2017, las ventas globales de alimentos saludables llegarán a un trillón de dolares." . <br><b>Forbes 2017</b></h4>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <h4 class="text-center color-font">
+                                    "7 de cada 10 colombianos desean bajar de peso y ser más saludables." <br><b>Nielsen 2017</b>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-9 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
+                </div>
+                <br>
+                <br>
 
-        </div>
+            </div>
+        </section>
+
         <div class="container-fluid" style="background-color:#fffcf8">
             <br>
             <div class="row">
-                <div class="col-lg-12"><h1 class="text-center">Nuestros <u>Productos</u></h1></div>
+                <div class="col-lg-12"><h1 class="text-center title-color" style="font-weight: 900">Nuestros <span class="underline">Productos</span></h1></div>
             </div>
 
             <div class="row">
-                <div class="col-lg-12"><h4 class="text-center" style="color:#cc">Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
+                <div class="col-lg-12"><h4 class="text-center font-color" >Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
             </div>
             <br>
             <br>
             <div class="row">
-                <div class='col-md-10 col-lg-offset-1'>
+                <div class='col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1'>
                     <div class="carousel slide media-carousel" id="media">
                         <div class="carousel-inner">
                             <div class="item  active">
                                 <div class="row">
                                     <?php
-//                                    dd($category);
                                     $cont = 0;
                                     foreach ($category as $i => $val) {
                                         if ($val->image != '') {
                                             ?>
-                                            <div class="col-md-2">
-                                                <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
+                                            <div class="col-md-2" style="padding:0px">
+                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
                                                     <img src="{{$val->image}}" alt="">
                                                 </a>
                                             </div>
@@ -388,14 +458,14 @@
             </div>
             <br>
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-2"><h4>Lo Nuevo</h4></div>
-                <div class="col-lg-3 col-lg-offset-4"><h4>Ver Todo</h4></div>
+                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2"><h4>Lo Nuevo</h4></div>
+                <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3"><h4>Ver Todo</h4></div>
             </div>
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
             </div>
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
+                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
                     <div class="carousel slide media-carousel" id="newproducts">
                         <div class="carousel-inner">
                             <div class="item  active">
@@ -405,7 +475,7 @@
                                     foreach ($category as $i => $val) {
                                         ?>
                                         <div class="col-md-2">
-                                            <a class="fancybox thumbnail" rel="gallery1" href="img/frezedetay.png">
+                                            <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="img/frezedetay.png">
                                                 <img src="{{$val->image}}" alt="">
                                             </a>
                                         </div>
@@ -444,33 +514,30 @@
         <br>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-2"><h4>Sub-categorias</h4></div>
+                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1"><h4 class="color-font">Sub-categorias</h4></div>
             </div>
 
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
             </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
+            <div class="row row-space">
+                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
                     @foreach($subcategory as $val)
-                    <div class="col-lg-2">
-                        <div class="row"><div class="col-lg-12"><p class="text-center">{{ucwords($val->description)}}</p></div></div>
-                        <div class="row"><div class="col-lg-12"><img src="{{$val->img}}" alt="" class="img-responsive center-block" ></div></div>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="row"><div class="col-lg-12 col-md-12"><p class="text-center color-font">{{ucwords($val->description)}}</p></div></div>
+                        <div class="row"><div class="col-lg-12 col-md-12"><img src="{{$val->alternative}}" alt="" class="img-responsive center-block"></div></div>
                     </div>
                     @endforeach
                 </div>
             </div>
-            <br>
-            <br>
-            <br>
 
             <div class="row green-bk">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-12"><h2 class="text-center" style="color:white"><u>Negocios</u></h2></div>
+                    <div class="row row-space">
+                        <div class="col-lg-12"><h2 class="text-center" style="color:white"><span class="underline-white" style="font-size: 40px">Negocios</span></h2></div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12"><p class="text-center" style="color:white">Concéntrate en tu producto, nosotros nos encargamos del negocio.</p></div>
+                        <div class="col-lg-12"><p class="text-center" style="color:white;font-size: 20px;font-weight: 100">Concéntrate en tu producto, nosotros nos encargamos del negocio.</p></div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
@@ -480,32 +547,25 @@
                                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                                     <li data-target="#myCarousel" data-slide-to="1"></li>
                                 </ol>
-
-
                                 <div class="carousel-inner">
                                     <div class="item active">
-
                                         <div class="header-text hidden-xs">
                                             <div class="col-md-12 col-center">
-                                                <br>
-                                                <br>
-                                                <br>
-                                                <h3>
-                                                    <h2 class="text-center" style="color:#ffffff">
-                                                        1 Factura para 300+ Productos Saludables de 40+ Marcas.</h2>
-                                                </h3>
-                                                <br>
-                                                <br>
-                                                <br>
-                                                <br>
-                                                <br>
+                                                <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
+                                                <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="item">
+                                        <div class="header-text hidden-xs">
+                                            <div class="col-md-12 col-center">
+                                                <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
+                                                <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
                                             </div>
                                         </div> 
                                     </div>
                                 </div>
-
-
-                                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                <a class="left carousel-control" href="#myCarousel" data-slide="prev" stuel>
                                     <span class="glyphicon glyphicon-chevron-left"></span>
                                     <span class="sr-only">Previous</span>
                                 </a>
@@ -528,297 +588,320 @@
 
                 </div>
             </div>
-        </div>                        
-        <br>
-        <br>
-        <br>
+        </div>                       
 
+        <section>
+            <div class="container-fluid" style="padding-top: 1%">
+                <div class="row row-space" style="padding-bottom: 2%">
+                    <div class="col-lg-12"><h2 class="text-center color-font">Lo que dic<span class="underline">en nuestro</span>s clientes</h2></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4">
+                        <div class="row row-space">
+                            <div class="col-lg-12 text-center col-md-12"><img src="/images/click_clack.png"></div>
+                        </div>
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12"><h4 class="text-center"><u>Lo que Dicen nuestros clientes</u></h4></div>
+                        <div class="row row-space">
+                            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2" style="color:#56be7f">
+                                <p class="text-center"><b>Sergio Saavedra<br>
+                                        Director General | Hotel Click Clack</b>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+                                <p class="text-center color-font">
+                                    Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="row  row-space">
+                            <div class="col-lg-12 text-center"><img src="/images/farmatado.png"></div>
+                        </div>
+
+                        <div class="row row-space">
+                            <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
+                                <p class="text-center"><b>Teodoro Zubillaga<br>
+                                        Country Manager | Farmatodo
+                                    </b>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <p class="text-center color-font">
+                                    A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="row">
+                            <div class="col-lg-12 text-center"><img src="/images/rappi.png"></div>
+                        </div>
+                        <br>
+                        <div class="row row-space">
+                            <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
+                                <p class="text-center"><b>Simon Borrero<br>
+                                        CEO | Rappi</b>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <p class="text-center color-font">
+                                    Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row row-space">
+                    <div class="col-lg-4 col-md-4">
+                        <p class="text-center color-font">
+                            <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
+                        </p>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <p class="text-center color-font">
+                            <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
+                        </p>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <p class="text-center color-font">
+                            <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
+                        </p>
+                    </div>
+                </div>
             </div>
-            <br>
-            <br>
-            <br>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-lg-12 text-center"><img src="/images/click_clack.png"></div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center" style="color:#56be7f">
-                            <b>Sergio Saavedra<br>
-                                Director General | Hotel Click Clack</b>
+        </section>
+
+
+        <section>
+            <div class="container-fluid">
+                <div class="row green-bk">
+                    <div class="col-lg-12">
+                        <div class="row row-space">
+                            <div class="col-lg-12"><h2 class="text-center" style="color:white"><span class="underline-white" style="font-size: 40px">Proveedores</span></h2></div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
+                        <div class="row">
+                            <div class="col-lg-12"><p class="text-center" style="color:white;font-size: 20px;font-weight: 100">Entregamos todas tus marcas favoritas directamente en tu negocio.</p></div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-lg-12 text-center"><img src="/images/farmatado.png"></div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center" style="color:#56be7f">
-                            <b>Teodoro Zubillaga<br>
-                                Country Manager | Farmatodo
-                            </b>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-lg-12 text-center"><img src="/images/rappi.png"></div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center" style="color:#56be7f">
-                            <b>Simon Borrero<br>
-                                CEO | Rappi</b>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br>
-        <br>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
 
-        <div class="container-fluid">
-            <div class="row green-bk">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-12"><h2 class="text-center" style="color:white"><u>Proveedores</u></h2></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12"><p class="text-center" style="color:white">Entregamos todas tus marcas favoritas directamente a tu negocio.</p></div>
-                    </div>
-                    <div class="row">
-                        <div id="myCarousel2" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                                    </ol>
 
-                            <ol class="carousel-indicators">
-                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                                <li data-target="#myCarousel" data-slide-to="1"></li>
-                            </ol>
+                                    <div class="carousel-inner">
+                                        <div class="item active">
 
-
-                            <div class="carousel-inner">
-                                <div class="item active">
-
-                                    <div class="header-text hidden-xs">
-                                        <div class="col-md-12 col-center">
-                                            <br>
-                                            <br>
-                                            <br>
-
-                                            <h3>
-                                                <h2 class="text-center" style="color:#ffffff">
-                                                    ¡Tus ventas se dispararán! Distribuimos a más de 400 puntos en 16 ciudades.
-                                            </h3>
-
-
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
+                                            <div class="header-text hidden-xs">
+                                                <div class="col-md-12 col-center">
+                                                    <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">¡Tus ventas se dispararan!<br>Distribuimos a más de 400 puntos<br>en 16 ciudades.</h2>
+                                                    <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
+                                                </div>
+                                            </div> 
                                         </div>
-                                    </div><!-- /header-text -->
+                                        <div class="item">
+
+                                            <div class="header-text hidden-xs">
+                                                <div class="col-md-12 col-center">
+                                                    <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
+                                                    <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+
+
+                                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+
+                                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Left and right controls -->
-                            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-
-                            <!-- Left and right controls -->
-                            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-        <br>
-        <br>
-
-
-        <div class="container-fluid ">
-            <div class="row">
-                <div class="col-lg-12"><h4 class="text-center"><u>Lo que Dicen nuestros clientes</u></h4></div>
-            </div>
-            <br>
-            <br>
-            <br>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-lg-12 text-center"><img src="/images/terra_fertil.png"></div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center" style="color:#56be7f">
-                            <b>Raul Bermeo<br>
-                                Director General | Terrafertil</b>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos.
-                        </div>
-                    </div>
-                    <br>
-
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="{{ asset('assets/images/SF50X.png') }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-lg-12 text-center"><img src="/images/chocolov.png"></div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center" style="color:#56be7f">
-                            <b>Adriana Hoyos<br>
-                                Gerente General | Chocolov</b>s
-                            </b>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios.
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="{{ asset('assets/images/SF50X.png') }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-lg-12 text-center"><img src="/images/rappi.png"></div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center" style="color:#56be7f">
-                            <b>Javier Pinilla<br>
-                                Director Comercial | Segalco</b>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores.
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="{{ asset('assets/images/SF50X.png') }}">
-                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <br>
-        <br>
-        <div class="container-fluid grey-bk">
-            <div class="row">
-                <div class="col-lg-4">
-                    <img src="/images/movil.png">
+        </section>
+
+
+        <section>
+            <div class="container-fluid" style="padding-top: 1%">
+                <div class="row row-space" style="padding-bottom: 2%">
+                    <div class="col-lg-12"><h2 class="text-center color-font">Lo que dic<span class="underline">en nuestros pr</span>oveedores ...</h2></div>
                 </div>
-                <div class="col-lg-8">
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h2 class="text-center">DELICIOSAMENTE SALUDABLE</h2>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4">
+                        <div class="row row-space">
+                            <div class="col-lg-12 text-center"><img src="/images/terra_fertil.png"></div>
+                        </div>
+
+                        <div class="row row-space">
+                            <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
+                                <p class="text-center"><b>Raul Bermeo<br>
+                                        Director General | Terrafertil</b>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <p class="text-center color-font">
+                                    “Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h4 class="text-center">Descarga Superfuds para  que puedas  llevar  la vida saludable a todas partes</h4>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="row  row-space">
+                            <div class="col-lg-12 text-center"><img src="/images/chocolov.png"></div>
+                        </div>
+
+                        <div class="row row-space">
+                            <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
+                                <p class="text-center"><b>Adriana Hoyos<br>
+                                        Gerente General | Chocolov
+                                    </b>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <p class="text-center color-font">
+
+                                    "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="/images/appstore.png" >
+                    <div class="col-lg-4 col-md-4">
+                        <div class="row">
+                            <div class="col-lg-12 text-center"><img src="/images/segalco.png"></div>
                         </div>
+                        <br>
+                        <div class="row row-space">
+                            <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
+                                <p class="text-center"><b>Javier Pinilla<br>
+                                        Director Comercial | Segalco</b>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <p class="text-center color-font">
+
+                                    "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
+                                </p>
+                            </div>
+                        </div>
+
                     </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="/images/googleplay.png">
+                </div>
+                <div class="row row-space">
+                    <div class="col-lg-4 col-md-4">
+                        <p class="text-center color-font">
+                            <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
+                        </p>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <p class="text-center color-font">
+                            <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
+                        </p>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <p class="text-center color-font">
+                            <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <section>
+            <div class="container-fluid grey-bk" style="background-color:#fffcf8">
+                <div class="row">
+                    <div class="col-lg-5 col-md-5">
+                        <p class="text-center col-lg-offset-5"><img src="/images/movil.png"></p>
+                    </div>
+                    <div class="col-lg-7 col-md-7" style="padding-top: 5%">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h2 class="text-center" style="color:#4a4a4a">DELICIOSAMENTE SALUDABLE</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4 class="text-center" style="color:#4a4a4a">Descarga Superfuds para  que puedas  llevar  la vida saludable a todas partes</h4>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <img src="/images/appstore.png" >
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <img src="/images/googleplay.png">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <br>
-        <br>
+        </section>
+
         <div class="container-fluid green-bk">
-            <div class="row">
-                <div class="col-lg-5">
-                    <h3 style="color:white">
+            <div class="row row-space" style="padding-top: 1%">
+                <div class="col-lg-5 col-md-5">
+                    <h2 class="col-lg-offset-2" style="color:white">
                         Boletín. <br>
-                        ºRegístrate y recibe tips, recetas 
+                        Regístrate y recibe tips, recetas <br>
                         y mucho más!
-                    </h3>
+                    </h2>
                 </div>
-                <div class="col-lg-7">
+                <div class="col-lg-7 col-md-7">
                     <br>
                     <div class="row">
-                        <div class="col-lg-12">
-                            <input class="form-control" placeholder="Email">
+                        <div class="col-lg-10">
+                            <input class="form-control input-lg" placeholder="Email">
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-lg-12">
-                            <button class="btn btn-default">Suscribete</button>
+                            <button class="btn btn-default" style="color:green">Suscribete</button>
                         </div>
                     </div>
                     <br>
@@ -829,15 +912,15 @@
         <br>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-5 col-lg-offset-4">
+                <div class="col-lg-5 col-lg-offset-4 col-md-5 col-md-offset-4">
                     <div class="row">
-                        <div class="col-lg-3 ">
+                        <div class="col-lg-3 col-md-3">
                             <img src="/images/facebook.png">
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-3">
                             <img src="/images/instagram.png">
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-3">
                             <img src="/images/twitter.png">
                         </div>
                     </div>
@@ -848,23 +931,23 @@
         <br>
         <br>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
+            <div class="row grey-bk" style="background-color:#fffcf8">
+                <div class="col-lg-4 col-md-4">
+                    <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%;">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3 style="color:white">Nosotros</h3>
+                                <h3 style="color:white" class="col-lg-offset-1">Nosotros</h3>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12">
-                                <h5 style="color:white">
-                                    Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h5>
+                            <div class="col-lg-12 col-md-12">
+                                <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1">
+                                    Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-4">
                     <div class="row">
                         <div class="col-lg-12 text-center">
                             <h3>Aliados</h3>
@@ -890,7 +973,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-4">
                     <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
                         <br>
                         <br>
@@ -909,46 +992,16 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-12 col-md-12">
                     <hr>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-12 col-md-12">
                     <p class="fancybox">SuperFüds 2017. Todos los Derechos Reservados.</p>
                 </div>
             </div>
         </div>
-
-        <!--        <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-3"><h3>Proveedores</h3></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6 col-md-3">
-                            <div class="thumbnail">
-                                <img src="http://lorempixel.com/380/270/food" alt="...">
-                                <div class="caption">
-        
-                                    <h4 class="pull-right">$ 100</h4>
-                                    <h4><a href="/productDetail/">Alimenmto</a></h4>
-                                    <p>
-                                        Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500
-                                    </p>
-                                    <div class="ratings">
-                                        <p class="pull-right">15 reviews</p>
-                                        <p>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
 
 
     </body>

@@ -4,14 +4,7 @@
         <td width='30%'><?php echo $client["observations"]; ?></td>
         <td>
             <table>
-                <tr>
-                    <td width='240px' >Total Factura</td>
-                    <td><?php echo $totalInvoice; ?></td>
-                </tr>
-<!--                <tr>
-                    <td>Descuento</td>
-                    <td>$ 0</td>
-                </tr>-->
+
                 <?php
                 if ($shipping_cost > 0) {
                     ?>
@@ -22,6 +15,10 @@
                     <?php
                 }
                 ?>
+                <tr>
+                    <td width='240px' ><b>Total Factura</b></td>
+                    <td><?php echo $totalInvoice; ?></td>
+                </tr>
                 <?php
                 if ($tax5 > 0) {
                     ?>
@@ -64,10 +61,17 @@
                 }
                 ?>
 
-                <tr>
-                    <td>Exento</td>
-                    <td><?php echo $exept; ?></td>
-                </tr>
+                <?php
+                if ($exept > 0) {
+                    ?>
+                    <tr>
+                        <td>Exento</td>
+                        <td><?php echo "$ " . number_format((round($exept)), 0, ',', '.'); ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+
                 <tr>
                     <td><b>Total a Pagar</b></td>
                     <td><b><?php echo $totalWithTax; ?></b></td>
@@ -80,6 +84,6 @@
 </table>
 <table>
     <tr>
-        <td><?php echo $textTotal . ', Total artículos: ' . count($detail). ' Total de Items: ' . $quantity ; ?></td>
+        <td><?php echo $textTotal . ', Total artículos: ' . count($detail) . ' Total de Items: ' . $quantity; ?></td>
     </tr>
 </table>

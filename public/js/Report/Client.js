@@ -47,7 +47,7 @@ function Client() {
             scrollX: true,
             columns: [
                 {data: "client"},
-                {data: "unidades"},
+                {data: "quantity_packaging"},
                 {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],

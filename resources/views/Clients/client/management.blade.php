@@ -209,6 +209,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address" class="control-label">Excluir reporte</label>
+                                            <input type="checkbox" id="exclude_report" name="exclude_report" class="input-clients">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

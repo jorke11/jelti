@@ -64,6 +64,8 @@ class ClientController extends Controller {
             $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
             $input["special_price"] = isset($input["special_price"]) ? true : false;
             $input["login_web"] = isset($input["login_web"]) ? true : false;
+            $input["exclude_report"] = (isset($input["exclude_report"])) ? 1 : 0;
+            
             $input["document"] = trim($input["document"]);
             $input["email"] = trim($input["email"]);
 
@@ -257,6 +259,7 @@ class ClientController extends Controller {
         $input["shipping_cost"] = isset($input["shipping_cost"]) ? true : false;
         $input["special_price"] = isset($input["special_price"]) ? true : false;
         $input["login_web"] = (isset($input["login_web"])) ? 1 : 0;
+        $input["exclude_report"] = (isset($input["exclude_report"])) ? 1 : 0;
 
         if (isset($input["login_web"])) {
             $input["login_web"] = 1;
@@ -265,13 +268,13 @@ class ClientController extends Controller {
             $input["login_web"] = 0;
         }
 
-       
+
         if (!isset($input["stakeholder_id"])) {
-            
+
             $input["stakeholder_id"] = null;
             $stakeholder = Stakeholder::Find($id);
         } else {
-            
+
             $stakeholder = Branch::Find($id);
         }
 
@@ -287,10 +290,10 @@ class ClientController extends Controller {
         $input["status_id"] = 1;
 
         if ($stakeholder == null) {
-           
+
             $result = Stakeholder::create($input);
         } else {
-            
+
             if ($input["password"] != '') {
                 $input["password"] = bcrypt($input["password"]);
 
@@ -298,7 +301,7 @@ class ClientController extends Controller {
                     unset($input["password"]);
                 }
             }
-            
+
             $result = $stakeholder->fill($input)->save();
         }
 
@@ -317,7 +320,7 @@ class ClientController extends Controller {
         }
 
         if ($result) {
-            return response()->json(['success' => true,"header"=>$result]);
+            return response()->json(['success' => true, "header" => $result]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -329,6 +332,17 @@ class ClientController extends Controller {
         $stakeholder->status_id = 4;
         $result = $stakeholder->save();
 //        $result = $stakeholder->delete();
+        if ($result) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function destroyPrice($id) {
+        $row = PricesSpecial::find($id);
+        $result = $row->delete();
+
         if ($result) {
             return response()->json(['success' => true]);
         } else {

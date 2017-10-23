@@ -40,25 +40,17 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-
-                <!--                <div class="thumbnail" >
-                                    <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=730&h=350">
-                                    <div class="caption">
-                                        <p><a href="#" class="btn btn-success" role="button">
-                                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><span class="badge">42</span>
-                                            </a>
-                                            <a href="#" class="btn btn-default" role="button">
-                                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span><span class="badge">0</span>
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>-->
             </div>
             <div class="col-lg-4">
                 <div class="row">
                     <div class="col-lg-12">
+                        <div class="row" style="padding-bottom: 5%">
+                            <div class="col-lg-12" style="color:#979797;font-size: 18px;font-weight: 400">
+                                {{ucwords($supplier["business"])}}
+                            </div>
+                        </div>
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12" style="font-size: 18px;font-weight: 400">
                                 {{ucwords($product["title"])}}
                             </div>
                         </div>
@@ -91,7 +83,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h4>Precio $ {{number_format($product["price_sf"],2,",",".")}}</h4>
+                        <h4 style="color:#434141">Precio $ {{number_format($product["price_sf"],2,",",".")}}</h4>
                     </div>
                 </div>
                 <div class="row">
@@ -106,7 +98,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h4>Quantity X{{$product["packaging"]}}</h4>
+                        <h4>Cantidad X{{$product["packaging"]}}</h4>
                     </div>
                 </div>
                 <div class="row">
@@ -116,7 +108,7 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6 col-lg-offset-3">
                         <button class="btn btn-success form-control" id="AddProduct">Comprar</button>
                     </div>
                 </div>

@@ -82,6 +82,7 @@ Route::post('/clients/uploadExcel', 'Clients\ClientController@uploadExcel');
 Route::post('/clients/uploadClient', 'Clients\ClientController@uploadclient');
 Route::put('/clients/checkmain/{id}', 'Clients\ClientController@checkMain');
 Route::delete('/clients/deleteImage/{id}', 'Clients\ClientController@deleteImage');
+Route::delete('clients/deletePrice/{id}', 'Clients\ClientController@destroyPrice');
 Route::get('/clients/getImages/{id}', 'Clients\ClientController@getImages');
 
 Route::post('/clients/StoreSpecial', 'Clients\ClientController@storeSpecial');
@@ -492,7 +493,6 @@ Route::get('/api/listBranch', 'Administration\StakeholderController@getBranch');
 Route::get('/api/listMenu', 'DashboardController@getMenu');
 Route::get('/user/savePermission/{id}', 'Security\UserController@savePermission');
 Route::get('/logout', 'Security\UserController@logOut');
-
 
 Route::get('/api/getCity', 'Administration\SeekController@getCity');
 Route::get('/api/getDepartment', 'Administration\SeekController@getDepartment');

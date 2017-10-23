@@ -604,6 +604,38 @@ function Client() {
         })
     }
 
+    this.deletePrice = function (id, clients_id) {
+        toastr.remove();
+        $("#div_" + id).remove();
+        var obj = {};
+        obj.clients_id = clients_id;
+        $.ajax({
+            url: 'clients/deletePrice/' + id,
+            method: 'DELETE',
+            data: obj,
+            dataType: 'JSON',
+            success: function (data) {
+                toastr.success("Precio Borrado");
+                tableSpecial.ajax.reload();
+            }
+        })
+    }
+
+    this.deleteImage = function (id, clients_id) {
+        $("#div_" + id).remove();
+        var obj = {};
+        obj.clients_id = clients_id;
+        $.ajax({
+            url: 'clients/deleteImage/' + id,
+            method: 'DELETE',
+            data: obj,
+            dataType: 'JSON',
+            success: function (data) {
+                toastr.success("Image Deleted")
+                //                $("#imageMain").attr("src", "/images/product/" + data.path.path);
+            }
+        })
+    }
     this.deleteImage = function (id, clients_id) {
         $("#div_" + id).remove();
         var obj = {};
@@ -889,8 +921,8 @@ function Client() {
                     mData: null,
                     mRender: function (data, type, full) {
                         checked = (data.priority == true) ? 'checked' : '';
-                        //                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
-                        return '<input type="radio" ' + checked + ' name="all" onclick=obj.MarkPrice(' + data.id + ',' + data.client_id + ')>';
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.deletePrice(' + data.id + ',' + data.client_id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>'
+                                + '<input type="radio" ' + checked + ' name="all" onclick=obj.MarkPrice(' + data.id + ',' + data.client_id + ')>';
                     }
                 }
             ],

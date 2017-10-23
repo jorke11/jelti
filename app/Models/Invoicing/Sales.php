@@ -25,6 +25,12 @@ class Sales extends Model {
         "created",
         "invoice",
         "dispatched",
+        "responsible",
+        "warehouse",
+        "city",
+        "client",
+        "destination",
+        "shipping_cost_tax"
     ];
 
 }

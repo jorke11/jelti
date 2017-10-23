@@ -90,27 +90,29 @@
                     <td>{{$val->totalFormated}}</td>
                 </tr>
                 @endforeach
+                @if($flete>0)
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="2"><b>Flete</b></td>
+                    <td>{{"$" . number_format($flete, 0, ",", ".")}}</td>
+                </tr>
+                @endif
                 <tr>
                     <td rowspan="4" colspan="3">Observaciones: {{(isset($observation))?$observation:''}}</td>
                     <td colspan="2"><b>SubTotal</b></td>
                     <td>{{(isset($subtotal))?$subtotal:0}}</td>
                 </tr>
-                @if($flete>0)
-                <tr>
-                    <td colspan="2"><b>Flete</b></td>
-                    <td>{{"$ " . number_format($flete, 0, ",", ".")}}</td>
-                </tr>
-                @endif
+
                 @if($tax5!=0)
                 <tr>
                     <td colspan="2"><b>Iva 5%</b></td>
-                    <td>{{"$ " . number_format($tax5, 0, ",", ".")}}</td>
+                    <td>{{"$" . number_format($tax5, 0, ",", ".")}}</td>
                 </tr>
                 @endif
                 @if($tax19!=0)
                 <tr>
                     <td colspan="2"><b>Iva 19%</b></td>
-                    <td>{{"$ " . number_format($tax19, 0, ",", ".")}}</td>
+                    <td>{{"$" . number_format($tax19, 0, ",", ".")}}</td>
                 </tr>
                 @endif
                 @if($discount>0)

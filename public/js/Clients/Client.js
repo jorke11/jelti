@@ -763,6 +763,7 @@ function Client() {
                 {data: "term"},
                 {data: "city"},
                 {data: "responsible"},
+                {data: "phone"},
                 {data: "typeperson"},
                 {data: "typeregime"},
                 {data: "created_at"},
@@ -784,7 +785,7 @@ function Client() {
                     }
                 },
                 {
-                    targets: [14],
+                    targets: [15],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

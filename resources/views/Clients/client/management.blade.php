@@ -123,7 +123,7 @@
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="address">Teléfono</label>
-                                            <input type="text" class="form-control input-clients input-sm" id="phone" name="phone" disabled>
+                                            <input type="text" class="form-control input-clients input-sm" id="phone" name="phone" disabled="" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -139,7 +139,7 @@
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="address">Correo</label>
-                                            <input type="text" class="form-control input-clients input-sm" id="email" name="email" disabled>
+                                            <input type="text" class="form-control input-clients input-sm" id="email" name="email" disabled required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">

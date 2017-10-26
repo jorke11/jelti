@@ -36,7 +36,7 @@
         <?php
         $cont = 0;
         ?>
-        @foreach($products as $i => $val)
+        @foreach($products as $i => $value)
 
         <div class="col-sm-3 col-lg-3 col-md-3">
             <div class="thumbnail" style="border: 0;padding: 0">
@@ -61,16 +61,16 @@
                 </div>
                 <img src="https://placeholdit.imgix.net/~text?txtsize=39&txt=420%C3%97250&w=420&h=250">
                 <div class="caption">
-                    <h5 class="text-center"><a href="/productDetail/{{$val->id}}" style="color:black;font-weight: 400">{{$val->title}}</a></h5>
-                    @if(Auth::guest())
+                    <h5 class="text-center"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400">{{$value->title}}</a></h5>
+                    @if(!Auth::guest())
                     <p>
-                    <h4 class="text-center" style="color:black;font-weight: 400">$ {{number_format($val->price_sf,2,",",".")}}</h4>
+                    <h4 class="text-center" style="color:black;font-weight: 400">$ {{number_format($value->price_sf,2,",",".")}}</h4>
                     </p>
                     @endif
                     <div class="row">
                         <div class="col-lg-12">
-                            @if(Auth::guest())
-                            <a href="/productDetail/{{$val->id}}" class="btn btn-success form-control">Comprar</a>
+                            @if(!Auth::guest())
+                            <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control">Comprar</a>
                             @else
                             <a href="/login" class="btn btn-success form-control">Comprar</a>
                             @endif

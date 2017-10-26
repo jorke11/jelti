@@ -55,10 +55,7 @@
                 <td width="60%" style="padding-left: 50px;padding-top: 80px;padding-bottom: 0">
                     <table width="100%">
                         <tr>
-                            <td>{{date("Y-m-d")}}</td>
-                        </tr>
-                        <tr>
-                            <td><span class="title-client">Nombre Cliente</span></td>
+                            <td>{{date("d-M-Y")}}</td>
                         </tr>
                         <tr>
                             <td><span class="title-client">SüperFuds S.A.S</span></td>
@@ -72,13 +69,12 @@
                 <td width="40%" style="padding-left: 50px;padding-top: 90px;padding-bottom: 0" ><img src="../../images/sf.png"></td>
             </tr>
             <tr>
-                <td colspan="2" align="center" style="font-size:30px; letter-spacing: 1px;">Hola (Nombre Cliente)</td>
+                <td colspan="2" align="center" style="font-size:30px; letter-spacing: 1px;">Hola ({{$header->client}})</td>
             </tr>
 
 
         </table>
         <br>
-
 
         <table align="center" width="550" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
             <tr>
@@ -86,30 +82,33 @@
             </tr>
         </table>
         <br>
+        @foreach($detail as $val)
+
         <table align="center" width="550" height="300" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" background="../../images/borde_color.png" style="background-repeat: no-repeat;background-size: 100%; ">
             <tr>
                 <td style="padding-top: 50px;padding-left: 80px" align="center">
                     <table width="100%" align="center">
                         <tr>
                             <td width="50%">Valor</td>
-                            <td width="50%">$ 1000000</td>
+                            <td width="50%">{{number_format($val->total,0,".",",")}}</td>
                         </tr>
                         <tr>
                             <td class="space-row">Factura</td>
-                            <td class="space-row">4356</td>
+                            <td class="space-row">{{$val->invoice}}</td>
                         </tr>
                         <tr>
                             <td class="space-row">Vencida hace</td>
-                            <td class="space-row">4356</td>
+                            <td class="space-row">{{$val->dias_vencidos}}</td>
                         </tr>
                         <tr>
                             <td class="space-row">Fecha despachado</td>
-                            <td class="space-row">4356</td>
+                            <td class="space-row">{{date("Y-m-d",strtotime($val->dispatched))}}</td>
                         </tr>
                     </table>
                 </td>
             </tr>
         </table>
+        @endforeach
         <table align="center" width="550" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
             <tr>
                 <td align="center"><span style="color: #4a4a4a;font-size: 18px;   word-spacing: 3px;">

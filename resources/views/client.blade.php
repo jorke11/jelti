@@ -61,6 +61,29 @@
         background: #fffcf8;
     }
 
+    .carousel-control.left{
+        background-image:-webkit-gradient(linear,left top,right top,from(rgba(0,0,0,.0001)),to(rgba(0,0,0,.0001)));
+        background-image:linear-gradient(to right,rgba(0,0,0,.0001) 0,rgba(0,0,0,.0001) 100%)
+    }
+    .carousel-control.right{
+        background-image:-webkit-gradient(linear,left top,right top,from(rgba(0,0,0,.0001)),to(rgba(0,0,0,.0001)));
+        background-image:linear-gradient(to right,rgba(0,0,0,.0001) 0,rgba(0,0,0,.0001) 100%)
+    }
+    .carousel-control{
+        opacity:.9;
+        width:6%
+    }
+    .carousel-control.left{
+        left: -6%;
+        bottom: 10%;
+    }
+    .carousel-control.right{
+        right: -3%;
+        bottom: 10%;
+        width:2%;
+
+    }
+
 </style>
 
 <div class="row">

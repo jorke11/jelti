@@ -269,6 +269,10 @@ Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
 Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 
 Route::get('/payment', 'Shopping\PaymentController@index');
+Route::get('payment/responsepay', 'Shopping\PaymentController@responsePay');
+Route::get('generatekey', "Shopping\PaymentController@generatekey");
+Route::post('payment/confirmationpay', 'Shopping\PaymentController@confirmationPay');
+Route::get('paymentest', "Payments\PaymentsController@index");
 Route::post('payment/target', 'Shopping\PaymentController@payment');
 Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
 Route::put('/getDetailQuantity/{order_id}', 'Shopping\PaymentController@setQuantity');
@@ -537,7 +541,7 @@ Route::get('profile/{id}/getRepurchase', "Report\ClientController@getRepurchase"
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 
-Route::get('payment', "Payments\PaymentsController@index");
+
 
 require __DIR__ . '/cron.php';
 require __DIR__ . '/report.php';

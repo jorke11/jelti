@@ -62,14 +62,14 @@ function Client() {
     }
 
     this.setBriefacase = function (data) {
-        var html = "<tr><td>Cliente</td>";
-        html += '<td colspan="2" align="center">Total</td>';
-        var subheader = '<tr><td></td>';
-        subheader += "<td align='center'>Unidades</td><td align='center'>Subtotal</td>";
+        var html = "<tr><th rowspan='2'>Cliente</th>";
+        html += '<th colspan="2" align="center">Total</th>';
+        var subheader = '<tr>';
+        subheader += "<th align='center'>Unidades</th><th align='center'>Subtotal</th>";
         header = data.header;
         $.each(data.header, function (i, val) {
-            html += '<td colspan="2" align="center">' + val.dates + "</td>";
-            subheader += "<td align='center'>Total</td><td align='center'>Total Pagado</td>";
+            html += '<th colspan="2" align="center">' + val.dates + "</th>";
+            subheader += "<th align='center'>Total</td><td align='center'>Total Pagado</th>";
         });
 
         html += "</tr>";
@@ -105,14 +105,14 @@ function Client() {
     }
 
     this.setData = function (data, title) {
-        var html = "<tr><td>" + title + "</td>";
-        html += '<td colspan="2" align="center">Total</td>';
-        var subheader = '<tr><td></td>';
-        subheader += "<td align='center'>Unidades</td><td align='center'>Subtotal</td>";
+        var html = "<tr><th rowspan='2'>" + title + "</th>";
+        html += '<th colspan="2" align="center">Total</th>';
+        var subheader = '<tr>';
+        subheader += "<th align='center'>Unidades</th><th align='center'>Subtotal</th>";
         header = data.header;
         $.each(data.header, function (i, val) {
-            html += '<td colspan="2" align="center">' + val.dates + "</td>";
-            subheader += "<td align='center'>Unidades</td><td align='center'>Subtotal</td>";
+            html += '<th colspan="2" align="center">' + val.dates + "</th>";
+            subheader += "<th align='center'>Unidades</th><th align='center'>Subtotal</th>";
         });
 
         html += "</tr>";
@@ -145,6 +145,7 @@ function Client() {
             html += "</tr>";
         });
         $("#tblClient tbody").html(html);
+//        $("#tblClient").DataTable();
     }
 }
 

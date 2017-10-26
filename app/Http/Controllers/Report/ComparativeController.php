@@ -28,14 +28,14 @@ class ComparativeController extends Controller {
 
     public function salesClient(Request $req) {
         $input = $req->all();
-        $where="";
+        $where = "";
         $header = $this->getHeader();
-        
+
 //        if(isset($input["client_id"])){
 //            
 //            dd($input["client_id"]);
 //        }
-        
+
         if ($input["type_report"] == 1) {
             $data = $this->reportSalesClient($input);
         } else if ($input["type_report"] == 2) {
@@ -232,7 +232,7 @@ class ComparativeController extends Controller {
             group by 1,2
             order by 1
                 ";
-            
+
             $det = DB::select($sql);
             $pro[$i]->detail = $det;
         }
@@ -276,7 +276,7 @@ class ComparativeController extends Controller {
     }
 
     function reportSalesClient($data) {
-        
+
         $sql = "
             SELECT client_id,client as description,sum(subtotalnumeric)::money total,sum(quantity_packaging) as quantity_packaging
             FROM vdepartures 
@@ -286,7 +286,7 @@ class ComparativeController extends Controller {
             group by 1,client
             order by 3 DESC
             ";
-        
+
         $cli = DB::select($sql);
 
         foreach ($cli as $i => $value) {
@@ -299,8 +299,14 @@ class ComparativeController extends Controller {
             AND client_id=" . $value->client_id . "
             group by 1,2
             order by 1 ASC";
+
             $det = DB::select($sql);
             $cli[$i]->detail = $det;
+            
+            foreach ($det as $val) {
+                $dates = $val->dates;
+                $cli[$i]->$dates = array("total" => $val->total, "quantity_packaging" => $val->quantity_packaging);
+            }
         }
 
         return $cli;

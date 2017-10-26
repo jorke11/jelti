@@ -7,7 +7,9 @@
                     <table class="table table-hover nowrap table-condensed" cellspacing="0" width="100%" id="tblClient">
                         <thead>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            
+                        </tbody>
                     </table>
                 </div>
             </div>

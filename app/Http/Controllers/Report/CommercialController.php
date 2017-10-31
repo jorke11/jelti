@@ -115,15 +115,15 @@ class CommercialController extends Controller {
 //dd($input);
         $where = '';
         if (isset($input["warehouse_id"]) && $input["warehouse_id"] != 0) {
-            $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
+            $where .= " AND s.warehouse_id=" . $input["warehouse_id"];
         }
 
         if (isset($input["client_id"]) && $input["client_id"] != '') {
-            $where .= " AND dep.client_id=" . $input["client_id"];
+            $where .= " AND s.client_id=" . $input["client_id"];
         }
 
         if (isset($input["city_id"]) && $input["city_id"] != '') {
-            $where = "AND dep.destination_id=" . $input["city_id"];
+            $where = "AND s.destination_id=" . $input["city_id"];
         }
 
         if (isset($input["product_id"]) && $input["product_id"] != '') {
@@ -135,7 +135,7 @@ class CommercialController extends Controller {
         }
 
         if (isset($input["commercial_id"]) && $input["commercial_id"] != '') {
-            $where .= " AND dep.responsible_id=" . $input["commercial_id"];
+            $where .= " AND s.responsible_id=" . $input["commercial_id"];
         }
 
         $sql = "

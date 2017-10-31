@@ -41,8 +41,11 @@ class StockController extends Controller {
 
 
         $sql = "
-            select id,reference,title as product
-            from products $bar_code";
+            select products.id,reference,title as product,stakeholder.business as supplier,categories.description as category
+            from products 
+            JOIN stakeholder ON stakeholder.id=products.supplier_id
+            JOIN categories ON categories.id=products.category_id
+                $bar_code";
         $products = DB::select($sql);
         foreach ($products as $i => $value) {
             $sql = "
@@ -50,7 +53,7 @@ class StockController extends Controller {
                     from entries_detail
                     JOIN entries ON entries.id = entries_detail.entry_id 
                     WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
-           
+
             $entry = DB::select($sql);
 
             $sql = "

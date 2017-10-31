@@ -24,6 +24,8 @@ function Stock() {
             columns: [
                 {data: "id"},
                 {data: "reference"},
+                {data: "supplier"},
+                {data: "category"},
                 {data: "product"},
                 {data: "entries"},
                 {data: "sales"},

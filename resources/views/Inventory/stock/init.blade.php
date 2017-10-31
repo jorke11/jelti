@@ -42,7 +42,9 @@
                         <tr>
                             <th>Id</th>
                             <th>Referencia</th>
-                            <th>Product</th>
+                            <th>Proveedor</th>
+                            <th>Categoria</th>
+                            <th>Producto</th>
                             <th>Entradas</th>
                             <th>Salidas</th>
                             <th>Disponible</th>

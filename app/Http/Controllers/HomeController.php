@@ -92,12 +92,12 @@ class HomeController extends Controller {
         }
         $sql = "
             SELECT u.name ||' '|| u.last_name as vendedor,sum(d.quantity * p.packaging) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
-            FROM departures_detail d
+            FROM sales_detail d
             JOIN products p ON p.id=d.product_id
-            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
-            JOIN users u ON u.id=dep.responsible_id
+            JOIN sales s ON s.id=d.sale_id
+            JOIN users u ON u.id=s.responsible_id
             WHERE d.product_id IS NOT NULL and client_id NOT IN (258,264)
-            AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            AND s.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 3 desc";
 

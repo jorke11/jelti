@@ -98,7 +98,7 @@
                         </tr>
                         <tr>
                             <td class="space-row">Vencida hace</td>
-                            <td class="space-row">{{$val->dias_vencidos}}</td>
+                            <td class="space-row">{{$val->dias_vencidos}} {{($val->dias_vencidos==1)?'día':'días'}}</td>
                         </tr>
                         <tr>
                             <td class="space-row">Fecha despachado</td>
@@ -112,7 +112,8 @@
         <table align="center" width="550" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
             <tr>
                 <td align="center"><span style="color: #4a4a4a;font-size: 18px;   word-spacing: 3px;">
-                        Ya son (<b>5</b>) días que no sabemos nada de ti ni el pago de la factura, recuerda que para el funcionamiento de tu negocio, el nuestro y el de los proveedores, es importante contar con tu apoyo.
+                        Ya son (<b>{{$detail[0]->dias_vencidos}}</b>) días que no sabemos nada de ti ni el pago de {{(count($detail)>1)?"las facturas":' la factura'}}, 
+                        recuerda que para el funcionamiento de tu negocio, el nuestro y el de los proveedores, es importante contar con tu apoyo.
                     </span></td>
             </tr>
         </table>
@@ -121,7 +122,7 @@
             <tr>
                 <td style="padding-left: 60px;padding-top: 70px;padding-right: 30px;  word-spacing: 3px;color:#4a4a4a;text-align : justify;">
                     Si ya hiciste el pago por favor envíanos tu comprobante al correo <a href="mailto:contabilidad@superfuds.com.co">contabilidad@superfuds.com.co</a>, 
-                    o si no, llama a tu Ejecutivo de Cuentas encargado, estamos interesados en resolver tu situación.</td>
+                    o si no, llama a tu Ejecutivo de Cuentas {{$header->client}} encargado, estamos interesados en resolver tu situación.</td>
             </tr>
         </table>
 

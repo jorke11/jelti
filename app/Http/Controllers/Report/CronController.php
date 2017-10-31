@@ -127,18 +127,24 @@ class CronController extends Controller {
 
     public function emailbriefcaseclient() {
         $sql = "
-                SELECT client_id,client 
+                SELECT client_id
                 FROM vbriefcase 
-                WHERE paid_out IS NULL group by client_id order by 1";
+                WHERE paid_out IS NULL 
+                group by client_id
+                order by 1";
         $cli = DB::select($sql);
 
         foreach ($cli as $value) {
             $sql = "
                 SELECT * 
                 FROM vbriefcase 
-                WHERE paid_out IS NULL and client_id=" . $value->client_id;
+                WHERE paid_out IS NULL and client_id=" . $value->client_id." and dias_vencidos > 0 ORDER BY dias_vencidos desc";
 
-            $brief = DB::select($sql);
+            $data["detail"] = DB::select($sql);
+            $data["header"] = $data["detail"][0];
+            
+             return view("Notifications.briefcase_client", $data);
+             exit;
             
         }
     }

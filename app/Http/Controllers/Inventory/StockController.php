@@ -35,7 +35,7 @@ class StockController extends Controller {
 
 
         if ($in["bar_code"] != '') {
-            $pro = Products::where("bar_code", $in["bar_code"])->first();
+            $pro = Products::where("reference", $in["bar_code"])->first();
             $bar_code = "WHERE id=" . $pro->id;
         }
 
@@ -48,15 +48,17 @@ class StockController extends Controller {
             $sql = "
                     select coalesce(sum(quantity),0) as total
                     from entries_detail
-                    JOIN entries ON entries.id=entries_detail.entry_id 
+                    JOIN entries ON entries.id = entries_detail.entry_id 
                     WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
+           
             $entry = DB::select($sql);
 
             $sql = "
                     select coalesce(sum(quantity),0) as total
                     from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id
+                    JOIN sales ON sales.id=sales_detail.sale_id and sales.status_id='1'
                     WHERE product_id=" . $value->id . " $sales_ware";
+//             echo $sql;exit;
             $sale = DB::select($sql);
 
             $products[$i]->entries = $entry[0]->total;

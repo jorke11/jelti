@@ -98,6 +98,11 @@
         @endif
 
     </div>
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-6">
+            {{ $products->appends(['sort' => 'titiel'])->links() }}
+        </div>
+    </div>
 </div>
 {!!Html::script('js/Ecommerce/Detail.js')!!}
 @endsection

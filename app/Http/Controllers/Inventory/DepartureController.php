@@ -238,7 +238,7 @@ class DepartureController extends Controller {
 
     public function getInvoice($id) {
         $this->mails = array();
-        
+
 //        if(file_exists(public_path()."/images/superfuds.png")){
 //            echo "asd";exit;
 //        }
@@ -251,11 +251,11 @@ class DepartureController extends Controller {
         $dep = Departures::find($id);
         $cli = null;
         if ($dep->branch_id != '') {
-            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term","branch_office.phone")
+            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term", "branch_office.phone")
                     ->where("id", $dep->branch_id)
                     ->first();
         } else {
-            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term","stakeholder.phone")
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term", "stakeholder.phone")
                     ->where("stakeholder.id", $sale["client_id"])
                     ->first();
         }
@@ -337,14 +337,15 @@ class DepartureController extends Controller {
             'textTotal' => trim($this->tool->to_word(round($totalWithTax))),
             'discount' => $dep->discount
         ];
-        
+
 //        dd($data);
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
-                    'title' => 'Invoice']);
+                    'title' => 'Invoice',
+                    'margin_top' => -12,"margin_bottom"=>1]);
+        
 //        $pdf->SetProtection(array(), '123', '123');
-//        $pdf->SetWatermarkImage('assets/images/logo.png');
-//        $pdf->showWatermarkImage = true;
-//        $pdf->WriteHTML('<watermarkimage src="public/assets/images/logo.png" alpha="0.4" size="200,250" />');
+//          $pdf->showWatermarkImage = true;
+//        $pdf->SetWatermarkImage(url("/").'/assets/images/logo.png');
 
         header('Content-Type: application/pdf');
 //        return $pdf->download('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');

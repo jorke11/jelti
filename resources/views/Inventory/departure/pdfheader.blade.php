@@ -32,32 +32,16 @@
     <br>
     <br>
 
-<!--    <table width='100%'>
+    <table align='left'  width='100%'>
         <tr>
-            <td align="right">Pag {{$i}}</td>
-        </tr>
-    </table>-->
-    <table align='center'  width='100%'>
-        <tr>
-            <td class="space-title">
-                <table>
-                    <tr>
-                        <td width='100px'></td>
-                        <td>
-                            <img src="{{public_path()}}/images/superfuds.png" width="20%">
-                        </td>
-                    </tr>
-                </table>
+            <td width="20%" rowspan="2">
+                <img src="{{public_path()}}/images/logo2.png" width="18%">
             </td>
-            <td>SUPERFUDS SAS<br>NIT 900 703 907-7<br>Calle 67 # 5-20 Tel: 310 2516486<br>Bogotá Colombia<br>E-mail: info@superfuds.com.co</td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td class="font-title">Resolución DIAN 18762003299025 del 17/05/2017</td>
+            <td><br><br><br><strong style="font-size: 22px">SUPERFUDS SAS</strong><br>NIT 900 703 907-7<br>Calle 67 # 5-20 Tel: 310 2516486<br>Bogotá Colombia<br>E-mail: info@superfuds.com.co</td>
         </tr>
         <tr>
-            <td class="font-title">Numeración Autorizada 3001 al 3999 por computador Actividad Economica 4631 Tarifa Ica 4.14 x 1000</td>
+                       <td class="font-title">Resolución DIAN 18762003299025 del 17/05/2017
+                <br>Numeración Autorizada 3001 al 3999 por computador Actividad Economica 4631 Tarifa Ica 4.14 x 1000</td>
         </tr>
     </table>
 
@@ -109,4 +93,7 @@
             </td>
         </tr>
     </table>
+    <?php
+//    echo "asd";exit;
+    ?>
 

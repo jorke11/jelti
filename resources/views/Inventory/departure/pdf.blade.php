@@ -51,17 +51,19 @@
 </style>
 
 <?php
-
-$rows = 10;
+$rows = 12;
 $rest = $rows - count($detail);
+
 $count = ceil(count($detail) / $rows);
 $init = 0;
 $fin = $rows;
 $cont = 0;
+//echo $count;exit;
 for ($i = 1; $i <= $count; $i++) {
     ?>
+
     @include('Inventory.departure.pdfheader')
-    <br>
+
     <table width='100%' id="detail">
         <thead>
             <tr>
@@ -97,7 +99,7 @@ for ($i = 1; $i <= $count; $i++) {
                             $init = $i * $rows;
                             $fin += $rows;
 
-                            if ($cont != 10) {
+                            if ($cont != 14) {
                                 for ($a = 0; $a <= (10 - $cont); $a++) {
                                     ?>
                                     <tr>
@@ -108,29 +110,15 @@ for ($i = 1; $i <= $count; $i++) {
                             }
                             ?>
                             </table>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
                             @include('Inventory.departure.pdffooter')
-                            <table>
-                                <tr>
-                                    <td class="resolution">La presente Factura se asemeja en todos sus efectos a un Título Valor Art. 1 Ley 1231 de 2008. En caso de
-                                        mora se causarán intereses a la tasa máxima legal estipulada por la ley, o en el respectivo contrato (conforme al art. 884 del Código de Comercio).</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">No somos grandes Contribuyentes, no somos Autorretenedores.</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">Favor hacer transferencia a Cuenta de Ahorros Bancolombia # 72951229710 a nombre de SuperFuds S.A.S.</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">Si el pago es por consignacion fuera de Bogota, favor agregar al valor al final $11.000 pesos.</td>
-                                </tr>
-                            </table>
+
 
                             <?php
                             $cont = 0;
                         }
+                        if (($count) != $i) {
+                            echo '<div style="page-break-after:always;"></div>';
+                        }
                     }
                     ?>
+                            

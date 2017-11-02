@@ -102,7 +102,7 @@
         <td class="resolution">Favor hacer transferencia a Cuenta Corriente Bancolombia # 72951229710 a nombre de SuperFuds S.A.S.</td>
     </tr>
     <tr>
-        <td class="resolution">Si el pago es por consignacion fuera de Bogota, favor agregar al valor al final $11.000 pesos.</td>
+        <td class="resolution"><b>Si el pago es por consignacion fuera de Bogota, favor agregar al valor al final $11.000 pesos.</b></td>
     </tr>
 </table>
 

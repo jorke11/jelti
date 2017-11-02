@@ -431,7 +431,7 @@ class ClientController extends Controller {
 
         $obj = new ProductController();
         $listProduct = $obj->getListProduct($in["init"], $in["end"], '');
-        print_r($listProduct);exit;
+        
         
         $totalpro = 0;
         $quantitypro = 0;

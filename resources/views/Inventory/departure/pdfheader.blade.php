@@ -40,8 +40,8 @@
             <td><br><br><br><strong style="font-size: 22px">SUPERFUDS SAS</strong><br>NIT 900 703 907-7<br>Calle 67 # 5-20 Tel: 310 2516486<br>Bogotá Colombia<br>E-mail: info@superfuds.com.co</td>
         </tr>
         <tr>
-                       <td class="font-title">Resolución DIAN 18762003299025 del 17/05/2017
-                <br>Numeración Autorizada 3001 al 3999 por computador Actividad Economica 4631 Tarifa Ica 4.14 x 1000</td>
+                       <td class="font-title">Resolución DIAN 18762005520595 del 02/11/2017
+                <br>Numeración Autorizada 4000 al 4998 por computador Actividad Economica 4631 Tarifa Ica 4.14 x 1000</td>
         </tr>
     </table>
 

@@ -106,10 +106,11 @@
                 background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
                 background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
                 background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
-                width:80%;
+
                 font-weight: 100;
                 font-size:16px;
             }
+
 
             @media (max-width: 1300px) {
                 .buttons-page {
@@ -121,7 +122,6 @@
                     background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
                     background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
                     background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%);
-                    width:100%;
                     font-weight: 100;
                     font-size:12px;
                     padding-left: 18%;
@@ -232,14 +232,14 @@
                 width:6%
             }
             .carousel-control.left{
-                left: -6%;
+                left: -1%;
                 bottom: 10%;
             }
             .carousel-control.right{
-                right: -3%;
+                right: 1%;
                 bottom: 10%;
                 width:2%;
-                
+
             }
         </style>
     </head>
@@ -267,8 +267,8 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100" ><span class="underline">Inicio</span></a></li>
-                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Productos</a></li>
-                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100">Blog</a></li>
+                        <li><a href="/listProducts" style="color:#00c98a;font-size:20px;font-weight: 100">Productos</a></li>
+                        <li><a href="/blog" style="color:#00c98a;font-size:20px;font-weight: 100">Blog</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
                         <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
                     </ul>
@@ -277,10 +277,8 @@
         </nav>
 
         <section>
-            <div class="container-fluid" style="padding-left: 0;padding-right: 0; background-attachment: fixed;" id="img-main">
-                <!--
-                <div style=" background-image: url({{ asset('assets/images/fondo1_1260X555.png') }});width:100%">-->
-                <!--<div >-->
+            <div class="container-fluid" style="padding-left: 0; background-attachment: fixed;" id="img-main">
+
                 <div class="row">
                     <div class="col-lg-6 col-md-6" style="padding-top: 13%;padding-left: 4%">
                         <img src="{{ asset('assets/images/marketplace.png') }}" >
@@ -347,10 +345,12 @@
                         </div>
 
                     </div>
-                </div>
 
-            </div>
+
+                </div>
         </section>
+
+
         <section>
             <div class="container-fluid">
 
@@ -391,41 +391,94 @@
                 <div class="row">
                     <div class="col-lg-9 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
                 </div>
-                <br>
-                <br>
-
             </div>
         </section>
 
-        <div class="container-fluid" style="background-color:#fffcf8">
-            <br>
-            <div class="row">
-                <div class="col-lg-12"><h1 class="text-center title-color" style="font-weight: 900">Nuestros <span class="underline">Productos</span></h1></div>
-            </div>
 
-            <div class="row">
-                <div class="col-lg-12"><h4 class="text-center font-color" >Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
-            </div>
-            <br>
-            <br>
-            <div class="row">
-                <div class='col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1'>
-                    <div class="carousel slide media-carousel" id="media">
-                        <div class="carousel-inner">
-                            <div class="item  active">
-                                <div class="row">
-                                    <?php
-                                    $cont = 0;
-                                    foreach ($category as $i => $val) {
-                                        if ($val->image != '') {
+        <section>
+            <div class="container-fluid" style="background-color:#fffcf8">
+
+                <div class="row">
+                    <div class="col-lg-12"><h1 class="text-center title-color" style="font-weight: 900">Nuestros <span class="underline">Productos</span></h1></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12"><h4 class="text-center font-color" >Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
+                </div>
+                <div class="row">
+                    <div class='col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1'>
+                        <div class="carousel slide media-carousel" id="media">
+                            <div class="carousel-inner">
+                                <div class="item  active">
+                                    <div class="row">
+                                        <?php
+                                        $cont = 0;
+                                        foreach ($category as $i => $val) {
+                                            if ($val->image != '') {
+                                                ?>
+                                                <div class="col-md-2" style="padding:0px">
+                                                    <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
+                                                        <img src="{{$val->image}}" alt="">
+                                                    </a>
+                                                </div>
+                                                <?php
+                                                if ($cont == 5) {
+                                                    $cont = 0;
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="row">
+                                                    <?php
+                                                }
+                                                $cont++;
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a class="left carousel-control" href="#media" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#media" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2"><h4>Lo Nuevo</h4></div>
+                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3"><h4>Ver Todo</h4></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+                        <div class="carousel slide media-carousel" id="newproducts">
+                            <div class="carousel-inner">
+                                <div class="item  active">
+                                    <div class="row">
+                                        <?php
+                                        $cont = 0;
+                                        foreach ($category as $i => $val) {
                                             ?>
-                                            <div class="col-md-2" style="padding:0px">
-                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
+                                            <div class="col-md-2">
+                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="img/frezedetay.png">
                                                     <img src="{{$val->image}}" alt="">
                                                 </a>
                                             </div>
                                             <?php
-                                            if ($cont == 5) {
+                                            $cont++;
+                                            if ($cont == 4) {
                                                 $cont = 0;
                                                 ?>
                                             </div>
@@ -434,161 +487,108 @@
                                             <div class="row">
                                                 <?php
                                             }
-                                            $cont++;
                                         }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="left carousel-control" href="#media" role="button" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="right carousel-control" href="#media" role="button" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12"></div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2"><h4>Lo Nuevo</h4></div>
-                <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3"><h4>Ver Todo</h4></div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
-                    <div class="carousel slide media-carousel" id="newproducts">
-                        <div class="carousel-inner">
-                            <div class="item  active">
-                                <div class="row">
-                                    <?php
-                                    $cont = 0;
-                                    foreach ($category as $i => $val) {
                                         ?>
-                                        <div class="col-md-2">
-                                            <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="img/frezedetay.png">
-                                                <img src="{{$val->image}}" alt="">
-                                            </a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#newproducts" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1"><h4 class="color-font">Sub-categorias</h4></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
+                </div>
+                <div class="row row-space">
+                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+                        @foreach($subcategory as $val)
+                        <div class="col-lg-2 col-md-2">
+                            <div class="row"><div class="col-lg-12 col-md-12"><p class="text-center color-font">{{ucwords($val->description)}}</p></div></div>
+                            <div class="row"><div class="col-lg-12 col-md-12"><img src="{{$val->alternative}}" alt="" class="img-responsive center-block"></div></div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="row green-bk">
+                    <div class="col-lg-12">
+                        <div class="row row-space">
+                            <div class="col-lg-12"><h2 class="text-center" style="color:white"><span class="underline-white" style="font-size: 40px">Negocios</span></h2></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12"><p class="text-center" style="color:white;font-size: 20px;font-weight: 100">Concéntrate en tu producto, nosotros nos encargamos del negocio.</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                        <div class="item active">
+                                            <div class="header-text hidden-xs">
+                                                <div class="col-md-12 col-center">
+                                                    <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
+                                                    <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
+                                                </div>
+                                            </div> 
                                         </div>
-                                        <?php
-                                        $cont++;
-                                        if ($cont == 4) {
-                                            $cont = 0;
-                                            ?>
+                                        <div class="item">
+                                            <div class="header-text hidden-xs">
+                                                <div class="col-md-12 col-center">
+                                                    <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
+                                                    <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
+                                                </div>
+                                            </div> 
                                         </div>
                                     </div>
-                                    <div class="item">
-                                        <div class="row">
-                                            <?php
-                                        }
-                                    }
-                                    ?>
+                                    <a class="left carousel-control" href="#myCarousel" data-slide="prev" stuel>
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+
+                                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
 
-
-                        <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="right carousel-control" href="#newproducts" role="button" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-
                     </div>
                 </div>
-            </div>
-        </div>
-        <br>
-        <br>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1"><h4 class="color-font">Sub-categorias</h4></div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
-            </div>
-            <div class="row row-space">
-                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
-                    @foreach($subcategory as $val)
-                    <div class="col-lg-2 col-md-2">
-                        <div class="row"><div class="col-lg-12 col-md-12"><p class="text-center color-font">{{ucwords($val->description)}}</p></div></div>
-                        <div class="row"><div class="col-lg-12 col-md-12"><img src="{{$val->alternative}}" alt="" class="img-responsive center-block"></div></div>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="row green-bk">
-                <div class="col-lg-12">
-                    <div class="row row-space">
-                        <div class="col-lg-12"><h2 class="text-center" style="color:white"><span class="underline-white" style="font-size: 40px">Negocios</span></h2></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12"><p class="text-center" style="color:white;font-size: 20px;font-weight: 100">Concéntrate en tu producto, nosotros nos encargamos del negocio.</p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-
-                                <ol class="carousel-indicators">
-                                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                                    <li data-target="#myCarousel" data-slide-to="1"></li>
-                                </ol>
-                                <div class="carousel-inner">
-                                    <div class="item active">
-                                        <div class="header-text hidden-xs">
-                                            <div class="col-md-12 col-center">
-                                                <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
-                                                <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                            </div>
-                                        </div> 
-                                    </div>
-                                    <div class="item">
-                                        <div class="header-text hidden-xs">
-                                            <div class="col-md-12 col-center">
-                                                <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
-                                                <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                            </div>
-                                        </div> 
-                                    </div>
-                                </div>
-                                <a class="left carousel-control" href="#myCarousel" data-slide="prev" stuel>
-                                    <span class="glyphicon glyphicon-chevron-left"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-
-                                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                                    <span class="glyphicon glyphicon-chevron-left"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>                       
+            </div>  
+        </section>
 
         <section>
             <div class="container-fluid" style="padding-top: 1%">
@@ -694,11 +694,11 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                <div id="myCarouselpro" class="carousel slide" data-ride="carousel">
 
                                     <ol class="carousel-indicators">
-                                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                                        <li data-target="#myCarouselpro" data-slide-to="0" class="active"></li>
+                                        <li data-target="#myCarouselpro" data-slide-to="1"></li>
                                     </ol>
 
                                     <div class="carousel-inner">
@@ -723,20 +723,11 @@
                                     </div>
 
 
-                                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <a class="left carousel-control" href="#myCarouselpro" data-slide="prev">
+                                        <span class="glyphicon glyphicon-chevron-left" style="left:-1"></span>
                                         <span class="sr-only">Previous</span>
                                     </a>
-                                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                                        <span class="glyphicon glyphicon-chevron-right"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-
-                                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                                        <span class="glyphicon glyphicon-chevron-left"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                    <a class="right carousel-control" href="#myCarouselpro" data-slide="next">
                                         <span class="glyphicon glyphicon-chevron-right"></span>
                                         <span class="sr-only">Next</span>
                                     </a>
@@ -846,7 +837,6 @@
 
 
 
-
         <section>
             <div class="container-fluid grey-bk" style="background-color:#fffcf8">
                 <div class="row">
@@ -908,8 +898,7 @@
                 </div>
             </div>
         </div>
-        <br>
-        <br>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-5 col-lg-offset-4 col-md-5 col-md-offset-4">
@@ -928,8 +917,6 @@
             </div>
         </div>
 
-        <br>
-        <br>
         <div class="container-fluid">
             <div class="row grey-bk" style="background-color:#fffcf8">
                 <div class="col-lg-4 col-md-4">

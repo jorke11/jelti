@@ -19,7 +19,7 @@
     }
 
     .resolution{
-        font-size: 8px;
+        font-size: 10px;
     }
 
     .font-invoice{
@@ -51,7 +51,8 @@
 </style>
 
 <?php
-$rows = 11;
+
+$rows = 10;
 $rest = $rows - count($detail);
 $count = ceil(count($detail) / $rows);
 $init = 0;
@@ -97,8 +98,8 @@ for ($i = 1; $i <= $count; $i++) {
                             $init = $i * $rows;
                             $fin += $rows;
 
-                            if ($cont != 11) {
-                                for ($a = 0; $a <= (11 - $cont); $a++) {
+                            if ($cont != 10) {
+                                for ($a = 0; $a <= (10 - $cont); $a++) {
                                     ?>
                                     <tr>
                                         <td align='center'>&nbsp;<br><br><br></td>
@@ -122,27 +123,16 @@ for ($i = 1; $i <= $count; $i++) {
                                     <td class="resolution">No somos grandes Contribuyentes, no somos Autorretenedores.</td>
                                 </tr>
                                 <tr>
-                                    <td class="resolution">Favor hacer transferencia a:</td>
+                                    <td class="resolution">Favor hacer transferencia a Cuenta de Ahorros Bancolombia # 72951229710 a nombre de SuperFuds S.A.S.</td>
                                 </tr>
                                 <tr>
-                                    <td class="resolution">Cuenta Bancaria:</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">Bancolombia # 72951229710</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution">Corriente a nombre de SuperFuds S.A.S.</td>
-                                </tr>
-                                <tr>
-                                    <td class="resolution"></td>
+                                    <td class="resolution">Si el pago es por consignacion fuera de Bogota, favor agregar al valor al final $11.000 pesos.</td>
                                 </tr>
                             </table>
                             <br>
-                            <br>
-                            <br>
+
                             <?php
                             $cont = 0;
                         }
                     }
                     ?>
-

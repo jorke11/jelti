@@ -112,11 +112,11 @@ class ClientController extends Controller {
 
         $cli = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
-            from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id 
+            from sales_detail d
+            JOIN sales dep ON dep.id=d.sale_id and dep.status_id=2 and dep.client_id NOT IN(258,264)
             JOIN products p ON p.id=d.product_id 
             WHERE d.product_id is Not null
-            AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware and dep.status_id IN(2,7) 
+            AND dep.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
                 AND dep.client_id NOT IN(258,264)
             group by 1,2
             order by 3 desc limit 10";
@@ -222,10 +222,10 @@ class ClientController extends Controller {
 
     public function getCEOProduct($init, $end, $where = '', $limit = '') {
         $cli = "
-            SELECT c.description category,sum(d.real_quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
-            sum(d.value * d.units_sf * d.real_quantity) subtotal 
-            FROM departures_detail d 
-            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
+            SELECT c.description category,sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+            sum(d.value * d.units_sf * d.quantity) subtotal 
+            FROM sales_detail d 
+            JOIN sales dep ON dep.id=d.sale_id and dep.status_id=2
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id
             JOIN categories c ON c.id = p.category_id
@@ -234,6 +234,8 @@ class ClientController extends Controller {
             GROUP bY 1,p.category_id
             ORDER by 3 DESC
             $limit";
+        
+//        echo $cli;exit;
 
         return DB::select($cli);
     }
@@ -290,9 +292,9 @@ class ClientController extends Controller {
         foreach ($categories as $i => $value) {
             $sql = "
                 select count(*) total
-                from departures_detail d  
+                from sales_detail d  
                 JOIN products p ON p.id=d.product_id
-                JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
+                JOIN sale dep ON dep.id=d.sale_id and dep.status_id IN(2)
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1 
                 WHERE dep.client_id=" . $input["client_id"] . " and p.category_id = " . $value->id . "
                     AND dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' ";
@@ -331,8 +333,8 @@ class ClientController extends Controller {
         foreach ($pro as $i => $value) {
             foreach ($dep as $val) {
                 $sql = "SELECT sum(quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) total
-                        from departures_detail d
-                        JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
+                        from sales_detail d
+                        JOIN departures dep ON dep.id=d.sale_id and dep.status_id IN(2,7)
                         where departure_id=" . $val->id . " and product_id = " . $value->id . " 
                         AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                         AND dep.client_id=" . $client_id;
@@ -429,7 +431,8 @@ class ClientController extends Controller {
 
         $obj = new ProductController();
         $listProduct = $obj->getListProduct($in["init"], $in["end"], '');
-
+        print_r($listProduct);exit;
+        
         $totalpro = 0;
         $quantitypro = 0;
         foreach ($listProduct as $i => $value) {
@@ -461,7 +464,7 @@ class ClientController extends Controller {
 
         $home = new HomeController();
         $listSupplier = $home->getCEOSupplier($in["init"], $in["end"], 'LIMIT 5');
-
+        
         $totalsup = 0;
         $quantitysup = 0;
         foreach ($listSupplier as $i => $value) {

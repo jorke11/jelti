@@ -62,7 +62,6 @@ for ($i = 1; $i <= $count; $i++) {
     ?>
     @include('Inventory.departure.pdfheader')
     <br>
-    <br>
     <table width='100%' id="detail">
         <thead>
             <tr>
@@ -129,7 +128,6 @@ for ($i = 1; $i <= $count; $i++) {
                                     <td class="resolution">Si el pago es por consignacion fuera de Bogota, favor agregar al valor al final $11.000 pesos.</td>
                                 </tr>
                             </table>
-                            <br>
 
                             <?php
                             $cont = 0;

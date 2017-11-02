@@ -62,7 +62,7 @@ class UserController extends Controller {
                 foreach ($reader->get() as $book) {
                     if ($book->correo != '') {
                         $rol = Roles::where("description", "ILIKE", "%" . $book->perfil . "%")->first();
-              
+
                         if (count($rol) > 0) {
                             $input["role_id"] = $rol->id;
                         } else {
@@ -85,8 +85,8 @@ class UserController extends Controller {
 
                             $noti["email"] = $book->correo;
                             $noti["password"] = substr($book->correo, 0, $pos);
-                            
-                            
+
+
                             Mail::send("Notifications.activation", $noti, function($msj) {
                                 $msj->subject("Solicitud de activación para: " . $this->email);
                                 $msj->to($this->email, "info")->cc('tech@superfuds.com.co');
@@ -111,6 +111,7 @@ class UserController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
+            $input["status"] = 1;
             if (!isset($input["status"])) {
                 $input["status"] = false;
             }

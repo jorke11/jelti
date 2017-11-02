@@ -111,9 +111,9 @@ class UserController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
             unset($input["id"]);
-            $input["status"] = 1;
-            if (!isset($input["status"])) {
-                $input["status"] = false;
+            $input["status_id"] = 1;
+            if (!isset($input["status_id"])) {
+                $input["status_id"] = false;
             }
 
 

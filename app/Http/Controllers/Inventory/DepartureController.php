@@ -238,6 +238,12 @@ class DepartureController extends Controller {
 
     public function getInvoice($id) {
         $this->mails = array();
+        
+//        if(file_exists(public_path()."/images/superfuds.png")){
+//            echo "asd";exit;
+//        }
+//        
+//        echo public_path()."/images/superfuds.png";exit;
 
         $sale = Sales::where("departure_id", $id)->first();
         $detail = $this->formatDetailSales($sale["id"]);

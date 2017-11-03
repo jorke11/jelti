@@ -745,7 +745,7 @@ class DepartureController extends Controller {
                             $id = DB::table("sales")->insertGetId(
                                     ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
                                         "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
-                                        "address" => $departure["address"], "phone" => $departure["phone"], "status_id" => $departure["status_id"],
+                                        "address" => $departure["address"], "phone" => $departure["phone"], "status_id" => 2,
                                         "created" => $departure["created"], "shipping_cost" => $departure["shipping_cost"],
                                         "created_at" => date("Y-m-d H:i"), "description" => $departure["description"], "shipping_cost_tax" => $departure["shipping_cost_tax"]
                                     ]

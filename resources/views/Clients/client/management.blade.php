@@ -168,7 +168,7 @@
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="address" class="control-label">Sector *</label>
-                                            <select id="sector_id" name="sector_id" class="form-control input-clients input-sm" required="" disabled>
+                                            <select id="sector_id" name="sector_id" class="form-control input-clients input-sm" required="" >
                                                 <option value="0">Selección</option>
                                                 @foreach($sector as $val)
                                                 <option value="{{$val->code}}">{{$val->description}}</option>
@@ -178,16 +178,17 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="address">Flete *</label>
-                                            <input type="checkbox" id="shipping_cost" name="shipping_cost" class="input-clients" checked disabled>
+                                            <label for="address" class="control-label">Contacto principal</label>
+                                            <input type="text" id="contact" name="contact" class="input-clients form-control" disabled>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="address">Precio Especial *</label>
-                                            <input type="checkbox" id="special_price" name="special_price" class="input-clients " disabled>
+                                            <label for="address" class="control-label">Telefono Contacto</label>
+                                            <input type="text" id="phone_contact" name="phone_contact" class="input-clients form-control" disabled>
                                         </div>
                                     </div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4">
@@ -212,8 +213,20 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="form-group">
+                                            <label for="address">Flete *</label>
+                                            <input type="checkbox" id="shipping_cost" name="shipping_cost" class="input-clients" checked disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="address">Precio Especial *</label>
+                                            <input type="checkbox" id="special_price" name="special_price" class="input-clients" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
                                             <label for="address" class="control-label">Excluir reporte</label>
-                                            <input type="checkbox" id="exclude_report" name="exclude_report" class="input-clients">
+                                            <input type="checkbox" id="exclude_report" name="exclude_report" class="input-clients form-control">
                                         </div>
                                     </div>
                                 </div>

@@ -95,6 +95,7 @@ class DepartureController extends Controller {
 
     public function listTable(Request $req) {
         $in = $req->all();
+        $cont = 0;
 
         $query = DB::table('vdepartures');
 
@@ -109,28 +110,35 @@ class DepartureController extends Controller {
             $query->whereBetween("dispatched", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
         }
 
-        if (isset($in["init_filter"]) && $in["init_filter"] != '') {
-            $query->where("created_at", ">=", $in["init_filter"] . " 00:00");
-        } else {
-            $query->where("created_at", ">=", $this->initdate . " 00:00");
-        }
 
         if (isset($in["id_filter"]) && $in["id_filter"] != '') {
+            $cont++;
             $query->where("id", $in["id_filter"]);
         }
         if (isset($in["invoice_filter"]) && $in["invoice_filter"] != '') {
+            $cont++;
             $query->where("invoice", $in["invoice_filter"]);
         }
         if (isset($in["responsible_filter"]) && $in["responsible_filter"] != '') {
+            $cont++;
             $query->where("responsible_id", $in["responsible_filter"]);
         }
 
         if (isset($in["end_filter"]) && $in["end_filter"] != '') {
+            $cont++;
             $query->where("created_at", "<=", $in["end_filter"] . " 00:00");
         }
 
         if ($in["client_id"] == 0 && $in["client_id"] != '') {
             $query->where("status_id", 2);
+        }
+
+        if ($cont == 0) {
+            if (isset($in["init_filter"]) && $in["init_filter"] != '') {
+                $query->where("created_at", ">=", $in["init_filter"] . " 00:00");
+            } else {
+                $query->where("created_at", ">=", $this->initdate . " 00:00");
+            }
         }
 
         if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {

@@ -969,7 +969,13 @@ function Departure() {
 
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
-        param.initdep = $("#finitdep").val();
+
+        param.init_filter = $("#finit_filter").val();
+        param.end_filter = $("#fend_filter").val();
+        param.client_filter = $("#client_filter").val();
+        param.responsible_filter = $("#responsible_filter").val();
+        param.id_filter = $("#id_filter").val();
+        param.invoice_filter = $("#invoice_filter").val();
 
         var html = '';
         table = $('#tbl').DataTable({
@@ -982,7 +988,10 @@ function Departure() {
             destroy: true,
             ajax: {
                 url: "/api/listDeparture",
-                data: param
+                data: param,
+                beforeSend: function (request) {
+                    $("#loading-super").removeClass("hidden");
+                }
             },
             "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
             columns: [
@@ -1045,6 +1054,7 @@ function Departure() {
                     className: 'btn btn-primary glyphicon glyphicon-filter',
                     action: function (e, dt, node, config) {
                         $("#modalFilter").modal("show");
+                        $(".modal-filter").cleanFields();
                     }
                 },
                 {
@@ -1069,7 +1079,9 @@ function Departure() {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
-            ],
+            ],initComplete:function(){
+                 $("#loading-super").addClass("hidden");
+            },
 
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {

@@ -75,7 +75,7 @@ class DepartureController extends Controller {
         $this->in = array();
         $this->mails = array();
         $this->log = new LogController();
-        $this->initdate = date('Y-m-d', strtotime('-2 month', strtotime(date('Y-m-d'))));
+        $this->initdate = date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m-d'))));
     }
 
     public function index($client_id = null, $init = null, $end = null, $product_id = null, $supplier_id = null) {
@@ -108,10 +108,25 @@ class DepartureController extends Controller {
         if (isset($in["init"]) && $in["init"] != '') {
             $query->whereBetween("dispatched", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
         }
-        if (isset($in["initdep"]) && $in["initdep"] != '') {
-            $query->where("created_at", ">=", $in["initdep"] . " 00:00");
+
+        if (isset($in["init_filter"]) && $in["init_filter"] != '') {
+            $query->where("created_at", ">=", $in["init_filter"] . " 00:00");
         } else {
             $query->where("created_at", ">=", $this->initdate . " 00:00");
+        }
+
+        if (isset($in["id_filter"]) && $in["id_filter"] != '') {
+            $query->where("id", $in["id_filter"]);
+        }
+        if (isset($in["invoice_filter"]) && $in["invoice_filter"] != '') {
+            $query->where("invoice", $in["invoice_filter"]);
+        }
+        if (isset($in["responsible_filter"]) && $in["responsible_filter"] != '') {
+            $query->where("responsible_id", $in["responsible_filter"]);
+        }
+
+        if (isset($in["end_filter"]) && $in["end_filter"] != '') {
+            $query->where("created_at", "<=", $in["end_filter"] . " 00:00");
         }
 
         if ($in["client_id"] == 0 && $in["client_id"] != '') {
@@ -341,8 +356,8 @@ class DepartureController extends Controller {
 //        dd($data);
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
                     'title' => 'Invoice',
-                    'margin_top' => -12,"margin_bottom"=>1]);
-        
+                    'margin_top' => -12, "margin_bottom" => 1]);
+
 //        $pdf->SetProtection(array(), '123', '123');
 //          $pdf->showWatermarkImage = true;
 //        $pdf->SetWatermarkImage(url("/").'/assets/images/logo.png');

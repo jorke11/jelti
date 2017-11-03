@@ -140,6 +140,7 @@ function Departure() {
         });
 
         $("#tabList").click(function () {
+            $("#loading-super").addClass("hidden");
             table.ajax.reload();
         })
 
@@ -761,6 +762,7 @@ function Departure() {
     }
 
     this.showModal = function (id) {
+        $("#loading-super").addClass("hidden");
         var frm = $("#frmEdit"), btnEdit = true, btnDel = true;
         var data = frm.serialize(), status = false;
         var url = "/departure/" + id + "/edit";
@@ -1079,8 +1081,8 @@ function Departure() {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
-            ],initComplete:function(){
-                 $("#loading-super").addClass("hidden");
+            ], initComplete: function () {
+                $("#loading-super").addClass("hidden");
             },
 
             createdRow: function (row, data, index) {

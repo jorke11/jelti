@@ -1,37 +1,5 @@
-@extends('layouts.client')
+@extends('layouts.blog')
 @section('content')
-
-<div class="row">
-
-</div>
-<div class="row">
-    <div class="col-lg-12" style="padding-bottom: 2%;">
-         @if($category->banner!='')
-        <img src="{{$category->banner}}" class="img-responsive" style="width: 100%">
-         @else
-         <img src="http://via.placeholder.com/2000x180" class="img-responsive">
-         @endif
-    </div>
-</div>
-
-<div class="row" style="padding-bottom: 3%">
-    <div class="col-lg-8 col-lg-offset-2">
-        @foreach($subcategory as $val)
-        <div class="col-lg-2">
-            <div class="row">
-                <div class="row hover01"><div class="col-lg-12"><figure><img id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer" onclick="obj.selectedSubcategory()"></figure></div></div>
-            </div>
-            <div class="row" style="padding-top: 1%">
-                <div class="col-lg-12" style="padding-top: 10%">
-                    <p class="text-center" style="color:#9b9b9b">{{ucwords($val->description)}}</p>
-                </div>
-
-            </div>
-
-        </div>
-        @endforeach
-    </div>
-</div>
 
 <div style="background: #fffcf8;width: 100%;">
     <div class="row " style="padding-top: 2%;padding-left: 2%;padding-right: 2%">
@@ -73,9 +41,9 @@
                     <div class="row">
                         <div class="col-lg-12">
                             @if(!Auth::guest())
-                            <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control">Comprar</a>
+                            <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control">Detalle</a>
                             @else
-                            <a href="/login" class="btn btn-success form-control">Comprar</a>
+                            <a href="/login" class="btn btn-success form-control">Detalle</a>
                             @endif
 
                         </div>
@@ -107,5 +75,4 @@
         </div>
     </div>
 </div>
-{!!Html::script('js/Ecommerce/Detail.js')!!}
 @endsection

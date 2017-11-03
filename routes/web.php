@@ -269,7 +269,7 @@ Route::get('payment/responsepay', 'Shopping\PaymentController@responsePay');
 Route::get('generatekey', "Shopping\PaymentController@generatekey");
 Route::post('payment/confirmationpay', 'Shopping\PaymentController@confirmationPay');
 Route::get('paymentest', "Payments\PaymentsController@index");
-Route::post('payment/target', 'Shopping\PaymentController@payment');
+
 
 Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
@@ -532,10 +532,11 @@ Route::get('/profileClient', "Report\ClientController@profile");
 Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
 Route::get('profile/{id}/getRepurchase', "Report\ClientController@getRepurchase");
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
-Route::get('blog', "Blog\BlogController@index");
+
 
 
 
 require __DIR__ . '/cron.php';
 require __DIR__ . '/report.php';
 require __DIR__ . '/shop.php';
+require __DIR__ . '/blog.php';

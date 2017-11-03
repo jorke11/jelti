@@ -7,8 +7,8 @@
     </div>
 </div>
 <div class="row">
-    <!--{!! Form::open(['id'=>'frm','files' => true,'url' => 'payment/target']) !!}-->
-    {!! Form::open(['id'=>'frm','files' => true]) !!}
+    <!--{!! Form::open(['id'=>'frm','files' => true]) !!}-->
+    {!! Form::open(['id'=>'frm','files' => true,'url' => 'payment/target']) !!}
     <div class="col-lg-10 col-lg-offset-1">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
@@ -26,7 +26,7 @@
                                         <h4 class="text-right">Facturado</h4>
                                     </div>
                                     <div class="col-lg-6">
-                                        {{$client->business}}
+                                         <h4 class="text-left">{{$client->business}}</h4>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -34,7 +34,7 @@
                                         <h4 class="text-right">Total  Orden</h4>
                                     </div>
                                     <div class="col-lg-6">
-                                        <span id="totalOrder"></span>
+                                        <h4 class="text-left"><span id="totalOrder"></span></h4>
                                     </div>
                                 </div>
                                 
@@ -47,7 +47,6 @@
         </div>
 
         <div id="content-detail">
-
         </div>
     </div>
     {!!Form::close()!!}

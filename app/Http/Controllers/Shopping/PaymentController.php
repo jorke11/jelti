@@ -120,6 +120,7 @@ class PaymentController extends Controller {
       ]
      * */
     public function payment(Request $req) {
+        
         $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
 
         $sql = "SELECT p.title product,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image
@@ -128,7 +129,6 @@ class PaymentController extends Controller {
                             WHERE order_id=$order->id
                             GROUP BY 1,2,3,product_id,p.image";
         $detail = (array) DB::select($sql);
-
 
         $user = \App\Models\Security\Users::find(Auth::user()->id);
 

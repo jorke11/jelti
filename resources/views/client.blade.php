@@ -87,7 +87,7 @@
 </style>
 
 <div class="row">
-    <div class="col-lg-9 col-lg-offset-1">
+    <div class="col-lg-12">
         @if(Session::has('success'))
         <div class="row">
             <div class="col-lg-12">
@@ -98,7 +98,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-9 col-lg-offset-1"><hr style="border-top: 1px solid #ccc"></div>
+    <div class="col-lg-10 col-lg-offset-1"><hr style="border-top: 1px solid #ccc"></div>
 </div>
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1">

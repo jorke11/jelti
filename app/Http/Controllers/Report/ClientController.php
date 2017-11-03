@@ -333,8 +333,8 @@ class ClientController extends Controller {
         foreach ($pro as $i => $value) {
             foreach ($dep as $val) {
                 $sql = "SELECT sum(quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) total
-                        from sales_detail d
-                        JOIN departures dep ON dep.id=d.sale_id and dep.status_id IN(2,7)
+                        from departures_detail d
+                        JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
                         where departure_id=" . $val->id . " and product_id = " . $value->id . " 
                         AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                         AND dep.client_id=" . $client_id;

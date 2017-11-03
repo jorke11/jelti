@@ -34,5 +34,7 @@ class MainController extends Controller {
             return $sent->where("products.id", $id)->get();
         }
     }
+    
+    
 
 }

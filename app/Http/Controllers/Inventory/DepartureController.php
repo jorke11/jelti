@@ -115,10 +115,12 @@ class DepartureController extends Controller {
             $cont++;
             $query->where("id", $in["id_filter"]);
         }
+
         if (isset($in["invoice_filter"]) && $in["invoice_filter"] != '') {
             $cont++;
             $query->where("invoice", $in["invoice_filter"]);
         }
+
         if (isset($in["responsible_filter"]) && $in["responsible_filter"] != '') {
             $cont++;
             $query->where("responsible_id", $in["responsible_filter"]);
@@ -128,9 +130,10 @@ class DepartureController extends Controller {
             $cont++;
             $query->where("created_at", "<=", $in["end_filter"] . " 00:00");
         }
+        
 
-        if ($in["client_id"] == 0 && $in["client_id"] != '') {
-            $query->where("status_id", 2);
+        if ($in["client_filter"] != 0 && $in["client_filter"] != '') {
+            $query->where("client_id", $in["client_filter"]);
         }
 
         if ($cont == 0) {

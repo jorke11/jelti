@@ -1,6 +1,17 @@
 function Payment() {
     this.init = function () {
-        $("#btnPay").click(this.pay);
+        $("#frm").submit(function () {
+            $.ajax({
+                url: PATH + '/generatekey',
+                method: 'GET',
+                dataType: 'JSON',
+                success: function (data) {
+                    $("#frm #signature").val(data.key);
+                }
+            });
+
+        });
+
         this.getDetail();
         this.getQuantity();
     }
@@ -30,26 +41,65 @@ function Payment() {
             success: function (data) {
 
                 $.each(data.detail, function (i, val) {
-                    image = (val.image == null) ? "default.jpg" : val.image;
-                    html += "<tr><td>" + (i + 1) + "</td>";
-                    html += '<td><img src="/images/product/' + image + '" width="25px"></td>'
-                    html += "<td>" + val.product + "</td><td><input type='number' value='" + val.quantity + "' class='form-control input-sm' onblur='obj.updateQuantity(" + val.order_id + "," + val.product_id + ",this)'></td><td>" + val.formateTotal + "</td>";
-                    html += '<td><button type="button" class="close" aria-label="Close" onclick=obj.deleteItem(' + val.product_id + ',' + val.order_id + ')><span aria-hidden="true">&times;</span></button></td></tr>';
+//                    image = (val.image == null) ? "../assets/images/default.jpg" : val.image;
+                    image = (val.image == null) ? "http://via.placeholder.com/200x150" : val.image;
+                    html += '<div class="row">\
+                <div class="col-lg-8 col-lg-offset-2">\
+                    <div class="panel panel-default">\
+                        <div class="panel-header">\
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding-right:1%"><span aria-hidden="true">&times;</span></button>\
+                        </div>\
+                        <div class="panel-body">\
+                            <div class="row">\
+                                <div class="col-lg-3">\
+                                    <img src="' + image + '">\
+                                </div>\
+                                <div class="col-lg-7">\
+                                    <div class="row">\
+                                        <div class="col-lg-12">\
+                                            <h3>' + val.product + '</h3>\
+                                        </div>\
+                                    </div>\
+                                    <div class="row">\
+                                        <div class="col-lg-12">\
+                                            <div class="muted">' + val.supplier + '</div>\
+                                        </div>\
+                                    </div>\
+                                    <div class="row">\
+                                        <div class="col-lg-12">\
+                                            <h4>' + val.formateTotal + '</h4>\
+                                        </div>\
+                                    </div>\
+                                    <div class="row">\
+                                        <div class="col-lg-4">\
+                                            <input type="number" id="quantity" name="quantity" class="form-control" min="1" value=' + val.quantity + ' onblur=obj.updateQuantity(' + val.order_id + ',' + val.product_id + ',this)>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>';
+
                 })
                 html += '</div>';
 
-                $("#tblReview tbody").html(html);
-                $("#tblReview tfoot").html('<tr><td colspan="4"><strong>Total</td><td>' + data.total + '</strong></td></tr>');
+                $("#content-detail").html(html);
+//                $("#tblReview").html('<tr><td colspan="4"><strong>Total</td><td>' + data.total + '</strong></td></tr>');
                 $("#loading-super").addClass("hidden");
+                $("#totalOrder").html("<h4>" + data.total + "</h4>");
+            }, error: function () {
+//                location.href = '/login';
             }
         })
     }
 
-    this.updateQuantity = function (order_id, product_id, obj) {
+    this.updateQuantity = function (order_id, product_id, input) {
         toastr.remove();
         var param = {};
         param.product_id = product_id;
-        param.quantity = obj.value;
+        param.quantity = input.value;
 
         $.ajax({
             url: 'getDetailQuantity/' + order_id,
@@ -59,9 +109,25 @@ function Payment() {
             success: function (data) {
                 if (data.success == true) {
                     toastr.success("Cantidad editada");
+                    obj.setQuantity();
+                    obj.getDetail();
                 }
             }
         })
+    }
+
+    this.setQuantity = function () {
+        var html = "";
+        $.ajax({
+            url: PATH + '/getCounter',
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (data) {
+
+                $("#quantityOrders").html(data.quantity);
+            }
+        })
+
     }
 
     this.deleteItem = function (product_id, order_id) {

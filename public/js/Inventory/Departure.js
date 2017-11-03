@@ -976,7 +976,7 @@ function Departure() {
         param.responsible_filter = $("#responsible_filter").val();
         param.id_filter = $("#id_filter").val();
         param.invoice_filter = $("#invoice_filter").val();
-
+        console.log(param)
         var html = '';
         table = $('#tbl').DataTable({
             "dom":

@@ -6,11 +6,14 @@
 </div>
 <div class="row">
     <div class="col-lg-12" style="padding: 0;">
-        <img src="/{{$category->banner}}" class="img-responsive" style="width: 100%">
+         @if($category->banner!='')
+        <img src="{{$category->banner}}" class="img-responsive" style="width: 100%">
+         @else
+         <img src="http://via.placeholder.com/2000x150" class="img-responsive">
+         @endif
     </div>
 </div>
-<br>
-<br>
+
 <div class="row" style="padding-bottom: 3%">
     <div class="col-lg-8 col-lg-offset-2">
         @foreach($subcategory as $val)
@@ -59,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <img src="https://placeholdit.imgix.net/~text?txtsize=39&txt=420%C3%97250&w=420&h=250">
+                <img src="http://via.placeholder.com/420x250">
                 <div class="caption">
                     <h5 class="text-center"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400">{{$value->title}}</a></h5>
                     @if(!Auth::guest())

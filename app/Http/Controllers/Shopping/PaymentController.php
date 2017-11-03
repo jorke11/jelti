@@ -11,38 +11,77 @@ use Auth;
 use DB;
 use Session;
 use Illuminate\Support\Facades\Input;
+use App\Models\Administration\Stakeholder;
 
 class PaymentController extends Controller {
 
     public $depObj;
+    public $merchantId;
+    public $accountId;
+    public $description;
+    public $referenceCode;
+    public $buyerEmail;
+    public $currency;
+    public $ApiKey;
+    public $ApiLogin;
+    public $amount;
 
     public function __construct() {
+        $this->middleware("auth");
         $this->depObj = new DepartureController();
+        $this->merchantId = "508029";
+        $this->accountId = "512321";
+        $this->description = "Ventas en linea";
+        $this->referenceCode = "invoice001";
+        $this->buyerEmail = "jpinedom@hotmail.com";
+        $this->currency = "COP";
+        $this->ApiKey = "4Vj8eK4rloUd272L48hsrarnUA";
+        $this->ApiLogin = "pRRXKOl8ikMmt9u";
+        $this->amount = 0;
     }
 
     public function index() {
+        $client = Stakeholder::where("document", Auth::user()->document)->first();
+        return view("Ecommerce.payment.init", compact("client"));
+    }
 
-        return view("Ecommerce.payment.init");
+    public function generatekey() {
+        $key = md5($this->ApiKey . "~" . $this->merchantId . "~" . $this->referenceCode . "~" . $this->currency);
+        return response()->json(["key" => $key]);
     }
 
     public function getDetail() {
-        $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
-
-        $sql = "SELECT p.title product,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image
-                            FROM orders_detail d
-                            JOIN products p ON p.id=d.product_id
-                            WHERE order_id=$order->id
-                            GROUP BY 1,2,3,product_id,p.image";
-        $detail = DB::select($sql);
-
-        $total = 0;
-        foreach ($detail as $i => $value) {
-            $detail[$i]->formateTotal = "$ " . number_format($value->total, 2, ",", ".");
-            $total += $value->total;
+        $detail = $this->getDetailData();
+        if ($detail != null) {
+            $total = "$ " . number_format($this->amount, 0, ",", ".");
+            return response()->json(["detail" => $detail, "total" => $total]);
+        } else {
+            return response()->json(["success" => false, "total" => 0], 509);
         }
-        $total = "$ " . number_format($total, 2, ",", ".");
+    }
 
-        return response()->json(["detail" => $detail, "total" => $total]);
+    public function getDetailData() {
+        $detail = null;
+        if (Auth::user() != null) {
+            $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
+
+            $sql = "
+                SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image
+                FROM orders_detail d
+                    JOIN products p ON p.id=d.product_id
+                    JOIN stakeholder s ON s.id=p.supplier_id
+                WHERE order_id=$order->id
+                GROUP BY 1,2,3,4,product_id,p.image,d.id
+                ORDER BY d.id";
+            $detail = DB::select($sql);
+
+            $total = 0;
+            foreach ($detail as $i => $value) {
+                $detail[$i]->formateTotal = "$ " . number_format($value->total, 2, ",", ".");
+                $this->amount += $value->total;
+            }
+            return $detail;
+        }
     }
 
     public function setQuantity(Request $req, $order_id) {
@@ -52,6 +91,15 @@ class PaymentController extends Controller {
         $det->quantity = $in["quantity"];
         $det->save();
         return response()->json(["success" => true]);
+    }
+
+    public function responsePay(Request $req) {
+        dd($_GET);
+    }
+
+    public function confirmationPay(Request $req) {
+        echo "adsad";
+        exit;
     }
 
     /**

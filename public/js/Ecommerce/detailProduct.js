@@ -7,6 +7,10 @@ function detailProduct() {
         this.getQuantity();
     }
 
+    this.modalComment = function () {
+        $("#modalComment").modal("show");
+    }
+
     this.addProduct = function () {
         toastr.remove()
         var obj = {};
@@ -65,7 +69,7 @@ function detailProduct() {
         obj.product_id = $("#product_id").val();
         obj.description = $("#txtComment").val();
         $.ajax({
-            url: '../addComment',
+            url: PATH + '/addComment',
             method: 'POST',
             data: obj,
             dataType: 'JSON',

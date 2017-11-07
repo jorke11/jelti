@@ -994,7 +994,7 @@ function Departure() {
                 beforeSend: function (request) {
                     $("#loading-super").removeClass("hidden");
                 },
-                after:function(){
+                complete:function(){
                     $("#loading-super").addClass("hidden");
                 }
             },

@@ -171,7 +171,6 @@
                 padding-bottom: 6px !important;
                 padding-top: 6px !important;
                 color:white !important;
-                font-weight: 300;
                 border-bottom-left-radius: 1em 1em 1em 1em !important;
                 width: 100% !important;
                 border: 0 !important;  
@@ -181,7 +180,7 @@
                 background: -webkit-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
                 background: -o-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
                 background: -ms-linear-gradient(top, rgba(241,111,92,1) 0%, rgba(246,41,12,1) 0%, rgba(231,56,39,1) 0%, rgba(52,205,159,1) 0%, rgba(142,222,174,1) 49%, rgba(142,222,174,1) 100%) !important;
-                font-size:20px !important;
+                font-size:17px !important;
                 font-weight: 100 !important;
                 -webkit-transition: all 0.3s ease-in-out !important;
                 -moz-transition: all 0.3s ease-in-out !important;
@@ -192,6 +191,7 @@
                 background: #ffffff !important;
                 color: #00c98a! important;
                 border: 1px solid #00c98a !important;
+                
             }
             .row-space{
                 padding-bottom: 20px;
@@ -211,6 +211,12 @@
             }
             .underline-white{
                 border-bottom: solid 2px #fff;
+                display: inline;
+                padding-bottom: 3px;
+            }
+
+            .underline-green{
+                border-bottom: solid .1px #00c98a;
                 display: inline;
                 padding-bottom: 3px;
             }
@@ -266,9 +272,9 @@
                     <ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#" style="color:#00c98a;font-size:20px;font-weight: 100" ><span class="underline">Inicio</span></a></li>
-                        <li><a href="/listProducts" style="color:#00c98a;font-size:20px;font-weight: 100">Productos</a></li>
-                        <li><a href="/blog" style="color:#00c98a;font-size:20px;font-weight: 100">Blog</a></li>
+                        <li><a href="/" style="color:#00c98a;font-size:17px;font-weight: 100" ><span class="underline-green">Inicio</span></a></li>
+                        <li><a href="/listProducts" style="color:#00c98a;font-size:17px;font-weight: 100">Productos</a></li>
+                        <li><a href="/blog" style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
                         <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
                     </ul>
@@ -280,17 +286,17 @@
             <div class="container-fluid" style="padding-left: 0; background-attachment: fixed;" id="img-main">
 
                 <div class="row">
-                    <div class="col-lg-6 col-md-6" style="padding-top: 13%;padding-left: 4%">
+                    <div class="col-lg-6 col-md-6" style="padding-top: 18%;padding-left: 8%">
                         <img src="{{ asset('assets/images/marketplace.png') }}" >
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        <div class="row" style="padding-top: 5%;">
+                        <div class="row" style="padding-top: 5%;padding-left: 10%">
                             <div class="col-lg-6 col-lg-offset-6 col-md-7 col-md-offset-4">
                                 <p class="text-center"><img src="{{ asset('assets/images/sf_blanco.png') }}"></p>
                             </div>
                         </div>
                         <div class="row" style="padding-top: 3%;">
-                            <div class="col-lg-5 col-lg-offset-6 col-md-8 col-md-offset-3">
+                            <div class="col-lg-5 col-lg-offset-6 col-md-7 col-md-offset-4">
                                 <div class="panel" style=" background-color:rgba(255,255,255,.4);border-color: white;padding: 0% 5% 0% 5%;border-radius: 10px">
                                     <div class="panel-body">
                                         <div class="row row-space">
@@ -300,33 +306,33 @@
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-6 col-md-6">
-                                                <button class="btn buttons-page btn-lg text-center">Proveedor</button>
+                                                <p class="text-center"><button class="btn buttons-page">Proveedor</button></p>
                                             </div>
 
                                             <div class="col-lg-6 col-md-6">
                                                 <p class="text-center">
-                                                    <button class="btn buttons-page btn-lg text-center">Negocio</button>
+                                                    <button class="btn buttons-page text-center">Negocio</button>
                                                 </p>
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12 ">
-                                                <input class="form-control input-lg" placeholder="Compañia">
+                                                <input class="form-control" placeholder="Compañia">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control input-lg" placeholder="Nombre">
+                                                <input class="form-control" placeholder="Nombre">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control input-lg" placeholder="Email">
+                                                <input class="form-control" placeholder="Email">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control input-lg" placeholder="Telefono">
+                                                <input class="form-control" placeholder="Telefono">
                                             </div>
                                         </div>
                                         <div class="row row-space">
@@ -335,8 +341,8 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-md-offset-3">
-                                                <button type="button" class="btn buttons-page btn-lg text-center">Registrate</button>
+                                            <div class="col-lg-6 col-md-6 col-lg-offset-4 col-md-offset-3">
+                                                <button type="button" class="btn buttons-page text-center">Registrate</button>
                                             </div>
                                         </div>
                                     </div>

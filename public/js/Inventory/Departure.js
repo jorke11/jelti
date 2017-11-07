@@ -993,6 +993,9 @@ function Departure() {
                 data: param,
                 beforeSend: function (request) {
                     $("#loading-super").removeClass("hidden");
+                },
+                after:function(){
+                    $("#loading-super").addClass("hidden");
                 }
             },
             "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],

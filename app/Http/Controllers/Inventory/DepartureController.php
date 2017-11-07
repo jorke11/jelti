@@ -130,7 +130,7 @@ class DepartureController extends Controller {
             $cont++;
             $query->where("created_at", "<=", $in["end_filter"] . " 00:00");
         }
-        
+
 
         if ($in["client_filter"] != 0 && $in["client_filter"] != '') {
             $query->where("client_id", $in["client_filter"]);
@@ -522,6 +522,10 @@ class DepartureController extends Controller {
                 $row->save();
                 DB::commit();
                 $dep = Departures::find($id);
+                
+                
+                
+                
                 return response()->json(["success" => true, "header" => $dep]);
             } else {
                 return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
@@ -1230,17 +1234,23 @@ class DepartureController extends Controller {
 
     public function destroy($id) {
         $row = Departures::Find($id);
-        $detail = DeparturesDetail::where("departure_id", $row->id)->get();
-        foreach ($detail as $value) {
-            $det = DeparturesDetail::find($value->id);
-            $det->delete();
-        }
-        $row->delete();
 
-        if ($id) {
-            return response()->json(['success' => true]);
+        if ($row->invoice == null) {
+
+            $detail = DeparturesDetail::where("departure_id", $row->id)->get();
+            foreach ($detail as $value) {
+                $det = DeparturesDetail::find($value->id);
+                $det->delete();
+            }
+            $row->delete();
+
+            if ($id) {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
         } else {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, "msg" => "No se puede borrar porque este pedido fue reversado y ya tiene consecutivo"], 409);
         }
     }
 

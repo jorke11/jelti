@@ -15,7 +15,6 @@ function Departure() {
             $('#myTabs a[href="#management"]').tab('show');
         });
         $("#btnFilter").click(function () {
-
             table = obj.table();
 
         })
@@ -140,8 +139,8 @@ function Departure() {
         });
 
         $("#tabList").click(function () {
-            $("#loading-super").addClass("hidden");
             table.ajax.reload();
+            $("#loading-super").addClass("hidden");
         })
 
 
@@ -906,10 +905,11 @@ function Departure() {
                     if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
+                        $("#loading-super").addClass("hidden");
                     }
-                }, error: function (err) {
-                    toastr.error("No se puede borrra Este registro");
-                }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                },
             })
         }
 
@@ -978,7 +978,7 @@ function Departure() {
         param.responsible_filter = $("#responsible_filter").val();
         param.id_filter = $("#id_filter").val();
         param.invoice_filter = $("#invoice_filter").val();
-        console.log(param)
+        
         var html = '';
         table = $('#tbl').DataTable({
             "dom":

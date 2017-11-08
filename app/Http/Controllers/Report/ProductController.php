@@ -52,7 +52,7 @@ class ProductController extends Controller {
         return response()->json(["data" => $res]);
     }
 
-    public function getListProduct($init, $end, $where = '', $limit = 'LIMIT 10') {
+    public function getListProduct($init, $end, $where = '', $limit = '') {
         $sql = "
           SELECT p.id,p.title as product, sum(d.real_quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
          sum(d.value * d.quantity * d.units_sf) as subtotal 

@@ -247,6 +247,21 @@
                 width:2%;
 
             }
+            
+            .box-client{
+               width:50%;float:left;height: 30px;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 10px 0 0 10px;
+               cursor:pointer;
+               border: solid 1px #00c98a;
+            }
+            .box-supplier{
+                width:50%;float:left;height: 30px;border: solid 1px #00c98a;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 0 10px 10px 0;
+                font-weight: 600;cursor:pointer;
+            }
+            
+            .back-green{
+                background-color: #86DDB0;
+            }
+            
         </style>
     </head>
 
@@ -306,8 +321,8 @@
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-10 col-lg-offset-1">
-                                                <div style="width:50%;float:left;height: 30px;background-color: #86DDB0;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 10px 0 0 10px">Cliente</div>
-                                                <div style="width:50%;float:left;height: 30px;border: solid 1px #00c98a;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 0 10px 10px 0;font-weight: 600">Proveedor</div>
+                                                <div  class="box-client" onclick="objPage.stakeholder(1,this)">Cliente</div>
+                                                <div class="box-supplier" onclick="objPage.stakeholder(2,this)">Proveedor</div>
                                             </div>
                                         </div>
                                         <div class="row row-space">
@@ -525,7 +540,7 @@
                         @foreach($subcategory as $val)
                         <div class="col-lg-2 col-md-2">
                             <div class="row"><div class="col-lg-12 col-md-12"><p class="text-center color-font">{{ucwords($val->description)}}</p></div></div>
-                            <div class="row"><div class="col-lg-12 col-md-12"><img src="{{$val->alternative}}" alt="" class="img-responsive center-block"></div></div>
+                            <div class="row"><div class="col-lg-12 col-md-12"><img src="{{$val->img}}" alt="" class="img-responsive center-block"></div></div>
                         </div>
                         @endforeach
                     </div>
@@ -900,18 +915,18 @@
             </div>
         </div>
 
-        <div class="container-fluid">
+        <div class="container-fluid" style="padding-top: 2%;padding-bottom: 2%">
             <div class="row">
-                <div class="col-lg-5 col-lg-offset-4 col-md-5 col-md-offset-4">
+                <div class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-4">
                     <div class="row">
-                        <div class="col-lg-3 col-md-3">
-                            <img src="/images/facebook.png">
+                        <div class="col-lg-2 col-md-2">
+                            <img src="assets/images/fb_icon.png">
                         </div>
-                        <div class="col-lg-3 col-md-3">
-                            <img src="/images/instagram.png">
+                        <div class="col-lg-2 col-md-2">
+                            <img src="assets/images/ig_icon.png">
                         </div>
-                        <div class="col-lg-3 col-md-3">
-                            <img src="/images/twitter.png">
+                        <div class="col-lg-2 col-md-2">
+                            <img src="assets/images/tw_icon.png">
                         </div>
                     </div>
                 </div>
@@ -993,13 +1008,6 @@
 
 
     </body>
-    <script>
-        $(document).ready(function ($) {
-            var ventana_ancho = $(window).width();
-            var ventana_alto = $(window).height();
-            console.log(ventana_ancho);
-            console.log(ventana_alto);
-        });
-    </script>
+       {!!Html::script('js/Page/page.js')!!}
 
 </html>

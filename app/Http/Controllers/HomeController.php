@@ -330,7 +330,7 @@ class HomeController extends Controller {
         return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity, "date" => date("F")]);
     }
 
-    public function getCEOSupplier($init, $end, $limit = '') {
+    public function getCEOSupplier($init, $end, $warehouse = '') {
         $sql = "
             select st.id,st.business as supplier,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
             sum(d.quantity * d.value* d.units_sf) as subtotal
@@ -339,7 +339,7 @@ class HomeController extends Controller {
             JOIN products p ON p.id=d.product_id 
             JOIN stakeholder st ON st.id=p.supplier_id
             WHERE d.product_id is NOT null and p.category_id<>-1
-            AND dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59'
+            AND dep.dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' $warehouse
             group by 1,2
             order by 4 desc
             ";

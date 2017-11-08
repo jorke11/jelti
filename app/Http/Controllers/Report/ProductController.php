@@ -24,19 +24,19 @@ class ProductController extends Controller {
         $where = '';
 
         if ($input["warehouse_id"] != 0) {
-            $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
+            $where .= " AND s.warehouse_id=" . $input["warehouse_id"];
         }
 
         if ($input["client_id"] != '') {
-            $where .= " AND dep.client_id=" . $input["client_id"];
+            $where .= " AND s.client_id=" . $input["client_id"];
         }
 
         if ($input["city_id"] != '') {
-            $where = "AND dep.destination_id=" . $input["city_id"];
+            $where = "AND s.destination_id=" . $input["city_id"];
         }
 
         if ($input["product_id"] != '') {
-            $where .= " AND d.product_id=" . $input["product_id"];
+            $where .= " AND p.product_id=" . $input["product_id"];
         }
 
         if ($input["supplier_id"] != '') {
@@ -44,7 +44,7 @@ class ProductController extends Controller {
         }
 
         if ($input["commercial_id"] != '') {
-            $where .= " AND dep.responsible_id=" . $input["commercial_id"];
+            $where .= " AND s.responsible_id=" . $input["commercial_id"];
         }
 
 

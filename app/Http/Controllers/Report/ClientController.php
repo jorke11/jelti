@@ -447,7 +447,7 @@ class ClientController extends Controller {
         $pertotalpro = ($totalpro / $subtotal) * 100;
         $perquantitypro = ($quantitypro / $quantity) * 100;
 
-        $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', 'LIMIT 5');
+        $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', '');
 
         $totalcat = 0;
         $quantitycat = 0;

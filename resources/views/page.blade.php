@@ -252,7 +252,7 @@
 
 
     <body>
-        <nav class="navbar navbar-default" style="margin-bottom:0px;padding-top: 4px;min-height: 60px">
+        <nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom:0px;padding-top: 4px;min-height: 60px">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header" style='padding-left: 2%'>
@@ -283,7 +283,7 @@
         </nav>
 
         <section>
-            <div class="container-fluid" style="padding-left: 0; background-attachment: fixed;" id="img-main">
+            <div class="container-fluid" style="padding-left: 0; background-attachment: fixed;padding-top: 4%" id="img-main">
 
                 <div class="row">
                     <div class="col-lg-6 col-md-6" style="padding-top: 18%;padding-left: 8%">
@@ -305,14 +305,9 @@
                                             </div>
                                         </div>
                                         <div class="row row-space">
-                                            <div class="col-lg-6 col-md-6">
-                                                <p class="text-center"><button class="btn buttons-page">Proveedor</button></p>
-                                            </div>
-
-                                            <div class="col-lg-6 col-md-6">
-                                                <p class="text-center">
-                                                    <button class="btn buttons-page text-center">Negocio</button>
-                                                </p>
+                                            <div class="col-lg-10 col-lg-offset-1">
+                                                <div style="width:50%;float:left;height: 30px;background-color: #86DDB0;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 10px 0 0 10px">Cliente</div>
+                                                <div style="width:50%;float:left;height: 30px;border: solid 1px #00c98a;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 0 10px 10px 0;font-weight: 600">Proveedor</div>
                                             </div>
                                         </div>
                                         <div class="row row-space">

@@ -447,13 +447,13 @@ class ClientController extends Controller {
         $pertotalpro = ($totalpro / $subtotal) * 100;
         $perquantitypro = ($quantitypro / $quantity) * 100;
 
-        $where='';
+        $where = '';
         if ($in["warehouse_id"] != 0) {
             $where = " and dep.warehouse_id=" . $in["warehouse_id"];
         }
-        
 
-        $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', '');
+
+        $listCategory = $this->getCEOProduct($in["init"], $in["end"], $where, '');
 
         $totalcat = 0;
         $quantitycat = 0;

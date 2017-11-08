@@ -471,8 +471,8 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2"><h4>Lo Nuevo</h4></div>
-                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3"><h4>Ver Todo</h4></div>
+                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2"><h3 class="color-font">Lo Nuevo</h3></div>
+                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3"><h3 class="text-muted color-font">Ver Todo</h3></div>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
@@ -526,16 +526,16 @@
         </section>
 
 
-        <section>
+        <section style="padding-top: 3%;">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1"><h4 class="color-font">Sub-categorias</h4></div>
+                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1"><h3 class="color-font">Sub-categorias</h3></div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
                 </div>
-                <div class="row row-space">
+                <div class="row row-space"  style="padding-bottom: 5%">
                     <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
                         @foreach($subcategory as $val)
                         <div class="col-lg-2 col-md-2">

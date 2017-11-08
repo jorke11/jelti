@@ -234,7 +234,7 @@ class ClientController extends Controller {
             GROUP bY 1,p.category_id
             ORDER by 3 DESC
             $limit";
-        
+
 //        echo $cli;exit;
 
         return DB::select($cli);
@@ -431,8 +431,8 @@ class ClientController extends Controller {
 
         $obj = new ProductController();
         $listProduct = $obj->getListProduct($in["init"], $in["end"], '');
-        
-        
+
+
         $totalpro = 0;
         $quantitypro = 0;
         foreach ($listProduct as $i => $value) {
@@ -446,6 +446,12 @@ class ClientController extends Controller {
         $quantitypro = ($quantitypro == 0) ? 1 : $quantitypro;
         $pertotalpro = ($totalpro / $subtotal) * 100;
         $perquantitypro = ($quantitypro / $quantity) * 100;
+
+        $where='';
+        if ($in["warehouse_id"] != 0) {
+            $where = " and dep.warehouse_id=" . $in["warehouse_id"];
+        }
+        
 
         $listCategory = $this->getCEOProduct($in["init"], $in["end"], '', '');
 
@@ -463,8 +469,8 @@ class ClientController extends Controller {
         $perquantitycat = ($quantitycat / $quantity) * 100;
 
         $home = new HomeController();
-        $listSupplier = $home->getCEOSupplier($in["init"], $in["end"], 'LIMIT 5');
-        
+        $listSupplier = $home->getCEOSupplier($in["init"], $in["end"], $where);
+
         $totalsup = 0;
         $quantitysup = 0;
         foreach ($listSupplier as $i => $value) {
@@ -520,12 +526,15 @@ class ClientController extends Controller {
 
     public function getSalesUnitsWare(Request $req) {
         $in = $req->all();
+
         $res = $this->getSalesUnitsDataWare($in["init"], $in["end"]);
 
         return response()->json(["data" => $res]);
     }
 
     function getSalesUnitsDataWare($init, $end) {
+
+
         $sql = "
                 SELECT 
                     warehouse,to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,
@@ -546,7 +555,7 @@ class ClientController extends Controller {
             list($year, $month) = explode("-", $value->dates);
             $day = date("d", (mktime(0, 0, 0, $month + 1, 1, $year) - 1));
 
-            
+
             $res[$i]->dates = date("Y-F", strtotime($value->dates));
             $subtotal += $value->subtotal;
             $total += $value->total;

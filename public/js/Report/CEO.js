@@ -21,6 +21,7 @@ function CEO() {
         var param = {}, html = '';
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
 
         return $('#tblSalesWare').DataTable({
             destroy: true,
@@ -277,6 +278,7 @@ function CEO() {
         var param = {}, html = '';
         param.init = $("#Detail #finit").val();
         param.end = $("#Detail #fend").val();
+        param.warehouse_id = $("#Detail #warehouse_id").val();
 
         $.ajax({
             url: "overview/getOverview",

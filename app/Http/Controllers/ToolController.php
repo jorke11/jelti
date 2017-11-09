@@ -81,7 +81,7 @@ class ToolController extends Controller {
 
         $sql = "select d.*,dep.invoice 
            from departures_detail d
-           JOIN departures dep ON dep.id=d.departure_id and dispatched between '2017-07-01 00:00' and '2017-07-31 23:59' 
+           JOIN departures dep ON dep.id=d.departure_id and dispatched between '2017-08-01 00:00' and '2017-08-30 23:59' 
            where d.real_quantity =0";
         $data = DB::select($sql);
         foreach ($data as $val) {

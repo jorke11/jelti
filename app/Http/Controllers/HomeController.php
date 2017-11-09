@@ -233,7 +233,7 @@ class HomeController extends Controller {
         $sql = "
             select d.product_id,p.title product,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,sum(d.quantity * d.value*coalesce(d.units_sf,1)) as total
             from departures_detail d
-            JOIN departures dep ON dep.id=d.sale_id and dep.status_id IN (2,7)
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN (2,7)
             JOIN products p ON p.id=d.product_id 
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             WHERE d.product_id is NOT null AND dep.client_id NOT IN(258,264,24)

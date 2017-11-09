@@ -291,9 +291,9 @@ class ClientController extends Controller {
         foreach ($categories as $i => $value) {
             $sql = "
                 select count(*) total
-                from sales_detail d  
+                from departures_detail d  
                 JOIN products p ON p.id=d.product_id
-                JOIN sales dep ON dep.id=d.sale_id and dep.status_id IN(2)
+                JOIN departures dep ON dep.id=d.sale_id and dep.status_id IN(2,7) and client_id NOT IN(258,264)
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1 
                 WHERE dep.client_id=" . $input["client_id"] . " and p.category_id = " . $value->id . "
                     AND dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' ";
@@ -331,9 +331,9 @@ class ClientController extends Controller {
         $arrDep = array();
         foreach ($pro as $i => $value) {
             foreach ($dep as $val) {
-                $sql = "SELECT sum(quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) total
+                $sql = "SELECT sum(real_quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) total
                         from departures_detail d
-                        JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
+                        JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7) and client_id NOT IN(258,264)
                         where departure_id=" . $val->id . " and product_id = " . $value->id . " 
                         AND dispatched between '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
                         AND dep.client_id=" . $client_id;

@@ -77,23 +77,34 @@ class ToolController extends Controller {
         $this->readFile();
     }
 
-    public function fixedInvoice($invoice) {
-        $sql = "select * from sales_detail where sale_id=(select id from sales where invoice='" . $invoice . "')";
-        $data = DB::select($sql);
+    public function fixedInvoice() {
 
+        $sql = "select d.*,dep.invoice 
+           from departures_detail d
+           JOIN departures dep ON dep.id=d.departure_id and dispatched between '2017-07-01 00:00' and '2017-07-31 23:59' 
+           where d.real_quantity =0";
+        $data = DB::select($sql);
         foreach ($data as $value) {
             
-            $sql = "select * from departures_detail where departure_id=(select id from departures where invoice='3149') and product_id=" . $value->product_id;
-            $res = DB::select($sql);
+            $sql = "select * from sales_detail where sale_id=(select id from sales where invoice='" . $value->invoice . "')";
+            $d = DB::select($sql);
             
-            if (count($res)>0) {
-                $res = $res[0];
-                $det = \App\Models\Inventory\DeparturesDetail::find($res->id);
-                echo "actual ".$det->real_quantity." :: actualizacion: ".$value->quantity;
-                $det->real_quantity = $value->quantity;
-                $det->save();
+            foreach ($d as $value) {
+
+                $sql = "select * from departures_detail where departure_id=(select id from departures where invoice='3149') and product_id=" . $value->product_id;
+                $res = DB::select($sql);
+
+                if (count($res) > 0) {
+                    $res = $res[0];
+                    $det = \App\Models\Inventory\DeparturesDetail::find($res->id);
+                    echo "actual " . $det->real_quantity . " :: actualizacion: " . $value->quantity."<br>";
+                    $det->real_quantity = $value->quantity;
+                    $det->save();
+                }
             }
         }
+
+
         echo "termino ";
     }
 

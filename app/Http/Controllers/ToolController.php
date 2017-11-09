@@ -11,6 +11,7 @@ use App\Models\Inventory\EntriesDetail;
 use App\Models\Administration\Products;
 use App\Models\Administration\Warehouses;
 use DB;
+use App\Models\Invoicing\SaleDetail;
 
 class ToolController extends Controller {
 
@@ -74,6 +75,26 @@ class ToolController extends Controller {
 
     public function index() {
         $this->readFile();
+    }
+
+    public function fixedInvoice($invoice) {
+        $sql = "select * from sales_detail where sale_id=(select id from sales where invoice='" . $invoice . "')";
+        $data = DB::select($sql);
+
+        foreach ($data as $value) {
+            
+            $sql = "select * from departures_detail where departure_id=(select id from departures where invoice='3149') and product_id=" . $value->product_id;
+            $res = DB::select($sql);
+            
+            if (count($res)>0) {
+                $res = $res[0];
+                $det = \App\Models\Inventory\DeparturesDetail::find($res->id);
+                echo "actual ".$det->real_quantity." :: actualizacion: ".$value->quantity;
+                $det->real_quantity = $value->quantity;
+                $det->save();
+            }
+        }
+        echo "termino ";
     }
 
     public function readFile() {

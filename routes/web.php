@@ -42,6 +42,7 @@ Route::get('/dash', 'DashboardController@index');
 Route::get('/summary', 'Invoicing\SummaryController@index');
 
 Route::get('/resize', 'ToolController@index');
+Route::get('/fixed/{invoice}', 'ToolController@fixedInvoice');
 
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
 

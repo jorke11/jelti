@@ -34,7 +34,7 @@ class OperationsController extends Controller {
             SELECT d.client,d.invoice,d.client_id,s.dispatched, d.created,s.dispatched - d.created as dias
             FROM vdepartures d 
             JOIN sales s ON s.departure_id=d.id 
-            WHERE d.status_id IN(2,7) and d.client_id NOT IN(258,264)
+            WHERE d.status_id IN(2,7) and d.client_id NOT IN(258,264,24)
             AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             ";
         $res = DB::select($sql);
@@ -172,9 +172,9 @@ class OperationsController extends Controller {
             $day = array();
             while ($diasql <= $input['end']) {
                 $sql = "
-                    select sum(d.quantity * d.packaging) as quantity,sum(d.quantity * d.packaging*value) total
-                    from sales_detail d
-                    JOIN sales s ON s.id=d.sale_id and s.created_at between '" . $diasql . " 00:00' and '" . $diasql . " 23:59'
+                    select sum(d.real_quantity * d.packaging) as quantity,sum(d.real_quantity * d.packaging*value) total
+                    from departures_detail d
+                    JOIN departures s ON s.id=d.departure_id and s.created_at between '" . $diasql . " 00:00' and '" . $diasql . " 23:59' and s.status_id IN (2,7)
                     where product_id=" . $value->id;
 
                 $det = DB::select($sql);

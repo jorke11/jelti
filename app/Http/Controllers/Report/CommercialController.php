@@ -29,7 +29,7 @@ class CommercialController extends Controller {
             SELECT vdepartures.responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity_packaging) as quantity
             from vdepartures 
             JOIN stakeholder sta ON sta.id=vdepartures.client_id and sta.type_stakeholder=1
-            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id IN(2,7) AND client_id NOT IN(258,264)
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id IN(2,7) AND client_id NOT IN(258,264,24)
             group by 1,responsible
             order by 3 DESC
             LIMIT 5
@@ -47,7 +47,7 @@ class CommercialController extends Controller {
             select u.name ||' '|| u.last_name as name,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::int y,
             sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::money totalFormated
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id IN(2,7)
+            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id IN(2,7) and client_id NOT IN(258,264,24)
             JOIN stakeholder sta ON sta.id=dep.client_id and sta.type_stakeholder=1
             JOIN users u ON u.id=dep.responsible_id
             WHERE dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'

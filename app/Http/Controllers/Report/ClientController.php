@@ -224,12 +224,12 @@ class ClientController extends Controller {
         $cli = "
             SELECT c.description category,sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
             sum(d.value * d.units_sf * d.quantity) subtotal 
-            FROM sales_detail d 
-            JOIN sales dep ON dep.id=d.sale_id and dep.status_id=2
+            FROM departures_detail d 
+            JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id
             JOIN categories c ON c.id = p.category_id
-            WHERE product_id IS NOT NULL AND dep.dispatched BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.client_id NOT IN(258,264)
+            WHERE product_id IS NOT NULL AND dep.dispatched BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.client_id NOT IN(258,264,24)
                 $where
             GROUP bY 1,p.category_id
             ORDER by 3 DESC
@@ -261,7 +261,7 @@ class ClientController extends Controller {
         $sql = "SELECT sum(subtotalnumeric) subtotal,sum(quantity) quantity 
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
-            and vdepartures.client_id NOT IN(258,264)
+            and vdepartures.client_id NOT IN(258,264,24)
             WHERE dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id IN(2,7)
                 and client_id=" . $client_id;
 
@@ -576,7 +576,7 @@ class ClientController extends Controller {
                 FROM vdepartures 
                 JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
                 WHERE vdepartures.status_id IN(2,7) AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
-                    AND client_id  NOT IN(258,264)
+                    AND client_id  NOT IN(258,264,24)
                 group by 1";
 
         $res = DB::select($sql);

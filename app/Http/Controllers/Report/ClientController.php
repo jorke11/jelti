@@ -222,8 +222,8 @@ class ClientController extends Controller {
 
     public function getCEOProduct($init, $end, $where = '', $limit = '') {
         $cli = "
-            SELECT c.description category,sum(d.quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
-            sum(d.value * d.units_sf * d.quantity) subtotal 
+            SELECT c.description category,sum(d.real_quantity * CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantity,
+            sum(d.value * d.units_sf * d.real_quantity) subtotal 
             FROM departures_detail d 
             JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
             JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
@@ -235,7 +235,6 @@ class ClientController extends Controller {
             ORDER by 3 DESC
             $limit";
 
-//        echo $cli;exit;
 
         return DB::select($cli);
     }

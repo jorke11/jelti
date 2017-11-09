@@ -81,17 +81,17 @@ class ToolController extends Controller {
 
         $sql = "select d.*,dep.invoice 
            from departures_detail d
-           JOIN departures dep ON dep.id=d.departure_id and dispatched between '2017-07-01 00:00' and '2017-07-31 23:59' 
+           JOIN departures dep ON dep.id=d.departure_id and dispatched between '2017-06-01 00:00' and '2017-06-30 23:59' 
            where d.real_quantity =0";
         $data = DB::select($sql);
-        foreach ($data as $value) {
+        foreach ($data as $val) {
             
-            $sql = "select * from sales_detail where sale_id=(select id from sales where invoice='" . $value->invoice . "')";
+            $sql = "select * from sales_detail where sale_id=(select id from sales where invoice='" . $val->invoice . "')";
             $d = DB::select($sql);
             
             foreach ($d as $value) {
 
-                $sql = "select * from departures_detail where departure_id=(select id from departures where invoice='3149') and product_id=" . $value->product_id;
+                $sql = "select * from departures_detail where departure_id=(select id from departures where invoice='".$val->invoice."') and product_id=" . $value->product_id;
                 $res = DB::select($sql);
 
                 if (count($res) > 0) {

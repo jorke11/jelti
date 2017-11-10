@@ -88,7 +88,7 @@
 
             @media screen and (min-width:1340px) {
                 #img-main{
-                    background: #13b671 url('assets/images/foto-paginaweb.png')  no-repeat;
+                    background: #13b671 url('assets/images/foto-paginaweb.jpg')  no-repeat;
                     background-image: 100%;
                     background-size: cover;
                     color:white;

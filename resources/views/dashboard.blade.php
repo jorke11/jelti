@@ -46,11 +46,11 @@
                             <div class="col-md-3 col-sm-3">
                                 <i class="fa fa-shopping-cart fa-4x"></i>
                             </div>
-                            <div class="col-md-9 col-sm-9 text-right">
+                            <div class="col-md-9 col-md-9 col-sm-9 text-right">
                                 @if(isset($client))
-                                <div class="huge">Ventas <br>{{(isset($client->client)?$client->client:'SuperFüds')}}</div>
+                                <div class="huge">Ventas <br>{{(isset($client->client)?substr($client->client,0,25)."...":'SuperFüds')}}</div>
                                 <div> <p>Total Unidades {{(isset($client->unidades)?$client->unidades:0)}}
-                                        @if(count($client)>0)
+                                        @if(count($client) > 0)
                                         Monto: $ {{number_format(round($client->total), 0, ',', '.')}}
                                         @endif
                                     </p>

@@ -9,8 +9,17 @@ use App\Models\Administration\Email;
 use App\Models\Administration\EmailDetail;
 use Mail;
 use Auth;
+use App\Models\Administration\Stakeholder;
 
 class CronController extends Controller {
+
+    public $emails;
+    public $subject;
+
+    public function __construct() {
+        $this->emails = [];
+        $this->subject = '';
+    }
 
     function emailoverview() {
         $environment = 'production';
@@ -117,11 +126,11 @@ class CronController extends Controller {
             $header["briefcase"] = $briefcase;
             $header["overview"] = $total;
 
-            return view("Notifications.overview", $header);
-//            Mail::send("Notifications.overview", $header, function($msj) {
-//                $msj->subject($this->subject);
-//                $msj->to($this->mails);
-//            });
+//            return view("Notifications.overview", $header);
+            Mail::send("Notifications.overview", $header, function($msj) {
+                $msj->subject($this->subject);
+                $msj->to($this->mails);
+            });
         }
     }
 
@@ -130,22 +139,36 @@ class CronController extends Controller {
                 SELECT client_id
                 FROM vbriefcase 
                 WHERE paid_out IS NULL 
-                group by client_id
-                order by 1";
+                GROUP BY client_id
+                ORDER BY 1
+                LIMIT 1";
         $cli = DB::select($sql);
 
         foreach ($cli as $value) {
+
+
             $sql = "
                 SELECT * 
                 FROM vbriefcase 
-                WHERE paid_out IS NULL and client_id=" . $value->client_id." and dias_vencidos > 0 ORDER BY dias_vencidos desc";
+                WHERE paid_out IS NULL and client_id=" . $value->client_id . " and dias_vencidos > 0 ORDER BY dias_vencidos desc";
 
             $data["detail"] = DB::select($sql);
             $data["header"] = $data["detail"][0];
-            
-             return view("Notifications.briefcase_client", $data);
-             exit;
-            
+
+            $client = Stakeholder::find($value->client_id);
+
+            $this->emails[] = "jpinedom@hotmail.com";
+            $this->emails[] = "jorke871@gmail.com";
+            $this->emails[] = "tech@superfuds.com.co";
+
+            $this->subject = "Cobro carteta pendiente";
+
+            Mail::send("Notifications.briefcase_client", $data, function($msj) {
+                $msj->subject($this->subject);
+                $msj->to($this->emails);
+            });
+            return view("Notifications.briefcase_client",$data);
+//            echo "finalizacion de proceso " . print_r($this->emails) . " " . $this->subject;
         }
     }
 

@@ -109,8 +109,10 @@ class ToolController extends Controller {
     }
 
     public function readFile() {
-
-        $list = shell_exec('find  ' . public_path() . '/images/resize/ -name "*.png"');
+        $cmd='find  ' . public_path() . '/fotos/ -name "*.png"';
+        
+        $list = shell_exec($cmd);
+        dd($list);exit;
         $list = explode("\n", $list);
 
 

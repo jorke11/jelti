@@ -41,8 +41,7 @@ Route::group(["middleware" => ["auth", "client"]], function() {
 Route::get('/dash', 'DashboardController@index');
 Route::get('/summary', 'Invoicing\SummaryController@index');
 
-Route::get('/resize', 'ToolController@index');
-Route::get('/fixed', 'ToolController@fixedInvoice');
+
 
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
 
@@ -525,10 +524,6 @@ Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice")
 Route::get('/briefcase/testnotificaction/{id}/{commercial}', "Sales\BriefcaseController@testNotification");
 Route::get('/briefcase/testPaidout/{id}', "Sales\BriefcaseController@testPaidout");
 
-Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
-Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}', "ToolController@addInventory");
-Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");
-
 Route::get('/profileClient', "Report\ClientController@profile");
 Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
 Route::get('profile/{id}/getRepurchase', "Report\ClientController@getRepurchase");
@@ -541,3 +536,4 @@ require __DIR__ . '/cron.php';
 require __DIR__ . '/report.php';
 require __DIR__ . '/shop.php';
 require __DIR__ . '/blog.php';
+require __DIR__ . '/tool.php';

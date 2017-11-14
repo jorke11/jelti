@@ -162,9 +162,11 @@ class EntryController extends Controller {
                 $ware = Warehouses::find($this->warehouse_id);
 
                 foreach ($reader->get() as $i => $book) {
-
+                    
                     if ($book->cantidad != '' && (int) $book->cantidad != 0 && (int) $book->codigo != '') {
                         $pro = Products::where("reference", (int) $book->codigo)->first();
+                        
+                    
                         if ($pro != null) {
 
                             $sup = Stakeholder::find($pro->supplier_id);
@@ -175,40 +177,16 @@ class EntryController extends Controller {
                                     $sql = "
                                         select products.id,products.reference,products.title as product,
                                             (
-                                                    select sum(quantity) 
-                                                    from sales_detail 
-                                                    JOIN sales ON sales.id=sales_detail.sale_id and sales.status_id='1'
-                                                    where product_id=products.id and sales.warehouse_id=" . $this->warehouse_id . "
+                                                    select sum(d.quantity) 
+                                                    from departures_detail d
+                                                    JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN (2,7) AND dep.client_id NOT IN(258,264)
+                                                    where product_id=products.id and dep.warehouse_id=" . $this->warehouse_id . "
                                                     ) as sales
                                             from products 
                                             WHERE products.id=" . $pro->id . " 
                                             group by 1
                                             ";
-//                                    $sql = "
-//                                        select products.id,products.reference,products.title as product,sum(entries_detail.quantity) entry, 
-//                                        coalesce(( 
-//                                            select sum(quantity)   
-//                                            from sales_detail 
-//                                            JOIN sales ON sales.id=sales_detail.sale_id 
-//                                            where product_id=products.id and product_id IS NOT NULL 
-//                                            AND sales.warehouse_id=" . $this->warehouse_id . ")
-//                                                ,0) departure, 
-//                                        sum(entries_detail.quantity) - coalesce((
-//                                                                            select sum(quantity) 
-//                                                                            from sales_detail 
-//                                                                            JOIN sales ON sales.id=sales_detail.sale_id 
-//                                                                            where product_id=products.id 
-//                                                                            and product_id IS NOT NULL 
-//                                                                            AND sales.warehouse_id=" . $this->warehouse_id . ")
-//                                                                                ,0) total 
-//                                        from products 
-//                                        JOIN entries_detail ON entries_detail.product_id=products.id 
-//                                        JOIN entries ON entries.id = entries_detail.entry_id and entries.status_id=2 
-//                                        AND entries.warehouse_id=" . $this->warehouse_id . " 
-//                                        WHERE products.id=" . $pro->id . "
-//                                        group by 1 
-//                                        order by 6 desc";
-
+                               
                                     $inventory = DB::select($sql);
 
                                     $unidades = 0;
@@ -226,7 +204,7 @@ class EntryController extends Controller {
                                             $new["city_id"] = $ware->city_id;
                                             $new["description"] = "Initial inventory";
                                             $new["invoice"] = "system";
-                                            $new["status_id"] = 1;
+                                            $new["status_id"] = 2;
 
                                             $new["created"] = date("Y-m-d H:i");
                                             $entry_id = Entries::create($new)->id;
@@ -236,7 +214,7 @@ class EntryController extends Controller {
                                                 $detail["product_id"] = $pro->id;
                                                 $detail["quantity"] = 1;
                                                 $detail["real_quantity"] = 0;
-                                                $detail["value"] = $pro->price_sf;
+                                                $detail["value"] = $pro->cost_sf;
                                                 $detail["lot"] = (!empty($book->lote)) ? $book->lote : '';
                                                 $detail["description"] = 'Initial inventory';
                                                 $detail["status_id"] = 1;

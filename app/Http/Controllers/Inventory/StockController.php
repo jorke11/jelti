@@ -29,14 +29,14 @@ class StockController extends Controller {
         $sales_ware = '';
         if ($in["warehouse_id"] != 0) {
             $entry_ware = ' AND entries.warehouse_id=' . $in["warehouse_id"];
-            $sales_ware = ' AND sales.warehouse_id=' . $in["warehouse_id"];
+            $sales_ware = ' AND dep.warehouse_id=' . $in["warehouse_id"];
         }
         $bar_code = '';
 
 
         if ($in["bar_code"] != '') {
             $pro = Products::where("reference", $in["bar_code"])->first();
-            $bar_code = "WHERE id=" . $pro->id;
+            $bar_code = "WHERE products.id=" . $pro->id;
         }
 
 
@@ -53,15 +53,14 @@ class StockController extends Controller {
                     from entries_detail
                     JOIN entries ON entries.id = entries_detail.entry_id 
                     WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
-
             $entry = DB::select($sql);
 
             $sql = "
-                    select coalesce(sum(quantity),0) as total
-                    from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id and sales.status_id='1'
+                    select coalesce(sum(d.quantity),0) as total
+                    from departures_detail d
+                    JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7) AND dep.client_id NOT IN(258,264)
                     WHERE product_id=" . $value->id . " $sales_ware";
-//             echo $sql;exit;
+
             $sale = DB::select($sql);
 
             $products[$i]->entries = $entry[0]->total;

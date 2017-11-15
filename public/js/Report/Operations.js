@@ -185,7 +185,7 @@ function Operations() {
         obj.client_id = $("#Detail #client_id").val();
 
         return $('#tblShipping_cost').DataTable({
-            destroy: true,
+            destroy: true,  
             ajax: {
                 url: "/operations/getShippingCostClient",
                 data: obj,

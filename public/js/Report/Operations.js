@@ -27,6 +27,7 @@ function Operations() {
             objCli.tableClientAverage();
             objCli.tableShipping_cost();
             objCli.tableNivel();
+            objCli.tableNoShipped();
         })
     }
 

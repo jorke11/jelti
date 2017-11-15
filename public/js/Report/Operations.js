@@ -125,7 +125,7 @@ function Operations() {
                 {data: "product"},
                 {data: "warehouse"},
                 {data: "no_shipped_units"},
-                {data: "value_dispatched"},
+                {data: "value_dispatched", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             aoColumnDefs: [
                 {
@@ -138,7 +138,7 @@ function Operations() {
             ],
         });
     }
-    
+
     this.tableNivel = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
@@ -185,7 +185,7 @@ function Operations() {
         obj.client_id = $("#Detail #client_id").val();
 
         return $('#tblShipping_cost').DataTable({
-            destroy: true,  
+            destroy: true,
             ajax: {
                 url: "/operations/getShippingCostClient",
                 data: obj,

@@ -8,8 +8,16 @@
                         <thead>
                             <tr>
                                 <td>Bodega</td>
-                                <td>Total Facturado</td>
-                                <td>%</td>
+                                <td>Facturas</td>
+                                <td>Unit Ordenes</td>
+                                <td>Unit Despachados</td>
+                                <td>Unit no Enviadas</td>
+                                <td>NS Unidades</td>
+                                <td>Valor Order</td>
+                                <td>Valor Despachado</td>
+                                <td>Valor No despachado</td>
+                                <td>NS Valor</td>
+                                
                             </tr>
                         </thead>
                         <tbody></tbody>

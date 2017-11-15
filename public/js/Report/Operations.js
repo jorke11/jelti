@@ -7,6 +7,7 @@ function Operations() {
         this.tableShipping_cost();
         this.tableMaxMin();
         this.tableNivel();
+        this.tableNoShipped();
 
         var init = $("#Detail #finit").val();
         var end = $("#Detail #fend").val();
@@ -105,6 +106,38 @@ function Operations() {
         });
     }
 
+    this.tableNoShipped = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+
+        return $('#tblNo_shipped').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/operations/getNoShipped",
+                data: obj,
+            },
+            scrollX: true,
+            columns: [
+                {data: "product"},
+                {data: "warehouse"},
+                {data: "no_shipped_units"},
+                {data: "value_dispatched"},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
+    }
+    
     this.tableNivel = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
@@ -121,8 +154,15 @@ function Operations() {
             scrollX: true,
             columns: [
                 {data: "warehouse"},
-                {data: "orders"},
+                {data: "invoices"},
+                {data: "orders_units"},
+                {data: "dispatched_units"},
+                {data: "not_shipped_units"},
                 {data: "nivel"},
+                {data: "orders_value"},
+                {data: "dispatched_value"},
+                {data: "not_shipped_value"},
+                {data: "nivel_value"},
             ],
             aoColumnDefs: [
                 {

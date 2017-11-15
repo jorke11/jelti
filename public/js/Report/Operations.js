@@ -6,6 +6,7 @@ function Operations() {
         this.tableClientAverage();
         this.tableShipping_cost();
         this.tableMaxMin();
+        this.tableNivel();
 
         var init = $("#Detail #finit").val();
         var end = $("#Detail #fend").val();
@@ -24,6 +25,7 @@ function Operations() {
             objCli.tableProductDay();
             objCli.tableClientAverage();
             objCli.tableShipping_cost();
+            objCli.tableNivel();
         })
     }
 
@@ -81,7 +83,7 @@ function Operations() {
                     if (cont == 0) {
                         del.push(i);
                     }
-                    
+
                     console.log(val.quantity);
                     html += "<td>" + val.quantity + "</td>";
                     html += "<td>" + val.totalF + "</td>";
@@ -100,6 +102,37 @@ function Operations() {
             complete: function () {
                 $("#loading-super").addClass("hidden");
             }
+        });
+    }
+
+    this.tableNivel = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+
+        return $('#tblService').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/operations/getNivelService",
+                data: obj,
+            },
+            scrollX: true,
+            columns: [
+                {data: "warehouse"},
+                {data: "orders"},
+                {data: "nivel"},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
         });
     }
 

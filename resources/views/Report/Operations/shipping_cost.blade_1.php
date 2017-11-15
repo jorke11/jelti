@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Nivel de servicio</div>
+                <div class="panel-heading">Fletes</div>
                 <div class="panel-body">
-                    <table class="table nowrap" cellspacing="0" width="100%" id="tblService">
+                    <table class="table nowrap" cellspacing="0" width="100%" id="tblShipping_cost">
                         <thead>
                             <tr>
-                                <td>Bodega</td>
-                                <td>Total Facturado</td>
-                                <td>%</td>
+                                <td>Cliente</td>
+                                <td>Cantidad</td>
+                                <td>Total Fletes</td>
                             </tr>
                         </thead>
                         <tbody></tbody>

@@ -92,7 +92,7 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <!--@include('Report.Operations.product')-->
+                @include('Report.Operations.service')
             </div>
         </div>
     </div>

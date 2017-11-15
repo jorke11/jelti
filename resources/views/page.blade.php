@@ -13,6 +13,8 @@
 
         <!-- Styles -->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
+        {!!Html::script('/vendor/toastr/toastr.min.js')!!}
+        {!!Html::style('/vendor/toastr/toastr.min.css')!!}
         <style>
             body{
                 font-family: "helvetica";
@@ -146,7 +148,7 @@
                             display: flex;
                         }*/
 
-            
+
             .img-subcategory{
                 -webkit-transition: all .6s ease;
                 opacity: .6;
@@ -203,7 +205,7 @@
                 background: #ffffff !important;
                 color: #00c98a! important;
                 border: 1px solid #00c98a !important;
-                
+
             }
             .row-space{
                 padding-bottom: 20px;
@@ -259,21 +261,21 @@
                 width:2%;
 
             }
-            
+
             .box-client{
-               width:50%;float:left;height: 30px;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 10px 0 0 10px;
-               cursor:pointer;
-               border: solid 1px #00c98a;
+                width:50%;float:left;height: 30px;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 10px 0 0 10px;
+                cursor:pointer;
+                border: solid 1px #00c98a;
             }
             .box-supplier{
                 width:50%;float:left;height: 30px;border: solid 1px #00c98a;text-align: center;vertical-align: middle;padding-top: 2%;border-radius: 0 10px 10px 0;
                 font-weight: 600;cursor:pointer;
             }
-            
+
             .back-green{
                 background-color: #86DDB0;
             }
-            
+
         </style>
     </head>
 
@@ -323,10 +325,11 @@
                             </div>
                         </div>
                         <div class="row" style="padding-top: 3%;">
+                            {!! Form::open(['id'=>'frm']) !!}
                             <div class="col-lg-5 col-lg-offset-6 col-md-7 col-md-offset-4 col-sm-9 col-sm-offset-3">
                                 <div class="panel" style=" background-color:rgba(255,255,255,.4);border-color: white;padding: 0% 5% 0% 5%;border-radius: 10px">
                                     <div class="panel-body">
-                                        
+
                                         <div class="row row-space">
                                             <div class="col-lg-10 col-lg-offset-1">
                                                 <p style="color:white;font-size:25px; text-shadow: 2px 1px 5px #575757;font-weight: 100" class="text-center">Registrate como Cliente o Negocio</p>
@@ -334,43 +337,44 @@
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-10 col-lg-offset-1">
-                                                <div  class="box-client" onclick="objPage.stakeholder(1,this)">Cliente</div>
-                                                <div class="box-supplier" onclick="objPage.stakeholder(2,this)">Proveedor</div>
+                                                <div  class="box-client" onclick="objPage.stakeholder(1, this)">Cliente</div>
+                                                <div class="box-supplier" onclick="objPage.stakeholder(2, this)">Proveedor</div>
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12 ">
-                                                <input class="form-control" placeholder="Compañia">
+                                                <input class="form-control" placeholder="Compañia" type="text" id="company" name="company">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control" placeholder="Nombre">
+                                                <input class="form-control" placeholder="Nombre" type="text" name="name" id="name">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control" placeholder="Email">
+                                                <input class="form-control" placeholder="Email" type="email" name="email" id="email">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control" placeholder="Telefono">
+                                                <input class="form-control" placeholder="Telefono" type="text" name="phone" id="phone">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input type="checkbox"><span style="color:white"> Acepto términos de servicio | Leer mas</span>
+                                                <input type="checkbox" name="agree" id="agree"><span style="color:white"> Acepto términos de servicio | Leer mas</span>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-6 col-md-6 col-lg-offset-4 col-md-offset-3 col-sm-6 col-sm-offset-3">
-                                                <button type="button" class="btn buttons-page text-center">Registrate</button>
+                                                <button type="submit" class="btn buttons-page text-center" id="register" >Registrate</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {!!Form::close()!!}
                         </div>
 
                     </div>
@@ -1021,6 +1025,6 @@
 
 
     </body>
-       {!!Html::script('js/Page/page.js')!!}
+    {!!Html::script('js/Page/page.js')!!}
 
 </html>

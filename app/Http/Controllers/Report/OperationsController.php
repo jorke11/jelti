@@ -193,4 +193,32 @@ class OperationsController extends Controller {
         return response()->json(["data" => $res, "date" => $day]);
     }
 
+    public function getNivelService(Request $req) {
+        $in = $req->all();
+
+        
+        
+        $ware = "";
+        if ($in["warehouse_id"] != 0) {
+            $ware = " AND dep.warehouse_id=" . $in["warehouse_id"];
+        }
+
+        if ($in["client_id"] != 0) {
+            $ware .= " AND dep.client_id=" . $in["client_id"];
+        }
+
+        
+        
+        $sql = "
+            SELECT dep.warehouse,count(distinct dep.id) as orders,round(avg(d.real_quantity / d.quantity) * 100) as nivel
+            FROM departures_detail d
+            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id IN (2,7) AND dep.client_id NOT IN(258,264)
+            WHERE dep.dispatched BETWEEN '" . $in["init"] . " 00:00' AND '" . $in["end"] . "' $ware
+            GROUP BY 1";
+        
+        $res = DB::select($sql);
+        return response()->json(["data" => $res]);
+        
+    }
+
 }

@@ -1,7 +1,20 @@
 function Page() {
     var id = 1;
     this.init = function () {
-        $(".box-client").addClass("back-green")
+        $(".box-client").addClass("back-green");
+        $("#frm").submit(function () {
+            if ($("#agree").is(":checked")) {
+                toastr.error("acuerdo");
+                return false;
+            }
+
+            if (NaN($("#phone"))) {
+                toastr.error("Numero de telefono");
+                return false;
+            }
+
+            return false;
+        });
     }
 
     this.stakeholder = function (elem_id, elem) {

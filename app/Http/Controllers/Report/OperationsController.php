@@ -207,8 +207,6 @@ class OperationsController extends Controller {
             $ware .= " AND dep.client_id=" . $in["client_id"];
         }
 
-        
-        
         $sql = "
              SELECT dep.warehouse,
             count(distinct dep.id) as invoices,
@@ -222,7 +220,7 @@ class OperationsController extends Controller {
             FROM departures_detail d
             JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id IN (2,7) AND dep.client_id NOT IN(258,264,24)
             JOIN stakeholder ON stakeholder.id=dep.client_id and type_stakeholder=1
-            WHERE dep.dispatched BETWEEN '" . $in["init"] . " 00:00' AND '" . $in["end"] . "' $ware
+                WHERE dep.dispatched BETWEEN '" . $in["init"] . " 00:00' AND '" . $in["end"] . "' $ware
             GROUP BY 1
             ";
         
@@ -251,18 +249,20 @@ class OperationsController extends Controller {
              SELECT p.title as product,dep.warehouse,
  		sum(d.quantity*d.packaging) unit_order,
  		sum(d.real_quantity*d.packaging) units_dispatched,
-        sum(d.quantity*d.packaging)-sum(d.real_quantity*d.packaging) no_shipped_units,
+        sum((d.quantity*d.packaging) - (d.real_quantity*d.packaging)) no_shipped_units,
         (sum(d.quantity*d.packaging-d.real_quantity*d.packaging) * d.value) value_dispatched
             FROM departures_detail d
             JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id IN (2,7) AND dep.client_id NOT IN(258,264,24)
             JOIN stakeholder ON stakeholder.id=dep.client_id and type_stakeholder=1
             JOIN products p ON p.id=d.product_id
             WHERE dep.dispatched BETWEEN '" . $in["init"] . " 00:00' AND '" . $in["end"] . " 23:59' $ware
-            and d.real_quantity<d.quantity
+            and d.real_quantity<>d.quantity
             GROUP BY 1,2,d.value
             order by 1,2
              
             ";
+        
+//        echo $sql;exit;
         
         
         $res = DB::select($sql);

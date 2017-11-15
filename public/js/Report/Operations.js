@@ -194,7 +194,7 @@ function Operations() {
             columns: [
                 {data: "client"},
                 {data: "pedidos"},
-                {data: "valor", render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "valor", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             aoColumnDefs: [
                 {

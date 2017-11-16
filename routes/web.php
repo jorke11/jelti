@@ -530,7 +530,8 @@ Route::get('profile/{id}/getRepurchase', "Report\ClientController@getRepurchase"
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 
-
+Route::post('newVisitan', "Blog\BlogController@newVisitan");
+Route::get('emailClients', "Blog\BlogController@emailCreate");
 
 require __DIR__ . '/cron.php';
 require __DIR__ . '/report.php';

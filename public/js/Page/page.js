@@ -2,18 +2,40 @@ function Page() {
     var id = 1;
     this.init = function () {
         $(".box-client").addClass("back-green");
-        $("#frm").submit(function () {
-            if ($("#agree").is(":checked")) {
+        $("#type_stakeholder").val(id);
+        $("#register").click(function () {
+            var elem = $(this);
+            elem.attr("disabled", true);
+            toastr.remove();
+            if (!$("#agree").is(":checked")) {
                 toastr.error("acuerdo");
                 return false;
             }
 
-            if (NaN($("#phone"))) {
+            if (isNaN($("#phone").val()) != false) {
                 toastr.error("Numero de telefono");
                 return false;
             }
 
-            return false;
+            var form = $("#frm");
+
+
+            $.ajax({
+                url: 'newVisitan',
+                method: 'POST',
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.status == true) {
+                        toastr.success("Pronto te estaremos contactando");
+                        $(".in-page").cleanFields();
+                        elem.attr("disabled", false);
+                    }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                    elem.attr("disabled", false);
+                }
+
+            })
         });
     }
 
@@ -29,7 +51,7 @@ function Page() {
         }
 
         id = elem_id;
-
+        $("#type_stakeholder").val(id);
     }
 
 }

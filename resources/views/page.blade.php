@@ -15,7 +15,7 @@
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
         {!!Html::script('/vendor/toastr/toastr.min.js')!!}
         {!!Html::style('/vendor/toastr/toastr.min.css')!!}
-        
+
         <script>
             $(document).ready(function ($) {
                 var ventana_ancho = $(window).width();
@@ -29,7 +29,8 @@
         <!-- Add the slick-theme.css if you want default styling -->
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick-theme.css"/>
         <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
-          {!!Html::style('/css/page.css')!!}
+        {!!Html::style('/css/page.css')!!}
+        {!!Html::script('/vendor/plugins.js')!!}
     </head>
 
 
@@ -92,36 +93,42 @@
                                             <div class="col-lg-10 col-lg-offset-1">
                                                 <div  class="box-client" onclick="objPage.stakeholder(1, this)">Cliente</div>
                                                 <div class="box-supplier" onclick="objPage.stakeholder(2, this)">Proveedor</div>
+                                                <input type="hidden" id="type_stakeholder" name="type_stakeholder" class="in-page">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12 ">
-                                                <input class="form-control" placeholder="Compañia" type="text" id="company" name="company">
+                                                <input class="form-control in-page" placeholder="Compañia" type="text" id="business" name="business">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control" placeholder="Nombre" type="text" name="name" id="name">
+                                                <input class="form-control in-page" placeholder="Nombre" type="text" name="name" id="name">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control" placeholder="Email" type="email" name="email" id="email">
+                                                <input class="form-control in-page" placeholder="Apellido" type="text" name="last_name" id="last_name">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input class="form-control" placeholder="Telefono" type="text" name="phone" id="phone">
+                                                <input class="form-control in-page" placeholder="Email" type="email" name="email" id="email">
                                             </div>
                                         </div>
                                         <div class="row row-space">
                                             <div class="col-lg-12">
-                                                <input type="checkbox" name="agree" id="agree"><span style="color:white"> Acepto términos de servicio | Leer mas</span>
+                                                <input class="form-control in-page" placeholder="Telefono" type="text" name="phone" id="phone">
+                                            </div>
+                                        </div>
+                                        <div class="row row-space">
+                                            <div class="col-lg-12">
+                                                <input type="checkbox" name="agree" id="agree" class="in-page"><span style="color:white"> Acepto términos de servicio | Leer mas</span>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-6 col-md-6 col-lg-offset-4 col-md-offset-3 col-sm-6 col-sm-offset-3">
-                                                <button type="submit" class="btn buttons-page text-center" id="register" >Registrate</button>
+                                                <button type="button" class="btn buttons-page text-center" id="register" >Registrate</button>
                                             </div>
                                         </div>
                                     </div>

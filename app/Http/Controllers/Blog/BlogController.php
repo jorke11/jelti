@@ -61,7 +61,7 @@ class BlogController extends Controller {
 
         $this->mails[] = "jpinedom@hotmail.com";
 
-        $email = Email::where("description", "departures")->first();
+        $email = Email::where("description", "page")->first();
 
         if ($email != null) {
             $emDetail = EmailDetail::where("email_id", $email->id)->get();

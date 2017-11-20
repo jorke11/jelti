@@ -82,8 +82,27 @@
     </tr>
 
 </table>
+
 <table>
     <tr>
         <td><?php echo $textTotal . ', Total artículos: ' . count($detail) . ' Total de Items: ' . $quantity; ?></td>
     </tr>
 </table>
+<br>
+<br>
+<table style="padding-bottom: 11%;">
+    <tr>
+        <td class="resolution">La presente Factura se asemeja en todos sus efectos a un Título Valor Art. 1 Ley 1231 de 2008. En caso de
+            mora se causarán intereses a la tasa máxima legal estipulada por la ley, o en el respectivo contrato (conforme al art. 884 del Código de Comercio).</td>
+    </tr>
+    <tr>
+        <td class="resolution">No somos grandes Contribuyentes, no somos Autorretenedores.</td>
+    </tr>
+    <tr>
+        <td class="resolution">Favor hacer transferencia a Cuenta Corriente Bancolombia # 72951229710 a nombre de SuperFuds S.A.S.</td>
+    </tr>
+    <tr>
+        <td class="resolution"><b>Si el pago es por consignacion fuera de Bogota, favor agregar al valor al final $11.000 pesos.</b></td>
+    </tr>
+</table>
+

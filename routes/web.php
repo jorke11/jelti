@@ -41,7 +41,7 @@ Route::group(["middleware" => ["auth", "client"]], function() {
 Route::get('/dash', 'DashboardController@index');
 Route::get('/summary', 'Invoicing\SummaryController@index');
 
-Route::get('/resize', 'ToolController@index');
+
 
 Route::resource('/consecutive', 'Administration\ConsecutiveController');
 
@@ -257,23 +257,21 @@ Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getCli
 /**
  * Shopping cart
  */
-Route::get('/shopping', 'Shopping\ShoppingController@index');
-Route::get('/shopping/{id}', 'Shopping\ShoppingController@getDetailProduct');
-Route::get('/getCategories', 'Shopping\ShoppingController@getCategories');
-Route::get('/productDetail/{id}', 'Shopping\ShoppingController@getProduct');
-Route::post('/addComment', 'Shopping\ShoppingController@addComment');
-Route::get('/getComment/{id}', 'Shopping\ShoppingController@getComment');
+
+
 
 
 Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
 Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 
-Route::get('/payment', 'Shopping\PaymentController@index');
-Route::post('payment/target', 'Shopping\PaymentController@payment');
-Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
-Route::put('/getDetailQuantity/{order_id}', 'Shopping\PaymentController@setQuantity');
-Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
+Route::get('payment/responsepay', 'Shopping\PaymentController@responsePay');
+Route::get('generatekey', "Shopping\PaymentController@generatekey");
+Route::post('payment/confirmationpay', 'Shopping\PaymentController@confirmationPay');
+Route::get('paymentest', "Payments\PaymentsController@index");
+
+
+Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
 Route::resource('/prospect', 'Seller\ProspectsController');
 Route::post('/prospect/convert', 'Seller\ProspectsController@convertToClient');
@@ -294,8 +292,7 @@ Route::put('/fulfillment/updateDetail/{id}', 'Seller\FulfillmentController@updat
 Route::post('/fulfillment/addCommercial', 'Seller\FulfillmentController@store');
 
 
-Route::get('/comments', 'MainController@getcomments');
-Route::get('/comments/list/{id}', 'MainController@listComments');
+
 
 
 Route::resource('/ticket', 'Administration\TicketController');
@@ -527,17 +524,17 @@ Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice")
 Route::get('/briefcase/testnotificaction/{id}/{commercial}', "Sales\BriefcaseController@testNotification");
 Route::get('/briefcase/testPaidout/{id}', "Sales\BriefcaseController@testPaidout");
 
-Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
-Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}', "ToolController@addInventory");
-Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");
-
 Route::get('/profileClient', "Report\ClientController@profile");
 Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
 Route::get('profile/{id}/getRepurchase', "Report\ClientController@getRepurchase");
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 
-Route::get('payment', "Payments\PaymentsController@index");
+Route::post('newVisitan', "Blog\BlogController@newVisitan");
+Route::get('emailClients', "Blog\BlogController@emailCreate");
 
 require __DIR__ . '/cron.php';
 require __DIR__ . '/report.php';
+require __DIR__ . '/shop.php';
+require __DIR__ . '/blog.php';
+require __DIR__ . '/tool.php';

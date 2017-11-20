@@ -7,13 +7,24 @@
         <div class="panel-body">
 
             <div class="col-lg-8 col-center">
-                <div class="col-lg-5">
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Bodega</label>
+                        <select class="form-control input-operations" id="warehouse_id" name="warehouse_id">
+                            <option value="0">SuperFüds</option>
+                            @foreach($warehouse as $val)
+                            <option value="{{$val->id}}">{{$val->description}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Inicio</label>
                         <input type="text" class="form-control input-sm" id="finit" name='finit' value="<?php echo date("Y-m-") . "01" ?>">
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-4">
                     <div class="form-group">
                         <label for="title" class="control-label">Fecha Final</label>
                         <input type="text" class="form-control input-sm" id="fend" name='fend' value="<?php echo date("Y-m-d") ?>">

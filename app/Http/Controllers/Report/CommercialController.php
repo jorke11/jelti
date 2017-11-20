@@ -29,7 +29,7 @@ class CommercialController extends Controller {
             SELECT vdepartures.responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity_packaging) as quantity
             from vdepartures 
             JOIN stakeholder sta ON sta.id=vdepartures.client_id and sta.type_stakeholder=1
-            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id IN(2,7) AND client_id NOT IN(258,264)
+            WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id IN(2,7) AND client_id NOT IN(258,264,24)
             group by 1,responsible
             order by 3 DESC
             LIMIT 5
@@ -47,7 +47,7 @@ class CommercialController extends Controller {
             select u.name ||' '|| u.last_name as name,sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::int y,
             sum(d.quantity) totalunidades,round(sum(d.value * d.quantity * d.units_sf))::money totalFormated
             from departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id IN(2,7)
+            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id IN(2,7) and client_id NOT IN(258,264,24)
             JOIN stakeholder sta ON sta.id=dep.client_id and sta.type_stakeholder=1
             JOIN users u ON u.id=dep.responsible_id
             WHERE dep.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
@@ -115,15 +115,15 @@ class CommercialController extends Controller {
 //dd($input);
         $where = '';
         if (isset($input["warehouse_id"]) && $input["warehouse_id"] != 0) {
-            $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
+            $where .= " AND s.warehouse_id=" . $input["warehouse_id"];
         }
 
         if (isset($input["client_id"]) && $input["client_id"] != '') {
-            $where .= " AND dep.client_id=" . $input["client_id"];
+            $where .= " AND s.client_id=" . $input["client_id"];
         }
 
         if (isset($input["city_id"]) && $input["city_id"] != '') {
-            $where = "AND dep.destination_id=" . $input["city_id"];
+            $where = "AND s.destination_id=" . $input["city_id"];
         }
 
         if (isset($input["product_id"]) && $input["product_id"] != '') {
@@ -135,21 +135,21 @@ class CommercialController extends Controller {
         }
 
         if (isset($input["commercial_id"]) && $input["commercial_id"] != '') {
-            $where .= " AND dep.responsible_id=" . $input["commercial_id"];
+            $where .= " AND s.responsible_id=" . $input["commercial_id"];
         }
 
         $sql = "
 
         SELECT st.business client,p.title product, sum(d.quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) as quantityproducts, sum(d.quantity * d.value * d.units_sf) as total 
         FROM sales_detail d 
-        JOIN sales s ON s.id=d.sale_id and s.status_id ='1' 
+        JOIN sales s ON s.id=d.sale_id and s.status_id ='2' 
         JOIN products p ON p.id=d.product_id JOIN stakeholder st ON st.id=s.client_id and s.client_id NOT IN(258,264) and st.type_stakeholder=1 
         WHERE d.product_id is not null AND s.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
         AND p.category_id<>-1 
         GROUP BY 1,2,s.client_id 
         ORDER BY 1 ASC, 3 DESC
             ";
-
+        
         $res = DB::select($sql);
 
         return response()->json(["data" => $res]);

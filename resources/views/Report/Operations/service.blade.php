@@ -7,9 +7,17 @@
                     <table class="table nowrap" cellspacing="0" width="100%" id="tblservice">
                         <thead>
                             <tr>
-                                <td>Cliente</td>
-                                <td>Cantidad</td>
-                                <td>Total Fletes</td>
+                                <td>Bodega</td>
+                                <td>Facturas</td>
+                                <td>Unit Ordenes</td>
+                                <td>Unit Despachados</td>
+                                <td>Unit no Enviadas</td>
+                                <td>NS Unidades</td>
+                                <td>Valor Order</td>
+                                <td>Valor Despachado</td>
+                                <td>Valor No despachado</td>
+                                <td>NS Valor</td>
+                                
                             </tr>
                         </thead>
                         <tbody></tbody>

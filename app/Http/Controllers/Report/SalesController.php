@@ -62,10 +62,10 @@ class SalesController extends Controller {
         }
 
         $sql = "
-            SELECT sum(sales_detail.quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) quantity,product_id,p.title
-            FROM sales_detail
+            SELECT sum(d.real_quantity * CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END) quantity,product_id,p.title
+            FROM departures_detail d
             JOIN products p ON p.id=sales_detail.product_id
-            JOIN sales s ON s.id=sales_detail.sale_id
+            JOIN departures s ON s.id=departures_detail.departure_id and s.status_id IN (2,7) and client_id NOT IN(258,264,24)
             WHERE product_id is not null $where
             GROUP BY product_id,p.title
             order by 1 desc	

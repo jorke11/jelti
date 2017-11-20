@@ -15,7 +15,6 @@ function Departure() {
             $('#myTabs a[href="#management"]').tab('show');
         });
         $("#btnFilter").click(function () {
-
             table = obj.table();
 
         })
@@ -32,9 +31,10 @@ function Departure() {
             }
         })
 
-        
+
         $("#branch_id").change(function () {
-            if ($(this).val() != 0) {
+
+            if ($(this).val() != 0 && $(this).val() != null) {
                 obj.getBranchAddress($(this).val());
             }
         });
@@ -140,6 +140,7 @@ function Departure() {
 
         $("#tabList").click(function () {
             table.ajax.reload();
+            $("#loading-super").addClass("hidden");
         })
 
 
@@ -284,7 +285,10 @@ function Departure() {
                 $("#frm #name_client").val(resp.data.client.business_name);
 //                $("#frm #name_client").val(resp.response.name + " " + resp.response.last_name);
                 $("#frm #address").val(resp.data.client.address_send);
-                $("#frm #phone").val(resp.data.client.phone);
+                if (resp.data.client.phone != '') {
+                    $("#frm #phone").val(resp.data.client.phone);
+                }
+
                 $("#frm #destination_id").setFields({data: {destination_id: resp.data.client.send_city_id}});
                 $("#frm #responsible_id").setFields({data: {responsible_id: resp.data.client.responsible_id}});
 
@@ -757,8 +761,9 @@ function Departure() {
     }
 
     this.showModal = function (id) {
+        $("#loading-super").addClass("hidden");
         var frm = $("#frmEdit"), btnEdit = true, btnDel = true;
-        var data = frm.serialize();
+        var data = frm.serialize(), status = false;
         var url = "/departure/" + id + "/edit";
         $.ajax({
             url: url,
@@ -768,7 +773,11 @@ function Departure() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
 
-                $(".input-departure").setFields({data: data.header, disabled: true});
+                if (data.header.status_id == 2) {
+                    status = true;
+                }
+
+                $(".input-departure").setFields({data: data.header, status: status});
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -896,10 +905,11 @@ function Departure() {
                     if (data.success == true) {
                         table.ajax.reload();
                         toastr.warning("Ok");
+                        $("#loading-super").addClass("hidden");
                     }
-                }, error: function (err) {
-                    toastr.error("No se puede borrra Este registro");
-                }
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.msg);
+                },
             })
         }
 
@@ -961,8 +971,14 @@ function Departure() {
 
         param.init = $("#frm #init").val();
         param.end = $("#frm #end").val();
-        param.initdep = $("#finitdep").val();
 
+        param.init_filter = $("#finit_filter").val();
+        param.end_filter = $("#fend_filter").val();
+        param.client_filter = $("#client_filter").val();
+        param.responsible_filter = $("#responsible_filter").val();
+        param.id_filter = $("#id_filter").val();
+        param.invoice_filter = $("#invoice_filter").val();
+        
         var html = '';
         table = $('#tbl').DataTable({
             "dom":
@@ -974,7 +990,13 @@ function Departure() {
             destroy: true,
             ajax: {
                 url: "/api/listDeparture",
-                data: param
+                data: param,
+                beforeSend: function (request) {
+                    $("#loading-super").removeClass("hidden");
+                },
+                complete:function(){
+                    $("#loading-super").addClass("hidden");
+                }
             },
             "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
             columns: [
@@ -1037,6 +1059,7 @@ function Departure() {
                     className: 'btn btn-primary glyphicon glyphicon-filter',
                     action: function (e, dt, node, config) {
                         $("#modalFilter").modal("show");
+                        $(".modal-filter").cleanFields();
                     }
                 },
                 {
@@ -1061,7 +1084,9 @@ function Departure() {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
-            ],
+            ], initComplete: function () {
+                $("#loading-super").addClass("hidden");
+            },
 
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {

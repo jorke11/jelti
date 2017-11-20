@@ -6,7 +6,12 @@ function Operations() {
         this.tableClientAverage();
         this.tableShipping_cost();
         this.tableMaxMin();
+<<<<<<< HEAD
         this.tableNivelService();
+=======
+        this.tableNivel();
+        this.tableNoShipped();
+>>>>>>> 2fda6f0d33acb43976c1f98090ef21830b178e61
 
         var init = $("#Detail #finit").val();
         var end = $("#Detail #fend").val();
@@ -25,6 +30,8 @@ function Operations() {
             objCli.tableProductDay();
             objCli.tableClientAverage();
             objCli.tableShipping_cost();
+            objCli.tableNivel();
+            objCli.tableNoShipped();
         })
     }
 
@@ -82,7 +89,7 @@ function Operations() {
                     if (cont == 0) {
                         del.push(i);
                     }
-                    
+
                     console.log(val.quantity);
                     html += "<td>" + val.quantity + "</td>";
                     html += "<td>" + val.totalF + "</td>";
@@ -104,6 +111,101 @@ function Operations() {
         });
     }
 
+    this.tableNoShipped = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+
+        return $('#tblNo_shipped').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
+            destroy: true,
+            ajax: {
+                url: "/operations/getNoShipped",
+                data: obj,
+            },
+            scrollX: true,
+            columns: [
+                {data: "product"},
+                {data: "warehouse"},
+                {data: "no_shipped_units"},
+                {data: "value_dispatched", render: $.fn.dataTable.render.number('.', ',', 0)},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
+    }
+
+    this.tableNivel = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+
+        return $('#tblService').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
+            destroy: true,
+            ajax: {
+                url: "/operations/getNivelService",
+                data: obj,
+            },
+
+            scrollX: true,
+            columns: [
+                {data: "warehouse"},
+                {data: "invoices"},
+                {data: "orders_units"},
+                {data: "dispatched_units"},
+                {data: "not_shipped_units"},
+                {data: "nivel"},
+                {data: "orders_value"},
+                {data: "dispatched_value"},
+                {data: "not_shipped_value"},
+                {data: "nivel_value"},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
+    }
+
     this.tableShipping_cost = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();
@@ -112,6 +214,18 @@ function Operations() {
         obj.client_id = $("#Detail #client_id").val();
 
         return $('#tblShipping_cost').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
             destroy: true,
             ajax: {
                 url: "/operations/getShippingCostClient",
@@ -121,7 +235,7 @@ function Operations() {
             columns: [
                 {data: "client"},
                 {data: "pedidos"},
-                {data: "valor", render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "valor", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             aoColumnDefs: [
                 {
@@ -173,6 +287,18 @@ function Operations() {
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
         return $('#tblAverageClient').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
             destroy: true,
             ajax: {
                 url: "/operations/getAverageTime",
@@ -203,6 +329,18 @@ function Operations() {
         obj.client_id = $("#Detail #client_id").val();
 
         return $('#tbl').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
             destroy: true,
             order: [[2, "desc"]],
             ajax: {
@@ -238,6 +376,18 @@ function Operations() {
         obj.client_id = $("#Detail #client_id").val();
 
         return $('#tblproductweek').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
             destroy: true,
             ajax: {
                 url: "/operations/getProductWeek",
@@ -269,6 +419,18 @@ function Operations() {
         obj.client_id = $("#Detail #client_id").val();
 
         return $('#tblproductday').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
             destroy: true,
             ajax: {
                 url: "/operations/getProductDay",
@@ -489,6 +651,18 @@ function Operations() {
         obj.client_id = $("#Detail #client_id").val();
 
         return $('#tblProductbyCategory').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
             destroy: true,
             ajax: {
                 url: "/api/reportProductByCategory",

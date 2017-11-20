@@ -34,7 +34,7 @@ class OperationsController extends Controller {
             SELECT d.client,d.invoice,d.client_id,s.dispatched, d.created,s.dispatched - d.created as dias
             FROM vdepartures d 
             JOIN sales s ON s.departure_id=d.id 
-            WHERE d.status_id IN(2,7) and d.client_id NOT IN(258,264)
+            WHERE d.status_id IN(2,7) and d.client_id NOT IN(258,264,24)
             AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
             ";
         $res = DB::select($sql);
@@ -172,9 +172,9 @@ class OperationsController extends Controller {
             $day = array();
             while ($diasql <= $input['end']) {
                 $sql = "
-                    select sum(d.quantity * d.packaging) as quantity,sum(d.quantity * d.packaging*value) total
-                    from sales_detail d
-                    JOIN sales s ON s.id=d.sale_id and s.created_at between '" . $diasql . " 00:00' and '" . $diasql . " 23:59'
+                    select sum(d.real_quantity * d.packaging) as quantity,sum(d.real_quantity * d.packaging*value) total
+                    from departures_detail d
+                    JOIN departures s ON s.id=d.departure_id and s.created_at between '" . $diasql . " 00:00' and '" . $diasql . " 23:59' and s.status_id IN (2,7)
                     where product_id=" . $value->id;
 
                 $det = DB::select($sql);
@@ -194,7 +194,79 @@ class OperationsController extends Controller {
     }
 
     public function getNivelService(Request $req) {
-        dd($req->all());
+        $in = $req->all();
+
+        
+        
+        $ware = "";
+        if ($in["warehouse_id"] != 0) {
+            $ware = " AND dep.warehouse_id=" . $in["warehouse_id"];
+        }
+
+        if ($in["client_id"] != 0) {
+            $ware .= " AND dep.client_id=" . $in["client_id"];
+        }
+
+        $sql = "
+             SELECT dep.warehouse,
+            count(distinct dep.id) as invoices,
+            sum(d.quantity*d.packaging) orders_units,
+            sum(d.real_quantity*d.packaging) dispatched_units,
+            sum(d.quantity*d.packaging) - sum(d.real_quantity*d.packaging) as not_shipped_units,
+            round(((sum(d.real_quantity * d.packaging)::float / sum(d.quantity* d.packaging)::float)*100)::numeric,2)||'%' as nivel,
+            sum(d.quantity*d.value)::money orders_value,sum(d.real_quantity*d.value)::money dispatched_value,
+             (sum(d.quantity*d.value)-sum(d.real_quantity*d.value))::money  as not_shipped_value,
+            round(((sum(d.real_quantity * d.value)::float / sum(d.quantity* d.value)::float)*100)::numeric,2)||'%' as nivel_value
+            FROM departures_detail d
+            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id IN (2,7) AND dep.client_id NOT IN(258,264,24)
+            JOIN stakeholder ON stakeholder.id=dep.client_id and type_stakeholder=1
+                WHERE dep.dispatched BETWEEN '" . $in["init"] . " 00:00' AND '" . $in["end"] . "' $ware
+            GROUP BY 1
+            ";
+        
+        
+        $res = DB::select($sql);
+        return response()->json(["data" => $res]);
+        
+    }
+    public function getNoShipped(Request $req) {
+        $in = $req->all();
+
+        
+        
+        $ware = "";
+        if ($in["warehouse_id"] != 0) {
+            $ware = " AND dep.warehouse_id=" . $in["warehouse_id"];
+        }
+
+        if ($in["client_id"] != 0) {
+            $ware .= " AND dep.client_id=" . $in["client_id"];
+        }
+
+        
+        
+        $sql = "
+             SELECT p.title as product,dep.warehouse,
+ 		sum(d.quantity*d.packaging) unit_order,
+ 		sum(d.real_quantity*d.packaging) units_dispatched,
+        sum((d.quantity*d.packaging) - (d.real_quantity*d.packaging)) no_shipped_units,
+        (sum(d.quantity*d.packaging-d.real_quantity*d.packaging) * d.value) value_dispatched
+            FROM departures_detail d
+            JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id IN (2,7) AND dep.client_id NOT IN(258,264,24)
+            JOIN stakeholder ON stakeholder.id=dep.client_id and type_stakeholder=1
+            JOIN products p ON p.id=d.product_id
+            WHERE dep.dispatched BETWEEN '" . $in["init"] . " 00:00' AND '" . $in["end"] . " 23:59' $ware
+            and d.real_quantity<>d.quantity
+            GROUP BY 1,2,d.value
+            order by 1,2
+             
+            ";
+        
+//        echo $sql;exit;
+        
+        
+        $res = DB::select($sql);
+        return response()->json(["data" => $res]);
     }
 
 }

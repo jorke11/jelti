@@ -11,6 +11,7 @@ use App\Models\Inventory\EntriesDetail;
 use App\Models\Administration\Products;
 use App\Models\Administration\Warehouses;
 use DB;
+use App\Models\Invoicing\SaleDetail;
 
 class ToolController extends Controller {
 
@@ -76,9 +77,42 @@ class ToolController extends Controller {
         $this->readFile();
     }
 
-    public function readFile() {
+    public function fixedInvoice() {
 
-        $list = shell_exec('find  ' . public_path() . '/images/resize/ -name "*.png"');
+        $sql = "select d.*,dep.invoice 
+           from departures_detail d
+           JOIN departures dep ON dep.id=d.departure_id and dispatched between '2017-08-01 00:00' and '2017-08-30 23:59' 
+           where d.real_quantity =0";
+        $data = DB::select($sql);
+        foreach ($data as $val) {
+            
+            $sql = "select * from sales_detail where sale_id=(select id from sales where invoice='" . $val->invoice . "')";
+            $d = DB::select($sql);
+            
+            foreach ($d as $value) {
+
+                $sql = "select * from departures_detail where departure_id=(select id from departures where invoice='".$val->invoice."') and product_id=" . $value->product_id;
+                $res = DB::select($sql);
+
+                if (count($res) > 0) {
+                    $res = $res[0];
+                    $det = \App\Models\Inventory\DeparturesDetail::find($res->id);
+                    echo "actual " . $det->real_quantity . " :: actualizacion: " . $value->quantity."<br>";
+                    $det->real_quantity = $value->quantity;
+                    $det->save();
+                }
+            }
+        }
+
+
+        echo "termino ";
+    }
+
+    public function readFile() {
+        $cmd='find  ' . public_path() . '/fotos/ -name "*.png"';
+        
+        $list = shell_exec($cmd);
+        dd($list);exit;
         $list = explode("\n", $list);
 
 

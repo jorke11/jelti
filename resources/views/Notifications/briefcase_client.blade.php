@@ -50,15 +50,12 @@
 
         </table>
         <br>
-        <table align="center" width="550" height="300" align="center" border="0" background="../../images/borde_verde.png" style="background-repeat: no-repeat;background-size: 100%; ">
+        <table align="center" width="550" height="300" align="center" border="0" background="{{url("/")}}/images/borde_verde.png" style="background-repeat: no-repeat;background-size: 100%; ">
             <tr>
                 <td width="60%" style="padding-left: 50px;padding-top: 80px;padding-bottom: 0">
                     <table width="100%">
                         <tr>
-                            <td>{{date("Y-m-d")}}</td>
-                        </tr>
-                        <tr>
-                            <td><span class="title-client">Nombre Cliente</span></td>
+                            <td>{{date("d-M-Y")}}</td>
                         </tr>
                         <tr>
                             <td><span class="title-client">SüperFuds S.A.S</span></td>
@@ -69,16 +66,15 @@
                     </table>
 
                 </td>
-                <td width="40%" style="padding-left: 50px;padding-top: 90px;padding-bottom: 0" ><img src="../../images/sf.png"></td>
+                <td width="40%" style="padding-left: 50px;padding-top: 90px;padding-bottom: 0" ><img src="{{url("/")}}/images/sf.png"></td>
             </tr>
             <tr>
-                <td colspan="2" align="center" style="font-size:30px; letter-spacing: 1px;">Hola (Nombre Cliente)</td>
+                <td colspan="2" align="center" style="font-size:30px; letter-spacing: 1px;">Hola ({{$header->client}})</td>
             </tr>
 
 
         </table>
         <br>
-
 
         <table align="center" width="550" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
             <tr>
@@ -86,61 +82,65 @@
             </tr>
         </table>
         <br>
-        <table align="center" width="550" height="300" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" background="../../images/borde_color.png" style="background-repeat: no-repeat;background-size: 100%; ">
+        @foreach($detail as $val)
+
+        <table align="center" width="550" height="300" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" background="{{url("/")}}/images/borde_color.png" style="background-repeat: no-repeat;background-size: 100%; ">
             <tr>
                 <td style="padding-top: 50px;padding-left: 80px" align="center">
                     <table width="100%" align="center">
                         <tr>
                             <td width="50%">Valor</td>
-                            <td width="50%">$ 1000000</td>
+                            <td width="50%">{{number_format($val->total,0,".",",")}}</td>
                         </tr>
                         <tr>
                             <td class="space-row">Factura</td>
-                            <td class="space-row">4356</td>
+                            <td class="space-row">{{$val->invoice}}</td>
                         </tr>
                         <tr>
                             <td class="space-row">Vencida hace</td>
-                            <td class="space-row">4356</td>
+                            <td class="space-row">{{$val->dias_vencidos}} {{($val->dias_vencidos==1)?'día':'días'}}</td>
                         </tr>
                         <tr>
                             <td class="space-row">Fecha despachado</td>
-                            <td class="space-row">4356</td>
+                            <td class="space-row">{{date("Y-m-d",strtotime($val->dispatched))}}</td>
                         </tr>
                     </table>
                 </td>
             </tr>
         </table>
+        @endforeach
         <table align="center" width="550" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
             <tr>
                 <td align="center"><span style="color: #4a4a4a;font-size: 18px;   word-spacing: 3px;">
-                        Ya son (<b>5</b>) días que no sabemos nada de ti ni el pago de la factura, recuerda que para el funcionamiento de tu negocio, el nuestro y el de los proveedores, es importante contar con tu apoyo.
+                        Ya son (<b>{{$detail[0]->dias_vencidos}}</b>) días que no sabemos nada de ti ni el pago de {{(count($detail)>1)?"las facturas":' la factura'}}, 
+                        recuerda que para el funcionamiento de tu negocio, el nuestro y el de los proveedores, es importante contar con tu apoyo.
                     </span></td>
             </tr>
         </table>
         <br>
-        <table align="center" width="550" height="250" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" background="../../images/1_cuenta_de_cobro.png" style="background-repeat: no-repeat;background-size: 100%; ">
+        <table align="center" width="550" height="250" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" background="{{url("/")}}/images/1_cuenta_de_cobro.png" style="background-repeat: no-repeat;background-size: 100%; ">
             <tr>
                 <td style="padding-left: 60px;padding-top: 70px;padding-right: 30px;  word-spacing: 3px;color:#4a4a4a;text-align : justify;">
                     Si ya hiciste el pago por favor envíanos tu comprobante al correo <a href="mailto:contabilidad@superfuds.com.co">contabilidad@superfuds.com.co</a>, 
-                    o si no, llama a tu Ejecutivo de Cuentas encargado, estamos interesados en resolver tu situación.</td>
+                    o si no, llama a tu Ejecutivo de Cuentas {{$header->client}} encargado, estamos interesados en resolver tu situación.</td>
             </tr>
         </table>
 
-        <table align="center" width="550" height="250" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" background="../../images/2_cuenta_de_cobro.png" style="background-repeat: no-repeat;background-size: 100%; ">
+        <table align="center" width="550" height="250" align="center" id="main"  border="0" cellspacing="0"cellpadding="0" background="{{url("/")}}/images/2_cuenta_de_cobro.png" style="background-repeat: no-repeat;background-size: 100%; ">
             <tr>
                 <td style="padding-left: 60px;padding-top: 70px;padding-right: 30px;  word-spacing: 3px;color:#4a4a4a;text-align : justify;">Recuerda que puedes enviar tu pago a la Cuenta Corriente de Bancolombia #(72951229710) o pagar con tarjeta crédito/debito en nuestra oficina en Bogota.<td>
             </tr>
         </table>
         <table align="center" width="550" align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
             <tr>
-                <td align="center" style="color:#58c896;font-size:23px;"><img src="../../images/gracias.png"><td>
+                <td align="center" style="color:#58c896;font-size:23px;"><img src="{{url("/")}}/images/gracias.png"><td>
             </tr>
         </table>
         <br>
         <br>
         <table align="center" width="550"align="center" id="main"  border="0" cellspacing="0"cellpadding="0">
             <tr>
-                <td align="center" ><img src="../../images/sf_65x85.png"><td>
+                <td align="center" ><img src="{{url("/")}}/images/sf_65x85.png"><td>
             </tr>
         </table>
         <br>

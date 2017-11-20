@@ -17,13 +17,18 @@
                     <ol class="carousel-indicators">
                         <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                         <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
                     </ol>
 
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner" role="listbox">
                         <div class="item active">
-                            <img src="https://placeholdit.imgix.net/~text?txtsize=50&txt=Product_{{$product["id"]}}&w=730&h=350" alt="">
+                            <img src="http://via.placeholder.com/950x400" alt="">
+                            <div class="carousel-caption">
+
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img src="http://via.placeholder.com/950x400" alt="">
                             <div class="carousel-caption">
 
                             </div>
@@ -115,24 +120,22 @@
                 <br>
                 <div class="row">
                     <div class="col-lg-12">
-                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>&nbsp;<span class="badge">42</span>&nbsp;&nbsp;
-                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>&nbsp;<span class="badge">0</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>&nbsp;<span class="badge">10</span>
-
-
+                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style='cursor: pointer'></span>&nbsp;<span class="badge">42</span>&nbsp;&nbsp;
+                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style='cursor: pointer'></span>&nbsp;<span class="badge">0</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="glyphicon glyphicon-comment" aria-hidden="true" style='cursor: pointer' onclick="obj.modalComment({{$product["id"]}})"></span>&nbsp;<span class="badge" >0</span>
                     </div>
                 </div>
-            </div>
+            </div>        
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <h2 class="text-muted">Productos Relacionados</h2>
+                <h2 class="text-muted">Productos Relacionados</h    2>
             </div>
         </div>
-        <div class="row">
+        <div class="row        ">
             <div class="col-lg-12">
-                <div style="background: #fffcf8;width: 100%;">
-                    <div class="row " style="padding-top: 20px;padding-left:50px;padding-right:50px;">
+                <div style="background:     #fffcf8;width: 100%;">
+                    <div class="row " sty    le="padding-top: 20px;padding-left:50px;padding-right:50px;">
                         @if (count($relations)>0)
                         <?php
                         $cont = 0;
@@ -141,7 +144,7 @@
 
                         <div class="col-sm-3 col-lg-3 col-md-3">
                             <div class="thumbnail">
-                                <img src="https://placeholdit.imgix.net/~text?txtsize=39&txt=420%C3%97250&w=420&h=250">
+                                <img src="http://via.placeholder.com/500x300">
                                 <div class="caption">
                                     <h5 class="text-center"><a href="/productDetail/{{$val->id}}">{{$val->title}}</a></h5>
                                     <p>
@@ -179,25 +182,29 @@
 
 </div>
 
-<!--<div class="row">
-    <div class="col-lg-8">
-        <h4>Comment</h4>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-7">
-        <textarea type="text" class="form-control" placeholder="Your comment!" id="txtComment"></textarea>
-    </div>
-    <div class="col-lg-1">
-        <button class="btn btn-success" type="button" id="addComment">Submit</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-8">
-        <div class="list-group" id="contentComment">
-        </div>
-    </div>
-</div>-->
+<div class="modal fade" role="dialog" id='modalComment'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Comentarios</h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmComment">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <textarea class="form-control" id="txtCommnet"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success">Enviar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 {!!Html::script('js/Ecommerce/detailProduct.js')!!}
 @endsection

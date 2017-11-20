@@ -29,34 +29,38 @@ class StockController extends Controller {
         $sales_ware = '';
         if ($in["warehouse_id"] != 0) {
             $entry_ware = ' AND entries.warehouse_id=' . $in["warehouse_id"];
-            $sales_ware = ' AND sales.warehouse_id=' . $in["warehouse_id"];
+            $sales_ware = ' AND dep.warehouse_id=' . $in["warehouse_id"];
         }
         $bar_code = '';
 
 
         if ($in["bar_code"] != '') {
-            $pro = Products::where("bar_code", $in["bar_code"])->first();
-            $bar_code = "WHERE id=" . $pro->id;
+            $pro = Products::where("reference", $in["bar_code"])->first();
+            $bar_code = "WHERE products.id=" . $pro->id;
         }
 
 
         $sql = "
-            select id,reference,title as product
-            from products $bar_code";
+            select products.id,reference,title as product,stakeholder.business as supplier,categories.description as category
+            from products 
+            JOIN stakeholder ON stakeholder.id=products.supplier_id
+            JOIN categories ON categories.id=products.category_id
+                $bar_code";
         $products = DB::select($sql);
         foreach ($products as $i => $value) {
             $sql = "
                     select coalesce(sum(quantity),0) as total
                     from entries_detail
-                    JOIN entries ON entries.id=entries_detail.entry_id 
+                    JOIN entries ON entries.id = entries_detail.entry_id 
                     WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
             $entry = DB::select($sql);
 
             $sql = "
-                    select coalesce(sum(quantity),0) as total
-                    from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id
+                    select coalesce(sum(d.quantity),0) as total
+                    from departures_detail d
+                    JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7) AND dep.client_id NOT IN(258,264)
                     WHERE product_id=" . $value->id . " $sales_ware";
+
             $sale = DB::select($sql);
 
             $products[$i]->entries = $entry[0]->total;

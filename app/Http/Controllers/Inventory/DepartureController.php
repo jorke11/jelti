@@ -75,7 +75,7 @@ class DepartureController extends Controller {
         $this->in = array();
         $this->mails = array();
         $this->log = new LogController();
-        $this->initdate = date('Y-m-d', strtotime('-2 month', strtotime(date('Y-m-d'))));
+        $this->initdate = date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m-d'))));
     }
 
     public function index($client_id = null, $init = null, $end = null, $product_id = null, $supplier_id = null) {
@@ -95,6 +95,7 @@ class DepartureController extends Controller {
 
     public function listTable(Request $req) {
         $in = $req->all();
+        $cont = 0;
 
         $query = DB::table('vdepartures');
 
@@ -108,14 +109,39 @@ class DepartureController extends Controller {
         if (isset($in["init"]) && $in["init"] != '') {
             $query->whereBetween("dispatched", array($in["init"] . " 00:00", $in["end"] . " 23:59"));
         }
-        if (isset($in["initdep"]) && $in["initdep"] != '') {
-            $query->where("created_at", ">=", $in["initdep"] . " 00:00");
-        } else {
-            $query->where("created_at", ">=", $this->initdate . " 00:00");
+
+
+        if (isset($in["id_filter"]) && $in["id_filter"] != '') {
+            $cont++;
+            $query->where("id", $in["id_filter"]);
         }
 
-        if ($in["client_id"] == 0 && $in["client_id"] != '') {
-            $query->where("status_id", 2);
+        if (isset($in["invoice_filter"]) && $in["invoice_filter"] != '') {
+            $cont++;
+            $query->where("invoice", $in["invoice_filter"]);
+        }
+
+        if (isset($in["responsible_filter"]) && $in["responsible_filter"] != '') {
+            $cont++;
+            $query->where("responsible_id", $in["responsible_filter"]);
+        }
+
+        if (isset($in["end_filter"]) && $in["end_filter"] != '') {
+            $cont++;
+            $query->where("created_at", "<=", $in["end_filter"] . " 00:00");
+        }
+
+
+        if ($in["client_filter"] != 0 && $in["client_filter"] != '') {
+            $query->where("client_id", $in["client_filter"]);
+        }
+
+        if ($cont == 0) {
+            if (isset($in["init_filter"]) && $in["init_filter"] != '') {
+                $query->where("created_at", ">=", $in["init_filter"] . " 00:00");
+            } else {
+                $query->where("created_at", ">=", $this->initdate . " 00:00");
+            }
         }
 
         if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
@@ -239,17 +265,23 @@ class DepartureController extends Controller {
     public function getInvoice($id) {
         $this->mails = array();
 
+//        if(file_exists(public_path()."/images/superfuds.png")){
+//            echo "asd";exit;
+//        }
+//        
+//        echo public_path()."/images/superfuds.png";exit;
+
         $sale = Sales::where("departure_id", $id)->first();
         $detail = $this->formatDetailSales($sale["id"]);
 
         $dep = Departures::find($id);
         $cli = null;
         if ($dep->branch_id != '') {
-            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term")
+            $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term", "branch_office.phone")
                     ->where("id", $dep->branch_id)
                     ->first();
         } else {
-            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term")
+            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term", "stakeholder.phone")
                     ->where("stakeholder.id", $sale["client_id"])
                     ->first();
         }
@@ -283,6 +315,7 @@ class DepartureController extends Controller {
         $cli["expiration"] = $this->formatDate($expiration);
 
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
+        $cli["phone"] = $cli->phone;
 
         $totalExemp = 0;
         $totalTax5 = 0;
@@ -331,12 +364,14 @@ class DepartureController extends Controller {
             'discount' => $dep->discount
         ];
 
+//        dd($data);
         $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
-                    'title' => 'Invoice']);
+                    'title' => 'Invoice',
+                    'margin_top' => -12, "margin_bottom" => 1]);
+
 //        $pdf->SetProtection(array(), '123', '123');
-//        $pdf->SetWatermarkImage('assets/images/logo.png');
-//        $pdf->showWatermarkImage = true;
-//        $pdf->WriteHTML('<watermarkimage src="public/assets/images/logo.png" alpha="0.4" size="200,250" />');
+//          $pdf->showWatermarkImage = true;
+//        $pdf->SetWatermarkImage(url("/").'/assets/images/logo.png');
 
         header('Content-Type: application/pdf');
 //        return $pdf->download('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
@@ -487,6 +522,10 @@ class DepartureController extends Controller {
                 $row->save();
                 DB::commit();
                 $dep = Departures::find($id);
+                
+                
+                
+                
                 return response()->json(["success" => true, "header" => $dep]);
             } else {
                 return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
@@ -736,7 +775,7 @@ class DepartureController extends Controller {
                             $id = DB::table("sales")->insertGetId(
                                     ["departure_id" => $departure["id"], "warehouse_id" => $departure["warehouse_id"], "responsible_id" => $departure["responsible_id"],
                                         "client_id" => $departure["client_id"], "city_id" => $departure["city_id"], "destination_id" => $departure["destination_id"],
-                                        "address" => $departure["address"], "phone" => $departure["phone"], "status_id" => $departure["status_id"],
+                                        "address" => $departure["address"], "phone" => $departure["phone"], "status_id" => 2,
                                         "created" => $departure["created"], "shipping_cost" => $departure["shipping_cost"],
                                         "created_at" => date("Y-m-d H:i"), "description" => $departure["description"], "shipping_cost_tax" => $departure["shipping_cost_tax"]
                                     ]
@@ -1195,17 +1234,23 @@ class DepartureController extends Controller {
 
     public function destroy($id) {
         $row = Departures::Find($id);
-        $detail = DeparturesDetail::where("departure_id", $row->id)->get();
-        foreach ($detail as $value) {
-            $det = DeparturesDetail::find($value->id);
-            $det->delete();
-        }
-        $row->delete();
 
-        if ($id) {
-            return response()->json(['success' => true]);
+        if ($row->invoice == null) {
+
+            $detail = DeparturesDetail::where("departure_id", $row->id)->get();
+            foreach ($detail as $value) {
+                $det = DeparturesDetail::find($value->id);
+                $det->delete();
+            }
+            $row->delete();
+
+            if ($id) {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
         } else {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, "msg" => "No se puede borrar porque este pedido fue reversado y ya tiene consecutivo"], 409);
         }
     }
 

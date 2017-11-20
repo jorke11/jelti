@@ -28,7 +28,8 @@ echo json_encode([
             body{
                 margin: 0 auto;
                 padding: 0;
-                background: url('assets/images/foto_final_1507x850.png') center center no-repeat;
+                /*background: url('assets/images/foto_final_1507x850.png') center center no-repeat;*/
+                background: url('assets/images/foto_final_opt.jpg') center center no-repeat;
                 background-size:100% 1280px;
             }
 

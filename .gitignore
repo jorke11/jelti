@@ -20,8 +20,9 @@ bootstrap/cache/
 /public/images/supplier
 /public/images/resize
 /public/images/product
-/public/images/stakeholder
+public/images/stakeholder
 /public/uploads
+public/images/
 /vendor
 /.idea
 Homestead.json

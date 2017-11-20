@@ -109,7 +109,7 @@
                 <div class="col-lg-8 col-lg-offset-1">
                     <div class="row">
                         <div class="col-lg-2">
-                            <h2>Compras</h2>
+                            <h2><a href="/home">Compras</a></h2>
                         </div>
                         <div class="col-lg-3">
                             <a href="/payment">

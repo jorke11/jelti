@@ -40,7 +40,7 @@ Route::get('/operations/getAverageTime', "Report\OperationsController@getAverage
 Route::get('/operations/getShippingCostClient', "Report\OperationsController@getShippingCostClient");
 Route::get('/operations/getMaxMin', "Report\OperationsController@getMinMax");
 Route::get('operations/getNivelService', "Report\OperationsController@getNivelService");
-
+Route::get('operations/getNoShipped', "Report\OperationsController@getNoShipped");
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");
 Route::get('/api/reportCommercialGraph', "Report\CommercialController@listCommercialGraph");

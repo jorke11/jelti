@@ -24,19 +24,19 @@ class ProductController extends Controller {
         $where = '';
 
         if ($input["warehouse_id"] != 0) {
-            $where .= " AND dep.warehouse_id=" . $input["warehouse_id"];
+            $where .= " AND s.warehouse_id=" . $input["warehouse_id"];
         }
 
         if ($input["client_id"] != '') {
-            $where .= " AND dep.client_id=" . $input["client_id"];
+            $where .= " AND s.client_id=" . $input["client_id"];
         }
 
         if ($input["city_id"] != '') {
-            $where = "AND dep.destination_id=" . $input["city_id"];
+            $where = "AND s.destination_id=" . $input["city_id"];
         }
 
         if ($input["product_id"] != '') {
-            $where .= " AND d.product_id=" . $input["product_id"];
+            $where .= " AND p.product_id=" . $input["product_id"];
         }
 
         if ($input["supplier_id"] != '') {
@@ -44,7 +44,7 @@ class ProductController extends Controller {
         }
 
         if ($input["commercial_id"] != '') {
-            $where .= " AND dep.responsible_id=" . $input["commercial_id"];
+            $where .= " AND s.responsible_id=" . $input["commercial_id"];
         }
 
 
@@ -52,21 +52,20 @@ class ProductController extends Controller {
         return response()->json(["data" => $res]);
     }
 
-    public function getListProduct($init, $end, $where = '', $limit = 'LIMIT 10') {
+    public function getListProduct($init, $end, $where = '', $limit = '') {
         $sql = "
           SELECT p.id,p.title as product, sum(d.real_quantity * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
          sum(d.value * d.real_quantity * d.units_sf) as subtotal 
             FROM departures_detail d 
-            JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7)
-            JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1
+            JOIN departures s ON s.id=d.departure_id and s.status_id IN(2,7)
+            JOIN stakeholder ON stakeholder.id=s.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id 
-            WHERE dep.dispatched BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' AND dep.client_id NOT IN(258,264) AND p.category_id<>-1
+            WHERE s.dispatched BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' AND s.client_id NOT IN(258,264,24) AND p.category_id<>-1
             $where
             GROUP by 1,2
             ORDER BY 4 DESC
             $limit
             ";
-//        echo $sql;exit;
 
         return DB::select($sql);
     }
@@ -112,12 +111,12 @@ class ProductController extends Controller {
         $sql = "
             SELECT c.id,c.description city,
             destination_id,(
-                            SELECT sum(d.value* d.quantity * d.units_sf) 
+                            SELECT sum(d.value* d.real_quantity * d.units_sf) 
                             FROM departures_detail d
                             JOIN departures ON departures.id=d.departure_id and departures.status_id IN(2,7)      
                             JOIN stakeholder ON stakeholder.id=departures.client_id and stakeholder.type_stakeholder=1
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1
-                            WHERE departures.destination_id=dep.destination_id and departures.client_id NOT IN(258,264)
+                            WHERE departures.destination_id=dep.destination_id and departures.client_id NOT IN(258,264,24)
                             AND departures.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59'
                                 $where
                             group by product_id
@@ -128,13 +127,13 @@ class ProductController extends Controller {
                             FROM departures_detail d
                             JOIN departures ON departures.id=d.departure_id and departures.status_id IN(2,7)
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1
-                            WHERE departures.destination_id=dep.destination_id AND departures.client_id NOT IN(258,264)
+                            WHERE departures.destination_id=dep.destination_id AND departures.client_id NOT IN(258,264,24)
                             AND departures.dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $where
                             group by 1,product_id
                             order by sum(d.value* d.quantity * d.units_sf)  desc
                             LIMIT 1) as product,
                             (
-                            SELECT sum(d.quantity*CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) 
+                            SELECT sum(d.real_quantity*CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) 
                             FROM departures_detail d
                             JOIN departures ON departures.id=d.departure_id and departures.status_id IN(2,7)
                             JOIN products p ON p.id=d.product_id and p.category_id<>-1

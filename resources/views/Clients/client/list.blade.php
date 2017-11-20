@@ -13,6 +13,7 @@
                         <th>Plazo de pago</th>
                         <th>Ciudad</th>
                         <th>Responsable</th>
+                        <th>Telefono</th>
                         <th>Tipo persona</th>
                         <th>Regimen</th>
                         <th>Creacion</th>

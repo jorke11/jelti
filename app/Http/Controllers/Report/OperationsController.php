@@ -193,4 +193,8 @@ class OperationsController extends Controller {
         return response()->json(["data" => $res, "date" => $day]);
     }
 
+    public function getNivelService(Request $req) {
+        dd($req->all());
+    }
+
 }

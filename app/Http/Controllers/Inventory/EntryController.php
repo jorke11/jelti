@@ -242,7 +242,6 @@ class EntryController extends Controller {
                                                 $detail["status_id"] = 1;
                                                 $detail["expiration_date"] = $book->fecha;
                                                 $detail["units_supplier"] = $pro->units_supplier;
-
                                                 EntriesDetail::create($detail);
                                             }
 

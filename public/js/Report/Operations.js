@@ -6,6 +6,7 @@ function Operations() {
         this.tableClientAverage();
         this.tableShipping_cost();
         this.tableMaxMin();
+        this.tableNivelService();
 
         var init = $("#Detail #finit").val();
         var end = $("#Detail #fend").val();
@@ -114,6 +115,37 @@ function Operations() {
             destroy: true,
             ajax: {
                 url: "/operations/getShippingCostClient",
+                data: obj,
+            },
+            scrollX: true,
+            columns: [
+                {data: "client"},
+                {data: "pedidos"},
+                {data: "valor", render: $.fn.dataTable.render.number(',', '.', 0)},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
+    }
+    
+    this.tableNivelService = function () {
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+
+        return $('#tblservice').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/operations/getNivelService",
                 data: obj,
             },
             scrollX: true,

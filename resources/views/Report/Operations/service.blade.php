@@ -2,9 +2,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Fletes</div>
+                <div class="panel-heading">Nivel de Servicio</div>
                 <div class="panel-body">
-                    <table class="table nowrap" cellspacing="0" width="100%" id="tblShipping_cost">
+                    <table class="table nowrap" cellspacing="0" width="100%" id="tblservice">
                         <thead>
                             <tr>
                                 <td>Cliente</td>

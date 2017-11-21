@@ -24,6 +24,8 @@ Route::group(['namespace' => 'Api'], function () {
 
 Route::get('/', function () {
     $category = Models\Administration\Categories::where("status_id", 1)->orderBy("order", "asc")->get();
+    
+//    dd($category);
     $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
     return view('page', compact("category", "subcategory"));
 });

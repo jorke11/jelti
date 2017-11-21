@@ -22,11 +22,11 @@ bootstrap/cache/
 /public/images/product
 public/images/stakeholder
 /public/uploads
-public/images/
+/public/
 /vendor
 /.idea
 Homestead.json
 Homestead.yaml
 
-
+composer.lock
 nbproject/

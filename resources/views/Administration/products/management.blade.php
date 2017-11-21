@@ -107,6 +107,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email">Producto Nuevo</label>
+                                  <input type="checkbox" class="form-control input-product" id="is_new" name='is_new'>
+
+                                </div>
+                            </div>
+                            
+                        </div>
 
                     </div>
                 </div>

@@ -39,6 +39,7 @@ class CreateProductsTable extends Migration {
             $table->integer('margin_sf')->nullable();
             $table->json('warehouse')->nullable();
             $table->integer('pvp')->nullable();
+            $table->boolean('is_new')->nullable();
             $table->timestamps();
         });
     }

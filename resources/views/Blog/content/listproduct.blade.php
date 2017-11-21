@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 </div>
-                <img src="http://via.placeholder.com/420x250">
+                <img src="{{$value->thumbnail}}">
                 <div class="caption">
                     <h5 class="text-center"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400">{{$value->title}}</a></h5>
                     @if(!Auth::guest())

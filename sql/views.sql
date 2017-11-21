@@ -24,7 +24,6 @@ LEFT JOIN parameters as status ON status.code=s.status_id and status."group"='ge
 WHERE s.type_stakeholder=2;
 
 
-
 --﻿﻿drop view vclient
 CREATE VIEW vclient AS
 SELECT s.id,s.business_name,s.business,coalesce(s.name,'') as name,coalesce(s.last_name,'') as last_name,s.document,s.email,coalesce(s.address_send,'') as address,s.phone,
@@ -45,9 +44,12 @@ WHERE s.type_stakeholder=1
 
 
 
+drop view vproducts
 create view vproducts as
-select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,p.cost_sf,p.tax,p.price_sf,
-p.image,status.description as status
+select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,
+p.cost_sf,p.tax,p.price_sf,
+(select path from products_image where product_id=p.id and main=true limit 1) as image,
+(select thumbnail from products_image where product_id=p.id and main=true limit 1) as thumbnail,status.description as status,p.status_id
 from products p
 JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic'

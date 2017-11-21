@@ -114,7 +114,7 @@ function Product() {
 
             html += '<div class="col-sm-6 col-lg-3" id="div_' + val.id + '">' +
                     '<div class="thumbnail" style="height:auto">' +
-                    '<img src="/images/product/' + val.path + '" alt="Product">' +
+                    '<img src="' + val.path + '" alt="Product">' +
                     '<div class="caption">' +
                     '<h4>Check Main <input type="radio" name="main[]" onclick=obj.checkMain(' + val.id + ',' + val.id + ')></h4>' +
 //                    '<p><button type="button" class="btn btn-primary btn-xs" aria-label="Left Align" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>' +
@@ -276,7 +276,7 @@ function Product() {
                 }
 
                 if (data.header.image != null) {
-                    $("#imageMain").attr("src", "/images/product/" + data.header.image);
+                    $("#imageMain").attr("src", data.header.image);
                 }
                 obj.printImages(data.images);
             }
@@ -327,12 +327,12 @@ function Product() {
                 {data: "tax"},
                 {data: "units_sf"},
                 {data: "price_sf"},
-                {data: "image", width: 10, searchable: false, render: function (data, type, row) {
+                {data: "thumbnail", width: 10, searchable: false, render: function (data, type, row) {
 
                         if (data == null) {
-                            data = "default.jpg";
+                            data = "/images/product/default.jpg";
                         }
-                        return '<img src="/images/product/' + data + '" width="25px">';
+                        return '<img src="' + data + '" width="25px">';
                     }
                 },
                 {data: "status"},

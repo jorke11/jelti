@@ -35,6 +35,7 @@ class Products extends Model {
         "type_product_id",
         "warehouse",
         "pvp",
+        "is_new"
         
     ];
     

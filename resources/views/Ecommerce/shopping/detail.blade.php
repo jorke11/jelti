@@ -1,17 +1,12 @@
 @extends('layouts.client')
 @section('content')
 
-<div class="row">
-
-</div>
-<div class="row">
-    <div class="col-lg-12" style="padding-bottom: 2%;">
-         @if($category->banner!='')
-        <img src="{{$category->banner}}" class="img-responsive" style="width: 100%">
-         @else
-         <img src="http://via.placeholder.com/2000x180" class="img-responsive">
-         @endif
-    </div>
+<div class="row" style="padding-bottom: 3%">
+    @if($category->banner!='')
+    <img src="{{url($category->banner)}}" class="img-responsive" style="width: 100%">
+    @else
+    <img src="http://via.placeholder.com/2000x180" class="img-responsive">
+    @endif
 </div>
 
 <div class="row" style="padding-bottom: 3%">

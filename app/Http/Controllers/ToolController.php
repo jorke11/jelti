@@ -9,9 +9,12 @@ use App\models\Administration\Consecutives;
 use App\Models\Inventory\Entries;
 use App\Models\Inventory\EntriesDetail;
 use App\Models\Administration\Products;
+use App\Models\Administration\Categories;
+use App\Models\Administration\ProductsImage;
 use App\Models\Administration\Warehouses;
 use DB;
 use App\Models\Invoicing\SaleDetail;
+use File;
 
 class ToolController extends Controller {
 
@@ -85,19 +88,19 @@ class ToolController extends Controller {
            where d.real_quantity =0";
         $data = DB::select($sql);
         foreach ($data as $val) {
-            
+
             $sql = "select * from sales_detail where sale_id=(select id from sales where invoice='" . $val->invoice . "')";
             $d = DB::select($sql);
-            
+
             foreach ($d as $value) {
 
-                $sql = "select * from departures_detail where departure_id=(select id from departures where invoice='".$val->invoice."') and product_id=" . $value->product_id;
+                $sql = "select * from departures_detail where departure_id=(select id from departures where invoice='" . $val->invoice . "') and product_id=" . $value->product_id;
                 $res = DB::select($sql);
 
                 if (count($res) > 0) {
                     $res = $res[0];
                     $det = \App\Models\Inventory\DeparturesDetail::find($res->id);
-                    echo "actual " . $det->real_quantity . " :: actualizacion: " . $value->quantity."<br>";
+                    echo "actual " . $det->real_quantity . " :: actualizacion: " . $value->quantity . "<br>";
                     $det->real_quantity = $value->quantity;
                     $det->save();
                 }
@@ -108,21 +111,154 @@ class ToolController extends Controller {
         echo "termino ";
     }
 
-    public function readFile() {
-        $cmd='find  ' . public_path() . '/fotos/ -name "*.png"';
-        
-        $list = shell_exec($cmd);
-        dd($list);exit;
-        $list = explode("\n", $list);
+    public function readImagesProducts() {
+        $cmd = 'find  ' . public_path() . '/FOTOS\ CATALOGO/ -name "*.png"';
 
+        $list = shell_exec($cmd);
+
+        $list = explode("\n", $list);
 
 
         foreach ($list as $value) {
             if (is_file($value)) {
                 $manager = new ImageManager(array('driver' => 'imagick'));
 
-// to finally create image instances
-                $image = $manager->make($value)->resize(300, 200);
+                $image = $manager->make($value);
+                if ($image->width() > 2000) {
+                    $width = $image->width() - round($image->width() * 0.95);
+                    $heigth = $image->height() - round($image->height() * 0.95);
+                } else {
+                    $width = $image->width() - round($image->width() * 0.90);
+                    $heigth = $image->height() - round($image->height() * 0.90);
+                }
+//
+//
+//// to finally create image instances
+                $imagethumb = $manager->make($value)->resize($width, $heigth);
+//                echo $image->basename;
+                $reference = str_replace(".png", "", $image->basename);
+                $pro = Products::where("reference", $reference)->first();
+
+                if ($pro != null) {
+                    $path = public_path() . "/images/product/" . $pro->id . "/";
+                    File::makeDirectory($path, $mode = 0777, true, true);
+                    chmod($path, 0777);
+
+                    $paththumb = public_path() . "/images/product/" . $pro->id . "/thumb/";
+                    File::makeDirectory($paththumb, $mode = 0777, true, true);
+                    chmod($paththumb, 0777);
+
+                    $pathsys = "images/product/" . $pro->id . "/";
+                    $pathsysthumb = "images/product/" . $pro->id . "/thumb/";
+
+                    $path .= $image->basename;
+                    $pathsys .= $image->basename;
+
+                    $paththumb .= $image->basename;
+                    $pathsysthumb .= $image->basename;
+
+                    $image->save($path);
+                    $imagethumb->save($paththumb);
+
+                    $new["product_id"] = $pro->id;
+                    $new["path"] = $pathsys;
+                    $new["thumbnail"] = $pathsysthumb;
+                    $new["main"] = true;
+
+                    ProductsImage::create($new);
+                    echo $path . "<br>";
+                } else {
+                    echo "Rechazado: " . $value . "<br>";
+                }
+            }
+        }
+    }
+
+    public function readImagesBanner() {
+
+        $cmd = 'find  ' . public_path() . '/banner/ -name "*.jpg"';
+
+        $list = shell_exec($cmd);
+
+        $list = explode("\n", $list);
+
+        foreach ($list as $value) {
+            if (is_file($value)) {
+                $manager = new ImageManager(array('driver' => 'imagick'));
+
+                $image = $manager->make($value);
+
+                
+                $cod = substr($image->basename, 0, strpos($image->basename, "-"));
+                $cod = explode("_", $cod);
+
+                $pro = Categories::find($cod[1]);
+                
+                if ($pro != null) {
+                    $path = public_path() . "/images/category/" . $pro->id . "/banner/";
+                    File::makeDirectory($path, $mode = 0777, true, true);
+                    chmod($path, 0777);
+
+                    $pathsys = "images/category/" . $pro->id . "/banner/";
+
+                    $path .= $image->basename;
+                    $pathsys .= $image->basename;
+
+                    $image->save($path);
+
+                    $pro->banner = $pathsys;
+                   
+                    $pro->save();
+                    echo $path . "<br>";
+                } else {
+                    echo "Rechazado: " . $value . "<br>";
+                }
+            }
+        }
+    }
+
+    public function readImagesCategory() {
+
+        $cmd = 'find  ' . public_path() . '/CATEGORIAS/ -name "*.png"';
+
+        $list = shell_exec($cmd);
+
+        $list = explode("\n", $list);
+
+        foreach ($list as $value) {
+            if (is_file($value)) {
+                $manager = new ImageManager(array('driver' => 'imagick'));
+
+                $image = $manager->make($value);
+
+//               dd($image); 
+
+                
+                $cod = substr($image->basename, 0, strpos($image->basename, "-"));
+                $cod = explode("_", $cod);
+
+                $pro = Categories::find($cod[1]);
+                
+                if ($pro != null) {
+                    $path = public_path() . "/images/category/" . $pro->id . "/";
+                    File::makeDirectory($path, $mode = 0777, true, true);
+                    chmod($path, 0777);
+
+                    $pathsys = "images/category/" . $pro->id . "/";
+
+                    $path .= $image->basename;
+                    $pathsys .= $image->basename;
+
+                    $image->save($path);
+
+                    $pro->image = $pathsys;
+                    $pro->order = $cod[0];
+
+                    $pro->save();
+                    echo $path . "<br>";
+                } else {
+                    echo "Rechazado: " . $value . "<br>";
+                }
             }
         }
     }

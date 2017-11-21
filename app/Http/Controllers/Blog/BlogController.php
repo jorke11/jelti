@@ -16,6 +16,7 @@ use Auth;
 use Image;
 use File;
 use Illuminate\Support\Facades\Input;
+use DB;
 
 class BlogController extends Controller {
 
@@ -58,7 +59,7 @@ class BlogController extends Controller {
 
         $file = Input::file('img');
 
-
+        unset($in["id"]);
         $res = Post::create($in);
 
         if ($file != null) {
@@ -111,7 +112,7 @@ class BlogController extends Controller {
     }
 
     public function listProducts() {
-        $products = \App\Models\Administration\Products::paginate();
+        $products = DB::table("vproducts")->where("status_id","<>", 1)->paginate(10);
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
         return view("Blog.content.listproduct", compact("products", "subcategory"));

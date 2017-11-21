@@ -215,7 +215,8 @@
                                                     </a>
                                                 </div>
                                                 <?php
-                                                if ($cont == 5) {
+                                                         $cont++;
+                                                if ($cont == 6) {
                                                     $cont = 0;
                                                     ?>
                                                 </div>
@@ -224,7 +225,7 @@
                                                 <div class="row">
                                                     <?php
                                                 }
-                                                $cont++;
+                                       
                                             }
                                         }
                                         ?>

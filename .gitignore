@@ -22,7 +22,10 @@ bootstrap/cache/
 /public/images/product
 public/images/stakeholder
 /public/uploads
-/public/
+public/CATEGORIAS/
+public/FOTOS CATALOGO/
+public/banner/
+public/images/category/
 /vendor
 /.idea
 Homestead.json

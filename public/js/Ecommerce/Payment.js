@@ -12,8 +12,22 @@ function Payment() {
 
         });
 
+        $("#btnPayU").click(this.payu);
+
         this.getDetail();
         this.getQuantity();
+    }
+
+    this.payu = function () {
+        console.log("asd");
+        $.ajax({
+            url: PATH + '/payu',
+            method: 'POST',
+            dataType: 'JSON',
+            success: function (data) {
+                $("#frm #signature").val(data.key);
+            }
+        });
     }
 
     this.getQuantity = function () {
@@ -44,14 +58,14 @@ function Payment() {
 //                    image = (val.image == null) ? "../assets/images/default.jpg" : val.image;
                     image = (val.image == null) ? "http://via.placeholder.com/200x150" : val.image;
                     html += '<div class="row">\
-                <div class="col-lg-8 col-lg-offset-2">\
+                <div class="col-lg-10 col-lg-offset-1">\
                     <div class="panel panel-default">\
                         <div class="panel-header">\
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding-right:1%"><span aria-hidden="true">&times;</span></button>\
                         </div>\
                         <div class="panel-body">\
                             <div class="row">\
-                                <div class="col-lg-3">\
+                                <div class="col-lg-4">\
                                     <img src="' + image + '">\
                                 </div>\
                                 <div class="col-lg-7">\

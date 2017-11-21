@@ -14,6 +14,7 @@ require('./bootstrap');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('message', require('./components/ChatMessage.vue'));
 
 const app = new Vue({
     el: 'body'

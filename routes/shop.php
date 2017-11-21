@@ -18,3 +18,11 @@ Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
 Route::put('/getDetailQuantity/{order_id}', 'Shopping\PaymentController@setQuantity');
 
 Route::post('payment/target', 'Shopping\PaymentController@payment');
+Route::post('payu', 'Shopping\PaymentController@payu');
+
+Route::get('payment/responsepay', 'Shopping\PaymentController@responsePay');
+Route::get('generatekey', "Shopping\PaymentController@generatekey");
+Route::post('payment/confirmationpay', 'Shopping\PaymentController@confirmationPay');
+Route::get('paymentest', "Payments\PaymentsController@index");
+
+Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');

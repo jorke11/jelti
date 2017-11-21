@@ -7,7 +7,6 @@
     </div>
 </div>
 <div class="row">
-    <!--{!! Form::open(['id'=>'frm','files' => true]) !!}-->
     {!! Form::open(['id'=>'frm','files' => true,'url' => 'payment/target']) !!}
     <div class="col-lg-10 col-lg-offset-1">
         <div class="row">
@@ -18,6 +17,9 @@
                             <div class="col-lg-6">
                                 <button type="submit" class="btn btn-success" id="btnPay">
                                     <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Payment
+                                </button>
+                                <button type="button" class="btn btn-info" id="btnPayU">
+                                    <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> PayU
                                 </button>
                             </div>
                             <div class="col-lg-6">

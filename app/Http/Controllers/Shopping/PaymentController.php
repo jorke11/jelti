@@ -120,15 +120,19 @@ class PaymentController extends Controller {
       ]
      * */
     public function payment(Request $req) {
-        
+
         $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
+
+
 
         $sql = "SELECT p.title product,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image
                             FROM orders_detail d
                             JOIN products p ON p.id=d.product_id
                             WHERE order_id=$order->id
                             GROUP BY 1,2,3,product_id,p.image";
-        $detail = (array) DB::select($sql);
+
+        $detail = DB::select($sql);
+        $detail = json_decode(json_encode($detail), true);
 
         $user = \App\Models\Security\Users::find(Auth::user()->id);
 
@@ -152,7 +156,45 @@ class PaymentController extends Controller {
         $order->status_id = 2;
         $order->save();
 
-        return redirect('home');
+        return redirect('listProducts');
+    }
+
+    public function payu(Request $req) {
+        $pet = '{
+                    "test": false,
+                    "language": "en",
+                    "command": "PING",
+                    "merchant": {
+                       "apiLogin": "pRRXKOl8ikMmt9u",
+                       "apiKey": "4Vj8eK4rloUd272L48hsrarnUA"
+                    }
+                    }';
+
+
+        $data = json_decode($pet, true);
+
+        $pet2 = json_encode($data);
+
+
+        $ch = curl_init("https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi");
+        //a true, obtendremos una respuesta de la url, en otro caso, 
+        //true si es correcto, false si no lo es
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_HEADER, array('Accept:application/json', 'Content-Type: application/json', 'Content-Length: ' . strlen($pet2)));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        //establecemos el verbo http que queremos utilizar para la petición
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        //enviamos el array data
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $pet2);
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, build_query($data));
+        
+        //obtenemos la respuesta
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        print_r($response);
+        exit;
     }
 
     public function deleteItem(Request $req, $id) {

@@ -265,13 +265,7 @@ Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
 Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 
 
-Route::get('payment/responsepay', 'Shopping\PaymentController@responsePay');
-Route::get('generatekey', "Shopping\PaymentController@generatekey");
-Route::post('payment/confirmationpay', 'Shopping\PaymentController@confirmationPay');
-Route::get('paymentest', "Payments\PaymentsController@index");
 
-
-Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 
 Route::resource('/prospect', 'Seller\ProspectsController');
 Route::post('/prospect/convert', 'Seller\ProspectsController@convertToClient');
@@ -538,3 +532,4 @@ require __DIR__ . '/report.php';
 require __DIR__ . '/shop.php';
 require __DIR__ . '/blog.php';
 require __DIR__ . '/tool.php';
+require __DIR__ . '/chat.php';

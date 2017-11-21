@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Blog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\Blog\Post;
 use App\Models\Administration\Characteristic;
 use App\Models\Administration\Stakeholder;
 use App\Models\Seller\Prospect;
 use Mail;
 use App\Models\Administration\Email;
 use App\Models\Administration\EmailDetail;
+use Auth;
+use Image;
+use File;
+use Illuminate\Support\Facades\Input;
 
 class BlogController extends Controller {
 
@@ -23,13 +28,86 @@ class BlogController extends Controller {
     }
 
     public function index() {
-        $data = Blog\Content::paginate(10);
+        $data = Post::paginate(10);
         return view("Blog.content.init", compact("data"));
     }
 
-    public function getDetail($id) {
-        $data = Blog\Content::find($id);
+    public function getDetail($slug) {
+        $data = Post::findBySlug($slug);
         return view("Blog.content.detail", compact("data"));
+    }
+
+    public function getAllPost() {
+        $data = Post::paginate(10);
+        return view("Blog.admin.init", compact("data"));
+    }
+
+    public function show($id) {
+        $row = Post::find($id);
+        return view("Blog.admin.edit", compact("row"));
+    }
+
+    public function create() {
+        $row = array();
+        return view("Blog.admin.new", compact("row"));
+    }
+
+    public function store(Request $req) {
+        $in = $req->all();
+        $in["user_id"] = Auth::user()->id;
+
+        $file = Input::file('img');
+
+
+        $res = Post::create($in);
+
+        if ($file != null) {
+            $image = Image::make(Input::file('img'));
+            $path = public_path() . '/uploads/blog/' . $res->id . "/";
+            $paththumb = public_path() . '/uploads/blog/' . $res->id . "/thumbmail/";
+
+            File::makeDirectory($path, $mode = 0777, true, true);
+            File::makeDirectory($paththumb, $mode = 0777, true, true);
+
+            $row = Post::find($res->id);
+
+            $row->img = 'uploads/blog/' . $res->id . '/' . $file->getClientOriginalName();
+            $image->save($path . $file->getClientOriginalName());
+
+            $image->resize(400, 300);
+            $row->thumbnail = 'uploads/blog/' . $res->id . '/thumbmail/' . $file->getClientOriginalName();
+            $image->save($paththumb . $file->getClientOriginalName());
+            $row->save();
+        }
+
+        return redirect()->route("admin.blog");
+    }
+
+    public function update(Request $req, $id) {
+        $row = Post::find($id);
+        $row->fill($req->all());
+        $row->save();
+        return redirect()->route("admin.blog");
+    }
+
+    public function delete($id) {
+        $row = Post::find($id);
+        return view("Blog.admin.delete", compact("row"));
+    }
+
+    public function destroy(Request $req) {
+        $in = $req->all();
+        $row = Post::find($in["id"]);
+        $row->delete();
+        return redirect()->route("admin.blog");
+    }
+
+    public function delete2(Request $req, $id) {
+        return redirect()->route("admin.blog");
+    }
+
+    public function updatePost(Request $req, $id) {
+        dd($req->all());
     }
 
     public function listProducts() {

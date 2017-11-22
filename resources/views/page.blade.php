@@ -263,7 +263,7 @@
                                     <div class="row">
                                         <?php
                                         $cont = 0;
-                                        foreach ($category as $i => $val) {
+                                        foreach ($newproducts as $i => $val) {
                                             ?>
                                             <div class="col-md-2 col-sm-2">
                                                 <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="img/frezedetay.png">

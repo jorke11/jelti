@@ -110,12 +110,34 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="email">Producto Nuevo</label>
-                                  <input type="checkbox" class="form-control input-product" id="is_new" name='is_new'>
+                                    <label for="email">Marcar como nuevo</label>
+                                    <input type="checkbox" class="form-control input-product" id="is_new" name='is_new'>
 
                                 </div>
                             </div>
-                            
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email">Acerca del Producto</label>
+                                    <textarea class="form-control input-product" name="about" id="about"></textarea>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email">Porque se va a gustar</label>
+                                    <textarea class="form-control input-product" name="why" id="why"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email">Ingredientes</label>
+                                    <textarea class="form-control input-product" name="ingredients" id="ingredients"></textarea>
+
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -220,7 +242,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="email" class="control-label">Bodega</label>
-                                   <select class="form-control input-product" id='warehouse' name="warehouse[]" data-api="/api/getWarehouseProduct" multiple>
+                                    <select class="form-control input-product" id='warehouse' name="warehouse[]" data-api="/api/getWarehouseProduct" multiple>
                                     </select>
 
                                 </div>

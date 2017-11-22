@@ -33,3 +33,7 @@ Homestead.yaml
 
 composer.lock
 nbproject/
+public/excel/
+public/images/subcategory/
+public/subcategorias/
+

@@ -24,10 +24,12 @@ Route::group(['namespace' => 'Api'], function () {
 
 Route::get('/', function () {
     $category = Models\Administration\Categories::where("status_id", 1)->orderBy("order", "asc")->get();
-    
-//    dd($category);
+
+    $newproducts = DB::table("vproducts")->where("status_id", 1)->where("category_id", "<>", -1)->where("category_id", "<>", 19)->get();
+
+//    dd($newproducts);
     $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
-    return view('page', compact("category", "subcategory"));
+    return view('page', compact("category", "subcategory", "newproducts"));
 });
 
 Route::get("/admins/login", "AdministratorsController@showLoginForm");
@@ -259,10 +261,6 @@ Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getCli
 /**
  * Shopping cart
  */
-
-
-
-
 Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
 Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 

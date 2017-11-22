@@ -10,11 +10,13 @@ use App\Models\Inventory\Entries;
 use App\Models\Inventory\EntriesDetail;
 use App\Models\Administration\Products;
 use App\Models\Administration\Categories;
+use App\Models\Administration\Characteristic;
 use App\Models\Administration\ProductsImage;
 use App\Models\Administration\Warehouses;
 use DB;
 use App\Models\Invoicing\SaleDetail;
 use File;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ToolController extends Controller {
 
@@ -188,12 +190,12 @@ class ToolController extends Controller {
 
                 $image = $manager->make($value);
 
-                
+
                 $cod = substr($image->basename, 0, strpos($image->basename, "-"));
                 $cod = explode("_", $cod);
 
                 $pro = Categories::find($cod[1]);
-                
+
                 if ($pro != null) {
                     $path = public_path() . "/images/category/" . $pro->id . "/banner/";
                     File::makeDirectory($path, $mode = 0777, true, true);
@@ -207,7 +209,7 @@ class ToolController extends Controller {
                     $image->save($path);
 
                     $pro->banner = $pathsys;
-                   
+
                     $pro->save();
                     echo $path . "<br>";
                 } else {
@@ -233,12 +235,12 @@ class ToolController extends Controller {
 
 //               dd($image); 
 
-                
+
                 $cod = substr($image->basename, 0, strpos($image->basename, "-"));
                 $cod = explode("_", $cod);
 
                 $pro = Categories::find($cod[1]);
-                
+
                 if ($pro != null) {
                     $path = public_path() . "/images/category/" . $pro->id . "/";
                     File::makeDirectory($path, $mode = 0777, true, true);
@@ -253,6 +255,178 @@ class ToolController extends Controller {
 
                     $pro->image = $pathsys;
                     $pro->order = $cod[0];
+
+                    $pro->save();
+                    echo $path . "<br>";
+                } else {
+                    echo "Rechazado: " . $value . "<br>";
+                }
+            }
+        }
+    }
+
+    public function excelCategory() {
+        $cmd = 'find  ' . public_path() . '/excel/ -name "Categ*.xlsx"';
+
+        $list = shell_exec($cmd);
+
+        $list = explode("\n", $list);
+
+
+        Excel::load($list[0], function($reader) {
+
+            foreach ($reader->get() as $i => $book) {
+
+                $pro = Products::where("reference", (int) $book->codigo_sf)->first();
+                $char = array();
+                if ($pro != null) {
+                    if ($book->paleo == 'X') {
+                        $char[] = 5;
+                    }
+                    if ($book->gluten_free == 'X') {
+                        $char[] = 9;
+                    }
+                    if ($book->vegan == 'X') {
+                        $char[] = 6;
+                    }
+                    if ($book->non_gmo == 'X') {
+                        $char[] = 13;
+                    }
+                    if ($book->organico == 'X') {
+                        $char[] = 11;
+                    }
+                    if ($book->sin_grasas_trans == 'X') {
+                        $char[] = 7;
+                    }
+                    if ($book->sin_azucar_anadida == 'X') {
+                        $char[] = 8;
+                    }
+
+                    $pro->characteristic = json_encode($char);
+                    $pro->save();
+                    echo $pro->title . " " . print_r($char, true) . "<br>";
+                } else {
+                    print_r($book);
+                    echo "<br>";
+                }
+            }
+        });
+    }
+
+    public function excelDescription() {
+        $cmd = 'find  ' . public_path() . '/excel/ -name "Super*.xlsx"';
+
+        $list = shell_exec($cmd);
+
+        $list = explode("\n", $list);
+
+
+        Excel::load($list[0], function($reader) {
+
+            foreach ($reader->get() as $i => $book) {
+                if ($book->sf_code != '') {
+
+                    $pro = Products::where("reference", (int) $book->sf_code)->first();
+                    $char = array();
+
+                    if ($pro != null) {
+                       
+                        $edit= Products::find($pro->id);
+                        if ($book->acerca_del_producto != '') {
+                            $edit->about = $book->acerca_del_producto;
+                        }
+                        if ($book->por_que_te_encantara != '') {
+                            $edit->why = $this->cleanText($book->por_que_te_encantara);
+                        }
+                        if ($book->ingredientes != '') {
+                            $edit->ingredients = $this->cleanText($book->ingredientes);
+                        }
+                        
+                        $edit->save();
+                        echo $pro->title . " " . $pro->reference . "<br>";
+                    } else {
+                        print_r($book);
+                        echo "<br>";
+                    }
+                } else {
+                    echo "Sdasdsad";
+                }
+            }
+        });
+    }
+
+    public function readImagesSubCategory() {
+
+        $cmd = 'find  ' . public_path() . '/subcategorias/No\ Coloreadas -name "*.png"';
+
+        $list = shell_exec($cmd);
+
+        $list = explode("\n", $list);
+
+        foreach ($list as $value) {
+            if (is_file($value)) {
+                $manager = new ImageManager(array('driver' => 'imagick'));
+
+                $image = $manager->make($value);
+
+                $cod = substr($image->basename, 0, strpos($image->basename, "_"));
+
+                $pro = Characteristic::find($cod);
+
+                if ($pro != null) {
+
+                    $path = public_path() . "/images/subcategory/sin/" . $pro->id . "/";
+                    File::makeDirectory($path, $mode = 0777, true, true);
+                    chmod($path, 0777);
+
+                    $pathsys = "images/subcategory/sin/" . $pro->id . "/";
+
+                    $path .= $image->basename;
+                    $pathsys .= $image->basename;
+
+                    $image->save($path);
+
+                    $pro->img = $pathsys;
+
+                    $pro->save();
+                    echo $path . "<br>";
+                } else {
+                    echo "Rechazado: " . $value . "<br>";
+                }
+            }
+        }
+
+        $cmd = 'find  ' . public_path() . '/subcategorias/Coloreadas/ -name "*.png"';
+
+        $list = shell_exec($cmd);
+
+        $list = explode("\n", $list);
+        $pathsys = '';
+
+        foreach ($list as $value) {
+            if (is_file($value)) {
+                $manager = new ImageManager(array('driver' => 'imagick'));
+
+                $image = $manager->make($value);
+
+                $cod = substr($image->basename, 0, strpos($image->basename, "_"));
+
+                $pro = Characteristic::find($cod);
+
+                if ($pro != null) {
+
+                    $path = public_path() . "/images/subcategory/con/" . $pro->id . "/";
+                    File::makeDirectory($path, $mode = 0777, true, true);
+                    chmod($path, 0777);
+
+                    $pathsys = "images/subcategory/con/" . $pro->id . "/";
+
+                    $path .= $image->basename;
+                    $pathsys .= $image->basename;
+
+                    $image->save($path);
+
+                    $pro->alternative = $pathsys;
 
                     $pro->save();
                     echo $path . "<br>";

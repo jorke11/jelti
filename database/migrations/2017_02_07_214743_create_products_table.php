@@ -40,6 +40,9 @@ class CreateProductsTable extends Migration {
             $table->json('warehouse')->nullable();
             $table->integer('pvp')->nullable();
             $table->boolean('is_new')->nullable();
+            $table->text('about')->nullable();
+            $table->text('why')->nullable();
+            $table->text('ingredients')->nullable();
             $table->timestamps();
         });
     }

@@ -22,8 +22,8 @@ bootstrap/cache/
 /public/images/product
 public/images/stakeholder
 /public/uploads
-public/CATEGORIAS/
-public/FOTOS CATALOGO/
+public/categorias/
+public/catalogo/
 public/banner/
 public/images/category/
 /vendor

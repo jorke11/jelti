@@ -114,7 +114,7 @@ class ToolController extends Controller {
     }
 
     public function readImagesProducts() {
-        $cmd = 'find  ' . public_path() . '/FOTOS\ CATALOGO/ -name "*.png"';
+        $cmd = 'find  ' . public_path() . '/catalogo/ -name "*.png"';
 
         $list = shell_exec($cmd);
 
@@ -221,7 +221,7 @@ class ToolController extends Controller {
 
     public function readImagesCategory() {
 
-        $cmd = 'find  ' . public_path() . '/CATEGORIAS/ -name "*.png"';
+        $cmd = 'find  ' . public_path() . '/categorias/ -name "*.png"';
 
         $list = shell_exec($cmd);
 

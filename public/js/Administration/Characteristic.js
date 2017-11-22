@@ -136,7 +136,7 @@ function Category() {
                     }
                 },
                 {
-                    targets: [4],
+                    targets: [5],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

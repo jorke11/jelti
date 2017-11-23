@@ -43,13 +43,12 @@ JOIN parameters as status ON status.code=s.status_id and status."group"='generic
 WHERE s.type_stakeholder=1 
 
 
-
 drop view vproducts
 create view vproducts as
 select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as description,s.business as supplier,p.reference,p.bar_code,p.units_supplier,p.units_sf,
 p.cost_sf,p.tax,p.price_sf,
 (select path from products_image where product_id=p.id and main=true limit 1) as image,
-(select thumbnail from products_image where product_id=p.id and main=true limit 1) as thumbnail,status.description as status,p.status_id
+(select thumbnail from products_image where product_id=p.id and main=true limit 1) as thumbnail,status.description as status,p.status_id,p.category_id
 from products p
 JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic'

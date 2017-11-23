@@ -244,7 +244,7 @@ class ToolController extends Controller {
                 if ($pro != null) {
                     $path = public_path() . "/images/category/" . $pro->id . "/";
                     File::makeDirectory($path, $mode = 0777, true, true);
-                    chmod($path, 0777);
+//                    chmod($path, 0777);
 
                     $pathsys = "images/category/" . $pro->id . "/";
 

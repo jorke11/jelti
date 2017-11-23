@@ -10,7 +10,7 @@
 </div>
 
 <div class="row row-space">
-    <div class="col-lg-8 col-lg-offset-2 ">
+    <div class="col-lg-8 col-lg-offset-2">
         <div class="carousel slide media-carousel" id="newproducts">
             <div class="carousel-inner">
                 <div class="item  active">
@@ -21,7 +21,7 @@
                             ?>
                             <div class="col-md-1 col-sm-2 img-subcategory" style="width: 14%">
                                 <a class="fancybox thumbnail" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
-                                    <img src="{{url($val->img)}}" alt="">
+                                    <img src="{{($val->img)}}" alt="">
                                 </a>
                             </div>
                             <?php

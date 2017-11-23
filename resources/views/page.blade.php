@@ -265,7 +265,7 @@
                                         foreach ($newproducts as $i => $val) {
                                             ?>
                                             <div class="col-md-2 col-sm-2">
-                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
+                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="productDetail/{{$val->id}}">
                                                     <img src="{{$val->image}}" alt="">
                                                 </a>
                                             </div>
@@ -325,7 +325,8 @@
                                             ?>
                                             <div class="col-md-1 col-sm-2 " style="width: 14%">
                                                 <h4 class="text-center">{{$val->description}}</h4>
-                                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
+                                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
+                                                   href="shopping/_{{$val->id}}">
                                                     <img src="{{$val->img}}" alt="">
                                                 </a>
                                             </div>

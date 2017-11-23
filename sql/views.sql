@@ -49,7 +49,7 @@ select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as descript
 p.cost_sf,p.tax,p.price_sf,
 (select path from products_image where product_id=p.id and main=true limit 1) as image,
 (select thumbnail from products_image where product_id=p.id and main=true limit 1) as thumbnail,status.description as status,p.status_id,p.category_id,p.supplier_id,
-p.short_description,p.packaging
+p.short_description,p.packaging,p.characteristic
 from products p
 JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic'

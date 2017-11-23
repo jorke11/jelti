@@ -18,11 +18,10 @@
                         <?php
                         $cont = 0;
                         foreach ($subcategory as $i => $val) {
-                            
                             ?>
-                            <div class="col-md-1 col-sm-2 " style="width: 14%">
-                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
-                                    <img src="{{url($val->img)}}" alt="">
+                            <div class="col-md-1 col-sm-2 img-subcategory" style="width: 14%">
+                                <a class="fancybox thumbnail" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
+                                    <img src="{{($val->img)}}" alt="">
                                 </a>
                             </div>
                             <?php
@@ -45,7 +44,6 @@
     </div>
 </div>
 
-
 <div style="background: #fffcf8;width: 100%;">
     <div class="row " style="padding-top: 2%;padding-left: 2%;padding-right: 2%">
         @if (count($products)>0)
@@ -60,7 +58,7 @@
                     <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-12">
-                                @foreach($value->characteristic as $val)
+                                @foreach($subcategory as $val)
                                 <div class="col-lg-2">
                                     <div class="row">
                                         <div class="row hover01">
@@ -75,7 +73,7 @@
                         </div>
                     </div>
                 </div>
-                <img src="{{url("/")."/".$value->image}}">
+                <img src="{{url($value->image)}}">
                 <div class="caption">
                     <h5 class="text-center"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400">{{$value->title}}</a></h5>
                     @if(!Auth::guest())

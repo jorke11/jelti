@@ -58,6 +58,7 @@ class ShoppingController extends Controller {
         
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
+//        dd($subcategory);
         return view("Ecommerce.shopping.detail", compact("products", "category", "subcategory"));
     }
 

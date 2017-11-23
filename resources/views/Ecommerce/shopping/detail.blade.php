@@ -3,7 +3,7 @@
 
 <div class="row" style="padding-bottom: 3%">
     @if($category->banner!='')
-    <img src="{{url($category->banner)}}" class="img-responsive" style="width: 100%">
+    <img src="{{($category->banner)}}" class="img-responsive" style="width: 100%">
     @else
     <img src="http://via.placeholder.com/2000x180" class="img-responsive">
     @endif
@@ -21,7 +21,7 @@
                             
                             ?>
                             <div class="col-md-1 col-sm-2 " style="width: 14%">
-                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
+                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
                                     <img src="{{url($val->img)}}" alt="">
                                 </a>
                             </div>
@@ -54,12 +54,16 @@
         ?>
         @foreach($products as $i => $value)
 
+        <?php
+//        dd($value);
+        ?>
         <div class="col-sm-2 col-lg-2 col-md-3" style="width: 20%">
             <div class="thumbnail" style="border: 0;padding: 0">
                 <div class="row" style="padding-bottom: 2%;padding-top: 2%">
                     <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-12">
+                                @if($value->characteristic!=null)
                                 @foreach($value->characteristic as $val)
                                 <div class="col-lg-2">
                                     <div class="row">
@@ -71,6 +75,7 @@
                                     </div>
                                 </div>
                                 @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>

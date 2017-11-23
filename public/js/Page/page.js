@@ -31,7 +31,7 @@ function Page() {
                         elem.attr("disabled", false);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
-                    toastr.error(xhr.responseJSON.msg);
+                    toastr.error("Problemas con el procesamiento");
                     elem.attr("disabled", false);
                 }
 

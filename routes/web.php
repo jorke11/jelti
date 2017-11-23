@@ -25,7 +25,12 @@ Route::group(['namespace' => 'Api'], function () {
 Route::get('/', function () {
     $category = Models\Administration\Categories::where("status_id", 1)->orderBy("order", "asc")->get();
 
-    $newproducts = DB::table("vproducts")->where("status_id", 1)->where("category_id", "<>", -1)->where("category_id", "<>", 19)->whereNotNull("image")->get();
+    $newproducts = DB::table("vproducts")->where("status_id", 1)
+            ->where("category_id", "<>", -1)
+            ->where("category_id", "<>", 19)
+            ->whereNotNull("image")
+//            ->orderBy("order", "asc")
+            ->get();
 //       dd($newproducts);
     $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 //dd($subcategory)

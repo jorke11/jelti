@@ -362,16 +362,19 @@ class ToolController extends Controller {
         $list = shell_exec($cmd);
 
         $list = explode("\n", $list);
-
+        $list= array_filter($list);
+//        dd($list);
+        
         foreach ($list as $value) {
             if (is_file($value)) {
                 $manager = new ImageManager(array('driver' => 'imagick'));
 
                 $image = $manager->make($value);
 
-                $cod = substr($image->basename, 0, strpos($image->basename, "_"));
-
-                $pro = Characteristic::find($cod);
+                $cod = substr($image->basename, 0, strpos($image->basename, "-"));
+                $cod = explode("_", $cod);
+                
+                $pro = Characteristic::find($cod[1]);
 
                 if ($pro != null) {
 
@@ -387,6 +390,7 @@ class ToolController extends Controller {
                     $image->save($path);
 
                     $pro->img = $pathsys;
+                    $pro->order = $cod[0];
 
                     $pro->save();
                     echo $path . "<br>";

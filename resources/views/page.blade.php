@@ -315,7 +315,7 @@
 
                 <div class="row row-space">
                     <div class="col-lg-8 col-lg-offset-2 ">
-                        <div class="carousel slide media-carousel" id="newproducts">
+                        <div class="carousel slide media-carousel" id="subcategories">
                             <div class="carousel-inner">
                                 <div class="item  active">
                                     <div class="row" style="padding-top: 2%;padding-bottom: 2%;padding-left: 3%">
@@ -345,6 +345,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <a class="left carousel-control" href="#subcategories" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#subcategories" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
                         </div>
                     </div>
                 </div>

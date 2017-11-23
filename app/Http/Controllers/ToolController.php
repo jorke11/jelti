@@ -413,9 +413,10 @@ class ToolController extends Controller {
 
                 $image = $manager->make($value);
 
-                $cod = substr($image->basename, 0, strpos($image->basename, "_"));
-
-                $pro = Characteristic::find($cod);
+                $cod = substr($image->basename, 0, strpos($image->basename, "-"));
+                $cod = explode("_", $cod);
+                
+                $pro = Characteristic::find($cod[1]);
 
                 if ($pro != null) {
 

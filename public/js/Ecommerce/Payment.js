@@ -56,7 +56,7 @@ function Payment() {
 
                 $.each(data.detail, function (i, val) {
 //                    image = (val.image == null) ? "../assets/images/default.jpg" : val.image;
-                    image = (val.image == null) ? "http://via.placeholder.com/200x150" : val.image;
+                    image = (val.thumbnail == null) ? "http://via.placeholder.com/200x150" : val.thumbnail;
                     html += '<div class="row">\
                 <div class="col-lg-10 col-lg-offset-1">\
                     <div class="panel panel-default">\

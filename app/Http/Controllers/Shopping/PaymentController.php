@@ -66,12 +66,12 @@ class PaymentController extends Controller {
             $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
 
             $sql = "
-                SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image
+                SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image,p.thumbnail
                 FROM orders_detail d
-                    JOIN products p ON p.id=d.product_id
+                    JOIN vproducts p ON p.id=d.product_id
                     JOIN stakeholder s ON s.id=p.supplier_id
                 WHERE order_id=$order->id
-                GROUP BY 1,2,3,4,product_id,p.image,d.id
+                GROUP BY 1,2,3,4,product_id,p.image,d.id,p.thumbnail
                 ORDER BY d.id";
             $detail = DB::select($sql);
 

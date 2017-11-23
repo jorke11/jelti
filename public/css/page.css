@@ -133,12 +133,11 @@ body{
 
 .img-subcategory{
     -webkit-transition: all .6s ease;
-    opacity: .6;
 }
 .img-subcategory:hover{
-    opacity: 1;
     border-radius: 200px;
     /*box-shadow: 0px 0px 20px #ddd;*/
+   
     -webkit-transform: scale(1) rotate(360deg)
 }
 

@@ -28,7 +28,7 @@ Route::get('/', function () {
     $newproducts = DB::table("vproducts")->where("status_id", 1)->where("category_id", "<>", -1)->where("category_id", "<>", 19)->whereNotNull("image")->get();
 //       dd($newproducts);
     $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
-   
+//dd($subcategory)
     return view('page', compact("category", "subcategory", "newproducts"));
 });
 

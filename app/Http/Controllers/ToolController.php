@@ -330,8 +330,8 @@ class ToolController extends Controller {
                     $char = array();
 
                     if ($pro != null) {
-                       
-                        $edit= Products::find($pro->id);
+
+                        $edit = Products::find($pro->id);
                         if ($book->acerca_del_producto != '') {
                             $edit->about = $book->acerca_del_producto;
                         }
@@ -341,7 +341,7 @@ class ToolController extends Controller {
                         if ($book->ingredientes != '') {
                             $edit->ingredients = $this->cleanText($book->ingredientes);
                         }
-                        
+
                         $edit->save();
                         echo $pro->title . " " . $pro->reference . "<br>";
                     } else {
@@ -362,9 +362,9 @@ class ToolController extends Controller {
         $list = shell_exec($cmd);
 
         $list = explode("\n", $list);
-        $list= array_filter($list);
+        $list = array_filter($list);
 //        dd($list);
-        
+
         foreach ($list as $value) {
             if (is_file($value)) {
                 $manager = new ImageManager(array('driver' => 'imagick'));
@@ -373,7 +373,7 @@ class ToolController extends Controller {
 
                 $cod = substr($image->basename, 0, strpos($image->basename, "-"));
                 $cod = explode("_", $cod);
-                
+
                 $pro = Characteristic::find($cod[1]);
 
                 if ($pro != null) {
@@ -392,8 +392,11 @@ class ToolController extends Controller {
                     $pro->img = $pathsys;
                     $pro->order = $cod[0];
 
-                    $pro->save();
-                    echo $path . "<br>";
+                    $res = $pro->save();
+
+                    var_dump($res);
+                    echo $pro->img . "<br>";
+                    $cod = array();
                 } else {
                     echo "Rechazado: " . $value . "<br>";
                 }
@@ -415,7 +418,7 @@ class ToolController extends Controller {
 
                 $cod = substr($image->basename, 0, strpos($image->basename, "-"));
                 $cod = explode("_", $cod);
-                
+
                 $pro = Characteristic::find($cod[1]);
 
                 if ($pro != null) {
@@ -433,8 +436,9 @@ class ToolController extends Controller {
 
                     $pro->alternative = $pathsys;
 
-                    $pro->save();
-                    echo $path . "<br>";
+                    $res = $pro->save();
+                    var_dump($res);
+                    echo $pro->img . "<br>";
                 } else {
                     echo "Rechazado: " . $value . "<br>";
                 }

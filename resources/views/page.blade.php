@@ -215,7 +215,7 @@
                                                     </a>
                                                 </div>
                                                 <?php
-                                                         $cont++;
+                                                $cont++;
                                                 if ($cont == 6) {
                                                     $cont = 0;
                                                     ?>
@@ -225,7 +225,6 @@
                                                 <div class="row">
                                                     <?php
                                                 }
-                                       
                                             }
                                         }
                                         ?>
@@ -272,7 +271,7 @@
                                             </div>
                                             <?php
                                             $cont++;
-                                            if ($cont == 4) {
+                                            if ($cont == 6) {
                                                 $cont = 0;
                                                 ?>
                                             </div>
@@ -313,16 +312,42 @@
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
                 </div>
-                <div class="row row-space"  style="padding-bottom: 5%">
-                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
-                        @foreach($subcategory as $val)
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <div class="row"><div class="col-lg-12 col-md-12"><p class="text-center color-font">{{ucwords($val->description)}}</p></div></div>
-                            <div class="row"><div class="col-lg-12 col-md-12"><img src="{{$val->img}}" alt="" class="img-responsive center-block img-subcategory"></div></div>
+
+                <div class="row row-space">
+                    <div class="col-lg-8 col-lg-offset-2 ">
+                        <div class="carousel slide media-carousel" id="newproducts">
+                            <div class="carousel-inner">
+                                <div class="item  active">
+                                    <div class="row">
+                                        <?php
+                                        $cont = 0;
+                                        foreach ($subcategory as $i => $val) {
+                                            ?>
+                                            <div class="col-md-1 col-sm-2" style="width: 14%">
+                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="img/frezedetay.png">
+                                                    <img src="{{$val->img}}" alt="">
+                                                </a>
+                                            </div>
+                                            <?php
+                                            $cont++;
+                                            if ($cont == 7) {
+                                                $cont = 0;
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="row">
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        @endforeach
                     </div>
                 </div>
+
 
                 <div class="row green-bk">
                     <div class="col-lg-12">

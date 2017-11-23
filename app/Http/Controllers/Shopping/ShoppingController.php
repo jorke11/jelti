@@ -28,7 +28,7 @@ class ShoppingController extends Controller {
     public function getDetailProduct($id) {
         $category = Categories::find($id);
 //        dd($category);
-        $products = Products::where("category_id", $id)->paginate(8);
+        $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->paginate(10);
 //        dd($products);
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
         return view("Ecommerce.shopping.detail", compact("products", "category", "subcategory"));
@@ -39,10 +39,12 @@ class ShoppingController extends Controller {
     }
 
     public function getProduct($id) {
-        $product = Products::findOrFail($id);
+        $product = DB::table("vproducts")->where("id",$id)->first();
+       
         $detail = ProductsImage::where("product_id", $id)->get();
-        $relations = Products::where("category_id", $product->category_id)->get();
+        $relations = DB::table("vproducts")->where("category_id", $product->category_id)->whereNotNull("image")->get();
         $supplier = Stakeholder::find($product->supplier_id);
+//         dd($relations);
         return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier"));
     }
 

@@ -9,22 +9,38 @@
     @endif
 </div>
 
-<div class="row" style="padding-bottom: 3%">
-    <div class="col-lg-8 col-lg-offset-2">
-        @foreach($subcategory as $val)
-        <div class="col-lg-2">
-            <div class="row">
-                <div class="row hover01"><div class="col-lg-12"><figure><img id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer" onclick="obj.selectedSubcategory()"></figure></div></div>
-            </div>
-            <div class="row" style="padding-top: 1%">
-                <div class="col-lg-12" style="padding-top: 10%">
-                    <p class="text-center" style="color:#9b9b9b">{{ucwords($val->description)}}</p>
+<div class="row row-space">
+    <div class="col-lg-8 col-lg-offset-2 ">
+        <div class="carousel slide media-carousel" id="newproducts">
+            <div class="carousel-inner">
+                <div class="item  active">
+                    <div class="row" style="padding-top: 2%;padding-bottom: 2%">
+                        <?php
+                        $cont = 0;
+                        foreach ($subcategory as $i => $val) {
+                            ?>
+                            <div class="col-md-1 col-sm-2 img-subcategory" style="width: 14%">
+                                <a class="fancybox thumbnail" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
+                                    <img src="{{url($val->img)}}" alt="">
+                                </a>
+                            </div>
+                            <?php
+                            $cont++;
+                            if ($cont == 7) {
+                                $cont = 0;
+                                ?>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="row">
+                                <?php
+                            }
+                        }
+                        ?>
+                    </div>
                 </div>
-
             </div>
-
         </div>
-        @endforeach
     </div>
 </div>
 
@@ -36,7 +52,7 @@
         ?>
         @foreach($products as $i => $value)
 
-        <div class="col-sm-3 col-lg-3 col-md-3">
+        <div class="col-sm-2 col-lg-2 col-md-3" style="width: 20%">
             <div class="thumbnail" style="border: 0;padding: 0">
                 <div class="row" style="padding-bottom: 2%;padding-top: 2%">
                     <div class="col-lg-12">
@@ -57,7 +73,8 @@
                         </div>
                     </div>
                 </div>
-                <img src="http://via.placeholder.com/420x250">
+                <!--<img src="http://via.placeholder.com/420x250">-->
+                <img src="{{url($value->image)}}">
                 <div class="caption">
                     <h5 class="text-center"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400">{{$value->title}}</a></h5>
                     @if(!Auth::guest())
@@ -82,7 +99,7 @@
         </div>
         <?php
         $cont++;
-        if ($cont == 4) {
+        if ($cont == 5) {
             $cont = 0;
             ?>
         </div>

@@ -83,6 +83,7 @@
         </style>
 
         {!!Html::style('/css/client.css')!!}
+        {!!Html::style('/css/page.css')!!}
 
         {!!Html::script('/vendor/toastr/toastr.min.js')!!}
         {!!Html::style('/vendor/toastr/toastr.min.css')!!}

@@ -265,7 +265,7 @@
                                         foreach ($newproducts as $i => $val) {
                                             ?>
                                             <div class="col-md-2 col-sm-2">
-                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="img/frezedetay.png">
+                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
                                                     <img src="{{$val->image}}" alt="">
                                                 </a>
                                             </div>
@@ -318,13 +318,14 @@
                         <div class="carousel slide media-carousel" id="newproducts">
                             <div class="carousel-inner">
                                 <div class="item  active">
-                                    <div class="row">
+                                    <div class="row" style="padding-top: 2%;padding-bottom: 2%;padding-left: 3%">
                                         <?php
                                         $cont = 0;
                                         foreach ($subcategory as $i => $val) {
                                             ?>
-                                            <div class="col-md-1 col-sm-2" style="width: 14%">
-                                                <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="img/frezedetay.png">
+                                            <div class="col-md-1 col-sm-2 " style="width: 14%">
+                                                <h4 class="text-center">{{$val->description}}</h4>
+                                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="img/frezedetay.png">
                                                     <img src="{{$val->img}}" alt="">
                                                 </a>
                                             </div>

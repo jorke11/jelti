@@ -728,27 +728,61 @@
             </div>
         </div>
 
-<!--        <div class="container-fluid" style="padding-top: 2%;padding-bottom: 2%;background-color: rgba(0,0,0,.8)">
-            <div class="row">
-                <div class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-4 col-sm-5 col-sm-offset-5">
+        <!--        <div class="container-fluid" style="padding-top: 2%;padding-bottom: 2%;background-color: rgba(0,0,0,.8)">
                     <div class="row">
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <img src="assets/images/fb_icon.png">
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <img src="assets/images/ig_icon.png">
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <img src="assets/images/tw_icon.png">
+                        <div class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-4 col-sm-5 col-sm-offset-5">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <img src="assets/images/fb_icon.png">
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <img src="assets/images/ig_icon.png">
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <img src="assets/images/tw_icon.png">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
+
+<!--        <div class="container-fluid">
+            <div class="row">
+                <img src="images/footer.png" style="width: 100%;height: 450px">
             </div>
         </div>-->
 
-        <div class="container-fluid">
+        <div class="container-fluid" style="background-color: rgba(0,0,0,.8)">
             <div class="row">
-                <img src="images/footer.png" style="width: 100%;height: 500px">
+                <div class="col-lg-4 col-md-4 col-sm-4" >
+                    <div class="row" style="padding-top: 10%;padding-bottom: 3%">
+                        <div class="col-lg-12">
+                            <h3 style="color:white" class="col-lg-offset-1">Nosotros</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1 text-justify">
+                                Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="row" style="padding-top: 20%;padding-bottom: 3%">
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-lg-offset-3">
+                            <p class="text-center"><img src="/images/facebook.png" class="img-responsive"></p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-4">
+                            <img src="/images/instagram.png">
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-4">
+                            <img src="/images/twitter.png">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-lg-offset-1" style="padding-top: 2%;padding-bottom: 3%">
+                    <img src="/images/aliados.png">
+                </div>
             </div>
         </div>
         <!--        <div class="container-fluid">

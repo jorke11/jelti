@@ -96,7 +96,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             @if(!Auth::guest())
-                            <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control" style="background-color: #30c594">COMPRAS</a>
+                            <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control" style="background-color: #30c594">COMPRAR</a>
                             @else
                             <a href="/login" class="btn btn-success form-control">Comprar</a>
                             @endif

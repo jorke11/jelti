@@ -728,7 +728,7 @@
             </div>
         </div>
 
-        <div class="container-fluid" style="padding-top: 2%;padding-bottom: 2%">
+<!--        <div class="container-fluid" style="padding-top: 2%;padding-bottom: 2%;background-color: rgba(0,0,0,.8)">
             <div class="row">
                 <div class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-4 col-sm-5 col-sm-offset-5">
                     <div class="row">
@@ -744,80 +744,85 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="container-fluid">
-            <div class="row grey-bk" style="background-color:#fffcf8">
-                <div class="col-lg-4 col-md-4 col-sm-4">
-                    <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%;">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h3 style="color:white" class="col-lg-offset-1">Nosotros</h3>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12">
-                                <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1">
-                                    Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4">
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <h3>Aliados</h3>
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="/images/endeavor.png">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="/images/innpulsa.png">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="/images/emprende.png">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4">
-                    <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-12  text-center">
-                                <h1 style="color:white">Noticias Recientes</h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div>-->
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <hr>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <p class="fancybox">SuperFüds 2017. Todos los Derechos Reservados.</p>
-                </div>
+                <img src="images/footer.png" style="width: 100%;height: 500px">
             </div>
         </div>
+        <!--        <div class="container-fluid">
+                    <div class="row grey-bk" style="background-color:#fffcf8">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%;">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h3 style="color:white" class="col-lg-offset-1">Nosotros</h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
+                                        <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1">
+                                            Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <h3>Aliados</h3>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <img src="/images/endeavor.png">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <img src="/images/innpulsa.png">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <img src="/images/emprende.png">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-12  text-center">
+                                        <h1 style="color:white">Noticias Recientes</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+
+        <!--        <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <p class="fancybox">SuperFüds 2017. Todos los Derechos Reservados.</p>
+                        </div>
+                    </div>
+                </div>-->
 
 
     </body>

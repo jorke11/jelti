@@ -1,9 +1,14 @@
 @extends('layouts.client')
 @section('content')
+<style>
+    .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+            background-color: #30c594
+    }
+</style>
 
-<div class="row" style="padding-bottom: 3%">
+<div class="row" style="padding-bottom: 3%;padding-top: 3%">
     @if($category->banner!='')
-    <img src="{{($category->banner)}}" class="img-responsive" style="width: 100%">
+    <img src="{{url("/")."/".($category->banner)}}" class="img-responsive" style="width: 100%">
     @else
     <img src="http://via.placeholder.com/2000x180" class="img-responsive">
     @endif
@@ -14,20 +19,20 @@
         <div class="carousel slide media-carousel" id="newproducts">
             <div class="carousel-inner">
                 <div class="item  active">
-                    <div class="row" style="padding-top: 2%;padding-bottom: 2%">
+                    <div class="row" style="padding-top: 1%;padding-bottom: 1%">
                         <?php
                         $cont = 0;
                         foreach ($subcategory as $i => $val) {
                             
                             ?>
-                            <div class="col-md-1 col-sm-2 " style="width: 14%">
+                        <div class="col-md-1" >
                                 <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
                                     <img src="{{url($val->img)}}" alt="">
                                 </a>
                             </div>
                             <?php
                             $cont++;
-                            if ($cont == 7) {
+                            if ($cont == 11) {
                                 $cont = 0;
                                 ?>
                             </div>
@@ -82,16 +87,16 @@
                 </div>
                 <img src="{{url("/")."/".$value->image}}">
                 <div class="caption">
-                    <h5 class="text-center"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400">{{$value->title}}</a></h5>
+                    <h5 class="text-center" style="height: 30px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;">{{$value->title}}</a></h5>
                     @if(!Auth::guest())
                     <p>
-                    <h4 class="text-center" style="color:black;font-weight: 400">$ {{number_format($value->price_sf,2,",",".")}}</h4>
+                    <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,2,",",".")}}</h4>
                     </p>
                     @endif
                     <div class="row">
                         <div class="col-lg-12">
                             @if(!Auth::guest())
-                            <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control">Comprar</a>
+                            <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control" style="background-color: #30c594">COMPRAS</a>
                             @else
                             <a href="/login" class="btn btn-success form-control">Comprar</a>
                             @endif

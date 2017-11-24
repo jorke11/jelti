@@ -12,6 +12,7 @@ use App\Models\Administration\Characteristic;
 use App\Models\Inventory\Orders;
 use App\Models\Inventory\OrdersDetail;
 use App\Models\Administration\Stakeholder;
+use App\Models\Blog\Feedback;
 use Auth;
 use DB;
 
@@ -41,7 +42,7 @@ class ShoppingController extends Controller {
 
             $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->paginate(10);
         }
-        
+
         foreach ($products as $i => $value) {
             $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));
             $cod = explode(",", $cod);
@@ -52,10 +53,10 @@ class ShoppingController extends Controller {
                 $products[$i]->characteristic = $cha;
             }
         }
-        
-      
 
-        
+
+
+
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
 //        dd($subcategory);
@@ -72,16 +73,27 @@ class ShoppingController extends Controller {
         $detail = ProductsImage::where("product_id", $id)->get();
         $relations = DB::table("vproducts")->where("category_id", $product->category_id)->whereNotNull("image")->get();
         $supplier = Stakeholder::find($product->supplier_id);
-//         dd($relations);
+        $cod = str_replace("]", "", str_replace("[", "", $product->characteristic));
+        $cod = explode(",", $cod);
+        $cod = array_filter($cod);
+
+        if (count($cod) > 0) {
+            $cha = Characteristic::whereIn("id", $cod)->get();
+            $product->characteristic = $cha;
+        }
+
         return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier"));
     }
 
     public function addComment(Request $req) {
         $data = $req->all();
-        $data["stakeholder_id"] = Auth::user()->id;
-        Comment::create($data);
-        $detail = $this->getComment($data["product_id"]);
-        return response()->json($detail);
+
+//        dd($data);
+        $data["user_id"] = Auth::user()->id;
+        $data["type_id"] = 1;
+        $data["row_id"] = $data["product_id"];
+        Feedback::create($data);
+        return $this->getComment($data["product_id"]);
     }
 
     public function managementOrder(Request $req) {
@@ -123,12 +135,11 @@ class ShoppingController extends Controller {
     }
 
     public function getComment($product_id) {
-        return DB::table("comments")
-                        ->select("comments.description", "stakeholder.name", "comments.created_at")
-                        ->join("stakeholder", "stakeholder.id", "comments.stakeholder_id")
-                        ->where("product_id", $product_id)
-                        ->orderBy("comments.id", "DESC")
-                        ->get();
+        $feed = Feedback::select("feedback.id", "feedback.title", "users.name", "users.last_name", "feedback.content", "feedback.created_at")
+                        ->join("users", "users.id", "feedback.user_id")
+                        ->where("row_id", $product_id)->get();
+
+        return response()->json($feed);
     }
 
 }

@@ -10,7 +10,6 @@ Route::get('/getComment/{id}', 'Shopping\ShoppingController@getComment');
 
 
 Route::get('/comments', 'MainController@getcomments');
-Route::get('/comments', 'MainController@getcomments');
 Route::get('/comments/list/{id}', 'MainController@listComments');
 
 Route::get('/payment', 'Shopping\PaymentController@index');

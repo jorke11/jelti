@@ -2,12 +2,15 @@ function detailProduct() {
     this.init = function () {
         $("#addComment").click(this.addComment);
         $("#AddProduct").click(this.addProduct);
+        $("#btnOpenModal").click(this.modalComment);
         $("#contentComment").empty();
         this.getComment();
         this.getQuantity();
     }
 
     this.modalComment = function () {
+        $("#txtTitle").val("");
+        $("#txtComment").val("");
         $("#modalComment").modal("show");
     }
 
@@ -54,31 +57,72 @@ function detailProduct() {
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {
-                $.each(data, function (i, val) {
-                    html += '<a href="#" class="list-group-item"><span class="label label-success">' + val.name + '</span> ' + val.description + ' <div class="pull-right">' + val.created_at + '</div></a>'
-                })
-
-                $("#contentComment").html(html);
+                obj.loadTable(data);
             }
         })
     }
 
+    this.loadTable = function (data) {
+        var html = '';
+        $.each(data, function (i, val) {
+            html += `
+                        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>${val.title}</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p class="text-muted">${val.name} ${val.last_name}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p class="text-muted">${val.created_at}</p>
+                            </div>
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-lg-12">
+                                <p class="text-justify">
+                                   ${val.content}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style='cursor: pointer;font-size: 25px;'></span>&nbsp;<span class="badge">42</span>&nbsp;&nbsp;
+                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style='cursor: pointer;font-size: 25px'></span>&nbsp;<span class="badge">0</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="glyphicon glyphicon-comment" aria-hidden="true" style='cursor: pointer;font-size: 25px' onclick="obj.modalComment({{$product->id}})"></span>&nbsp;<span class="badge" >0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`
+                    ;
+        })
+
+        $("#contentComment").html(html);
+    }
+
     this.addComment = function () {
         var html = "";
-        var obj = {};
-        obj.product_id = $("#product_id").val();
-        obj.description = $("#txtComment").val();
+        var param = {};
+        param.product_id = $("#product_id").val();
+        param.content = $("#txtComment").val();
+        param.title = $("#txtTitle").val();
         $.ajax({
             url: PATH + '/addComment',
             method: 'POST',
-            data: obj,
+            data: param,
             dataType: 'JSON',
             success: function (data) {
-                $.each(data, function (i, val) {
-                    html += '<a href="#" class="list-group-item"><span class="label label-success">' + val.name + '</span> ' + val.description + ' <div class="pull-right">' + val.created_at + '</div></a>'
-                })
-
-                $("#contentComment").html(html);
+                obj.loadTable(data)
+                $("#modalComment").modal("hide");
             }
         })
 

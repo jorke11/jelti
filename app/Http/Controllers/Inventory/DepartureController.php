@@ -544,6 +544,7 @@ class DepartureController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
+            
 //            unset($input["id"]);
 //            $user = Auth::User();
 

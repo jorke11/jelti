@@ -268,7 +268,7 @@ function Departure() {
             dataType: 'JSON',
             success: function (resp) {
                 $("#frm #destination_id").setFields({data: {destination_id: resp.response.send_city_id}});
-                $("#frm #address").val(resp.response.address_invoice);
+                $("#frm #address").val(resp.response.address_send);
             }
         })
     }
@@ -313,7 +313,7 @@ function Departure() {
         $.each(data, function (i, val) {
             val.business = (val.business == null) ? '' : val.business;
             selected = (val.id == selected_id) ? 'selected' : '';
-            html += '<option value="' + val.id + '" ' + selected + '>' + val.business + ' ' + val.address_invoice + "</option>";
+            html += '<option value="' + val.id + '" ' + selected + '>' + val.business + ' ' + val.address_send + "</option>";
         })
 
         $("#frm #branch_id").html(html);

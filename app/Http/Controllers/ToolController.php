@@ -369,7 +369,7 @@ class ToolController extends Controller {
             if (is_file($value)) {
                 $manager = new ImageManager(array('driver' => 'imagick'));
 
-                $image = $manager->make($value);
+                $image = $manager->make($value)->widen(700);
 
                 $cod = substr($image->basename, 0, strpos($image->basename, "-"));
                 $cod = explode("_", $cod);
@@ -414,7 +414,7 @@ class ToolController extends Controller {
             if (is_file($value)) {
                 $manager = new ImageManager(array('driver' => 'imagick'));
 
-                $image = $manager->make($value);
+                $image = $manager->make($value)->widen(700);
 
                 $cod = substr($image->basename, 0, strpos($image->basename, "-"));
                 $cod = explode("_", $cod);

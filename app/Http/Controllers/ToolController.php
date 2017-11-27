@@ -125,7 +125,7 @@ class ToolController extends Controller {
             if (is_file($value)) {
                 $manager = new ImageManager(array('driver' => 'imagick'));
 
-                $image = $manager->make($value);
+                $image = $manager->make($value)->widen(700);
                 if ($image->width() > 2000) {
                     $width = $image->width() - round($image->width() * 0.95);
                     $heigth = $image->height() - round($image->height() * 0.95);

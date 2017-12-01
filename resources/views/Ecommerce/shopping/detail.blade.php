@@ -74,7 +74,7 @@
                                     <div class="row">
                                         <div class="row hover01">
                                             <div class="col-lg-12">
-                                                <img width="60%" id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer">
+                                                <img width="60%" id="sub_{{$val->id}}" src="/{{$val->thumbnail}}" alt="" class="img-responsive center-block" style="cursor:pointer">
                                             </div>
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@
                         </div>
                     </div>
                 </div>
-                <img src="{{url("/")."/".$value->image}}">
+                <img src="{{url("/")."/".$value->thumbnail}}">
                 <div class="caption">
                     <h5 class="text-center" style="height: 30px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;">{{$value->title}}</a></h5>
                     @if(!Auth::guest())

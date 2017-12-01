@@ -6,12 +6,9 @@ function Operations() {
         this.tableClientAverage();
         this.tableShipping_cost();
         this.tableMaxMin();
-<<<<<<< HEAD
-        this.tableNivelService();
-=======
+
         this.tableNivel();
         this.tableNoShipped();
->>>>>>> 2fda6f0d33acb43976c1f98090ef21830b178e61
 
         var init = $("#Detail #finit").val();
         var end = $("#Detail #fend").val();

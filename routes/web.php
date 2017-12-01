@@ -29,7 +29,9 @@ Route::get('/', function () {
             ->where("category_id", "<>", -1)
             ->where("category_id", "<>", 19)
             ->whereNotNull("image")
-//            ->orderBy("order", "asc")
+            ->orderBy("supplier", "asc")
+            ->orderBy("category_id")
+            ->orderBy("reference")
             ->get();
 //       dd($newproducts);
     $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();

@@ -127,11 +127,11 @@ class ToolController extends Controller {
 
                 $image = $manager->make($value)->widen(700);
                 if ($image->width() > 2000) {
-                    $width = $image->width() - round($image->width() * 0.95);
-                    $heigth = $image->height() - round($image->height() * 0.95);
+                    $width = $image->width() - round($image->width() * 0.70);
+                    $heigth = $image->height() - round($image->height() * 0.70);
                 } else {
-                    $width = $image->width() - round($image->width() * 0.90);
-                    $heigth = $image->height() - round($image->height() * 0.90);
+                    $width = $image->width() - round($image->width() * 0.70);
+                    $heigth = $image->height() - round($image->height() * 0.70);
                 }
 //
 //

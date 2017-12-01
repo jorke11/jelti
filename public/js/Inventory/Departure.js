@@ -978,7 +978,7 @@ function Departure() {
         param.responsible_filter = $("#responsible_filter").val();
         param.id_filter = $("#id_filter").val();
         param.invoice_filter = $("#invoice_filter").val();
-        
+
         var html = '';
         table = $('#tbl').DataTable({
             "dom":
@@ -994,7 +994,7 @@ function Departure() {
                 beforeSend: function (request) {
                     $("#loading-super").removeClass("hidden");
                 },
-                complete:function(){
+                complete: function () {
                     $("#loading-super").addClass("hidden");
                 }
             },
@@ -1018,18 +1018,8 @@ function Departure() {
                 {data: "city"},
                 {data: "quantity"},
                 {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0)},
-                {data: "subtotalnumeric", render: function (data, type, row) {
-                        var total = (row.status_id == 1) ? row.subtotalnew : row.subtotalnumeric;
-                        total = parseFloat(total)
-                        return obj.formatCurrency(total, '$')
-                    }
-                },
-                {data: "total", render: function (data, type, row) {
-                        var total = (row.status_id == 1) ? row.totalnew : row.total;
-                        total = parseFloat(total);
-                        return obj.formatCurrency(total, '$')
-                    }
-                },
+                {data: "subtotalnumeric", render: $.fn.dataTable.render.number('.', ',', 0)},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "status"},
                 {data: "total", render: function (data, type, row) {
                         if (row.status_id == 5) {

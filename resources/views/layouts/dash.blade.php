@@ -125,6 +125,7 @@
                                     <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/shopping">Shopping</a></li>
+                                            <li><a href="/blog">Blog</a></li>
                                         </ul>
                                     </li>
                                     @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)

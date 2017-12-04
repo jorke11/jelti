@@ -8,6 +8,7 @@ Route::get('/imagecategory', 'ToolController@readImagesCategory');
 Route::get('/imagesubcategory', 'ToolController@readImagesSubCategory');
 Route::get('/excelcategory', 'ToolController@excelCategory');
 Route::get('/exceldescription', 'ToolController@excelDescription');
+Route::get('/exceltitle', 'ToolController@excelTitle');
 
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}', "ToolController@addInventory");

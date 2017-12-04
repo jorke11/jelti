@@ -29,13 +29,17 @@ class BlogController extends Controller {
     }
 
     public function index() {
+        $last = Post::orderBy("created_at", "desc")->first();
         $data = Post::paginate(10);
-        return view("Blog.content.init", compact("data"));
+
+        return view("Blog.content.init", compact("data", "last"));
     }
 
     public function getDetail($slug) {
         $data = Post::findBySlug($slug);
-        return view("Blog.content.detail", compact("data"));
+        $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->get();
+//        dd($products);
+        return view("Blog.content.detail", compact("data", "products"));
     }
 
     public function getAllPost() {
@@ -73,9 +77,9 @@ class BlogController extends Controller {
             $row = Post::find($res->id);
 
             $row->img = 'uploads/blog/' . $res->id . '/' . $file->getClientOriginalName();
-            $image->save($path . $file->getClientOriginalName());
+            $image->save($path . $file->getClientOriginalName())->widen(800);
 
-            $image->resize(400, 300);
+            $image->resize(400, 250);
             $row->thumbnail = 'uploads/blog/' . $res->id . '/thumbmail/' . $file->getClientOriginalName();
             $image->save($paththumb . $file->getClientOriginalName());
             $row->save();
@@ -85,8 +89,10 @@ class BlogController extends Controller {
     }
 
     public function update(Request $req, $id) {
+        $in = $req->all();
+        unset($in["img"]);
         $row = Post::find($id);
-        $row->fill($req->all());
+        $row->fill($in);
         $row->save();
         return redirect()->route("admin.blog");
     }
@@ -112,7 +118,7 @@ class BlogController extends Controller {
     }
 
     public function listProducts() {
-        $products = DB::table("vproducts")->where("status_id","<>", 1)->paginate(10);
+        $products = DB::table("vproducts")->where("status_id", "<>", 1)->paginate(10);
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
         return view("Blog.content.listproduct", compact("products", "subcategory"));

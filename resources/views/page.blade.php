@@ -423,7 +423,7 @@
                                     <div class="item">
                                         <div class="header-text hidden-xs">
                                             <div class="col-md-12 col-center">
-                                                <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">Nos aseguramos de tener los mejores precios para que puedas ahorrar tiempo y dinero</h2>
+                                                <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">Nos aseguramos de tener <br>los mejores precios para que <br>puedas ahorrar tiempo y dinero</h2>
                                                 <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
                                             </div>
                                         </div> 

@@ -312,6 +312,35 @@ class ToolController extends Controller {
             }
         });
     }
+    
+    public function excelTitle() {
+        $cmd = 'find  ' . public_path() . '/excel/ -name "Nombres*.xlsx"';
+
+        $list = shell_exec($cmd);
+
+        $list = explode("\n", $list);
+        $list = array_filter($list);
+              
+        
+
+        Excel::load($list[0], function($reader) {
+
+            foreach ($reader->get() as $i => $book) {
+                
+                
+                $pro = Products::where("reference", (int) $book->sf_code)->first();
+                $char = array();
+                if ($pro != null) {
+                    $pro->short_description = $book->title;
+                    $pro->save();
+                    echo $pro->title . " " . print_r($char, true) . "<br>";
+                } else {
+                    print_r($book);
+                    echo "<br>";
+                }
+            }
+        });
+    }
 
     public function excelDescription() {
         $cmd = 'find  ' . public_path() . '/excel/ -name "Super*.xlsx"';

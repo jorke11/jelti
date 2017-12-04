@@ -34,7 +34,7 @@ class ShoppingController extends Controller {
 
             $category = Categories::find($id);
 
-            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->paginate(10);
+            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(10);
         } else {
 
             $category = Categories::find($id);
@@ -52,14 +52,13 @@ class ShoppingController extends Controller {
                 $cha = Characteristic::whereIn("id", $cod)->get();
                 $products[$i]->characteristic = $cha;
             }
+
+            $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);
         }
-
-
 
 
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
-//        dd($subcategory);
         return view("Ecommerce.shopping.detail", compact("products", "category", "subcategory"));
     }
 

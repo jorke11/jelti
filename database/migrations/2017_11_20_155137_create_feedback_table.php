@@ -18,6 +18,8 @@ class CreateFeedbackTable extends Migration {
             $table->integer('type_id');
             $table->text('title');
             $table->text('content');
+            $table->text('email');
+            $table->text('name');
             $table->timestamps();
         });
     }

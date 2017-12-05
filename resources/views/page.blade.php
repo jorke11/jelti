@@ -16,14 +16,7 @@
         {!!Html::script('/vendor/toastr/toastr.min.js')!!}
         {!!Html::style('/vendor/toastr/toastr.min.css')!!}
 
-        <script>
-            $(document).ready(function ($) {
-                var ventana_ancho = $(window).width();
-                var ventana_alto = $(window).height();
-                console.log(ventana_ancho);
-                console.log(ventana_alto);
-            });
-        </script>
+
         {!!Html::script('/vendor/template/vendors/bootstrap/dist/js/bootstrap.min.js')!!}
 
         <!-- Add the slick-theme.css if you want default styling -->
@@ -35,7 +28,7 @@
 
             #buttonMain{
                 position: absolute;
-                top:60%;
+                top:70%;
                 left:55%;
                 display: inline-block;
                 outline: none;
@@ -54,17 +47,23 @@
 
 
     <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12" style="padding: 0">
+                    <header id="headervideo" style="padding-top: 3%"> 
+                        <video autoplay="autoplay" loop="loop" id="video_background" preload="auto" volume="50" style="width:100%">
+                     <!--<source src="images/fondo.mpeg" type="video/mpeg" />-->
+                            <source src="images/fondo.mp4" type="video/mp4" />
+                        </video>
+                        <button type="button" class="btn btn-primary btn-lg" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
+                            Registrate como<br>
+                            <span style="font-weight: 900;font-size: 30px">Cliente o Proveedor</span>
+                        </button>
+                    </header>
+                </div>
+            </div>
+        </div>
 
-        <header id="headervideo" style="padding-top: 3%"> 
-            <video autoplay="autoplay" loop="loop" id="video_background" preload="auto" volume="50" style="width:100%">
-         <!--<source src="images/fondo.mpeg" type="video/mpeg" />-->
-                <source src="images/fondo.mp4" type="video/mp4" />
-            </video>
-            <button type="button" class="btn btn-primary btn-lg" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
-                Registrate como<br>
-                <span style="font-weight: 900;font-size: 30px">Cliente o Proveedor</span>
-            </button>
-        </header>
         <!-- Button trigger modal -->
 
         <style>
@@ -161,8 +160,8 @@
                 <ul class="nav navbar-nav">
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/" style="color:#00c98a;font-size:17px;font-weight: 100" ><span class="underline-green">Inicio</span></a></li>
-                    <li><a href="#divProduct" style="color:#00c98a;font-size:17px;font-weight: 100">Productos</a></li>
+                    <li><a href="/" style="color:#00c98a;font-size:17px;font-weight: 100" ><span class="underline-green" id="menuInicio">Inicio</span></a></li>
+                    <li><a href="#divProduct" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
                     <li><a href="/blog" style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
                     <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
                     <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
@@ -430,7 +429,7 @@
                                     </div>
 
                                 </div>
-                             
+
 
                                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
                                     <span class="glyphicon glyphicon-chevron-left"></span>
@@ -599,7 +598,6 @@
                                     </div>
                                 </div>
 
-
                                 <a class="left carousel-control" href="#myCarouselpro" data-slide="prev">
                                     <span class="glyphicon glyphicon-chevron-left" style="left:-1"></span>
                                     <span class="sr-only">Previous</span>
@@ -615,7 +613,6 @@
                 </div>
             </div>
         </div>
-
     </section>
 
 
@@ -712,8 +709,6 @@
         </div>
     </section>
 
-
-
     <section>
         <div class="container-fluid grey-bk" style="background-color:#fffcf8">
             <div class="row">
@@ -775,30 +770,6 @@
         </div>
     </div>
 
-    <!--        <div class="container-fluid" style="padding-top: 2%;padding-bottom: 2%;background-color: rgba(0,0,0,.8)">
-                <div class="row">
-                    <div class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-4 col-sm-5 col-sm-offset-5">
-                        <div class="row">
-                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                <img src="assets/images/fb_icon.png">
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                <img src="assets/images/ig_icon.png">
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                <img src="assets/images/tw_icon.png">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
-
-    <!--        <div class="container-fluid">
-                <div class="row">
-                    <img src="images/footer.png" style="width: 100%;height: 450px">
-                </div>
-            </div>-->
-
     <div class="container-fluid" style="background-color: rgba(0,0,0,.8)">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-4" >
@@ -848,81 +819,28 @@
             </div>
         </div>
     </div>
-    <!--        <div class="container-fluid">
-                <div class="row grey-bk" style="background-color:#fffcf8">
-                    <div class="col-lg-4 col-md-4 col-sm-4">
-                        <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%;">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h3 style="color:white" class="col-lg-offset-1">Nosotros</h3>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12">
-                                    <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1">
-                                        Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4">
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <h3>Aliados</h3>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <img src="/images/endeavor.png">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <img src="/images/innpulsa.png">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <img src="/images/emprende.png">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4">
-                        <div style="width:100%;height:270px;background-image:url({{ asset('images/nosotros_back.png') }}); background-repeat: no-repeat;background-size: 100% 100%; ">
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <div class="row">
-                                <div class="col-lg-12  text-center">
-                                    <h1 style="color:white">Noticias Recientes</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
-
-    <!--        <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <hr>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <p class="fancybox">SuperFüds 2017. Todos los Derechos Reservados.</p>
-                    </div>
-                </div>
-            </div>-->
-
-
 </body>
+<script>
+    $('#menuProduct').click(function () {
+        $("#menuProduct span").addClass("underline-green");
+        $("#menuInicio").removeClass("underline-green");
+        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+                && location.hostname == this.hostname) {
+
+            var $target = $(this.hash);
+
+            $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+
+            if ($target.length) {
+                var targetOffset = $target.offset().top;
+                $('html,body').animate({scrollTop: targetOffset}, 1000);
+                return false;
+            }
+        }
+
+    });
+
+</script>
 {!!Html::script('js/Page/page.js')!!}
 
 </html>

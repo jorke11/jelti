@@ -134,6 +134,8 @@
                     <h2 class="text-center">Comenta</h2>
                 </div>
             </div>
+            {!! Form::open(['id'=>'frm']) !!}
+            <input type="hidden" id="id" name='id' value="{{$data["id"]}}">
             <div class="row row-space">
                 <div class="col-lg-6 col-lg-offset-3">
                     <div class="row">
@@ -170,11 +172,56 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <button class="btn btn-success" style="width:100%;background-color: #30c594">Enviar</button>
+                            <button class="btn btn-success" style="width:100%;background-color: #30c594" type="submit">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+                {!!Form::close()!!}
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-space">
+        <div class="col-lg-7 col-lg-offset-3">
+            @foreach($comments as $val)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h4>{{$val->title}}</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p class="text-muted">{{$val->name}} {{$val->last_name}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p class="text-muted">{{$val->created_at}}</p>
+                                </div>
+                            </div>
+                            <div class="row row-space">
+                                <div class="col-lg-12">
+                                    <p class="text-justify">
+                                       {{$val->content}}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style='cursor: pointer;font-size: 25px;'></span>&nbsp;<span class="badge">42</span>&nbsp;&nbsp;
+                                    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style='cursor: pointer;font-size: 25px'></span>&nbsp;<span class="badge">0</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span class="glyphicon glyphicon-comment" aria-hidden="true" style='cursor: pointer;font-size: 25px' onclick="obj.modalComment({{$val->id}})"></span>&nbsp;<span class="badge" >0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
 

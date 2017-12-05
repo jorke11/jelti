@@ -1,6 +1,8 @@
 function Blog() {
     this.init = function () {
         $('#content').trumbowyg();
+        
+            
     }
 }
 

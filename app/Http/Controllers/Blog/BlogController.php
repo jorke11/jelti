@@ -36,10 +36,16 @@ class BlogController extends Controller {
     }
 
     public function getDetail($slug) {
+//        echo "asdasd";exit;
         $data = Post::findBySlug($slug);
+        
+        
         $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->get();
-//        dd($products);
-        return view("Blog.content.detail", compact("data", "products"));
+
+        $comments = Blog\Feedback::where("row_id", $data->id)->orderBy("created_at", "desc")->get();
+
+//        dd($comment);exit;
+        return view("Blog.content.detail", compact("data", "products", "comments"));
     }
 
     public function getAllPost() {
@@ -55,6 +61,27 @@ class BlogController extends Controller {
     public function create() {
         $row = array();
         return view("Blog.admin.new", compact("row"));
+    }
+
+    public function newComment(Request $req) {
+        $in = $req->all();
+        dd($in);
+        $new["title"] = $in["title"];
+        $new["content"] = $in["comment"];
+        $new["email"] = $in["email"];
+        $new["name"] = $in["name"];
+        $new["type_id"] = 1;
+        $new["row_id"] = $in["id"];
+
+        $res = Blog\Feedback::create($new);
+//        dd($res);
+
+        $data = Post::find($in["id"]);
+        $comments = Blog\Feedback::where("row_id", $in["id"])->orderBy("created_at", "desc")->get();
+        $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->get();
+
+//        dd($commmets);
+        return view("Blog.content.detail", compact("data", "products", "comments"));
     }
 
     public function store(Request $req) {
@@ -127,8 +154,7 @@ class BlogController extends Controller {
     public function newVisitan(Request $req) {
 
         $in = $req->all();
-//        print_r($in);
-//        exit;
+
         unset($in["_token"]);
         $email = Stakeholder::where("email", $in["email"])->get();
 
@@ -164,8 +190,6 @@ class BlogController extends Controller {
             $msj->subject($this->subject);
             $msj->to($this->mails);
         });
-
-
 
         return response()->json(["msg" => "Creados!", "status" => true]);
     }

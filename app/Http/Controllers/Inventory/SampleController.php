@@ -596,7 +596,7 @@ class SampleController extends Controller {
                 $val = SampleDetail::where("sample_id", $departure["id"])->count();
 
 
-                $dep = Sales::where("id", $input["id"])->where("status_id", 2)->get();
+                $dep = Sample::where("id", $input["id"])->where("status_id", 2)->get();
                 if ($val > 0) {
                     $val = SampleDetail::where("sample_id", $departure["id"])->where("status_id", 1)->count();
                     if ($val == 0) {
@@ -630,7 +630,7 @@ class SampleController extends Controller {
 
                                 $ware = Warehouses::find($departure->warehouse_id);
                                 $client = Stakeholder::find($departure->client_id);
-                                $sales = Sales::find($departure->id);
+                                $sales = Sample::find($departure->id);
                                 $this->mails = array();
 
                                 $userware = Users::find($ware->responsible_id);

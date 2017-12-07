@@ -17,6 +17,7 @@ use Image;
 use File;
 use Illuminate\Support\Facades\Input;
 use DB;
+use App\Models\Security\Users;
 
 class BlogController extends Controller {
 
@@ -36,16 +37,16 @@ class BlogController extends Controller {
     }
 
     public function getDetail($slug) {
-//        echo "asdasd";exit;
+        
         $data = Post::findBySlug($slug);
-        
-        
-        $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->get();
 
+
+        $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->get();
+        $writer = Users::find($data->user_id);
         $comments = Blog\Feedback::where("row_id", $data->id)->orderBy("created_at", "desc")->get();
 
 //        dd($comment);exit;
-        return view("Blog.content.detail", compact("data", "products", "comments"));
+        return view("Blog.content.detail", compact("data", "products", "comments", "writer"));
     }
 
     public function getAllPost() {
@@ -65,7 +66,7 @@ class BlogController extends Controller {
 
     public function newComment(Request $req) {
         $in = $req->all();
-        dd($in);
+//        dd($in);
         $new["title"] = $in["title"];
         $new["content"] = $in["comment"];
         $new["email"] = $in["email"];

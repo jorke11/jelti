@@ -20,7 +20,7 @@
                         {!!$data["content"]!!}
                     </p>
                     <div class="ratings" style="padding-bottom: 2%">
-                        <p class="pull-right">Mariana Villegas ({{date("Y-m-d",strtotime($data["created_at"]))}})</p>
+                        <p class="pull-right">{{$writer->name}} {{$writer->last_name}} ({{date("Y-m-d",strtotime($data["created_at"]))}})</p>
                     </div>
                 </div>
             </div>

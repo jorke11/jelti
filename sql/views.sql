@@ -68,55 +68,38 @@ WHERE p.type_product_id IS NOT NULL
 
 --drop view vdepartures;
 create view vdepartures as 
+
 select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,sta.business_name,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
 
-	CASE WHEN (d.status_id=1) THEN 
+	CASE WHEN (d.status_id IN(1,8)) THEN 
 		(select sum(quantity) from departures_detail where departure_id=d.id)
-		 WHEN (d.status_id=8) THEN 
-		(select sum(quantity) from departures_detail where departure_id=d.id)
-        ELSE
+		ELSE
 		(select sum(real_quantity) from departures_detail where departure_id=d.id)
 		 END as quantity,
-           
-            
-        CASE WHEN (d.status_id=1) 
-        THEN 
-		(select sum(quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
-        WHEN (d.status_id=8) 
+               
+        CASE WHEN (d.status_id IN(1,8)) 
         THEN 
 		(select sum(quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
         ELSE 
 		(select sum(real_quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
 		 END as quantity_packaging,
             
-        CASE WHEN (d.status_id=1) THEN 
-		(select (round(coalesce(sum(real_quantity * units_sf * value * tax),0) + coalesce(sum(real_quantity * units_sf * value),0))) 
+        CASE WHEN (d.status_id IN(1,8)) THEN 
+		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) 
          from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
-		 WHEN (d.status_id=8) 
-                THEN 
-		(
-                select (round(coalesce(sum(real_quantity * units_sf * value * tax),0) + coalesce(sum(real_quantity * units_sf * value),0))) 
-                from departures_detail 
-                    JOIN departures ON departures.id= departures_detail.departure_id 
-                where departure_id=d.id)
-         ELSE 
+		 ELSE 
 		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where departure_id=d.id)
-		 END+coalesce(d.shipping_cost,0)-coalesce(d.discount,0) +(Coalesce(d.shipping_cost,0) * coalesce(d.shipping_cost_tax,0) ) as total,
-		 
+		 END+coalesce(d.shipping_cost,0)-coalesce(d.discount,0) +(Coalesce(d.shipping_cost,0) * coalesce(d.shipping_cost_tax,0) ) 
+         as total,
+		
+        
 		 (select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id) 
 		 +coalesce(d.shipping_cost,0)-coalesce(d.discount,0) as totalnew,
 		 
 		CASE 
-        WHEN (d.status_id=1) 
-        THEN (select (round(coalesce(sum(real_quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
-		WHEN (d.status_id=8) 
-        THEN (
-                select (round(coalesce(sum(quantity * units_sf * value),0))) 
-                from departures_detail 
-                JOIN departures ON departures.id= departures_detail.departure_id 
-                where departure_id=d.id
-            )
+        WHEN (d.status_id IN(1,8)) 
+        THEN (select (round(coalesce(sum(quantity * units_sf * value),0))) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
         ELSE (
                 select coalesce(sum(real_quantity * units_sf * value),0) 
                 from departures_detail 
@@ -130,21 +113,17 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
          	where departure_id=d.id) 
             as subtotalnew,
             
-		CASE WHEN (d.status_id=1) THEN 
-		(select round(coalesce(sum(real_quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.19)
-		WHEN (d.status_id=8) THEN 
+		CASE WHEN (d.status_id IN (1,8)) THEN 
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.19)
-        ELSE
+		ELSE
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id and sales_detail.tax=0.19) 
             END as tax19,
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.19)
 		as tax19new,
             
-            CASE WHEN (d.status_id=1) THEN 
-		(select round(coalesce(sum(real_quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.05)
-        WHEN (d.status_id=7) THEN 
+            CASE WHEN (d.status_id IN(1,8)) THEN 
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.05)
-		ELSE
+        ELSE
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where sales.departure_id=d.id and sales_detail.tax=0.05) 
             END as tax5,
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.05)

@@ -219,7 +219,7 @@
         </div><!-- /.container-fluid -->
     </nav>
 
-    <section>
+    <section style="padding-top: 3%">
         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">

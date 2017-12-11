@@ -213,6 +213,7 @@
                                             <li><a href="/reportSales">Ventas</a></li>
                                             <li><a href="/reportPurchase">Compras</a></li>
                                             <li><a href="/profileClient">Perfil del Cliente</a></li>
+                                            <li><a href="/profileSupplier">Perfil del Proveedor</a></li>
                                             <li><a href="/overview">Resumen CEO</a></li>
                                             <li><a href="/comparative">Comparativo</a></li>
                                         </ul>

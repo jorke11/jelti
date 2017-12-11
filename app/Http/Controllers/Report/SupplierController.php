@@ -100,4 +100,10 @@ class SupplierController extends Controller {
         return response()->json(["data" => $res]);
     }
 
+    public function profile() {
+        $warehouse = \App\Models\Administration\Warehouses::all();
+
+        return view("Report.ProfileSupplier.init", compact("warehouse"));
+    }
+
 }

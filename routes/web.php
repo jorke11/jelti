@@ -527,9 +527,6 @@ Route::put('/briefcase/payInvoice/{id}', "Sales\BriefcaseController@payInvoice")
 Route::get('/briefcase/testnotificaction/{id}/{commercial}', "Sales\BriefcaseController@testNotification");
 Route::get('/briefcase/testPaidout/{id}', "Sales\BriefcaseController@testPaidout");
 
-Route::get('/profileClient', "Report\ClientController@profile");
-Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
-Route::get('profile/{id}/getRepurchase', "Report\ClientController@getRepurchase");
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 

@@ -14,7 +14,6 @@
 use App\Models;
 use Models\Administration\Categories;
 
-
 Route::get('/reportClient', "Report\ClientController@index");
 Route::get('/reportSamples', "Report\SampleController@index");
 Route::get('/reportOperations', "Report\OperationsController@index");
@@ -75,3 +74,8 @@ Route::get('operations/getProductDay', "Report\OperationsController@ProductDay")
 Route::get('comparative', "Report\ComparativeController@index");
 Route::get('comparatives/salesClient', "Report\ComparativeController@salesClient");
 
+
+Route::get('/profileClient', "Report\ClientController@profile");
+Route::get('/profileSupplier', "Report\SupplierController@profile");
+Route::get('/profile/{id}/getClient', "Report\ClientController@profileClient");
+Route::get('profile/{id}/getRepurchase', "Report\ClientController@getRepurchase");

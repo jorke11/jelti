@@ -53,7 +53,7 @@ class PurchaseController extends Controller {
     public function getSupplier($id) {
         $stakeholder = \App\Models\Administration\Stakeholder::findOrFail($id);
         $stakeholder->delivery = date('Y-m-d', strtotime('+' . $stakeholder->lead_time . ' days', strtotime(date('Y-m-d'))));
-        
+
         $products = Products::select("id as product_id", "tax", "title", "cost_sf", "units_supplier", "category_id")
                         ->where("supplier_id", $stakeholder->id)->orderBy("title", "asc")->get();
         return response()->json(["response" => $stakeholder, "products" => $products]);
@@ -63,6 +63,42 @@ class PurchaseController extends Controller {
         $resp = \App\Models\Administration\Products::where("supplier_id", $id);
 
         return response()->json(["response" => $resp]);
+    }
+
+    public function reverse($id) {
+        try {
+            DB::beginTransaction();
+            $row = Purchases::find($id);
+
+            $ayer = date("Y-m-d", strtotime("-10 day", strtotime(date("Y-m-d"))));
+
+
+            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 5 || Auth::user()->id == 2) {
+                $sal = Entries::where("purchase_id", $id)->first();
+                if ($sal != null) {
+                    $detail = EntriesDetail::where("entry_id", $sal->id)->get();
+
+                    foreach ($detail as $value) {
+                        $det = EntriesDetail::find($value->id);
+                        $det->delete();
+                    }
+                    $sal->delete();
+                }
+
+                $row->status_id = 1;
+                $row->save();
+                DB::commit();
+                $dep = Purchases::find($id);
+
+
+                return response()->json(["success" => true, "header" => $dep]);
+            } else {
+                return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+            }
+        } catch (Exception $exp) {
+            DB::rollback();
+            return response()->json(["success" => false], 409);
+        }
     }
 
     public function store(Request $request) {
@@ -407,7 +443,7 @@ class PurchaseController extends Controller {
             JOIN products p On p.id=d.product_id 
             where d.purchase_id=" . $id . "
             group by 1,2,3,4,5,7,10";
-        
+
         $detail = DB::select($sql);
 
         $this->subtotal = 0;

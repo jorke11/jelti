@@ -4,9 +4,9 @@
     <div class="page-title" style="height: 0;">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-9 col-md-6">
+                <div class="col-lg-8 col-md-6">
                 </div>
-                <div class="col-lg-3 col-md-6 text-right">
+                <div class="col-lg-4 col-md-6 text-right">
                     <button type="button" class="btn btn-success btn-sm" id='btnNew'>
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"> Nuevo</span>
                     </button>
@@ -15,6 +15,9 @@
                     </button>
                     <button type="button" class="btn btn-success btn-sm" id='btnSend' disabled>
                         <span class="glyphicon glyphicon-save" aria-hidden="true"> Enviar</span>
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" id='btnReverse' disabled>
+                        <span class="glyphicon glyphicon-save" aria-hidden="true"> Reversar</span>
                     </button>
                 </div>
             </div>

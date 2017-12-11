@@ -19,9 +19,7 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="list">
                 <div class="panel panel-default">
-
                     @include('Invoicing.purchase.list')
-
                 </div>
 
             </div>

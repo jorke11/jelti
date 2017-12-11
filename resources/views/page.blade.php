@@ -5,13 +5,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Superfuds</title>
+        <title>SuperFüds</title>
         <link rel="shortcut icon" href="{{ asset('assets/images/logoico.png') }}">
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <meta name="keywords" content="organico,saludable">
-        <meta name="description" content="Somos una empresa colombiana de alimentos saludables que cuidamos el planeta.">
+        <meta name="description" content="¡SuperFüds es el futuro del descubrimiento de nuevos productos! Hemos creado una forma más eficiente para que los consumidores y proveedores se conecten. Nuestra plataforma en línea administra productos saludables y ecológicos de cientos de proveedores en múltiples categorías, lo que facilita a los compradores y consumidores enfocarse rápidamente en los que son adecuados para ellos y compartirlos con el mundo.">
         <!-- Styles -->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
         {!!Html::script('/vendor/toastr/toastr.min.js')!!}

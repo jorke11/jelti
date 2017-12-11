@@ -5,6 +5,7 @@ function Purchase() {
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#btnSend").click(this.send);
+        $("#btnReverse").click(this.reverse);
         $("#newDetail").click(this.saveDetail);
         $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
         $("#edit").click(this.edit);
@@ -302,6 +303,22 @@ function Purchase() {
         }
     }
 
+    this.reverse = function () {
+        toastr.remove()
+        $.ajax({
+            url: 'purchase/' + $("#frm #id").val() + '/reverseInvoice',
+            method: 'PUT',
+            dataType: 'JSON',
+            success: function (data) {
+                $(".input-purchase").setFields({data: data.header});
+                table.ajax.reload();
+                toastr.success("Factura reversada!");
+            }, error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(xhr.responseJSON.msg);
+            },
+        })
+    }
+
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
@@ -323,6 +340,10 @@ function Purchase() {
                     $("#btnSend").attr("disabled", false);
                     $("#btnSave").attr("disabled", false);
                     $("#btnmodalDetail").attr("disabled", false);
+                }
+
+                if (data.header.status_id == 2) {
+                    $("#btnReverse").attr("disabled", false);
                 }
 
                 obj.printDetail(data);

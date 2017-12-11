@@ -82,7 +82,19 @@
 
         </style>
     </head>
-
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/5a2ea31bd0795768aaf8e9a6/default';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <body>
         <!--        <div class="container-fluid" id="container-video">
@@ -230,20 +242,21 @@
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
                 <div class="item active">
-                    <img src="images/banner_bebe.jpg" alt="Navidad" width="100%">
-                    <div class="carousel-caption" style="padding-left: 40%">
-                        <a href="/shopping/18" style="color:white;background-color: #139c9e;border: 1px solid white;
-                           border-radius: 30px;padding:10px 40px 10px 40px;font-size: 40px;font-weight: 800">BEBES</a>
-                    </div>
-                </div>
-                <div class="item">
-                    <img src="images/banner_navidad.jpg" alt="Bebés" class="img-responsive" width="100%">
+                   <img src="images/banner_navidad.jpg" alt="Bebés" class="img-responsive" width="100%">
                     <div class="carousel-caption" style="padding-left: 50%">
                         <button type="button" class="btn btn-primary btn-lg" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
                             Registrate como<br>
                             <span style="font-weight: 900;font-size: 30px">Cliente o Proveedor</span>
                         </button>
                     </div>
+                </div>
+                <div class="item">
+                     <img src="images/banner_bebe.jpg" alt="Navidad" width="100%">
+                    <div class="carousel-caption" style="padding-left: 40%">
+                        <a href="/shopping/18" style="color:white;background-color: #139c9e;border: 1px solid white;
+                           border-radius: 30px;padding:10px 40px 10px 40px;font-size: 40px;font-weight: 800">BEBES</a>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -257,65 +270,6 @@
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
-    </div>
-</section>
-
-<section>
-    <div class="container-fluid">
-
-        <div class="row" style="padding-bottom:5%;padding-top: 2%">
-            <div class="col-lg-10 col-lg-offset-1 col-sm-12 col-xs-12"><h1 class="text-center title-color title" >Industria de alimentos <span class="underline">saludables</span></h1></div>
-        </div>
-
-        <div class="row" style="padding-bottom:3%;">
-            <div class="col-lg-10 col-lg-offset-1 col-xs-10 col-xs-offset-1">
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4">
-
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-8" style="min-height: 100px">
-                                <img src="{{ asset('assets/images/group8.png') }}" class="img-responsive center-block"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <h4 class="text-center color-font texto" >
-                                    "88% de las personas estan dispuestas a pagar más por alimentos saludables." <br><b>Forbes 2017</b>
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-8" style="min-height: 100px">
-                                <img src="{{ asset('assets/images/group9.png') }}" class="img-responsive center-block"/>
-                            </div>  
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <h4 class="text-center color-font texto">"Para el 2017, las ventas globales de alimentos saludables llegarán a un trillón de dolares." . <br><b>Forbes 2017</b></h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-8 col-xs-8" style="min-height: 100px">
-                                <img src="{{ asset('assets/images/group11.png') }}" class="img-responsive center-block"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <h4 class="text-center color-font texto">"7 de cada 10 colombianos desean bajar de peso y ser más saludables." <br><b>Nielsen 2017</b></h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-9 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
-        </div>
     </div>
 </section>
 

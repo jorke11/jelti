@@ -11,7 +11,7 @@ function Category() {
     }
 
     this.new = function () {
-        $(".input-characteristc").cleanFields();
+        $(".input-characteristic").cleanFields();
     }
 
     this.save = function () {

@@ -23,7 +23,10 @@ Route::group(['namespace' => 'Api'], function () {
 
 
 Route::get('/', function () {
-    $category = Models\Administration\Categories::where("status_id", 1)->where("type_category_id",1)->whereNull("node_id")->orderBy("order", "asc")->get();
+    $category = Models\Administration\Categories::where("status_id", 1)->where("type_category_id", 1)
+                    ->where(function($query) {
+                        $query->whereNull("node_id")->OrWhere("node_id", "<>", 0);
+                    })->orderBy("order", "asc")->get();
 
     $newproducts = DB::table("vproducts")->where("status_id", 1)
             ->where("category_id", "<>", -1)

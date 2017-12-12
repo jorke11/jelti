@@ -34,11 +34,12 @@
                     <div class="row" style="padding-top: 1%;padding-bottom: 1%">
                         <?php
                         $cont = 0;
+
                         foreach ($subcategory as $i => $val) {
                             ?>
                             <div class="col-md-1" >
                                 <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
-                                    <img src="{{url($val->img)}}" alt="">
+                                    <img src="{{url("/")."/".$val->image}}" alt="">
                                 </a>
                             </div>
                             <?php

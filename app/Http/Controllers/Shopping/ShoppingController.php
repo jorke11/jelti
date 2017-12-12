@@ -42,6 +42,8 @@ class ShoppingController extends Controller {
 
             $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->paginate(10);
         }
+        
+        
 
         foreach ($products as $i => $value) {
             $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));
@@ -55,7 +57,7 @@ class ShoppingController extends Controller {
 
             $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);
         }
-
+//dd($products);
 
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 

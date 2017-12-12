@@ -274,8 +274,6 @@ Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
 Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 
 
-
-
 Route::resource('/prospect', 'Seller\ProspectsController');
 Route::post('/prospect/convert', 'Seller\ProspectsController@convertToClient');
 
@@ -336,7 +334,7 @@ Route::get('/api/CreditNoteGenerated', function() {
 Route::get('/creditnote/{id}/getInvoice', ['uses' => 'Sales\creditnoteController@getInvoice']);
 
 Route::get('/api/listCategory', function() {
-    return Datatables::queryBuilder(DB::table("categories")->orderBy("order", "asc"))->make(true);
+    return Datatables::queryBuilder(DB::table("vcategories")->orderBy("order", "asc"))->make(true);
 });
 Route::get('/api/listCharacterist', function() {
     return Datatables::eloquent(Models\Administration\Characteristic::query())->make(true);

@@ -290,6 +290,8 @@
                     <div class="carousel-inner">
                         <div class="item  active">
                             <div class="row">
+                            
+                                
                                 <?php
                                 $cont = 0;
                                 foreach ($category as $i => $val) {

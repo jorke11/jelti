@@ -17,6 +17,10 @@ class CreateCategoriesTable extends Migration {
             $table->string('description');
             $table->string('image')->nullable();
             $table->integer('order')->nullable();
+            $table->integer('status_id')->nullable();
+            $table->integer('type_category_id')->nullable();
+            $table->integer('banner')->nullable();
+            $table->integer('node_id')->nullable();
             $table->string('short_description')->nullable();
             $table->timestamps();
         });

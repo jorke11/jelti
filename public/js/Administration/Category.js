@@ -75,7 +75,6 @@ function Category() {
                 } else {
                     $("#img_banner").val("")
                 }
-
             }
         })
     }
@@ -111,10 +110,9 @@ function Category() {
                 {data: "id"},
                 {data: "description"},
                 {data: "short_description"},
-                {data: "status_id", render: function (data, type, row) {
-                        return (row.status_id == 1) ? 'Enable' : 'Disabled';
-                    }
-                },
+                {data: "status"},
+                {data: "node"},
+                {data: "order"},
                 {data: "image", render: function (data, type, row) {
                         return (row.image == '') ? '' : "<img src='" + row.image + "' width=80%>";
                     }
@@ -134,7 +132,7 @@ function Category() {
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [9],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -144,7 +142,6 @@ function Category() {
             ],
         });
     }
-
 }
 
 var obj = new Category();

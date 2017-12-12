@@ -244,3 +244,10 @@ JOIN credit_note c ON c.id=d.creditnote_id
 JOIN sales_detail s ON s.id=d.row_id
 JOIN products p ON p.id=d.product_id
 JOIN stakeholder st ON st.id=p.supplier_id;
+
+
+create view vcategories as 
+select c.id,c.description,c.image,c.order,c.short_description,
+CASE WHEN c.status_id = 1 THEN 'Activo' ELSE 'Inactivo' END, c.banner,c2.description as node
+from categories c
+LEFT JOIN categories c2 ON c2.id=c.node_id

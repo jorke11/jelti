@@ -25,6 +25,8 @@
                             <th>Description</th>
                             <th>Short Description</th>
                             <th>Status</th>
+                            <th>Nodo</th>
+                            <th>Order</th>
                             <th>Image</th>
                             <th>Baner</th>
                             <th>Order</th>

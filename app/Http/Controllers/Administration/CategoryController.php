@@ -17,7 +17,9 @@ class CategoryController extends Controller {
 
     public function index() {
         $types = Parameters::where("group", "type_category")->get();
-        return view("Administration.category.init", compact("types"));
+        $categories = Categories::orderBy("description","asc")->get();
+
+        return view("Administration.category.init", compact("types", "categories"));
     }
 
     public function create() {
@@ -34,6 +36,7 @@ class CategoryController extends Controller {
             $banner = array_get($input, 'banner');
 
             $input["status_id"] = (isset($input["status_id"])) ? 1 : 0;
+            $input["node_id"] = (isset($input["node_id"])) ? $input["node_id"] : null;
 
             if ($id != '') {
                 $row = Categories::find($id);

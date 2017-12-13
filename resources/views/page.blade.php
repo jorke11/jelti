@@ -398,7 +398,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     $cont = 0;
                                     foreach ($newproducts as $i => $value) {
                                         ?>
-                                        <div class="col-md-2 col-sm-2 col-xs-2">
+                                        <div class="col-md-3 col-sm-2 col-xs-2">
                                             <div class="thumbnail" style="border: 0;padding: 0">
                                                 <div class="row" >
                                                     <div class="col-lg-12">
@@ -446,7 +446,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         </div>
                                         <?php
                                         $cont++;
-                                        if ($cont == 6) {
+                                        if ($cont == 4) {
                                             $cont = 0;
                                             ?>
                                         </div>

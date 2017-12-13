@@ -129,7 +129,7 @@ class ToolController extends Controller {
              
 //
 //// to finally create image instances
-                $imagethumb = $manager->make($value)->resize(300, 300);
+                $imagethumb = $manager->make($value)->resize(300);
 //                echo $image->basename;
                 $reference = str_replace(".png", "", $image->basename);
                 $pro = Products::where("reference", $reference)->first();

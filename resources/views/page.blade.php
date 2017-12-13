@@ -425,7 +425,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                 </div>
                                                 <img src="{{url("/")."/".$value->thumbnail}}">
                                                 <div class="caption" style="padding: 0">
-                                                    <h5 class="text-center" style="height: 38px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
+                                                    <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                                     @if(!Auth::guest())
                                                     <p>
                                                     <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,2,",",".")}}</h4>

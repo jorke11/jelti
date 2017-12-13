@@ -377,9 +377,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 </div>
             </div>
         </div>
-
         <br>
-
         </section>
 
         <section style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%">   
@@ -475,378 +473,378 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     </div>
                 </div>
             </div>
-    </div>
-</section>
+
+        </section>
 
 
 
-<section style="padding-top: 3%;">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12"><h3 class="color-font text-center">¿Que es SuperFuds?</h3></div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 ">
-                <div class="row" style="padding-top: 5%;background-color: #BAF2E8">
-                    <div class="col-lg-4">
-                        <div class="row row-space">
-                            <div class="col-lg-12">
-                                <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
-                            </div>
-                        </div>
-                        <div class="row" style="padding-bottom: 20%;">
-                            <div class="col-lg-12">
-                                <p class="text-justify" style="letter-spacing:2px">
-                                    Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.    
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row row-space">
-                            <div class="col-lg-12">
-                                <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12"  style="padding-bottom: 20%;">
-                                <p class="text-justify" style="letter-spacing:2px">
-                                    A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row row-space">
-                            <div class="col-lg-12">
-                                <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12"  style="padding-bottom: 20%;">
-                                <p class="text-justify" style="letter-spacing:2px">
-                                    Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row" >
-            <div class="col-lg-8 col-lg-offset-2" style="background-color: #FAF6ee;"><h3 class="color-font text-center">Lo que Aman nuestros Clientes y Proveedores</h3></div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 ">
+        <section style="padding-top: 3%;">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-6" style="background-color: #1ec296">
-                        <div id="carousel-clients2" class="carousel slide" data-ride="carousel">
-                            <!-- Indicators -->
-                            <ol class="carousel-indicators">
-                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                            </ol>
-
-                            <!-- Wrapper for slides -->
-                            <div class="carousel-inner" role="listbox">
-                                <div class="item active">
-                                    <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                    <div class="carousel-caption">
-                                        <h2>Click Clak</h2>  
-                                        <p>
-                                            Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
+                    <div class="col-lg-12"><h3 class="color-font text-center">¿Que es SuperFuds?</h3></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 ">
+                        <div class="row" style="padding-top: 5%;background-color: #BAF2E8">
+                            <div class="col-lg-4">
+                                <div class="row row-space">
+                                    <div class="col-lg-12">
+                                        <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-bottom: 20%;">
+                                    <div class="col-lg-12">
+                                        <p class="text-justify" style="letter-spacing:2px">
+                                            Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.    
                                         </p>
                                     </div>
                                 </div>
-                                <div class="item">
-                                    <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                    <div class="carousel-caption">
-                                        <h2>Farmatodo</h2>  
-                                        <p>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="row row-space">
+                                    <div class="col-lg-12">
+                                        <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12"  style="padding-bottom: 20%;">
+                                        <p class="text-justify" style="letter-spacing:2px">
                                             A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
                                         </p>
                                     </div>
                                 </div>
-                                <div class="item">
-                                    <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                    <div class="carousel-caption">
-                                        <h2>Rappi</h2>  
-                                        <p>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="row row-space">
+                                    <div class="col-lg-12">
+                                        <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12"  style="padding-bottom: 20%;">
+                                        <p class="text-justify" style="letter-spacing:2px">
                                             Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
                                         </p>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Controls -->
-                            <a class="left carousel-control" href="#carousel-clients2" role="button" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#carousel-clients2" role="button" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6" style="background-color: #49e2c6">
-                        <div id="carousel-supplier" class="carousel slide" data-ride="carousel">
-                            <!-- Indicators -->
-                            <ol class="carousel-indicators">
-                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                            </ol>
-
-                            <!-- Wrapper for slides -->
-                            <div class="carousel-inner" role="listbox">
-
-                                <div class="item active">
-                                    <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                    <div class="carousel-caption">
-                                        <h2>Terrafertil</h2>  
-                                        <p>
-                                            "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                    <div class="carousel-caption">
-                                        <h2>Chocolov</h2>  
-                                        <p>
-                                            "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                    <div class="carousel-caption">
-                                        <h2>Segalco</h2>  
-                                        <p>
-                                            "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Controls -->
-                            <a class="left carousel-control" href="#carousel-supplier" role="button" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#carousel-supplier" role="button" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="row" >
+                    <div class="col-lg-8 col-lg-offset-2" style="background-color: #FAF6ee;"><h3 class="color-font text-center">Lo que Aman nuestros Clientes y Proveedores</h3></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 ">
+                        <div class="row">
+                            <div class="col-lg-6" style="background-color: #1ec296">
+                                <div id="carousel-clients2" class="carousel slide" data-ride="carousel">
+                                    <!-- Indicators -->
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                    </ol>
 
-        </div>
-</section>
-<section style="padding-bottom: 2%;padding-top: 2%">
-    <div class="row" style="background-color: #FAF6ee;">
-        <div class="col-lg-12">
-            <div id="carousel-clients" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                </ol>
+                                    <!-- Wrapper for slides -->
+                                    <div class="carousel-inner" role="listbox">
+                                        <div class="item active">
+                                            <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <div class="carousel-caption">
+                                                <h2>Click Clak</h2>  
+                                                <p>
+                                                    Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <div class="carousel-caption">
+                                                <h2>Farmatodo</h2>  
+                                                <p>
+                                                    A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <div class="carousel-caption">
+                                                <h2>Rappi</h2>  
+                                                <p>
+                                                    Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner" role="listbox">
-
-                    <div class="item active">
-                        <div class="row" style="padding-top: 3%;padding-bottom: 3%">
-                            <div class="col-lg-10 col-lg-offset-1">
-                                <div class="col-lg-3">
-                                    <img src="logos/olimpica-1.png" alt="..." class="img-responsive center-block" width="40%">
+                                    <!-- Controls -->
+                                    <a class="left carousel-control" href="#carousel-clients2" role="button" data-slide="prev">
+                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#carousel-clients2" role="button" data-slide="next">
+                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
                                 </div>
-                                <div class="col-lg-3">
-                                    <img src="logos/farmatodo-2.png" alt="..." class="img-responsive center-block" width="40%" >
-                                </div>
-                                <div class="col-lg-3">
-                                    <img src="logos/rappi-3.png" alt="..." class="img-responsive center-block" width="40%">
-                                </div>
-                                <div class="col-lg-3">
-                                    <img src="logos/click_clack-4.png" alt="..." class="img-responsive center-block" width="40%">
-                                </div>
-
                             </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="row" style="padding-top: 3%;padding-bottom: 3%">
-                            <div class="col-lg-10 col-lg-offset-1">
-                                <div class="col-lg-3">
-                                    <img src="logos/locatel-5.png" alt="..." class="img-responsive center-block" width="40%">
-                                </div>
-                                <div class="col-lg-3">
-                                    <img src="logos/altoque-6.png" alt="..." class="img-responsive center-block" width="40%">
-                                </div>
-                                <div class="col-lg-3">
-                                    <img src="logos/cruz_verde-7.png" alt="..." class="img-responsive center-block" width="40%">
-                                </div>
-                                <div class="col-lg-3">
-                                    <img src="logos/gastronomy-8.png" alt="..." class="img-responsive center-block" width="40%">
+                            <div class="col-lg-6" style="background-color: #49e2c6">
+                                <div id="carousel-supplier" class="carousel slide" data-ride="carousel">
+                                    <!-- Indicators -->
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                    </ol>
+
+                                    <!-- Wrapper for slides -->
+                                    <div class="carousel-inner" role="listbox">
+
+                                        <div class="item active">
+                                            <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <div class="carousel-caption">
+                                                <h2>Terrafertil</h2>  
+                                                <p>
+                                                    "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <div class="carousel-caption">
+                                                <h2>Chocolov</h2>  
+                                                <p>
+                                                    "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <div class="carousel-caption">
+                                                <h2>Segalco</h2>  
+                                                <p>
+                                                    "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Controls -->
+                                    <a class="left carousel-control" href="#carousel-supplier" role="button" data-slide="prev">
+                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="right carousel-control" href="#carousel-supplier" role="button" data-slide="next">
+                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
+        </section>
+    
+        <section style="padding-bottom: 2%;padding-top: 2%">
+            <div class="row" style="background-color: #FAF6ee;">
+                <div class="col-lg-12">
+                    <div id="carousel-clients" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                        </ol>
 
-                <!-- Controls -->
-                <a class="left carousel-control" href="#carousel-clients" role="button" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="right carousel-control" href="#carousel-clients" role="button" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+
+                            <div class="item active">
+                                <div class="row" style="padding-top: 3%;padding-bottom: 3%">
+                                    <div class="col-lg-10 col-lg-offset-1">
+                                        <div class="col-lg-3">
+                                            <img src="logos/olimpica-1.png" alt="..." class="img-responsive center-block" width="40%">
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <img src="logos/farmatodo-2.png" alt="..." class="img-responsive center-block" width="40%" >
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <img src="logos/rappi-3.png" alt="..." class="img-responsive center-block" width="40%">
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <img src="logos/click_clack-4.png" alt="..." class="img-responsive center-block" width="40%">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="row" style="padding-top: 3%;padding-bottom: 3%">
+                                    <div class="col-lg-10 col-lg-offset-1">
+                                        <div class="col-lg-3">
+                                            <img src="logos/locatel-5.png" alt="..." class="img-responsive center-block" width="40%">
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <img src="logos/altoque-6.png" alt="..." class="img-responsive center-block" width="40%">
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <img src="logos/cruz_verde-7.png" alt="..." class="img-responsive center-block" width="40%">
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <img src="logos/gastronomy-8.png" alt="..." class="img-responsive center-block" width="40%">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-clients" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-clients" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section >
+            <div class="container-fluid grey-bk" style="background-color:#fffcf8;">
+                <div class="row">
+                    <div class="col-lg-5 col-md-5 col-sm-5">
+                        <p class="text-center col-lg-offset-5"><img src="/images/movil.png"></p>
+                    </div>
+                    <div class="col-lg-7 col-md-7 col-sm-7" style="padding-top: 5%">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h2 class="text-center" style="color:#4a4a4a">DELICIOSAMENTE SALUDABLE</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4 class="text-center" style="color:#4a4a4a">Descarga Superfuds para  que puedas  llevar  la vida saludable a todas partes</h4>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <img src="/images/appstore.png" >
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <img src="/images/googleplay.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container-fluid green-bk">
+            <div class="row row-space" style="padding-top: 1%">
+                <div class="col-lg-5 col-md-5 col-sm-6">
+                    <h2 class="col-lg-offset-2"  style="color:white">
+                        Regístrate y recibe tips, recetas <br>
+                        y mucho más!
+                    </h2>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-6">
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input class="form-control input-lg" placeholder="Email">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class="btn btn-default" style="color:green">Suscribete</button>
+                        </div>
+                    </div>
+                    <br>
+                </div>
             </div>
         </div>
-    </div>
-</section>
 
-
-<section >
-    <div class="container-fluid grey-bk" style="background-color:#fffcf8;">
-        <div class="row">
-            <div class="col-lg-5 col-md-5 col-sm-5">
-                <p class="text-center col-lg-offset-5"><img src="/images/movil.png"></p>
-            </div>
-            <div class="col-lg-7 col-md-7 col-sm-7" style="padding-top: 5%">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h2 class="text-center" style="color:#4a4a4a">DELICIOSAMENTE SALUDABLE</h2>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h4 class="text-center" style="color:#4a4a4a">Descarga Superfuds para  que puedas  llevar  la vida saludable a todas partes</h4>
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <img src="/images/appstore.png" >
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <img src="/images/googleplay.png">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<div class="container-fluid green-bk">
-    <div class="row row-space" style="padding-top: 1%">
-        <div class="col-lg-5 col-md-5 col-sm-6">
-            <h2 class="col-lg-offset-2"  style="color:white">
-                Regístrate y recibe tips, recetas <br>
-                y mucho más!
-            </h2>
-        </div>
-        <div class="col-lg-7 col-md-7 col-sm-6">
-            <br>
+        <div class="container-fluid" style="background-color: rgba(0,0,0,.8)">
             <div class="row">
-                <div class="col-lg-10">
-                    <input class="form-control input-lg" placeholder="Email">
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 hidden-xs" >
+                    <div class="row" style="padding-top: 10%;padding-bottom: 3%">
+                        <div class="col-lg-12">
+                            <h3 style="color:white" class="col-lg-offset-1">Nosotros</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+                            <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1 text-justify">
+                                Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-4 col-xs-6">
+                    <div class="row" style="padding-top: 20%;padding-bottom: 3%">
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-lg-offset-3 col-xs-4">
+                            <p class="text-center"><img src="/images/facebook.png" class="img-responsive"></p>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+                            <img src="/images/instagram.png" class="img-responsive">
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+                            <img src="/images/twitter.png" class="img-responsive">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-lg-offset-1 col-xs-4" style="padding-top: 2%;padding-bottom: 3%">
+                    <img src="/images/aliados.png" class="img-responsive">
                 </div>
             </div>
-            <br>
             <div class="row">
                 <div class="col-lg-12">
-                    <button class="btn btn-default" style="color:green">Suscribete</button>
-                </div>
-            </div>
-            <br>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid" style="background-color: rgba(0,0,0,.8)">
-    <div class="row">
-        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 hidden-xs" >
-            <div class="row" style="padding-top: 10%;padding-bottom: 3%">
-                <div class="col-lg-12">
-                    <h3 style="color:white" class="col-lg-offset-1">Nosotros</h3>
+                    <hr>   
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-xs-12">
-                    <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1 text-justify">
-                        Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
+                <div class="col-lg-3 col-md-4 col-sm-4" >
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <span style="color:white;" class="col-lg-offset-1">Superfüds 2018. Todos los derechos reservados</span>   
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <div class="col-lg-5 col-md-5 col-sm-4 col-xs-6">
-            <div class="row" style="padding-top: 20%;padding-bottom: 3%">
-                <div class="col-lg-3 col-md-4 col-sm-4 col-lg-offset-3 col-xs-4">
-                    <p class="text-center"><img src="/images/facebook.png" class="img-responsive"></p>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-                    <img src="/images/instagram.png" class="img-responsive">
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-                    <img src="/images/twitter.png" class="img-responsive">
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-sm-4 col-lg-offset-1 col-xs-4" style="padding-top: 2%;padding-bottom: 3%">
-            <img src="/images/aliados.png" class="img-responsive">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <hr>   
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-4" >
+        </body>
+        <script>
+            $('#menuProduct').click(function () {
+                $("#menuProduct span").addClass("underline-green");
+                $("#menuInicio").removeClass("underline-green");
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+                        && location.hostname == this.hostname) {
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <span style="color:white;" class="col-lg-offset-1">Superfüds 2018. Todos los derechos reservados</span>   
-                </div>
-            </div>
+                    var $target = $(this.hash);
 
-        </div>
-    </div>
-</div>
-</body>
-<script>
-    $('#menuProduct').click(function () {
-        $("#menuProduct span").addClass("underline-green");
-        $("#menuInicio").removeClass("underline-green");
-        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
-                && location.hostname == this.hostname) {
+                    $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
 
-            var $target = $(this.hash);
+                    if ($target.length) {
+                        var targetOffset = $target.offset().top;
+                        $('html,body').animate({scrollTop: targetOffset}, 1000);
+                        return false;
+                    }
+                }
 
-            $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+            });
 
-            if ($target.length) {
-                var targetOffset = $target.offset().top;
-                $('html,body').animate({scrollTop: targetOffset}, 1000);
-                return false;
-            }
-        }
+        </script>
+        {!!Html::script('js/Page/page.js')!!}
 
-    });
-
-</script>
-{!!Html::script('js/Page/page.js')!!}
-
-</html>
+        </html>

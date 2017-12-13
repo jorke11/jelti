@@ -133,12 +133,12 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                 <div class="col-lg-10 col-lg-offset-1">
                                     <div class="row row-space">
                                         <div class="col-lg-10 col-lg-offset-1">
-                                            <p style="color:white;font-size:25px; text-shadow: 2px 1px 5px #575757;font-weight: 100" class="text-center">Registrate como <br><span style="font-weight: 900">Cliente o Negocio</span></p>
+                                            <p style="color:white;font-size:25px; text-shadow: 2px 1px 5px #575757;font-weight: 100" class="text-center">Registrate como</p>
                                         </div>
                                     </div>
                                     <div class="row row-space">
                                         <div class="col-lg-10 col-lg-offset-1">
-                                            <div  class="box-client" onclick="objPage.stakeholder(1, this)">Cliente</div>
+                                            <div  class="box-client" onclick="objPage.stakeholder(1, this)">Negocio</div>
                                             <div class="box-supplier" onclick="objPage.stakeholder(2, this)">Proveedor</div>
                                             <input type="hidden" id="type_stakeholder" name="type_stakeholder" class="in-page">
                                         </div>
@@ -338,13 +338,13 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 <div class="carousel slide media-carousel" id="subcategories">
                     <div class="carousel-inner">
                         <div class="item  active">
-                            <div class="row" style="padding-top: 2%;padding-bottom: 2%;padding-left: 3%">
+                            <div class="row" style="padding-top: 2%;padding-bottom: 2%;">
                                 <?php
                                 $cont = 0;
                                 foreach ($subcategory as $i => $val) {
                                     ?>
-                                    <div class="col-md-1 col-sm-2 col-xs-2" style="width: 14%;">
-                                        <h4 class="text-center texto" style="color:#7b7b7b;height: 35px">{{$val->description}}</h4>
+                                    <div class="col-md-2 col-sm-2 col-xs-2" >
+
                                         <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
                                            href="shopping/_{{$val->id}}">
                                             <img src="{{$val->img}}" alt="">
@@ -352,7 +352,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     </div>
                                     <?php
                                     $cont++;
-                                    if ($cont == 7) {
+                                    if ($cont == 6) {
                                         $cont = 0;
                                         ?>
                                     </div>
@@ -379,476 +379,344 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </div>
 
         <br>
-        <div class="row">
-            <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font title">Lo Nuevo</h3></div>
-            <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><h3 class="text-muted color-font title">Ver Todo</h3></div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
-                <div class="carousel slide media-carousel" id="newproducts">
-                    <div class="carousel-inner">
-                        <div class="item  active">
-                            <div class="row">
-                                <?php
-                                $cont = 0;
-                                foreach ($newproducts as $i => $val) {
-                                    ?>
-                                    <div class="col-md-2 col-sm-2 col-xs-2">
-                                        <a class="fancybox thumbnail" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="productDetail/{{$val->id}}">
-                                            <img src="{{$val->image}}" alt="">
-                                        </a>
-                                    </div>
+
+        </section>
+
+        <section style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%">   
+            <div class="row">
+                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font title">Lo Nuevo</h3></div>
+                <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><h3 class="text-muted color-font title">Ver Todo</h3></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
+            </div>
+            <div class="row" >
+                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+                    <div class="carousel slide media-carousel" id="newproducts">
+                        <div class="carousel-inner">
+                            <div class="item  active">
+                                <div class="row">
                                     <?php
-                                    $cont++;
-                                    if ($cont == 6) {
-                                        $cont = 0;
+                                    $cont = 0;
+                                    foreach ($newproducts as $i => $value) {
                                         ?>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="row">
+                                        <div class="col-md-2 col-sm-2 col-xs-2">
+                                            <div class="thumbnail" style="border: 0;padding: 0">
+                                                <div class="row" >
+                                                    <div class="col-lg-12">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                @if($value->characteristic!=null)
+                                                                @foreach($value->characteristic as $val)
+                                                                <div class="col-lg-2">
+                                                                    <div class="row">
+                                                                        <div class="row hover01">
+                                                                            <div class="col-lg-12">
+                                                                                <img width="60%" id="sub_{{$val->id}}" src="/{{$val->thumbnail}}" alt="" class="img-responsive center-block" style="cursor:pointer">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                @endforeach
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <img src="{{url("/")."/".$value->thumbnail}}">
+                                                <div class="caption" style="padding: 0">
+                                                    <h5 class="text-center" style="height: 38px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
+                                                    @if(!Auth::guest())
+                                                    <p>
+                                                    <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,2,",",".")}}</h4>
+                                                    </p>
+                                                    @endif
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            @if(!Auth::guest())
+                                                            <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control" style="background-color: #30c594;">COMPRAR</a>
+                                                            @else
+                                                            <a href="/login" class="btn btn-success form-control" style="background-color: #30c594;">COMPRAR</a>
+                                                            @endif
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
                                         <?php
+                                        $cont++;
+                                        if ($cont == 6) {
+                                            $cont = 0;
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="row">
+                                            <?php
+                                        }
                                     }
-                                }
-                                ?>
+                                    ?>
+                                </div>
                             </div>
                         </div>
+
+                        <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#newproducts" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+
                     </div>
-
-
-                    <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#newproducts" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-
                 </div>
             </div>
-        </div>
     </div>
 </section>
 
-<section>
-    <div class="container-fluid">
-        <div class="row" style="padding-top: 2%;padding-bottom: 2%;padding-left: 3%">
-            <?php
-            $cont = 0;
-            foreach ($subcategory as $i => $val) {
-                ?>
-                <div class="col-md-1 col-sm-2 col-xs-2" style="width: 14%;">
-                    <h4 class="text-center texto" style="color:#7b7b7b;height: 35px">{{$val->description}}</h4>
-                    <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
-                       href="shopping/_{{$val->id}}">
-                        <img src="{{$val->img}}" alt="">
-                    </a>
-                </div>
-                <?php
-                $cont++;
-                if ($cont == 7) {
-                    $cont = 0;
-                    ?>
-                </div>
-            </div>
-            <div class="item">
-                <div class="row">
-                    <?php
-                }
-            }
-            ?>
-        </div>                       
-    </div>                       
-
-</section>
 
 
 <section style="padding-top: 3%;">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-1"><h3 class="color-font">Sub-Categorias</h3></div>
+            <div class="col-lg-12"><h3 class="color-font text-center">¿Que es SuperFuds?</h3></div>
         </div>
-
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
-        </div>
-
-        <div class="row row-space">
             <div class="col-lg-8 col-lg-offset-2 ">
-                <div class="carousel slide media-carousel" id="subcategories">
-                    <div class="carousel-inner">
-                        <div class="item  active">
-                            <div class="row" style="padding-top: 2%;padding-bottom: 2%;padding-left: 3%">
-                                <?php
-                                $cont = 0;
-                                foreach ($subcategory as $i => $val) {
-                                    ?>
-                                    <div class="col-md-1 col-sm-2 col-xs-2" style="width: 14%;">
-                                        <h4 class="text-center texto" style="color:#7b7b7b;height: 35px">{{$val->description}}</h4>
-                                        <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
-                                           href="shopping/_{{$val->id}}">
-                                            <img src="{{$val->img}}" alt="">
-                                        </a>
-                                    </div>
-                                    <?php
-                                    $cont++;
-                                    if ($cont == 7) {
-                                        $cont = 0;
-                                        ?>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="row">
-                                        <?php
-                                    }
-                                }
-                                ?>
+                <div class="row" style="padding-top: 5%;background-color: #BAF2E8">
+                    <div class="col-lg-4">
+                        <div class="row row-space">
+                            <div class="col-lg-12">
+                                <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom: 20%;">
+                            <div class="col-lg-12">
+                                <p class="text-justify" style="letter-spacing:2px">
+                                    Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.    
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <a class="left carousel-control" href="#subcategories" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#subcategories" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
+                    <div class="col-lg-4">
+                        <div class="row row-space">
+                            <div class="col-lg-12">
+                                <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12"  style="padding-bottom: 20%;">
+                                <p class="text-justify" style="letter-spacing:2px">
+                                    A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row row-space">
+                            <div class="col-lg-12">
+                                <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12"  style="padding-bottom: 20%;">
+                                <p class="text-justify" style="letter-spacing:2px">
+                                    Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-
-        <div class="row green-bk">
-            <div class="col-lg-12">
-                <div class="row row-space">
-                    <div class="col-lg-12"><h2 class="text-center" style="color:white"><span class="underline-white title">Negocios</span></h2></div>
-                </div>
+        <div class="row" >
+            <div class="col-lg-8 col-lg-offset-2" style="background-color: #FAF6ee;"><h3 class="color-font text-center">Lo que Aman nuestros Clientes y Proveedores</h3></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 ">
                 <div class="row">
-                    <div class="col-lg-12"><p class="text-center" style="color:white;font-size: 20px;font-weight: 100">Concéntrate en tu producto, nosotros nos encargamos del negocio.</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-
+                    <div class="col-lg-6" style="background-color: #1ec296">
+                        <div id="carousel-clients2" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
                             <ol class="carousel-indicators">
-                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                                <li data-target="#myCarousel" data-slide-to="1"></li>
-                                <li data-target="#myCarousel" data-slide-to="12"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
                             </ol>
-                            <div class="carousel-inner">
-                                <div class="item active">
-                                    <div class="header-text hidden-xs">
-                                        <div class="col-md-12 col-center">
-                                            <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">1 Factura para 300+ <br>Productos Saludables de <br>40+ Marcas.</h2>
-                                            <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="item">
-                                    <div class="header-text hidden-xs">
-                                        <div class="col-md-12 col-center">
-                                            <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">Encontrar todos los productos<br>que te gustan <br>en un solo lugar.</h2>
-                                            <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="item">
-                                    <div class="header-text hidden-xs">
-                                        <div class="col-md-12 col-center">
-                                            <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">Nos aseguramos de tener <br>los mejores precios para que <br>puedas ahorrar tiempo y dinero.</h2>
-                                            <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                        </div>
-                                    </div> 
-                                </div>
 
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" role="listbox">
+                                <div class="item active">
+                                    <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                    <div class="carousel-caption">
+                                        <h2>Click Clak</h2>  
+                                        <p>
+                                            Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                    <div class="carousel-caption">
+                                        <h2>Farmatodo</h2>  
+                                        <p>
+                                            A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                    <div class="carousel-caption">
+                                        <h2>Rappi</h2>  
+                                        <p>
+                                            Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
-
-                            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left"></span>
+                            <!-- Controls -->
+                            <a class="left carousel-control" href="#carousel-clients2" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                                 <span class="sr-only">Previous</span>
                             </a>
-                            <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            <a class="right carousel-control" href="#carousel-clients2" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" style="background-color: #49e2c6">
+                        <div id="carousel-supplier" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                            </ol>
+
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" role="listbox">
+
+                                <div class="item active">
+                                    <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                    <div class="carousel-caption">
+                                        <h2>Terrafertil</h2>  
+                                        <p>
+                                            "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                    <div class="carousel-caption">
+                                        <h2>Chocolov</h2>  
+                                        <p>
+                                            "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                    <div class="carousel-caption">
+                                        <h2>Segalco</h2>  
+                                        <p>
+                                            "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Controls -->
+                            <a class="left carousel-control" href="#carousel-supplier" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#carousel-supplier" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                                 <span class="sr-only">Next</span>
                             </a>
                         </div>
                     </div>
                 </div>
-
             </div>
+
         </div>
-    </div>  
 </section>
+<section style="padding-bottom: 2%;padding-top: 2%">
+    <div class="row" style="background-color: #FAF6ee;">
+        <div class="col-lg-12">
+            <div id="carousel-clients" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                </ol>
 
-<section>
-    <div class="container-fluid" style="padding-top: 1%">
-        <div class="row row-space" style="padding-bottom: 2%">
-            <div class="col-lg-12"><h2 class="text-center color-font title">Lo que dic<span class="underline">en nuestro</span>s clientes</h2></div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="row row-space">
-                    <div class="col-lg-12 text-center col-md-12 col-sm-12 col-xs-12"><img src="/images/click_clack.png" class="img-responsive center-block"></div>
-                </div>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
 
-                <div class="row row-space">
-                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2" style="color:#56be7f">
-                        <p class="text-center"><b>Sergio Saavedra<br>
-                                Director General | Hotel Click Clack</b>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
-                        <p class="text-center color-font texto">
-                            Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="row  row-space">
-                    <div class="col-lg-12 "><img src="/images/farmatado.png" class="img-responsive center-block"></div>
-                </div>
-
-                <div class="row row-space">
-                    <div class="col-lg-8 col-lg-offset-2 col-sm-8 col-sm-offset-2" style="color:#56be7f">
-                        <p class="text-center"><b>Teodoro Zubillaga<br>
-                                Country Manager | Farmatodo
-                            </b>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 col-sm-8 col-sm-offset-2">
-                        <p class="text-center color-font texto">
-                            A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="row">
-                    <div class="col-lg-12 text-center"><img src="/images/rappi.png" class="img-responsive center-block"></div>
-                </div>
-                <br>
-                <div class="row row-space">
-                    <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
-                        <p class="text-center"><b>Simon Borrero<br>
-                                CEO | Rappi</b>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 col-sm-8 col-sm-offset-2">
-                        <p class="text-center color-font">
-                            Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="row row-space">
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 hidden-xs">
-                <p class="text-center color-font">
-                    <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
-                </p>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 hidden-xs">
-                <p class="text-center color-font">
-                    <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
-                </p>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 hidden-xs">
-                <p class="text-center color-font">
-                    <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section>
-    <div class="container-fluid">
-        <div class="row green-bk">
-            <div class="col-lg-12">
-                <div class="row row-space">
-                    <div class="col-lg-12"><h2 class="text-center title" style="color:white"><span class="underline-white">Proveedores</span></h2></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12"><p class="text-center" style="color:white;font-size: 20px;font-weight: 100;font-size: 20px">Entregamos todas tus marcas favoritas directamente en tu negocio.</p></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="myCarouselpro" class="carousel slide" data-ride="carousel">
-
-                            <ol class="carousel-indicators">
-                                <li data-target="#myCarouselpro" data-slide-to="0" class="active"></li>
-                                <li data-target="#myCarouselpro" data-slide-to="1"></li>
-                                <li data-target="#myCarouselpro" data-slide-to="2"></li>
-                            </ol>
-
-                            <div class="carousel-inner">
-                                <div class="item active">
-
-                                    <div class="header-text hidden-xs">
-                                        <div class="col-md-12 col-center">
-                                            <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">¡Tus ventas se dispararan!<br>Distribuimos a más de 400 puntos<br>en 16 ciudades.</h2>
-                                            <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                        </div>
-                                    </div> 
+                    <div class="item active">
+                        <div class="row" style="padding-top: 3%;padding-bottom: 3%">
+                            <div class="col-lg-10 col-lg-offset-1">
+                                <div class="col-lg-3">
+                                    <img src="logos/olimpica-1.png" alt="..." class="img-responsive center-block" width="40%">
                                 </div>
-                                <div class="item">
+                                <div class="col-lg-3">
+                                    <img src="logos/farmatodo-2.png" alt="..." class="img-responsive center-block" width="40%" >
+                                </div>
+                                <div class="col-lg-3">
+                                    <img src="logos/rappi-3.png" alt="..." class="img-responsive center-block" width="40%">
+                                </div>
+                                <div class="col-lg-3">
+                                    <img src="logos/click_clack-4.png" alt="..." class="img-responsive center-block" width="40%">
+                                </div>
 
-                                    <div class="header-text hidden-xs">
-                                        <div class="col-md-12 col-center">
-                                            <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">¡Unidos  hacemos la diferencia!<br> mas de 40 Provedores<br>trabajando por la alimentación saludable.</h2>
-                                            <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="item">
-
-                                    <div class="header-text hidden-xs">
-                                        <div class="col-md-12 col-center">
-                                            <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">¡Tus ventas se disparan!<br> Nosotros distribuimos en 16 ciudades<br> en mas de 400 locaciones.</h2>
-                                            <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                        </div>
-                                    </div> 
-                                </div>
-                                <div class="item">
-                                    <div class="header-text hidden-xs">
-                                        <div class="col-md-12 col-center">
-                                            <h2 class="text-center" style="color:#ffffff;padding-top: 2%;padding-bottom: 3%">Deja de precuparte<br> tenemos un equipo ideal quienes te ayudaran<br> en mas de 400 locaciones.</h2>
-                                            <p class="text-center"  style="color:#ffffff;padding-bottom: 5%"><img src="{{ asset('assets/images/hoja-blanco.png') }}"></p>
-                                        </div>
-                                    </div> 
-                                </div>
                             </div>
-
-                            <a class="left carousel-control" href="#myCarouselpro" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" style="left:-1"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="right carousel-control" href="#myCarouselpro" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
                         </div>
                     </div>
+                    <div class="item">
+                        <div class="row" style="padding-top: 3%;padding-bottom: 3%">
+                            <div class="col-lg-10 col-lg-offset-1">
+                                <div class="col-lg-3">
+                                    <img src="logos/locatel-5.png" alt="..." class="img-responsive center-block" width="40%">
+                                </div>
+                                <div class="col-lg-3">
+                                    <img src="logos/altoque-6.png" alt="..." class="img-responsive center-block" width="40%">
+                                </div>
+                                <div class="col-lg-3">
+                                    <img src="logos/cruz_verde-7.png" alt="..." class="img-responsive center-block" width="40%">
+                                </div>
+                                <div class="col-lg-3">
+                                    <img src="logos/gastronomy-8.png" alt="..." class="img-responsive center-block" width="40%">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-clients" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-clients" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
         </div>
     </div>
 </section>
 
 
-<section>
-    <div class="container-fluid" style="padding-top: 1%">
-        <div class="row row-space" style="padding-bottom: 2%">
-            <div class="col-lg-12"><h2 class="text-center color-font title">Lo que dic<span class="underline">en nuestros pr</span>oveedores ...</h2></div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="row row-space">
-                    <div class="col-lg-12 text-center"><img src="/images/terra_fertil.png" class="img-responsive center-block"></div>
-                </div>
-
-                <div class="row row-space">
-                    <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
-                        <p class="text-center"><b>Raul Bermeo<br>
-                                Director General | Terrafertil</b>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <p class="text-center color-font">
-                            “Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="row  row-space">
-                    <div class="col-lg-12 text-center"><img src="/images/chocolov.png" class="center-block"></div>
-                </div>
-
-                <div class="row row-space">
-                    <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
-                        <p class="text-center"><b>Adriana Hoyos<br>
-                                Gerente General | Chocolov
-                            </b>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <p class="text-center color-font">
-
-                            "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div class="row">
-                    <div class="col-lg-12 text-center"><img src="/images/segalco.png" class="center-block"></div>
-                </div>
-                <br>
-                <div class="row row-space">
-                    <div class="col-lg-8 col-lg-offset-2" style="color:#56be7f">
-                        <p class="text-center"><b>Javier Pinilla<br>
-                                Director Comercial | Segalco</b>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <p class="text-center color-font">
-
-                            "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="row row-space hidden-xs">
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <p class="text-center color-font">
-                    <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
-                </p>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <p class="text-center color-font">
-                    <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
-                </p>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <p class="text-center color-font">
-                    <img src="{{ asset('assets/images/SF50X.png') }}" width="6%">
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section>
-    <div class="container-fluid grey-bk" style="background-color:#fffcf8">
+<section >
+    <div class="container-fluid grey-bk" style="background-color:#fffcf8;">
         <div class="row">
             <div class="col-lg-5 col-md-5 col-sm-5">
                 <p class="text-center col-lg-offset-5"><img src="/images/movil.png"></p>

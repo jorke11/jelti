@@ -312,7 +312,7 @@ class ToolController extends Controller {
             }
         });
     }
-    
+
     public function excelTitle() {
         $cmd = 'find  ' . public_path() . '/excel/ -name "Nombres*.xlsx"';
 
@@ -320,14 +320,14 @@ class ToolController extends Controller {
 
         $list = explode("\n", $list);
         $list = array_filter($list);
-              
-        
+
+
 
         Excel::load($list[0], function($reader) {
 
             foreach ($reader->get() as $i => $book) {
-                
-                
+
+
                 $pro = Products::where("reference", (int) $book->sf_code)->first();
                 $char = array();
                 if ($pro != null) {
@@ -386,7 +386,7 @@ class ToolController extends Controller {
 
     public function readImagesSubCategory() {
 
-        $cmd = 'find  ' . public_path() . '/subcategorias/No\ Coloreadas -name "*.png"';
+        $cmd = 'find  ' . public_path() . '/subcategorias -name "*.png"';
 
         $list = shell_exec($cmd);
 
@@ -398,20 +398,22 @@ class ToolController extends Controller {
             if (is_file($value)) {
                 $manager = new ImageManager(array('driver' => 'imagick'));
 
-                $image = $manager->make($value)->widen(700);
-
-                $cod = substr($image->basename, 0, strpos($image->basename, "-"));
-                $cod = explode("_", $cod);
-
-                $pro = Characteristic::find($cod[1]);
-
+                $image = $manager->make($value)->widen(900);
+//            dd($image);
+                $cod = substr($image->basename, 0, strpos($image->basename, "."));
+                $cod = explode("-", $cod);
+//                dd($cod);
+                $pro = Characteristic::where("order", $cod[1])->first();
+                
+//                dd($pro);
+                
                 if ($pro != null) {
 
-                    $path = public_path() . "/images/subcategory/sin/" . $pro->id . "/";
+                    $path = public_path() . "/images/subcategory/" . $pro->id . "/";
                     File::makeDirectory($path, $mode = 0777, true, true);
                     chmod($path, 0777);
 
-                    $pathsys = "images/subcategory/sin/" . $pro->id . "/";
+                    $pathsys = "images/subcategory/" . $pro->id . "/";
 
                     $path .= $image->basename;
                     $pathsys .= $image->basename;
@@ -419,7 +421,7 @@ class ToolController extends Controller {
                     $image->save($path);
 
                     $pro->img = $pathsys;
-                    $pro->order = $cod[0];
+                    $pro->order = $cod[1];
 
                     $res = $pro->save();
 

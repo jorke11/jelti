@@ -126,17 +126,10 @@ class ToolController extends Controller {
                 $manager = new ImageManager(array('driver' => 'imagick'));
 
                 $image = $manager->make($value)->widen(700);
-                if ($image->width() > 2000) {
-                    $width = $image->width() - round($image->width() * 0.70);
-                    $heigth = $image->height() - round($image->height() * 0.70);
-                } else {
-                    $width = $image->width() - round($image->width() * 0.70);
-                    $heigth = $image->height() - round($image->height() * 0.70);
-                }
-//
+             
 //
 //// to finally create image instances
-                $imagethumb = $manager->make($value)->resize($width, $heigth);
+                $imagethumb = $manager->make($value)->resize(300, 300);
 //                echo $image->basename;
                 $reference = str_replace(".png", "", $image->basename);
                 $pro = Products::where("reference", $reference)->first();

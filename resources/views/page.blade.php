@@ -632,7 +632,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         <div class="item active">
                                             <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
-                                                <h2></h2>  
+                                                <h2>Raúl Bermeo</h2>  
                                                 <p>
                                                     "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
                                                 </p>
@@ -641,7 +641,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         <div class="item">
                                             <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
-                                                <h2>Chocolov</h2>  
+                                                <h2>Adriana Hoyos</h2>  
                                                 <p>
                                                     "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
                                                 </p>
@@ -650,7 +650,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         <div class="item">
                                             <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
-                                                <h2>Segalco</h2>  
+                                                <h2>Javier Pinilla</h2>  
                                                 <p>
                                                     "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
                                                 </p>

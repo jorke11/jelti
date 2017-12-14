@@ -35,16 +35,16 @@
                         <?php
                         $cont = 0;
 
-                        foreach ($subcategory as $i => $val) {
+                        foreach ($categoryAsocc as $i => $val) {
                             ?>
-                            <div class="col-md-1" >
+                            <div class="col-md-2" >
                                 <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
                                     <img src="{{url("/")."/".$val->image}}" alt="">
                                 </a>
                             </div>
                             <?php
                             $cont++;
-                            if ($cont == 11) {
+                            if ($cont == 6) {
                                 $cont = 0;
                                 ?>
                             </div>
@@ -63,7 +63,7 @@
 </div>
 
 
-<div style="background: #fffBF2;width: 100%;padding-top:2%">
+<div style="background: #fffBF2;;padding-top:2%">
     <div class="row" >
         <div class="col-lg-10 col-lg-offset-1">
             @if (count($products)>0)
@@ -72,7 +72,7 @@
             ?>
             @foreach($products as $i => $value)
 
-            <div class="col-sm-2 col-lg-2 col-md-3" style="width: 20%">
+            <div class="col-sm-3 col-lg-3 col-md-3">
                 <div class="thumbnail" style="border: 0;padding: 0">
                     <div class="row" >
                         <div class="col-lg-12">
@@ -97,7 +97,7 @@
                     </div>
                     <img src="{{url("/")."/".$value->thumbnail}}">
                     <div class="caption" style="padding: 0">
-                        <h5 class="text-center" style="height: 38px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
+                        <h5 class="text-center" style="height: 60px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                         @if(!Auth::guest())
                         <p>
                         <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,2,",",".")}}</h4>
@@ -118,29 +118,20 @@
                     </div>
                 </div>
             </div>
-            <?php
-            $cont++;
-            if ($cont == 5) {
-                $cont = 0;
-                ?>
-            </div>
-            <div class="row" >
-                <div class="col-lg-10 col-lg-offset-1">
-                    <?php
-                }
-                ?>
-                @endforeach
-                @else
-                <div class="col-sm-3 col-lg-3 col-md-3">Dont found</div>
-                @endif
 
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-lg-offset-6">
-                {{ $products->appends(['sort' => 'titiel'])->links() }}
-            </div>
+            @endforeach
+            @else
+            <div class="col-sm-3 col-lg-3 col-md-3">Dont found</div>
+            @endif
+
         </div>
     </div>
-    {!!Html::script('js/Ecommerce/Detail.js')!!}
-    @endsection
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-6">
+            {{ $products->appends(['sort' => 'titiel'])->links() }}
+        </div>
+    </div>
+</div>
+</div>
+{!!Html::script('js/Ecommerce/Detail.js')!!}
+@endsection

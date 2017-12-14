@@ -38,12 +38,16 @@ class ShoppingController extends Controller {
         } else {
 
             $category = Categories::find($id);
+            $categoryAsocc = Categories::where("node_id", $id)->get();
+            $in = [];
+            foreach ($categoryAsocc as $value) {
+                $in[] = $value->id;
+            }
 
-
-            $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->paginate(10);
+            $products = DB::table("vproducts")->whereIn("category_id", $in)->whereNotNull("image")->paginate(15);
         }
-        
-        
+
+
 
         foreach ($products as $i => $value) {
             $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));
@@ -57,11 +61,11 @@ class ShoppingController extends Controller {
 
             $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);
         }
-//dd($products);
 
+//        dd($category);
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
-        return view("Ecommerce.shopping.detail", compact("products", "category", "subcategory"));
+        return view("Ecommerce.shopping.detail", compact("products", "category","categoryAsocc", "subcategory"));
     }
 
     public function getCategories() {

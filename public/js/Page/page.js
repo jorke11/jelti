@@ -1,7 +1,7 @@
 function Page() {
     var id = 1;
     this.init = function () {
-        $("#myModal").modal("show");
+     
         $(".box-client").addClass("back-green");
         $("#type_stakeholder").val(id);
         $("#register").click(function () {

@@ -339,14 +339,14 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         </div>
                     </div>
 
-                    <a class="left carousel-control" href="#media" role="button" data-slide="prev">
+<!--                    <a class="left carousel-control" href="#media" role="button" data-slide="prev">
                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                     </a>
                     <a class="right carousel-control" href="#media" role="button" data-slide="next">
                         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
-                    </a>
+                    </a>-->
                 </div>
             </div>
         </div>
@@ -583,7 +583,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         <div class="item">
                                             <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
-                                                <h2>Farmatodo</h2>  
+                                                <h2>Teodoro Zubillaga</h2>  
+                                                 <p>Country Manager</p>  
                                                 <p>
                                                     A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
                                                 </p>
@@ -592,7 +593,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         <div class="item">
                                             <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
-                                                <h2>Rappi</h2>  
+                                                <h2>Simon Borreo</h2>  
+                                                 <p>CEO</p>  
                                                 <p>
                                                     Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
                                                 </p>
@@ -626,7 +628,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         <div class="item active">
                                             <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
-                                                <h2>Terrafertil</h2>  
+                                                <h2></h2>  
                                                 <p>
                                                     "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
                                                 </p>

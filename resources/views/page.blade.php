@@ -597,7 +597,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         <div class="item">
                                             <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
-                                                <h2>Simon Borreo</h2>  
+                                                <h2>Simon Borrero</h2>  
                                                 <p>CEO</p>  
                                                 <p>
                                                     Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.

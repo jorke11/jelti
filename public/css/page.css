@@ -15,10 +15,7 @@ body{
 .navbar-brand {
     padding: 10px 10px;
 }
-/*            .navbar-default {
-                background-color: white;
-                box-shadow: 0 4px 4px -4px #9B9B9B;
-            }*/
+
 
 .navbar-form .form-control.search {
     width: 500px;

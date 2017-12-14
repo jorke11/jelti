@@ -743,7 +743,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
 
         <section >
-            <div class="container-fluid grey-bk" style="background-color:#fffcf8;">
+            <div class="container-fluid grey-bk">
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-5">
                         <p class="text-center col-lg-offset-5"><img src="/images/movil.png"></p>

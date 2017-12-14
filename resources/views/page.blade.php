@@ -278,17 +278,18 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
                 </div>
             </div>
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
 
         <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+
     </div>
 </section>
 
@@ -339,14 +340,14 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         </div>
                     </div>
 
-<!--                    <a class="left carousel-control" href="#media" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#media" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>-->
+                    <!--                    <a class="left carousel-control" href="#media" role="button" data-slide="prev">
+                                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="right carousel-control" href="#media" role="button" data-slide="next">
+                                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>-->
                 </div>
             </div>
         </div>
@@ -584,7 +585,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
                                                 <h2>Teodoro Zubillaga</h2>  
-                                                 <p>Country Manager</p>  
+                                                <p>Country Manager</p>  
                                                 <p>
                                                     A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
                                                 </p>
@@ -594,7 +595,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
                                             <div class="carousel-caption">
                                                 <h2>Simon Borreo</h2>  
-                                                 <p>CEO</p>  
+                                                <p>CEO</p>  
                                                 <p>
                                                     Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
                                                 </p>
@@ -821,56 +822,56 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <img src="/images/superfuds_gris.png" class="img-responsive" style="padding-top: 5%;padding-left: 7%">
                 </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <hr>   
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-4" >
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <span style="color:white;" class="col-lg-offset-1">Superfüds 2018. Todos los derechos reservados</span>   
-                        </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <hr>   
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-4" >
 
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <span style="color:white;" class="col-lg-offset-1">Superfüds 2018. Todos los derechos reservados</span>   
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div>
-        </body>
-        <script>
-            $('#menuProduct').click(function () {
-                $("#menuProduct span").addClass("underline-green");
-                $("#menuInicio").removeClass("underline-green");
-                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
-                        && location.hostname == this.hostname) {
-
-                    var $target = $(this.hash);
-
-                    $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
-
-                    if ($target.length) {
-                        var targetOffset = $target.offset().top;
-                        $('html,body').animate({scrollTop: targetOffset}, 1000);
-                        return false;
-                    }
-                }
-
-            });
-
-        </script>
-        {!!Html::script('js/Page/page.js')!!}
-
-        </html>
-        <?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario. ?>
+            </body>
             <script>
-                $(document).ready(function ()
-                {
-                    // id de nuestro modal
-                    $("#myModal").modal("show");
+                $('#menuProduct').click(function () {
+                    $("#menuProduct span").addClass("underline-green");
+                    $("#menuInicio").removeClass("underline-green");
+                    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+                            && location.hostname == this.hostname) {
+
+                        var $target = $(this.hash);
+
+                        $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+
+                        if ($target.length) {
+                            var targetOffset = $target.offset().top;
+                            $('html,body').animate({scrollTop: targetOffset}, 1000);
+                            return false;
+                        }
+                    }
 
                 });
+
             </script>
-        <?php endif; ?>
+            {!!Html::script('js/Page/page.js')!!}
+
+            </html>
+            <?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario. ?>
+                <script>
+                    $(document).ready(function ()
+                    {
+                        // id de nuestro modal
+                        $("#myModal").modal("show");
+
+                    });
+                </script>
+            <?php endif; ?>
         

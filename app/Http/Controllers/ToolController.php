@@ -398,7 +398,7 @@ class ToolController extends Controller {
             if (is_file($value)) {
                 $manager = new ImageManager(array('driver' => 'imagick'));
 
-                $image = $manager->make($value)->widen(300);
+                $image = $manager->make($value)->widen(150);
 //            dd($image);
                 $cod = substr($image->basename, 0, strpos($image->basename, "."));
                 $cod = explode("-", $cod);

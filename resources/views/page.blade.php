@@ -297,11 +297,13 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     <div class="container-fluid" style="background-color:#fffcf8">
 
         <div class="row">
-            <div class="col-lg-12"><h1 class="text-center title-color title" >Nuestros <span class="underline">productos</span></h1></div>
+            <div class="col-lg-12">
+                <h1 class="text-center title-color" >Nuestros <span class="underline">Productos</span></h1>
+            </div>
         </div>
 
         <div class="row row-space">
-            <div class="col-lg-12"><h4 class="text-center font-color title" >Entregamos todas tus marcas saludables favoritas directamente a tu negocio.</h4></div>
+            <div class="col-lg-12"><p class="text-center font-color" style="font-size: 18px" >Entregamos todas tus marcas saludables favoritas directamente a tu Negocio.</p></div>
         </div>
         <div class="row">
             <div class='col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1'>
@@ -402,8 +404,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
         <section style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%">   
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font title">Lo Nuevo</h3></div>
-                <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><h3 class="text-muted color-font title">Ver Todo</h3></div>
+                <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>
+                <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><h4 class="text-muted color-font" style="padding-top: 3%">Ver Todo</h4></div>
             </div>
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
@@ -500,8 +502,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
         <section style="padding-top: 3%;">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12"><h3 class="color-font text-center">¿Que es SuperFuds?</h3></div>
+                <div class="row" style="padding-bottom: 4%">
+                    <div class="col-lg-12"><h1 class="color-font text-center">¿Que es SuperFuds?</h1></div>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2 ">
@@ -552,7 +554,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     </div>
                 </div>
                 <div class="row" >
-                    <div class="col-lg-8 col-lg-offset-2" style="background-color: #FAF6ee;"><h3 class="color-font text-center">Lo que Aman nuestros Clientes y Proveedores</h3></div>
+                    <div class="col-lg-8 col-lg-offset-2" style="background-color: #FAF6ee;"><h3 class="color-font text-center">Lo que Aman nuestros <b>Clientes</b> y <b>Proveedores</b></h3></div>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2 ">
@@ -664,7 +666,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     </div>
                 </div>
         </section>
-    
+
         <section style="padding-bottom: 2%;padding-top: 2%">
             <div class="row" style="background-color: #FAF6ee;">
                 <div class="col-lg-12">
@@ -743,12 +745,12 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <div class="col-lg-7 col-md-7 col-sm-7" style="padding-top: 5%">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h2 class="text-center" style="color:#4a4a4a">DELICIOSAMENTE SALUDABLE</h2>
+                                <h2 class="text-center" style="color:#4a4a4a">Descarga SuperFüds</h2>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <h4 class="text-center" style="color:#4a4a4a">Descarga Superfuds para  que puedas  llevar  la vida saludable a todas partes</h4>
+                                <h4 class="text-center" style="color:#4a4a4a">Para  que puedas  llevar  la vida saludable a todas partes</h4>
                             </div>
                         </div>
                         <br>
@@ -797,18 +799,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
         <div class="container-fluid" style="background-color: rgba(0,0,0,.8)">
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 hidden-xs" >
-                    <div class="row" style="padding-top: 10%;padding-bottom: 3%">
-                        <div class="col-lg-12">
-                            <h3 style="color:white" class="col-lg-offset-1">Nosotros</h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-xs-12">
-                            <h4 style="color:white;font-weight: 100;line-height:1.5" class="col-lg-offset-1 text-justify">
-                                Somos el marketplace de alimentos saludables más grande del país. Entregamos a clientes sus marcas saludables favoritas y nos encargamos de los negocios para que proveedores puedan concentrarse en su producto.</h4>
-                        </div>
-                    </div>
+                <div class="col-lg-2 col-md-4 col-sm-4 col-lg-offset-1 col-xs-4" style="padding-top: 2%;">
+                    <img src="/images/aliados.png" class="img-responsive">
                 </div>
                 <div class="col-lg-5 col-md-5 col-sm-4 col-xs-6">
                     <div class="row" style="padding-top: 20%;padding-bottom: 3%">
@@ -822,11 +814,11 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                             <img src="/images/twitter.png" class="img-responsive">
                         </div>
                     </div>
+                </div
+                <div class="col-lg-2 col-md-4 col-sm-4 col-lg-offset-1 col-xs-4" >
+                    <img src="/images/superfuds_gris.png" class="img-responsive" style="padding-top: 5%;padding-left: 7%">
                 </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 col-lg-offset-1 col-xs-4" style="padding-top: 2%;padding-bottom: 3%">
-                    <img src="/images/aliados.png" class="img-responsive">
-                </div>
-            </div>
+
             <div class="row">
                 <div class="col-lg-12">
                     <hr>   

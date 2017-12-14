@@ -70,6 +70,9 @@ if (!isset($_COOKIE["mostrarModal"])) {
             .texto{
                 font-weight: 900
             }
+            .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev{
+                font-size: 20px;
+            }
 
             @media (max-width: 700px) {
                 #container-video{

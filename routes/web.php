@@ -33,8 +33,9 @@ Route::get('/', function () {
             ->orderBy("category_id")
             ->orderBy("reference")
             ->get();
-//       dd($newproducts);
+
     $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
+//    $subcategory = array();
 
     return view('page', compact("category", "subcategory", "newproducts"));
 });

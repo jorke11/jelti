@@ -19,6 +19,7 @@
 </style>
 
 <div class="row" style="padding-bottom: 3%;padding-top: 3%">
+
     @if($category->banner!='')
     <img src="{{url("/")."/".($category->banner)}}" class="img-responsive" style="width: 100%">
     @else
@@ -34,12 +35,12 @@
                     <div class="row" style="padding-top: 1%;padding-bottom: 1%">
                         <?php
                         $cont = 0;
-
-                        foreach ($categoryAsocc as $i => $val) {
+                        foreach ($subcategory as $i => $val) {
+//                            dd($val);
                             ?>
                             <div class="col-md-2" >
                                 <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
-                                    <img src="{{url("/")."/".$val->image}}" alt="">
+                                    <img src="{{url("/")."/".$val->img}}" alt="">
                                 </a>
                             </div>
                             <?php
@@ -70,6 +71,7 @@
             <?php
             $cont = 0;
             ?>
+
             @foreach($products as $i => $value)
 
             <div class="col-sm-3 col-lg-3 col-md-3">
@@ -78,8 +80,10 @@
                         <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    @if($value->characteristic!=null)
+                                    @if($value->characteristic != null || count($value->characteristic)>0)
+
                                     @foreach($value->characteristic as $val)
+
                                     <div class="col-lg-2">
                                         <div class="row">
                                             <div class="row hover01">

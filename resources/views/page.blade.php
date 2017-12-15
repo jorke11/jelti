@@ -567,7 +567,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         <div class="row">
                             <div class="col-lg-6" style="background-color: #1ec296">
                                 <div id="carousel-clients2" class="carousel slide" data-ride="carousel">
-                                    Indicators 
+                                     
                                     <ol class="carousel-indicators">
                                         <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                                         <li data-target="#carousel-example-generic" data-slide-to="1"></li>

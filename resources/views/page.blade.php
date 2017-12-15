@@ -574,7 +574,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                         <li data-target="#carousel-example-generic" data-slide-to="2"></li>
                                     </ol>
 
-                                    Wrapper for slides 
+                                   
                                     <div class="carousel-inner" role="listbox">
                                         <div class="item active">
                                             <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">

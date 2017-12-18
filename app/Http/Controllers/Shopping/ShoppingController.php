@@ -38,37 +38,38 @@ class ShoppingController extends Controller {
         } else {
 
             $category = Categories::find($id);
-            $categoryAsocc = Categories::where("node_id", $id)->get();
+            $categoryAssoc = Categories::where("node_id", $id)->get();
             $in = [];
-            foreach ($categoryAsocc as $value) {
-                $in[] = $value->id;
-            }
 
-            $products = DB::table("vproducts")->whereIn("category_id", $in)->whereNotNull("image")->paginate(20);
-        }
+            foreach ($categoryAssoc as $j => $value) {
+                $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->get();
 
-        foreach ($products as $i => $value) {
-            $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));
-            $cod = array_map('intval', explode(",", $cod));
-            $cod = array_filter($cod);
+                foreach ($products as $i => $value) {
+                    $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));
+                    $cod = array_map('intval', explode(",", $cod));
+                    $cod = array_filter($cod);
 
-            if (count($cod) > 0) {
+                    if (count($cod) > 0) {
+                        $cha = Characteristic::whereIn("id", $cod)->get();
+                        if (count($cha) == 0) {
+                            $cha = null;
+                        }
+                        $products[$i]->characteristic = $cha;
+                    }
 
-                $cha = Characteristic::whereIn("id", $cod)->get();
-
-                if (count($cha) == 0) {
-                    $cha = null;
+                    $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);
                 }
-                $products[$i]->characteristic = $cha;
-            }
 
-            $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);
+                $categoryAssoc[$j]->products = $products;
+            }
         }
+        dd($categoryAssoc);
+
 
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
 //        dd($subcategory);
-        return view("Ecommerce.shopping.detail", compact("products", "category", "categoryAsocc", "subcategory"));
+        return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory"));
     }
 
     public function getCategories() {

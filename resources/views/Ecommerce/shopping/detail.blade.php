@@ -99,7 +99,7 @@
                         <div class="row">
                             <?php
                             $cont = 0;
-                                dd($val->products);
+//                                dd($val->products);
                             foreach ($val->products as $i => $value) {
                                 ?>
                                 <div class="col-md-3 col-sm-2 col-xs-2">

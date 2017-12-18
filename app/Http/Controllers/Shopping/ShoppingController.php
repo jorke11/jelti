@@ -63,7 +63,7 @@ class ShoppingController extends Controller {
                 $categoryAssoc[$j]->products = $products;
             }
         }
-        dd($categoryAssoc);
+//        dd($categoryAssoc);
 
 
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();

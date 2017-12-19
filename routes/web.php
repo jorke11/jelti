@@ -37,6 +37,30 @@ Route::get('/', function () {
     $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 //    $subcategory = array();
 
+    foreach ($newproducts as $i => $value) {
+        $cod = str_replace("]", "", str_replace("[", "", $newproducts[$i]->characteristic));
+        if ($cod != '') {
+            $cod = array_map('intval', explode(",", $cod));
+            $cod = array_filter($cod);
+            $cha = null;
+            if (count($cod) > 0) {
+
+                $cha = Models\Administration\Characteristic::whereIn("id", $cod)->get();
+                if (count($cha) == 0) {
+                    $cha = null;
+                }
+                $newproducts[$i]->characteristic = $cha;
+            }
+
+            $newproducts[$i]->short_description = str_replace("/", "<br>", $newproducts[$i]->short_description);
+        } else {
+            $newproducts[$i]->characteristic = null;
+        }
+    }
+
+//    dd($newproducts);
+
+
     return view('page', compact("category", "subcategory", "newproducts"));
 });
 

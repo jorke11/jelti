@@ -271,41 +271,96 @@ class ToolController extends Controller {
         $list = shell_exec($cmd);
 
         $list = explode("\n", $list);
-
+        $list = array_filter($list);
 
         Excel::load($list[0], function($reader) {
 
             foreach ($reader->get() as $i => $book) {
-
-                $pro = Products::where("reference", (int) $book->codigo_sf)->first();
+                $pro = Products::where("reference", (int) $book->sf_code)->first();
                 $char = array();
+
+
                 if ($pro != null) {
-                    if ($book->paleo == 'X') {
-                        $char[] = 5;
+
+                    if (strtoupper($book->paleo) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%paleo%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
                     }
-                    if ($book->gluten_free == 'X') {
-                        $char[] = 9;
+                    if (strtoupper($book->gluten_free) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%fluten free%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
                     }
-                    if ($book->vegan == 'X') {
-                        $char[] = 6;
+                    if (strtoupper($book->vegan) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%vegano%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
                     }
-                    if ($book->non_gmo == 'X') {
-                        $char[] = 13;
+                    if (strtoupper($book->non_gmo) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%no gmo%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
                     }
-                    if ($book->organico == 'X') {
-                        $char[] = 11;
+                    if (strtoupper($book->organico) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%organico%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
                     }
-                    if ($book->sin_grasas_trans == 'X') {
-                        $char[] = 7;
+                    if (strtoupper($book->sin_grasas_trans) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%sin grasas trans%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
                     }
-                    if ($book->sin_azucar_anadida == 'X') {
-                        $char[] = 8;
+                    if (strtoupper($book->sin_azucar_anadida) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%sin azucar%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
+                    }
+
+                    if (strtoupper($book->cruelty_free) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%cruelty free%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
+                    }
+
+                    if (strtoupper($book->de_origen_vegetal) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%origen vegetal%')->first();
+
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
+                    }
+
+                    if (strtoupper($book->no_testado_en_animales) == 'X') {
+                        $cha = Characteristic::where(DB::raw("LOWER(description)"), "LIKE", '%no testado en animales%')->first();
+                        if ($cha != null) {
+                            $char[] = $cha->id;
+                        }
                     }
 
                     $pro->characteristic = json_encode($char);
+
                     $pro->save();
                     echo $pro->title . " " . print_r($char, true) . "<br>";
                 } else {
+                    echo "ingreso:<br>";
                     print_r($book);
                     echo "<br>";
                 }
@@ -320,8 +375,6 @@ class ToolController extends Controller {
 
         $list = explode("\n", $list);
         $list = array_filter($list);
-
-
 
         Excel::load($list[0], function($reader) {
 
@@ -348,7 +401,6 @@ class ToolController extends Controller {
         $list = shell_exec($cmd);
 
         $list = explode("\n", $list);
-
 
         Excel::load($list[0], function($reader) {
 
@@ -392,7 +444,6 @@ class ToolController extends Controller {
 
         $list = explode("\n", $list);
         $list = array_filter($list);
-//        dd($list);
 
         foreach ($list as $value) {
             if (is_file($value)) {
@@ -405,9 +456,9 @@ class ToolController extends Controller {
                 $cod = explode("-", $cod);
 //                dd($cod);
                 $pro = Characteristic::where("order", $cod[1])->first();
-                
+
 //                dd($pro);
-                
+
                 if ($pro != null) {
 
                     $path = public_path() . "/images/subcategory/" . $pro->id . "/";

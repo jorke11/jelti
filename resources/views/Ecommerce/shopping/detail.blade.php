@@ -26,10 +26,8 @@
     @endif
 </div>
 
-
-
 <div class="container-fluid">
-    <div class="row row-space">
+    <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
             <div class="carousel slide media-carousel" id="newproducts">
                 <div class="carousel-inner">
@@ -74,12 +72,18 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-lg-12">
+        <hr>
+    </div>
+</div>
+
 
 @foreach($categoryAssoc as $val)
 @if(count($val->products)>0)
 <div class="row" style="padding-top: 2%;padding-bottom: 2%">
     <div class="col-lg-12">
-        <p class="text-center" style="font-size:25px"><span class="underline">{{$val->description}}</span></p>
+        <p class="text-center" style="font-size:24px;font-weight: 0"><span class="underline-green">{{$val->description}}</span></p>
     </div>
 </div>
 <div class="row">
@@ -99,12 +103,22 @@
                         <div class="row">
                             <?php
                             $cont = 0;
-//                                dd($val->products);
                             foreach ($val->products as $i => $value) {
                                 ?>
                                 <div class="col-md-3 col-sm-2 col-xs-2">
                                     <div class="thumbnail" style="border: 0;padding: 0">
-                                        <img src="{{url("/")."/".$value->thumbnail}}">
+                                        <div class="row">
+                                            @if($value->characteristic!=null)
+                                            @foreach($value->characteristic as $val)
+                                       
+                                            <div class="col-md-3 col-sm-2 col-xs-2">
+                                                <img src="/{{$val->img}}" class="img-responsive center-block" style="cursor:pointer;" >
+                                            </div>
+                                            @endforeach
+                                            @endif
+                                        </div>
+
+                                        <img src="{{url("/") ."/".$value->thumbnail}}">
                                         <div class="caption" style="padding: 0">
                                             <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                             @if(!Auth::guest())

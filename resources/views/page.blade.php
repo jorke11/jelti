@@ -427,29 +427,20 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             ?>
                                             <div class="col-md-3 col-sm-2 col-xs-2">
                                                 <div class="thumbnail" style="border: 0;padding: 0">
-                                                    <div class="row" >
-                                                        <div class="col-lg-12">
-                                                            <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    @if($value->characteristic!=null)
-                                                                    @foreach($value->characteristic as $val)
-                                                                    <div class="col-lg-2">
-                                                                        <div class="row">
-                                                                            <div class="row hover01">
-                                                                                <div class="col-lg-12">
-                                                                                    <img width="60%" id="sub_{{$val->id}}" src="/{{$val->thumbnail}}" alt="" class="img-responsive center-block" style="cursor:pointer">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    @endforeach
-                                                                    @endif
-                                                                </div>
-                                                            </div>
+                                                    <div class="row" style="padding-top: 5%">
+                                                        @if($value->characteristic != null)
+                                                        @foreach($value->characteristic as $val)
+
+                                                        <div class="col-lg-2" style="padding-left: 10px;padding-right: 10px">
+                                                            <img  id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer;" 
+                                                                  title="{{$val->description}}">
                                                         </div>
+                                                        @endforeach
+                                                        @endif
                                                     </div>
+
                                                     <img src="{{url("/")."/".$value->thumbnail}}">
-                                                    <div class="caption" style="padding: 0">
+                                                    <div cl                                            ass="caption" style="padding: 0">
                                                         <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                                         @if(!Auth::guest())
                                                         <p>
@@ -567,14 +558,14 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         <div class="row">
                             <div class="col-lg-6" style="background-color: #1ec296">
                                 <div id="carousel-clients2" class="carousel slide" data-ride="carousel">
-                                     
+
                                     <ol class="carousel-indicators">
                                         <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                                         <li data-target="#carousel-example-generic" data-slide-to="1"></li>
                                         <li data-target="#carousel-example-generic" data-slide-to="2"></li>
                                     </ol>
 
-                                   
+
                                     <div class="carousel-inner" role="listbox">
                                         <div class="item active">
                                             <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
@@ -804,7 +795,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
             </div>
         </div>
 
-       @include("footer")
+        @include("footer")
     </body>
     <script>
         $('#menuProduct').click(function () {
@@ -830,7 +821,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     {!!Html::script('js/Page/page.js')!!}
 
 </html>
-<?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario. ?>
+<?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario.  ?>
     <script>
         $(document).ready(function ()
         {

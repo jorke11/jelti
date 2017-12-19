@@ -42,6 +42,7 @@ class ShoppingController extends Controller {
             $in = [];
 
             foreach ($categoryAssoc as $j => $value) {
+                
                 $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->get();
 
                 foreach ($products as $i => $value) {
@@ -50,11 +51,14 @@ class ShoppingController extends Controller {
                     $cod = array_filter($cod);
 
                     if (count($cod) > 0) {
+
                         $cha = Characteristic::whereIn("id", $cod)->get();
                         if (count($cha) == 0) {
                             $cha = null;
                         }
                         $products[$i]->characteristic = $cha;
+                    } else {
+                        $products[$i]->characteristic = null;
                     }
 
                     $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);

@@ -99,6 +99,10 @@ if (!isset($_COOKIE["mostrarModal"])) {
 
 
             }
+            #menuNav{
+                top:10
+            }
+
 
 
 
@@ -213,17 +217,17 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         <!--</div>-->
 
 
-<!--    <section>
-        <div class="container-fluid" >
-            <div class="row" style="background-color: #68b9a3;padding-bottom: 1%;">
-                <div class="col-lg-12">
-                    <h4 style="color:white">Invita y Gana</h4>
+        <section>
+            <div class="container-fluid" >
+                <div class="row" style="background-color: #68b9a3;padding-bottom: 1%;position: fixed;right: 0;left: 0;z-index: 1030;padding-left: 2%">
+                    <div class="col-lg-12">
+                        <h4 style="color:white">Invita y Gana</h4>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>-->
+        </section>
 
-        <nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom:0px;padding-top: 4px;min-height: 60px;">
+        <nav class="navbar navbar-default navbar-fixed-top" id="menuNav" style="margin-bottom:0px;padding-top: 4px;min-height: 60px;top:6%">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header" style='padding-left: 2%'>

@@ -107,14 +107,22 @@
                                 ?>
                                 <div class="col-md-3 col-sm-2 col-xs-2">
                                     <div class="thumbnail" style="border: 0;padding: 0">
-                                        <div class="row">
+                                        <div class="row" style="margin: 0 auto;">
+
                                             @if($value->characteristic!=null)
-                                            @foreach($value->characteristic as $val)
-                                       
-                                            <div class="col-md-3 col-sm-2 col-xs-2">
-                                                <img src="/{{$val->img}}" class="img-responsive center-block" style="cursor:pointer;" >
+                                            <div class="col-md-12 center-block" >
+                                                
+                                                    <?php
+                                                    foreach ($value->characteristic as $val) {
+                                                        ?>
+                                                    <div class="col-md-3 col-sm-2 col-xs-2">
+                                                        <img src="/{{$val->img}}" class="img-responsive center-block" style="cursor:pointer;" >
+                                                    </div>
+                                                    <?php
+                                                }
+                                                ?>
+                                                
                                             </div>
-                                            @endforeach
                                             @endif
                                         </div>
 

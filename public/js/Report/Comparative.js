@@ -105,14 +105,14 @@ function Client() {
     }
 
     this.setData = function (data, title) {
-        var html = "<tr><th rowspan='2'>" + title + "</th>";
+        var html = "<tr><th rowspan='2' width=200px>" + title + "</th>";
         html += '<th colspan="2" align="center">Total</th>';
         var subheader = '<tr>';
         subheader += "<th align='center'>Unidades</th><th align='center'>Subtotal</th>";
         header = data.header;
         $.each(data.header, function (i, val) {
             html += '<th colspan="2" align="center">' + val.dates + "</th>";
-            subheader += "<th align='center'>Unidades</th><th align='center'>Subtotal</th>";
+            subheader += "<th align='center'>Unidades</th><th align='center' width=200px>Subtotal</th>";
         });
 
         html += "</tr>";

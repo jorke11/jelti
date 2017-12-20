@@ -28,13 +28,16 @@ class ShoppingController extends Controller {
 
     public function getDetailProduct($id) {
 
+        $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
+
         if (strpos($id, "_") !== false) {
 
             $id = str_replace("_", "", $id);
 
             $category = Categories::find($id);
 
-            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(10);
+            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
+            return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
         } else {
 
             $category = Categories::find($id);
@@ -42,7 +45,7 @@ class ShoppingController extends Controller {
             $in = [];
 
             foreach ($categoryAssoc as $j => $value) {
-                
+
                 $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->get();
 
                 foreach ($products as $i => $value) {
@@ -66,14 +69,9 @@ class ShoppingController extends Controller {
 
                 $categoryAssoc[$j]->products = $products;
             }
+
+            return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory"));
         }
-//        dd($categoryAssoc);
-
-
-        $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
-
-//        dd($subcategory);
-        return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory"));
     }
 
     public function getCategories() {

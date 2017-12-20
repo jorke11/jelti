@@ -304,7 +304,7 @@ class ComparativeController extends Controller {
             group by 1,client
             order by 3 DESC
             ";
-        echo $sql;exit;
+//        echo $sql;exit;
 
 
         $cli = DB::select($sql);

@@ -219,7 +219,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
         <section>
             <div class="container-fluid" style="padding-bottom: .8%;">
-                <div class="row" style="background-color: #68b9a3;position: fixed;right: 0;left: 0;z-index: 1030;padding-left: 2%">
+                <div class="row" style="background-color: #68b9a3;position: fixed;right: 0;left: 0;z-index: 1030;padding-left: 2%;">
                     <div class="col-lg-12">
                         <h4 style="color:white">Invita y Gana</h4>
                     </div>
@@ -444,7 +444,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                     </div>
 
                                                     <img src="{{url("/")."/".$value->thumbnail}}">
-                                                    <div cl                                            ass="caption" style="padding: 0">
+                                                    <div class="caption" style="padding: 0">
                                                         <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                                         @if(!Auth::guest())
                                                         <p>

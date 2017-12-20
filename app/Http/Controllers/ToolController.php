@@ -134,7 +134,7 @@ class ToolController extends Controller {
                     $heigth = $image->height() - round($image->height() * 0.70);
                 }
 //
-//
+
 //// to finally create image instances
                 $imagethumb = $manager->make($value)->resize($width, $heigth);
 //                echo $image->basename;

@@ -220,12 +220,21 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         <section>
             <div class="container-fluid" style="padding-bottom: .8%;">
                 <div class="row" style="background-color: #68b9a3;position: fixed;right: 0;left: 0;z-index: 1030;padding-left: 2%;">
-                    <div class="col-lg-12">
+                    <div class="col-lg-8">
                         <h4 style="color:white">Invita y Gana</h4>
                     </div>
+                    <div class="col-lg-4">
+                        <div id="wrap">
+                            <form action="" autocomplete="on">
+                                <input id="search" name="search" type="text" placeholder="Buscar?"><input id="search_submit" value="Rechercher" type="submit">
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
+        
 
         <nav class="navbar navbar-default navbar-fixed-top" id="menuNav" style="margin-bottom:0px;padding-top: 4px;min-height: 60px;top:4%">
             <div class="container-fluid">

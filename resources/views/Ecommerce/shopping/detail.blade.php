@@ -59,7 +59,7 @@
                         </div>
                     </div>
                 </div>
-                <a class="left carousel-control" href="#media" role="button" data-slide="prev">
+                <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
                 </a>
@@ -80,10 +80,11 @@
 
 
 @foreach($categoryAssoc as $val)
+<?php $id = $val->description; ?>
 @if(count($val->products)>0)
 <div class="row" style="padding-top: 2%;padding-bottom: 2%">
     <div class="col-lg-12">
-        <p class="text-center" style="font-size:24px;font-weight: 0"><span class="underline-green">{{$val->description}}</span></p>
+        <a href="" ><p class="text-center"  style="font-size:24px;font-weight: 0" >{{$val->description}}</p></a>
     </div>
 </div>
 <div class="row">
@@ -97,7 +98,8 @@
     <!--<div class="container-fluid">-->
     <div class="row" >
         <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
-            <div class="carousel slide media-carousel" id="newproducts_{{$val->id}}">
+            <!--<div class="carousel slide media-carousel"  data-ride="carousel" id="newproducts2_{{$val->id}}">-->
+            <div class="carousel slide media-carousel"  data-ride="carousel" id="{{$id}}">
                 <div class="carousel-inner">
                     <div class="item  active">
                         <div class="row">
@@ -111,17 +113,17 @@
 
                                             @if($value->characteristic!=null)
                                             <div class="col-md-12 center-block" >
-                                                
-                                                    <?php
-                                                    foreach ($value->characteristic as $val) {
-                                                        ?>
+
+                                                <?php
+                                                foreach ($value->characteristic as $val) {
+                                                    ?>
                                                     <div class="col-md-3 col-sm-2 col-xs-2">
                                                         <img src="/{{$val->img}}" class="img-responsive center-block" style="cursor:pointer;" >
                                                     </div>
                                                     <?php
                                                 }
                                                 ?>
-                                                
+
                                             </div>
                                             @endif
                                         </div>
@@ -144,8 +146,6 @@
 
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -166,11 +166,12 @@
                     </div>
                 </div>
 
-                <a class="left carousel-control" href="#newproducts_{{$val->id}}" role="button" data-slide="prev">
+                <!--<a class="left carousel-control" href="#newproducts_{{$val->id}}" role="button" data-slide="prev">-->
+                <a class="left carousel-control" href="#{{$id}}" role="button" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
                 </a>
-                <a class="right carousel-control" href="#newproducts_{{$val->id}}" role="button" data-slide="next">
+                <a class="right carousel-control" href="#{{$id}}" role="button" data-slide="next">
                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>

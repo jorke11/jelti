@@ -442,14 +442,14 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         <div class="carousel slide media-carousel" id="newproducts">
                             <div class="carousel-inner">
                                 <div class="item  active">
-                                    <div class="row">
+                                    <div class="row" >
                                         <?php
                                         $cont = 0;
                                         foreach ($newproducts as $i => $value) {
                                             ?>
                                             <div class="col-md-3 col-sm-2 col-xs-2">
-                                                <div class="thumbnail" style="border: 0;padding: 0">
-                                                    <div class="row" style="padding-top: 5%">
+                                                <div class="thumbnail" style="border: 0;padding: 0;">
+                                                    <div class="row" style="padding-top: 5%;min-height: 50px">
                                                         @if($value->characteristic != null)
                                                         @foreach($value->characteristic as $val)
 

@@ -109,7 +109,7 @@
                                 ?>
                                 <div class="col-md-3 col-sm-2 col-xs-2">
                                     <div class="thumbnail" style="border: 0;padding: 0">
-                                        <div class="row" style="margin: 0 auto;">
+                                        <div class="row" style="margin: 0 auto;min-height: 50px">
 
                                             @if($value->characteristic!=null)
                                             <div class="col-md-12 center-block" >

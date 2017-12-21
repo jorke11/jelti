@@ -46,7 +46,7 @@ class ShoppingController extends Controller {
 
             foreach ($categoryAssoc as $j => $value) {
 
-                $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->get();
+                $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->orderBy("supplier_id")->get();
 
                 foreach ($products as $i => $value) {
                     $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));

@@ -102,6 +102,17 @@ if (!isset($_COOKIE["mostrarModal"])) {
             #menuNav{
                 top:10
             }
+            .carousel-caption-edit {
+                position: absolute;
+                left: 15%;
+                right: 15%;
+                bottom: 20px;
+                z-index: 10;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                text-align: center;
+                color: #fffbf2
+            }
 
 
 
@@ -234,7 +245,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 </div>
             </div>
         </section>
-        
+
 
         <nav class="navbar navbar-default navbar-fixed-top" id="menuNav" style="margin-bottom:0px;padding-top: 4px;min-height: 60px;top:4%">
             <div class="container-fluid">
@@ -258,7 +269,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="/" style="color:#00c98a;font-size:17px;font-weight: 100" ><span class="underline-green" id="menuInicio">Inicio</span></a></li>
                         <li><a href="#divProduct" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
-                        <li><a href="/blog" style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
+                        <li><a href="http://blog.superfuds.com/" style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
                         <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
                     </ul>
@@ -291,7 +302,6 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                             <a href="/shopping/18" style="color:white;background-color: #139c9e;border: 1px solid white;
                                border-radius: 30px;padding:10px 40px 10px 40px;font-size: 40px;font-weight: 800">BEBES</a>
                         </div>
-
                     </div>
                 </div>
                 <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
@@ -318,7 +328,6 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         <h1 class="text-center title-color" >Nuestros <span class="underline">Productos</span></h1>
                     </div>
                 </div>
-
                 <div class="row row-space">
                     <div class="col-lg-12"><p class="text-center font-color" style="font-size: 18px" >Entregamos todas tus marcas saludables favoritas directamente a tu Negocio.</p></div>
                 </div>
@@ -582,32 +591,33 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     <div class="carousel-inner" role="listbox">
                                         <div class="item active">
                                             <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                            <div class="carousel-caption">
-                                                <h2>Sergio Saavedra</h2>  
-                                                <p>Director General</p>  
+                                            <div class="carousel-caption-edit">
                                                 <p>
                                                     Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
                                                 </p>
+                                                <h3>Sergio Saavedra</h3>  
+                                                <!--<p>Director General</p>--> 
                                             </div>
                                         </div>
                                         <div class="item">
                                             <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                            <div class="carousel-caption">
-                                                <h2>Teodoro Zubillaga</h2>  
-                                                <p>Country Manager</p>  
+                                            <div class="carousel-caption-edit">
                                                 <p>
                                                     A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
                                                 </p>
+                                                <h3>Teodoro Zubillaga</h3>  
+                                                <!--<p>Country Manager</p>-->  
+
                                             </div>
                                         </div>
                                         <div class="item">
                                             <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                            <div class="carousel-caption">
-                                                <h2>Simon Borrero</h2>  
-                                                <p>CEO</p>  
+                                            <div class="carousel-caption-edit">
                                                 <p>
                                                     Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
                                                 </p>
+                                                <h3>Simon Borrero</h3>  
+                                                <!--<p>CEO</p>--> 
                                             </div>
                                         </div>
                                     </div>
@@ -637,29 +647,31 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
                                         <div class="item active">
                                             <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                            <div class="carousel-caption">
-                                                <h2>Raúl Bermeo</h2>  
+                                            <div class="carousel-caption-edit">
+
                                                 <p>
                                                     "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
                                                 </p>
+                                                <h3>Raúl Bermeo</h3>  
                                             </div>
                                         </div>
                                         <div class="item">
                                             <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                            <div class="carousel-caption">
-                                                <h2>Adriana Hoyos</h2>  
+                                            <div class="carousel-caption-edit">
+
                                                 <p>
                                                     "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
                                                 </p>
+                                                <h3>Adriana Hoyos</h3>  
                                             </div>
                                         </div>
                                         <div class="item">
                                             <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
-                                            <div class="carousel-caption">
-                                                <h2>Javier Pinilla</h2>  
+                                            <div class="carousel-caption-edit">
                                                 <p>
                                                     "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
                                                 </p>
+                                                <h3>Javier Pinilla</h3> 
                                             </div>
                                         </div>
                                     </div>

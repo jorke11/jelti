@@ -255,7 +255,7 @@ body{
     position: relative;
 }
 
-input[type="text"] {
+#wrap input[type="text"] {
     height: 60px;
     font-size: 20px;
     display: inline-block;
@@ -276,17 +276,17 @@ input[type="text"] {
     cursor: pointer;
 }
 
-input[type="text"]:focus:hover {
+#wrap input[type="text"]:focus:hover {
     border-bottom: 1px solid #BBB;
 }
 
-input[type="text"]:focus {
+#wrap input[type="text"]:focus {
     width: 690px;
     z-index: 1;
     border-bottom: 1px solid #BBB;
     cursor: text;
 }
-input[type="submit"] {
+#wrap input[type="submit"] {
     height: 50px;
     width: 50px;
     display: inline-block;

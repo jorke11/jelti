@@ -296,15 +296,15 @@ class ComparativeController extends Controller {
     function reportSalesClient($data, $where, $date) {
 
         $sql = "
-            SELECT client_id,client as description,sum(subtotalnumeric)::money total,sum(quantity_packaging) as quantity_packaging
+            SELECT vdepartures.business_name as description,client_id,sum(subtotalnumeric)::money total,sum(quantity_packaging) as quantity_packaging
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             WHERE vdepartures.status_id IN(2,7) AND client_id  NOT IN(258,264,24) $date
             $where
-            group by 1,client
+            group by 1,2
             order by 3 DESC
             ";
-//        echo $sql;exit;
+        
 
 
         $cli = DB::select($sql);

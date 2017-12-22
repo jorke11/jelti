@@ -84,7 +84,7 @@
 @if(count($val->products)>0)
 <div class="row" style="padding-top: 2%;padding-bottom: 2%">
     <div class="col-lg-12">
-        <a href="" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a" >{{$val->description}}</p></a>
+        <a href="/shopping/_{{$val->id}}" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a" >{{$val->description}}</p></a>
     </div>
 </div>
 <div class="row">

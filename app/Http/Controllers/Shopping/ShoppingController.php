@@ -33,10 +33,13 @@ class ShoppingController extends Controller {
         if (strpos($id, "_") !== false) {
 
             $id = str_replace("_", "", $id);
-
+//            dd($id);
             $category = Categories::find($id);
 
-            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
+
+//            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
+            $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
+
             return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
         } else {
 

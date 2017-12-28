@@ -32,7 +32,7 @@ class ShoppingController extends Controller {
 
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
-        if ($id == 0) {
+        if ($id == '0') {
             $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->paginate(16);
             $category = Categories::all();
             return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));

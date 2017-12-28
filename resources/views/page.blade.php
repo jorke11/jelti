@@ -114,8 +114,40 @@ if (!isset($_COOKIE["mostrarModal"])) {
                 color: #fffbf2
             }
 
+            
+            a:focus, a:hover{
+                text-decoration: none;
+            }
+            
+            .anim-underline {
+                text-decoration: none;
+                position: relative;
+                padding: 5px 3px;
+                text-align: center;
+                font-family: arial;
+                font-size: 20px;
+            }
+            .anim-underline:before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 3px;
+                width: 100%;
+                background-color: #00c98a;
+                animation: width 0.5s;
+                -webkit-transform: scaleX(0);
+                transform: scaleX(0);
+                -webkit-transition: all 0.4s;
+                transition: all 0.4s;
+                border-radius: 2px;
+            }
 
-
+            .anim-underline:hover:before {
+                -webkit-transform: scaleX(1);
+                transform: scaleX(1);
+            }
 
         </style>
     </head>
@@ -229,7 +261,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
 
         <section>
-            <div class="container-fluid" style="padding-bottom: .8%;">
+            <div class="container-fluid" style="padding-bottom: 2%;">
                 <div class="row" style="background-color: #68b9a3;position: fixed;right: 0;left: 0;z-index: 1030;padding-left: 2%;">
                     <div class="col-lg-8">
                         <h4 style="color:white">Invita y Gana</h4>
@@ -247,7 +279,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </section>
 
 
-        <nav class="navbar navbar-default navbar-fixed-top" id="menuNav" style="margin-bottom:0px;padding-top: 4px;min-height: 60px;top:4%">
+        <nav class="navbar navbar-default navbar-fixed-top" id="menuNav" style="margin-bottom:0px;padding-top: 4px;min-height: 60px;top:35px">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header" style='padding-left: 2%'>
@@ -267,9 +299,9 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/" style="color:#00c98a;font-size:17px;font-weight: 100" ><span class="underline-green" id="menuInicio">Inicio</span></a></li>
-                        <li><a href="#divProduct" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
-                        <li><a href="http://blog.superfuds.com/" style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
+                        <li><a href="/" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" >Inicio</a></li>
+                        <li><a href="#divProduct" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
+                        <li><a href="http://blog.superfuds.com/" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
                         <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
                     </ul>
@@ -432,7 +464,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>
-                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><h4 class="text-muted color-font" style="padding-top: 3%">Ver Todo</h4></div>
+                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
@@ -514,9 +546,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     </div>
                 </div>
             </div>
-
         </section>
-
 
 
         <section style="padding-top: 3%;">
@@ -590,7 +620,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
                                     <div class="carousel-inner" role="listbox">
                                         <div class="item active">
-                                            <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
@@ -600,7 +630,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             </div>
                                         </div>
                                         <div class="item">
-                                            <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
@@ -611,7 +641,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             </div>
                                         </div>
                                         <div class="item">
-                                            <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
@@ -646,9 +676,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     <div class="carousel-inner" role="listbox">
 
                                         <div class="item active">
-                                            <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
                                             <div class="carousel-caption-edit">
-
                                                 <p>
                                                     "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
                                                 </p>
@@ -656,9 +685,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             </div>
                                         </div>
                                         <div class="item">
-                                            <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
                                             <div class="carousel-caption-edit">
-
                                                 <p>
                                                     "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
                                                 </p>
@@ -666,7 +694,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             </div>
                                         </div>
                                         <div class="item">
-                                            <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 50%" width="40%">
+                                            <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".

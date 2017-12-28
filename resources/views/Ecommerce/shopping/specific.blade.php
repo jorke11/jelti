@@ -114,7 +114,7 @@
         ?>
     </div>
     <div class="row" style="padding-top: 2%;padding-bottom: 2%">
-        <div class="col-lg-4 col-lg-offset-5">
+        <div class="col-lg-8 col-lg-offset-4">
             {{ $products->links() }}
         </div>
     </div>

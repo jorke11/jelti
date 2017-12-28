@@ -28,52 +28,61 @@ class ShoppingController extends Controller {
 
     public function getDetailProduct($id) {
 
+
+
         $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
-        if (strpos($id, "_") !== false) {
-
-            $id = str_replace("_", "", $id);
-//            dd($id);
-            $category = Categories::find($id);
-
-
-//            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
-            $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
-
+        if ($id == 0) {
+            $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->paginate(16);
+            $category = Categories::all();
             return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
         } else {
 
-            $category = Categories::find($id);
-            $categoryAssoc = Categories::where("node_id", $id)->get();
-            $in = [];
+            if (strpos($id, "_") !== false) {
 
-            foreach ($categoryAssoc as $j => $value) {
+                $id = str_replace("_", "", $id);
+//            dd($id);
+                $category = Categories::find($id);
 
-                $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->orderBy("supplier_id")->get();
 
-                foreach ($products as $i => $value) {
-                    $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));
-                    $cod = array_map('intval', explode(",", $cod));
-                    $cod = array_filter($cod);
+//            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
+                $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
 
-                    if (count($cod) > 0) {
+                return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
+            } else {
 
-                        $cha = Characteristic::whereIn("id", $cod)->get();
-                        if (count($cha) == 0) {
-                            $cha = null;
+                $category = Categories::find($id);
+                $categoryAssoc = Categories::where("node_id", $id)->get();
+                $in = [];
+
+                foreach ($categoryAssoc as $j => $value) {
+
+                    $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->orderBy("supplier_id")->get();
+
+                    foreach ($products as $i => $value) {
+                        $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));
+                        $cod = array_map('intval', explode(",", $cod));
+                        $cod = array_filter($cod);
+
+                        if (count($cod) > 0) {
+
+                            $cha = Characteristic::whereIn("id", $cod)->get();
+                            if (count($cha) == 0) {
+                                $cha = null;
+                            }
+                            $products[$i]->characteristic = $cha;
+                        } else {
+                            $products[$i]->characteristic = null;
                         }
-                        $products[$i]->characteristic = $cha;
-                    } else {
-                        $products[$i]->characteristic = null;
+
+                        $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);
                     }
 
-                    $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);
+                    $categoryAssoc[$j]->products = $products;
                 }
 
-                $categoryAssoc[$j]->products = $products;
+                return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory"));
             }
-
-            return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory"));
         }
     }
 

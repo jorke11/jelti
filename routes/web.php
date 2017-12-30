@@ -34,8 +34,8 @@ Route::get('/', function () {
             ->orderBy("reference")
             ->get();
 
-    $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
-//    $subcategory = array();
+    $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->whereNotNull("img")->orderBy("order", "asc")->get();
+//    dd($subcategory);
 
     foreach ($newproducts as $i => $value) {
         $cod = str_replace("]", "", str_replace("[", "", $newproducts[$i]->characteristic));

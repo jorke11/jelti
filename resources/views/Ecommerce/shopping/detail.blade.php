@@ -35,6 +35,8 @@
                         <div class="row" style="padding-top: 1%;padding-bottom: 1%">
                             <?php
                             $cont = 0;
+                            $max = count($subcategory) / 6;
+                            $cur = 0;
                             foreach ($subcategory as $i => $val) {
 //                            dd($val);
                                 ?>
@@ -46,13 +48,16 @@
                                 <?php
                                 $cont++;
                                 if ($cont == 6) {
+                                    $cur++;
                                     $cont = 0;
-                                    ?>
+                                    if ($cur != $max) {
+                                        ?>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="item">
-                                <div class="row">
-                                    <?php
+                                <div class="item">
+                                    <div class="row">
+                                        <?php
+                                    }
                                 }
                             }
                             ?>
@@ -84,7 +89,7 @@
 @if(count($val->products)>0)
 <div class="row" style="padding-top: 2%;padding-bottom: 2%">
     <div class="col-lg-12">
-        <a href="/shopping/_{{$val->id}}" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a" >{{$val->description}}</p></a>
+        <a href="/shopping/_{{$val->id}}" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a" >{{$val->description}} <span style="font-size: 13px;" class="text-muted">Ver Todos</span></p></a>
     </div>
 </div>
 <div class="row">

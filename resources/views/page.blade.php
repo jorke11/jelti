@@ -114,11 +114,11 @@ if (!isset($_COOKIE["mostrarModal"])) {
                 color: #fffbf2
             }
 
-            
+
             a:focus, a:hover{
                 text-decoration: none;
             }
-            
+
             .anim-underline {
                 text-decoration: none;
                 position: relative;
@@ -420,25 +420,32 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     <div class="row" style="padding-top: 2%;padding-bottom: 2%;">
                                         <?php
                                         $cont = 0;
+                                        $max = count($subcategory) / 6;
+                                        $cur = 0;
                                         foreach ($subcategory as $i => $val) {
-                                            ?>
-                                            <div class="col-md-2 col-sm-2 col-xs-2" >
-
-                                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
-                                                   href="shopping/_{{$val->id}}">
-                                                    <img src="{{$val->img}}" alt="">
-                                                </a>
-                                            </div>
-                                            <?php
-                                            $cont++;
-                                            if ($cont == 6) {
-                                                $cont = 0;
+                                            if ($val->img != null) {
                                                 ?>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="row">
+                                                <div class="col-md-2 col-sm-2 col-xs-2" >
+
+                                                    <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
+                                                       href="shopping/_{{$val->id}}">
+                                                        <img src="{{$val->img}}" alt="">
+                                                    </a>
+                                                </div>
                                                 <?php
+                                                $cont++;
+                                                if ($cont == 6) {
+                                                    $cur++;
+                                                    $cont = 0;
+                                                    if ($cur != $max) {
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                                <div class="item">
+                                                    <div class="row">
+                                                        <?php
+                                                    }
+                                                }
                                             }
                                         }
                                         ?>
@@ -874,7 +881,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     {!!Html::script('js/Page/page.js')!!}
 
 </html>
-<?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario.  ?>
+<?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario.      ?>
     <script>
         $(document).ready(function ()
         {

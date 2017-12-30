@@ -27,6 +27,8 @@
                         <div class="row" style="padding-top: 1%;padding-bottom: 1%">
                             <?php
                             $cont = 0;
+                            $max = count($subcategory) / 6;
+                            $cur = 0;
                             foreach ($subcategory as $i => $val) {
 //                            dd($val);
                                 ?>
@@ -38,13 +40,16 @@
                                 <?php
                                 $cont++;
                                 if ($cont == 6) {
+                                    $cur++;
                                     $cont = 0;
-                                    ?>
+                                    if ($cur != $max) {
+                                        ?>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="item">
-                                <div class="row">
-                                    <?php
+                                <div class="item">
+                                    <div class="row">
+                                        <?php
+                                    }
                                 }
                             }
                             ?>

@@ -442,7 +442,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                     </div>
                                                 </div>
                                                 <div class="item">
-                                                    <div class="row">
+                                                    <div class="row" style="padding-top: 2%;padding-bottom: 2%;">
                                                         <?php
                                                     }
                                                 }
@@ -488,7 +488,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             ?>
                                             <div class="col-md-3 col-sm-2 col-xs-2">
                                                 <div class="thumbnail" style="border: 0;padding: 0;">
-                                                    <div class="row" style="padding-top: 5%;min-height: 50px">
+<!--                                                    <div class="row" style="padding-top: 5%;min-height: 50px">
                                                         @if($value->characteristic != null)
                                                         @foreach($value->characteristic as $val)
 
@@ -498,7 +498,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                         </div>
                                                         @endforeach
                                                         @endif
-                                                    </div>
+                                                    </div>-->
 
                                                     <img src="{{url("/")."/".$value->thumbnail}}">
                                                     <div class="caption" style="padding: 0">
@@ -627,7 +627,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
                                     <div class="carousel-inner" role="listbox">
                                         <div class="item active">
-                                            <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
+                                            <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
@@ -637,7 +637,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             </div>
                                         </div>
                                         <div class="item">
-                                            <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
+                                            <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
@@ -648,7 +648,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             </div>
                                         </div>
                                         <div class="item">
-                                            <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
+                                            <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
@@ -683,30 +683,33 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     <div class="carousel-inner" role="listbox">
 
                                         <div class="item active">
-                                            <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
+                                            <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
                                                 </p>
                                                 <h3>Raúl Bermeo</h3>  
+                                                <p>Director General y Fundador</p> 
                                             </div>
                                         </div>
                                         <div class="item">
-                                            <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
+                                            <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
                                                 </p>
                                                 <h3>Adriana Hoyos</h3>  
+                                                <p>Gerente General</p> 
                                             </div>
                                         </div>
                                         <div class="item">
-                                            <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 65%" width="40%">
+                                            <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
                                             <div class="carousel-caption-edit">
                                                 <p>
                                                     "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
                                                 </p>
                                                 <h3>Javier Pinilla</h3> 
+                                                <p>Director y Cofundador</p>
                                             </div>
                                         </div>
                                     </div>

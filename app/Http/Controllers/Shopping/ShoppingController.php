@@ -33,7 +33,7 @@ class ShoppingController extends Controller {
         $subcategory = Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
         if ($id == '0') {
-            $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->paginate(16);
+            $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(16);
             $category = Categories::all();
             return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
         } else {
@@ -41,12 +41,12 @@ class ShoppingController extends Controller {
             if (strpos($id, "_") !== false) {
 
                 $id = str_replace("_", "", $id);
-//            dd($id);
+
                 $category = Categories::find($id);
+//dd($category);
 
-
-//            $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
-                $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->paginate(12);
+                $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
+//                $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
 
                 return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
             } else {
@@ -57,7 +57,7 @@ class ShoppingController extends Controller {
 
                 foreach ($categoryAssoc as $j => $value) {
 
-                    $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->orderBy("supplier_id")->get();
+                    $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->orderBy("supplier_id")->orderBy("title", "desc")->get();
 
                     foreach ($products as $i => $value) {
                         $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));

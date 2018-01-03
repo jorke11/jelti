@@ -26,56 +26,55 @@
     @endif
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2">
-            <div class="carousel slide media-carousel" id="newproducts">
-                <div class="carousel-inner">
-                    <div class="item  active">
-                        <div class="row" style="padding-top: 1%;padding-bottom: 1%">
-                            <?php
-                            $cont = 0;
-                            $max = count($subcategory) / 6;
-                            $cur = 0;
-                            foreach ($subcategory as $i => $val) {
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="carousel slide media-carousel" id="newproducts">
+            <div class="carousel-inner">
+                <div class="item  active">
+                    <div class="row" style="padding-top: 1%;padding-bottom: 1%">
+                        <?php
+                        $cont = 0;
+                        $max = count($subcategory) / 6;
+                        $cur = 0;
+                        foreach ($subcategory as $i => $val) {
 //                            dd($val);
-                                ?>
-                                <div class="col-md-2" >
-                                    <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
-                                        <img src="{{url("/")."/".$val->img}}" alt="">
-                                    </a>
+                            ?>
+                            <div class="col-md-2" >
+                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
+                                    <img src="{{url("/")."/".$val->img}}" alt="">
+                                </a>
+                            </div>
+                            <?php
+                            $cont++;
+                            if ($cont == 6) {
+                                $cur++;
+                                $cont = 0;
+                                if ($cur != $max) {
+                                    ?>
                                 </div>
-                                <?php
-                                $cont++;
-                                if ($cont == 6) {
-                                    $cur++;
-                                    $cont = 0;
-                                    if ($cur != $max) {
-                                        ?>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="row" style="padding-top: 1%;padding-bottom: 1%">
-                                        <?php
-                                    }
+                            </div>
+                            <div class="item">
+                                <div class="row" style="padding-top: 1%;padding-bottom: 1%">
+                                    <?php
                                 }
                             }
-                            ?>
-                        </div>
+                        }
+                        ?>
                     </div>
                 </div>
-                <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="right carousel-control" href="#newproducts" role="button" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
+            <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#newproducts" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
     </div>
 </div>
+
 
 <div class="row">
     <div class="col-lg-12">
@@ -99,9 +98,9 @@
 </div>
 
 
-<section style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%">   
+<!--<section-->    
     <!--<div class="container-fluid">-->
-    <div class="row" >
+    <div class="row" style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%"> >
         <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
             <!--<div class="carousel slide media-carousel"  data-ride="carousel" id="newproducts2_{{$val->id}}">-->
             <div class="carousel slide media-carousel"  data-ride="carousel" id="{{$id}}">
@@ -186,9 +185,10 @@
         <!--</div>-->
     </div>
 
-</section>
+<!--</section>-->
 @endif
 @endforeach
+
 @include("footer")
 
 {!!Html::script('js/Ecommerce/Detail.js')!!}

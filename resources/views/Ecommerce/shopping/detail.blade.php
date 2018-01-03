@@ -100,7 +100,7 @@
 
 <!--<section-->    
     <!--<div class="container-fluid">-->
-    <div class="row" style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%"> >
+    <div class="row" style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%">
         <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
             <!--<div class="carousel slide media-carousel"  data-ride="carousel" id="newproducts2_{{$val->id}}">-->
             <div class="carousel slide media-carousel"  data-ride="carousel" id="{{$id}}">
@@ -113,24 +113,6 @@
                                 ?>
                                 <div class="col-md-3 col-sm-2 col-xs-2">
                                     <div class="thumbnail" style="border: 0;padding: 0">
-<!--                                        <div class="row" style="margin: 0 auto;min-height: 50px">
-
-                                            @if($value->characteristic!=null)
-                                            <div class="col-md-12 center-block" >
-
-                                                <?php
-                                                foreach ($value->characteristic as $val) {
-                                                    ?>
-                                                    <div class="col-md-3 col-sm-2 col-xs-2">
-                                                        <img src="/{{$val->img}}" class="img-responsive center-block" style="cursor:pointer;" >
-                                                    </div>
-                                                    <?php
-                                                }
-                                                ?>
-
-                                            </div>
-                                            @endif
-                                        </div>-->
 
                                         <img src="{{url("/") ."/".$value->thumbnail}}">
                                         <div class="caption" style="padding: 0">

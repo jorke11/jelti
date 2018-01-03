@@ -73,6 +73,7 @@
 
     }
 </style>
+
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1">
         <hr style="    border-top: 1px solid #8c8c8c;">
@@ -92,23 +93,23 @@
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner" role="listbox">
                         <div class="item active text-center">
-                            <div class="col-lg-12 ">
-                                <div class="row">
-                                    <div class="col-lg-8 ">
+                            <div class="col-lg-12">
+                                <div class="row row-center">
+                                    <!--<div class="col-lg-12">-->
                                         @if($product->characteristic!=null)
                                         @foreach($product->characteristic as $val)
-                                        <div class="col-lg-1">
+                                        <div class="col-lg-2">
                                             <div class="row">
                                                 <div class="row hover01">
-                                                    <div class="col-lg-12">
-                                                        <img width="90%" id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" title="{{$val->description}}" class="img-responsive center-block" style="cursor:pointer">
+                                                    <div class="col-lg-10">
+                                                        <img id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" title="{{$val->description}}" class="img-responsive center-block" style="cursor:pointer">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         @endforeach
                                         @endif
-                                    </div>
+                                    <!--</div>-->
                                 </div>
                             </div>
                             <img src="{{url($product->image)}}" alt="" width="80%" style="padding-left: 20%">
@@ -330,7 +331,7 @@
 
 <div class="row" style="padding-top: 2%">
     <div class="col-lg-6" id="contentComment">
-     
+
     </div>
     <div class="col-lg-6">
 

@@ -254,60 +254,10 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-        <!--</div>-->
-
-
-        <section>
-            <div class="container-fluid" style="padding-bottom: 2%;">
-                <div class="row" style="background-color: #68b9a3;position: fixed;right: 0;left: 0;z-index: 1030;padding-left: 2%;">
-                    <div class="col-lg-8">
-                        <h4 style="color:white">Invita y Gana</h4>
-                    </div>
-                    <div class="col-lg-4">
-                        <div id="wrap">
-                            <form action="" autocomplete="on">
-                                <input id="search" name="search" type="text" placeholder="Buscar?"><input id="search_submit" value="Rechercher" type="submit">
-                            </form>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-
-        <nav class="navbar navbar-default navbar-fixed-top" id="menuNav" style="margin-bottom:0px;padding-top: 4px;min-height: 60px;top:35px">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header" style='padding-left: 2%'>
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">
-                        <img alt="Brand" src="{{ asset('assets/images/SF50X.png') }}">
-                    </a>
-
-                </div>
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-right: 5%">
-                    <ul class="nav navbar-nav">
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" >Inicio</a></li>
-                        <li><a href="#divProduct" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
-                        <li><a href="http://blog.superfuds.com/" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-shopping-cart color-superfuds" aria-hidden="true"></span></a></li>
-                        <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
+        
+        @include("header")
 
         <section style="padding-top: 3%">
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
@@ -345,10 +295,6 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <span class="sr-only">Next</span>
                 </a>
             </div>
-
-            <!-- Controls -->
-
-            <!--</div>-->
         </section>
 
 
@@ -488,17 +434,17 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             ?>
                                             <div class="col-md-3 col-sm-2 col-xs-2">
                                                 <div class="thumbnail" style="border: 0;padding: 0;">
-<!--                                                    <div class="row" style="padding-top: 5%;min-height: 50px">
-                                                        @if($value->characteristic != null)
-                                                        @foreach($value->characteristic as $val)
-
-                                                        <div class="col-lg-2" style="padding-left: 10px;padding-right: 10px">
+                                                    <!--                                                    <div class="row" style="padding-top: 5%;min-height: 50px">
+                                                            @if($value->characteristic != null)
+                                                            @foreach($value->characteristic as $val)
+                                                    
+                                                            <div class="col-lg-2" style="padding-left: 10px;padding-right: 10px">
                                                             <img  id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer;" 
-                                                                  title="{{$val->description}}">
-                                                        </div>
-                                                        @endforeach
-                                                        @endif
-                                                    </div>-->
+                                                            title="{{$val->description}}">
+                                                            </div>
+                                                            @endforeach
+                                                            @endif
+                                                            </div>-->
 
                                                     <img src="{{url("/")."/".$value->thumbnail}}">
                                                     <div class="caption" style="padding: 0">
@@ -858,7 +804,10 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
             </div>
         </div>
 
-        @include("footer")
+        <div class="container-fluid green-bk">
+            @include("footer")
+        </div>
+
     </body>
     <script>
         $('#menuProduct').click(function () {

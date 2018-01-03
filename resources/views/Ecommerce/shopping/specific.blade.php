@@ -1,22 +1,5 @@
 @extends('layouts.client')
 @section('content')
-<!--<style>
-    .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
-        background-color: #30c594;
-        border:1px solid #30c594;
-        color:black;
-    }
-
-    .pagination>li>a, .pagination>li>span>a{
-        color:black;
-    }
-
-
-    .form-control{
-        border-radius: 0;
-        background-color: #30c594;
-    }
-</style>-->
 
 <div class="container-fluid" style="padding-top: 6%">
     <div class="row">
@@ -74,6 +57,13 @@
         <hr>
     </div>
 </div>
+@if(isset($_GET["search"]))
+<div class="row row-space">
+    <div class="col-lg-10">
+        <h4>Resultados de la busqueda ({{count($products)}} productos relacionados):</h4>
+    </div>
+</div>
+@endif
 
 <section>
     <div class="row" style="padding-top: 2%;padding-bottom: 2%">

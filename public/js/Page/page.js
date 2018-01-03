@@ -1,7 +1,7 @@
 function Page() {
     var id = 1;
     this.init = function () {
-     
+
         $(".box-client").addClass("back-green");
         $("#type_stakeholder").val(id);
         $("#register").click(function () {
@@ -38,6 +38,13 @@ function Page() {
 
             })
         });
+
+
+    }
+
+    this.search = function () {
+//        location.href = PATH + "/search/" + $("#formSearch #search").val();
+        $("#formSearch").submit();
     }
 
     this.stakeholder = function (elem_id, elem) {

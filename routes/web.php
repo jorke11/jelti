@@ -22,46 +22,69 @@ Route::group(['namespace' => 'Api'], function () {
 });
 
 
-Route::get('/', function () {
-    $category = Models\Administration\Categories::where("status_id", 1)->where("type_category_id", 1)->whereNull("node_id")->OrWhere("node_id", 0)->orderBy("order", "asc")->get();
-//    dd($category);
-    $newproducts = DB::table("vproducts")->where("status_id", 1)
-            ->where("category_id", "<>", -1)
-            ->where("category_id", "<>", 19)
-            ->whereNotNull("image")
-            ->orderBy("supplier", "asc")
-            ->orderBy("category_id")
-            ->orderBy("reference")
-            ->get();
+Route::get('/', function ($search = null) {
+//    dd($_GET);
 
-    $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->whereNotNull("img")->orderBy("order", "asc")->get();
+    if (isset($_GET["search"])) {
+        $subcategory = Models\Administration\Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
+        $data = DB::table("vproducts")
+                ->where("title", "ilike", "%" . strtolower($_GET["search"]) . "%")
+//                ->where("status_id", 1)
+//                ->whereNotIn("category_id", [-1,19])
+                ->whereNotNull("image")
+//                ->orderBy("supplier", "asc")
+//                ->orderBy("category_id")
+//                ->orderBy("reference")
+                ->get();
+
+        $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")
+                        ->where("title", "ilike", "%" . strtolower($_GET["search"]) . "%")->orderBy("title", "desc")->paginate(16);
+        $category = Models\Administration\Categories::all();
+        return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
+
+//        return view('search', compact("data"));
+    } else {
+
+        $category = Models\Administration\Categories::where("status_id", 1)->where("type_category_id", 1)->whereNull("node_id")->OrWhere("node_id", 0)->orderBy("order", "asc")->get();
+//    dd($category);
+        $newproducts = DB::table("vproducts")->where("status_id", 1)
+                ->where("category_id", "<>", -1)
+                ->where("category_id", "<>", 19)
+                ->whereNotNull("image")
+                ->orderBy("supplier", "asc")
+                ->orderBy("category_id")
+                ->orderBy("reference")
+                ->get();
+
+        $subcategory = Models\Administration\Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->whereNotNull("img")->orderBy("order", "asc")->get();
 //    dd($subcategory);
 
-    foreach ($newproducts as $i => $value) {
-        $cod = str_replace("]", "", str_replace("[", "", $newproducts[$i]->characteristic));
-        if ($cod != '') {
-            $cod = array_map('intval', explode(",", $cod));
-            $cod = array_filter($cod);
-            $cha = null;
-            if (count($cod) > 0) {
+        foreach ($newproducts as $i => $value) {
+            $cod = str_replace("]", "", str_replace("[", "", $newproducts[$i]->characteristic));
+            if ($cod != '') {
+                $cod = array_map('intval', explode(",", $cod));
+                $cod = array_filter($cod);
+                $cha = null;
+                if (count($cod) > 0) {
 
-                $cha = Models\Administration\Characteristic::whereIn("id", $cod)->get();
-                if (count($cha) == 0) {
-                    $cha = null;
+                    $cha = Models\Administration\Characteristic::whereIn("id", $cod)->get();
+                    if (count($cha) == 0) {
+                        $cha = null;
+                    }
+                    $newproducts[$i]->characteristic = $cha;
                 }
-                $newproducts[$i]->characteristic = $cha;
+
+                $newproducts[$i]->short_description = str_replace("/", "<br>", $newproducts[$i]->short_description);
+            } else {
+                $newproducts[$i]->characteristic = null;
             }
-
-            $newproducts[$i]->short_description = str_replace("/", "<br>", $newproducts[$i]->short_description);
-        } else {
-            $newproducts[$i]->characteristic = null;
         }
+
+
+
+
+        return view('page', compact("category", "subcategory", "newproducts"));
     }
-
-//    dd($newproducts);
-
-
-    return view('page', compact("category", "subcategory", "newproducts"));
 });
 
 Route::get("/admins/login", "AdministratorsController@showLoginForm");

@@ -6,7 +6,9 @@ function Autoload() {
             method: 'GET',
             dataType: 'JSON',
             success: function (data) {
+                console.log(data)
                 $("#quantityOrders").html(data);
+                
             }
         })
 

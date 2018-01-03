@@ -27,18 +27,12 @@ Route::get('/', function ($search = null) {
 
     if (isset($_GET["search"])) {
         $subcategory = Models\Administration\Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
-        $data = DB::table("vproducts")
-                ->where("title", "ilike", "%" . strtolower($_GET["search"]) . "%")
-//                ->where("status_id", 1)
-//                ->whereNotIn("category_id", [-1,19])
-                ->whereNotNull("image")
-//                ->orderBy("supplier", "asc")
-//                ->orderBy("category_id")
-//                ->orderBy("reference")
-                ->get();
 
         $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")
-                        ->where("title", "ilike", "%" . strtolower($_GET["search"]) . "%")->orderBy("title", "desc")->paginate(16);
+                        ->where("title", "ilike", "%" . strtolower($_GET["search"]) . "%")
+                        ->Orwhere("supplier", "ilike", "%" . strtolower($_GET["search"]) . "%")
+                        ->whereNotNull("image")
+                        ->orderBy("title", "desc")->paginate(16);
         $category = Models\Administration\Categories::all();
         return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
 

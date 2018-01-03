@@ -88,7 +88,7 @@
 @if(count($val->products)>0)
 <div class="row" style="padding-top: 2%;padding-bottom: 2%">
     <div class="col-lg-12">
-        <a href="/shopping/_{{$val->id}}" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a" >{{$val->description}} <span style="font-size: 13px;" class="text-muted">Ver Todos</span></p></a>
+        <a href="/shopping/sub{{$val->id}}" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a" >{{$val->description}} <span style="font-size: 13px;" class="text-muted">Ver Todos</span></p></a>
     </div>
 </div>
 <div class="row">
@@ -113,7 +113,7 @@
                                 ?>
                                 <div class="col-md-3 col-sm-2 col-xs-2">
                                     <div class="thumbnail" style="border: 0;padding: 0">
-                                        <div class="row" style="margin: 0 auto;min-height: 50px">
+<!--                                        <div class="row" style="margin: 0 auto;min-height: 50px">
 
                                             @if($value->characteristic!=null)
                                             <div class="col-md-12 center-block" >
@@ -130,7 +130,7 @@
 
                                             </div>
                                             @endif
-                                        </div>
+                                        </div>-->
 
                                         <img src="{{url("/") ."/".$value->thumbnail}}">
                                         <div class="caption" style="padding: 0">

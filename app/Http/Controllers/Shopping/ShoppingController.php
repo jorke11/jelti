@@ -43,15 +43,25 @@ class ShoppingController extends Controller {
                 $id = str_replace("_", "", $id);
 
                 $category = Categories::find($id);
-//dd($category);
+
 
                 $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
-//                $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
+
+
+                return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
+            } else if (strpos($id, "sub") !== false) {
+                $id = str_replace("sub", "", $id);
+
+                $category = Categories::find($id);
+
+                $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
+
 
                 return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
             } else {
 
                 $category = Categories::find($id);
+
                 $categoryAssoc = Categories::where("node_id", $id)->get();
                 $in = [];
 

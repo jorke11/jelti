@@ -73,10 +73,6 @@ Route::get('/', function ($search = null) {
                 $newproducts[$i]->characteristic = null;
             }
         }
-
-
-
-
         return view('page', compact("category", "subcategory", "newproducts"));
     }
 });

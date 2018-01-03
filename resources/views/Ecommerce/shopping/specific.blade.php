@@ -108,8 +108,8 @@
         }
         ?>
     </div>
-    <div class="row" style="padding-top: 2%;padding-bottom: 2%">
-        <div class="col-lg-8 col-lg-offset-4">
+    <div class="row row-center" style="padding-top: 2%;padding-bottom: 2%">
+        <div class="col-lg-2 col-center">
             {{ $products->links() }}
         </div>
     </div>

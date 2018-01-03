@@ -1,6 +1,14 @@
 @extends('layouts.client')
 @section('content')
-
+<style>
+    .pagination>li>a, .pagination>li>span{
+        color:black
+    }
+    .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+        background-color: #30c594;
+            border-color:#30c594
+    }
+</style>
 <div class="container-fluid" style="padding-top: 6%">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">

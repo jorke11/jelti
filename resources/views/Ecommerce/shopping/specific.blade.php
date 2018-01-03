@@ -47,7 +47,7 @@
                                     </div>
                                 </div>
                                 <div class="item">
-                                    <div class="row">
+                                    <div class="row" style="padding-top: 1%;padding-bottom: 1%">
                                         <?php
                                     }
                                 }

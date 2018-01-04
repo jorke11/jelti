@@ -31,13 +31,14 @@ class BlogController extends Controller {
 
     public function index() {
         $last = Post::orderBy("created_at", "desc")->first();
-        $data = Post::paginate(10);
+        $data = Post::where("id", "<>", $last->id)->paginate(10);
 
+//        dd($data);
         return view("Blog.content.init", compact("data", "last"));
     }
 
     public function getDetail($slug) {
-        
+
         $data = Post::findBySlug($slug);
 
 

@@ -256,7 +256,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 </div>
             </div>
         </div>
-        
+
         @include("header")
 
         <section style="padding-top: 3%">
@@ -579,7 +579,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                     Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
                                                 </p>
                                                 <h3>Sergio Saavedra</h3>  
-                                                <!--<p>Director General</p>--> 
+                                                <p>Director General</p> 
                                             </div>
                                         </div>
                                         <div class="item">
@@ -589,7 +589,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                     A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
                                                 </p>
                                                 <h3>Teodoro Zubillaga</h3>  
-                                                <!--<p>Country Manager</p>-->  
+                                                <p>Country Manager</p>  
 
                                             </div>
                                         </div>
@@ -600,7 +600,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                     Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
                                                 </p>
                                                 <h3>Simon Borrero</h3>  
-                                                <!--<p>CEO</p>--> 
+                                                <p>CEO</p> 
                                             </div>
                                         </div>
                                     </div>
@@ -731,8 +731,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             <div class="col-lg-3">
                                                 <img src="logos/la14.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                         
-                                           
+
+
                                         </div>
                                     </div>
                                 </div>

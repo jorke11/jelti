@@ -724,7 +724,17 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             </div>
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="item">
+                                    <div class="row" style="padding-top: 3%;padding-bottom: 3%">
+                                        <div class="col-lg-10 col-lg-offset-1">
+                                            <div class="col-lg-3">
+                                                <img src="logos/la14.png" alt="..." class="img-responsive center-block" width="40%">
+                                            </div>
+                                         
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <a class="left carousel-control" href="#carousel-clients" role="button" data-slide="prev">

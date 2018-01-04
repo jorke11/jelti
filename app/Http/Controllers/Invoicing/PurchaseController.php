@@ -72,8 +72,8 @@ class PurchaseController extends Controller {
 
             $ayer = date("Y-m-d", strtotime("-10 day", strtotime(date("Y-m-d"))));
 
-
-            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 5 || Auth::user()->id == 2) {
+            
+            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 2 || Auth::user()->id == 2) {
                 $sal = Entries::where("purchase_id", $id)->first();
                 if ($sal != null) {
                     $detail = EntriesDetail::where("entry_id", $sal->id)->get();

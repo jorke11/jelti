@@ -300,7 +300,6 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
         <section id="divProduct" style="padding-top:4%">
             <div class="container-fluid">
-
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="text-center title-color" >Nuestros <span class="underline">Productos</span></h1>

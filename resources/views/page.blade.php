@@ -429,6 +429,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     <div class="row" >
                                         <?php
                                         $cont = 0;
+
                                         foreach ($newproducts as $i => $value) {
                                             ?>
                                             <div class="col-md-3 col-sm-2 col-xs-2">
@@ -897,7 +898,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     {!!Html::script('js/Page/page.js')!!}
 
 </html>
-<?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario.      ?>
+<?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario.       ?>
     <script>
         $(document).ready(function ()
         {

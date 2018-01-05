@@ -96,7 +96,7 @@
             $cont = 0;
             ?>
         </div>
-        <div class="row">
+        <div class="row" style=";padding-bottom: 5%;background-color: #FAF6EE;padding-left: 5%;padding-right: 5%;">
             <?php
         }
         ?>

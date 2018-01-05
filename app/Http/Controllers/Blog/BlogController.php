@@ -27,12 +27,11 @@ class BlogController extends Controller {
     public function __construct() {
         $this->subject = '';
         $this->emails = [];
-        
     }
 
     public function index() {
         $last = Post::orderBy("created_at", "desc")->first();
-        $data = Post::where("id", "<>", $last->id)->paginate(10);
+        $data = Post::where("id", "<>", $last->id)->orderBy("created_at")->paginate(10);
 //        dd($data);
         return view("Blog.content.init", compact("data", "last"));
     }
@@ -60,7 +59,6 @@ class BlogController extends Controller {
         $row = array();
         return view("Blog.admin.new", compact("row"));
     }
-    
 
     public function newComment(Request $req) {
         $in = $req->all();

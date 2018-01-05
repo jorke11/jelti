@@ -46,6 +46,27 @@
 
 
     <body>
+        <section>
+            <div class="container-fluid" style="padding-bottom: 2%;">
+                <div class="row" style="background-color: #68b9a3;position: fixed;right: 0;left: 0;z-index: 1030;padding-left: 2%;">
+                    <div class="col-lg-8">
+                        <!--<h4 style="color:white">Invita y Gana</h4>-->
+                    </div>
+                    <div class="col-lg-3">
+
+                        <form autocomplete="on" id="formSearch">
+                            <div class="input-group">
+                                <span class="input-group-addon" style="background-color: rgba(255,255,255,.0);border: 0">
+                                    <i class="glyphicon glyphicon-search" style="color:white" onclick="objPage.search()"></i></span>
+                                <input id="search" type="text" class="form-control" name="search" placeholder="Qué producto buscas?" style="background-color: rgba(255,255,255,.4)">
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
         <nav class="navbar navbar-default" style="margin-bottom:0px;padding-top: 4px;min-height: 60px">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -95,7 +116,7 @@
                                 <li>
                                     <a href="{{ url('/logout') }}"
                                        onclick="event.preventDefault();
-                document.getElementById('logout-form').submit();">
+                                               document.getElementById('logout-form').submit();">
                                         Logout
                                     </a>
 
@@ -110,6 +131,7 @@
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
+
 
         @yield('content')
     </body>

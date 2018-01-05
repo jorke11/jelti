@@ -84,7 +84,7 @@
                 <div class="caption" >
                     <p class="text-center"><img src="../images_blog/category/belleza-4.png" alt=""></p>
                     <h3 class="text-center">{{$val["title"]}}</h3>
-                    <p style="min-height: 70px" class="text-justify">{!!substr(strip_tags($val["content"]),0,150)."..."!!}</p>
+                    <p style="min-height: 70px" class="text-center">{!!substr(strip_tags($val["content"]),0,150)."..."!!}</p>
                     <!--<p><a href="blog/{{$val["slug"]}}" class="btn btn-primary" role="button">Ver Mas</a>--> 
                     <p  class="text-center text-muted">Hace 1 minuto</p>
                 </div>

@@ -7,6 +7,7 @@
 
         <title>Superfuds</title>
         <link rel="shortcut icon" href="{{ asset('assets/images/logoico.png') }}">
+        <script>var PATH = '{{url("/")}}'</script>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -33,6 +34,14 @@
         {!!Html::script('/vendor/trumbowyg/js/trumbowyg.min.js')!!}
         {!!Html::style('/vendor/trumbowyg/css/trumbowyg.min.css')!!}
 
+        {!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/ColReorder/js/dataTables.colReorder.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/jszip.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/pdfmake.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/vfs_fonts.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/buttons.html5.min.js')!!}
+
     </head>
 
 
@@ -58,8 +67,14 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         @if(Auth::user()!=null)
-                        <li><a href="/admin/blog/create"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></li>
-                        <li><a href="/admin/blog" style="color:#00c98a;font-size:17px;font-weight: 100"><span class="underline">Administracion</span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administración <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/admin/blog/create">Nueva Entrada</a></li>
+                                <li><a href="/admin/blog">Publicaciones</a></li>
+                                <li><a href="/admin/blog/category">Categorias</a></li>
+                            </ul>
+                        </li>
                         @endif
                         <li><a href="/blog" style="color:#00c98a;font-size:17px;font-weight: 100" >Inicio</a></li>
 

@@ -742,21 +742,23 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                 <img src="logos/olimpica.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
                                             <div class="col-lg-3">
+                                                <img src="logos/la14.png" alt="..." class="img-responsive center-block" width="40%">
+                                            </div>
+                                            <div class="col-lg-3">
                                                 <img src="logos/farmatodo.png" alt="..." class="img-responsive center-block" width="40%" >
                                             </div>
                                             <div class="col-lg-3">
                                                 <img src="logos/rappi-3.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
-                                                <img src="logos/click_clack-4.png" alt="..." class="img-responsive center-block" width="40%">
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="row" style="padding-top: 3%;padding-bottom: 3%">
                                         <div class="col-lg-10 col-lg-offset-1">
+                                            <div class="col-lg-3">
+                                                <img src="logos/click_clack-4.png" alt="..." class="img-responsive center-block" width="40%">
+                                            </div>
                                             <div class="col-lg-3">
                                                 <img src="logos/locatel-5.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
@@ -766,9 +768,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             <div class="col-lg-3">
                                                 <img src="logos/cruz_verde-7.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
-                                                <img src="logos/gastronomy-8.png" alt="..." class="img-responsive center-block" width="40%">
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -776,10 +776,17 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     <div class="row" style="padding-top: 3%;padding-bottom: 3%">
                                         <div class="col-lg-10 col-lg-offset-1">
                                             <div class="col-lg-3">
-                                                <img src="logos/la14.png" alt="..." class="img-responsive center-block" width="40%">
+                                                <img src="logos/gastronomy-8.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-
-
+                                            <div class="col-lg-3">
+                                                <img src="logos/enjoy_fit-11.png" alt="..." class="img-responsive center-block" width="40%">
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <img src="logos/juliao-10.png" alt="..." class="img-responsive center-block" width="40%">
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <img src="logos/tiger_market-9.png" alt="..." class="img-responsive center-block" width="40%">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

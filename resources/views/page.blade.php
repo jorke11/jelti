@@ -313,7 +313,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         <div class="carousel slide media-carousel" id="media">
                             <div class="carousel-inner">
                                 <div class="item  active">
-                                    <div class="row">
+                                    <div class="row row-center">
                                         <?php
                                         $cont = 0;
                                         foreach ($category as $i => $val) {
@@ -332,7 +332,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                 </div>
                                             </div>
                                             <div class="item">
-                                                <div class="row">
+                                                <div class="row row-center">
                                                     <?php
                                                 }
                                             }
@@ -362,7 +362,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         <div class="carousel slide media-carousel" id="subcategories">
                             <div class="carousel-inner">
                                 <div class="item  active">
-                                    <div class="row" style="padding-top: 2%;padding-bottom: 2%;">
+                                    <div class="row row-center" style="padding-top: 2%;padding-bottom: 2%;">
                                         <?php
                                         $cont = 0;
                                         $max = count($subcategory) / 6;

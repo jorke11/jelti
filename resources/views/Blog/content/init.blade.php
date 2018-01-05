@@ -2,9 +2,41 @@
 @section('content')
 
 <div class="container-fluid">
-    <div class="row row-space" style="padding-top: 2%;padding-bottom: 5%;background-color: #FAF6EE;min-height: 110px">
-        <div class="col-lg-10 col-lg-offset-1">
-
+    <div class="row row-space row-center" style="padding-top: 2%;padding-bottom: 2%;background-color: #FAF6EE;min-height: 110px">
+        <div class="col-lg-1">
+<!--            <a style="padding:0px;border:0px;" rel="gallery1" href="shopping/">-->
+                <img src="../images_blog/category/alimentos-1.png" alt="">
+            <!--</a>-->
+        </div>
+        <div class="col-lg-1">
+            <!--<a style="padding:0px;border:0px;" rel="gallery1" href="shopping/">-->
+                <img src="../images_blog/category/bebes-2.png" alt="">
+            <!--</a>-->
+        </div>
+        <div class="col-lg-1">
+            <!--<a style="padding:0px;border:0px;" rel="gallery1" href="shopping/">-->
+                <img src="../images_blog/category/belleza-4.png" alt="">
+            <!--</a>-->
+        </div>
+        <div class="col-lg-1">
+            <!--<a style="padding:0px;border:0px;" rel="gallery1" href="shopping/">-->
+                <img src="../images_blog/category/emprendimiento-7.png" alt="">
+            <!--</a>-->
+        </div>
+        <div class="col-lg-1">
+            <!--<a style="padding:0px;border:0px;" rel="gallery1" href="shopping/">-->
+                <img src="../images_blog/category/hogar-3.png" alt="">
+            <!--</a>-->
+        </div>
+        <div class="col-lg-1">
+            <!--<a style="padding:0px;border:0px;" rel="gallery1" href="shopping/">-->
+                <img src="../images_blog/category/mascotas-5.png" alt="">
+            <!--</a>-->
+        </div>
+        <div class="col-lg-1">
+            <!--<a style="padding:0px;border:0px;" rel="gallery1" href="shopping/">-->
+                <img src="../images_blog/category/planeta-5.png" alt="">
+            <!--</a>-->
         </div>
     </div>
     <div class="row" style="padding-top: 2%;padding-bottom: 5%">

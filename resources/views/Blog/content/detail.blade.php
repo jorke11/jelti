@@ -4,10 +4,11 @@
 <div class="container-fluid">
     <div class="row row-space" style="padding-top: 2%;padding-bottom: 5%;background-color: #FAF6EE;min-height: 150px;padding-bottom: 5%">
         <div class="col-lg-10 col-lg-offset-1">
-
+            <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
+                <img src="images_blog/category/alimentos-1" alt="">
+            </a>
         </div>
     </div>
-
     <div style="width: 100%;background-color: #FFFCF8;padding-top: 1%">
         <div class="row">
 

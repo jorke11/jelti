@@ -54,7 +54,7 @@
 
                     <div class="row row-center" style="padding-top: 8%">
                         <div class="col-lg-22">
-                            <img src="../images_blog/category/belleza-4.png" alt="">
+                            <img src="../images_blog/category_line/belleza.png" alt="">
                         </div>
                     </div>
                     <div class="row">
@@ -82,7 +82,7 @@
             <div class="thumbnail" style="padding: 0">
                 <a href="{{$val["slug"]}}" ><img src="../{{$val["thumbnail"]}}" alt="..." class="img-responsive"></a>
                 <div class="caption" >
-                    <p class="text-center"><img src="../images_blog/category/belleza-4.png" alt=""></p>
+                    <p class="text-center"><img src="../images_blog/category_line/belleza.png" alt=""></p>
                     <h3 class="text-center">{{$val["title"]}}</h3>
                     <p style="min-height: 70px" class="text-center">{!!substr(strip_tags($val["content"]),0,150)."..."!!}</p>
                     <!--<p><a href="blog/{{$val["slug"]}}" class="btn btn-primary" role="button">Ver Mas</a>--> 

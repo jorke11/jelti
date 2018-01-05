@@ -33,16 +33,12 @@ class BlogController extends Controller {
     public function index() {
         $last = Post::orderBy("created_at", "desc")->first();
         $data = Post::where("id", "<>", $last->id)->paginate(10);
-
 //        dd($data);
         return view("Blog.content.init", compact("data", "last"));
     }
 
     public function getDetail($slug) {
-
         $data = Post::findBySlug($slug);
-
-
         $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->get();
         $writer = Users::find($data->user_id);
         $comments = Blog\Feedback::where("row_id", $data->id)->orderBy("created_at", "desc")->get();
@@ -65,6 +61,7 @@ class BlogController extends Controller {
         $row = array();
         return view("Blog.admin.new", compact("row"));
     }
+    
 
     public function newComment(Request $req) {
         $in = $req->all();

@@ -567,8 +567,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                         <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                                                         <li data-target="#carousel-example-generic" data-slide-to="1"></li>
                                                         <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                                                    </ol>
-                
+                                                    </ol>                
                 
                                                     <div class="carousel-inner" role="listbox">
                                                         <div class="item active">

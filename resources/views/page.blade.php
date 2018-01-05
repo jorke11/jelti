@@ -434,17 +434,6 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             ?>
                                             <div class="col-md-3 col-sm-2 col-xs-2">
                                                 <div class="thumbnail" style="border: 0;padding: 0;">
-                                                    <!--                                                    <div class="row" style="padding-top: 5%;min-height: 50px">
-                                                            @if($value->characteristic != null)
-                                                            @foreach($value->characteristic as $val)
-                                                    
-                                                            <div class="col-lg-2" style="padding-left: 10px;padding-right: 10px">
-                                                            <img  id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" class="img-responsive center-block" style="cursor:pointer;" 
-                                                            title="{{$val->description}}">
-                                                            </div>
-                                                            @endforeach
-                                                            @endif
-                                                            </div>-->
 
                                                     <img src="{{url("/")."/".$value->thumbnail}}">
                                                     <div class="caption" style="padding: 0">

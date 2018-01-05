@@ -53,7 +53,8 @@ if (!isset($_COOKIE["mostrarModal"])) {
                 /*display: inline-block;*/
                 outline: none;
                 background-color: rgba(255,255,255,.3);
-                border-color: #ffffff;
+                border-color: #000000;
+                color:#000
             }
 
             /*@media screen all*/ 
@@ -270,11 +271,11 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
                     <div class="item active">
-                        <img src="images/banner_navidad.jpg" alt="Bebés" class="img-responsive" width="100%">
+                        <img src="images/banner-1.jpg" alt="Bebés" class="img-responsive" width="100%">
                         <div class="carousel-caption" style="padding-left: 50%">
                             <button type="button" class="btn btn-primary btn-lg" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
                                 Registrate como<br>
-                                <span style="font-weight: 900;font-size: 30px">Cliente o Proveedor</span>
+                                <span style="font-size: 30px;color:#000"><b>Cliente</b> o <b>Proveedor</b></span>
                             </button>
                         </div>
                     </div>

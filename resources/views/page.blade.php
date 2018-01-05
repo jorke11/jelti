@@ -555,129 +555,176 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         </div>
                     </div>
                 </div>
-                <div class="row" >
-                    <div class="col-lg-8 col-lg-offset-2" style="background-color: #FAF6ee;"><h3 class="color-font text-center">Lo que Aman nuestros <b>Clientes</b> y <b>Proveedores</b></h3></div>
+                <div class="row row-center" >
+                    <div class="col-lg-8" style="background-color: #2FC8AE;padding-bottom: .9%"><h2 class="color-font text-center" style="color:#fffbf2">Lo que Aman nuestros <b>Clientes</b> y <b>Proveedores</b></h2></div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 ">
-                        <div class="row">
-                            <div class="col-lg-6" style="background-color: #1ec296">
-                                <div id="carousel-clients2" class="carousel slide" data-ride="carousel">
-
-                                    <ol class="carousel-indicators">
-                                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                                    </ol>
-
-
-                                    <div class="carousel-inner" role="listbox">
-                                        <div class="item active">
-                                            <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                            <div class="carousel-caption-edit">
-                                                <p>
-                                                    Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
-                                                </p>
-                                                <h3>Sergio Saavedra</h3>  
-                                                <p>Director General</p> 
+                <!--                <div class="row">
+                                    <div class="col-lg-8 col-lg-offset-2 ">
+                                        <div class="row">
+                                            <div class="col-lg-6" style="background-color: #1ec296">
+                                                <div id="carousel-clients2" class="carousel slide" data-ride="carousel">
+                
+                                                    <ol class="carousel-indicators">
+                                                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                                    </ol>
+                
+                
+                                                    <div class="carousel-inner" role="listbox">
+                                                        <div class="item active">
+                                                            <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
+                                                            <div class="carousel-caption-edit">
+                                                                <p>
+                                                                    Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
+                                                                </p>
+                                                                <h3>Sergio Saavedra</h3>  
+                                                                <p>Director General</p> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
+                                                            <div class="carousel-caption-edit">
+                                                                <p>
+                                                                    A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
+                                                                </p>
+                                                                <h3>Teodoro Zubillaga</h3>  
+                                                                <p>Country Manager</p>  
+                
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
+                                                            <div class="carousel-caption-edit">
+                                                                <p>
+                                                                    Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
+                                                                </p>
+                                                                <h3>Simon Borrero</h3>  
+                                                                <p>CEO</p> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                
+                
+                                                    <a class="left carousel-control" href="#carousel-clients2" role="button" data-slide="prev">
+                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                        <span class="sr-only">Previous</span>
+                                                    </a>
+                                                    <a class="right carousel-control" href="#carousel-clients2" role="button" data-slide="next">
+                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                        <span class="sr-only">Next</span>
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="item">
-                                            <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                            <div class="carousel-caption-edit">
-                                                <p>
-                                                    A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
-                                                </p>
-                                                <h3>Teodoro Zubillaga</h3>  
-                                                <p>Country Manager</p>  
-
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                            <div class="carousel-caption-edit">
-                                                <p>
-                                                    Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
-                                                </p>
-                                                <h3>Simon Borrero</h3>  
-                                                <p>CEO</p> 
+                                            <div class="col-lg-6" style="background-color: #49e2c6">
+                                                <div id="carousel-supplier" class="carousel slide" data-ride="carousel">
+                
+                                                    <ol class="carousel-indicators">
+                                                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                                    </ol>
+                
+                
+                                                    <div class="carousel-inner" role="listbox">
+                
+                                                        <div class="item active">
+                                                            <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
+                                                            <div class="carousel-caption-edit">
+                                                                <p>
+                                                                    "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
+                                                                </p>
+                                                                <h3>Raúl Bermeo</h3>  
+                                                                <p>Director General y Fundador</p> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
+                                                            <div class="carousel-caption-edit">
+                                                                <p>
+                                                                    "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
+                                                                </p>
+                                                                <h3>Adriana Hoyos</h3>  
+                                                                <p>Gerente General</p> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
+                                                            <div class="carousel-caption-edit">
+                                                                <p>
+                                                                    "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
+                                                                </p>
+                                                                <h3>Javier Pinilla</h3> 
+                                                                <p>Director y Cofundador</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                
+                                                    <a class="left carousel-control" href="#carousel-supplier" role="button" data-slide="prev">
+                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                        <span class="sr-only">Previous</span>
+                                                    </a>
+                                                    <a class="right carousel-control" href="#carousel-supplier" role="button" data-slide="next">
+                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                        <span class="sr-only">Next</span>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>-->
 
+                <div class="row row-center">
+                    <div class="col-lg-8 " style="padding: 0">
+                        <div id="carousel-refer" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <!--                            <ol class="carousel-indicators">
+                                                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                                        </ol>-->
 
-                                    <a class="left carousel-control" href="#carousel-clients2" role="button" data-slide="prev">
-                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="right carousel-control" href="#carousel-clients2" role="button" data-slide="next">
-                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" role="listbox">
+                                <div class="item active">
+                                    <img src="{{url("images_blog/referentes/rappi.jpg")}}" alt="..."  style="width:100%">
                                 </div>
-                            </div>
-                            <div class="col-lg-6" style="background-color: #49e2c6">
-                                <div id="carousel-supplier" class="carousel slide" data-ride="carousel">
+                                <div class="item">
+                                    <img src="{{url("images_blog/referentes/farmatodo.jpg")}}" alt="..."  style="width:100%">
 
-                                    <ol class="carousel-indicators">
-                                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                                    </ol>
-
-
-                                    <div class="carousel-inner" role="listbox">
-
-                                        <div class="item active">
-                                            <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                            <div class="carousel-caption-edit">
-                                                <p>
-                                                    "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
-                                                </p>
-                                                <h3>Raúl Bermeo</h3>  
-                                                <p>Director General y Fundador</p> 
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                            <div class="carousel-caption-edit">
-                                                <p>
-                                                    "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
-                                                </p>
-                                                <h3>Adriana Hoyos</h3>  
-                                                <p>Gerente General</p> 
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                            <div class="carousel-caption-edit">
-                                                <p>
-                                                    "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
-                                                </p>
-                                                <h3>Javier Pinilla</h3> 
-                                                <p>Director y Cofundador</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <a class="left carousel-control" href="#carousel-supplier" role="button" data-slide="prev">
-                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="right carousel-control" href="#carousel-supplier" role="button" data-slide="next">
-                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
                                 </div>
+                                <div class="item ">
+                                    <img src="{{url("images_blog/referentes/chocolov.jpg")}}" alt="..." class="img-responsive" style="width:100%">
+
+                                </div>
+                                <div class="item">
+                                    <img src="{{url("images_blog/referentes/segalco.jpg")}}" alt="..."  style="width:100%">
+                                </div>
+                                <div class="item">
+                                    <img src="{{url("images_blog/referentes/terrafertil.jpg")}}" alt="..."  style="width:100%">
+                                </div>
+
                             </div>
+
+                            <!-- Controls -->
+                            <a class="left carousel-control" href="#carousel-refer" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#carousel-refer" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
                         </div>
                     </div>
                 </div>
+
+
         </section>
 
         <section style="padding-bottom: 2%;padding-top: 2%">
             <div class="container-fluid">
-                <div class="row" style="background-color: #FAF6ee;">
+                <div class="row">
                     <div class="col-lg-12">
                         <div id="carousel-clients" class="carousel slide" data-ride="carousel">
 
@@ -692,10 +739,10 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     <div class="row" style="padding-top: 3%;padding-bottom: 3%">
                                         <div class="col-lg-10 col-lg-offset-1">
                                             <div class="col-lg-3">
-                                                <img src="logos/olimpica-1.png" alt="..." class="img-responsive center-block" width="40%">
+                                                <img src="logos/olimpica.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
                                             <div class="col-lg-3">
-                                                <img src="logos/farmatodo-2.png" alt="..." class="img-responsive center-block" width="40%" >
+                                                <img src="logos/farmatodo.png" alt="..." class="img-responsive center-block" width="40%" >
                                             </div>
                                             <div class="col-lg-3">
                                                 <img src="logos/rappi-3.png" alt="..." class="img-responsive center-block" width="40%">
@@ -751,9 +798,35 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
             </div>
         </section>
 
+        <div class="container-fluid green-bk">
+            <div class="row row-space" style="padding-top: 1%">
+                <div class="col-lg-5 col-md-5 col-sm-6">
+                    <h2 class="col-lg-offset-2"  style="color:white">
+                        Regístrate y recibe tips, recetas <br>
+                        y mucho más!
+                    </h2>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-6">
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input class="form-control input-lg" placeholder="Email">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class="btn btn-default" style="color:green">Suscribete</button>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+
 
         <section>
-            <div class="container-fluid grey-bk">
+            <div class="container-fluid grey-bk" style="padding-top: 3%">
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-5">
                         <p class="text-center col-lg-offset-5"><img src="/images/movil.png"></p>
@@ -788,31 +861,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </section>
 
 
-        <div class="container-fluid green-bk">
-            <div class="row row-space" style="padding-top: 1%">
-                <div class="col-lg-5 col-md-5 col-sm-6">
-                    <h2 class="col-lg-offset-2"  style="color:white">
-                        Regístrate y recibe tips, recetas <br>
-                        y mucho más!
-                    </h2>
-                </div>
-                <div class="col-lg-7 col-md-7 col-sm-6">
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <input class="form-control input-lg" placeholder="Email">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <button class="btn btn-default" style="color:green">Suscribete</button>
-                        </div>
-                    </div>
-                    <br>
-                </div>
-            </div>
-        </div>
+
 
         <div class="container-fluid green-bk">
             @include("footer")

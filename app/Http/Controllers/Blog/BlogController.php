@@ -27,6 +27,7 @@ class BlogController extends Controller {
     public function __construct() {
         $this->subject = '';
         $this->emails = [];
+        
     }
 
     public function index() {

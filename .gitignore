@@ -19,6 +19,7 @@ bootstrap/cache/
 /public/storage
 public/images
 public/images_blog
+public/images_blog/
 /public/images/supplier
 /public/images/resize
 /public/images/product

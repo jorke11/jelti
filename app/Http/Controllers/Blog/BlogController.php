@@ -43,7 +43,6 @@ class BlogController extends Controller {
         $writer = Users::find($data->user_id);
         $comments = Blog\Feedback::where("row_id", $data->id)->orderBy("created_at", "desc")->get();
 
-//        dd($comment);exit;
         return view("Blog.content.detail", compact("data", "products", "comments", "writer"));
     }
 
@@ -106,7 +105,7 @@ class BlogController extends Controller {
             $row->img = 'uploads/blog/' . $res->id . '/' . $file->getClientOriginalName();
             $image->save($path . $file->getClientOriginalName())->widen(800);
 
-            $image->resize(400, 250);
+            $image->resize(600, 450);
             $row->thumbnail = 'uploads/blog/' . $res->id . '/thumbmail/' . $file->getClientOriginalName();
             $image->save($paththumb . $file->getClientOriginalName());
             $row->save();

@@ -101,7 +101,7 @@ class BlogController extends Controller {
             $row = Post::find($res->id);
 
             $row->img = 'uploads/blog/' . $res->id . '/' . $file->getClientOriginalName();
-            $image->save($path . $file->getClientOriginalName())->widen(800);
+            $image->save($path . $file->getClientOriginalName())->widen(900);
 
             $image->resize(500, 350);
             $row->thumbnail = 'uploads/blog/' . $res->id . '/thumbmail/' . $file->getClientOriginalName();

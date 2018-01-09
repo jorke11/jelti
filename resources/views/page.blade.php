@@ -272,7 +272,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 <div class="carousel-inner" role="listbox">
                     <div class="item active">
                         <img src="images/banner-1.jpg" alt="Bebés" class="img-responsive" width="100%">
-                        <div class="carousel-caption" style="padding-left: 50%">
+                        <div class="carousel-caption" style="padding-left: 45%">
                             <button type="button" class="btn btn-primary btn-lg" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
                                 Registrate como<br>
                                 <span style="font-size: 30px;color:#000"><b>Cliente</b> o <b>Proveedor</b></span>
@@ -388,7 +388,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                     </div>
                                                 </div>
                                                 <div class="item">
-                                                    <div class="row" style="padding-top: 2%;padding-bottom: 2%;">
+                                                    <div class="row row-center" style="padding-top: 2%;padding-bottom: 2%;">
                                                         <?php
                                                     }
                                                 }

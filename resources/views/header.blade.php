@@ -1,11 +1,13 @@
 <style>
     #search{
         background-color: rgba(255,255,255,0);border-top: none;
-        border-right: none;border-left: none;border-bottom: 2px solid #fff;color: #fff
+        border-right: none;border-left: none;border-bottom: 2px solid #fff;color: #fff;
+        width: 80%
     }
     #search::placeholder{
         color:white
     }
+    
 </style>
 <section>
     <div class="container-fluid" style="padding-bottom: 2%;">
@@ -18,7 +20,7 @@
                     <div class="input-group">
                         <span class="input-group-addon" style="background-color: rgba(255,255,255,.0);border: 0">
                             <i class="glyphicon glyphicon-search" style="color:white" onclick="objPage.search()"></i></span>
-                            <input id="search" type="text" class="form-control" name="search" placeholder="Qué producto buscas?" style="" width="50px">
+                            <input id="search" type="text" class="form-control" name="search" placeholder="Qué producto buscas?" size="30">
                     </div>
                 </form>
 

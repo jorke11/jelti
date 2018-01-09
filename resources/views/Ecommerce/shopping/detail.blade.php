@@ -31,7 +31,7 @@
         <div class="carousel slide media-carousel" id="newproducts">
             <div class="carousel-inner">
                 <div class="item  active">
-                    <div class="row" style="padding-top: 1%;padding-bottom: 1%">
+                    <div class="row row-center" style="padding-top: 1%;padding-bottom: 1%">
                         <?php
                         $cont = 0;
                         $max = count($subcategory) / 6;
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                             <div class="item">
-                                <div class="row" style="padding-top: 1%;padding-bottom: 1%">
+                                <div class="row row-center" style="padding-top: 1%;padding-bottom: 1%">
                                     <?php
                                 }
                             }
@@ -88,7 +88,8 @@
 @if(count($val->products)>0)
 <div class="row" style="padding-top: 2%;padding-bottom: 2%">
     <div class="col-lg-12">
-        <a href="/shopping/sub{{$val->id}}" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a" >{{$val->description}} <span style="font-size: 13px;" class="text-muted">Ver Todos</span></p></a>
+        <a href="/shopping/sub{{$val->id}}" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a">{{$val->description}}</p>
+            <p class="text-center"><span style="font-size: 13px;color:#30C594" class="text-muted">Ver Todos</span></p></a>
     </div>
 </div>
 <div class="row">
@@ -116,7 +117,7 @@
 
                                         <img src="{{url("/") ."/".$value->thumbnail}}">
                                         <div class="caption" style="padding: 0">
-                                            <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
+                                            <h5 class="text-center" style="min-height: 50px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                             @if(!Auth::guest())
                                             <p>
                                             <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,2,",",".")}}</h4>

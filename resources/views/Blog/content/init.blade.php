@@ -54,7 +54,8 @@
 
                     <div class="row row-center" style="padding-top: 8%">
                         <div class="col-lg-22">
-                            <img src="../images_blog/category_line/belleza.png" alt="">
+                            <!--<img src="../images_blog/category_line/belleza.png" alt="">-->
+                            <img src="{{$last->img}}" alt="">
                         </div>
                     </div>
                     <div class="row">

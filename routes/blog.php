@@ -8,6 +8,8 @@ Route::get('admin/blog', ["as" => "admin.blog", "uses" => "Blog\BlogController@g
 
 Route::get('admin/blog/category', ["uses" => "Blog\CategoryController@index"]);
 Route::post('admin/blog/category', ["uses" => "Blog\CategoryController@store"]);
+Route::get('admin/blog/category/{id}/edit', ["uses" => "Blog\CategoryController@edit"]);
+Route::delete('admin/blog/category/{id}', ["uses" => "Blog\CategoryController@destroy"]);
 
 Route::get('admin/blog/{id}/edit', "Blog\BlogController@show");
 Route::put('blog/update/{id}', ["as" => 'blog.update', "uses" => "Blog\BlogController@update"]);

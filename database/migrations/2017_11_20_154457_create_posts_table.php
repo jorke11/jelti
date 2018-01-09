@@ -21,6 +21,8 @@ class CreatePostsTable extends Migration {
             $table->text('tags')->nullable();
             $table->text('slug')->nullable();
             $table->text('thumbnail')->nullable();
+            $table->integer('category_id');
+            $table->json('products_id')->nullable();
             $table->boolean('published')->nullable();
             $table->integer('user_id')->nullable();
 

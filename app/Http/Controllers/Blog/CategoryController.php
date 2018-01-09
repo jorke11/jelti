@@ -16,7 +16,7 @@ class CategoryController extends Controller {
     public function index() {
         $types = Parameters::where("group", "type_category")->get();
         $categories = Category::orderBy("description", "asc")->get();
-
+        
         return view("Blog.category.init", compact("types", "categories"));
     }
 
@@ -49,7 +49,7 @@ class CategoryController extends Controller {
                 if (file_exists($row->image))
                     unlink($row->image);
                 $name = $file->getClientOriginalName();
-                $path = "images/category/" . $id . "/";
+                $path = "images/blog/category/" . $id . "/";
                 $name = str_replace(" ", "", $name);
                 $file->move($path, $name);
                 $path .= $name;
@@ -60,7 +60,7 @@ class CategoryController extends Controller {
                 if (file_exists($row->banner))
                     unlink($row->banner);
                 $namebanner = $banner->getClientOriginalName();
-                $pathbanner = "images/category/" . $id . "/header/";
+                $pathbanner = "images/blog/category/" . $id . "/header/";
                 $namebanner = str_replace(" ", "", $namebanner);
                 $banner->move($pathbanner, $namebanner);
                 $pathbanner .= $namebanner;
@@ -78,7 +78,7 @@ class CategoryController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Category::FindOrFail($id);
+        $suppliers = Category::Find($id);
         return response()->json($suppliers);
     }
 

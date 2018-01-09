@@ -8,11 +8,12 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
 class Post extends Model {
 
-    use Sluggable,SluggableScopeHelpers;
+    use Sluggable,
+        SluggableScopeHelpers;
 
     protected $table = "posts";
     protected $primaryKey = "id";
-    protected $fillable = ["id", "title", "content", "tags", "user_id", "img","thumbnail","published"];
+    protected $fillable = ["id", "title", "content", "tags", "user_id", "img", "thumbnail", "published", "products_id","category_id"];
 
     public function sluggable() {
         return [

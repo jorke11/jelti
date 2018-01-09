@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="row">
-        {!! Form::open(['route' => 'admin.blog.store','files' => true,'method'=>'POST']) !!}
+        {!! Form::open(['route' => 'admin.blog.store','files' => true,'method'=>'POST','id'=>"frm"]) !!}
         <div class="col-lg-8 col-lg-offset-2">
             @include('Blog.admin.form')
             <div class="row" style="padding-bottom: 5%">    

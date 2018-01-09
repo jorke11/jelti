@@ -216,7 +216,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                 ?>
                                                 <div class="col-md-2 col-sm-2 col-xs-2" style="padding:0px">
                                                     <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
-                                                        <img src="{{$val->image}}" alt="">
+                                                        <img src="{{$val->image}}" alt="Image">
                                                     </a>
                                                 </div>
                                                 <?php
@@ -269,7 +269,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
                                                     <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
                                                        href="shopping/_{{$val->id}}">
-                                                        <img src="{{$val->img}}" alt="">
+                                                        <img src="{{$val->img}}" alt="Image">
                                                     </a>
                                                 </div>
                                                 <?php
@@ -330,7 +330,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             <div class="col-md-3 col-sm-2 col-xs-2">
                                                 <div class="thumbnail" style="border: 0;padding: 0;">
 
-                                                    <img src="{{url("/")."/".$value->thumbnail}}">
+                                                    <img src="{{url("/")."/".$value->thumbnail}}" alt="image">
                                                     <div class="caption" style="padding: 0">
                                                         <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                                         @if(!Auth::guest())
@@ -570,21 +570,21 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner" role="listbox">
                                 <div class="item active">
-                                    <img src="{{url("images_blog/referentes/rappi.jpg")}}" alt="..."  style="width:100%">
+                                    <img src="{{url("images_blog/referentes/rappi.jpg")}}" alt="Image"  style="width:100%">
                                 </div>
                                 <div class="item">
-                                    <img src="{{url("images_blog/referentes/farmatodo.jpg")}}" alt="..."  style="width:100%">
+                                    <img src="{{url("images_blog/referentes/farmatodo.jpg")}}" alt="Image"  style="width:100%">
 
                                 </div>
                                 <div class="item ">
-                                    <img src="{{url("images_blog/referentes/chocolov.jpg")}}" alt="..." class="img-responsive" style="width:100%">
+                                    <img src="{{url("images_blog/referentes/chocolov.jpg")}}" alt="Image" class="img-responsive" style="width:100%">
 
                                 </div>
                                 <div class="item">
-                                    <img src="{{url("images_blog/referentes/segalco.jpg")}}" alt="..."  style="width:100%">
+                                    <img src="{{url("images_blog/referentes/segalco.jpg")}}" alt="Image"  style="width:100%">
                                 </div>
                                 <div class="item">
-                                    <img src="{{url("images_blog/referentes/terrafertil.jpg")}}" alt="..."  style="width:100%">
+                                    <img src="{{url("images_blog/referentes/terrafertil.jpg")}}" alt="Image"  style="width:100%">
                                 </div>
 
                             </div>

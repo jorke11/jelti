@@ -42,6 +42,9 @@
         {!!Html::script('/vendor/DataTables-1.10.13/vfs_fonts.js')!!}
         {!!Html::script('/vendor/DataTables-1.10.13/buttons.html5.min.js')!!}
 
+        {!!Html::style('/vendor/select2/css/select2.min.css')!!}
+        {!!Html::script('/vendor/select2/js/select2.js')!!}
+
     </head>
 
 

@@ -52,12 +52,14 @@ class BlogController extends Controller {
 
     public function show($id) {
         $row = Post::find($id);
-        return view("Blog.admin.edit", compact("row"));
+        $category = Blog\Category::all();
+        return view("Blog.admin.edit", compact("row", "category"));
     }
 
     public function create() {
         $row = array();
-        return view("Blog.admin.new", compact("row"));
+        $category = Blog\Category::all();
+        return view("Blog.admin.new", compact("row", "category"));
     }
 
     public function newComment(Request $req) {
@@ -87,7 +89,13 @@ class BlogController extends Controller {
 
         $file = Input::file('img');
 
+
+        if (isset($in["products_id"])) {
+            $in["products_id"] = json_encode($in["products_id"]);
+        }
+
         unset($in["id"]);
+//        dd($in);
         $res = Post::create($in);
 
         if ($file != null) {
@@ -123,7 +131,8 @@ class BlogController extends Controller {
 
     public function delete($id) {
         $row = Post::find($id);
-        return view("Blog.admin.delete", compact("row"));
+        $category = Blog\Category::all();
+        return view("Blog.admin.delete", compact("row", "category"));
     }
 
     public function destroy(Request $req) {

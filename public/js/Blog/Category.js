@@ -1,7 +1,6 @@
 function Category() {
     var table;
     this.init = function () {
-        console.log("asdasd")
         table = this.table();
         $("#new").click(this.save);
         $("#edit").click(this.edit);
@@ -9,6 +8,7 @@ function Category() {
             $(".input-category").cleanFields();
             $("#modalNew").modal("show");
         });
+
     }
 
     this.save = function () {
@@ -57,7 +57,7 @@ function Category() {
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = id + "/edit";
+        var url = "category/" + id + "/edit";
         $("#modalNew").modal("show");
         $.ajax({
             url: url,
@@ -67,7 +67,8 @@ function Category() {
             success: function (data) {
                 $(".input-category").setFields({data: data});
                 if (data.image != null) {
-                    $("#img_category").attr("src", data.image)
+
+                    $("#img_category").attr("src", PATH + "/" + data.image)
                 } else {
                     $("#img_category").val("")
                 }
@@ -129,7 +130,7 @@ function Category() {
                 {
                     aTargets: [0, 1, 2, 3],
                     mRender: function (data, type, full) {
-                        return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                        return '<a href="#" onclick="objCat.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
@@ -137,7 +138,7 @@ function Category() {
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
+                        return '<button class="btn btn-danger btn-xs" onclick="objCat.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],
@@ -145,5 +146,5 @@ function Category() {
     }
 }
 
-var obj = new Category();
-obj.init();
+var objCat = new Category();
+objCat.init();

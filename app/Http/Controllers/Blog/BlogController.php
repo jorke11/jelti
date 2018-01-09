@@ -41,18 +41,20 @@ class BlogController extends Controller {
     public function getDetail($slug) {
         $data = Post::findBySlug($slug);
         $category = Blog\Category::find($data->category_id);
-        $prod = json_decode($data->products_id, true);
-        $prod = array_filter($prod);
 
         $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse");
+        if ($data->products_id != null) {
+            $prod = json_decode($data->products_id, true);
+            $prod = array_filter($prod);
 
-        if (count($prod) > 0) {
+            if (count($prod) > 0) {
 
-            foreach ($prod as $value) {
-                $ids[] = (int) $value;
+                foreach ($prod as $value) {
+                    $ids[] = (int) $value;
+                }
+
+                $products->whereIn("id", $ids);
             }
-
-            $products->whereIn("id", $ids);
         }
         $products = $products->get();
 

@@ -522,10 +522,10 @@ class DepartureController extends Controller {
                 $row->save();
                 DB::commit();
                 $dep = Departures::find($id);
-                
-                
-                
-                
+
+
+
+
                 return response()->json(["success" => true, "header" => $dep]);
             } else {
                 return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
@@ -544,7 +544,7 @@ class DepartureController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            
+
 //            unset($input["id"]);
 //            $user = Auth::User();
 
@@ -1274,9 +1274,25 @@ class DepartureController extends Controller {
             unset($input["id"]);
 //            $user = Auth::User();
             $input["status_id"] = 1;
+
+
             $input["real_quantity"] = (!isset($input["real_quantity"]) || $input["real_quantity"] == '') ? null : $input["real_quantity"];
 
-            $product = Products::find($input["product_id"]);
+            $header = Departures::find($input["departure_id"]);
+
+            $special = PricesSpecial::where("product_id", $input["product_id"])->where("client_id", $header->client_id)->first();
+
+            if ($special == null) {
+
+                $product = Products::find($input["product_id"]);
+            } else {
+
+                $product = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
+                        ->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["product_id"])
+                        ->where("prices_special.client_id", $header->client_id)
+                        ->first();
+            }
+
             $input["value"] = $product->price_sf;
             $input["units_sf"] = $product->units_sf;
             $input["tax"] = $product->tax;

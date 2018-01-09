@@ -1179,7 +1179,7 @@ class DepartureController extends Controller {
         }
 
 
-        unset($input["value"]);
+//        unset($input["value"]);
 //        $input["value"] = $pro->price_sf;
         if (Auth::user()->role_id == 4) {
             unset($input["real_quantity"]);

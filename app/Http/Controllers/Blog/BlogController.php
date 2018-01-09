@@ -30,19 +30,36 @@ class BlogController extends Controller {
     }
 
     public function index() {
-        $last = Post::orderBy("created_at", "desc")->first();
-        $data = Post::where("id", "<>", $last->id)->orderBy("created_at")->paginate(10);
-//        dd($data);
+        $last = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category")->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")->first();
+
+        $data = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category")->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")
+                        ->where("posts.id", "<>", $last->id)->orderBy("posts.created_at")->paginate(10);
+
         return view("Blog.content.init", compact("data", "last"));
     }
 
     public function getDetail($slug) {
         $data = Post::findBySlug($slug);
-        $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->get();
+        $category = Blog\Category::find($data->category_id);
+        $prod = json_decode($data->products_id, true);
+        $prod = array_filter($prod);
+
+        $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse");
+
+        if (count($prod) > 0) {
+
+            foreach ($prod as $value) {
+                $ids[] = (int) $value;
+            }
+
+            $products->whereIn("id", $ids);
+        }
+        $products = $products->get();
+
         $writer = Users::find($data->user_id);
         $comments = Blog\Feedback::where("row_id", $data->id)->orderBy("created_at", "desc")->get();
 
-        return view("Blog.content.detail", compact("data", "products", "comments", "writer"));
+        return view("Blog.content.detail", compact("data", "products", "comments", "writer", "category"));
     }
 
     public function getAllPost() {

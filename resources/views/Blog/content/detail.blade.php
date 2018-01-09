@@ -2,10 +2,10 @@
 @section('content')
 
 <div class="container-fluid">
-    <div class="row row-space" style="padding-top: 2%;padding-bottom: 5%;background-color: #FAF6EE;min-height: 150px;padding-bottom: 5%">
-        <div class="col-lg-10 col-lg-offset-1">
-            <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/">
-                <img src="images_blog/category/alimentos-1" alt="">
+    <div class="row row-space row-center" style="padding-top: 2%;padding-bottom: 5%;background-color: #FAF6EE;min-height: 150px;padding-bottom: 5%">
+        <div class="col-lg-2">
+            <a class="fancybox thumbnail" style="padding:0px;border:0px;display: inline" rel="gallery1" href="shopping/">
+                <img src="{{url($category->image)}}" alt="">
             </a>
         </div>
     </div>
@@ -27,6 +27,7 @@
                 </div>
             </div>
         </div>
+        @if(count($products)>0)
         <div class="row row-space">
             <div class="col-lg-8 col-lg-offset-2" style="background-color: #fff">
                 <div class="row">
@@ -97,6 +98,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
         <div class="row row-space">
             <div class="col-lg-8 col-lg-offset-2" style="background-color: #fff">

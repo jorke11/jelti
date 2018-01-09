@@ -46,16 +46,16 @@
                 <div class="col-lg-6" style="padding-left: 0">
                     <div class="row row-space">
                         <div class="col-lg-12">
-                            <a href="blog/{{$last->slug}}" class="text-center center-block"><img src="../{{$last->img}}" class="img-responsive"></a>
+                            <a href="{{url("blog/".$last->slug)}}" class="text-center center-block"><img src="../{{$last->img}}" class="img-responsive"></a>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6" >
 
                     <div class="row row-center" style="padding-top: 8%">
-                        <div class="col-lg-22">
+                        <div class="col-lg-4">
                             <!--<img src="../images_blog/category_line/belleza.png" alt="">-->
-                            <img src="{{$last->img}}" alt="">
+                            <img src="{{$last->img_category}}" alt="">
                         </div>
                     </div>
                     <div class="row">
@@ -65,7 +65,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12" style="padding-top: 5%">
-                            <p class="text-center"><a  href="{{$last->slug}}" style="color:#30c594;font-size: 21px;font-weight: 700">Leer Más</a></p>
+                            <p class="text-center"><a  href="{{url("blog/".$last->slug)}}" style="color:#30c594;font-size: 21px;font-weight: 700">Leer Más</a></p>
                         </div>
                     </div>
 

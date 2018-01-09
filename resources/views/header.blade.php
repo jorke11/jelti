@@ -13,7 +13,7 @@
             <div class="col-lg-8">
                 <!--<h4 style="color:white">Invita y Gana</h4>-->
             </div>
-            <div class="col-lg-3" style="padding-bottom: 4%">
+            <div class="col-lg-3" style="padding-bottom: 1%">
                 <form autocomplete="on" id="formSearch">
                     <div class="input-group">
                         <span class="input-group-addon" style="background-color: rgba(255,255,255,.0);border: 0">

@@ -6,13 +6,13 @@
     <div class="col-lg-5 col-md-5 col-sm-4 col-xs-6">
         <div class="row" style="padding-top: 20%;padding-bottom: 3%">
             <div class="col-lg-3 col-md-4 col-sm-4 col-lg-offset-3 col-xs-4">
-                <p class="text-center"><img src="/images/facebook.png" class="img-responsive"></p>
+                <a href="https://www.facebook.com/superfuds/"><p class="text-center"><img src="/images/facebook.png" class="img-responsive"></p></a>
             </div>
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-                <img src="/images/instagram.png" class="img-responsive">
+                <a href="https://www.instagram.com/superfuds/?hl=es-la"><img src="/images/instagram.png" class="img-responsive"></a>
             </div>
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-                <img src="/images/twitter.png" class="img-responsive">
+                <a href=""><img src="/images/twitter.png" class="img-responsive"></a>
             </div>
         </div>
     </div
@@ -33,7 +33,6 @@
                     <span style="color:white;" class="col-lg-offset-1">Superfüds 2018. Todos los derechos reservados</span>   
                 </div>
             </div>
-
         </div>
     </div>
 

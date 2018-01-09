@@ -88,7 +88,8 @@
 @if(count($val->products)>0)
 <div class="row" style="padding-top: 2%;padding-bottom: 2%">
     <div class="col-lg-12">
-        <a href="/shopping/sub{{$val->id}}" ><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a">{{$val->description}}</p>
+        <a href="/shopping/sub{{$val->id}}" style="text-decoration: none"><p class="text-center"  style="font-size:24px;font-weight: 0;color:#4a4a4a;">
+                <span style="border-bottom: 2px solid #30C594;padding-bottom: 5px;letter-spacing: 3px">{{$val->description}}</span></p>
             <p class="text-center"><span style="font-size: 13px;color:#30C594" class="text-muted">Ver Todos</span></p></a>
     </div>
 </div>

@@ -17,7 +17,7 @@
         content: '';
         position: absolute;
         left: 50%;
-        bottom: 0;
+        bottom: 30%;
         transform: translateX(-50%);
         width: 25px;
         height: 25px;
@@ -37,14 +37,14 @@
         border-radius: 10px;
     }
 
-    .timeline ul li div::before {
-        content: '';
-        position: absolute;
-        bottom: 7px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-    }
+    /*    .timeline ul li div::before {
+            content: '';
+            position: absolute;
+            bottom: 7px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }*/
     /*.timeline ul li:nth-child(odd) div {*/
     .timeline ul li> div {
         left: 45px;
@@ -52,15 +52,15 @@
 
 
     /*.timeline ul li:nth-child(odd) div::before {*/
-    .timeline ul li >div::before {
-        left: 100%;
-        border-color: transparent transparent transparent #30c594;
-
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-top: 20px solid #30c594;
-
-    }
+    /*    .timeline ul li >div::before {
+            left: 100%;
+            border-color: transparent transparent transparent #30c594;
+    
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #30c594;
+    
+        }*/
 
     .timeline ul li div time {
         width: 100%;
@@ -96,19 +96,19 @@
                             <div class="col-lg-12">
                                 <div class="row row-center">
                                     <!--<div class="col-lg-12">-->
-                                        @if($product->characteristic!=null)
-                                        @foreach($product->characteristic as $val)
-                                        <div class="col-lg-2">
-                                            <div class="row">
-                                                <div class="row hover01">
-                                                    <div class="col-lg-10">
-                                                        <img id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" title="{{$val->description}}" class="img-responsive center-block" style="cursor:pointer">
-                                                    </div>
+                                    @if($product->characteristic!=null)
+                                    @foreach($product->characteristic as $val)
+                                    <div class="col-lg-2">
+                                        <div class="row">
+                                            <div class="row hover01">
+                                                <div class="col-lg-10">
+                                                    <img id="sub_{{$val->id}}" src="/{{$val->img}}" alt="" title="{{$val->description}}" class="img-responsive center-block" style="cursor:pointer">
                                                 </div>
                                             </div>
                                         </div>
-                                        @endforeach
-                                        @endif
+                                    </div>
+                                    @endforeach
+                                    @endif
                                     <!--</div>-->
                                 </div>
                             </div>
@@ -280,35 +280,36 @@
 
 
         </section>
-        <div class="row">
+        <div class="row row-center">
+            <div class="col-lg-6">
+                <section class="timeline">
+                    <ul>
+                        <li>
+                            <div>
+                                <time>Acerca del producto</time>
+                                <p class="text-justify">{{$product->about}}</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <time>Por qué te encantara</time>
+                                <p class="text-justify">{{$product->why}}</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <time>Ingredientes</time>
+                                <p class="text-justify">
+                                    {{$product->ingredients}}
+                                </p>
+                            </div>
+                        </li>
 
-            <section class="timeline">
-                <ul>
-                    <li>
-                        <div>
-                            <time>Acerca del producto</time>
-                            <p class="text-justify">{{$product->about}}</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <time>Por qué te encantara</time>
-                            <p class="text-justify">{{$product->why}}</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <time>Ingredientes</time>
-                            <p class="text-justify">
-                                {{$product->ingredients}}
-                            </p>
-                        </div>
-                    </li>
+                        <!-- more list items here -->
+                    </ul>
+                </section>
 
-                    <!-- more list items here -->
-                </ul>
-            </section>
-
+            </div>
         </div>
     </div>
 

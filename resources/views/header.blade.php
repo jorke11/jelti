@@ -18,7 +18,7 @@
                     <div class="input-group">
                         <span class="input-group-addon" style="background-color: rgba(255,255,255,.0);border: 0">
                             <i class="glyphicon glyphicon-search" style="color:white" onclick="objPage.search()"></i></span>
-                        <input id="search" type="text" class="form-control" name="search" placeholder="Qué producto buscas?" style="">
+                            <input id="search" type="text" class="form-control" name="search" placeholder="Qué producto buscas?" style="" width="50px">
                     </div>
                 </form>
 

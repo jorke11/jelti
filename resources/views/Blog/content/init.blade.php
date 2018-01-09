@@ -46,7 +46,7 @@
                 <div class="col-lg-6" style="padding-left: 0">
                     <div class="row row-space">
                         <div class="col-lg-12">
-                            <a href="{{url("blog/".$last->slug)}}" class="text-center center-block"><img src="../{{$last->img}}" class="img-responsive"></a>
+                            <a href="{{url("blog/")}}" class="text-center center-block"><img src="../{{$last->img}}" class="img-responsive"></a>
                         </div>
                     </div>
                 </div>

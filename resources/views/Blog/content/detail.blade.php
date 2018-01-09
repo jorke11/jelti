@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="container-fluid">
-    <div class="row row-space row-center" style="padding-top: 2%;padding-bottom: 5%;background-color: #FAF6EE;min-height: 150px;padding-bottom: 5%">
+    <div class="row row-space row-center" style="padding-top: 2%;background-color: #FAF6EE;min-height: 100px;padding-bottom: 3%">
         <div class="col-lg-2">
             <a class="fancybox thumbnail" style="padding:0px;border:0px;display: inline" rel="gallery1" href="shopping/">
                 <img src="{{url($category->image)}}" alt="">

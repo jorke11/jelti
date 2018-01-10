@@ -780,6 +780,7 @@ function Departure() {
 
                 if (data.header.status_id == 2) {
                     status = true;
+
                 }
 
                 $(".input-departure").setFields({data: data.header, status: status});
@@ -791,6 +792,7 @@ function Departure() {
                 if (data.header.status_id == 1) {
                     statusRecord = true;
                     btnDel = true;
+                    $("#btnRem").attr("disabled", false);
                 }
                 if (data.header.status_id != 1) {
                     $("#btnmodalDetail").attr("disabled", true);

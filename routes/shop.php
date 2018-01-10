@@ -2,6 +2,7 @@
 
 Route::get('/shopping', 'Shopping\ShoppingController@index');
 Route::get('/shopping/{id}', 'Shopping\ShoppingController@getDetailProduct');
+Route::get('shopping/all/{id}/{subcategory_id}', 'Shopping\ShoppingController@getDetailProductAllCategory');
 Route::get('/shopping/{categrory_id}/{subcategrory_id}', 'Shopping\ShoppingController@getDetailProductFilter');
 
 Route::get('/getCategories', 'Shopping\ShoppingController@getCategories');

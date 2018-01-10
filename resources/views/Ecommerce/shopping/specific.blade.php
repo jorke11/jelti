@@ -15,7 +15,7 @@
             <div class="carousel slide media-carousel" id="newproducts">
                 <div class="carousel-inner">
                     <div class="item  active">
-                        <div class="row" style="padding-top: 1%;padding-bottom: 1%">
+                        <div class="row row-center" style="padding-top: 1%;padding-bottom: 1%">
                             <?php
                             $cont = 0;
                             $max = count($subcategory) / 6;
@@ -24,7 +24,7 @@
 //                            dd($val);
                                 ?>
                                 <div class="col-md-2" >
-                                    <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
+                                    <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="#">
                                         <img src="{{url("/")."/".$val->img}}" alt="">
                                     </a>
                                 </div>
@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                                 <div class="item">
-                                    <div class="row" style="padding-top: 1%;padding-bottom: 1%">
+                                    <div class="row row-center" style="padding-top: 1%;padding-bottom: 1%">
                                         <?php
                                     }
                                 }

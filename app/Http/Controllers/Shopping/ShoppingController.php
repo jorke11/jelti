@@ -47,6 +47,15 @@ class ShoppingController extends Controller {
 
 
                 return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
+            } if (strpos($id, "sub") !== false) {
+                $id = str_replace("sub", "", $id);
+
+                $category = Categories::find($id);
+
+                $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
+
+
+                return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
             } else {
 
                 $category = Categories::find($id);
@@ -104,7 +113,7 @@ class ShoppingController extends Controller {
         $category = Categories::find($id);
 
         $subcategory = Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->where("id", $subcategory_id)->orderBy("order", "asc")->get();
-        
+
 
         $products = DB::table("vproducts")->where("category_id", $id)->where(DB::raw("characteristic->>0"), $subcategory_id)
                         ->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);

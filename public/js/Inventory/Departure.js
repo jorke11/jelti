@@ -166,8 +166,13 @@ function Departure() {
             // Toggle the visibility
             column.visible(!column.visible());
         })
+
+        $("#btnRem").click(this.saveRem);
     }
 
+    this.saveRem = function () {
+        obj.tempInvoice($("#frm #id").val());
+    }
 
     this.reverse = function () {
         toastr.remove()

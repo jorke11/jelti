@@ -8,6 +8,9 @@
                 <button class="btn btn-success btn-sm" id='btnSave'>
                     <span class="glyphicon glyphicon-save" aria-hidden="true" > Guardar</span>
                 </button>
+                <button class="btn btn-warning btn-sm" id='btnRem'>
+                    <span class="glyphicon glyphicon-save" aria-hidden="true" > Remision</span>
+                </button>
                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                 <button class="btn btn-success btn-sm" id='btnSend' disabled>
                     <span class="glyphicon glyphicon-send" aria-hidden="true"> Enviar</span>

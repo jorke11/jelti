@@ -570,21 +570,24 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner" role="listbox">
                                 <div class="item active">
-                                    <img src="{{url("images_blog/referentes/rappi.jpg")}}" alt="Image"  style="width:100%">
+                                    <img src="{{url("images_blog/referentes/farmatodo-1.jpg")}}" alt="Image"  style="width:100%">
                                 </div>
                                 <div class="item">
-                                    <img src="{{url("images_blog/referentes/farmatodo.jpg")}}" alt="Image"  style="width:100%">
+                                    <img src="{{url("images_blog/referentes/segalco-2.jpg")}}" alt="Image"  style="width:100%">
 
                                 </div>
                                 <div class="item ">
-                                    <img src="{{url("images_blog/referentes/chocolov.jpg")}}" alt="Image" class="img-responsive" style="width:100%">
+                                    <img src="{{url("images_blog/referentes/rappi-3.jpg")}}" alt="Image" class="img-responsive" style="width:100%">
 
                                 </div>
                                 <div class="item">
-                                    <img src="{{url("images_blog/referentes/segalco.jpg")}}" alt="Image"  style="width:100%">
+                                    <img src="{{url("images_blog/referentes/terrafertil-4.jpg")}}" alt="Image"  style="width:100%">
                                 </div>
                                 <div class="item">
-                                    <img src="{{url("images_blog/referentes/terrafertil.jpg")}}" alt="Image"  style="width:100%">
+                                    <img src="{{url("images_blog/referentes/clickclack-5.jpg")}}" alt="Image"  style="width:100%">
+                                </div>
+                                <div class="item">
+                                    <img src="{{url("images_blog/referentes/chocolov-6.jpg")}}" alt="Image"  style="width:100%">
                                 </div>
 
                             </div>

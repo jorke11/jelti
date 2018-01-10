@@ -30,7 +30,7 @@ if (!isset($_COOKIE["mostrarModal"])) {
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <meta name="keywords" content="organico,saludable">
-        <meta name="description" content="¡SuperFüds es el futuro del descubrimiento de nuevos productos! Hemos creado una forma más eficiente para que los consumidores y proveedores se conecten. Nuestra plataforma en línea administra productos saludables y ecológicos de cientos de proveedores en múltiples categorías, lo que facilita a los compradores y consumidores enfocarse rápidamente en los que son adecuados para ellos y compartirlos con el mundo.">
+        <meta name="description" content="Your website does not contain an XML sitemap and that can weaken your SEO.">
         <!-- Styles -->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
         {!!Html::script('/vendor/toastr/toastr.min.js')!!}

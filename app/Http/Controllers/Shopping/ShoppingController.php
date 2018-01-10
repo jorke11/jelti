@@ -43,7 +43,6 @@ class ShoppingController extends Controller {
 
                 $category = Categories::find($id);
 
-
                 $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
 
 
@@ -64,6 +63,8 @@ class ShoppingController extends Controller {
                 $categoryAssoc = Categories::where("node_id", $id)->get();
                 $in = [];
 
+                $sub = array();
+
                 foreach ($categoryAssoc as $j => $value) {
 
                     $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->orderBy("supplier_id")->orderBy("title", "desc")->get();
@@ -73,12 +74,22 @@ class ShoppingController extends Controller {
                         $cod = array_map('intval', explode(",", $cod));
                         $cod = array_filter($cod);
 
+
                         if (count($cod) > 0) {
+
+                            foreach ($cod as $value) {
+
+                                if (!in_array($value, $sub)) {
+
+                                    $sub[] = $value;
+                                }
+                            }
 
                             $cha = Characteristic::whereIn("id", $cod)->get();
                             if (count($cha) == 0) {
                                 $cha = null;
                             }
+
                             $products[$i]->characteristic = $cha;
                         } else {
                             $products[$i]->characteristic = null;
@@ -89,6 +100,9 @@ class ShoppingController extends Controller {
 
                     $categoryAssoc[$j]->products = $products;
                 }
+
+                $subcategory = Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->whereIn("id", $sub)->orderBy("order", "asc")->get();
+
 
                 return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory", "id"));
             }

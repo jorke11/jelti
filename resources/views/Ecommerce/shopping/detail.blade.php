@@ -40,7 +40,7 @@
 //                            dd($val);
                             ?>
                             <div class="col-md-2" >
-                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="_{{$val->id}}">
+                                <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" href="{{$id}}/{{$val->id}}">
                                     <img src="{{url("/")."/".$val->img}}" alt="">
                                 </a>
                             </div>

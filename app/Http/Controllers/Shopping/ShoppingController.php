@@ -29,7 +29,6 @@ class ShoppingController extends Controller {
     public function getDetailProduct($id) {
 
 
-
         $subcategory = Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
         if ($id == '0') {
@@ -91,9 +90,52 @@ class ShoppingController extends Controller {
                     $categoryAssoc[$j]->products = $products;
                 }
 
-                return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory"));
+                return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory", "id"));
             }
         }
+    }
+
+    public function getDetailProductFilter($category_id, $subcategory_id) {
+
+
+        $subcategory = Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->where("id", $subcategory_id)->orderBy("order", "asc")->get();
+
+        $category = Categories::find($category_id);
+
+//        dd($subcategory);
+
+        $categoryAssoc = Categories::where("node_id", $category_id)->get();
+        $in = [];
+
+        foreach ($categoryAssoc as $j => $value) {
+
+            $products = DB::table("vproducts")->where("category_id", $value->id)->whereNotNull("image")->where(DB::raw("characteristic->>0"), $subcategory_id)->orderBy("supplier_id")->orderBy("title", "desc")->get();
+
+            foreach ($products as $i => $value) {
+                $cod = str_replace("]", "", str_replace("[", "", $products[$i]->characteristic));
+                $cod = array_map('intval', explode(",", $cod));
+                $cod = array_filter($cod);
+
+                if (count($cod) > 0) {
+
+                    $cha = Characteristic::whereIn("id", $cod)->get();
+                    if (count($cha) == 0) {
+                        $cha = null;
+                    }
+                    $products[$i]->characteristic = $cha;
+                } else {
+                    $products[$i]->characteristic = null;
+                }
+
+                $products[$i]->short_description = str_replace("/", "<br>", $products[$i]->short_description);
+            }
+
+            $categoryAssoc[$j]->products = $products;
+        }
+
+        $id = $category_id;
+
+        return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory", "id"));
     }
 
     public function getCategories() {

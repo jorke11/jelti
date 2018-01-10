@@ -1,7 +1,7 @@
 .col-center{float: none;margin: 0 auto;}
 table>thead>tr{
-    /*background:#2a3f54;*/
-    background:#1b2733;
+    background:#00c98a;
+    /*background:#1b2733;*/
     color:white;
     border-color: #2a3f54
 }

@@ -101,7 +101,6 @@ class DepartureController extends Controller {
 
 
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
-
             $query->where("client_id", $in["client_id"])
                     ->where("status_id", 2);
         }
@@ -137,10 +136,13 @@ class DepartureController extends Controller {
         }
 
         if ($cont == 0) {
+
             if (isset($in["init_filter"]) && $in["init_filter"] != '') {
                 $query->where("created_at", ">=", $in["init_filter"] . " 00:00");
             } else {
-                $query->where("created_at", ">=", $this->initdate . " 00:00");
+//                echo "else";
+//                exit;
+//                $query->where("created_at", ">=", $this->initdate . " 00:00");
             }
         }
 

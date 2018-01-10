@@ -6,7 +6,7 @@
     }
     .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
         background-color: #30c594;
-            border-color:#30c594
+        border-color:#30c594
     }
 </style>
 <div class="container-fluid" style="padding-top: 6%">
@@ -86,7 +86,7 @@
                         <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                         @if(!Auth::guest())
                         <p>
-                        <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,2,",",".")}}</h4>
+                        <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,0,",",".")}}</h4>
                         </p>
                         @endif
                         <div class="row">

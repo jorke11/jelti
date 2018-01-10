@@ -40,7 +40,12 @@ class ComparativeController extends Controller {
         }
 
         if (isset($input["client_id"]) && $input["client_id"] != 0) {
-            $where = " AND vdepartures.client_id=" . $input["client_id"];
+            $cli = '';
+            foreach ($input["client_id"] as $value) {
+                $cli .= ($cli == '') ? '' : ',';
+                $cli .= $value;
+            }
+            $where = " AND vdepartures.client_id IN(" . $cli . ")";
         }
         if (isset($input["commercial_id"]) && $input["commercial_id"] != 0) {
             $where .= " AND vdepartures.responsible_id=" . $input["commercial_id"];
@@ -304,7 +309,7 @@ class ComparativeController extends Controller {
             group by 1,2
             order by 3 DESC
             ";
-        
+
 
 
         $cli = DB::select($sql);

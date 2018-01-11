@@ -30,7 +30,7 @@ echo json_encode([
                 padding: 0;
                 /*background: url('assets/images/foto_final_1507x850.png') center center no-repeat;*/
                 background: url('assets/images/fondo_log_in.png') center center no-repeat;
-                background-size:100% 1280px;
+                background-size:100%;
             }
 
             @media screen and (min-width:1340px) {

@@ -308,7 +308,7 @@ Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getCli
 /**
  * Shopping cart
  */
-Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
+
 Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 
 

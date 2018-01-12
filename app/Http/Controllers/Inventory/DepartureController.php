@@ -589,7 +589,7 @@ class DepartureController extends Controller {
      * @param type $detail
      * @return type
      */
-    public function processDeparture($header, $detail) {
+    public function processDeparture($header, $detail, $id = null) {
         try {
             DB::beginTransaction();
             $header["insert_id"] = Auth::user()->id;
@@ -599,7 +599,14 @@ class DepartureController extends Controller {
                 $header["responsible_id"] = $bra->responsible_id;
             }
 
-            $result = Departures::create($header)->id;
+            if ($id == null) {
+                $result = Departures::create($header)->id;
+            } else {
+                $entry = Departures::Find($id);
+                $result = $entry->fill($header)->save();
+                $result = $id;
+            }
+
 
             if ($result) {
                 $emDetail = null;
@@ -1137,14 +1144,42 @@ class DepartureController extends Controller {
 
         unset($input["header"]["created_at"]);
 
-        $result = $entry->fill($input["header"])->save();
-        if ($result) {
-            $detail = $this->formatDetail($id);
-            $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "success" => true]);
+        $query = DB::table("vbriefcase")
+                ->where("client_id", $input["header"]["client_id"])
+                ->where("dias_vencidos", ">", 0);
+
+
+        $query->where(function($query) {
+            $query->whereNull("paid_out")
+                    ->orWhere("paid_out", "=", false);
+        });
+
+
+        $validateBriefcase = $query->get();
+
+        if (isset($input["detail"])) {
+
+            $status = (count($validateBriefcase) > 0) ? 8 : 1;
+            $input["header"]["status_id"] = $status;
+
+            if (!isset($input["header"]["shipping_cost"])) {
+                $input["header"]["shipping_cost"] = 0;
+            }
+            $input["detail"] = array_values(array_filter($input["detail"]));
+            $input["header"]["type_request"] = "web";
+
+            return $this->processDeparture($input["header"], $input["detail"],$id);
         } else {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, "msg" => "detail Empty"], 409);
         }
+
+//        if ($result) {
+//            $detail = $this->formatDetail($id);
+//            $total = "$ " . number_format($this->total, 0, ",", ".");
+//            return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "success" => true]);
+//        } else {
+//            return response()->json(['success' => false]);
+//        }
     }
 
     public function cancelInvoice(Request $request, $id) {

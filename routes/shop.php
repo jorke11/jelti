@@ -27,3 +27,4 @@ Route::post('payment/confirmationpay', 'Shopping\PaymentController@confirmationP
 Route::get('paymentest', "Payments\PaymentsController@index");
 
 Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
+Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');

@@ -25,6 +25,11 @@ class PaymentController extends Controller {
     public $ApiKey;
     public $ApiLogin;
     public $amount;
+    public $total;
+    public $subtotal;
+    public $tax5;
+    public $tax19;
+    public $exento;
 
     public function __construct() {
         $this->middleware("auth");
@@ -53,8 +58,9 @@ class PaymentController extends Controller {
     public function getDetail() {
         $detail = $this->getDetailData();
         if ($detail != null) {
-            $total = "$ " . number_format($this->amount, 0, ",", ".");
-            return response()->json(["detail" => $detail, "total" => $total]);
+            $total = "$" . number_format($this->total, 0, ",", ".");
+            $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
+            return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal]);
         } else {
             return response()->json(["success" => false, "total" => 0], 509);
         }
@@ -66,20 +72,41 @@ class PaymentController extends Controller {
             $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
 
             $sql = "
-                SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image,p.thumbnail
+                SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.value) as value,sum(d.quantity * d.value) total,p.image,p.thumbnail,
+                sum(d.units_sf) as units_sf,d.tax
                 FROM orders_detail d
                     JOIN vproducts p ON p.id=d.product_id
                     JOIN stakeholder s ON s.id=p.supplier_id
                 WHERE order_id=$order->id
                 GROUP BY 1,2,3,4,product_id,p.image,d.id,p.thumbnail
                 ORDER BY d.id";
+
             $detail = DB::select($sql);
 
-            $total = 0;
+            $this->total = 0;
+            $this->subtotal = 0;
             foreach ($detail as $i => $value) {
-                $detail[$i]->formateTotal = "$ " . number_format($value->total, 2, ",", ".");
-                $this->amount += $value->total;
+                $detail[$i]->valueFormated = "$" . number_format($value->value, 0, ",", ".");
+                $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
+
+                $detail[$i]->totalFormated = "$" . number_format($detail[$i]->total, 0, ",", ".");
+                $this->subtotal += $detail[$i]->total;
+
+                $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
+
+                if ($value->tax == 0) {
+                    $this->exento += $detail[$i]->total;
+                }
+
+                if ($value->tax == 0.05) {
+                    $this->tax5 += $detail[$i]->total * $value->tax;
+                }
+                if ($value->tax == 0.19) {
+                    $this->tax19 += $detail[$i]->total * $value->tax;
+                }
             }
+
+
             return $detail;
         }
     }
@@ -187,7 +214,6 @@ class PaymentController extends Controller {
         //enviamos el array data
         curl_setopt($ch, CURLOPT_POSTFIELDS, $pet2);
 //        curl_setopt($ch, CURLOPT_POSTFIELDS, build_query($data));
-        
         //obtenemos la respuesta
         $response = curl_exec($ch);
 

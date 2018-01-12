@@ -42,11 +42,10 @@ function Payment() {
         })
     }
 
-
     this.getDetail = function () {
         var html = "", image = "";
         $.ajax({
-            url: 'getDetail/',
+            url: 'getDetail',
             method: 'GET',
             dataType: 'JSON',
             beforeSend: function () {
@@ -61,7 +60,7 @@ function Payment() {
                 <div class="col-lg-10 col-lg-offset-1">\
                     <div class="panel panel-default">\
                         <div class="panel-header">\
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding-right:1%"><span aria-hidden="true">&times;</span></button>\
+                            <button type="button" class="close"  aria-label="Close" style="padding-right:1%" onclick=obj.deleteItem(' + val.product_id + ',' + val.order_id + ')><span aria-hidden="true">&times;</span></button>\
                         </div>\
                         <div class="panel-body">\
                             <div class="row">\

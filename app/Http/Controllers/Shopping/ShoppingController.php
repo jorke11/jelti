@@ -171,14 +171,19 @@ class ShoppingController extends Controller {
     public function getProduct($id) {
         $product = DB::table("vproducts")->where("id", $id)->first();
 
-        $detail = ProductsImage::where("product_id", $id)->get();
-        $relations = DB::table("vproducts")->where("category_id", $product->category_id)->whereNotNull("image")->get();
-        $supplier = Stakeholder::find($product->supplier_id);
-        $cod = str_replace("]", "", str_replace("[", "", $product->characteristic));
-        $cod = explode(",", $cod);
-        $cod = array_filter($cod);
 
-        if (count($cod) > 0) {
+        $detail = ProductsImage::where("product_id", $id)->get();
+
+        $relations = DB::table("vproducts")->where("category_id", $product->category_id)->whereNotNull("image")->get();
+
+        $supplier = Stakeholder::find($product->supplier_id);
+        $cod = json_decode($product->characteristic, true);
+        $id = array();
+        foreach ($cod as $value) {
+            $id[] = (int) $value;
+        }
+
+        if (count($id) > 0) {
             $cha = Characteristic::whereIn("id", $cod)->get();
             $product->characteristic = $cha;
         }
@@ -214,6 +219,8 @@ class ShoppingController extends Controller {
         $pro = Products::findOrFail($data["product_id"]);
         $data["order_id"] = $order_id;
         $data["tax"] = $pro["tax"];
+        $data["units_sf"] = $pro["units_sf"];
+        $data["packaging"] = $pro["packaging"];
         $data["value"] = $pro["price_sf"];
         OrdersDetail::create($data);
 

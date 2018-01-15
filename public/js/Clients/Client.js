@@ -760,6 +760,7 @@ function Client() {
                 {data: "document"},
                 {data: "email"},
                 {data: "address"},
+                {data: "sector"},
                 {data: "term"},
                 {data: "city"},
                 {data: "responsible"},
@@ -785,7 +786,7 @@ function Client() {
                     }
                 },
                 {
-                    targets: [15],
+                    targets: [16],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {

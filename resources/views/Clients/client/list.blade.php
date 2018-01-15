@@ -10,6 +10,7 @@
                         <th>Documento</th>
                         <th>Correo</th>
                         <th>Direccion</th>
+                        <th>Sector</th>
                         <th>Plazo de pago</th>
                         <th>Ciudad</th>
                         <th>Responsable</th>

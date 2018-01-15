@@ -1168,7 +1168,7 @@ class DepartureController extends Controller {
             $input["detail"] = array_values(array_filter($input["detail"]));
             $input["header"]["type_request"] = "web";
 
-            return $this->processDeparture($input["header"], $input["detail"],$id);
+            return $this->processDeparture($input["header"], $input["detail"], $id);
         } else {
             return response()->json(['success' => false, "msg" => "detail Empty"], 409);
         }
@@ -1212,7 +1212,8 @@ class DepartureController extends Controller {
         if ($special == null) {
             $pro = Products::find($input["product_id"]);
         } else {
-            $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["product_id"])->first();
+            
+            $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["product_id"])->where("client_id", $header->client_id)->first();
         }
 
 

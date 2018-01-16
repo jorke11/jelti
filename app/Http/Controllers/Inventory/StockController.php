@@ -29,7 +29,7 @@ class StockController extends Controller {
         $sales_ware = '';
         if ($in["warehouse_id"] != 0) {
             $entry_ware = ' AND entries.warehouse_id=' . $in["warehouse_id"];
-            $sales_ware = ' AND dep.warehouse_id=' . $in["warehouse_id"];
+            $sales_ware = ' AND sales.warehouse_id=' . $in["warehouse_id"];
         }
         $bar_code = '';
 
@@ -46,6 +46,8 @@ class StockController extends Controller {
             JOIN stakeholder ON stakeholder.id=products.supplier_id
             JOIN categories ON categories.id=products.category_id
                 $bar_code";
+
+
         $products = DB::select($sql);
         foreach ($products as $i => $value) {
             $sql = "
@@ -55,14 +57,16 @@ class StockController extends Controller {
                     WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
             $entry = DB::select($sql);
 
+
             $sql = "
-                    select coalesce(sum(d.quantity),0) as total
-                    from departures_detail d
-                    JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7) AND dep.client_id NOT IN(258,264)
-                    WHERE product_id=" . $value->id . " $sales_ware";
+                    select coalesce(sum(quantity),0)  AS total
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE sales_detail.product_id is not null and product_id=" . $value->id . "
+                     $sales_ware";
 
             $sale = DB::select($sql);
-
+           
             $products[$i]->entries = $entry[0]->total;
             $products[$i]->sales = $sale[0]->total;
             $products[$i]->available = $products[$i]->entries - $products[$i]->sales;

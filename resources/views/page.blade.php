@@ -398,11 +398,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         <img src="images/como_funciona.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
                     </div>
                 </div>
-                <div class="row row-center">
-                    <div class="col-lg-8">
-                        <img src="images/como_funciona.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
-                    </div>
-                </div>
+                
             </div>
         </section>
 

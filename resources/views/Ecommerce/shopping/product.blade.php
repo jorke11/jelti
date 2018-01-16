@@ -88,7 +88,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <h4 style="color:#434141">Precio $ {{number_format($product["price_sf"],2,",",".")}}</h4>
+                        <h4 style="color:#434141">Precio $ {{number_format($product->price_sf,0,",",".")}}</h4>
                     </div>
                 </div>
                 <div class="row">

@@ -13,6 +13,7 @@ class OrdersDetail extends Model {
         "order_id",
         "product_id",
         "quantity",
+        "units_sf",
         "tax",
         "value"
     ];

@@ -112,7 +112,9 @@
                                     <!--</div>-->
                                 </div>
                             </div>
+                            @if($product->image!=null)
                             <img src="{{url($product->image)}}" alt="" width="80%" style="padding-left: 20%">
+                            @endif
                             <div class="carousel-caption">
                             </div>
                         </div>
@@ -231,11 +233,13 @@
                                                 ?>
                                                 <div class="col-sm-3 col-lg-2 col-md-3">
                                                     <div class="thumbnail" style="padding: 0px">
+                                                        @if($val->thumbnail!=null)
                                                         <img src="{{url($val->thumbnail)}}">
+                                                        @endif
                                                         <div class="caption" style="padding: 0px">
                                                             <h5 class="text-center" style="height: 35px"><a href="/productDetail/{{$val->id}}">{{$val->title}}</a></h5>
                                                             <p>
-                                                            <h4 class="text-center">$ {{number_format($val->price_sf,2,",",".")}}</h4>
+                                                            <h4 class="text-center">$ {{number_format($val->price_sf,0,",",".")}}</h4>
                                                             </p>
                                                             <div class="row">
                                                                 <div class="col-lg-12">

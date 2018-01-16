@@ -15,10 +15,11 @@ Route::get('/comments', 'MainController@getcomments');
 Route::get('/comments/list/{id}', 'MainController@listComments');
 
 Route::get('/payment', 'Shopping\PaymentController@index');
+Route::get('/payment/{order_id}', 'Shopping\PaymentController@methodsPayment');
 Route::get('/getDetail', 'Shopping\PaymentController@getDetail');
 Route::put('/getDetailQuantity/{order_id}', 'Shopping\PaymentController@setQuantity');
 
-Route::post('payment/target', 'Shopping\PaymentController@payment');
+//Route::post('payment/target', 'Shopping\PaymentController@payment');
 Route::post('payu', 'Shopping\PaymentController@payu');
 
 Route::get('payment/responsepay', 'Shopping\PaymentController@responsePay');

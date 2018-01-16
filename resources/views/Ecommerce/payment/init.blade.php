@@ -8,6 +8,7 @@
 </div>
 <div class="row">
     {!! Form::open(['id'=>'frm','files' => true,'url' => 'payment/target']) !!}
+    <input id="order_id" name="order_id" type="hidden">
     <div class="col-lg-10 col-lg-offset-1">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
@@ -28,18 +29,26 @@
                                         <h4 class="text-right">Facturado</h4>
                                     </div>
                                     <div class="col-lg-6">
-                                         <h4 class="text-left">{{$client->business}}</h4>
+                                        <h4 class="text-left">{{$client->business}}</h4>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <h4 class="text-right">Total  Orden</h4>
+                                        <h4 class="text-right">SubTotal</h4>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h4 class="text-left"><span id="subtotalOrder"></span></h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h4 class="text-right">Total</h4>
                                     </div>
                                     <div class="col-lg-6">
                                         <h4 class="text-left"><span id="totalOrder"></span></h4>
                                     </div>
                                 </div>
-                                
+
                             </div>
 
                         </div>

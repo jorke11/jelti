@@ -227,6 +227,8 @@ class ShoppingController extends Controller {
         return $this->getDataCountOrders();
     }
 
+    
+
     public function getCountOrders() {
         $count = 0;
 

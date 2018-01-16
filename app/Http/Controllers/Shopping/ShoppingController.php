@@ -170,9 +170,7 @@ class ShoppingController extends Controller {
 
     public function getProduct($id) {
         $product = DB::table("vproducts")->where("id", $id)->first();
-        $detail = array();
-        $relations = array();
-        $supplier = array();
+        
 
         if ($product != null) {
             $detail = ProductsImage::where("product_id", $id)->get();

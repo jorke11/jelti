@@ -96,7 +96,7 @@
                             <div class="col-lg-12">
                                 <div class="row row-center">
                                     <!--<div class="col-lg-12">-->
-                                    @if($product->characteristic!=null)
+                                    @if(isset($product) && $product->characteristic!=null)
                                     @foreach($product->characteristic as $val)
                                     <div class="col-lg-2">
                                         <div class="row">
@@ -112,7 +112,9 @@
                                     <!--</div>-->
                                 </div>
                             </div>
+                            @if(isset($product))
                             <img src="{{url($product->image)}}" alt="" width="80%" style="padding-left: 20%">
+                            @endif
                             <div class="carousel-caption">
                             </div>
                         </div>
@@ -135,17 +137,26 @@
                     <div class="col-lg-12">
                         <div class="row" style="padding-bottom: 5%">
                             <div class="col-lg-12" style="color:#979797;font-size: 20px;font-weight: 600">
+                                @if(isset($supplier["business"]))
                                 {{ucwords($supplier["business"])}}
+                                @endif
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12" style="font-size: 18px;font-weight: 600">
+                                @if(isset($product->title))
                                 {{ucwords($product->title)}}
+                                @endif
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <h4 class="text-muted">Unidades {{$product->units_sf}} &nbsp;
+                                <h4 class="text-muted">Unidades 
+
+                                    @if(isset($product->units_sf))
+                                    {{$product->units_sf}} 
+                                    @endif
+                                    &nbsp;
                                     <span class="glyphicon glyphicon-star" style="color:#f0e012"></span>
                                     <span class="glyphicon glyphicon-star" style="color:#f0e012"></span>
                                     <span class="glyphicon glyphicon-star" style="color:#f0e012"></span>
@@ -166,7 +177,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <input type="hidden" id="product_id" name="product_id" value="{{$product->id}}">
+                        @if(isset($product->short_description))
                         {{$product->short_description}}
+                        @endif
                     </div>
                 </div>
 

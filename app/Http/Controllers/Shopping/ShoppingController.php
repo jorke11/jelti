@@ -170,25 +170,30 @@ class ShoppingController extends Controller {
 
     public function getProduct($id) {
         $product = DB::table("vproducts")->where("id", $id)->first();
+        $detail = array();
+        $relations = array();
+        $supplier = array();
 
+        if ($product != null) {
+            $detail = ProductsImage::where("product_id", $id)->get();
 
-        $detail = ProductsImage::where("product_id", $id)->get();
+            $relations = DB::table("vproducts")->where("category_id", $product->category_id)->whereNotNull("image")->get();
 
-        $relations = DB::table("vproducts")->where("category_id", $product->category_id)->whereNotNull("image")->get();
+            $supplier = Stakeholder::find($product->supplier_id);
+            $cod = json_decode($product->characteristic, true);
+            $id = array();
+            foreach ($cod as $value) {
+                $id[] = (int) $value;
+            }
 
-        $supplier = Stakeholder::find($product->supplier_id);
-        $cod = json_decode($product->characteristic, true);
-        $id = array();
-        foreach ($cod as $value) {
-            $id[] = (int) $value;
+            if (count($id) > 0) {
+                $cha = Characteristic::whereIn("id", $cod)->get();
+                $product->characteristic = $cha;
+            }
+            return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier"));
+        } else {
+            return response(view('errors.503'), 404);
         }
-
-        if (count($id) > 0) {
-            $cha = Characteristic::whereIn("id", $cod)->get();
-            $product->characteristic = $cha;
-        }
-
-        return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier"));
     }
 
     public function addComment(Request $req) {
@@ -226,8 +231,6 @@ class ShoppingController extends Controller {
 
         return $this->getDataCountOrders();
     }
-
-    
 
     public function getCountOrders() {
         $count = 0;

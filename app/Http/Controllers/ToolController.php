@@ -220,11 +220,11 @@ class ToolController extends Controller {
 
     public function readImagesCategory() {
 
-        $cmd = 'find  ' . public_path() . '/categorias/ -name "*.png"';
+        $cmd = 'find  ' . public_path() . '/categorias/ -name "*.jpg"';
 
         $list = shell_exec($cmd);
-
         $list = explode("\n", $list);
+
 
         foreach ($list as $value) {
             if (is_file($value)) {
@@ -232,10 +232,8 @@ class ToolController extends Controller {
 
                 $image = $manager->make($value);
 
-//               dd($image); 
+                $cod = substr($image->basename, 0, strpos($image->basename, "."));
 
-
-                $cod = substr($image->basename, 0, strpos($image->basename, "-"));
                 $cod = explode("_", $cod);
 
                 $pro = Categories::find($cod[1]);
@@ -253,7 +251,7 @@ class ToolController extends Controller {
                     $image->save($path);
 
                     $pro->image = $pathsys;
-                    $pro->order = $cod[0];
+                    $pro->order = $cod[1];
 
                     $pro->save();
                     echo $path . "<br>";
@@ -747,12 +745,12 @@ class ToolController extends Controller {
         $urls = array_filter($urls);
 
         foreach ($urls as $value) {
-        
+
             $handler = curl_init($value);
             $response = curl_exec($handler);
             curl_close($handler);
             echo $response;
-            echo  "<br>" . $value . "<br>";
+            echo "<br>" . $value . "<br>";
         }
 
 

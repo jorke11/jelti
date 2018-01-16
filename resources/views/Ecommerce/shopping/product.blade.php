@@ -114,6 +114,8 @@
                             </div>
                             @if($product->image!=null)
                             <img src="{{url($product->image)}}" alt="" width="80%" style="padding-left: 20%">
+                            @else
+                            <img src="" alt="No disponible" width="80%" style="padding-left: 20%">
                             @endif
                             <div class="carousel-caption">
                             </div>

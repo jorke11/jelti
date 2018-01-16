@@ -170,24 +170,33 @@ class ShoppingController extends Controller {
 
     public function getProduct($id) {
         $product = DB::table("vproducts")->where("id", $id)->first();
-        
+
 
         if ($product != null) {
+
             $detail = ProductsImage::where("product_id", $id)->get();
 
             $relations = DB::table("vproducts")->where("category_id", $product->category_id)->whereNotNull("image")->get();
 
+
             $supplier = Stakeholder::find($product->supplier_id);
-            $cod = json_decode($product->characteristic, true);
-            $id = array();
-            foreach ($cod as $value) {
-                $id[] = (int) $value;
+
+            if ($product->characteristic != null) {
+                $cod = json_decode($product->characteristic, true);
+                $id = array();
+
+                foreach ($cod as $value) {
+                    $id[] = (int) $value;
+                }
+
+                if (count($id) > 0) {
+                    $cha = Characteristic::whereIn("id", $cod)->get();
+                    $product->characteristic = $cha;
+                }
             }
 
-            if (count($id) > 0) {
-                $cha = Characteristic::whereIn("id", $cod)->get();
-                $product->characteristic = $cha;
-            }
+
+
             return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier"));
         } else {
             return response(view('errors.503'), 404);

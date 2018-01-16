@@ -80,6 +80,7 @@ class PaymentController extends Controller {
                 WHERE order_id=$order->id
                 GROUP BY 1,2,3,4,product_id,p.image,d.id,p.thumbnail
                 ORDER BY d.id";
+//            echo $sql;exit;
 
             $detail = DB::select($sql);
 

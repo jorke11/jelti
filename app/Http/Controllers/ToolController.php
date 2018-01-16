@@ -134,7 +134,6 @@ class ToolController extends Controller {
                     $heigth = $image->height() - round($image->height() * 0.70);
                 }
 //
-
 //// to finally create image instances
                 $imagethumb = $manager->make($value)->resize($width, $heigth);
 //                echo $image->basename;
@@ -729,14 +728,41 @@ class ToolController extends Controller {
             
             where p.reference=$reference
             order by p.title asc";
+        ;
         $res = DB::select($sql);
         $res = $res[0];
         dd($res);
     }
 
+    public function formInventory() {
+        return view("Tool/uploadInventory");
+    }
+
+    public function storeInventory(Request $req) {
+
+        $in = $req->all();
+
+        $urls = $in["urls"];
+        $urls = explode("\n", $urls);
+        $urls = array_filter($urls);
+
+        foreach ($urls as $value) {
+        
+            $handler = curl_init($value);
+            $response = curl_exec($handler);
+            curl_close($handler);
+            echo $response;
+            echo  "<br>" . $value . "<br>";
+        }
+
+
+        return view("Tool/uploadInventory");
+    }
+
     public function addInventory($warehouse_id, $reference, $quantity, $lot = null) {
         $lot = ($lot == null) ? 'system' : $lot;
         $pro = Products::where("reference", $reference)->first();
+
 
         $sql = "
             select 

@@ -13,3 +13,5 @@ Route::get('/exceltitle', 'ToolController@excelTitle');
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}', "ToolController@addInventory");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");
+Route::get('/uinventory', "ToolController@formInventory");
+Route::post('/setinventory', "ToolController@storeInventory");

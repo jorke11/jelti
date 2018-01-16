@@ -165,7 +165,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
                     <div class="item active">
-                        <img src="images/banner-1.jpg" alt="Bebés" class="img-responsive" width="100%">
+                        <img src="images/banner_main.jpg" alt="Bebés" class="img-responsive" width="100%">
                         <div class="carousel-caption" style="padding-left: 45%">
                             <button type="button" class="btn btn-primary btn-lg" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
                                 Registrate como<br>
@@ -307,17 +307,17 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
             <br>
         </section>
 
-        <section style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%">   
+        <section style="padding-top: 1%;padding-bottom: 2%">   
             <div class="container-fluid">
-                <div class="row">
+                <div class="row row-center">
                     <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>
                     <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2"><hr style="border-top: 1px solid #ccc"></div>
+                <div class="row row-center">
+                    <div class="col-lg-8"><hr style="border-top: 1px solid #ccc"></div>
                 </div>
-                <div class="row" >
-                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+                <div class="row row-center" >
+                    <div class="col-lg-8 col-md-8">
                         <div class="carousel slide media-carousel" id="newproducts">
                             <div class="carousel-inner">
                                 <div class="item  active">
@@ -386,59 +386,29 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </section>
 
 
-        <section style="padding-top: 3%;">
+        <section style="padding-top: 3%;padding-bottom: 2%">
             <div class="container-fluid">
-                <div class="row" style="padding-bottom: 4%">
-                    <div class="col-lg-12"><h1 class="color-font text-center">¿Que es SuperFuds?</h1></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 ">
-                        <div class="row" style="padding-top: 5%;background-color: #BAF2E8">
-                            <div class="col-lg-4">
-                                <div class="row row-space">
-                                    <div class="col-lg-12">
-                                        <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
-                                    </div>
-                                </div>
-                                <div class="row" style="padding-bottom: 20%;">
-                                    <div class="col-lg-12">
-                                        <p class="text-justify" style="letter-spacing:2px">
-                                            Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.    
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="row row-space">
-                                    <div class="col-lg-12">
-                                        <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12"  style="padding-bottom: 20%;">
-                                        <p class="text-justify" style="letter-spacing:2px">
-                                            A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="row row-space">
-                                    <div class="col-lg-12">
-                                        <img src="images/SF.png" style="width: 20%" class="img-responsive center-block">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12"  style="padding-bottom: 20%;">
-                                        <p class="text-justify" style="letter-spacing:2px">
-                                            Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row row-center row-space">
+                    <div class="col-lg-8">
+                        <img src="images/por_que_sf.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
                     </div>
                 </div>
+                <div class="row row-center">
+                    <div class="col-lg-8">
+                        <img src="images/como_funciona.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
+                    </div>
+                </div>
+                <div class="row row-center">
+                    <div class="col-lg-8">
+                        <img src="images/como_funciona.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section>
+            <div class="container-fluid">
                 <div class="row row-center" >
                     <div class="col-lg-8" style="background-color: #2FC8AE;padding-bottom: .9%"><h2 class="color-font text-center" style="color:#fffbf2">Lo que Aman nuestros <b>Clientes</b> y <b>Proveedores</b></h2></div>
                 </div>
@@ -604,6 +574,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                         </div>
                     </div>
                 </div>
+            </div>
 
 
         </section>

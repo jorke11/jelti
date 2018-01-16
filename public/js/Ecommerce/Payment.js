@@ -19,15 +19,8 @@ function Payment() {
     }
 
     this.payu = function () {
-        console.log("asd");
-        $.ajax({
-            url: PATH + '/payu',
-            method: 'POST',
-            dataType: 'JSON',
-            success: function (data) {
-                $("#frm #signature").val(data.key);
-            }
-        });
+        window.location.href = PATH + "/payment/" + $("#frm #order_id").val()
+
     }
 
     this.getQuantity = function () {
@@ -80,7 +73,7 @@ function Payment() {
                                     </div>\
                                     <div class="row">\
                                         <div class="col-lg-12">\
-                                            <h4>' + val.formateTotal + '</h4>\
+                                            <h4>' + val.valueFormated + '</h4>\
                                         </div>\
                                     </div>\
                                     <div class="row">\
@@ -101,7 +94,9 @@ function Payment() {
                 $("#content-detail").html(html);
 //                $("#tblReview").html('<tr><td colspan="4"><strong>Total</td><td>' + data.total + '</strong></td></tr>');
                 $("#loading-super").addClass("hidden");
+                $("#subtotalOrder").html("<h4>" + data.subtotal + "</h4>");
                 $("#totalOrder").html("<h4>" + data.total + "</h4>");
+                $("#frm #order_id").val(data.order);
             }, error: function () {
 //                location.href = '/login';
             }

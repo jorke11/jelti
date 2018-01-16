@@ -30,6 +30,7 @@ class PaymentController extends Controller {
     public $tax5;
     public $tax19;
     public $exento;
+    public $order_id;
 
     public function __construct() {
         $this->middleware("auth");
@@ -43,11 +44,48 @@ class PaymentController extends Controller {
         $this->ApiKey = "4Vj8eK4rloUd272L48hsrarnUA";
         $this->ApiLogin = "pRRXKOl8ikMmt9u";
         $this->amount = 0;
+        $this->order_id = 0;
     }
 
     public function index() {
         $client = Stakeholder::where("document", Auth::user()->document)->first();
         return view("Ecommerce.payment.init", compact("client"));
+    }
+
+    public function getMethodsPayments() {
+        $url = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi ";
+        $postData = array(
+            "test" => "false",
+            "language" => "es",
+            "command" => "GET_PAYMENT_METHODS",
+            "merchant" => array("apiLogin" => "pRRXKOl8ikMmt9u", "apiKey" => "4Vj8eK4rloUd272L48hsrarnUA"));
+
+
+        $data_string = json_encode($postData);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json;',
+            'Host: sandbox.api.payulatam.com',
+            'Accept:application/json',
+            'Content-Length: ' . strlen($data_string))
+        );
+//print_r($data_string);exit;                        
+
+        $result = curl_exec($ch);
+        $arr = json_decode($result, TRUE);
+        $banks = [];
+
+        foreach ($arr["paymentMethods"] as $val) {
+            if ($val["country"] == 'CO') {
+                $banks[] = $val;
+            }
+        }
+
+        return $banks;
     }
 
     public function generatekey() {
@@ -60,16 +98,27 @@ class PaymentController extends Controller {
         if ($detail != null) {
             $total = "$" . number_format($this->total, 0, ",", ".");
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
-            return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal]);
+            return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal, "order" => $this->order_id]);
         } else {
             return response()->json(["success" => false, "total" => 0], 509);
         }
+    }
+
+    public function methodsPayment($id) {
+        $banks = $this->getMethodsPayments();
+        $order = Orders::find($id);
+        
+        $client = \App\Models\Security\Users::find($order->id);
+        dd($client);
+        
+        return view("Ecommerce.payment.methods", compact("id", "banks"));
     }
 
     public function getDetailData() {
         $detail = null;
         if (Auth::user() != null) {
             $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
+            $this->order_id = $order->id;
 
             $sql = "
                 SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.value) as value,sum(d.quantity * d.value) total,p.image,p.thumbnail,

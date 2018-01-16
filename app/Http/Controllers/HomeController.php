@@ -161,12 +161,16 @@ class HomeController extends Controller {
             if ($users->status_id == 3) {
                 return view('activation', compact("users", "roles", "warehouses", "samples"));
             } else {
+                
                 return \Redirect::to('/');
             }
         } else {
+                    
             if (Auth::user()->role_id == 2) {
 
-                return view('client', compact("product", "client", "supplier", "commercial", "samples", "category", "subcategory"));
+//                return view('client', compact("product", "client", "supplier", "commercial", "samples", "category", "subcategory"));
+                return redirect('shopping/0');
+                
             } else {
                 return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples", "category"));
             }

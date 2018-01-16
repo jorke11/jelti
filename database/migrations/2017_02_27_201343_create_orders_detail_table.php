@@ -18,6 +18,7 @@ class CreateOrdersDetailTable extends Migration { /**
             $table->integer('quantity');
             $table->decimal('tax', 15, 2);
             $table->decimal('value', 15, 2);
+            $table->decimal('units_sf', 15, 2);
             $table->timestamps();
         });
     }

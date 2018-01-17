@@ -32,28 +32,34 @@ class SeekController extends Controller {
     public function getCity(Request $req) {
         $in = $req->all();
         $query = Cities::select("cities.id", DB::raw("initcap(cities.description || ' '||departments.description) as text"))
-                ->join("departments", "departments.id", "cities.department_id")
-        ;
-        if (isset($in["q"]) && $in["q"] == "0") {
-            $query->where("cities.id", Auth::user()->city_id)->get();
-        } else if (isset($in["id"])) {
-            if ($in["id"] != '') {
-                $query->where("cities.id", $in["id"])->get();
+                ->join("departments", "departments.id", "cities.department_id");
+        if (count($in) > 0) {
+            if (isset($in["q"]) && $in["q"] == "0") {
+                $query->where("cities.id", Auth::user()->city_id)->get();
+            } else if (isset($in["id"])) {
+                if ($in["id"] != '') {
+                    $query->where("cities.id", $in["id"])->get();
+                } else {
+                    $query->where("cities.id", -1)->get();
+                }
             } else {
-                $query->where("cities.id", -1)->get();
+                echo "<pre>";
+                print_r($in);
+                exit;
+                $query->where(DB::raw("cities.description || ' '||departments.description"), "ilike", "%" . $in["q"] . "%")->get();
             }
-        } else {
-            $query->where(DB::raw("cities.description || ' '||departments.description"), "ilike", "%" . $in["q"] . "%")->get();
-        }
 
-        $result = $query->get();
+            $result = $query->get();
+        } else {
+            $result = array();
+        }
 
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
 
     public function getDepartment(Request $req) {
         $in = $req->all();
-        
+
         $query = Department::select("id", "description as text");
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->city_id)->get();

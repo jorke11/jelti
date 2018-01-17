@@ -120,8 +120,13 @@ class SampleController extends Controller {
         return response()->json(["success" => true, "data" => $resp]);
     }
 
-    public function getBranch($id) {
-        $response = Branch::find($id);
+    public function getBranch($id = null) {
+        $response = array();
+       
+        if ($id != "null") {
+            $response = Branch::find($id);
+        }
+
         return response()->json(["response" => $response]);
     }
 

@@ -53,7 +53,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" >Inicio</a></li>
                 <li><a href="/shopping/0" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
-                <li><a href="blog/" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
+                <li><a href="{{url("blog")}}" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
                 @if(Auth::user()!=null)
                 
                 @if(Auth::user()->role_id!=2)

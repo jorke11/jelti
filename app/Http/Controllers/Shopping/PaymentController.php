@@ -12,6 +12,7 @@ use DB;
 use Session;
 use Illuminate\Support\Facades\Input;
 use App\Models\Administration\Stakeholder;
+use App\Models\Security\Users;
 
 class PaymentController extends Controller {
 
@@ -107,16 +108,13 @@ class PaymentController extends Controller {
     }
 
     public function methodsPayment($id) {
-
 //        $banks = $this->getMethodsPayments();
-
         $banks = array(array("id" => 1, "description" => "visa"), array("id" => 2, "description" => "mastercard"));
         $order = Orders::find($id);
-
-        $client = \App\Models\Security\Users::find($order->id);
-
-
-        return view("Ecommerce.payment.methods", compact("id", "banks"));
+        $user = Users::find($order->stakeholder_id);
+        $client = Stakeholder::where("email", $user->email)->first();
+//        dd($client);
+        return view("Ecommerce.payment.methods", compact("id", "banks", "client"));
     }
 
     public function getDetailData() {
@@ -203,6 +201,8 @@ class PaymentController extends Controller {
      * */
     public function payment(Request $req) {
 
+        $in = $req->all();
+        dd($in);
         $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
 
 

@@ -59,7 +59,7 @@ class ComparativeController extends Controller {
         if ($input["type_report"] == 1) {
             $data = $this->reportSalesClient($input, $where, $date);
         } else if ($input["type_report"] == 2) {
-            $data = $this->reportSalesProduct($input);
+            $data = $this->reportSalesProduct($input,$where, $date);
         } else if ($input["type_report"] == 3) {
             $data = $this->reportSalesCategory($input);
         } else if ($input["type_report"] == 4) {
@@ -263,7 +263,7 @@ class ComparativeController extends Controller {
         return $pro;
     }
 
-    function reportSalesProduct($data) {
+    function reportSalesProduct($data,$where,$dates) {
         $sql = "
             select products.id,substring(products.title from 0 for 40)|| '..' as description,
             sum(departures_detail.value * departures_detail.real_quantity * departures_detail.units_sf)::money as total,
@@ -272,6 +272,8 @@ class ComparativeController extends Controller {
             JOIN vdepartures ON vdepartures.id=departures_detail.departure_id and vdepartures.status_id IN(2,7) and vdepartures.client_id NOT IN(258,264,24)
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             JOIN products ON products.id=departures_detail.product_id
+            $dates
+            $where
             group by 1,products.title
             order by 3 desc
             ";
@@ -287,7 +289,7 @@ class ComparativeController extends Controller {
             JOIN vdepartures ON vdepartures.id=departures_detail.departure_id AND vdepartures.status_id IN(2,7) AND vdepartures.client_id NOT IN(258,264,24)
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             JOIN products ON products.id=departures_detail.product_id
-            Where products.id=" . $value->id . "
+            Where products.id=" . $value->id . " $dates
             group by 1,2
             order by 1";
 

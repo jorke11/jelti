@@ -49,9 +49,9 @@ function Client() {
                     $("#loading-super").addClass("hidden");
                     $("#btnSearch").attr("disabled", false);
                     return;
-                }else if (obj.type_report == 7) {
+                } else if (obj.type_report == 7) {
                     title = "Sector";
-                } 
+                }
 
                 objCli.setData(data, title);
 
@@ -125,19 +125,23 @@ function Client() {
 
         html = '';
         var cont = 0;
-
+        console.log(data.header)
         $.each(data.data, function (i, val) {
 
             html += "<tr><td>" + val.description + "</td>";
             html += '<td align="center">' + val.quantity_packaging + "</td><td>" + val.total + "</td>";
+            console.log(val.detail);
             for (var j = 0; j < val.detail.length; j++) {
-                if (data.header[cont].dates == val.detail[j].dates) {
-                    html += "<td align='center'>" + val.detail[j].quantity_packaging + "</td><td align='center'>" + val.detail[j].total + "</td>";
-                } else {
-                    html += "<td align='center'>0</td><td align='center'>0</td>";
-                    j--;
+         
+                if (val.detail[j] != undefined && data.header[cont]!=undefined) {
+                    if (data.header[cont].dates == val.detail[j].dates) {
+                        html += "<td align='center'>" + val.detail[j].quantity_packaging + "</td><td align='center'>" + val.detail[j].total + "</td>";
+                    } else {
+                        html += "<td align='center'>0</td><td align='center'>0</td>";
+                        j--;
+                    }
+                    cont++;
                 }
-                cont++;
             }
             cont = 0;
 

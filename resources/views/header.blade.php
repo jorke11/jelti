@@ -7,7 +7,7 @@
     #search::placeholder{
         color:white
     }
-    
+
 </style>
 <section>
     <div class="container-fluid" style="padding-bottom: 2%;">
@@ -20,7 +20,7 @@
                     <div class="input-group">
                         <span class="input-group-addon" style="background-color: rgba(255,255,255,.0);border: 0">
                             <i class="glyphicon glyphicon-search" style="color:white" onclick="objPage.search()"></i></span>
-                            <input id="search" type="text" class="form-control" name="search" placeholder="Qué producto buscas?" size="30">
+                        <input id="search" type="text" class="form-control" name="search" placeholder="Qué producto buscas?" size="30">
                     </div>
                 </form>
 
@@ -61,13 +61,26 @@
                         <span class="badge">
                             <span id="quantityOrders"></span>
                         </span></a></li>
+                <li>
+                    <a href="{{ url('/logout') }}"
+                       onclick="event.preventDefault();
+                               document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+
+                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                </li>
 
                 @endif
                 @if(Auth::user()==null)
                 <li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>
                 @endif
-                <!--<li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>-->
-            </ul>
+            </ul>    
+
+            <!--<li style="padding-top: 12px"><a href="/login" class="btn btn-success login-button" style="">Iniciar Sesión</a></li>-->
+
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>

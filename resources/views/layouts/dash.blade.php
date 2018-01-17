@@ -179,7 +179,7 @@
                                     </li>
                                     @endif
 
-                                    @if(Auth::user()->role_id==1)
+                                   
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Compras <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/purchase">Compra</a></li>
@@ -188,7 +188,7 @@
                                             <li><a href="/summary">Resumen</a></li>                                    
                                         </ul>
                                     </li>
-                                    @endif
+                                   
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Ventas <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
 

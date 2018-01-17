@@ -272,10 +272,10 @@ class DepartureController extends Controller {
 //        }
 //        
 //        echo public_path()."/images/superfuds.png";exit;
-
+        
         $sale = Sales::where("departure_id", $id)->first();
         $detail = $this->formatDetailSales($sale["id"]);
-
+        echo $this->tax19;exit;
         $dep = Departures::find($id);
         $cli = null;
         if ($dep->branch_id != '') {
@@ -337,6 +337,8 @@ class DepartureController extends Controller {
             $this->tax5 += $shipping_cost_tax;
         }
 
+        echo "asd";
+        echo $dep->shipping_cost_tax;exit;
         if ($dep->shipping_cost_tax == 0.19) {
             $shipping_cost_tax = $dep->shipping_cost * $dep->shipping_cost_tax;
             $this->tax19 += $shipping_cost_tax;
@@ -350,6 +352,8 @@ class DepartureController extends Controller {
         $cli["business"] = $this->tool->cleanText($cli["business"]);
         $cli["address_invoice"] = $dep->address_invoice;
 
+    
+        
         $data = [
             'rete' => 0,
             'formatRete' => "$ " . number_format(($rete["value"]), 2, ',', '.'),
@@ -1092,6 +1096,8 @@ class DepartureController extends Controller {
 
         $this->total = 0;
         $this->subtotal = 0;
+        
+        
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$" . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
@@ -1110,6 +1116,8 @@ class DepartureController extends Controller {
                 $this->tax19 += $detail[$i]->total * $value->tax;
             }
         }
+        
+        
         return $detail;
     }
 

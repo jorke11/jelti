@@ -275,7 +275,7 @@ class DepartureController extends Controller {
         
         $sale = Sales::where("departure_id", $id)->first();
         $detail = $this->formatDetailSales($sale["id"]);
-        echo $this->tax19;exit;
+       
         $dep = Departures::find($id);
         $cli = null;
         if ($dep->branch_id != '') {

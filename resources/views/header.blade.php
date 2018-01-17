@@ -55,7 +55,10 @@
                 <li><a href="/shopping/0" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
                 <li><a href="blog/" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
                 @if(Auth::user()!=null)
+                
+                @if(Auth::user()->role_id!=2)
                 <li><a href="/home" style="color:#00c98a;font-size:17px;font-weight: 100">Jelty</a></li>
+                @endif
                 <li> <a href="/payment">
                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" style="font-size: 25px;color:#30c594"></span>
                         <span class="badge">

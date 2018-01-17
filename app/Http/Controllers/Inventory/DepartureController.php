@@ -337,8 +337,8 @@ class DepartureController extends Controller {
             $this->tax5 += $shipping_cost_tax;
         }
 
-        echo "asd";
-        echo $dep->shipping_cost_tax;exit;
+        
+//        echo $dep->shipping_cost_tax;exit;
         if ($dep->shipping_cost_tax == 0.19) {
             $shipping_cost_tax = $dep->shipping_cost * $dep->shipping_cost_tax;
             $this->tax19 += $shipping_cost_tax;

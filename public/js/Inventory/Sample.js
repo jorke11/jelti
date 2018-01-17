@@ -123,17 +123,17 @@ function Sale() {
         $("#btnDocument").click(function () {
             if ($("#frm #status_id").val() != 1) {
 
-                $.ajax({
-                    url: 'sample/generateInvoice/' + $("#frm #id").val(),
-                    method: 'PUT',
-                    dataType: 'JSON',
-                    success: function (resp) {
-                        if (resp.success == true) {
-                            $("#frm #invoice").val(resp.consecutive);
-                            $("#btnDocument").attr("disabled", true);
-                        }
-                    }
-                })
+//                $.ajax({
+//                    url: 'sample/generateInvoice/' + $("#frm #id").val(),
+//                    method: 'PUT',
+//                    dataType: 'JSON',
+//                    success: function (resp) {
+//                        if (resp.success == true) {
+//                            $("#frm #invoice").val(resp.consecutive);
+//                            $("#btnDocument").attr("disabled", true);
+//                        }
+//                    }
+//                })
 
                 window.open("sample/" + $("#frm #id").val() + "/getInvoice");
             } else {

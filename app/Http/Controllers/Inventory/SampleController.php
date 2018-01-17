@@ -122,7 +122,7 @@ class SampleController extends Controller {
 
     public function getBranch($id = null) {
         $response = array();
-       
+
         if ($id != "null") {
             $response = Branch::find($id);
         }
@@ -1013,25 +1013,25 @@ class SampleController extends Controller {
     }
 
     public function generateInvoice($id) {
-        $sale = Sales::where("sample_id", $id)->first();
+//        $sale = SampleDetail::where("sample_id", $id)->first();
 
-        $dep = Sample::find($id)->toArray();
+        $sale = Sample::find($id)->toArray();
 
 
         $detail = DB::table("samples_detail")
-                ->select("quantity", DB::raw("sales_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "sales_detail.value", "sales_detail.units_sf", DB::raw("sales_detail.units_sf * sales_detail.quantity as quantityTotal"), DB::raw("sales_detail.value * sales_detail.quantity * sales_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
-                ->join("products", "sales_detail.product_id", "products.id")
+                ->select("quantity", DB::raw("samples_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "samples_detail.value", "samples_detail.units_sf", DB::raw("samples_detail.units_sf * samples_detail.quantity as quantityTotal"), DB::raw("samples_detail.value * samples_detail.quantity * samples_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->join("products", "samples_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("sale_id", $sale["id"])
-                ->orderBy("order", "asc")
+                ->where("sample_id", $sale["id"])
                 ->get();
+
 
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
                 ->where("stakeholder.id", $sale["client_id"])
                 ->join("cities", "cities.id", "stakeholder.city_id")
                 ->first();
 
-        $user = Users::find($dep["responsible_id"]);
+        $user = Users::find($sale["responsible_id"]);
         $totalExemp = 0;
         $totalTax5 = 0;
         $totalTax19 = 0;
@@ -1056,7 +1056,7 @@ class SampleController extends Controller {
             }
         }
 
-        $ware = Warehouses::find($dep["warehouse_id"]);
+        $ware = Warehouses::find($sale["warehouse_id"]);
 
         $email = Email::where("description", "invoices")->first();
 
@@ -1074,10 +1074,15 @@ class SampleController extends Controller {
 
         if (count($this->mails) > 0) {
             $cit = Cities::find($ware->city_id);
-            $this->subject = "SuperFuds " . date("d/m") . " " . $cli->business . " " . $cit->description . " Despacho de Pedido, factura " . $dep["invoice"];
+            $this->subject = "SuperFuds " . date("d/m") . " " . $cli->business . " " . $cit->description . " Despacho de Pedido, factura " . $sale["invoice"];
             $input["city"] = $cit->description;
-            $input["consecutive"] = $dep["id"];
-            $input["invoice"] = $dep["invoice"];
+            $input["consecutive"] = $sale["id"];
+            $input["invoice"] = $sale["invoice"];
+            $input["dispatched"] = $sale["dispatched"];
+            $input["flete"] = $sale["shipping_cost"];
+            $input["tax5"] = 0;
+            $input["tax19"] = 0;
+            $input["discount"] = 0;
 
             $input["name"] = ucwords($user->name);
             $input["last_name"] = ucwords($user->last_name);
@@ -1090,7 +1095,7 @@ class SampleController extends Controller {
 
             $this->mails[] = $user->email;
 
-
+            
             Mail::send("Notifications.invoice", $input, function($msj) {
                 $msj->subject($this->subject);
                 $msj->to($this->mails);

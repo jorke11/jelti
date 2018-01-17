@@ -79,6 +79,8 @@ class PaymentController extends Controller {
         $arr = json_decode($result, TRUE);
         $banks = [];
 
+
+        dd($arr);
         foreach ($arr["paymentMethods"] as $val) {
             if ($val["country"] == 'CO') {
                 $banks[] = $val;
@@ -105,12 +107,15 @@ class PaymentController extends Controller {
     }
 
     public function methodsPayment($id) {
-        $banks = $this->getMethodsPayments();
+
+//        $banks = $this->getMethodsPayments();
+
+        $banks = array(array("id" => 1, "description" => "visa"), array("id" => 2, "description" => "mastercard"));
         $order = Orders::find($id);
-        
+
         $client = \App\Models\Security\Users::find($order->id);
-        dd($client);
-        
+
+
         return view("Ecommerce.payment.methods", compact("id", "banks"));
     }
 

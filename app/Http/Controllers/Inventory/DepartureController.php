@@ -272,10 +272,10 @@ class DepartureController extends Controller {
 //        }
 //        
 //        echo public_path()."/images/superfuds.png";exit;
-        
+
         $sale = Sales::where("departure_id", $id)->first();
         $detail = $this->formatDetailSales($sale["id"]);
-       
+
         $dep = Departures::find($id);
         $cli = null;
         if ($dep->branch_id != '') {
@@ -337,7 +337,7 @@ class DepartureController extends Controller {
             $this->tax5 += $shipping_cost_tax;
         }
 
-        
+
 //        echo $dep->shipping_cost_tax;exit;
         if ($dep->shipping_cost_tax == 0.19) {
             $shipping_cost_tax = $dep->shipping_cost * $dep->shipping_cost_tax;
@@ -352,8 +352,8 @@ class DepartureController extends Controller {
         $cli["business"] = $this->tool->cleanText($cli["business"]);
         $cli["address_invoice"] = $dep->address_invoice;
 
-    
-        
+
+
         $data = [
             'rete' => 0,
             'formatRete' => "$ " . number_format(($rete["value"]), 2, ',', '.'),
@@ -390,12 +390,18 @@ class DepartureController extends Controller {
         $dep = Departures::find($id);
 
         $detail = DB::table("departures_detail")
-                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"),
+                        "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", 
+                        DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), 
+                        DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder", 
+                        "departures_detail.real_quantity as quantity")
                 ->join("products", "departures_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
                 ->where("departures_detail.departure_id", $id)
+                ->where("departures_detail.real_quantity", "<>", 0)
                 ->get();
 
+//        dd($detail);
 
         $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
                 ->where("stakeholder_id", $dep["client_id"])
@@ -1096,8 +1102,8 @@ class DepartureController extends Controller {
 
         $this->total = 0;
         $this->subtotal = 0;
-        
-        
+
+
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$" . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
@@ -1116,8 +1122,8 @@ class DepartureController extends Controller {
                 $this->tax19 += $detail[$i]->total * $value->tax;
             }
         }
-        
-        
+
+
         return $detail;
     }
 
@@ -1220,7 +1226,7 @@ class DepartureController extends Controller {
         if ($special == null) {
             $pro = Products::find($input["product_id"]);
         } else {
-            
+
             $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["product_id"])->where("client_id", $header->client_id)->first();
         }
 

@@ -43,9 +43,6 @@ class SeekController extends Controller {
                     $query->where("cities.id", -1)->get();
                 }
             } else {
-                echo "<pre>";
-                print_r($in);
-                exit;
                 $query->where(DB::raw("cities.description || ' '||departments.description"), "ilike", "%" . $in["q"] . "%")->get();
             }
 

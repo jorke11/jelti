@@ -12,12 +12,25 @@ function Payment() {
 
         });
 
-        $("#btnPayU").click(this.payu);
+        $('.input-number').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        $("#btnPayment").click(this.payu);
 
     }
 
     this.payu = function () {
-        window.location.href = PATH + "/payment/" + $("#frm #order_id").val()
+        var form = $("#frm").serialize();
+        $.ajax({
+            url: PATH + '/payment/target',
+            data: form,
+            method: "post",
+            success: function () {
+
+            }
+
+
+        })
 
     }
 

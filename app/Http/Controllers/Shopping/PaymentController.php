@@ -51,6 +51,7 @@ class PaymentController extends Controller {
 
     public function index() {
         $client = Stakeholder::where("document", Auth::user()->document)->first();
+//        dd($client);
         return view("Ecommerce.payment.init", compact("client"));
     }
 
@@ -188,162 +189,14 @@ class PaymentController extends Controller {
         $in = $req->all();
 
         $detail = $this->getDetailData();
-//
-//
         $client = Stakeholder::where("email", Auth::user()->email)->first();
-////        echo "<pre>";
-////        print_r(Auth::user()->email);
-////        print_r($client);
-////        exit;
-//        $url = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi";
-        $apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
-        $apiKey = "maGw8KQ5JlOEv64D79ma1N0l9G";
-        $apiLogin = "pRRXKOl8ikMmt9u";
-////$apiLogin = "rHpg9EL98w905Nv";
-        $merchantId = "508029";
-        $accountId = "512321";
-        $referenceCode = "Superfuds0000004";
-        $tx_value = $this->total;
-        $session_id = md5(session_id() . microtime());
-        $currency = "COP";
-        $postData["test"] = "false";
-        $postData["language"] = "en";
-        $postData["command"] = "SUBMIT_TRANSACTION";
 
-        $postData["merchant"] = array(
-            "apiKey" => $apiKey,
-            "apiLogin" => $apiLogin
-        );
-//
-////        $signature = md5($apiKey . "~" . $merchantId . "~" . $referenceCode . "~" . $tx_value . "~" . $currency);
-        $signature = md5($apiKey . "~" . $merchantId . "~" . $referenceCode . "~" . $tx_value . "~" . $currency);
-////        echo "<pre>";
-////        print_r($client);
-//
-//        $city = \App\Models\Administration\Cities::find($client->city_id);
-//        $department = \App\Models\Administration\Department::find($city->department_id);
+        $city = \App\Models\Administration\Cities::find($client->city_id);
+        $department = \App\Models\Administration\Department::find($city->department_id);
 //
         $type_card = $this->identifyCard($in["target_number"], $in["crc"], $in["expirate"]);
 
-
         $deviceSessionId = md5(session_id() . microtime());
-//
-//        if ($type_card != false) {
-//            $postData["transaction"] = array("order" => array(
-//                    "accountId" => $accountId,
-//                    "referenceCode" => $referenceCode,
-//                    "description" => "payment " . $client->business,
-//                    "language" => "es",
-//                    "signature" => $signature,
-//                    "notifyUrl" => "http://localhost:8080/payu/tarjetas_credito.php",
-//                    "additionalValues" => array(
-////                    "TX_VALUE" => array("value" => $tx_value, "currency" => $currency),
-//                        "TX_VALUE" => array("value" => $this->total, "currency" => $currency),
-//                        "TX_TAX" => array("value" => 3193, "currency" => $currency),
-//                        "TX_TAX_RETURN_BASE" => array("value" => 16806, "currency" => $currency),
-//                    ),
-//                    "buyer" => array(
-//                        "merchantBuyerId" => "1",
-//                        "fullName" => $client->business,
-//                        "emailAddress" => $client->email,
-//                        "contactPhone" => $client->phone,
-//                        "dniNumber" => $client->document,
-//                        "shippingAddress" => array(
-//                            "street1" => $client->address_send,
-////                        "street2" => "5555487",
-//                            "city" => $city->description,
-//                            "state" => $department->description,
-//                            "country" => "CO",
-//                            "postalCode" => "000000",
-//                            "phone" => $client->phone
-//                        )
-//                    ),
-//                    "shippingAddress" => array(
-//                        "street1" => $client->address_send,
-////                        "street2" => "5555487",
-//                        "city" => $city->description,
-//                        "state" => $department->description,
-//                        "country" => "CO",
-//                        "postalCode" => "000000",
-//                        "phone" => $client->phone
-//                    )
-//                ),
-//                "payer" => array(
-//                    "merchantPayerId" => "1",
-//                    "fullName" => $client->business,
-//                    "emailAddress" => $client->emails,
-//                    "contactPhone" => $client->phone,
-//                    "dniNumber" => $client->document,
-//                    "billingAddress" => array(
-//                        "street1" => $client->address_send,
-////                        "street2" => "5555487",
-//                        "city" => $city->description,
-//                        "state" => $department->description,
-//                        "country" => "CO",
-//                        "postalCode" => "000000",
-//                        "phone" => $client->phones
-//                    )
-//                ),
-//                "creditCard" => array(
-//                    "number" => $in["target_number"],
-//                    "securityCode" => $in["crc"],
-////                "expirationDate" => "2018/12",
-//                    "expirationDate" => $in["expirate"],
-//                    "name" => "REJECTED"
-//                ),
-//                "extraParameters" => array(
-//                    "INSTALLMENTS_NUMBER" => 1
-//                ),
-//                "type" => "AUTHORIZATION_AND_CAPTURE",
-//                "paymentMethod" => $type_card["paymentMethod"],
-//                "paymentCountry" => "CO",
-//                "deviceSessionId" => $deviceSessionId,
-//                "ipAddress" => $_SERVER["REMOTE_ADDR"],
-//                "cookie" => "pt1t38347bs6jc9ruv2ecpv7o2",
-//                "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
-//            );
-//        } else {
-//            $postData["error"] = "Datos no validos";
-//        }
-//
-//        echo "<pre>";
-//        print_r($postData);
-//
-//        echo "<br>";
-//        echo "Respuesta ......<br>";
-//
-//        $data_string = json_encode($postData);
-//
-//
-//
-//        $ch = curl_init($url);
-//        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-//            'Content-Type: application/json',
-//            'Host: sandbox.api.payulatam.com',
-//            'Accept:application/json',
-//            'Content-Length: ' . strlen($data_string))
-//        );
-////print_r($data_string);exit;                        
-//
-//        $result = curl_exec($ch);
-//
-//        $arr = json_decode($result, TRUE);
-//        echo "<pre>";
-//        print_r($arr);
-
-
-
-
-
-
-
-
-
-
-
 
         $url = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi";
         $apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
@@ -352,8 +205,12 @@ class PaymentController extends Controller {
 //$apiLogin = "rHpg9EL98w905Nv";
         $merchantId = "508029";
         $accountId = "512321";
-        $referenceCode = "Superfuds000000113";
-        $tx_value = 20000;
+        $referenceCode = "Superfuds00000012".$in["order_id"];
+
+        $TX_VALUE = $this->total;
+        $TX_TAX = 0.19;
+        $TX_TAX_RETURN_BASE = $this->tax19;
+
         $session_id = md5(session_id() . microtime());
         $currency = "COP";
         $postData["test"] = "false";
@@ -365,79 +222,77 @@ class PaymentController extends Controller {
             "apiLogin" => $apiLogin
         );
 
-
-        $signature = md5($apiKey . "~" . $merchantId . "~" . $referenceCode . "~" . $tx_value . "~" . $currency);
+        $signature = md5($apiKey . "~" . $merchantId . "~" . $referenceCode . "~" . $TX_VALUE . "~" . $currency);
 
         $postData["transaction"] = array("order" => array(
                 "accountId" => $accountId,
                 "referenceCode" => $referenceCode,
-                "description" => "payment " . $client->business,
+                "description" => "Pago " . $referenceCode,
                 "language" => "es",
                 "signature" => $signature,
                 "notifyUrl" => "http://localhost:8080/payu/tarjetas_credito.php",
                 "additionalValues" => array(
-                    "TX_VALUE" => array("value" => $tx_value, "currency" => $currency),
-                    "TX_VALUE" => array("value" => $this->total, "currency" => $currency),
-                    "TX_TAX" => array("value" => 10, "currency" => $currency),
-                    "TX_TAX_RETURN_BASE" => array("value" => 16806, "currency" => $currency),
+                    "TX_VALUE" => array("value" => $TX_VALUE, "currency" => $currency),
+                    "TX_TAX" => array("value" => $TX_TAX, "currency" => $currency),
+                    "TX_TAX_RETURN_BASE" => array("value" => $TX_TAX_RETURN_BASE, "currency" => $currency),
                 ),
                 "buyer" => array(
                     "merchantBuyerId" => "1",
-                    "fullName" => "First name and second buyer  name",
-                    "emailAddress" => "jpinedom@hotmail.com",
-                    "contactPhone" => "7563126",
-                    "dniNumber" => "5415668464654",
+                    "fullName" => $client->business,
+                    "emailAddress" => $client->email,
+                    "contactPhone" => $client->phone,
+                    "dniNumber" => $client->document,
                     "shippingAddress" => array(
-                        "street1" => "calle 100",
-                        "street2" => "5555487",
-                        "city" => "Medellin",
-                        "state" => "Antioquia",
+                        "street1" => $client->address_send,
+//                        "street2" => "5555487",
+                        "city" => $city->description,
+                        "state" => $department->description,
                         "country" => "CO",
                         "postalCode" => "000000",
-                        "phone" => "7563126"
+                        "phone" => $client->phone
                     )
                 ),
                 "shippingAddress" => array(
-                    "street1" => "calle 100",
-                    "street2" => "5555487",
-                    "city" => "Medellin",
-                    "state" => "Antioquia",
+                    "street1" => $client->address_send,
+//                        "street2" => "5555487",
+                    "city" => $city->description,
+                    "state" => $department->description,
                     "country" => "CO",
-                    "postalCode" => "0000000",
-                    "phone" => "7563126"
+                    "postalCode" => "000000",
+                    "phone" => $client->phone
                 )
             ),
             "payer" => array(
                 "merchantPayerId" => "1",
-                "fullName" => "First name and second payer name",
-                "emailAddress" => "payer_test@test.com",
-                "contactPhone" => "7563126",
-                "dniNumber" => "5415668464654",
+                "fullName" => $client->business,
+                "emailAddress" => $client->email,
+                "contactPhone" => $client->phone,
+                "dniNumber" => $client->document,
                 "billingAddress" => array(
-                    "street1" => "calle 93",
-                    "street2" => "125544",
-                    "city" => "Bogota",
-                    "state" => "Bogota DC",
+                    "street1" => $client->address_send,
+//                        "street2" => "5555487",
+                    "city" => $city->description,
+                    "state" => $department->description,
                     "country" => "CO",
                     "postalCode" => "000000",
-                    "phone" => "7563126"
+                    "phone" => $client->phones
                 )
             ),
             "creditCard" => array(
-                "number" => $in["target_number"],
-                "securityCode" => $in["crc"],
-//                "expirationDate" => "2018/12",
-                "expirationDate" => $in["expirate"],
+                "number" => "4097440000000004",
+                "securityCode" => "321",
+                "expirationDate" => "2019/02",
                 "name" => "REJECTED"
             ),
             "extraParameters" => array(
                 "INSTALLMENTS_NUMBER" => 1
             ),
             "type" => "AUTHORIZATION_AND_CAPTURE",
-            "paymentMethod" => $type_card["paymentMethod"],
+            "paymentMethod" => "VISA",
             "paymentCountry" => "CO",
+//            "deviceSessionId" => "vghs6tvkcle931686k1900o6e1",
             "deviceSessionId" => $deviceSessionId,
-            "ipAddress" => $_SERVER["REMOTE_ADDR"],
+            "ipAddress" => "127.0.0.1",
             "cookie" => "pt1t38347bs6jc9ruv2ecpv7o2",
             "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
         );
@@ -467,6 +322,50 @@ class PaymentController extends Controller {
         $arr = json_decode($result, TRUE);
         echo "<pre>";
         print_r($arr);
+
+        if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
+            return redirect('shopping/0')->with("success", 'Payment success');
+        }
+    }
+
+    public function paymentCredit(Request $req) {
+
+        $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
+
+
+
+        $sql = "SELECT p.title product,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image
+                            FROM orders_detail d
+                            JOIN products p ON p.id=d.product_id
+                            WHERE order_id=$order->id
+                            GROUP BY 1,2,3,product_id,p.image";
+
+        $detail = DB::select($sql);
+        $detail = json_decode(json_encode($detail), true);
+
+        $user = \App\Models\Security\Users::find(Auth::user()->id);
+
+        $cli = \App\Models\Administration\Stakeholder::where("document", $user->document)->first();
+
+        $header["warehouse_id"] = 3;
+        $header["responsible_id"] = 1;
+        $header["city_id"] = 1;
+        $header["created"] = date("Y-m-d H:i");
+        $header["client_id"] = $cli->id;
+        $header["destination_id"] = 1;
+        $header["address"] = "adress";
+        $header["phone"] = "phone";
+        $header["status_id"] = 1;
+        $header["shipping_cost"] = 0;
+        $header["type_request"] = "ecommerce";
+
+        $this->depObj->processDeparture($header, $detail);
+        \Session::flash('success', 'Compra Realizada con exito');
+
+        $order->status_id = 2;
+        $order->save();
+
+        return redirect('shopping/0')->with("success", 'Payment success');
     }
 
     public function identifyCard($number, $cvc, $expire) {

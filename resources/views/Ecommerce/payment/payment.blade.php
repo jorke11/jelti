@@ -6,8 +6,8 @@
         <img src="http://via.placeholder.com/2000x100" class="img-responsive">
     </div>
 </div>
-{!! Form::open(['id'=>'frm']) !!}
-<input id="order_id" name="order_id" type="hidden">
+{!! Form::open(['id'=>'frm','url'=>'payment/target']) !!}
+<input id="order_id" name="order_id" type="hidden" value='{{$id}}'>
 
 <div class="row row-center">
     <div class="col-lg-6">
@@ -35,13 +35,13 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-2">Expira (YYYY/MM)</div>
-                    <div class="col-lg-3"><input type="text" name="expirate" id="expirate" class="form-control" placeholder="MM / YY" maxlength="7"></div>
+                    <div class="col-lg-3"><input type="text" name="expirate" id="expirate" class="form-control" placeholder="YYYY / MM" maxlength="7"></div>
                     <div class="col-lg-3">Código de Seguridad</div>
                     <div class="col-lg-3"><input type="text" name="crc" id="crc" class="form-control" maxlength="4"x></div>
                 </div>
             </div>
             <div class="panel-footer">
-                <button type="button" id="btnPayment" class="btn btn-success">Pagar</button>
+                <button type="submit" id="btnPayment" class="btn btn-success">Pagar</button>
             </div>
         </div>
     </div>

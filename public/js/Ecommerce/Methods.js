@@ -15,7 +15,13 @@ function Payment() {
         $('.input-number').on('input', function () {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
-        $("#btnPayment").click(this.payu);
+        
+        $('.input-date').on('input', function () {
+            
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        
+//        $("#btnPayment").click(this.payu);
 
     }
 

@@ -10,6 +10,15 @@
     }
 </style>
 <div class="container-fluid" style="padding-top: 6%">
+
+    @if(Session::has('success'))
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-success"><strong>Compra Realizada!</strong></div>
+        </div>
+    </div>
+    @endif
+
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
             <div class="carousel slide media-carousel" id="newproducts">

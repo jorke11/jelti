@@ -1,14 +1,11 @@
 function Payment() {
     this.init = function () {
         $("#frm").submit(function () {
-            $.ajax({
-                url: PATH + '/generatekey',
-                method: 'GET',
-                dataType: 'JSON',
-                success: function (data) {
-                    $("#frm #signature").val(data.key);
-                }
-            });
+
+
+
+            console.log("asdasd");
+            return false;
 
         });
 

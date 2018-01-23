@@ -389,18 +389,18 @@ class DepartureController extends Controller {
 
         $dep = Departures::find($id);
 
+
+
         $detail = DB::table("departures_detail")
-                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"),
-                        "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", 
-                        DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), 
-                        DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder", 
-                        "departures_detail.real_quantity as quantity")
+                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder", "departures_detail.real_quantity as quantity")
                 ->join("products", "departures_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
                 ->where("departures_detail.departure_id", $id)
                 ->where("departures_detail.real_quantity", "<>", 0)
                 ->get();
 
+//        dd($detail);
+//        $detail = $this->formatDetail($id);
 //        dd($detail);
 
         $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
@@ -479,7 +479,6 @@ class DepartureController extends Controller {
         $totalSum += $dep->shipping_cost;
 
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + (- $dep->discount);
-
 
 
         $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);

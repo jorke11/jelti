@@ -67,5 +67,5 @@
         <td><?php echo $textTotal; ?></td>
     </tr>
 </table>
-</body>
-</html>
+
+<!--</html>-->

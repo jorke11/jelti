@@ -1,38 +1,34 @@
-<html>
-    <head>
-        <title>Remisión</title>
-        <style>
-            body{
-                font-size: 11px;
-            }
-            .space-title{
-                width: 350px;
-                margin: 0 auto;
-            }
+        
+<style>
+    body{
+        font-size: 11px;
+    }
+    .space-title{
+        width: 350px;
+        margin: 0 auto;
+    }
 
-            .font-subtitle{
-                font-size: 11px;
-                font-weight: bold;
-                padding-bottom: 15px;
-            }
-            .font-invoice{
-                font-size: 20px;
-                font-weight: bold;
-                padding-bottom: 15px;
-            }
-            .font-detail{
-                font-size: 12px;
-            }
-            .font-detail-cont{
-                font-size: 12px;
-                font-weight: bold;
-            }
-        </style>
-    </head>
-
-    <br>
-    <br>
-    <body>
+    .font-subtitle{
+        font-size: 11px;
+        font-weight: bold;
+        padding-bottom: 15px;
+    }
+    .font-invoice{
+        font-size: 20px;
+        font-weight: bold;
+        padding-bottom: 15px;
+    }
+    .font-detail{
+        font-size: 12px;
+    }
+    .font-detail-cont{
+        font-size: 12px;
+        font-weight: bold;
+    }
+</style>
+<br>
+<br>
+<body>
     <table align='center'  width='100%'>
         <tr>
             <td class="space-title">

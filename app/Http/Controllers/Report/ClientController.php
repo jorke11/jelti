@@ -293,7 +293,7 @@ class ClientController extends Controller {
                 select count(*) total
                 from departures_detail d  
                 JOIN products p ON p.id=d.product_id
-                JOIN departures dep ON dep.id=d.sale_id and dep.status_id IN(2,7) and client_id NOT IN(258,264)
+                JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7) and client_id NOT IN(258,264)
                 JOIN stakeholder ON stakeholder.id=dep.client_id and stakeholder.type_stakeholder=1 
                 WHERE dep.client_id=" . $input["client_id"] . " and p.category_id = " . $value->id . "
                     AND dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' ";

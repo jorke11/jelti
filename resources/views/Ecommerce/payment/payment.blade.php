@@ -30,14 +30,52 @@
                     <div class="col-lg-5"><b>{{$client->address_send}}</b></div>
                 </div>
                 <div class="row row-space">
-                    <div class="col-lg-2">Tarjeta de Credito</div>
-                    <div class="col-lg-5"><input type="text" name="target_number" id="target_numbers" class="form-control input" maxlength="16"></div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="tgarjeta">Tarjeta de Credito</label>
+                            <input type="text" class="form-control input input-payment input-number" id="number" name="number" placeholder="Numero de tarjeta" maxlength="16" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="tgarjeta">Nombre como aparece en la tarjeta</label>
+                            <input type="text" class="form-control input input-payment" id="name" name="name" placeholder="Nombre como aparece en la tarjeta" required>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-2">Expira (YYYY/MM)</div>
-                    <div class="col-lg-3"><input type="text" name="expirate" id="expirate" class="form-control" placeholder="YYYY / MM" maxlength="7"></div>
-                    <div class="col-lg-3">Código de Seguridad</div>
-                    <div class="col-lg-3"><input type="text" name="crc" id="crc" class="form-control" maxlength="4"x></div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="tgarjeta">Fecha de vencimiento</label>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <select class="form-control" id="month" name="month">
+                                        @foreach($month as $val)
+                                        <option value="{{$val}}">{{$val}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <select class="form-control" id="year" name="year">
+                                        @foreach($years as $val)
+                                        <option value="{{$val}}">{{$val}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="tgarjeta">Código de Seguridad</label>
+                            <input type="text" class="form-control input-number" id="crc" name="crc" placeholder="Código de Seguridad" maxlength="4" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <img src="{{url("images/tarjeta_codigo_seguridad.png")}}" width="70%">
+                    </div>
                 </div>
             </div>
             <div class="panel-footer">

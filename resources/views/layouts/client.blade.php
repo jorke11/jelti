@@ -93,6 +93,7 @@
         <!-- Add the slick-theme.css if you want default styling -->
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick-theme.css"/>
         <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+        {!!Html::script('/vendor/plugins.js')!!}
     </head>
     <body>
         <div id="loading-super" class="hidden" >

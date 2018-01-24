@@ -7,8 +7,8 @@
     </div>
 </div>
 <div class="row">
-    {!! Form::open(['id'=>'frm','files' => true,'url' => 'payment/target']) !!}
-    
+    {!! Form::open(['id'=>'frm','url' => 'payment/credit']) !!}
+
     <input id="order_id" name="order_id" type="hidden">
     <div class="col-lg-10 col-lg-offset-1">
         <div class="row">
@@ -17,11 +17,10 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-6">
-                                @if($client->term > 1)
+
                                 <button type="submit" class="btn btn-success" id="btnPay">
                                     <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Payment
                                 </button>
-                                @endif
                                 <button type="button" class="btn btn-info" id="btnPayU">
                                     <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> PayU
                                 </button>

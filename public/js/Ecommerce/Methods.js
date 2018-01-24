@@ -1,26 +1,19 @@
-function Payment() {
+function MethodsPayment() {
     this.init = function () {
-        $("#frm").submit(function () {
-            $.ajax({
-                url: PATH + '/generatekey',
-                method: 'GET',
-                dataType: 'JSON',
-                success: function (data) {
-                    $("#frm #signature").val(data.key);
-                }
-            });
 
-        });
+//        $("#frm").submit(function () {
+//
+//        });
 
         $('.input-number').on('input', function () {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
-        
+
         $('.input-date').on('input', function () {
-            
+
             this.value = this.value.replace(/[^0-9]/g, '');
         });
-        
+
 //        $("#btnPayment").click(this.payu);
 
     }
@@ -55,5 +48,5 @@ function Payment() {
     }
 }
 
-var obj = new Payment();
+var obj = new MethodsPayment();
 obj.init();

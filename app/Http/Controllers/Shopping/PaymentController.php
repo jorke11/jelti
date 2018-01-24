@@ -110,13 +110,27 @@ class PaymentController extends Controller {
     }
 
     public function methodsPayment($id) {
-//        $banks = $this->getMethodsPayments();
-        $banks = array(array("id" => 1, "description" => "visa"), array("id" => 2, "description" => "mastercard"));
+        $month = array();
+        for ($i = 1; $i <= 12; $i++) {
+            if ($i <= 9) {
+                $month[] = "0" . $i;
+            } else {
+                $month[] = "" . $i;
+            }
+        }
+
+        $years = array();
+
+        for ($i = (int) date("Y"); $i <= date("Y") + 10; $i++) {
+            $years[] = $i;
+        }
+
+
         $order = Orders::find($id);
         $user = Users::find($order->stakeholder_id);
         $client = Stakeholder::where("email", $user->email)->first();
-//        dd($client);
-        return view("Ecommerce.payment.payment", compact("id", "banks", "client"));
+
+        return view("Ecommerce.payment.payment", compact("id", "client", "month", "years"));
     }
 
     public function getDetailData() {
@@ -175,26 +189,23 @@ class PaymentController extends Controller {
         return response()->json(["success" => true]);
     }
 
-    public function responsePay(Request $req) {
-        dd($_GET);
-    }
-
-    public function confirmationPay(Request $req) {
-        echo "adsad";
-        exit;
-    }
-
     public function payment(Request $req) {
 
         $in = $req->all();
 
+        $in["expirate"] = $in["year"] . "/" . $in["month"];
         $detail = $this->getDetailData();
         $client = Stakeholder::where("email", Auth::user()->email)->first();
 
         $city = \App\Models\Administration\Cities::find($client->city_id);
         $department = \App\Models\Administration\Department::find($city->department_id);
 //
-        $type_card = $this->identifyCard($in["target_number"], $in["crc"], $in["expirate"]);
+        $type_card = $this->identifyCard($in["number"], $in["crc"], $in["expirate"]);
+
+        if ($type_card == false) {
+            exit("Tarjeta no reconocida");
+        }
+        
 
         $deviceSessionId = md5(session_id() . microtime());
 
@@ -205,15 +216,15 @@ class PaymentController extends Controller {
 //$apiLogin = "rHpg9EL98w905Nv";
         $merchantId = "508029";
         $accountId = "512321";
-        $referenceCode = "Superfuds00000012".$in["order_id"];
+        $referenceCode = 'invioce_004';
 
         $TX_VALUE = $this->total;
         $TX_TAX = 0.19;
-        $TX_TAX_RETURN_BASE = $this->tax19;
+        $TX_TAX_RETURN_BASE = 1000;
 
         $session_id = md5(session_id() . microtime());
         $currency = "COP";
-        $postData["test"] = "false";
+        $postData["test"] = "true";
         $postData["language"] = "en";
         $postData["command"] = "SUBMIT_TRANSACTION";
 
@@ -279,16 +290,20 @@ class PaymentController extends Controller {
                 )
             ),
             "creditCard" => array(
-                "number" => "4097440000000004",
-                "securityCode" => "321",
-                "expirationDate" => "2019/02",
-                "name" => "REJECTED"
+//                "number" => "4097440000000004",
+                "number" => $in["number"],
+//                "securityCode" => "321",
+                "securityCode" => $in["crc"],
+//                "expirationDate" => "2019/02",
+                "expirationDate" => $in["expirate"],
+                "name" => $in["name"]
             ),
             "extraParameters" => array(
                 "INSTALLMENTS_NUMBER" => 1
             ),
             "type" => "AUTHORIZATION_AND_CAPTURE",
-            "paymentMethod" => "VISA",
+//            "paymentMethod" => "VISA",
+            "paymentMethod" => $type_card["paymentMethod"],
             "paymentCountry" => "CO",
 //            "deviceSessionId" => "vghs6tvkcle931686k1900o6e1",
             "deviceSessionId" => $deviceSessionId,
@@ -323,16 +338,24 @@ class PaymentController extends Controller {
         echo "<pre>";
         print_r($arr);
 
-        if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
-            return redirect('shopping/0')->with("success", 'Payment success');
-        }
+//        if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
+//            return redirect('shopping/0')->with("success", 'Payment success');
+//        }
     }
 
     public function paymentCredit(Request $req) {
+        $in = $req->all();
 
-        $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
+        $this->processPayment($in["order_id"]);
+    }
 
+    public function processPayment($id) {
+//        $order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
+        $order = Orders::where("status_id", 1)->where("id", $id)->first();
 
+        $stake = Stakeholder::find($order->stakeholder_id);
+
+        dd($stake);
 
         $sql = "SELECT p.title product,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.quantity * d.value) total,p.image
                             FROM orders_detail d
@@ -373,8 +396,8 @@ class PaymentController extends Controller {
 
         if (preg_match('/[0-9]{4,}\/[0-9]{2,}$/', $expire)) {
             //Mastercard
-            if (strlen($number) == 15 && strlen($cvc) == 4) {
 
+            if (strlen($number) == 15 && strlen($cvc) == 4) {
 
                 if (preg_match('/^5[1-5][0-9]{5,}|222[1-9][0-9]{3,}|22[3-9][0-9]{4,}|2[3-6][0-9]{5,}|27[01][0-9]{4,}|2720[0-9]{3,}$/', trim($number))) {
 

@@ -177,7 +177,11 @@ class AdministratorsController extends Controller {
                 return \Redirect::to('/');
             }
         } else {
+            
+//            dd(Auth::user());
+            
             if (Auth::user()->role_id == 2) {
+                
                 return view('client', compact("product", "client", "supplier", "commercial", "samples"));
             } else {
                 return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples"));

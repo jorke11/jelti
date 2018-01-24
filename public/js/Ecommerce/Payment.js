@@ -1,13 +1,5 @@
 function Payment() {
     this.init = function () {
-        $("#frm").submit(function () {
-
-
-
-            console.log("asdasd");
-            return false;
-
-        });
 
         $("#btnPayU").click(this.payu);
 

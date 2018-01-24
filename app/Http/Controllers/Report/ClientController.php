@@ -143,11 +143,11 @@ class ClientController extends Controller {
             $where .= " AND vdepartures.warehouse_id=" . $input["warehouse_id"];
         }
 
-        if ($input["client_id"] != '') {
+        if (isset($input["client_id"]) && $input["client_id"] != '') {
             $where .= " AND vdepartures.client_id=" . $input["client_id"];
         }
 
-        if ($input["city_id"] != '') {
+        if (isset($input["city_id"]) && $input["city_id"] != '') {
             $where = "AND vdepartures.destination_id=" . $input["city_id"];
         }
 
@@ -158,7 +158,7 @@ class ClientController extends Controller {
 //            $where .= " AND p.supplier_id= " . $input["supplier_id"];
 //        }
 
-        if ($input["commercial_id"] != '') {
+        if (isset($input["commercial_id"]) && $input["commercial_id"] != '') {
             $where .= " AND vdepartures.responsible_id=" . $input["commercial_id"];
         }
 

@@ -321,6 +321,7 @@ class SeekController extends Controller {
                         ->OrWhere(DB::raw("products.reference::text"), "ILIKE", "%" . $this->input["q"] . "%");
             });
         }
+        $query->where("products.status_id", 1);
 //        $query->whereNull("type_product_id");
 
         $result = $query->get();

@@ -792,7 +792,7 @@ function Departure() {
                 if (data.header.status_id == 1) {
                     statusRecord = true;
                     btnDel = true;
-                    $("#btnRem").attr("disabled", false);
+                    $("#btnRem,#btnSave").attr("disabled", false);
                 }
                 if (data.header.status_id != 1) {
                     $("#btnmodalDetail").attr("disabled", true);

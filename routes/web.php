@@ -308,7 +308,6 @@ Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getCli
 /**
  * Shopping cart
  */
-
 Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 
 
@@ -458,9 +457,13 @@ Route::get('/api/listPurchase', function() {
 
     $query = DB::table("vpurchases");
 
-    if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
-        $query->where("responsible_id", Auth::user()->id);
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id == 5) {
+        $query->where("warehouse_id", Auth::user()->warehouse_id);
     }
+
+
+
+
 
     return Datatables::queryBuilder($query)->make(true);
 });

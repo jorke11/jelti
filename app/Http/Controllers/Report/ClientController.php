@@ -577,7 +577,8 @@ class ClientController extends Controller {
                 WHERE vdepartures.status_id IN(2,7) AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id  NOT IN(258,264,24)
                 group by 1";
-
+        echo $sql;exit;
+        
         $res = DB::select($sql);
 
         $total = 0;

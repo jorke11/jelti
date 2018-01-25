@@ -106,7 +106,6 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
                 JOIN departures ON departures.id= departures_detail.departure_id 
                 where departures.id=d.id) 
         END  as subtotalnumeric,	 
-        
         (select (round(coalesce(sum(quantity * units_sf * value),0))) 
         	from departures_detail 
          	JOIN departures ON departures.id= departures_detail.departure_id 

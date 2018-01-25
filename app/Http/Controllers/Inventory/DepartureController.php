@@ -675,7 +675,7 @@ class DepartureController extends Controller {
                     }
 
 
-                    $valpro = DeparturesDetail::where("product_id", $val["product_id"])->first();
+                    $valpro = DeparturesDetail::where("product_id", $val["product_id"])->where("departure_id", $resp->id)->first();
 
                     if ($valpro == null) {
                         DeparturesDetail::create($new);

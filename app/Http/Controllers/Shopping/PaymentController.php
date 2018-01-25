@@ -205,7 +205,7 @@ class PaymentController extends Controller {
         if ($type_card == false) {
             exit("Tarjeta no reconocida");
         }
-        
+
 
         $deviceSessionId = md5(session_id() . microtime());
 
@@ -395,27 +395,41 @@ class PaymentController extends Controller {
         $response = false;
 
         if (preg_match('/[0-9]{4,}\/[0-9]{2,}$/', $expire)) {
+            
+            //VISA
+            if (strlen($number) == 16 && strlen($cvc) == 3) {
+//                if (preg_match('/^4[0-9]{6,}$/', $number)) {
+                if (preg_match('/^(4)(\\d{12}|\\d{15})$|^(606374\\d{10}$)/', $number)) {
+                    $response = array("paymentMethod" => 'VISA', "status" => true);
+                }
+            }
+            
+              //Dinnesrs
+
+            if (strlen($number) == 15 && strlen($cvc) == 4) {
+                if (preg_match('/^[35](?:0[0-5|[68][0-9]{11}$)|(^30[0-5]{11}$)|(^3095(\\d{10}$)|(^3[89](\\d{12})$/', trim($number))) {
+                    $response = array("paymentMethod" => 'Dinners', "status" => true);
+                }
+            }
+
+
             //Mastercard
 
             if (strlen($number) == 15 && strlen($cvc) == 4) {
 
-                if (preg_match('/^5[1-5][0-9]{5,}|222[1-9][0-9]{3,}|22[3-9][0-9]{4,}|2[3-6][0-9]{5,}|27[01][0-9]{4,}|2720[0-9]{3,}$/', trim($number))) {
-
+//                if (preg_match('/^5[1-5][0-9]{5,}|222[1-9][0-9]{3,}|22[3-9][0-9]{4,}|2[3-6][0-9]{5,}|27[01][0-9]{4,}|2720[0-9]{3,}$/', trim($number))) {
+                if (preg_match('/^(5[1-5]\\d{14}$)|^(2(?:2(?:2[1-9]|[3-9]\\d)|[3-6]\\d\\dd|7(?:[01]\\d|20))\\d{12}$)/', trim($number))) {
                     $response = array("paymentMethod" => 'Mastercard', "status" => true);
                 }
             }
 
-            //VISA
-            if (strlen($number) == 16 && strlen($cvc) == 3) {
-                if (preg_match('/^4[0-9]{6,}$/', $number)) {
-                    $response = array("paymentMethod" => 'VISA', "status" => true);
-                }
-            }
+
 
             //American express
             if (strlen($number) == 15 && strlen($cvc) == 4) {
 
-                if (preg_match('/^3[47][0-9]{5,}$/', $number)) {
+//                if (preg_match('/^3[47][0-9]{5,}$/', $number)) {
+                if (preg_match('/^3[47]\\d{13}$/', $number)) {
                     $response = array("paymentMethod" => 'AMEX', "status" => true);
                 }
             }

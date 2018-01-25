@@ -77,14 +77,14 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Cliente:</label>
-                            <select class="form-control input-departure modal-filter" id="client_filter" name='client_filter' data-api="/api/getClient"> 
+                            <select class="form-control input-departure modal-filter" id="client_filter" name='client_filter' data-api="/api/getClient" multiple=""> 
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Comercial:</label>
-                            <select class="form-control input-departure input-sm modal-filter" id="responsible_filter" name='responsible_filter' readonly data-api="/api/getResponsable">
+                            <select class="form-control input-departure input-sm modal-filter" id="responsible_filter" name='responsible_filter' readonly data-api="/api/getResponsable" multiple="">
                             </select>
                         </div>
                     </div>

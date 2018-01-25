@@ -101,6 +101,7 @@ class DepartureController extends Controller {
 
 
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
+
             $query->where("client_id", $in["client_id"])
                     ->where("status_id", 2);
         }
@@ -122,7 +123,10 @@ class DepartureController extends Controller {
 
         if (isset($in["responsible_filter"]) && $in["responsible_filter"] != '') {
             $cont++;
-            $query->where("responsible_id", $in["responsible_filter"]);
+
+            foreach ($in["responsible_filter"] as $value) {
+                $query->Orwhere("responsible_id", $value);
+            }
         }
 
         if (isset($in["end_filter"]) && $in["end_filter"] != '') {
@@ -132,7 +136,9 @@ class DepartureController extends Controller {
 
 
         if ($in["client_filter"] != 0 && $in["client_filter"] != '') {
-            $query->where("client_id", $in["client_filter"]);
+            foreach ($in["client_filter"] as $value) {
+                $query->Orwhere("client_id", $value);
+            }
         }
 
         if ($cont == 0) {

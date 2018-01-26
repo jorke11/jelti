@@ -26,6 +26,7 @@ class creditnoteController extends Controller {
     public $name;
     public $listProducts;
     public $errors;
+    public $objDep;
 
     public function __construct() {
         $this->middleware("auth");
@@ -35,6 +36,8 @@ class creditnoteController extends Controller {
         $this->name = '';
         $this->listProducts = array();
         $this->errors = array();
+
+        $this->objDep = new \App\Http\Controllers\Inventory\DepartureController();
     }
 
     public function index() {
@@ -56,11 +59,13 @@ class creditnoteController extends Controller {
 
         $sales = Sales::where("departure_id", $input["id"])->first();
 
+        $dep = Departures::find($input["id"]);
+
         $new["sale_id"] = $sales->id;
         $new["departure_id"] = $input["id"];
         $new["description"] = $input["description"];
         if (count($input["detail"]) > 0) {
-            
+
             $id = CreditNote::create($new)->id;
             foreach ($input["detail"] as $value) {
                 if (isset($value["quantity"]) && $value["quantity"] != 0) {
@@ -72,6 +77,10 @@ class creditnoteController extends Controller {
                     $cre->save();
                 }
             }
+            $dep->credinote_id = $id;
+            $this->objDep->sendNofication($dep, 'credit_note');
+
+
 
             return response()->json(["success" => true]);
         } else {

@@ -541,7 +541,7 @@ class DepartureController extends Controller {
                 $dep = Departures::find($id);
 
 
-
+                $this->sendNofication($dep, "reverse");
 
                 return response()->json(["success" => true, "header" => $dep]);
             } else {
@@ -1234,6 +1234,20 @@ class DepartureController extends Controller {
         });
     }
 
+    public function notificationReversed($input) {
+        Mail::send("Notifications.reverse", $input, function($msj) {
+            $msj->subject($this->subject);
+            $msj->to($this->mails);
+        });
+    }
+
+    public function notificationCreditNote($input) {
+        Mail::send("Notifications.creditnote", $input, function($msj) {
+            $msj->subject($this->subject);
+            $msj->to($this->mails);
+        });
+    }
+
     public function sendNofication($departures, $type_event) {
 
         $email = Email::where("description", $type_event)->first();
@@ -1257,6 +1271,23 @@ class DepartureController extends Controller {
                 $input["invoice"] = $departures->invoice;
                 $input["environment"] = env("APP_ENV");
                 $this->notificationCanceled($input);
+            }
+
+            if ($type_event == "reverse") {
+                $this->subject = "SuperFuds " . date("d/m") . " " . $departures->business . " " . $departures->description . " factura Reversada " . $departures->invoice;
+                $user = Users::find($departures->responsible_id);
+                $input["invoice"] = $departures->invoice;
+                $input["environment"] = env("APP_ENV");
+                $this->notificationReversed($input);
+            }
+
+            if ($type_event == "credit_note") {
+                $this->subject = "SuperFuds " . date("d/m") . " " . $departures->business . " " . $departures->description . " factura con Nota credito #" . $departures->credinote_id . " Invoice " . $departures->invoice;
+                $user = Users::find($departures->responsible_id);
+                $input["invoice"] = $departures->invoice;
+                $input["environment"] = env("APP_ENV");
+                $input["id"] = $departures->credinote_id;
+                $this->notificationCreditNote($input);
             }
 
 

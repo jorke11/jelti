@@ -179,7 +179,7 @@
                                     </li>
                                     @endif
 
-                                   
+
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Compras <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/purchase">Compra</a></li>
@@ -188,7 +188,7 @@
                                             <li><a href="/summary">Resumen</a></li>                                    
                                         </ul>
                                     </li>
-                                   
+
                                     <li><a><i class="fa fa-product-hunt" aria-hidden="true"></i> Ventas <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
 
@@ -203,6 +203,7 @@
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Inventario <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/entry">Entrada</a></li>
+                                            <li><a href="/tranfer">Traslado</a></li>                                    
                                             <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>

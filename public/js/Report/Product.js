@@ -36,7 +36,7 @@ function Product() {
         param.end = $("#Detail #fend").val();
 
         param.product_id = $("#Detail #product_id").val();
-        
+
 
         return $('#tbl').DataTable({
             ajax: {
@@ -86,6 +86,7 @@ function Product() {
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             order: [[0, 'ASC']],
+            "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
             aoColumnDefs: [
                 {
                     aTargets: [0, 1, 2],

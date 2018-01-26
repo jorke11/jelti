@@ -924,28 +924,28 @@ class SampleController extends Controller {
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
         }
 
-        if ($input["real_quantity"] != 0) {
-
-            if ($available["quantity"] >= $input["real_quantity"]) {
-                $result = $entry->fill($input)->save();
-                if ($result) {
-                    $resp = $this->formatDetail($input["sample_id"]);
-                    $total = "$ " . number_format($this->total, 0, ",", ".");
-                    return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-                } else {
-                    return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
-                }
-            } else {
-                $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];
-                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
-            }
-        } else {
+//        if ($input["real_quantity"] != 0) {
+//
+//            if ($available["quantity"] >= $input["real_quantity"]) {
+//                $result = $entry->fill($input)->save();
+//                if ($result) {
+//                    $resp = $this->formatDetail($input["sample_id"]);
+//                    $total = "$ " . number_format($this->total, 0, ",", ".");
+//                    return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
+//                } else {
+//                    return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
+//                }
+//            } else {
+//                $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];
+//                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
+//            }
+//        } else {
 
             $entry->fill($input)->save();
             $resp = $this->formatDetail($input["sample_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-        }
+//        }
     }
 
     public function destroy($id) {

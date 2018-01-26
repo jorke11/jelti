@@ -214,6 +214,8 @@ Route::get('/sale/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@
 
 Route::put('/checkedSale/{id}', 'Invoicing\SaleController@checkedSale');
 
+Route::resource('/transfer', 'Inventory\TransferController');
+
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
 Route::get('/entry/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);

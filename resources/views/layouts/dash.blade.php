@@ -203,7 +203,7 @@
                                     <li><a><i  class="fa fa-cog" aria-hidden="true"></i> Inventario <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/entry">Entrada</a></li>
-                                            <li><a href="/tranfer">Traslado</a></li>                                    
+                                            <li><a href="/transfer">Traslado</a></li>                                    
                                             <li><a href="/stock">Stock</a></li>                                    
                                         </ul>
                                     </li>

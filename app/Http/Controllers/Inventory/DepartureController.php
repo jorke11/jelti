@@ -1210,6 +1210,8 @@ class DepartureController extends Controller {
         $in = $request->all();
         $row = Departures::Find($id);
 
+
+
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
 
@@ -1218,9 +1220,47 @@ class DepartureController extends Controller {
             $row->status_id = 4;
             $row->save();
             $resp = Departures::FindOrFail($id);
+            $this->sendNofication($resp, "canceled");
             return response()->json(['success' => true, "data" => $resp]);
         } else {
             return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+        }
+    }
+
+    public function notificationCanceled($input) {
+        Mail::send("Notifications.canceled", $input, function($msj) {
+            $msj->subject($this->subject);
+            $msj->to($this->mails);
+        });
+    }
+
+    public function sendNofication($departures, $type_event) {
+
+        $email = Email::where("description", $type_event)->first();
+
+        if ($email != null) {
+            $emDetail = EmailDetail::where("email_id", $email->id)->get();
+        }
+
+
+        if (count($emDetail) > 0) {
+
+            foreach ($emDetail as $value) {
+                $this->mails[] = $value->description;
+            }
+        }
+
+        if (count($this->mails) > 0) {
+            if ($type_event == "canceled") {
+                $this->subject = "SuperFuds " . date("d/m") . " " . $departures->business . " " . $departures->description . " factura " . $departures->invoice;
+                $user = Users::find($departures->responsible_id);
+                $input["invoice"] = $departures->invoice;
+                $input["environment"] = env("APP_ENV");
+                $this->notificationCanceled($input);
+            }
+
+
+            $this->mails[] = $user->email;
         }
     }
 

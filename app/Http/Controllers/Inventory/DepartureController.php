@@ -141,6 +141,13 @@ class DepartureController extends Controller {
             }
         }
 
+        if (isset($in["init_filter"]) && $in["init_filter"] != '' & isset($in["end_filter"]) && $in["end_filter"] != '') {
+            $query->where("dispatched", ">=", $in["init_filter"] . " 00:00");
+            $query->where("dispatched", "<=", $in["end_filter"] . " 00:00");
+        }
+
+
+
         if ($cont == 0) {
 
             if (isset($in["init_filter"]) && $in["init_filter"] != '') {

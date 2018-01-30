@@ -215,6 +215,9 @@ Route::get('/sale/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@
 Route::put('/checkedSale/{id}', 'Invoicing\SaleController@checkedSale');
 
 Route::resource('/transfer', 'Inventory\TransferController');
+Route::get('/api/listTransfer', 'Inventory\TransferController@listTable');
+Route::get('/transfer/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
+
 
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
@@ -264,6 +267,9 @@ Route::get('/api/listDeparture', 'Inventory\DepartureController@listTable');
 Route::put('/departure/{id}/reverseInvoice', 'Inventory\DepartureController@reverse');
 Route::get('/departure/testDepNotification/{id}', 'Inventory\DepartureController@testDepNotification');
 Route::get('/departure/testInvoiceNotification/{id}', 'Inventory\DepartureController@testInvoiceNotification');
+
+
+
 
 Route::resource('/sample', 'Inventory\SampleController');
 Route::get('/sample/{id}/consecutive', ['uses' => 'Inventory\SampleController@getConsecutive']);

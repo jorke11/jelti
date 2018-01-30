@@ -56,7 +56,7 @@ function Transfer() {
         }
 
         $("#insideManagement").click(function () {
-            $(".input-sample").cleanFields({disabled: true});
+            $(".input-transfer").cleanFields({disabled: true});
             $("#btnSend").attr("disabled", true);
             $("#btnSave").attr("disabled", true);
             $("#btnmodalDetail,#btnModalUpload").attr("disabled", true);
@@ -90,7 +90,7 @@ function Transfer() {
 
             param.client_id = client_id;
             $.ajax({
-                url: 'sample/' + $(this).val() + '/getDetailProduct',
+                url: 'transfer/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 data: param,
                 dataType: 'JSON',
@@ -109,7 +109,7 @@ function Transfer() {
             param.client_id = client_id;
 
             $.ajax({
-                url: 'sample/' + $(this).val() + '/getDetailProduct',
+                url: 'transfer/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 data: param,
                 dataType: 'JSON',
@@ -124,7 +124,7 @@ function Transfer() {
             if ($("#frm #status_id").val() != 1) {
 
 //                $.ajax({
-//                    url: 'sample/generateInvoice/' + $("#frm #id").val(),
+//                    url: 'transfer/generateInvoice/' + $("#frm #id").val(),
 //                    method: 'PUT',
 //                    dataType: 'JSON',
 //                    success: function (resp) {
@@ -135,7 +135,7 @@ function Transfer() {
 //                    }
 //                })
 
-                window.open("sample/" + $("#frm #id").val() + "/getInvoice");
+                window.open("transfer/" + $("#frm #id").val() + "/getInvoice");
             } else {
                 toastr.error("error")
             }
@@ -159,11 +159,11 @@ function Transfer() {
     this.reverse = function () {
         toastr.remove()
         $.ajax({
-            url: 'sample/' + $("#frm #id").val() + '/reverseInvoice',
+            url: 'transfer/' + $("#frm #id").val() + '/reverseInvoice',
             method: 'PUT',
             dataType: 'JSON',
             success: function (data) {
-                $(".input-sample").setFields({data: data.header});
+                $(".input-transfer").setFields({data: data.header});
                 toastr.success("Factura reversada!");
             }, error: function (xhr, ajaxOptions, thrownError) {
                 toastr.error(xhr.responseJSON.msg);
@@ -177,7 +177,7 @@ function Transfer() {
         param.description = $("#frmCancel #description").val();
         if ($("#frmCancel #description").val() != '') {
             $.ajax({
-                url: 'sample/' + $("#frmCancel #sample_id").val() + '/cancelInvoice',
+                url: 'transfer/' + $("#frmCancel #transfer_id").val() + '/cancelInvoice',
                 method: 'PUT',
                 data: param,
                 dataType: 'JSON',
@@ -198,14 +198,14 @@ function Transfer() {
 
     this.modalCancel = function (id) {
         $("#modalCancel").modal("show");
-        $("#frmCancel #sample_id").val(id);
+        $("#frmCancel #transfer_id").val(id);
     }
 
     this.uploadExcel = function () {
         $("#frmUpload #client_id").val($("#frm #client_id :selected").val());
         var formData = new FormData($("#frmUpload")[0]);
         $.ajax({
-            url: 'sample/uploadExcel',
+            url: 'transfer/uploadExcel',
             method: 'POST',
             data: formData,
             dataType: 'JSON',
@@ -229,9 +229,12 @@ function Transfer() {
         $("#loading-super").addClass("hidden");
         client_id = null;
         $("#btnSave").attr("disabled", false);
-        $("#btnmodalDetail, #btnModalUpload").attr("disabled", true);
-        $(".input-sample").cleanFields();
+        $("#btnmodalDetail").attr("disabled", false);
+        
+//        $("#btnmodalDetail, #btnModalUpload").attr("disabled", true);
+        $(".input-transfer").cleanFields();
         $(".input-detail").cleanFields();
+
         $(".input-fillable").prop("readonly", false);
         $("#btnSend,#btnPdf").prop("disabled", true);
         $("#tblDetail tbody").empty();
@@ -246,9 +249,9 @@ function Transfer() {
     }
 
     this.getBranchAddress = function (id, path) {
-        var url = 'sample/' + id + '/getBranch';
+        var url = 'transfer/' + id + '/getBranch';
         if (path == undefined) {
-            url = '../../sample/' + id + '/getBranch';
+            url = '../../transfer/' + id + '/getBranch';
         }
 
         $.ajax({
@@ -265,9 +268,9 @@ function Transfer() {
 
     this.getClient = function (id, path) {
         var html = "";
-        var url = 'sample/' + id + '/getClient';
+        var url = 'transfer/' + id + '/getClient';
         if (path == undefined) {
-            url = '../../sample/' + id + '/getClient';
+            url = '../../transfer/' + id + '/getClient';
         }
 
         $.ajax({
@@ -299,7 +302,7 @@ function Transfer() {
         var data = {}, btnEdit = true, btnDel = true;
         data.id = $("#frm #id").val()
         $.ajax({
-            url: 'sample/setSale',
+            url: 'transfer/setSale',
             method: 'POST',
             data: data,
             dataType: 'JSON',
@@ -309,7 +312,7 @@ function Transfer() {
             success: function (resp) {
                 if (resp.success == true) {
                     toastr.success("Sended");
-                    $(".input-sample").setFields({data: resp.header, disabled: true});
+                    $(".input-transfer").setFields({data: resp.header, disabled: true});
                     $("#btnDocument").attr("disabled", false);
                     if (resp.header.status_id == 2) {
                         btnEdit = false;
@@ -342,19 +345,20 @@ function Transfer() {
         var url = "", method = "";
         var id = $("#frm #id").val();
         var msg = '';
-        var validate = $(".input-sample").validate();
+        var validate = $(".input-transfer").validate();
+
         if (validate.length == 0) {
             if ($("#id_orderext").val() == '') {
                 if (listProducts.length > 0) {
-                    data.header = $(".input-sample").getData();
+                    data.header = $(".input-transfer").getData();
                     data.detail = listProducts;
                     if (id == '') {
                         method = 'POST';
-                        url = "sample";
+                        url = "transfer";
                         msg = "Created Record";
                     } else {
                         method = 'PUT';
-                        url = "sample/" + id;
+                        url = "transfer/" + id;
                         msg = "Edited Record";
                     }
 
@@ -371,7 +375,7 @@ function Transfer() {
                                 statusRecord = true;
                                 $("#btnSend").attr("disabled", false);
                                 $("#frm #id").val(data.header.id);
-                                $(".input-sample").setFields({data: data.header, disabled: true});
+                                $(".input-transfer").setFields({data: data.header, disabled: true});
                                 table.ajax.reload();
                                 toastr.success(msg);
                                 $("#loading-super").addClass("hidden");
@@ -391,17 +395,17 @@ function Transfer() {
                 var param = {};
                 param.id = $("#id_orderext").val();
                 $.ajax({
-                    url: "../../sample/storeExt",
+                    url: "../../transfer/storeExt",
                     method: 'POST',
                     data: data,
                     dataType: 'JSON',
                     success: function (data) {
                         if (data.success == true) {
-                            $(".input-sample").setFields({data: data.header})
+                            $(".input-transfer").setFields({data: data.header})
 
                             toastr.success("ok");
                             $("#btnmodalDetail").attr("disabled", false);
-                            location.href = "/sample";
+                            location.href = "/transfer";
                             obj.printDetail(data);
                         }
                     }
@@ -417,7 +421,7 @@ function Transfer() {
 
     this.saveDetail = function () {
         toastr.remove();
-        $("#frmDetail #sample_id").val($("#frm #id").val());
+        $("#frmDetail #transfer_id").val($("#frm #id").val());
         var data = {}, value = 0, total = 0;
         var url = "", method = "";
         var id = $("#frmDetail #id").val();
@@ -429,7 +433,7 @@ function Transfer() {
                 var id = $("#frmDetail #id").val();
                 var frm = $("#frmDetail");
                 var data = frm.serialize();
-                var url = "/sample/detail/" + id;
+                var url = "/transfer/detail/" + id;
                 $.ajax({
                     url: url,
                     method: "PUT",
@@ -456,7 +460,7 @@ function Transfer() {
                 if (statusRecord == true) {
                     var frm = $("#frmDetail");
                     var data = frm.serialize();
-                    var url = "/sample/storeDetail";
+                    var url = "/transfer/storeDetail";
                     $.ajax({
                         url: url,
                         method: "POST",
@@ -522,7 +526,7 @@ function Transfer() {
     }
     this.saveService = function () {
         toastr.remove();
-        $("#frmServices #sample_id").val($("#frm #id").val());
+        $("#frmServices #transfer_id").val($("#frm #id").val());
         var data = {}, value = 0, total = 0;
         var url = "", method = "";
         var id = $("#frmServices #id").val();
@@ -534,7 +538,7 @@ function Transfer() {
                 var id = $("#frmServices #id").val();
                 var frm = $("#frmServices");
                 var data = frm.serialize();
-                var url = "/sample/detail/" + id;
+                var url = "/transfer/detail/" + id;
                 $.ajax({
                     url: url,
                     method: "PUT",
@@ -558,7 +562,7 @@ function Transfer() {
                 if (statusRecord == true) {
                     var frm = $("#frmServices");
                     var data = frm.serialize();
-                    var url = "/sample/storeDetail";
+                    var url = "/transfer/storeDetail";
                     $.ajax({
                         url: url,
                         method: "POST",
@@ -719,7 +723,7 @@ function Transfer() {
     this.showModal = function (id) {
         var frm = $("#frmEdit"), btnEdit = true, btnDel = true;
         var data = frm.serialize();
-        var url = "/sample/" + id + "/edit";
+        var url = "/transfer/" + id + "/edit";
         $.ajax({
             url: url,
             method: "GET",
@@ -727,7 +731,7 @@ function Transfer() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-sample").setFields({data: data.header, disabled: true});
+                $(".input-transfer").setFields({data: data.header, disabled: true});
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -768,7 +772,7 @@ function Transfer() {
     this.infomationExt = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/sample/" + id + "/editExt";
+        var url = "/transfer/" + id + "/editExt";
         $.ajax({
             url: url,
             method: "GET",
@@ -777,7 +781,7 @@ function Transfer() {
             success: function (data) {
 
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-sample").setFields({data: data.header});
+                $(".input-transfer").setFields({data: data.header});
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
@@ -788,10 +792,10 @@ function Transfer() {
     }
 
     this.editDetail = function (id) {
-        $("#frmDetail #sample_id").val($("#frm #id").val());
+        $("#frmDetail #transfer_id").val($("#frm #id").val());
         var frm = $("#frm");
         var data = frm.serialize();
-        var url = "/sample/" + id + "/detail";
+        var url = "/transfer/" + id + "/detail";
         $.ajax({
             url: url,
             method: "GET",
@@ -810,7 +814,7 @@ function Transfer() {
         var id = $("#frmDetail #id").val();
         var frm = $("#frmDetail");
         var data = frm.serialize();
-        var url = "/sample/detail/" + id;
+        var url = "/transfer/detail/" + id;
         $.ajax({
             url: url,
             method: "PUT",
@@ -831,7 +835,7 @@ function Transfer() {
         toastr.remove();
         if (confirm("Deseas eliminar")) {
             var token = $("input[name=_token]").val();
-            var url = "/sample/" + id;
+            var url = "/transfer/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -855,7 +859,7 @@ function Transfer() {
 
         if (confirm("Do you want delete this record?")) {
             var token = $("input[name=_token]").val();
-            var url = "/sample/detail/" + id;
+            var url = "/transfer/detail/" + id;
             $.ajax({
                 url: url,
                 headers: {'X-CSRF-TOKEN': token},
@@ -877,13 +881,13 @@ function Transfer() {
     this.tempInvoice = function (id) {
         if (confirm("¿Deseas crear una remisión?")) {
             $.ajax({
-                url: 'sample/generateRemission/' + id,
+                url: 'transfer/generateRemission/' + id,
                 method: 'PUT',
                 dataType: 'JSON',
                 success: function (resp) {
                     if (resp.success == true) {
                         table.ajax.reload();
-                        window.open("sample/" + id + "/getRemission");
+                        window.open("transfer/" + id + "/getRemission");
                     }
                 }
             })
@@ -893,7 +897,7 @@ function Transfer() {
     }
 
     this.viewRemission = function (id) {
-        window.open("sample/" + id + "/getRemission");
+        window.open("transfer/" + id + "/getRemission");
     }
 
 
@@ -916,7 +920,7 @@ function Transfer() {
             "processing": true,
             "serverSide": true,
             ajax: {
-                url: "/api/listSample",
+                url: "/api/listTransfer",
                 data: param
             },
             "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
@@ -929,16 +933,16 @@ function Transfer() {
                     searchable: false,
                 },
                 {data: "id"},
-                {data: "invoice"},
+                {data: "origin"},
+                {data: "destination"},
                 {data: "created_at"},
-                {data: "client"},
-                {data: "responsible"},
-                {data: "warehouse"},
-                {data: "city"},
-                {data: "quantity"},
-                {data: "subtotalnumeric", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
-                {data: "status"},
+                {data: "status_id"},
+//                {data: "warehouse"},
+//                {data: "city"},
+//                {data: "quantity"},
+//                {data: "subtotalnumeric", render: $.fn.dataTable.render.number('.', ',', 2)},
+//                {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
+//                {data: "status"},
             ],
 
             buttons: [
@@ -950,32 +954,32 @@ function Transfer() {
             order: [[1, 'DESC']],
             aoColumnDefs: [
                 {
-                    aTargets: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                    aTargets: [1],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
-                {
-                    targets: [12],
-                    searchable: false,
-                    mData: null,
-                    mRender: function (data, type, full) {
-                        if (data.status_id == 5) {
-                            html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + data.id + ')"></i>';
-                        } else {
-                            if (data.status_id != 1) {
-
-                                html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')" title="Ver Factura">';
-                                if (data.status_id != 4) {
-                                    html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + data.id + ')" title="Anular Factura"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
-                                }
-                            } else {
-                                html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + data.id + ')" title="Borrar Orden"></i>&nbsp;&nbsp;<i style="cursor:pointer" class="fa fa-file-text fa-lg" aria-hidden="true" onclick="obj.tempInvoice(' + data.id + ')" title="Generar Remisión"></i>';
-                            }
-                        }
-                        return html;
-                    }
-                }
+//                {
+//                    targets: [12],
+//                    searchable: false,
+//                    mData: null,
+//                    mRender: function (data, type, full) {
+//                        if (data.status_id == 5) {
+//                            html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + data.id + ')"></i>';
+//                        } else {
+//                            if (data.status_id != 1) {
+//
+//                                html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + data.id + ')" title="Ver Factura">';
+//                                if (data.status_id != 4) {
+//                                    html += '&nbsp;&nbsp;<span style="cursor:pointer" class="fa-stack" onclick="obj.modalCancel(' + data.id + ')" title="Anular Factura"><i class="fa fa-stack-1x fa-file-pdf-o"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>';
+//                                }
+//                            } else {
+//                                html = '<i style="cursor:pointer" class="fa fa-trash fa-lg" aria-hidden="true" onclick="obj.delete(' + data.id + ')" title="Borrar Orden"></i>&nbsp;&nbsp;<i style="cursor:pointer" class="fa fa-file-text fa-lg" aria-hidden="true" onclick="obj.tempInvoice(' + data.id + ')" title="Generar Remisión"></i>';
+//                            }
+//                        }
+//                        return html;
+//                    }
+//                }
             ],
 
             createdRow: function (row, data, index) {
@@ -997,42 +1001,42 @@ function Transfer() {
                             i : 0;
                 };
 
-                quantity = api
-                        .column(8)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                subtotal = api
-                        .column(9)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                total = api
-                        .column(10)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                // Update footer
-                $(api.column(8).footer()).html(
-                        '(' + quantity + ')'
-                        );
-
-
-                $(api.column(9).footer()).html(
-                        '(' + obj.formatCurrency(subtotal, '$') + ')'
-                        );
-
-
-                $(api.column(10).footer()).html(
-                        '(' + obj.formatCurrency(total, "$") + ')'
-
-                        );
+//                quantity = api
+//                        .column(8)
+//                        .data()
+//                        .reduce(function (a, b) {
+//                            return intVal(a) + intVal(b);
+//                        }, 0);
+//
+//                subtotal = api
+//                        .column(9)
+//                        .data()
+//                        .reduce(function (a, b) {
+//                            return intVal(a) + intVal(b);
+//                        }, 0);
+//
+//                total = api
+//                        .column(10)
+//                        .data()
+//                        .reduce(function (a, b) {
+//                            return intVal(a) + intVal(b);
+//                        }, 0);
+//
+//                // Update footer
+//                $(api.column(8).footer()).html(
+//                        '(' + quantity + ')'
+//                        );
+//
+//
+//                $(api.column(9).footer()).html(
+//                        '(' + obj.formatCurrency(subtotal, '$') + ')'
+//                        );
+//
+//
+//                $(api.column(10).footer()).html(
+//                        '(' + obj.formatCurrency(total, "$") + ')'
+//
+//                        );
 
 //                console.log(api)
             }
@@ -1061,11 +1065,11 @@ function Transfer() {
 
 
     this.viewPdf = function (id) {
-        window.open(PATH + "/sample/" + id + "/getInvoice");
+        window.open(PATH + "/transfer/" + id + "/getInvoice");
     }
 
     this.format = function (d) {
-        var url = "/sample/" + d.id + "/detailAll";
+        var url = "/transfer/" + d.id + "/detailAll";
         var html = '<br><table class="table-detail">';
         html += '<thead><tr><th colspan="2">Information</th><th colspan="3" class="center-rowspan">Order</th>'
         html += '<th colspan="3" class="center-rowspan">Dispatched</th></tr>'

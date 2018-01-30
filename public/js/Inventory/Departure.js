@@ -676,8 +676,10 @@ function Departure() {
     }
 
     this.getItem = function (product_id) {
-
+        console.log(product_id)
+        
         $.each(listProducts, function (i, val) {
+            console.log(val)
             if (val.product_id == product_id) {
                 rowItem = i;
                 row = val;

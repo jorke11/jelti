@@ -12,6 +12,10 @@ use Mail;
 use Datatables;
 use App\Http\Controllers\LogController;
 use App\Models\Administration\Parameters;
+use App\Models\Inventory\Transfer;
+use App\Models\Inventory\TransferDetail;
+use DB;
+use App\Models\Administration\Products;
 
 class TransferController extends Controller {
 
@@ -62,7 +66,7 @@ class TransferController extends Controller {
     public function listTable(Request $req) {
         $in = $req->all();
 
-        $query = DB::table('vsample');
+        $query = DB::table('vtransfer');
 
         if (isset($in["client_id"]) && $in["client_id"] != '' && $in["client_id"] != 0) {
 
@@ -118,32 +122,6 @@ class TransferController extends Controller {
         $detail = DB::select("SELECT id,product_id,generate as quantity,value FROM orders_detail where order_id=" . $id);
 
         return response()->json(["header" => $entry, "detail" => $detail]);
-    }
-
-    public function pdf($id) {
-        $data = [
-            'foo' => 'bar'
-        ];
-        $pdf = PDF::loadView('departure.pdf', $data);
-        return $pdf->stream('document.pdf');
-    }
-
-    public function getInvoiceHtml($id) {
-        $sale = Sample::where("sample_id", $id)->first();
-        $detail = SampleDetail::select("quantity,tax,description,product_id,products.title product")
-                ->join("products", "Sales.product_id", "products_id")
-                ->where("sale_id", $sale["id"])
-                ->get();
-        $cli = Stakeholder::findOrFail($sale["client_id"]);
-        $data = [
-            'client' => $cli,
-            'detail' => $detail,
-        ];
-
-        dd($detail);
-        exit;
-
-        return view("departure.pdf", compact("data"));
     }
 
     public function formatDate($date) {
@@ -305,108 +283,6 @@ class TransferController extends Controller {
         return $pdf->stream('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
     }
 
-    public function getRemission($id) {
-        $this->mails = array();
-
-        $dep = Sample::find($id);
-
-        $detail = DB::table("samples_detail")
-                ->select("samples_detail.quantity", DB::raw("samples_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "samples_detail.value", "samples_detail.units_sf", DB::raw("samples_detail.units_sf * samples_detail.quantity as quantityTotal"), DB::raw("samples_detail.value * samples_detail.quantity * samples_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
-                ->join("products", "samples_detail.product_id", "products.id")
-                ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("samples_detail.sample_id", $id)
-                ->get();
-
-
-        $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
-                ->where("stakeholder_id", $dep["client_id"])
-                ->join("cities", "cities.id", "branch_office.city_id")
-                ->first();
-
-        if ($cli == null) {
-            $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")
-                    ->where("stakeholder.id", $dep["client_id"])
-                    ->join("cities", "cities.id", "stakeholder.city_id")
-                    ->first();
-        }
-
-        $user = Users::find($dep["responsible_id"]);
-
-        $ware = Warehouses::find($dep["warehouse_id"]);
-
-        $this->email[] = $user->email;
-
-
-        $term = 7;
-
-        if ($cli["term"] != null) {
-            $term = $cli["term"];
-        }
-
-
-        $cli["address_invoice"] = $dep["address"];
-        $cli["emition"] = $this->formatDate($dep["created_at"]);
-        $cli["observations"] = $dep["description"];
-
-
-        $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
-
-        $totalExemp = 0;
-        $totalTax5 = 0;
-        $totalTax19 = 0;
-        $tax = 0;
-        $totalSum = 0;
-        foreach ($detail as $i => $value) {
-            $detail[$i]->valueFormated = "$" . number_format($value->value, 0, ',', '.');
-            $detail[$i]->totalFormated = "$" . number_format($value->value * $value->units_sf * $value->quantity, 0, ',', '.');
-
-            $totalSum += $value->valuetotal;
-            $tax = ($value->tax / 100);
-
-            if ($value->tax == 0) {
-                $totalExemp += $value->valuetotal;
-            }
-            if ($value->tax == '5') {
-                $totalTax5 += $value->valuetotal * $tax;
-            }
-            if ($value->tax == '19') {
-                $totalTax19 += $value->valuetotal * $tax;
-            }
-        }
-
-        $rete = SaleDetail::where("description", "rete")->where("sale_id", $dep["id"])->first();
-
-//        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
-        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
-
-        $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
-        $data = [
-            'rete' => 0,
-//            'rete' => $rete["value"],
-            'formatRete' => "$ " . number_format(($rete["value"]), 2, ',', '.'),
-            'client' => $cli,
-            'detail' => $detail,
-            'exept' => "$ " . number_format(($totalExemp), 2, ',', '.'),
-            'tax5num' => $totalTax5,
-            'tax5' => "$ " . number_format((round($totalTax5)), 0, ',', '.'),
-            'tax19num' => $totalTax19,
-            'tax19' => "$ " . number_format((round($totalTax19)), 0, ',', '.'),
-            'totalInvoice' => "$ " . number_format(($totalSum), 0, ',', '.'),
-            'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
-            'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
-            'invoice' => $dep->remission,
-            'textTotal' => trim($this->tool->to_word(round($totalWithTax)))
-        ];
-
-
-        $pdf = \PDF::loadView('Inventory.sample.remission', [], $data, [
-                    'title' => 'Invoice']);
-//  
-        header('Content-Type: application/pdf');
-//        return $pdf->download('factura_' . $dep["invoice"] . '_' . $cli["business_name"] . '.pdf');
-        return $pdf->stream('remission_' . $dep["remission"] . '_' . $cli["business_name"] . '.pdf');
-    }
-
     public function reverse($id) {
 
         try {
@@ -441,11 +317,6 @@ class TransferController extends Controller {
         }
     }
 
-    public function getQuantity($id) {
-        $product = \App\Models\Invoicing\PurchaseDetail::where("product_id", $id)->first();
-        return response()->json(["response" => $product]);
-    }
-
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
@@ -456,17 +327,18 @@ class TransferController extends Controller {
                     DB::beginTransaction();
                     $emDetail = null;
 
+                    $input["header"]["date_dispatched"] = date("Y-m-d");
                     $input["header"]["status_id"] = 1;
+                    $input["header"]["created"] = date("Y-m-d");
                     $input["header"]["insert_id"] = Auth::user()->id;
 
-                    if (!isset($input["header"]["shipping_cost"])) {
-                        $input["header"]["shipping_cost"] = 0;
-                    }
-
-                    $result = Sample::create($input["header"])->id;
+//                    echo "<pre>";
+//                    print_r($input["header"]);
+//                    exit;
+                    $result = Transfer::create($input["header"])->id;
 
                     if ($result) {
-                        $resp = Sample::Find($result);
+                        $resp = Transfer::Find($result);
 
                         $input["detail"] = array_values(array_filter($input["detail"]));
                         $price_sf = 0;
@@ -492,7 +364,7 @@ class TransferController extends Controller {
                             $detail["tax"] = $pro->tax;
                             $detail["value"] = $price_sf;
 
-                            SampleDetail::create($detail);
+                            TransferDetail::create($detail);
                         }
 
                         $listdetail = $this->formatDetail($result);

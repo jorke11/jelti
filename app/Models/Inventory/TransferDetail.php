@@ -10,7 +10,7 @@ class TransferDetail extends Model {
     protected $primaryKey = "id";
     protected $fillable = [
         "id",
-        "sample_id",
+        "transfer_id",
         "product_id",
         "status_id",
         "mark_id",

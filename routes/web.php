@@ -217,6 +217,9 @@ Route::put('/checkedSale/{id}', 'Invoicing\SaleController@checkedSale');
 Route::resource('/transfer', 'Inventory\TransferController');
 Route::get('/api/listTransfer', 'Inventory\TransferController@listTable');
 Route::get('/transfer/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
+Route::get('/transfer/{id}/detail', ['uses' => 'Inventory\TransferController@getDetail']);
+Route::put('/transfer/detail/{id}', 'Inventory\TransferController@updateDetail');
+Route::post('/transfer/setSale/', 'Inventory\TransferController@setSale');
 
 
 Route::resource('/entry', 'Inventory\EntryController');

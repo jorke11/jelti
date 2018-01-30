@@ -16,7 +16,9 @@ class CreateTransferDetailTable extends Migration {
             $table->increments('id');
             $table->integer('transfer_id');
             $table->integer('product_id');
+            $table->integer('status_id');
             $table->integer('quantity');
+            $table->integer('packaging');
             $table->integer('real_quantity')->nullable();
             $table->decimal('value', 15, 2);
             $table->decimal('tax', 5, 2);

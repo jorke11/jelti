@@ -230,7 +230,7 @@ function Transfer() {
         client_id = null;
         $("#btnSave").attr("disabled", false);
         $("#btnmodalDetail").attr("disabled", false);
-        
+
 //        $("#btnmodalDetail, #btnModalUpload").attr("disabled", true);
         $(".input-transfer").cleanFields();
         $(".input-detail").cleanFields();
@@ -954,7 +954,7 @@ function Transfer() {
             order: [[1, 'DESC']],
             aoColumnDefs: [
                 {
-                    aTargets: [1],
+                    aTargets: [1, 2, 3, 4],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }

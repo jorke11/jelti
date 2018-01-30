@@ -16,6 +16,13 @@ use App\Models\Inventory\Transfer;
 use App\Models\Inventory\TransferDetail;
 use DB;
 use App\Models\Administration\Products;
+use App\Models\Administration\Warehouses;
+use App\Models\Administration\Stakeholder;
+use App\Models\Administration\Email;
+use App\Models\Administration\EmailDetail;
+use App\Models\Administration\Cities;
+use App\Models\Administration\PricesSpecial;
+use App\Models\Security\Users;
 
 class TransferController extends Controller {
 
@@ -159,16 +166,16 @@ class TransferController extends Controller {
     public function getInvoice($id) {
         $this->mails = array();
 
-        $sale = SampleDetail::where("sample_id", $id)->first();
+        $sale = TransferDetail::where("transfer_id", $id)->first();
 
-        $detail = DB::table("samples_detail")
-                ->select("quantity", DB::raw("samples_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "samples_detail.value", "samples_detail.units_sf", DB::raw("samples_detail.units_sf * samples_detail.quantity as quantityTotal"), DB::raw("samples_detail.value * samples_detail.quantity * samples_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
-                ->join("products", "samples_detail.product_id", "products.id")
+        $detail = DB::table("transfer_detail")
+                ->select("quantity", DB::raw("transfer_detail.tax * 100 as tax"), DB::raw("coalesce(transfer_detail.description,'') as description"), "products.title as product", "products.id as product_id", "transfer_detail.value", "transfer_detail.units_sf", DB::raw("transfer_detail.units_sf * transfer_detail.quantity as quantityTotal"), DB::raw("transfer_detail.value * transfer_detail.quantity * transfer_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->join("products", "transfer_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("sample_id", $id)
+                ->where("transfer_id", $id)
                 ->get();
 
-        $dep = Sample::find($id);
+        $dep = Transfer::find($id);
 
 
         if ($dep->branch_id != '') {
@@ -242,7 +249,7 @@ class TransferController extends Controller {
             }
         }
 
-        $rete = SampleDetail::where("description", "rete")->where("sample_id", $sale["id"])->first();
+        $rete = TransferDetail::where("description", "rete")->where("transfer_id", $sale["id"])->first();
 
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
 
@@ -287,12 +294,12 @@ class TransferController extends Controller {
 
         try {
             DB::beginTransaction();
-            $row = Sample::find($id);
+            $row = Transfer::find($id);
 
             $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
             if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched)))) {
-                $sal = Sample::where("sample_id", $id)->first();
+                $sal = Transfer::where("transfer_id", $id)->first();
                 if ($sal != null) {
                     $detail = SaleDetail::where("sale_id", $sal->id)->get();
 
@@ -306,7 +313,7 @@ class TransferController extends Controller {
                 $row->status_id = 1;
                 $row->save();
                 DB::commit();
-                $dep = Sample::find($id);
+                $dep = Transfer::find($id);
                 return response()->json(["success" => true, "header" => $dep]);
             } else {
                 return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
@@ -324,6 +331,7 @@ class TransferController extends Controller {
 //            $user = Auth::User();
             if (isset($input["detail"])) {
                 try {
+
                     DB::beginTransaction();
                     $emDetail = null;
 
@@ -356,22 +364,22 @@ class TransferController extends Controller {
 //                            }
 
                             $detail["product_id"] = $val["product_id"];
-                            $detail["sample_id"] = $result;
+                            $detail["transfer_id"] = $result;
                             $detail["status_id"] = 1;
                             $detail["quantity"] = $val["quantity"];
                             $detail["units_sf"] = $pro->units_sf;
                             $detail["packaging"] = ($pro->packaging == null) ? 1 : $pro->packaging;
                             $detail["tax"] = $pro->tax;
                             $detail["value"] = $price_sf;
-
+//                            echo "<pre>";print_r($detail);exit;
                             TransferDetail::create($detail);
                         }
 
                         $listdetail = $this->formatDetail($result);
 
-                        $ware = Warehouses::find($input["header"]["warehouse_id"]);
+                        $origin = Warehouses::find($input["header"]["origin_id"]);
+                        $destination = Warehouses::find($input["header"]["destination_id"]);
 
-                        $client = Stakeholder::find($input["header"]["client_id"]);
 
                         $email = Email::where("description", "muestras")->first();
 
@@ -382,25 +390,26 @@ class TransferController extends Controller {
                         if (count($emDetail) > 0) {
                             $this->mails = array();
 
-                            $userware = Users::find($ware->responsible_id);
-                            $this->mails[] = $userware->email;
+                            $user = Users::find($origin->responsible_id);
+                            $userdest = Users::find($destination->responsible_id);
+                            $this->mails[] = $user->email;
+                            $this->mails[] = $userdest->email;
 
                             foreach ($emDetail as $value) {
                                 $this->mails[] = $value->description;
                             }
 
-                            $cit = Cities::find($ware->city_id);
+//                            $cit = Cities::find($ware->city_id);
 
-                            $this->subject = "SuperFüds " . date("d/m") . " [Muestras] para Cliente: " . $client->business . " " . $cit->description . " " . $result;
-                            $input["city"] = $cit->description;
+                            $this->subject = "SuperFüds " . date("d/m") . " [Traslado] de: " . $origin->description . " " . $destination->description . " " . $result;
+//                            $input["city"] = $cit->description;
 
-                            $user = Users::find($input["header"]["responsible_id"]);
 
                             $input["name"] = ucwords($user->name);
                             $input["last_name"] = ucwords($user->last_name);
                             $input["phone"] = $user->phone;
-                            $input["warehouse"] = $ware->description;
-                            $input["address"] = $ware->address;
+                            $input["warehouse"] = $origin->description;
+                            $input["address"] = $origin->address;
                             $input["detail"] = $listdetail;
                             $input["id"] = $result;
                             $input["environment"] = env("APP_ENV");
@@ -420,13 +429,10 @@ class TransferController extends Controller {
                                 $this->mails = Auth::User()->email;
                             }
 
-
-                            Mail::send("Notifications.sample", $input, function($msj) {
+                            Mail::send("Notifications.transfer", $input, function($msj) {
                                 $msj->subject($this->subject);
                                 $msj->to($this->mails);
                             });
-
-                            $this->log->logClient($client->id, "Genero Orden de venta " . $result);
                         }
                         DB::commit();
 
@@ -452,35 +458,27 @@ class TransferController extends Controller {
             try {
                 DB::beginTransaction();
 
-                $departure = Sample::find($input["id"]);
-                $val = SampleDetail::where("sample_id", $departure["id"])->count();
+                $departure = Transfer::find($input["id"]);
+                $val = TransferDetail::where("transfer_id", $departure["id"])->count();
 
 
-                $dep = Sample::where("id", $input["id"])->where("status_id", 2)->get();
+                $dep = Transfer::where("id", $input["id"])->where("status_id", 2)->get();
                 if ($val > 0) {
-                    $val = SampleDetail::where("sample_id", $departure["id"])->where("status_id", 1)->count();
+                    $val = TransferDetail::where("transfer_id", $departure["id"])->where("status_id", 1)->count();
                     if ($val == 0) {
                         if (count($dep) == 0) {
 
-                            $con = Sample::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
-
-                            if ($departure->invoice == '') {
-                                $consecutive = ($con == null) ? 1 : $con->consecutive;
-                                $departure->invoice = $consecutive;
-                            }
-
                             $departure->status_id = 2;
-                            $departure->dispatched = date("Y-m-d H:i:s");
+                            $departure->date_dispatched = date("Y-m-d H:i:s");
 
                             $departure->save();
 
                             $detail = $this->formatDetail($input["id"]);
-                            $departure = Sample::find($input["id"]);
+                            $departure = Transfer::find($input["id"]);
                             $total = "$ " . number_format($this->total, 0, ",", ".");
 
-                            $this->log->logClient($departure->client_id, "Genero Petición de Muestra # " . $departure->invoice);
 
-                            $email = Email::where("description", "muestras")->first();
+                            $email = Email::where("description", "transfer")->first();
 
                             if ($email != null) {
                                 $emDetail = EmailDetail::where("email_id", $email->id)->get();
@@ -488,13 +486,17 @@ class TransferController extends Controller {
 
                             if (count($emDetail) > 0) {
 
+                                $origin = Warehouses::find($departure->origin_id);
+                                $destination = Warehouses::find($departure->destination_id);
+
                                 $ware = Warehouses::find($departure->warehouse_id);
-                                $client = Stakeholder::find($departure->client_id);
-                                $sales = Sample::find($departure->id);
+
+                                $client = Stakeholder::find();
+                                $sales = Transfer::find($departure->id);
                                 $this->mails = array();
 
-                                $userware = Users::find($ware->responsible_id);
-                                $this->mails[] = $userware->email;
+                                $userorigin = Users::find($origin->responsible_id);
+                                $this->mails[] = $userorigin->email;
 
                                 foreach ($emDetail as $value) {
                                     $this->mails[] = $value->description;
@@ -502,24 +504,22 @@ class TransferController extends Controller {
 
                                 $listdetail = $this->formatDetail($departure->id);
 
-                                $cit = Cities::find($ware->city_id);
+                                $cit = Cities::find($origin->city_id);
                                 $commercial = Users::where("id", $departure->responsible_id)->first();
-                                $this->subject = "SuperFüds " . date("d/m") . " [Muestras] para Cliente: " . $client->business . " " . $cit->description . " " . $departure->id . " [Despachado]";
+                                $this->subject = "SuperFüds " . date("d/m") . " [Traslad] de " . $origin->description . " " . $destination->description . " " . $departure->id . " [Despachado]";
                                 $input["city"] = $cit->description;
 
                                 $user = Users::find($departure->responsible_id);
-                                $term = 7;
+                                
 
-                                if ($client->term != null) {
-                                    $term = $client->term;
-                                }
+                             
                                 $input["client"] = ucwords($client->business);
                                 $input["address"] = ucwords($client->business);
                                 $input["document"] = $client->document;
                                 $input["address_send"] = $client->address_send;
                                 $input["address_invoice"] = $client->address_invoice;
                                 $input["dispatched"] = $departure->dispatched;
-                                $input["expiration"] = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($departure->dispatched)));
+//                                $input["expiration"] = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($departure->date_dispatched)));
 
                                 $input["responsible"] = $commercial->name . " " . $commercial->last_name;
                                 $input["observation"] = $departure->description;
@@ -637,8 +637,8 @@ class TransferController extends Controller {
                 }
 
 
-                SampleDetail::insert([
-                    'sample_id' => $id, "value" => $value->value, "product_id" => $value->product_id, "category_id" => $value->category_id,
+                TransferDetail::insert([
+                    'transfer_id' => $id, "value" => $value->value, "product_id" => $value->product_id, "category_id" => $value->category_id,
                     "quantity" => $value->generate
                 ]);
 
@@ -646,26 +646,26 @@ class TransferController extends Controller {
                 OrdersDetail::where("id", $value->id)->update(["generate" => $value->generate, "pending" => $value->quantity]);
             }
         }
-        $resp = Sample::FindOrFail($id);
-        $detail = SampleDetail::where("sample_id", $id)->get();
+        $resp = Transfer::FindOrFail($id);
+        $detail = TransferDetail::where("transfer_id", $id)->get();
 
         return response()->json(["success" => true, "header" => $resp, "detail" => $detail]);
     }
 
     public function edit($id) {
-        $entry = Sample::FindOrFail($id);
+        $entry = Transfer::FindOrFail($id);
         $detail = $this->formatDetail($id);
         $total = "$ " . number_format($this->total, 0, ",", ".");
         return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);
     }
 
     public function formatDetail($id) {
-        $detail = DB::table("samples_detail")
-                ->select("samples_detail.id", "samples_detail.status_id", DB::raw("coalesce(samples_detail.description,'') as comment"), "samples_detail.real_quantity", "samples_detail.quantity", "samples_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "samples_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "samples_detail.tax")
-                ->join("products", "samples_detail.product_id", "products.id")
+        $detail = DB::table("transfer_detail")
+                ->select("transfer_detail.id", "transfer_detail.status_id", DB::raw("coalesce(transfer_detail.description,'') as comment"), "transfer_detail.real_quantity", "transfer_detail.quantity", "transfer_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "transfer_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "transfer_detail.tax")
+                ->join("products", "transfer_detail.product_id", "products.id")
                 ->join("stakeholder", "stakeholder.id", "products.supplier_id")
-                ->join("parameters", "samples_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
-                ->where("sample_id", $id)
+                ->join("parameters", "transfer_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
+                ->where("transfer_id", $id)
                 ->orderBy("id", "asc")
                 ->get();
 
@@ -695,7 +695,7 @@ class TransferController extends Controller {
     }
 
     public function getDetail($id) {
-        $detail = SampleDetail::FindOrFail($id);
+        $detail = TransferDetail::FindOrFail($id);
         return response()->json($detail);
     }
 
@@ -705,11 +705,11 @@ class TransferController extends Controller {
     }
 
     public function update(Request $request, $id) {
-        $entry = Sample::Find($id);
+        $entry = Transfer::Find($id);
         $input = $request->all();
         $result = $entry->fill($input)->save();
         if ($result) {
-            $resp = Sample::FindOrFail($id);
+            $resp = Transfer::FindOrFail($id);
             return response()->json(['success' => true, "data" => $resp]);
         } else {
             return response()->json(['success' => false]);
@@ -718,7 +718,7 @@ class TransferController extends Controller {
 
     public function cancelInvoice(Request $request, $id) {
         $in = $request->all();
-        $row = Sample::Find($id);
+        $row = Transfer::Find($id);
 
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
@@ -726,7 +726,7 @@ class TransferController extends Controller {
             $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
             $row->status_id = 4;
             $row->save();
-            $resp = Sample::FindOrFail($id);
+            $resp = Transfer::FindOrFail($id);
             return response()->json(['success' => true, "data" => $resp]);
         } else {
             return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
@@ -736,9 +736,9 @@ class TransferController extends Controller {
     public function updateDetail(Request $request, $id) {
         $input = $request->all();
 
-        $header = Sample::find($input["sample_id"]);
+        $header = Transfer::find($input["transfer_id"]);
 
-        $entry = SampleDetail::FindOrFail($id);
+        $entry = TransferDetail::FindOrFail($id);
 
         $special = PricesSpecial::where("product_id", $input["product_id"])
                         ->where("client_id", $header->client_id)->first();
@@ -759,7 +759,7 @@ class TransferController extends Controller {
         if (Auth::user()->role_id == 4) {
             unset($input["real_quantity"]);
             $result = $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["sample_id"]);
+            $resp = $this->formatDetail($input["transfer_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
         }
@@ -774,7 +774,7 @@ class TransferController extends Controller {
             $input["real_quantity"] = 0;
             $input["description"] = "Inventario no disponible, guarda 0";
             $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["sample_id"]);
+            $resp = $this->formatDetail($input["transfer_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
         }
@@ -784,7 +784,7 @@ class TransferController extends Controller {
 //            if ($available["quantity"] >= $input["real_quantity"]) {
 //                $result = $entry->fill($input)->save();
 //                if ($result) {
-//                    $resp = $this->formatDetail($input["sample_id"]);
+//                    $resp = $this->formatDetail($input["transfer_id"]);
 //                    $total = "$ " . number_format($this->total, 0, ",", ".");
 //                    return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
 //                } else {
@@ -797,18 +797,18 @@ class TransferController extends Controller {
 //        } else {
 
         $entry->fill($input)->save();
-        $resp = $this->formatDetail($input["sample_id"]);
+        $resp = $this->formatDetail($input["transfer_id"]);
         $total = "$ " . number_format($this->total, 0, ",", ".");
         return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
 //        }
     }
 
     public function destroy($id) {
-        $row = Sample::Find($id);
+        $row = Transfer::Find($id);
         $row->delete();
-        $detail = SampleDetail::where("sample_id", $row->id)->get();
+        $detail = TransferDetail::where("transfer_id", $row->id)->get();
         foreach ($detail as $value) {
-            $det = SampleDetail::find($value->id);
+            $det = TransferDetail::find($value->id);
             $det->delete();
         }
 
@@ -820,11 +820,11 @@ class TransferController extends Controller {
     }
 
     public function destroyDetail($id) {
-        $entry = SampleDetail::FindOrFail($id);
+        $entry = TransferDetail::FindOrFail($id);
         $result = $entry->delete();
         if ($result) {
-            $header = Sample::find($entry["sample_id"]);
-            $resp = $this->formatDetail($entry["sample_id"]);
+            $header = Transfer::find($entry["transfer_id"]);
+            $resp = $this->formatDetail($entry["transfer_id"]);
             $total = "$ " . number_format($this->total, 0, ",", ".");
             return response()->json(['success' => true, "header" => $header, "detail" => $resp, 'total' => $total]);
         } else {
@@ -846,11 +846,11 @@ class TransferController extends Controller {
             $input["tax"] = $product->tax;
             $input["packaging"] = $product->packaging;
 
-            $result = SampleDetail::create($input);
+            $result = TransferDetail::create($input);
             if ($result) {
-                $resp = $this->formatDetail($input["sample_id"]);
+                $resp = $this->formatDetail($input["transfer_id"]);
                 $total = "$ " . number_format($this->total, 0, ",", ".");
-                $header = Sample::find($input["sample_id"]);
+                $header = Transfer::find($input["transfer_id"]);
                 return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
             } else {
                 return response()->json(['success' => false]);
@@ -859,8 +859,8 @@ class TransferController extends Controller {
     }
 
     public function generateRemission($id) {
-        $row = Sample::find($id);
-        $con = Sample::select(DB::raw("count(*) +1 consecutive"))->whereNotNull("remission")->first();
+        $row = Transfer::find($id);
+        $con = Transfer::select(DB::raw("count(*) +1 consecutive"))->whereNotNull("remission")->first();
         $row->status_id = 5;
         $row->remission = $con->consecutive;
         $row->save();
@@ -868,16 +868,16 @@ class TransferController extends Controller {
     }
 
     public function generateInvoice($id) {
-//        $sale = SampleDetail::where("sample_id", $id)->first();
+//        $sale = TransferDetail::where("transfer_id", $id)->first();
 
-        $sale = Sample::find($id)->toArray();
+        $sale = Transfer::find($id)->toArray();
 
 
-        $detail = DB::table("samples_detail")
-                ->select("quantity", DB::raw("samples_detail.tax * 100 as tax"), DB::raw("coalesce(samples_detail.description,'') as description"), "products.title as product", "products.id as product_id", "samples_detail.value", "samples_detail.units_sf", DB::raw("samples_detail.units_sf * samples_detail.quantity as quantityTotal"), DB::raw("samples_detail.value * samples_detail.quantity * samples_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
-                ->join("products", "samples_detail.product_id", "products.id")
+        $detail = DB::table("transfer_detail")
+                ->select("quantity", DB::raw("transfer_detail.tax * 100 as tax"), DB::raw("coalesce(transfer_detail.description,'') as description"), "products.title as product", "products.id as product_id", "transfer_detail.value", "transfer_detail.units_sf", DB::raw("transfer_detail.units_sf * transfer_detail.quantity as quantityTotal"), DB::raw("transfer_detail.value * transfer_detail.quantity * transfer_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder")
+                ->join("products", "transfer_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("sample_id", $sale["id"])
+                ->where("transfer_id", $sale["id"])
                 ->get();
 
 

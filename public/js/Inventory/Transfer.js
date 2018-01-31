@@ -1,5 +1,5 @@
 function Transfer() {
-    var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false, client_id = null;
+    var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false, client_id = null, available = 0;
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -48,8 +48,8 @@ function Transfer() {
 
 
         $("#quantity").change(function () {
-            $("#quantity_units").val(dataProduct.cost_sf * $(this).val());
-            $("#value_units").val(dataProduct.cost_sf).formatNumber();
+            $("#quantity_units").val(dataProduct.price_sf * $(this).val());
+            $("#value_units").val(dataProduct.price_sf).formatNumber();
         });
         if ($("#id_orderext").val() != '') {
             obj.infomationExt($("#id_orderext").val(), true);
@@ -86,19 +86,25 @@ function Transfer() {
 
         $("#frmDetail #product_id").change(function () {
             var param = {};
-            client_id = (client_id == null) ? $("#frm #client_id :selected").val() : client_id;
-
-            param.client_id = client_id;
+            var warehouse_id
+            warehouse_id = (warehouse_id == null) ? $("#frm #origin_id :selected").val() : warehouse_id;
+            param.warehouse_id = warehouse_id;
             $.ajax({
-                url: 'transfer/' + $(this).val() + '/getDetailProduct',
+                url: 'transfer/' + $(this).val() + '/getProductTransfer',
                 method: 'GET',
                 data: param,
                 dataType: 'JSON',
                 success: function (resp) {
                     dataProduct = resp.response;
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
-                    $("#frmDetail #value").val((resp.response.cost_sf / resp.response.packaging)).formatNumber()
-                    $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.cost_sf) + ") Available: (" + resp.quantity + ")")
+                    $("#frmDetail #value").val((resp.response.price_sf / resp.response.packaging)).formatNumber()
+                    $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.response.available + ")")
+                    if (resp.response.available > 0) {
+                        available = resp.response.available;
+                        $("#newDetail").attr("disabled", false);
+                    } else {
+                        $("#newDetail").attr("disabled", true);
+                    }
                 }
             })
         });
@@ -421,49 +427,27 @@ function Transfer() {
 
     this.saveDetail = function () {
         toastr.remove();
-        $("#frmDetail #transfer_id").val($("#frm #id").val());
-        var data = {}, value = 0, total = 0;
-        var url = "", method = "";
-        var id = $("#frmDetail #id").val();
-        var form = $("#frmDetail").serialize()
-        var msg = 'Record Detail';
-        var validate = $(".input-detail").validate();
-        if (validate.length == 0) {
-            if (id != '') {
-                var id = $("#frmDetail #id").val();
-                var frm = $("#frmDetail");
-                var data = frm.serialize();
-                var url = "/transfer/detail/" + id;
-                $.ajax({
-                    url: url,
-                    method: "PUT",
-                    data: data,
-                    dataType: 'JSON',
-                    success: function (resp) {
-                        if (resp.success == true) {
-                            $("#modalDetail").modal("hide");
-                            obj.printDetail(resp);
-                            $("#frmDetail #product_id").text("");
-                            $("#frmDetail #value").val("");
-                            $("#frmDetail #quantity").val("");
-                            $("#frmDetail #quantity_units").val("");
-                            $("#frmDetail #value_units").val("");
-                        } else {
-                            toastr.error(resp.success.msg);
-                        }
-                    }, error(xhr, responseJSON, thrown) {
-                        toastr.error(xhr.responseJSON.msg);
-                    }
-                })
 
-            } else {
-                if (statusRecord == true) {
+
+        if (available >= $("#frmDetail #quantity").val()) {
+
+
+            $("#frmDetail #transfer_id").val($("#frm #id").val());
+            var data = {}, value = 0, total = 0;
+            var url = "", method = "";
+            var id = $("#frmDetail #id").val();
+            var form = $("#frmDetail").serialize()
+            var msg = 'Record Detail';
+            var validate = $(".input-detail").validate();
+            if (validate.length == 0) {
+                if (id != '') {
+                    var id = $("#frmDetail #id").val();
                     var frm = $("#frmDetail");
                     var data = frm.serialize();
-                    var url = "/transfer/storeDetail";
+                    var url = "/transfer/detail/" + id;
                     $.ajax({
                         url: url,
-                        method: "POST",
+                        method: "PUT",
                         data: data,
                         dataType: 'JSON',
                         success: function (resp) {
@@ -482,46 +466,76 @@ function Transfer() {
                             toastr.error(xhr.responseJSON.msg);
                         }
                     })
+
                 } else {
-                    if ($("#frmDetail #rowItem").val() == '-1') {
-                        listProducts.push({
-                            row: listProducts.length,
-                            product_id: $("#frmDetail #product_id").val(),
-                            product: $.trim($("#frmDetail #product_id").text()),
-                            price_tax: dataProduct.cost_sf * dataProduct.packaging * dataProduct.tax,
-                            price_sf: (dataProduct.cost_sf / dataProduct.packaging),
-                            units_sf: parseFloat(dataProduct.packaging),
-                            quantity: $("#frmDetail #quantity").val(),
-                            valueFormated: $("#frmDetail #value").val(),
-                            totalFormated: ($("#frmDetail #quantity").val() * (dataProduct.cost_sf / dataProduct.packaging)),
-                            total: ($("#frmDetail #quantity").val() * (dataProduct.cost_sf / dataProduct.packaging)),
-                            real_quantity: '',
-                            totalFormated_real: '',
-                            comment: '',
-                            status: 'new'
-                        });
-                        //                    $(".input-detail").cleanFields();
-                        $("#frmDetail #product_id").text("");
-                        $("#frmDetail #value").val("");
-                        $("#frmDetail #quantity").val("");
-                        $("#frmDetail #quantity_units").val("");
-                        $("#frmDetail #value_units").val("");
-//                    $("#frmDetail #value").val("");
-                        msg += " add";
+                    if (statusRecord == true) {
+                        var frm = $("#frmDetail");
+                        var data = frm.serialize();
+                        var url = "/transfer/storeDetail";
+                        $.ajax({
+                            url: url,
+                            method: "POST",
+                            data: data,
+                            dataType: 'JSON',
+                            success: function (resp) {
+                                if (resp.success == true) {
+                                    $("#modalDetail").modal("hide");
+                                    obj.printDetail(resp);
+                                    $("#frmDetail #product_id").text("");
+                                    $("#frmDetail #value").val("");
+                                    $("#frmDetail #quantity").val("");
+                                    $("#frmDetail #quantity_units").val("");
+                                    $("#frmDetail #value_units").val("");
+                                } else {
+                                    toastr.error(resp.success.msg);
+                                }
+                            }, error(xhr, responseJSON, thrown) {
+                                toastr.error(xhr.responseJSON.msg);
+                            }
+                        })
                     } else {
-                        listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
-                        listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
-                        msg += " edited";
+                        if ($("#frmDetail #rowItem").val() == '-1') {
+                            listProducts.push({
+                                row: listProducts.length,
+                                product_id: $("#frmDetail #product_id").val(),
+                                product: $.trim($("#frmDetail #product_id").text()),
+                                price_tax: dataProduct.cost_sf * dataProduct.packaging * dataProduct.tax,
+                                price_sf: (dataProduct.cost_sf / dataProduct.packaging),
+                                units_sf: parseFloat(dataProduct.packaging),
+                                quantity: $("#frmDetail #quantity").val(),
+                                valueFormated: $("#frmDetail #value").val(),
+                                totalFormated: ($("#frmDetail #quantity").val() * (dataProduct.cost_sf / dataProduct.packaging)),
+                                total: ($("#frmDetail #quantity").val() * (dataProduct.cost_sf / dataProduct.packaging)),
+                                real_quantity: '',
+                                totalFormated_real: '',
+                                comment: '',
+                                status: 'new'
+                            });
+                            //                    $(".input-detail").cleanFields();
+                            $("#frmDetail #product_id").text("");
+                            $("#frmDetail #value").val("");
+                            $("#frmDetail #quantity").val("");
+                            $("#frmDetail #quantity_units").val("");
+                            $("#frmDetail #value_units").val("");
+//                    $("#frmDetail #value").val("");
+                            msg += " add";
+                        } else {
+                            listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
+                            listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
+                            msg += " edited";
+                        }
+                        obj.printDetailTmp();
                     }
-                    obj.printDetailTmp();
+
+
+                    toastr.success(msg);
                 }
 
-
-                toastr.success(msg);
+            } else {
+                toastr.error("input required");
             }
-
         } else {
-            toastr.error("input required");
+            toastr.error("Cantidad no disponible");
         }
     }
     this.saveService = function () {

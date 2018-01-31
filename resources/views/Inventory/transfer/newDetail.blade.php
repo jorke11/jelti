@@ -10,13 +10,13 @@
                 <input type="hidden" id="id" name="id" class="input-detail">
                 <input type="hidden" id="transfer_id" name="transfer_id">
                 <input type="hidden" id="rowItem">
-                
-                
+
+
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Product:</label>
-                            <select class="form-control input-detail" id="product_id" name='product_id' data-api="/api/getProduct" required>
+                            <select class="form-control input-detail" id="product_id" name='product_id' data-api="/api/getProductTransfer" required>
                             </select>
                         </div>
 
@@ -36,7 +36,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email">Quantity <span id="quantityMax" style="color: red;"></span></label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' placeholder="Quantity" required>
+                            <input type="number" class="form-control input-detail input-sm" id="quantity" name='quantity' min="1" placeholder="Quantity" required>
                         </div>
                     </div>
                     <div class="col-lg-6">

@@ -329,6 +329,35 @@ class SeekController extends Controller {
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
 
+    public function getProductTransfer(Request $req) {
+        $this->input = $req->all();
+        $query = Products::select("products.id", DB::raw("products.reference ||' - '|| products.title || ' - ' || stakeholder.business  as text"))
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id");
+
+        if (isset($this->input["filter"]) && $this->input["filter"] != '') {
+            foreach ($this->input["filter"] as $key => $val) {
+                $query->where($key, $val);
+            }
+        } else if (isset($this->input["id"])) {
+            $query->where("products.id", $this->input["id"])->get();
+        }
+
+        if (isset($this->input["q"]) && $this->input["q"] != "0") {
+            $query->where(function($query) {
+                $query->where("products.title", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere("stakeholder.business", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere("products.bar_code", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere(DB::raw("products.reference::text"), "ILIKE", "%" . $this->input["q"] . "%");
+            });
+        }
+        $query->where("products.status_id", 1);
+//        $query->whereNull("type_product_id");
+
+        $result = $query->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+
     public function getServices(Request $req) {
         $this->input = $req->all();
         $query = Products::select("products.id", DB::raw("products.reference ||' - '|| products.title || ' - ' || stakeholder.business  as text"))

@@ -220,7 +220,7 @@ Route::get('/transfer/{id}/getDetailProduct', ['uses' => 'Inventory\StockControl
 Route::get('/transfer/{id}/detail', ['uses' => 'Inventory\TransferController@getDetail']);
 Route::put('/transfer/detail/{id}', 'Inventory\TransferController@updateDetail');
 Route::post('/transfer/setSale/', 'Inventory\TransferController@setSale');
-
+Route::get('/transfer/{id}/getProductTransfer', ['uses' => 'Inventory\TransferController@getProducts']);
 
 Route::resource('/entry', 'Inventory\EntryController');
 Route::get('/entry/{id}/consecutive', ['uses' => 'Inventory\EntryController@getConsecutive']);
@@ -555,6 +555,7 @@ Route::get('/api/getWarehouse', 'Administration\SeekController@getWarehouse');
 Route::get('/api/getWarehouseProduct', 'Administration\SeekController@getWarehouseProduct');
 Route::get('/api/getResponsable', 'Administration\SeekController@getResponsable');
 Route::get('/api/getProduct', 'Administration\SeekController@getProduct');
+Route::get('/api/getProductTransfer', 'Administration\SeekController@getProductTransfer');
 Route::get('/api/getService', 'Administration\SeekController@getServices');
 Route::get('/api/getCategory', 'Administration\SeekController@getCategory');
 Route::get('/api/getNotification', 'Administration\SeekController@getNotification');

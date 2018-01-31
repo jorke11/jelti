@@ -459,8 +459,8 @@ class TransferController extends Controller {
                 DB::beginTransaction();
 
                 $departure = Transfer::find($input["id"]);
-                $val = TransferDetail::where("transfer_id", $departure["id"])->count();
 
+                $val = TransferDetail::where("transfer_id", $departure["id"])->count();
 
                 $dep = Transfer::where("id", $input["id"])->where("status_id", 2)->get();
                 if ($val > 0) {
@@ -473,7 +473,6 @@ class TransferController extends Controller {
 
                             $departure->save();
 
-                            $detail = $this->formatDetail($input["id"]);
                             $departure = Transfer::find($input["id"]);
                             $total = "$ " . number_format($this->total, 0, ",", ".");
 
@@ -485,13 +484,14 @@ class TransferController extends Controller {
                             }
 
                             if (count($emDetail) > 0) {
+                                $listdetail = $this->formatDetail($departure->id);
 
                                 $origin = Warehouses::find($departure->origin_id);
                                 $destination = Warehouses::find($departure->destination_id);
 
                                 $ware = Warehouses::find($departure->warehouse_id);
 
-                                $client = Stakeholder::find();
+                                $client = Stakeholder::find(178);
                                 $sales = Transfer::find($departure->id);
                                 $this->mails = array();
 
@@ -502,17 +502,13 @@ class TransferController extends Controller {
                                     $this->mails[] = $value->description;
                                 }
 
-                                $listdetail = $this->formatDetail($departure->id);
 
                                 $cit = Cities::find($origin->city_id);
                                 $commercial = Users::where("id", $departure->responsible_id)->first();
                                 $this->subject = "SuperFüds " . date("d/m") . " [Traslad] de " . $origin->description . " " . $destination->description . " " . $departure->id . " [Despachado]";
                                 $input["city"] = $cit->description;
 
-                                $user = Users::find($departure->responsible_id);
-                                
 
-                             
                                 $input["client"] = ucwords($client->business);
                                 $input["address"] = ucwords($client->business);
                                 $input["document"] = $client->document;
@@ -521,7 +517,7 @@ class TransferController extends Controller {
                                 $input["dispatched"] = $departure->dispatched;
 //                                $input["expiration"] = date('Y-m-d', strtotime('+' . $term . ' days', strtotime($departure->date_dispatched)));
 
-                                $input["responsible"] = $commercial->name . " " . $commercial->last_name;
+                                $input["responsible"] = $userorigin->name . " " . $userorigin->last_name;
                                 $input["observation"] = $departure->description;
                                 $input["city"] = $cit->description;
                                 $input["detail"] = $listdetail;
@@ -540,20 +536,20 @@ class TransferController extends Controller {
                                 $input["flete"] = "$ " . number_format($departure->shipping_cost, 0, ",", ".");
                                 $input["discount"] = $departure->discount;
 
-                                $this->mails[] = $user->email;
+                                $this->mails[] = $userorigin->email;
 
                                 if ($input["environment"] == 'local') {
                                     $this->mails = Auth::User()->email;
                                 }
 
-                                Mail::send("Notifications.sampleDep", $input, function($msj) {
+                                Mail::send("Notifications.tranferDep", $input, function($msj) {
                                     $msj->subject($this->subject);
                                     $msj->to($this->mails);
                                 });
                             }
 
                             DB::commit();
-                            return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" => $total]);
+                            return response()->json(["success" => true, "header" => $departure, "detail" => $listdetail, "total" => $total]);
                         } else {
                             DB::rollback();
                             return response()->json(["success" => false, "msg" => 'Already sended']);
@@ -571,6 +567,60 @@ class TransferController extends Controller {
                 return response()->json(["success" => false, "msg" => 'Wrong'], 409);
             }
         }
+    }
+
+    public function getProducts(Request $req, $id) {
+        $in = $req->all();
+
+        $entry_ware = '';
+        $sales_ware = '';
+        if ($in["warehouse_id"] != 0) {
+            $entry_ware = ' AND entries.warehouse_id=' . $in["warehouse_id"];
+            $sales_ware = ' AND sales.warehouse_id=' . $in["warehouse_id"];
+        }
+        $bar_code = '';
+
+
+//            $pro = Products::where("reference", $in["bar_code"])->first();
+        $pro = Products::find($id);
+        $bar_code = "WHERE products.id=" . $pro->id;
+
+
+
+        $sql = "
+            select products.id,reference,title as product,stakeholder.business as supplier,categories.description as category,price_sf,packaging,
+            category_id,units_sf
+            from products 
+            JOIN stakeholder ON stakeholder.id=products.supplier_id
+            JOIN categories ON categories.id=products.category_id
+                $bar_code";
+
+        $products = DB::select($sql);
+        
+        foreach ($products as $i => $value) {
+            $sql = "
+                    select coalesce(sum(quantity),0) as total
+                    from entries_detail
+                    JOIN entries ON entries.id = entries_detail.entry_id 
+                    WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
+            $entry = DB::select($sql);
+
+
+            $sql = "
+                    select coalesce(sum(quantity),0)  AS total
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE sales_detail.product_id is not null and product_id=" . $value->id . "
+                     $sales_ware";
+
+            $sale = DB::select($sql);
+
+            $products[$i]->entries = $entry[0]->total;
+            $products[$i]->sales = $sale[0]->total;
+            $products[$i]->available = $products[$i]->entries - $products[$i]->sales;
+        }
+
+        return response()->json(["response" => $products[0]]);
     }
 
     public function testDepNotification($id) {

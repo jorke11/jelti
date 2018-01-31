@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use DB;
+use App\Models\Administration\Categories;
+use App\Models\Administration\Characteristic;
 
 class AdministratorsController extends Controller {
 
@@ -14,12 +16,18 @@ class AdministratorsController extends Controller {
     protected $guard = 'admins';
     protected $redirectTo = '/admins/home';
 
+    public function __construct() {
+        $this->middleware("admin");
+    }
+
     public function showLoginForm() {
-        
+
         return view('administrators.login');
     }
 
     public function login(Request $request) {
+
+
 
         $this->validateLogin($request);
 
@@ -34,6 +42,7 @@ class AdministratorsController extends Controller {
         }
 
         if ($this->attemptLogin($request)) {
+
             return $this->sendLoginResponse($request);
         }
 
@@ -51,26 +60,61 @@ class AdministratorsController extends Controller {
         ]);
     }
 
+    protected function attemptLogin(Request $request) {
+
+        return $this->guard("admins")->attempt(
+                        $this->credentials($request), $request->has('remember')
+        );
+    }
+
+    protected function guard() {
+        return Auth::guard("admins");
+    }
+
+    protected function sendLoginResponse(Request $request) {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+
+        return $this->authenticated($request, $this->guard("admins")->user()) ?: redirect()->intended($this->redirectPath());
+    }
+
     public function username() {
         return 'email';
     }
 
     public function authenticated(Request $request, $user) {
-        redirect("admins/area");
+
+        redirect("admins/aassssreaa");
     }
 
     public function index() {
 
+
+
+//        $sql = "
+//            SELECT p.title,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
+//            round(sum(d.value * d.quantity * d.units_sf)) as total
+//            FROM departures_detail d
+//            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id NOT IN (258,264)
+//            JOIN products p ON p.id=d.product_id  
+//            WHERE product_id IS NOT NULL AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+//            GROUP BY 1
+//            ORDER BY 2 DESC 
+//            LIMIT 1";
         $sql = "
-            SELECT p.title,sum(d.quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
-            round(sum(d.value * d.quantity * d.units_sf)) as total
+            SELECT p.title,sum(d.real_quantity *  CASE  WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) cantidadTotal,
+            round(sum(d.value * d.real_quantity * d.units_sf)) as total
             FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id<>258
+            JOIN departures dep ON dep.id=d.departure_id  ANd dep.client_id NOT IN(258,264,24) and dep.status_id IN(2,7)
             JOIN products p ON p.id=d.product_id  
-            WHERE product_id IS NOT NULL AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE product_id IS NOT NULL AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
-            ORDER BY 2 DESC LIMIT 1";
-//        echo $sql;exit;
+            ORDER BY 2 DESC 
+            LIMIT 1";
+
+
         $product = DB::select($sql);
 
         if (count($product) > 0) {
@@ -80,8 +124,8 @@ class AdministratorsController extends Controller {
         $sql = "
             SELECT client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) as unidades
             FROM vdepartures
-            WHERE created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59' AND status_id=2
-                AND client_id <>258
+            WHERE dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59' AND status_id IN (2,7)
+                AND client_id NOT IN(258,264,24)
             group by 1
             ORDER BY 2 DESC
             LIMIT 1
@@ -93,31 +137,31 @@ class AdministratorsController extends Controller {
         }
 
         $sql = "
-            SELECT s.business proveedor,round(sum(d.quantity*d.units_sf)) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
+            SELECT s.business proveedor,round(sum(d.real_quantity * d.units_sf)) cantidadtotal,round(sum(d.value * d.real_quantity * d.units_sf)) total
             FROM departures_detail d
-            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id IN(2,7) and  dep.client_id NOT IN(258,264,24)
             JOIN products p ON p.id=d.product_id  
             JOIN stakeholder s ON s.id=p.supplier_id  
-            WHERE d.product_id is not null AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE d.product_id is not null AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 3 desc LIMIT 1";
-
+//        echo $sql;exit;
         $supplier = DB::select($sql);
 
         if (count($supplier) > 0) {
             $supplier = $supplier[0];
         }
         $sql = "
-            SELECT u.name ||' '|| u.last_name as vendedor,sum(d.quantity*p.packaging) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
+            SELECT u.name ||' '|| u.last_name as vendedor,sum(d.quantity * p.packaging) cantidadtotal,round(sum(d.value * d.quantity * d.units_sf)) total
             FROM departures_detail d
             JOIN products p ON p.id=d.product_id
-            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id=2
+            JOIN departures dep ON dep.id=d.departure_id AND dep.status_id IN(2,7) and  dep.client_id NOT IN(258,264,24)
             JOIN users u ON u.id=dep.responsible_id
-            WHERE d.product_id IS NOT NULL and client_id <>258
-            AND dep.created BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
+            WHERE d.product_id IS NOT NULL 
+            AND dep.dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59'
             GROUP BY 1
             ORDER BY 3 desc";
-
+//        echo $sql;exit;desc
         $commercial = DB::select($sql);
 
         if (count($commercial) > 0) {
@@ -146,7 +190,7 @@ class AdministratorsController extends Controller {
             where d.product_id is not null and p.created_at between '" . $ant . "-01 00:00' and '" . $ant . "-30 23:59') mesanterior
             from purchases_detail  d
             JOIN purchases p ON p.id=d.purchase_id
-            where d.product_id is not null and p.created_at > '" . date("Y-m") . "-01 00:00'
+            where d.product_id is not null and p.created > '" . date("Y-m") . "-01 00:00'
         ";
         $purchase = DB::select($sql);
         if (count($purchase) > 0) {
@@ -166,26 +210,29 @@ class AdministratorsController extends Controller {
             $samples = $samples[0];
         }
 
-//        dd($purchase);
-        if (Auth::user()->status_id == 3) {
-            $users = Auth::user();
+
+        $category = Categories::where("status_id", 1)->orderBy("order", "asc")->get();
+        $subcategory = Characteristic::where("status_id", 1)->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
+
+        $user = Auth::guard("admins")->user();
+        
+
+        if ($user->status_id == 3) {
+
             $roles = Roles::where("id", $users->role_id)->get();
             $warehouses = Warehouses::all();
             if ($users->status_id == 3) {
                 return view('activation', compact("users", "roles", "warehouses", "samples"));
             } else {
+
                 return \Redirect::to('/');
             }
         } else {
-            
-//            dd(Auth::user());
-            
-            if (Auth::user()->role_id == 2) {
-                
-                return view('client', compact("product", "client", "supplier", "commercial", "samples"));
+            if ($user->role_id == 2) {
+//                return view('client', compact("product", "client", "supplier", "commercial", "samples", "category", "subcategory"));
+                return redirect('shopping/0');
             } else {
-                return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples"));
-//                return view('dashboard');
+                return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples", "category"));
             }
         }
     }

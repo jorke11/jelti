@@ -133,7 +133,9 @@ class ProductController extends Controller {
 //                            $product["units_supplier"] = (int) trim($book->supplier_packing);
 //                            $product["units_sf"] = (int) trim($book->sf_packing);
 
-                    $product["cost_sf"] = trim($book->packing_cost);
+//                    echo "<pre>";                    print_r($book);exit;
+                    
+                    $product["cost_sf"] = trim($book->packaging_cost);
                     $product["price_sf"] = round(trim($book->sf_price_sin_iva));
 
                     if ($book->pvp_sugerido_iva != '') {

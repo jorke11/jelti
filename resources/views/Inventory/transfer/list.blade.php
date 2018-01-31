@@ -4,24 +4,24 @@
         <tr>
             <th>Detail</th>
             <th>Id</th>
-            <th>Factura</th>
+            <th>Origen</th>
+            <th>Destino</th>
             <th>Fecha</th>
-            <th>Cliente</th>
-            <th>Comercial</th>
-            <th>Bodega</th>
-            <th>Ciudad</th>
-            <th>Unidades</th>
-            <th>SubTotal</th>
-            <th>Total</th>
+            <th>Estado</th>
+            <!--<th>Bodega</th>-->
+            <!--<th>Ciudad</th>-->
+            <!--<th>Unidades</th>-->
+            <!--<th>SubTotal</th>-->
+<!--            <th>Total</th>
             <th>Estatus</th>
-            <th tipo="prueba">Action</th>
+            <th tipo="prueba">Action</th>-->
         </tr>
     </thead>
     <tbody>
     </tbody>
-    <tfoot>
-        <tr>
-            <th></th>
+    <!--<tfoot>-->
+        <!--<tr>-->
+<!--            <th></th>
             <th></th>
             <th></th>
             <th></th>
@@ -32,9 +32,9 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
-        </tr>
-    </tfoot>
+            <th></th>-->
+        <!--</tr>-->
+    <!--</tfoot>-->
 </table>
 
 

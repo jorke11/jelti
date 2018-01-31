@@ -141,6 +141,13 @@ class DepartureController extends Controller {
             }
         }
 
+        if (isset($in["init_filter"]) && $in["init_filter"] != '' & isset($in["end_filter"]) && $in["end_filter"] != '') {
+            $query->where("dispatched", ">=", $in["init_filter"] . " 00:00");
+            $query->where("dispatched", "<=", $in["end_filter"] . " 00:00");
+        }
+
+
+
         if ($cont == 0) {
 
             if (isset($in["init_filter"]) && $in["init_filter"] != '') {
@@ -1551,6 +1558,7 @@ class DepartureController extends Controller {
                         if (isset($book->item) && $book->item != '') {
 
                             $special = PricesSpecial::where("item", (int) $book->item)->where("client_id", $this->in["client_id"])->first();
+//                            echo "<pre>";print_r($special);exit;
                             if ($special == null) {
                                 $product_id = 0;
                             } else {
@@ -1575,8 +1583,15 @@ class DepartureController extends Controller {
                                 $special = PricesSpecial::where("product_id", $pro->id)->where("client_id", $this->in["client_id"])->first();
                             }
                         } else {
+
                             if (isset($book->sf_code) && $book->sf_code != '') {
+
                                 $pro = Products::where("reference", $book->sf_code)->first();
+
+
+                                if ($pro != null) {
+                                    $special = PricesSpecial::where("product_id", $pro->id)->where("client_id", $this->in["client_id"])->first();
+                                }
                             }
                         }
 

@@ -12,10 +12,6 @@
                 <button class="btn btn-success btn-sm" id='btnSend' disabled>
                     <span class="glyphicon glyphicon-send" aria-hidden="true"> Enviar</span>
                 </button>
-
-                <button class="btn btn-success btn-sm" id='btnDocument' disabled>
-                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Pdf</span>
-                </button>
                 @endif
                 @if( Auth::user()->role_id == 1)
                 <button class="btn btn-success btn-sm" id='btnReverse'>
@@ -38,135 +34,38 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">#:</label>
-                    <input type="text" class="form-control input-sample input-sm" id="id" name='id' readonly="">
+                    <input type="text" class="form-control input-transfer input-sm" id="id" name='id' readonly="">
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-3">
                 <div class="form-group">
-                    <label for="email">Bodega:</label>
-                    <select class="form-control input-sample" id="warehouse_id" name='warehouse_id' data-api="/api/getWarehouse" required="">
+                    <label for="email">Bodega Origin:</label>
+                    <select class="form-control input-transfer" id="origin_id" name='origin_id' data-api="/api/getWarehouse" required="">
                     </select>
 
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-3">
                 <div class="form-group">
-                    <label for="email">Responsable:</label>
-                    <select class="form-control input-sample input-sm" id="responsible_id" name='responsible_id' readonly data-api="/api/getResponsable" required>
+                    <label for="email">Bodega destino:</label>
+                    <select class="form-control input-transfer" id="destination_id" name='destination_id' data-api="/api/getWarehouse" required="">
                     </select>
 
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Ciudad Origen:</label>
-                    <select class="form-control input-sample" id="city_id" name='city_id' width="100%" data-api="/api/getCity" required>
-                    </select>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Fecha:</label>
-                    <input type="datetime" class="form-control input-sample form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required readonly="">
+                    <input type="datetime" class="form-control input-transfer form_datetime" id="created" name='created' value="<?php echo date("Y-m-d H:i") ?>" required readonly="">
                 </div>
             </div>
 
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Estatus:</label>
-                    <select class="form-control input-sample input-sm" id="status_id" name='status_id' readonly>
+                    <select class="form-control input-transfer input-sm" id="status_id" name='status_id' readonly>
                         <option value="0">Selection</option>
                         @foreach($status as $val)
-                        <option value="{{$val->code}}">{{$val->description}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-
-        </div>
-
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Cliente:</label>
-                    <select class="form-control input-sample input-fillable" id="client_id" name='client_id' data-api="/api/getClient" required> 
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="email">Razón Social o Cuenta:</label>
-                    <input type="text" class="form-control input-sample input-sm" id="name_client" readonly="">
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Ciudad Destino:</label>
-                    <select class="form-control input-sample input-fillable" id="destination_id" name='destination_id' data-api="/api/getCity" required>
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Dirección:</label>
-                    <input type="text" class="form-control input-sample input-sm input-fillable" id="address" name="address" required>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Teléfono:</label>
-                    <input type="text" class="form-control input-sample input-sm input-fillable" id="phone" name="phone" required> 
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Sucursal:</label>
-                    <select class="form-control input-sample input-fillable" id="branch_id" name='branch_id'>
-
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Flete:</label>
-                    <input type="text" class="form-control input-sample" id="shipping_cost" name="shipping_cost" data-type="number" required>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="email">Observaciones:</label>
-                    <input type="text" class="form-control input-sample" id="description" name="description">
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Factura:</label>
-                    <input type="text" class="form-control input-sample" id="invoice" readonly>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Guia:</label>
-                    <input type="text" class="form-control input-sample" id="transport" name="transport">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Descuento:</label>
-                    <input type="text" class="form-control input-sample" id="discount" name="discount">
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="email">Tipo Salida:</label>
-                    <select class="form-control input-sample input-sm" id="type_inventory_id" name='type_inventory_id' required>
-                        <option value="0">Selection</option>
-                        @foreach($type_inventory as $val)
                         <option value="{{$val->code}}">{{$val->description}}</option>
                         @endforeach
                     </select>
@@ -185,12 +84,6 @@
                 <div class="row">
                     <div class="col-lg-4">Detalle</div>
                     <div class="col-lg-8 text-right">
-                        <button class="btn btn-success btn-sm" type="button" id="btnModalServices">
-                            <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
-                        </button>
-                        <button class="btn btn-success btn-sm" type="button" id="btnAsociar">
-                            Asociar
-                        </button>
                         <button class="btn btn-success btn-sm" type="button" id="btnModalUpload">
                             <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
                         </button>

@@ -8,7 +8,7 @@
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmDetail']) !!}
                 <input type="hidden" id="id" name="id" class="input-detail">
-                <input type="hidden" id="sample_id" name="sample_id">
+                <input type="hidden" id="transfer_id" name="transfer_id">
                 <input type="hidden" id="rowItem">
                 
                 

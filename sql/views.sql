@@ -337,3 +337,10 @@ select c.id,c.description,c.image,c.order,c.short_description,
 CASE WHEN c.status_id = 1 THEN 'Activo' ELSE 'Inactivo' END status, c.banner,c2.description as node
 from categories_blog c
 LEFT JOIN categories_blog c2 ON c2.id=c.node_id
+
+
+create view vtransfer as 
+select t.id,w.description origin, d.description destination,t.created_at,t.status_id
+from transfer t
+JOIN warehouses w ON w.id=t.origin_id
+JOIN warehouses d ON d.id=t.destination_id

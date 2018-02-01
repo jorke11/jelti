@@ -146,10 +146,9 @@ class PaymentController extends Controller {
                     JOIN vproducts p ON p.id=d.product_id
                     JOIN stakeholder s ON s.id=p.supplier_id
                 WHERE order_id=" . $this->order->id . "
-                GROUP BY 1,2,3,4,product_id,p.image,d.id,p.thumbnail
-                ORDER BY d.id";
+                GROUP BY 1,2,3,4,product_id,p.image,d.tax,p.thumbnail
+                ORDER BY 1";
 //            echo $sql;exit;
-
             $detail = DB::select($sql);
 
             $this->total = 0;
@@ -183,9 +182,26 @@ class PaymentController extends Controller {
     public function setQuantity(Request $req, $order_id) {
         $in = $req->all();
 
-        $det = OrdersDetail::where("order_id", $order_id)->where("product_id", $in["product_id"])->first();
-        $det->quantity = $in["quantity"];
-        $det->save();
+        $det = OrdersDetail::where("order_id", $order_id)->where("product_id", $in["product_id"])->get();
+        foreach ($det as $value) {
+            $row = OrdersDetail::find($value->id);
+            $row->delete();
+        }
+
+        $pro = \App\Models\Administration\Products::find($in["product_id"]);
+
+        for ($i = 0; $i < $in["quantity"]; $i++) {
+            $new["order_id"] = $order_id;
+            $new["product_id"] = $in["product_id"];
+            $new["tax"] = $pro->tax;
+            $new["value"] = $pro->price_sf;
+            $new["units_sf"] = $pro->units_sf;
+            $new["quantity"] = 1;
+            OrdersDetail::create($new);
+        }
+
+
+
         return response()->json(["success" => true]);
     }
 
@@ -395,7 +411,7 @@ class PaymentController extends Controller {
         $response = false;
 
         if (preg_match('/[0-9]{4,}\/[0-9]{2,}$/', $expire)) {
-            
+
             //VISA
             if (strlen($number) == 16 && strlen($cvc) == 3) {
 //                if (preg_match('/^4[0-9]{6,}$/', $number)) {
@@ -403,8 +419,8 @@ class PaymentController extends Controller {
                     $response = array("paymentMethod" => 'VISA', "status" => true);
                 }
             }
-            
-              //Dinnesrs
+
+            //Dinnesrs
 
             if (strlen($number) == 15 && strlen($cvc) == 4) {
                 if (preg_match('/^[35](?:0[0-5|[68][0-9]{11}$)|(^30[0-5]{11}$)|(^3095(\\d{10}$)|(^3[89](\\d{12})$/', trim($number))) {

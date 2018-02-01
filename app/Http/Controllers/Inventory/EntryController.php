@@ -152,92 +152,117 @@ class EntryController extends Controller {
             $this->warehouse_id = $input["warehouse_id"];
             $this->responsible_id = $input["responsible_id"];
 
+
             Excel::load($this->path, function($reader) {
-                $in["name"] = $this->name;
-                $in["path"] = $this->path;
-                $in["quantity"] = count($reader->get());
-
-                $base_id = Base::create($in)->id;
-
-                $ware = Warehouses::find($this->warehouse_id);
 
                 foreach ($reader->get() as $i => $book) {
+
+                    echo "<pre>";                        print_r($book);exit;
                     
-                    if ($book->cantidad != '' && (int) $book->cantidad != 0 && (int) $book->codigo != '') {
-                        $pro = Products::where("reference", (int) $book->codigo)->first();
+                    if ($i > 0) {
                         
-                    
-                        if ($pro != null) {
-
-                            $sup = Stakeholder::find($pro->supplier_id);
-
-                            if (count($sup) > 0) {
-
-                                if ($book->cantidad > 0) {
-                                    $sql = "
-                                        select products.id,products.reference,products.title as product,
-                                            (
-                                                    select sum(d.quantity) 
-                                                    from departures_detail d
-                                                    JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN (2,7) AND dep.client_id NOT IN(258,264)
-                                                    where product_id=products.id and dep.warehouse_id=" . $this->warehouse_id . "
-                                                    ) as sales
-                                            from products 
-                                            WHERE products.id=" . $pro->id . " 
-                                            group by 1
-                                            ";
-                               
-                                    $inventory = DB::select($sql);
-
-                                    $unidades = 0;
-
-                                    if ($inventory != false) {
-                                        $inventory = $inventory[0];
-//
-                                        try {
-                                            
-                                            DB::beginTransaction();
-                                            $new["warehouse_id"] = $this->warehouse_id;
-                                            $new["responsible_id"] = $this->responsible_id;
-                                            $new["supplier_id"] = $sup->id;
-                                            $new["purchase_id"] = 0;
-                                            $new["city_id"] = $ware->city_id;
-                                            $new["description"] = "Initial inventory";
-                                            $new["invoice"] = "system";
-                                            $new["status_id"] = 2;
-
-                                            $new["created"] = date("Y-m-d H:i");
-                                            $entry_id = Entries::create($new)->id;
-                                            
-                                            for ($i = 0; $i < ($inventory->sales + $book->cantidad); $i++) {
-                                                $detail["entry_id"] = $entry_id;
-                                                $detail["product_id"] = $pro->id;
-                                                $detail["quantity"] = 1;
-                                                $detail["real_quantity"] = 0;
-                                                $detail["value"] = $pro->cost_sf;
-                                                $detail["lot"] = (!empty($book->lote)) ? $book->lote : '';
-                                                $detail["description"] = 'Initial inventory';
-                                                $detail["status_id"] = 1;
-                                                $detail["expiration_date"] = $book->fecha;
-                                                $detail["units_supplier"] = $pro->units_supplier;
-                                                EntriesDetail::create($detail);
-                                            }
-
-                                            DB::commit();
-                                        } catch (Exception $exep) {
-                                            DB::rollback();
-                                            return response()->json(['success' => false, "msg" => "Wrong"], 409);
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        
+                        
+                        $this->addInventory($this->warehouse_id, $book->sf_code, $book->total, $book->lote_real, $book->vencimiento_real);
                     }
                 }
             })->get();
 
             return response()->json(["success" => true]);
         }
+    }
+
+    public function addInventory($warehouse_id, $reference, $quantity, $lot = null, $vencimiento) {
+        $lot = ($lot == null) ? 'system' : $lot;
+        $pro = Products::where("reference", $reference)->first();
+
+        echo $warehouse_id . " - " . $reference . " - " . $quantity . " - " . $lot . " - " . $vencimiento;
+        exit;
+
+
+        $sql = "
+            select 
+                p.id,
+                p.reference,
+                p.title as product,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from entries_detail
+                    JOIN entries ON entries.id=entries_detail.entry_id
+                    WHERE entries.status_id=2 and entries_detail.product_id=p.id and product_id=" . $pro->id . "
+                    and entries.warehouse_id=$warehouse_id
+                ) entradas,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id and product_id=" . $pro->id . "
+                    and sales.warehouse_id=$warehouse_id
+                ) salidas,
+                (
+                    select coalesce(sum(quantity),0) 
+                    from entries_detail
+                    JOIN entries ON entries.id=entries_detail.entry_id
+                    WHERE entries.status_id=2 and entries_detail.product_id=p.id and product_id=" . $pro->id . "
+                    and entries.warehouse_id=$warehouse_id
+                ) - (
+                    select coalesce(sum(quantity),0) 
+                    from sales_detail
+                    JOIN sales ON sales.id=sales_detail.sale_id
+                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id and product_id=" . $pro->id . "
+                    and sales.warehouse_id=$warehouse_id
+                ) Total
+            from products p
+            where p.id=" . $pro->id . "
+            order by p.title asc";
+        $res = DB::select($sql);
+        $res = $res[0];
+
+
+        $w = Warehouses::find($warehouse_id);
+
+        $en["warehouse_id"] = $warehouse_id;
+        $en["responsible_id"] = $w->responsible_id;
+        $en["supplier_id"] = $pro->supplier_id;
+        $en["purchase_id"] = 0;
+        $en["city_id"] = $w->city_id;
+        $en["description"] = "initial inventory";
+        $en["invoice"] = "system";
+        $en["status_id"] = 2;
+        $en["created"] = date("Y-m-d H:i:s");
+
+        $total = ($res->total < 0 ) ? $res->total * -1 : $res->total;
+
+        if ($res->total < 0) {
+            $quantity = $quantity + ($res->total * -1);
+        } else {
+            $quantity = $quantity - $res->total;
+        }
+
+        $entry_id = Entries::create($en)->id;
+        echo "entry:" . $entry_id;
+
+
+        $det["entry_id"] = $entry_id;
+        $det["product_id"] = $pro->id;
+        $det["quantity"] = $quantity;
+        $det["real_quantity"] = $quantity;
+        $det["value"] = $pro->price_sf;
+        $det["lot"] = $lot;
+        $det["description"] = "system";
+        $det["status_id"] = 3;
+        $det["created_at"] = date("Y-m-d H:i:s");
+
+        $detail_id = EntriesDetail::create($det)->id;
+        echo " detail:" . $detail_id;
+
+
+        $res = DB::select($sql);
+        $res = $res[0];
+
+        echo "<pre>";
+        print_r($res);
+        echo "<br>";
     }
 
     public function sendPurchase(Request $request) {

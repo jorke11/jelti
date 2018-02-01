@@ -757,9 +757,11 @@ class ToolController extends Controller {
         return view("Tool/uploadInventory");
     }
 
-    public function addInventory($warehouse_id, $reference, $quantity, $lot = null) {
+    public function addInventory($warehouse_id, $reference, $quantity, $lot = null, $expire) {
         $lot = ($lot == null) ? 'system' : $lot;
         $pro = Products::where("reference", $reference)->first();
+
+        $expire = date("Y-m-d", strtotime($expire));
 
 
         $sql = "
@@ -834,6 +836,7 @@ class ToolController extends Controller {
         $det["description"] = "system";
         $det["status_id"] = 3;
         $det["created_at"] = date("Y-m-d H:i:s");
+        $det["expiration_date"] = $expire;
 
         $detail_id = EntriesDetail::create($det)->id;
         echo " detail:" . $detail_id;

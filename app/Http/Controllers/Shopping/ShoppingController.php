@@ -216,7 +216,7 @@ class ShoppingController extends Controller {
 
     public function managementOrder(Request $req) {
         $data = $req->all();
-
+        
         $order = Orders::where("stakeholder_id", Auth::user()->id)->where("status_id", 1)->first();
 
         if (count($order) > 0) {
@@ -226,15 +226,19 @@ class ShoppingController extends Controller {
             $new["status_id"] = 1;
             $order_id = Orders::create($new)->id;
         }
-
-
-        $pro = Products::findOrFail($data["product_id"]);
-        $data["order_id"] = $order_id;
-        $data["tax"] = $pro["tax"];
-        $data["units_sf"] = $pro["units_sf"];
-        $data["packaging"] = $pro["packaging"];
-        $data["value"] = $pro["price_sf"];
-        OrdersDetail::create($data);
+        
+        
+        for ($i = 0; $i < $data["quantity"]; $i++) {
+            $pro = Products::findOrFail($data["product_id"]);
+            $det["product_id"] = $data["product_id"];
+            $det["order_id"] = $order_id;
+            $det["tax"] = $pro["tax"];
+            $det["units_sf"] = $pro["units_sf"];
+            $det["packaging"] = $pro["packaging"];
+            $det["value"] = $pro["price_sf"];
+            $det["quantity"] = 1;
+            OrdersDetail::create($det);
+        }
 
         return $this->getDataCountOrders();
     }

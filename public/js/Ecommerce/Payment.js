@@ -39,7 +39,7 @@ function Payment() {
 //                    image = (val.image == null) ? "../assets/images/default.jpg" : val.image;
                     image = (val.thumbnail == null) ? "http://via.placeholder.com/200x150" : val.thumbnail;
                     html += '<div class="row">\
-                <div class="col-lg-10 col-lg-offset-1">\
+                <div class="col-lg-12">\
                     <div class="panel panel-default">\
                         <div class="panel-header">\
                             <button type="button" class="close"  aria-label="Close" style="padding-right:1%" onclick=obj.deleteItem(' + val.product_id + ',' + val.order_id + ')><span aria-hidden="true">&times;</span></button>\

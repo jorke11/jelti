@@ -66,7 +66,7 @@ class StockController extends Controller {
                      $sales_ware";
 
             $sale = DB::select($sql);
-           
+
             $products[$i]->entries = $entry[0]->total;
             $products[$i]->sales = $sale[0]->total;
             $products[$i]->available = $products[$i]->entries - $products[$i]->sales;
@@ -100,13 +100,10 @@ class StockController extends Controller {
         }
 
 
-        $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 3)->sum(DB::raw("quantity * units_supplier"));
-        $departure = DB::table("departures_detail")->where("product_id", $id)->where("status_id", 3)->sum("quantity");
-        $purchase = DB::table("purchases_detail")->where("product_id", $id)->sum("quantity");
-        $sales = DB::table("sales_detail")->where("product_id", $id)->whereNotNull("product_id")->sum("quantity");
-        $quantity = $entry - $sales;
+        $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 1)->sum(DB::raw("quantity"));
+        
 
-        return response()->json(["response" => $response, "quantity" => $quantity]);
+        return response()->json(["response" => $response, "quantity" => $entry]);
     }
 
     public function getDetailSample(Request $req, $id) {

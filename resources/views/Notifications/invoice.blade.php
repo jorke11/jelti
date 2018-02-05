@@ -21,7 +21,7 @@
             <tr>
                 <td width='15%'><img src="{!!asset('assets/images/logo.png')!!}" width="45" style="display:block"></td>
                 <td width='60%'><strong>SuperFüds</strong><br>Nit 900703907-7<br>BARRANQUILLA COLOMBIA<br>E-mail: info@superfuds.com.co</td>
-                <td><strong>Factura {!!(isset($invoice))?$invoice:0!!}</strong><br> <strong>{{$dispatched}}</strong></td>
+                <td><strong>Factura {!!(isset($invoice))?$invoice:0!!}</strong><br> <strong>{{(isset($dispatched))?$dispatched:''}}</strong></td>
             </tr>
             <tr>
                 <td><br></td>

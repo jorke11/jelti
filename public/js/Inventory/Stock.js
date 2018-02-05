@@ -38,8 +38,6 @@ function Stock() {
                 {data: "supplier"},
                 {data: "category"},
                 {data: "product"},
-                {data: "entries"},
-                {data: "sales"},
                 {data: "available"},
             ],
             order: [[5, 'ASC']],

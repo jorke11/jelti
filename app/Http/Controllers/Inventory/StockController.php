@@ -27,18 +27,18 @@ class StockController extends Controller {
         $in = $req->all();
         $entry_ware = '';
         $sales_ware = '';
+
         if ($in["warehouse_id"] != 0) {
             $entry_ware = ' AND entries.warehouse_id=' . $in["warehouse_id"];
             $sales_ware = ' AND sales.warehouse_id=' . $in["warehouse_id"];
         }
-        $bar_code = '';
 
+        $bar_code = '';
 
         if ($in["bar_code"] != '') {
             $pro = Products::where("reference", $in["bar_code"])->first();
             $bar_code = "WHERE products.id=" . $pro->id;
         }
-
 
         $sql = "
             select products.id,reference,title as product,stakeholder.business as supplier,categories.description as category
@@ -49,27 +49,15 @@ class StockController extends Controller {
 
 
         $products = DB::select($sql);
+
         foreach ($products as $i => $value) {
             $sql = "
                     select coalesce(sum(quantity),0) as total
                     from entries_detail
                     JOIN entries ON entries.id = entries_detail.entry_id 
-                    WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
+                    WHERE entries.status_id=1 and product_id=" . $value->id . " $entry_ware";
             $entry = DB::select($sql);
-
-
-            $sql = "
-                    select coalesce(sum(quantity),0)  AS total
-                    from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id
-                    WHERE sales_detail.product_id is not null and product_id=" . $value->id . "
-                     $sales_ware";
-
-            $sale = DB::select($sql);
-
-            $products[$i]->entries = $entry[0]->total;
-            $products[$i]->sales = $sale[0]->total;
-            $products[$i]->available = $products[$i]->entries - $products[$i]->sales;
+            $products[$i]->available = $entry[0]->total;
         }
 
         return response()->json(["data" => $products]);
@@ -101,7 +89,7 @@ class StockController extends Controller {
 
 
         $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 1)->sum(DB::raw("quantity"));
-        
+
 
         return response()->json(["response" => $response, "quantity" => $entry]);
     }

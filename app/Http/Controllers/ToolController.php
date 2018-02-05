@@ -781,7 +781,7 @@ class ToolController extends Controller {
             $entry_id = Entries::create($en)->id;
             echo "entry:" . $entry_id;
 
-            for ($i = 0; $i <= $quantity; $i++) {
+            for ($i = 0; $i < $quantity; $i++) {
                 $det["entry_id"] = $entry_id;
                 $det["product_id"] = $pro->id;
                 $det["quantity"] = $quantity;
@@ -794,10 +794,10 @@ class ToolController extends Controller {
                 $det["expiration_date"] = $expire;
 
                 $detail_id = EntriesDetail::create($det)->id;
-                echo $i . " New  detail:" . $detail_id . "<br>";
+                echo $i . " New  detail:" . $detail_id . "\n";
             }
         } else {
-            echo " ERROR: reference:" . $reference . " date not valid " . $expire . "<br>";
+            echo " ERROR: reference:" . $reference . " date not valid " . $expire . "\n";
         }
     }
 

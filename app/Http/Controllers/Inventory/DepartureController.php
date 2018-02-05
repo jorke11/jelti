@@ -838,24 +838,24 @@ class DepartureController extends Controller {
 
                                 if ($value->real_quantity > 0) {
 
-                                    $entries = \App\Models\Inventory\EntriesDetail::where("product_id", $value->product_id)
-                                                    ->where("status_id", 1)
-                                                    ->take($value->real_quantity)
-                                                    ->orderBy("expiration_date")->get();
-
-                                    if (count($entries) > 0) {
-                                        $ids = [];
-
-                                        foreach ($entries as $value) {
-                                            $row = \App\Models\Inventory\EntriesDetail::find($value->id);
-                                            $row->status_id = 2;
-                                            $row->save();
-                                            $ids[] = $value->id;
-                                        }
-
-                                        $rowDep->entry_detail_id = json_encode($ids);
-                                        $rowDep->save();
-                                    }
+//                                    $entries = \App\Models\Inventory\EntriesDetail::where("product_id", $value->product_id)
+//                                                    ->where("status_id", 1)
+//                                                    ->take($value->real_quantity)
+//                                                    ->orderBy("expiration_date")->get();
+//
+//                                    if (count($entries) > 0) {
+//                                        $ids = [];
+//
+//                                        foreach ($entries as $value) {
+//                                            $row = \App\Models\Inventory\EntriesDetail::find($value->id);
+//                                            $row->status_id = 2;
+//                                            $row->save();
+//                                            $ids[] = $value->id;
+//                                        }
+//
+//                                        $rowDep->entry_detail_id = json_encode($ids);
+//                                        $rowDep->save();
+//                                    }
 
                                     $pro = Products::find($value->product_id);
 

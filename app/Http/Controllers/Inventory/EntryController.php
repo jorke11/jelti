@@ -98,41 +98,68 @@ class EntryController extends Controller {
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
 
-            $purc = Purchases::find($input["purchase_id"]);
 
-            if (count($purc) > 0) {
-                $purc->status_id = 3;
-                $purc->save();
+            $input["header"]["status_id"] = 1;
+            $result = Entries::create($input["header"])->id;
 
 
-                $input["status_id"] = 1;
-                $result = Entries::create($input)->id;
+            if ($result) {
+                foreach ($input["detail"] as $value) {
 
-                if ($result) {
+                    $pro = Products::find($value["product_id"]);
 
-                    $resp = Entries::FindOrFail($result);
-
-                    $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->whereNotNull('product_id')->get();
-
-                    foreach ($detail as $value) {
+                    for ($i = 0; $i < $value["quantity"]; $i++) {
                         EntriesDetail::insert([
-                            "entry_id" => $result, "product_id" => $value->product_id, "quantity" => $value->quantity,
-                            "value" => $value->value, "units_supplier" => $value->units_supplier, "status_id" => 1
+                            "entry_id" => $result, "product_id" => $value["product_id"], "quantity" => 1,
+                            "value" => $value["value"], "units_supplier" => $pro->units_supplier, "status_id" => 0
                         ]);
                     }
-
-                    $detailEntry = $this->formatDetail($result);
-
-                    $total = "$ " . number_format($this->total, 2, ',', '.');
-                    $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
-
-                    return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
-                } else {
-                    return response()->json(['success' => false]);
                 }
-            } else {
-                return response()->json(['success' => false, "msg" => "Requied Purchase(Order)"], 409);
             }
+
+            $resp = Entries::FindOrFail($result);
+            $detailEntry = $this->formatDetail($result);
+
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+            $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+
+            return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
+
+//            $purc = Purchases::find($input["purchase_id"]);
+//
+//            if (count($purc) > 0) {
+//                $purc->status_id = 3;
+//                $purc->save();
+//
+//
+//                $input["status_id"] = 1;
+//                $result = Entries::create($input)->id;
+//
+//                if ($result) {
+//
+//                    $resp = Entries::FindOrFail($result);
+//
+//                    $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->whereNotNull('product_id')->get();
+//
+//                    foreach ($detail as $value) {
+//                        EntriesDetail::insert([
+//                            "entry_id" => $result, "product_id" => $value->product_id, "quantity" => $value->quantity,
+//                            "value" => $value->value, "units_supplier" => $value->units_supplier, "status_id" => 1
+//                        ]);
+//                    }
+//
+//                    $detailEntry = $this->formatDetail($result);
+//
+//                    $total = "$ " . number_format($this->total, 2, ',', '.');
+//                    $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
+//
+//                    return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
+//                } else {
+//                    return response()->json(['success' => false]);
+//                }
+//            } else {
+//                return response()->json(['success' => false, "msg" => "Requied Purchase(Order)"], 409);
+//            }
         }
     }
 
@@ -156,15 +183,11 @@ class EntryController extends Controller {
             Excel::load($this->path, function($reader) {
 
                 foreach ($reader->get() as $i => $book) {
-
-                    echo "<pre>";                        print_r($book);exit;
-                    
-                    if ($i > 0) {
-                        
-                        
-                        
-                        $this->addInventory($this->warehouse_id, $book->sf_code, $book->total, $book->lote_real, $book->vencimiento_real);
-                    }
+                    $handler = curl_init($book->url);
+                    $response = curl_exec($handler);
+                    curl_close($handler);
+                    echo $book->url . "<br>";
+//                        $this->addInventory($this->warehouse_id, $book->sf_code, $book->total, $book->lote_real, $book->vencimiento_real);
                 }
             })->get();
 
@@ -173,96 +196,7 @@ class EntryController extends Controller {
     }
 
     public function addInventory($warehouse_id, $reference, $quantity, $lot = null, $vencimiento) {
-        $lot = ($lot == null) ? 'system' : $lot;
-        $pro = Products::where("reference", $reference)->first();
-
-        echo $warehouse_id . " - " . $reference . " - " . $quantity . " - " . $lot . " - " . $vencimiento;
-        exit;
-
-
-        $sql = "
-            select 
-                p.id,
-                p.reference,
-                p.title as product,
-                (
-                    select coalesce(sum(quantity),0) 
-                    from entries_detail
-                    JOIN entries ON entries.id=entries_detail.entry_id
-                    WHERE entries.status_id=2 and entries_detail.product_id=p.id and product_id=" . $pro->id . "
-                    and entries.warehouse_id=$warehouse_id
-                ) entradas,
-                (
-                    select coalesce(sum(quantity),0) 
-                    from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id
-                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id and product_id=" . $pro->id . "
-                    and sales.warehouse_id=$warehouse_id
-                ) salidas,
-                (
-                    select coalesce(sum(quantity),0) 
-                    from entries_detail
-                    JOIN entries ON entries.id=entries_detail.entry_id
-                    WHERE entries.status_id=2 and entries_detail.product_id=p.id and product_id=" . $pro->id . "
-                    and entries.warehouse_id=$warehouse_id
-                ) - (
-                    select coalesce(sum(quantity),0) 
-                    from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id
-                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id and product_id=" . $pro->id . "
-                    and sales.warehouse_id=$warehouse_id
-                ) Total
-            from products p
-            where p.id=" . $pro->id . "
-            order by p.title asc";
-        $res = DB::select($sql);
-        $res = $res[0];
-
-
-        $w = Warehouses::find($warehouse_id);
-
-        $en["warehouse_id"] = $warehouse_id;
-        $en["responsible_id"] = $w->responsible_id;
-        $en["supplier_id"] = $pro->supplier_id;
-        $en["purchase_id"] = 0;
-        $en["city_id"] = $w->city_id;
-        $en["description"] = "initial inventory";
-        $en["invoice"] = "system";
-        $en["status_id"] = 2;
-        $en["created"] = date("Y-m-d H:i:s");
-
-        $total = ($res->total < 0 ) ? $res->total * -1 : $res->total;
-
-        if ($res->total < 0) {
-            $quantity = $quantity + ($res->total * -1);
-        } else {
-            $quantity = $quantity - $res->total;
-        }
-
-        $entry_id = Entries::create($en)->id;
-        echo "entry:" . $entry_id;
-
-
-        $det["entry_id"] = $entry_id;
-        $det["product_id"] = $pro->id;
-        $det["quantity"] = $quantity;
-        $det["real_quantity"] = $quantity;
-        $det["value"] = $pro->price_sf;
-        $det["lot"] = $lot;
-        $det["description"] = "system";
-        $det["status_id"] = 3;
-        $det["created_at"] = date("Y-m-d H:i:s");
-
-        $detail_id = EntriesDetail::create($det)->id;
-        echo " detail:" . $detail_id;
-
-
-        $res = DB::select($sql);
-        $res = $res[0];
-
-        echo "<pre>";
-        print_r($res);
-        echo "<br>";
+        echo "llego aca";
     }
 
     public function sendPurchase(Request $request) {
@@ -270,15 +204,23 @@ class EntryController extends Controller {
             $input = $request->all();
             $entry = Entries::find($input["id"]);
 
-            $exist = Purchases::find($entry->purchase_id);
 
-            $val = EntriesDetail::where("entry_id", $entry["id"])->where("status_id", 1)->get();
+            $exist = array();
+            if ($entry->purchase_id != null) {
+                $exist = Purchases::find($entry->purchase_id);
+            }
 
-            if ($entry["status_id"] != 2) {
+            $val = EntriesDetail::where("entry_id", $entry["id"])->get();
+
+
+
+            if ($entry->status_id != 2) {
                 foreach ($val as $value) {
-                    $det = EntriesDetail::find($value->id);
-                    $det->status_id = 2;
-                    $det->save();
+                    if ($value->real_quantity > 0) {
+                        $det = EntriesDetail::find($value->id);
+                        $det->status_id = 1;
+                        $det->save();
+                    }
                 }
 
                 $entry->status_id = 2;
@@ -394,16 +336,16 @@ class EntryController extends Controller {
 
         $sql = "
             SELECT 
-                p.id,p.title as product,sum(d.quantity)*d.units_supplier as quantity,sum(d.quantity)*d.units_supplier quantity_total, 
-                sum(d.value * d.quantity) * d.units_supplier as value,coalesce(sum(d.real_quantity * d.units_supplier),0) as real_quantity, 
-                coalesce(sum(d.value*d.real_quantity * d.units_supplier),0) real_value,d.units_supplier 
+                p.id,p.title as product,sum(d.quantity)as  quantity,sum(d.quantity)*d.units_supplier quantity_total, 
+                sum(d.value * d.quantity) * d.units_supplier as value,coalesce(sum(d.real_quantity),0) as real_quantity, 
+                coalesce(sum(d.value*d.real_quantity * d.units_supplier),0) real_value,d.units_supplier,d.quantity_confirmed
             FROM entries_detail d
             JOIN products p ON p.id=d.product_id
             WHERE d.entry_id=$id
-            group by p.id,d.units_supplier
+            group by p.id,d.units_supplier,d.quantity_confirmed
+              
               ";
-//        echo $sql;
-//        exit;
+
         $detail = DB::select($sql);
         $this->total = 0;
         $this->total_real = 0;
@@ -440,6 +382,7 @@ class EntryController extends Controller {
     }
 
     public function getDetail($product_id, $entry_id) {
+
         $detail = EntriesDetail::where("entry_id", $entry_id)->where("product_id", $product_id)->get();
         return response()->json($detail);
     }
@@ -503,6 +446,10 @@ class EntryController extends Controller {
     public function setDetail(Request $request, $id) {
 
         $input = $request->all();
+
+
+
+
         $entry_id = $input["entry_id"];
         unset($input["entry_id"]);
         unset($input["_token"]);
@@ -546,6 +493,7 @@ class EntryController extends Controller {
                 $det->expiration_date = $value;
                 $det->save();
             }
+
             foreach ($qua as $i => $value) {
                 $det = EntriesDetail::find($i);
                 $det->real_quantity = $value;

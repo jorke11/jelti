@@ -764,88 +764,41 @@ class ToolController extends Controller {
         $expire = date("Y-m-d", strtotime($expire));
 
 
-        $sql = "
-            select 
-                p.id,
-                p.reference,
-                p.title as product,
-                (
-                    select coalesce(sum(quantity),0) 
-                    from entries_detail
-                    JOIN entries ON entries.id=entries_detail.entry_id
-                    WHERE entries.status_id=2 and entries_detail.product_id=p.id and product_id=" . $pro->id . "
-                    and entries.warehouse_id=$warehouse_id
-                ) entradas,
-                (
-                    select coalesce(sum(quantity),0) 
-                    from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id
-                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id and product_id=" . $pro->id . "
-                    and sales.warehouse_id=$warehouse_id
-                ) salidas,
-                (
-                    select coalesce(sum(quantity),0) 
-                    from entries_detail
-                    JOIN entries ON entries.id=entries_detail.entry_id
-                    WHERE entries.status_id=2 and entries_detail.product_id=p.id and product_id=" . $pro->id . "
-                    and entries.warehouse_id=$warehouse_id
-                ) - (
-                    select coalesce(sum(quantity),0) 
-                    from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id
-                    WHERE sales_detail.product_id is not null and sales_detail.product_id=p.id and product_id=" . $pro->id . "
-                    and sales.warehouse_id=$warehouse_id
-                ) Total
-            from products p
-            where p.id=" . $pro->id . "
-            order by p.title asc";
-        $res = DB::select($sql);
-        $res = $res[0];
-
-
         $w = Warehouses::find($warehouse_id);
 
-        $en["warehouse_id"] = $warehouse_id;
-        $en["responsible_id"] = $w->responsible_id;
-        $en["supplier_id"] = $pro->supplier_id;
-        $en["purchase_id"] = 0;
-        $en["city_id"] = $w->city_id;
-        $en["description"] = "initial inventory";
-        $en["invoice"] = "system";
-        $en["status_id"] = 2;
-        $en["created"] = date("Y-m-d H:i:s");
+        if (strtotime($expire) > strtotime(date("Y-m-d"))) {
+            $en["warehouse_id"] = $warehouse_id;
+            $en["responsible_id"] = $w->responsible_id;
+            $en["supplier_id"] = $pro->supplier_id;
+            $en["purchase_id"] = 0;
+            $en["city_id"] = $w->city_id;
+            $en["description"] = "initial inventory";
+            $en["invoice"] = "system";
+            $en["status_id"] = 2;
+            $en["created"] = date("Y-m-d H:i:s");
 
-        $total = ($res->total < 0 ) ? $res->total * -1 : $res->total;
 
-        if ($res->total < 0) {
-            $quantity = $quantity + ($res->total * -1);
+            $entry_id = Entries::create($en)->id;
+            echo "entry:" . $entry_id;
+
+            for ($i = 0; $i <= $quantity; $i++) {
+                $det["entry_id"] = $entry_id;
+                $det["product_id"] = $pro->id;
+                $det["quantity"] = $quantity;
+                $det["real_quantity"] = $quantity;
+                $det["value"] = $pro->price_sf;
+                $det["lot"] = $lot;
+                $det["description"] = "system";
+                $det["status_id"] = 1;
+                $det["created_at"] = date("Y-m-d H:i:s");
+                $det["expiration_date"] = $expire;
+
+                $detail_id = EntriesDetail::create($det)->id;
+                echo $i . " New  detail:" . $detail_id . "<br>";
+            }
         } else {
-            $quantity = $quantity - $res->total;
+            echo " ERROR: reference:" . $reference . " date not valid " . $expire . "<br>";
         }
-
-        $entry_id = Entries::create($en)->id;
-        echo "entry:" . $entry_id;
-
-
-        $det["entry_id"] = $entry_id;
-        $det["product_id"] = $pro->id;
-        $det["quantity"] = $quantity;
-        $det["real_quantity"] = $quantity;
-        $det["value"] = $pro->price_sf;
-        $det["lot"] = $lot;
-        $det["description"] = "system";
-        $det["status_id"] = 3;
-        $det["created_at"] = date("Y-m-d H:i:s");
-        $det["expiration_date"] = $expire;
-
-        $detail_id = EntriesDetail::create($det)->id;
-        echo " detail:" . $detail_id;
-
-
-        $res = DB::select($sql);
-        $res = $res[0];
-
-        dd($res);
     }
 
 }

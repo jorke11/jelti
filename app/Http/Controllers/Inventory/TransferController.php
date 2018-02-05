@@ -785,7 +785,7 @@ class TransferController extends Controller {
 
     public function updateDetail(Request $request, $id) {
         $input = $request->all();
-
+//        echo "<pre>";        print_r($input);exit;
         $header = Transfer::find($input["transfer_id"]);
 
         $entry = TransferDetail::FindOrFail($id);

@@ -622,6 +622,8 @@ class DepartureController extends Controller {
             }
 
             if ($id == null) {
+                $commercial = Users::find($header["responsible_id"]);
+                $header["responsible"] = $commercial["name"] . " " . $commercial["last_name"];
                 $result = Departures::create($header)->id;
             } else {
                 $entry = Departures::Find($id);
@@ -643,7 +645,6 @@ class DepartureController extends Controller {
                 foreach ($detail as $i => $val) {
                     $product_id = (is_array($val)) ? $val["product_id"] : $val->product_id;
                     $quantity = (is_array($val)) ? $val["quantity"] : $val->quantity;
-
 
                     $special = PricesSpecial::where("product_id", $product_id)
                                     ->where("client_id", $header["client_id"])->first();
@@ -767,6 +768,15 @@ class DepartureController extends Controller {
                         $this->mails = Auth::User()->email;
                     }
 
+                    $resp->exento = $this->exento;
+
+                    $resp->tax5 = $this->tax5;
+                    $resp->tax19 = $this->tax19;
+                    $resp->subtotal = $this->subtotal;
+                    $resp->total = $this->total;
+
+                    $resp->save();
+
                     Mail::send("Notifications.departure", $header, function($msj) {
                         $msj->subject($this->subject);
                         $msj->to($this->mails);
@@ -824,14 +834,38 @@ class DepartureController extends Controller {
                             $sale = Sales::find($id);
 
                             foreach ($detail as $value) {
+                                $rowDep = DeparturesDetail::find($value->id);
+
                                 if ($value->real_quantity > 0) {
+
+                                    $entries = \App\Models\Inventory\EntriesDetail::where("product_id", $value->product_id)
+                                                    ->where("status_id", 1)
+                                                    ->take($value->real_quantity)
+                                                    ->orderBy("expiration_date")->get();
+
+                                    if (count($entries) > 0) {
+                                        $ids = [];
+
+                                        foreach ($entries as $value) {
+                                            $row = \App\Models\Inventory\EntriesDetail::find($value->id);
+                                            $row->status_id = 2;
+                                            $row->save();
+                                            $ids[] = $value->id;
+                                        }
+
+                                        $rowDep->entry_detail_id = json_encode($ids);
+                                        $rowDep->save();
+                                    }
+
                                     $pro = Products::find($value->product_id);
+
                                     SaleDetail::insert([
                                         "sale_id" => $id, "product_id" => $value->product_id,
                                         "category_id" => $value->category_id, "quantity" => $value->real_quantity,
                                         "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
                                         "account_id" => 1, "order" => $cont, "type_nature" => 1, "packaging" => $value->packaging
                                     ]);
+
                                     $cont++;
                                 }
                             }
@@ -842,17 +876,27 @@ class DepartureController extends Controller {
                                 $departure->invoice = $con->consecutive;
                             }
 
-                            $departure->status_id = 2;
-                            $departure->save();
 
                             $detail = $this->formatDetail($input["id"]);
-                            $departure = Departures::find($input["id"]);
+
                             $total = "$ " . number_format($this->total, 0, ",", ".");
 
                             $sale->dispatched = date("Y-m-d H:i:s");
                             $sale->invoice = $departure->invoice;
+
+
+                            $departure->exento = $this->exento;
+
                             $sale->save();
+
+                            $departure->status_id = 2;
                             $departure->dispatched = $sale->dispatched;
+
+                            $departure->tax5_real = $this->tax5_real;
+                            $departure->tax19_real = $this->tax19_real;
+                            $departure->subtotal_real = $this->subtotal_real;
+                            $departure->total_real = $this->total_real;
+
                             $departure->save();
 
                             //Log 

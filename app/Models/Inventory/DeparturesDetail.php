@@ -22,6 +22,16 @@ class DeparturesDetail extends Model {
         "units_sf",
         "tax",
         "packaging",
+        "entry_detail_id",
+        "exento",
+        "tax5",
+        "tax5_real",
+        "tax19",
+        "tax19_real",
+        "subtotal",
+        "subtotal_real",
+        "total",
+        "total_real",
     ];
 
 }

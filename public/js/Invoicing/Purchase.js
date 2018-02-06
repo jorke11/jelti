@@ -131,7 +131,7 @@ function Purchase() {
     }
 
     this.loadProducts = function () {
-        var html = "", color = "", quantity_total = 0, price_total = 0;
+        var html = "", color = "", quantity_total = 0, price_total = 0, total = 0;
 
         $("#tblDetail tbody").empty();
 
@@ -154,7 +154,10 @@ function Purchase() {
 
             color = (listProducts[i].quantity == 0) ? '' : 'info';
             quantity_total = val.units_supplier * val.quantity;
+
+            
             price_total = val.cost_sf * quantity_total;
+            total += price_total;
             html += '<tr id="row_' + val.product_id + '" class="' + color + '">';
             html += "<td>" + (i + 1) + "</td><td>" + val.title + "</td>";
             html += "<td>" + val.units_supplier + "</td><td>" + val.tax + "</td><td>" + val.quantity + "</td>";
@@ -163,6 +166,7 @@ function Purchase() {
             html += '<button class="btn btn-danger btn-xs" onclick=obj.deleteNew(' + val.product_id + ')><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>';
             html += "</tr>";
         })
+        html += "<tr><td colspan='7'><b>Total</b></td><td>" + total + "</td></tr>"
 
         $("#tblDetail tbody").html(html);
 

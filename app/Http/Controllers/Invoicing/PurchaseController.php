@@ -72,7 +72,7 @@ class PurchaseController extends Controller {
 
             $ayer = date("Y-m-d", strtotime("-10 day", strtotime(date("Y-m-d"))));
 
-            
+
             if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 2 || Auth::user()->id == 2) {
                 $sal = Entries::where("purchase_id", $id)->first();
                 if ($sal != null) {
@@ -110,6 +110,9 @@ class PurchaseController extends Controller {
 //            $user = Auth::User();
 
             if (isset($input["detail"])) {
+
+
+
                 $purchase_id = Purchases::create($input["header"])->id;
 
                 foreach ($input["detail"] as $i => $val) {
@@ -130,10 +133,12 @@ class PurchaseController extends Controller {
                         unset($input["detail"][$i]["credit"]);
                         unset($input["detail"][$i]["total"]);
 
-                        for ($j = 0; $j < $val["quantity"]; $j++) {
-                            $input["detail"][$i]["quantity"] = 1;
-                            $detail_id = PurchasesDetail::create($input["detail"][$i])->id;
-                        }
+                        $detail_id = PurchasesDetail::create($input["detail"][$i])->id;
+
+//                        for ($j = 0; $j < $val["quantity"]; $j++) {
+//                            $input["detail"][$i]["quantity"] = 1;
+//                            $detail_id = PurchasesDetail::create($input["detail"][$i])->id;
+//                        }
                     }
                 }
 

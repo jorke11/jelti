@@ -120,17 +120,17 @@ function Departure() {
         $("#btnDocument").click(function () {
             if ($("#frm #status_id").val() != 1) {
 
-                $.ajax({
-                    url: 'departure/generateInvoice/' + $("#frm #id").val(),
-                    method: 'PUT',
-                    dataType: 'JSON',
-                    success: function (resp) {
-                        if (resp.success == true) {
-                            $("#frm #invoice").val(resp.consecutive);
-                            $("#btnDocument").attr("disabled", true);
-                        }
-                    }
-                })
+//                $.ajax({
+//                    url: 'departure/generateInvoice/' + $("#frm #id").val(),
+//                    method: 'PUT',
+//                    dataType: 'JSON',
+//                    success: function (resp) {
+//                        if (resp.success == true) {
+//                            $("#frm #invoice").val(resp.consecutive);
+//                            $("#btnDocument").attr("disabled", true);
+//                        }
+//                    }
+//                })
 
                 window.open("departure/" + $("#frm #id").val() + "/getInvoice");
             } else {

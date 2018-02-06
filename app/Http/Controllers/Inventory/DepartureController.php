@@ -889,13 +889,14 @@ class DepartureController extends Controller {
 
                             $sale->save();
 
+                            $departure->total_real = $this->subtotal_real + $this->tax5_real + $this->tax19_real - $departure->discount;
+
                             $departure->status_id = 2;
                             $departure->dispatched = $sale->dispatched;
 
                             $departure->tax5_real = $this->tax5_real;
                             $departure->tax19_real = $this->tax19_real;
                             $departure->subtotal_real = $this->subtotal_real;
-                            $departure->total_real = $this->total_real;
 
                             $departure->save();
 
@@ -1420,22 +1421,27 @@ class DepartureController extends Controller {
     public function destroy($id) {
         $row = Departures::Find($id);
 
-        if ($row->invoice == null) {
 
-            $detail = DeparturesDetail::where("departure_id", $row->id)->get();
-            foreach ($detail as $value) {
-                $det = DeparturesDetail::find($value->id);
-                $det->delete();
-            }
-            $row->delete();
+        if (Auth::user()->id == $row->responsible_id || Auth::user()->id == 2) {
+            if ($row->invoice == null) {
 
-            if ($id) {
-                return response()->json(['success' => true]);
+                $detail = DeparturesDetail::where("departure_id", $row->id)->get();
+                foreach ($detail as $value) {
+                    $det = DeparturesDetail::find($value->id);
+                    $det->delete();
+                }
+                $row->delete();
+
+                if ($id) {
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false]);
+                }
             } else {
-                return response()->json(['success' => false]);
+                return response()->json(['success' => false, "msg" => "No se puede borrar porque este pedido fue reversado y ya tiene consecutivo"], 409);
             }
         } else {
-            return response()->json(['success' => false, "msg" => "No se puede borrar porque este pedido fue reversado y ya tiene consecutivo"], 409);
+            return response()->json(['success' => false, "msg" => "No se puede eliminar porque este pedido no te pertenece!"], 409);
         }
     }
 

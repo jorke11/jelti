@@ -90,7 +90,7 @@
                     <td>{{$val->totalFormated}}</td>
                 </tr>
                 @endforeach
-                @if($flete>0)
+                @if(isset($flete) && $flete>0)
                 <tr>
                     <td colspan="3"></td>
                     <td colspan="2"><b>Flete</b></td>
@@ -103,19 +103,19 @@
                     <td>{{(isset($subtotal))?$subtotal:0}}</td>
                 </tr>
 
-                @if($tax5!=0)
+                @if(isset($tax5) && $tax5!=0)
                 <tr>
                     <td colspan="2"><b>Iva 5%</b></td>
                     <td>{{"$" . number_format($tax5, 0, ",", ".")}}</td>
                 </tr>
                 @endif
-                @if($tax19!=0)
+                @if(isset($tax19) && $tax19!=0)
                 <tr>
                     <td colspan="2"><b>Iva 19%</b></td>
                     <td>{{"$" . number_format($tax19, 0, ",", ".")}}</td>
                 </tr>
                 @endif
-                @if($discount>0)
+                @if(isset($discount) &&$discount>0)
                 <tr>
                     <td colspan="2"><b>Descuento</b></td>
                     <td>{{"$ " . number_format($discount, 0, ",", ".")}}</td>

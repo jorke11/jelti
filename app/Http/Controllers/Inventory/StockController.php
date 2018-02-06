@@ -56,7 +56,8 @@ class StockController extends Controller {
                     select coalesce(count(quantity),0) as total
                     from entries_detail
                     JOIN entries ON entries.id = entries_detail.entry_id 
-                    WHERE entries.status_id=1 and product_id=" . $value->id . " $entry_ware";
+                    WHERE  product_id=" . $value->id . " $entry_ware";
+
             $entry = DB::select($sql);
             $products[$i]->available = $entry[0]->total;
         }

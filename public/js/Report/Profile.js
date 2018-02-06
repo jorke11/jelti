@@ -142,6 +142,7 @@ function Profile() {
                 data: param,
             },
             columns: [
+                {data: "reference"},
                 {data: "product"},
                 {data: "quantityproducts"},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},

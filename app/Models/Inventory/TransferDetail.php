@@ -22,6 +22,7 @@ class TransferDetail extends Model {
         "units_sf",
         "tax",
         "packaging",
+        "quantity_confirmed"
     ];
 
 }

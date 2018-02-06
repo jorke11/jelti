@@ -116,6 +116,7 @@
                 <table class="table table-condensed  table-bordered" id="tblProduct">
                     <thead>
                         <tr>
+                            <th>Codigo SF</th>
                             <th>Producto</th>
                             <th>Unidades</th>
                             <th>Total</th>

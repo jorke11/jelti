@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Quantity <span id="quantityMax" style="color: red;"></span></label>
+                            <label for="email">Cantidad Pedido<span id="quantityMax" style="color: red;"></span></label>
                             <input type="number" class="form-control input-detail input-sm" id="quantity" name='quantity' min="1" placeholder="Quantity" required>
                         </div>
                     </div>
@@ -50,23 +50,23 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
+                            <label for="email">Cantidad confirmado</label>
+                            <input type="text" class="form-control input-detail input-sm" id="quantity_confirmed" name="quantity_confirmed">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label for="email">Quantity with units_sf</label>
                             <input type="text" class="form-control input-detail input-sm" id="quantity_units" readonly="">
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Value with units_sf</label>
-                            <input type="text" class="form-control input-detail input-sm" id="value_units" readonly="">
-                        </div>
-                    </div>
-
                 </div>
+
                 @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Quantity real</label>
+                            <label for="email">Cantidad real</label>
                             <input type="text" class="form-control input-detail input-sm" id="real_quantity" name='real_quantity' min='0' placeholder="Quantity real" data-type="number"
                                    <?php echo (Auth::user()->role != 4) ? '' : "readonly" ?>>
                         </div>

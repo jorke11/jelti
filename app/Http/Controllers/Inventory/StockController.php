@@ -45,6 +45,7 @@ class StockController extends Controller {
             from products 
             JOIN stakeholder ON stakeholder.id=products.supplier_id
             JOIN categories ON categories.id=products.category_id
+            WHERE products.status_id = 1
                 $bar_code";
 
 

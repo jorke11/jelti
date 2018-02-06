@@ -121,7 +121,7 @@
                 <div class="row">
                     <div class="col-lg-4">List Detail</div>
                     <div class="col-lg-8 text-right">
-                        <button class="btn btn-success btn-sm" type="button" id="btnmodalDetail" disabled>
+                        <button class="btn btn-success btn-sm" type="button" id="btnmodalDetail">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         </button>
                     </div>

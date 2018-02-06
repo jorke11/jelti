@@ -22,7 +22,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Quantity:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' required data-type='number' readonly="">
+                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' required data-type='number'>
                         </div>
                     </div>
                 </div>

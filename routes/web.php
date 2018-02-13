@@ -490,11 +490,12 @@ Route::get('/api/listSale', function() {
 });
 Route::get('/api/listEntry', function() {
 
-    $query = DB::table('ventries');
+    $query = DB::table("vpurchases");
 
-    if (Auth::user()->role_id != 1) {
+    if (Auth::user()->role_id != 1 && Auth::user()->role_id == 5) {
         $query->where("warehouse_id", Auth::user()->warehouse_id);
     }
+
 
     return Datatables::queryBuilder($query)->make(true);
 });
@@ -520,14 +521,7 @@ Route::get('/api/listRole', function() {
 });
 
 Route::get('/api/listUser', function() {
-    return Datatables::queryBuilder(
-                    DB::table("users")
-                            ->select("users.id", "users.name", "users.email", DB::raw("coalesce(users.document::text,'') as document"), "roles.description as role", "stakeholder.business_name as stakeholder", "cities.description as city", "parameters.description as status")
-                            ->join("roles", "roles.id", "users.role_id")
-                            ->leftjoin("stakeholder", "stakeholder.id", "users.stakeholder_id")
-                            ->leftjoin("cities", "cities.id", "users.city_id")
-                            ->join("parameters", "parameters.code", DB::raw("users.status_id and parameters.group='generic'"))
-            )->make(true);
+    return Datatables::queryBuilder(DB::table("vusers"))->make(true);
 });
 
 Route::get('/api/listPuc', function() {

@@ -252,9 +252,9 @@ join departments d ON d.id=c.department_id;
 
 
 create or replace view vpurchases as 
-select p.id,coalesce(p.description,'') as description,p.warehouse_id,p.created_at,s.business || ' '|| s.business_name as stakeholder,w.description as warehouse,c.description as city,param.description as status,
+select p.id,coalesce(p.description,'') as description,p.warehouse_id,p.created_at,s.business || ' '|| s.business_name as business,w.description as warehouse,c.description as city,param.description as status,
 p.responsible_id
-from purchases p
+from purchases p    
 JOIN stakeholder s ON s.id=p.supplier_id
 JOIN warehouses w ON w.id=p.warehouse_id
 JOIN cities c ON c.id=p.city_id
@@ -344,3 +344,11 @@ select t.id,w.description origin, d.description destination,t.created_at,t.statu
 from transfer t
 JOIN warehouses w ON w.id=t.origin_id
 JOIN warehouses d ON d.id=t.destination_id
+
+create view vusers as 
+select  users.id,users.name,users.last_name,stakeholder.business as stakeholder,users.email,users.document,roles.description as role,cities.description as city,parameters.description as status
+from users
+JOIN roles ON roles.id =users.role_id
+LEFT JOIN stakeholder ON stakeholder.id= users.stakeholder_id
+LEFT JOIN cities ON cities.id =users.city_id
+LEFT JOIN parameters ON parameters.code = users.status_id and parameters.group='generic'

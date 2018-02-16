@@ -537,6 +537,8 @@ class DepartureController extends Controller {
         if ($request->ajax()) {
             $input = $request->all();
 
+            $input["detail"] = json_decode($input["detail"]);
+
 //            unset($input["id"]);
 //            $user = Auth::User();
 

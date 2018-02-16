@@ -387,7 +387,7 @@ function Departure() {
             if ($("#id_orderext").val() == '') {
                 if (listProducts.length > 0) {
                     data.header = $(".input-departure").getData();
-                    data.detail = listProducts;
+                    data.detail = JSON.stringify(listProducts);
                     if (id == '') {
                         method = 'POST';
                         url = "departure";

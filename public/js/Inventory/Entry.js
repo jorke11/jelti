@@ -1,5 +1,5 @@
 function Entry() {
-    var table, showDetail = true, detail = [], price_sf = 0;
+    var table, showDetail = true, detail = [], price_sf = 0, row = {};
 
     this.init = function () {
         table = this.table();
@@ -8,7 +8,7 @@ function Entry() {
         $("#btnSave").click(this.save);
         $("#newDetail").click(this.saveDetail);
         $("#btnSend").click(this.send);
-        $(".form_datetime").datetimepicker({format: 'Y-m-d h:i'});
+        $(".form_datetime").datetimepicker({format: 'Y-m-d'});
         $("#edit").click(this.edit);
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
@@ -105,13 +105,16 @@ function Entry() {
     this.send = function () {
         toastr.remove();
 
-        var obj = {};
-        obj.id = $("#frm #id").val()
+        var param = {};
+
+        param.header = $(".input-entry").getData();
+        param.detail = detail;
+
         if (confirm("¿Deseas ingresar el pedido?")) {
             $.ajax({
                 url: 'entry/setPurchase',
                 method: 'POST',
-                data: obj,
+                data: param,
                 dataType: 'JSON',
                 beforeSend: function () {
                     $("#loading-super").removeClass("hidden");
@@ -225,44 +228,31 @@ function Entry() {
             var id = $("#frmDetail #id").val();
             var msg = 'Record Detail';
             if (id == '') {
-                method = 'POST';
-                url += "storeDetail";
-                msg = "Created " + msg;
-
+                obj.createDetail();
             } else {
-                method = 'PUT';
-                url += "detail/" + id;
-                msg = "Edited " + msg;
+                obj.setDetail(id);
             }
-
-
-            obj.createDetail();
-
-
-
-//            $.ajax({
-//                url: url,
-//                method: method,
-//                data: data,
-//                dataType: 'JSON',
-//                success: function (data) {
-//                    if (data.success == true) {
-//                        toastr.success(msg);
-//                        $("#btnmodalDetail").attr("disabled", false);
-//                        obj.printDetail(data);
-//                        $("#modalDetail").modal("hide");
-//                    } else {
-//                        toastr.warning("Wrong");
-//                    }
-//                },
-//                error: function (xhr, ajaxOptions, thrownError) {
-//                    toastr.error(xhr.responseJSON.msg);
-//                }
-//            })
         } else {
             toastr.warning("Input required");
         }
     }
+
+
+    this.setDetail = function (id) {
+        $.each(detail, function (i, val) {
+            if (id == val.id) {
+                detail[i].lot = $("#frmDetail #lot").val();
+                detail[i].real_quantity = $("#frmDetail #real_quantity").val();
+                detail[i].description = $("#frmDetail #description").val();
+                detail[i].total_real = detail[i].units_supplier * detail[i].value * $("#frmDetail #real_quantity").val();
+                detail[i].expiration_date = $("#frmDetail #expiration_date").val();
+            }
+        })
+
+        this.printDetail();
+    }
+
+
 
     this.createDetail = function () {
 
@@ -280,6 +270,8 @@ function Entry() {
             total_real: price_sf * $("#frmDetail #real_quantity").val()
         });
 
+
+
         $("#frmDetail #product_id").text("");
         toastr.success("Producto Agregado");
 
@@ -290,13 +282,13 @@ function Entry() {
 
     this.editDetail = function (id) {
 
-        var url = "/entry/" + id + "/" + $("#frm #id").val() + "/detail";
 
-        if ($("#frm #status_id").val() == 1) {
-            var url = "/entry/" + id + "/" + $("#frm #id").val() + "/detail";
+        if ($("#frm #status_id").val() != 2) {
+            var url = "/purchase/" + id + "/detail";
             var param = {};
 
             if (showDetail) {
+                console.log("asd");
                 $.ajax({
                     url: url,
                     method: "GET",
@@ -313,21 +305,31 @@ function Entry() {
         } else {
             $("#modalDetail").modal("show");
 
-            var row = {
-                id: id,
-                product_id: $("#frmDetail #product_id").val(),
-                product: $.trim($("#frmDetail #product_id").text()),
-                quantity: $("#frmDetail #quantity").val(),
-                real_quantity: $("#frmDetail #real_quantity").val(),
-                expiration_date: $("#frmDetail #expiration_date").val(),
-                lot: $("#frmDetail #lot").val(),
-                description: $("#frmDetail #description").val(),
-                value: price_sf,
-                total: price_sf * $("#frmDetail #quantity").val()
-            };
+            this.getDetail(id)
 
-            $(".input-detail").setFields({data: detail[id - 1]})
+//            var row = {
+//                id: id,
+//                product_id: $("#frmDetail #product_id").val(),
+//                product: $.trim($("#frmDetail #product_id").text()),
+//                quantity: $("#frmDetail #quantity").val(),
+//                real_quantity: $("#frmDetail #real_quantity").val(),
+//                expiration_date: $("#frmDetail #expiration_date").val(),
+//                lot: $("#frmDetail #lot").val(),
+//                description: $("#frmDetail #description").val(),
+//                value: price_sf,
+//                total: price_sf * $("#frmDetail #quantity").val()
+//            };
+
+            $(".input-detail").setFields({data: row})
         }
+    }
+
+    this.getDetail = function (id) {
+        $.each(detail, function (i, val) {
+            if (id == val.id) {
+                row = val
+            }
+        })
     }
 
     this.printDetail = function () {
@@ -337,6 +339,7 @@ function Entry() {
         var htmlDel = ''
 
         $("#tblDetail tbody").empty();
+
 
         $.each(detail, function (i, val) {
             if (val != undefined) {
@@ -363,45 +366,11 @@ function Entry() {
     }
 
 
-//this.printDetail = function (data, btnEdit = true, btnDel = true) {
-//
-//        var html = "", htmlEdit = "", htmlDel = "";
-//        $("#tblDetail tbody").empty();
-//        var total = 0, calc = 0;
-//
-//        $.each(data.detail, function (i, val) {
-//
-//    if (data.header.status_id == 1) {
-//        htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
-//        htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
-//    }
-//
-//            val.real_quantity = (val.real_quantity != null) ? val.real_quantity : ''
-//
-//            html += '<tr id="row_' + val.id + '">';
-//            html += "<td>" + val.id + "</td>";
-//            html += "<td>" + val.product + "</td>";
-//            html += "<td>" + val.quantity + "</td>";
-//            html += "<td>" + val.valueFormated + "</td>";
-//            html += "<td>" + val.totalFormated + "</td>";
-//            html += "<td>" + val.real_quantity + "</td>";
-//            html += "<td>" + val.valueFormated + "</td>";
-//            html += "<td>" + val.totalFormated_real + "</td>";
-//            html += '<td>' + htmlEdit + htmlDel + "</td>";
-//            html += '</td>';
-//            html += "</tr>";
-//        });
-//
-//        $("#tblDetail tbody").html(html);
-//        $("#tblDetail tfoot").html('<tr><td colspan="4">Total</td><td>' + data.total + '</td><td colspan="2"></td><td>' + data.total_real + '</td></tr>');
-//
-//    }
-
 
     this.showModal = function (id) {
         var frm = $("#frmEdit");
         var data = frm.serialize();
-        var url = "/entry/" + id + "/edit";
+        var url = "/purchase/" + id + "/edit";
 
         $.ajax({
             url: url,
@@ -425,10 +394,9 @@ function Entry() {
                 }
 
                 detail = data.detail
-
                 obj.printDetail();
 
-                if (data.header.status_id != 1) {
+                if (data.header.status_id != 2) {
 
                     $("#btnmodalDetail").prop("disabled", true);
                     $(".btnEditClass").prop("disabled", true);
@@ -462,7 +430,7 @@ function Entry() {
 //            $(".add_" + id).remove();
 //            showDetail = true;
 //        }
-    //    }
+//    }
 
     this.reloadTableDetail = function (id, data) {
 
@@ -649,7 +617,6 @@ function Entry() {
                 {data: "business"},
                 {data: "description"},
                 {data: "created_at"},
-                {data: "invoice"},
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "status"},
@@ -657,13 +624,13 @@ function Entry() {
             order: [[1, 'DESC']],
             aoColumnDefs: [
                 {
-                    aTargets: [1, 2, 3, 4, 5, 6, 7],
+                    aTargets: [1, 2, 3, 4, 5],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
                 },
                 {
-                    targets: [9],
+                    targets: [8],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
@@ -751,7 +718,8 @@ function Entry() {
         })
         return html;
     }
-
 }
+
+
 var obj = new Entry();
 obj.init();

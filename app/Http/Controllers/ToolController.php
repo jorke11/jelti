@@ -17,6 +17,10 @@ use DB;
 use App\Models\Invoicing\SaleDetail;
 use File;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Inventory\Inventory;
+use App\Models\Inventory\InventoryLog;
+use App\Models\Inventory\InventoryHold;
+use Auth;
 
 class ToolController extends Controller {
 
@@ -757,48 +761,193 @@ class ToolController extends Controller {
         return view("Tool/uploadInventory");
     }
 
-    public function addInventory($warehouse_id, $reference, $quantity, $lot = null, $expire) {
-        $lot = ($lot == null) ? 'system' : $lot;
-        $pro = Products::where("reference", $reference)->first();
+    /**
+     * 
+     * Options 1. new 2. Update
+     * 
+     * @param type $warehouse_id
+     * @param type $reference
+     * @param type $quantity
+     * @param type $lot
+     * @param type $expire
+     */
+    public function addInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf) {
 
         $expire = date("Y-m-d", strtotime($expire));
 
-
+        $pro = Products::where("reference", $reference)->first();
         $w = Warehouses::find($warehouse_id);
 
+
         if (strtotime($expire) > strtotime(date("Y-m-d"))) {
-            $en["warehouse_id"] = $warehouse_id;
-            $en["responsible_id"] = $w->responsible_id;
-            $en["supplier_id"] = $pro->supplier_id;
-            $en["purchase_id"] = 0;
-            $en["city_id"] = $w->city_id;
-            $en["description"] = "initial inventory";
-            $en["invoice"] = "system";
-            $en["status_id"] = 2;
-            $en["created"] = date("Y-m-d H:i:s");
+            $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)->where("warehouse_id", $warehouse_id)->where("value", $cost_sf)->first();
 
+            $new["product_id"] = $pro->id;
+            $new["warehouse_id"] = $warehouse_id;
+            $new["value"] = $cost_sf;
+            $new["expiration_date"] = $expire;
+            $new["quantity"] = $quantity;
 
-            $entry_id = Entries::create($en)->id;
-            echo "entry:" . $entry_id;
+            $new["lot"] = $lot;
 
-            for ($i = 0; $i < $quantity; $i++) {
-                $det["entry_id"] = $entry_id;
-                $det["product_id"] = $pro->id;
-                $det["quantity"] = $quantity;
-                $det["real_quantity"] = $quantity;
-                $det["value"] = $pro->price_sf;
-                $det["lot"] = $lot;
-                $det["description"] = "system";
-                $det["status_id"] = 1;
-                $det["created_at"] = date("Y-m-d H:i:s");
-                $det["expiration_date"] = $expire;
-
-                $detail_id = EntriesDetail::create($det)->id;
-                echo $i . " New  detail:" . $detail_id . "\n";
+            if (count($inv) > 0) {
+                $inv->update_id = Auth::user()->id;
+                $inv->quantity = $inv->quantity + $quantity;
+                $new["insert_id"] = $inv->update_id;
+                $new["update_id"] = $inv->update_id;
+                $new["type_move"] = "update";
+                InventoryLog::create($new);
+                $inv->save();
+            } else {
+                $new["insert_id"] = Auth::user()->id;
+                Inventory::create($new);
+                $new["type_move"] = "new";
+                InventoryLog::create($new);
             }
         } else {
             echo " ERROR: reference:" . $reference . " date not valid " . $expire . "\n";
+            exit;
         }
+    }
+
+    public function addInventoryReverse($header, $detail) {
+
+        foreach ($detail as $val) {
+            $dataNew = json_decode($val->quantity_lots);
+            
+            foreach ($dataNew as $value) {
+                $pro = Products::find($value->product_id);
+                $this->addInventory($header->warehouse_id, $pro->reference, $value->quantity, $value->lot, $value->expiration_date, $value->cost_sf);
+            }
+        }
+    }
+
+    public function addInventoryHold($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf, $id) {
+        $expire = date("Y-m-d", strtotime($expire));
+
+        $pro = Products::where("reference", $reference)->first();
+        $w = Warehouses::find($warehouse_id);
+
+
+        if (strtotime($expire) > strtotime(date("Y-m-d"))) {
+            $hold = InventoryHold::where("row_id", $id)->first();
+
+            $new["product_id"] = $pro->id;
+            $new["warehouse_id"] = $warehouse_id;
+            $new["value"] = $cost_sf;
+            $new["expiration_date"] = $expire;
+            $new["quantity"] = $quantity;
+            $new["lot"] = $lot;
+
+            if (count($hold) > 0) {
+                $hold->update_id = Auth::user()->id;
+                $total = $hold->quantity - $quantity;
+
+                if ($hold->quantity != $quantity) {
+                    if ($hold->quantity > $quantity) {
+                        $this->substractHold($hold->id, $total);
+                        $this->addInventory($warehouse_id, $reference, $total, $lot, $expire, $cost_sf);
+                    } else {
+                        $this->substractHold($hold->id, $quantity);
+                        $this->addInventory($warehouse_id, $reference, $total, $lot, $expire, $cost_sf);
+                    }
+
+                    $hold->quantity = $quantity;
+                    $new["insert_id"] = Auth::user()->id;
+                    $new["update_id"] = $hold->update_id;
+
+                    $new["type_move"] = "update_hold";
+                    InventoryLog::create($new);
+
+                    $hold->save();
+                }
+            } else {
+
+                $new["insert_id"] = Auth::user()->id;
+                $new["row_id"] = $id;
+                InventoryHold::create($new);
+                $new["type_move"] = "new_hold";
+                unset($new["row_id"]);
+
+                InventoryLog::create($new);
+
+                $this->outInventoryHold($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf);
+            }
+        } else {
+            echo " ERROR: reference:" . $reference . " date not valid " . $expire . "\n";
+            exit;
+        }
+    }
+
+    public function substractHold($id, $quantity) {
+        $hold = InventoryHold::find($id);
+        $hold->quantity = $quantity;
+
+//        $up["row_id"] = $row_id;
+        $up["product_id"] = $hold->product_id;
+        $up["warehouse_id"] = $hold->warehouse_id;
+        $up["value"] = $hold->value;
+        $up["expiration_date"] = $hold->expiration_date;
+        $up["quantity"] = $hold->quantity;
+        $up["lot"] = $hold->lot;
+        $up["type_move"] = "substract_hold";
+        $up["insert_id"] = Auth::user()->id;
+        InventoryLog::create($up);
+        $hold->save();
+    }
+
+    public function outInventoryHold($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf) {
+        $pro = Products::where("reference", $reference)->first();
+        $w = Warehouses::find($warehouse_id);
+        $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)->where("warehouse_id", $warehouse_id)->where("value", $cost_sf)->first();
+
+        $up["product_id"] = $pro->id;
+        $up["warehouse_id"] = $warehouse_id;
+        $up["value"] = $cost_sf;
+        $up["expiration_date"] = $expire;
+        $up["quantity"] = $quantity;
+        $up["lot"] = $lot;
+        $up["type_move"] = "out_hold";
+        $up["insert_id"] = Auth::user()->id;
+        InventoryLog::create($up);
+
+        $inv->quantity = $inv->quantity - $quantity;
+        $inv->save();
+    }
+
+    public function substract($row_id) {
+        $hold = InventoryHold::where("row_id", $row_id)->first();
+
+        $up["row_id"] = $row_id;
+        $up["product_id"] = $hold->product_id;
+        $up["warehouse_id"] = $hold->warehouse_id;
+        $up["value"] = $hold->value;
+        $up["expiration_date"] = $hold->expiration_date;
+        $up["quantity"] = $hold->quantity;
+        $up["lot"] = $hold->lot;
+        $up["type_move"] = "substract_hold";
+        $up["insert_id"] = Auth::user()->id;
+        InventoryLog::create($up);
+
+        $hold->delete();
+    }
+
+    public function addInventoryRow($row_id) {
+        $hold = InventoryHold::where("row_id", $row_id)->first();
+        $pro = Products::find($hold->product_id);
+
+        $this->addInventory($hold->warehouse_id, $pro->reference, $hold->quantity, $hold->lot, $hold->expiration_date, $hold->value);
+        $up["row_id"] = $row_id;
+        $up["product_id"] = $hold->product_id;
+        $up["warehouse_id"] = $hold->warehouse_id;
+        $up["value"] = $hold->value;
+        $up["expiration_date"] = $hold->expiration_date;
+        $up["quantity"] = $hold->quantity;
+        $up["lot"] = $hold->lot;
+        $up["type_move"] = "substract_hold";
+        $up["insert_id"] = Auth::user()->id;
+        InventoryLog::create($up);
+        $hold->delete();
     }
 
 }

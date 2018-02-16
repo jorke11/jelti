@@ -20,6 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Uploads\Base;
 use Auth;
 use App;
+use App\Http\Controllers\ToolController;
 
 class EntryController extends Controller {
 
@@ -27,14 +28,16 @@ class EntryController extends Controller {
     public $total_real;
     public $warehouse_id;
     public $responsible_id;
+    public $tool;
 
-    public function __construct() {
+    public function __construct(ToolController $tool) {
         App::setLocale("en");
         $this->total = 0;
         $this->total_real = 0;
         $this->warehouse_id = 0;
         $this->responsible_id = 0;
         $this->middleware("auth");
+        $this->tool = $tool;
     }
 
     public function index() {
@@ -195,44 +198,27 @@ class EntryController extends Controller {
         }
     }
 
-    public function addInventory($warehouse_id, $reference, $quantity, $lot = null, $vencimiento) {
-        echo "llego aca";
-    }
-
     public function sendPurchase(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
-            $entry = Entries::find($input["id"]);
 
+            $purc = Purchases::find($input["header"]["id"]);
 
-            $exist = array();
-            if ($entry->purchase_id != null) {
-                $exist = Purchases::find($entry->purchase_id);
-            }
+            if ($purc->status_id == 2) {
 
-            $val = EntriesDetail::where("entry_id", $entry["id"])->get();
+                foreach ($input["detail"] as $value) {
+                    $pro = Products::find($value["product_id"]);
 
-
-
-            if ($entry->status_id != 2) {
-                foreach ($val as $value) {
-                    if ($value->real_quantity > 0) {
-                        $det = EntriesDetail::find($value->id);
-                        $det->status_id = 1;
-                        $det->save();
+                    if ($value["real_quantity"] > 0) {
+                        $this->tool->addInventory($input["header"]["warehouse_id"], $pro->reference, trim($value["real_quantity"]), trim($value["lot"]), trim($value["expiration_date"]), $pro->cost_sf);
                     }
                 }
 
-                $entry->status_id = 2;
-                $entry->save();
-                if (count($exist) > 0) {
-                    $exist->status_id = 4;
-                    $exist->save();
-                }
 
-                $entry = Entries::find($input["id"]);
+                $purc->status_id = 3;
+                $purc->save();
 
-                return response()->json(["success" => true, "header" => $entry]);
+                return response()->json(["success" => true, "header" => $purc]);
             } else {
                 return response()->json(["success" => false, "msg" => "Entry is already generate"], 404);
             }
@@ -407,10 +393,6 @@ class EntryController extends Controller {
                 $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
 
                 return response()->json(['success' => true, "header" => $entry, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
-
-
-
-                return response()->json(['success' => true, "data" => $resp]);
             } else {
                 return response()->json(['success' => false, "msg" => "Problemas con la ejecución"], 409);
             }
@@ -446,9 +428,6 @@ class EntryController extends Controller {
     public function setDetail(Request $request, $id) {
 
         $input = $request->all();
-
-
-
 
         $entry_id = $input["entry_id"];
         unset($input["entry_id"]);

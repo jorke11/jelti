@@ -23,6 +23,7 @@ class CreateDeparturesDetailTable extends Migration {
             $table->decimal('tax', 5, 2);
             $table->decimal('units_sf', 15, 2)->nullable();
             $table->string('description')->nullable();
+            $table->json("quantity_lots")->nullable();
             $table->timestamps();
         });
     }

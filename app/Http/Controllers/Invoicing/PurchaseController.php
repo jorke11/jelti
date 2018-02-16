@@ -127,6 +127,7 @@ class PurchaseController extends Controller {
                         $input["detail"][$i]["order"] = $i;
                         $input["detail"][$i]["value"] = $val["cost_sf"];
                         $input["detail"][$i]["units_supplier"] = (int) $input["detail"][$i]["units_supplier"];
+                        $input["detail"][$i]["real_quantity"] = 0;
                         unset($input["detail"][$i]["cost_sf"]);
                         unset($input["detail"][$i]["title"]);
                         unset($input["detail"][$i]["debt"]);
@@ -245,33 +246,7 @@ class PurchaseController extends Controller {
                     $pur->status_id = 2;
                     $pur->save();
 
-                    $newIn["responsible_id"] = Auth::user()->id;
-                    $newIn["warehouse_id"] = $pur->warehouse_id;
-                    $newIn["supplier_id"] = $pur->supplier_id;
-                    $newIn["purchase_id"] = $in["id"];
-                    $newIn["city_id"] = $pur->city_id;
-                    $newIn["description"] = "Compra nueva";
-                    $newIn["invoice"] = "new";
-                    $newIn["created"] = date("Y-m-d H:i:s");
-                    $newIn["status_id"] = 1;
-
-                    $newId = Entries::create($newIn)->id;
                     $det = PurchasesDetail::where("purchase_id", $in["id"])->get();
-
-                    foreach ($det as $key => $value) {
-                        $newDet["entry_id"] = $newId;
-                        $newDet["product_id"] = $value->product_id;
-                        $newDet["quantity"] = 1;
-                        $newDet["quantity_real"] = 0;
-                        $newDet["value"] = $value->value;
-                        $newDet["units_supplier"] = $value->units_supplier;
-                        $newDet["lote"] = 'new';
-                        $newDet["status_id"] = 1;
-
-                        for ($j = 0; $j < $value->quantity; $j++) {
-                            $detail_id = EntriesDetail::create($newDet);
-                        }
-                    }
 
                     $purchase = Purchases::findOrFail($in["id"]);
 
@@ -438,16 +413,18 @@ class PurchaseController extends Controller {
     public function formatDetail($id) {
         $sql = "
             select 
+            d.id,
                 p.id as product_id,
                 p.title as product,
                 d.units_supplier,
                 d.tax,d.value,
-                sum(d.quantity * d.units_supplier) quantity_total,d.purchase_id, sum(d.value * d.units_supplier * d.quantity) as total,sum(d.quantity) as quantity,
-                p.bar_code as ean
+                (d.quantity * d.units_supplier) quantity_total,d.purchase_id, (d.value * d.units_supplier * d.quantity) as total, d.quantity,
+                p.bar_code as ean,
+                d.real_quantity,
+                (d.value * d.units_supplier * d.real_quantity) as total_real
             from purchases_detail d 
             JOIN products p On p.id=d.product_id 
-            where d.purchase_id=" . $id . "
-            group by 1,2,3,4,5,7,10";
+            where d.purchase_id=" . $id;
 
         $detail = DB::select($sql);
 

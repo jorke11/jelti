@@ -421,7 +421,7 @@ function Departure() {
 
                         }, error: function (xhr, ajaxOptions, thrownError) {
                             toastr.error("Wrong");
-                            console.log(xhr);
+                            console.log(xhr.responseText);
                         }
                     })
                 } else {

@@ -1,5 +1,8 @@
 function Sale() {
     var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false, client_id = null;
+    var quantity_total = 0;
+
+
     this.init = function () {
         table = this.table();
         $("#btnNew").click(this.new);
@@ -90,7 +93,7 @@ function Sale() {
 
             param.client_id = client_id;
             $.ajax({
-                url: 'sample/' + $(this).val() + '/getDetailProduct',
+                url: 'departure/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 data: param,
                 dataType: 'JSON',
@@ -417,6 +420,7 @@ function Sale() {
 
     this.saveDetail = function () {
         toastr.remove();
+        var lots = [];
         $("#frmDetail #sample_id").val($("#frm #id").val());
         var data = {}, value = 0, total = 0;
         var url = "", method = "";
@@ -424,11 +428,25 @@ function Sale() {
         var form = $("#frmDetail").serialize()
         var msg = 'Record Detail';
         var validate = $(".input-detail").validate();
+
+        $(".input-lots").each(function () {
+            if ($(this).val() > 0) {
+                lots.push({lot: $(this).attr("lot"), quantity: $(this).val(), expiration_date: $(this).attr("expire")
+                    , cost_sf: $(this).attr("cost_sf"), product_id: $(this).attr("product_id")});
+                total += parseInt($(this).val());
+            }
+        })
+
         if (validate.length == 0) {
             if (id != '') {
-                var id = $("#frmDetail #id").val();
-                var frm = $("#frmDetail");
-                var data = frm.serialize();
+                data.header = {};
+                data.detail = [];
+
+                data.header.id = $("#frmDetail #id").val();
+                data.header.product_id = $("#frmDetail #product_id :selected").val();
+                data.header.total = total;
+                data.detail = lots;
+
                 var url = "/sample/detail/" + id;
                 $.ajax({
                     url: url,
@@ -790,7 +808,7 @@ function Sale() {
     this.editDetail = function (id) {
         $("#frmDetail #sample_id").val($("#frm #id").val());
         var frm = $("#frm");
-        var data = frm.serialize();
+        var data = frm.serialize(), html = '';
         var url = "/sample/" + id + "/detail";
         $.ajax({
             url: url,
@@ -798,8 +816,24 @@ function Sale() {
             data: data,
             dataType: 'JSON',
             success: function (resp) {
+
+
+                quantity_total = resp.row.quantity;
+
                 $("#modalDetail").modal("show");
-                $(".input-detail").setFields({data: resp})
+                $(".input-detail").setFields({data: resp.row})
+
+                $("#tableLot tbody").empty();
+
+                $.each(resp.inventory, function (i, val) {
+                    html += '<tr><td>' + val.lot + '</td>';
+                    html += '<td>' + val.quantity + '</td>';
+                    html += '<td>' + val.expiration_date + '</td>';
+                    html += '<td><input value="0" class="form-control input-lots" lot="' + val.lot + '" expire="' + val.expiration_date + '" cost_sf="' + val.value + '" product_id="' + val.product_id + '"></td></tr>';
+                });
+
+                $("#tableLot tbody").html(html);
+
             }, error(xhr, responseJSON, thrown) {
                 console.log(responseJSON)
             }

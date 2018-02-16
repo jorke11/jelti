@@ -29,6 +29,7 @@ use Datatables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Administration\PricesSpecial;
 use App\Http\Controllers\LogController;
+use App\Models\Inventory\Inventory;
 
 class SampleController extends Controller {
 
@@ -494,11 +495,6 @@ class SampleController extends Controller {
 
                             $price_sf = $pro->cost_sf / (($pro->packaging == null) ? 1 : $pro->packaging);
 
-//                            if (Auth::user()->role_id == 1) {
-//                                if (isset($val["price_sf"]) && !empty($val["price_sf"])) {
-//                                    $price_sf = $val["price_sf"];
-//                                }
-//                            }
 
                             $detail["product_id"] = $val["product_id"];
                             $detail["sample_id"] = $result;
@@ -618,6 +614,15 @@ class SampleController extends Controller {
                             $departure->dispatched = date("Y-m-d H:i:s");
 
                             $departure->save();
+
+                            $detail = SampleDetail::where("sample_id", $input["id"])->where("real_quantity", ">", 0)->get();
+
+                            $cont = 0;
+
+                            foreach ($detail as $value) {
+                                $rowDep = SampleDetail::find($value->id);
+                                $this->tool->substract($value->id, $value);
+                            }
 
                             $detail = $this->formatDetail($input["id"]);
                             $departure = Sample::find($input["id"]);
@@ -841,7 +846,9 @@ class SampleController extends Controller {
 
     public function getDetail($id) {
         $detail = SampleDetail::FindOrFail($id);
-        return response()->json($detail);
+        $header = Sample::find($detail->sample_id);
+        $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->get();
+        return response()->json(["row" => $detail, "inventory" => $inventory]);
     }
 
     public function getAllDetail($departue_id) {
@@ -880,72 +887,39 @@ class SampleController extends Controller {
 
     public function updateDetail(Request $request, $id) {
         $input = $request->all();
+        $row = SampleDetail::find($id);
 
-        $header = Sample::find($input["sample_id"]);
+        $header = Sample::find($row->sample_id);
 
-        $entry = SampleDetail::FindOrFail($id);
-
-        $special = PricesSpecial::where("product_id", $input["product_id"])
+        $special = PricesSpecial::where("product_id", $input["header"]["product_id"])
                         ->where("client_id", $header->client_id)->first();
 
         if ($special == null) {
-            $pro = Products::find($input["product_id"]);
+            $pro = Products::find($input["header"]["product_id"]);
         } else {
             $pro = DB::table("products")
                     ->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
                     ->join("prices_special", "prices_special.product_id", "=", "products.id")
-                    ->where("products.id", $input["product_id"])
+                    ->where("products.id", $input["header"]["product_id"])
                     ->first();
         }
 
+        $input["value"] = $pro->price_sf;
 
-        unset($input["value"]);
-//        $input["value"] = $pro->price_sf;
-        if (Auth::user()->role_id == 4) {
-            unset($input["real_quantity"]);
-            $result = $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["sample_id"]);
-            $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-        }
-
-
-        $stock = new StockController();
-        $available = $stock->getDetailProductIn($header->client_id, $input["product_id"]);
-        $available = $available->getData(true);
-
+        $input["quantity_lots"] = json_encode($input["detail"]);
+        $input["real_quantity"] = $input["header"]["total"];
         $input["status_id"] = 3;
-        if ($available["quantity"] == 0 && Auth::user()->role_id != 4) {
-            $input["real_quantity"] = 0;
-            $input["description"] = "Inventario no disponible, guarda 0";
-            $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["sample_id"]);
-            $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
+
+
+        foreach ($input["detail"] as $value) {
+            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
         }
 
-//        if ($input["real_quantity"] != 0) {
-//
-//            if ($available["quantity"] >= $input["real_quantity"]) {
-//                $result = $entry->fill($input)->save();
-//                if ($result) {
-//                    $resp = $this->formatDetail($input["sample_id"]);
-//                    $total = "$ " . number_format($this->total, 0, ",", ".");
-//                    return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-//                } else {
-//                    return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
-//                }
-//            } else {
-//                $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];
-//                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
-//            }
-//        } else {
 
-            $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["sample_id"]);
-            $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-//        }
+        $row->fill($input)->save();
+        $resp = $this->formatDetail($header->id);
+        $total = "$ " . number_format($this->total, 0, ",", ".");
+        return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
     }
 
     public function destroy($id) {
@@ -1095,7 +1069,7 @@ class SampleController extends Controller {
 
             $this->mails[] = $user->email;
 
-            
+
             Mail::send("Notifications.invoice", $input, function($msj) {
                 $msj->subject($this->subject);
                 $msj->to($this->mails);

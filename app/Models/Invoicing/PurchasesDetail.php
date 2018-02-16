@@ -14,6 +14,7 @@ class PurchasesDetail extends Model {
         "product_id", 
         "category_id", 
         "quantity", 
+        "real_quantity", 
         "lot", 
         "expiration_date", 
         "value",

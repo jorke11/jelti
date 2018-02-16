@@ -44,6 +44,7 @@ if (!isset($_COOKIE["mostrarModal"])) {
         <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
         {!!Html::style('/css/page.css')!!}
         {!!Html::script('/vendor/plugins.js')!!}
+        {!!Html::script('/vendor/jquery.smoove.js')!!}
 
     </head>
     <!--Start of Tawk.to Script-->
@@ -154,8 +155,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
         @include("header")
 
-        <section style="padding-top: 3%">
-            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <section style="padding-top: 3%" >
+            <div id="carousel-example-generic" class="carousel slide test" data-ride="carousel">
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
                     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
@@ -194,7 +195,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
 
         <section id="divProduct" style="padding-top:4%">
-            <div class="container-fluid">
+            <div class="container-fluid ">
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="text-center title-color" >Nuestros <span class="underline">Productos</span></h1>
@@ -203,7 +204,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 <div class="row row-space">
                     <div class="col-lg-12"><p class="text-center font-color" style="font-size: 18px" >Entregamos todas tus marcas saludables favoritas directamente a tu Negocio.</p></div>
                 </div>
-                <div class="row">
+                <div class="row test">
                     <div class='col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1'>
                         <div class="carousel slide media-carousel" id="media">
                             <div class="carousel-inner">
@@ -252,7 +253,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <div class="col-lg-12"></div>
                 </div>
 
-                <div class="row row-space">
+                <div class="row row-space test">
                     <div class="col-lg-8 col-lg-offset-2 ">
                         <div class="carousel slide media-carousel" id="subcategories">
                             <div class="carousel-inner">
@@ -308,7 +309,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </section>
 
         <section style="padding-top: 1%;padding-bottom: 2%">   
-            <div class="container-fluid">
+            <div class="container-fluid test">
                 <div class="row row-center">
                     <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>
                     <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
@@ -316,7 +317,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 <div class="row row-center">
                     <div class="col-lg-8"><hr style="border-top: 1px solid #ccc"></div>
                 </div>
-                <div class="row row-center" >
+                <div class="row row-center test" >
                     <div class="col-lg-8 col-md-8">
                         <div class="carousel slide media-carousel" id="newproducts">
                             <div class="carousel-inner">
@@ -388,17 +389,17 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
         <section style="padding-top: 3%;padding-bottom: 2%">
             <div class="container-fluid">
-                <div class="row row-center row-space">
+                <div class="row row-center row-space test">
                     <div class="col-lg-8">
                         <img src="images/por_que_sf.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
                     </div>
                 </div>
-                <div class="row row-center">
+                <div class="row row-center test">
                     <div class="col-lg-8">
                         <img src="images/como_funciona.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
                     </div>
                 </div>
-                
+
             </div>
         </section>
 
@@ -408,121 +409,6 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 <div class="row row-center" >
                     <div class="col-lg-8" style="background-color: #2FC8AE;padding-bottom: .9%"><h2 class="color-font text-center" style="color:#fffbf2">Lo que Aman nuestros <b>Clientes</b> y <b>Proveedores</b></h2></div>
                 </div>
-                <!--                <div class="row">
-                                    <div class="col-lg-8 col-lg-offset-2 ">
-                                        <div class="row">
-                                            <div class="col-lg-6" style="background-color: #1ec296">
-                                                <div id="carousel-clients2" class="carousel slide" data-ride="carousel">
-                
-                                                    <ol class="carousel-indicators">
-                                                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                                                    </ol>                
-                
-                                                    <div class="carousel-inner" role="listbox">
-                                                        <div class="item active">
-                                                            <img src="logos_blancos/clickclack.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                                            <div class="carousel-caption-edit">
-                                                                <p>
-                                                                    Por medio de SuperFüds hemos accedido a un amplio portafolio de productos locales, altamente saludables con presentación impecable que los clientes de Click Clack han sabido disfrutar.
-                                                                </p>
-                                                                <h3>Sergio Saavedra</h3>  
-                                                                <p>Director General</p> 
-                                                            </div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <img src="logos_blancos/farmatodo.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                                            <div class="carousel-caption-edit">
-                                                                <p>
-                                                                    A través de SuperFüds ahora podemos brindar las mejores opciones para una alimentación saludable, con ellos ampliamos nuestra oferta para el cuidado integral de la salud y de esta forma estamos satisfaciendo las necesidades y gustos de nuestros clientes.
-                                                                </p>
-                                                                <h3>Teodoro Zubillaga</h3>  
-                                                                <p>Country Manager</p>  
-                
-                                                            </div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <img src="logos_blancos/rappi.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                                            <div class="carousel-caption-edit">
-                                                                <p>
-                                                                    Hicimos esta alianza con SuperFüds por que lideran en Colombia el mercado de alimentos saludables y confiamos en su selección de proveedores para ofrecerle a nuestros clientes los mejores productos del mercado.
-                                                                </p>
-                                                                <h3>Simon Borrero</h3>  
-                                                                <p>CEO</p> 
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                
-                
-                                                    <a class="left carousel-control" href="#carousel-clients2" role="button" data-slide="prev">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="right carousel-control" href="#carousel-clients2" role="button" data-slide="next">
-                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6" style="background-color: #49e2c6">
-                                                <div id="carousel-supplier" class="carousel slide" data-ride="carousel">
-                
-                                                    <ol class="carousel-indicators">
-                                                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                                                    </ol>
-                
-                
-                                                    <div class="carousel-inner" role="listbox">
-                
-                                                        <div class="item active">
-                                                            <img src="logos_blancos/terrafertil.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                                            <div class="carousel-caption-edit">
-                                                                <p>
-                                                                    "Trabajar con SuperFüds es una oportunidad de ingresar a mercados diferentes que van a la vanguardia de nuestra marca, tienen la energía y la actitud para sacar proyectos nuevos".
-                                                                </p>
-                                                                <h3>Raúl Bermeo</h3>  
-                                                                <p>Director General y Fundador</p> 
-                                                            </div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <img src="logos_blancos/chocolov.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                                            <div class="carousel-caption-edit">
-                                                                <p>
-                                                                    "A través de SuperFüds hemos expandido nuestro negocio, llegando a muchos más clientes en diferentes ciudades de Colombia y logrando masificar nuestros productos. Son un aliado que además de ser los únicos especializados en su categoría, tienen una amplia visión sobre el B2B y B2C ya que están en la constante búsqueda e implementación de herramientas para generar nuevos negocios".
-                                                                </p>
-                                                                <h3>Adriana Hoyos</h3>  
-                                                                <p>Gerente General</p> 
-                                                            </div>
-                                                        </div>
-                                                        <div class="item">
-                                                            <img src="logos_blancos/segalco.png" alt="..." class="img-responsive center-block" style="padding-top: 10%;padding-bottom: 70%" width="40%">
-                                                            <div class="carousel-caption-edit">
-                                                                <p>
-                                                                    "Trabajar con SuperFüds ha sido una experiencia interesante, hemos podido aperturar unos mercados de nicho que nos interesaba y hemos llegado a puntos donde no habíamos podido llegar. Su drive haciendo distribución punto a punto con varios productos hace que el negocio sea rentable para todos los jugadores".
-                                                                </p>
-                                                                <h3>Javier Pinilla</h3> 
-                                                                <p>Director y Cofundador</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                
-                                                    <a class="left carousel-control" href="#carousel-supplier" role="button" data-slide="prev">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="right carousel-control" href="#carousel-supplier" role="button" data-slide="next">
-                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-
                 <div class="row row-center">
                     <div class="col-lg-8 " style="padding: 0">
                         <div id="carousel-refer" class="carousel slide" data-ride="carousel">

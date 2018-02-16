@@ -250,7 +250,7 @@ function User() {
                 {data: "name"},
                 {data: "email"},
                 {data: "document"},
-                {data: "role"},
+                {data: "role","searchable": false},
                 {data: "stakeholder"},
                 {data: "city"},
                 {data: "status"},

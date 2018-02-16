@@ -22,6 +22,7 @@ class SampleDetail extends Model {
         "units_sf",
         "tax",
         "packaging",
+        "quantity_lots"
     ];
 
 }

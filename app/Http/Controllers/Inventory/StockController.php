@@ -11,6 +11,7 @@ use App\Models\Administration\PricesSpecial;
 use Datatables;
 use PDF;
 use App\Models\Administration\Warehouses;
+use App\Models\Inventory\Inventory;
 
 class StockController extends Controller {
 
@@ -26,41 +27,38 @@ class StockController extends Controller {
     public function getStock(Request $req) {
         $in = $req->all();
         $entry_ware = '';
-        $sales_ware = '';
-
-        if ($in["warehouse_id"] != 0) {
-            $entry_ware = ' AND entries.warehouse_id=' . $in["warehouse_id"];
-            $sales_ware = ' AND sales.warehouse_id=' . $in["warehouse_id"];
-        }
-
         $bar_code = '';
 
         if ($in["bar_code"] != '') {
             $pro = Products::where("reference", $in["bar_code"])->first();
-            $bar_code = "WHERE products.id=" . $pro->id;
+            $bar_code = "WHERE p.id=" . $pro->id;
         }
 
+
+        if ($in["warehouse_id"] != 0) {
+            if ($bar_code == '') {
+                
+            }
+
+            $temp = 'i.warehouse_id=' . $in["warehouse_id"];
+
+            $temp = ($bar_code == '') ? ' WHERE ' . $temp : ' AND ' . $temp;
+        }
+
+
         $sql = "
-            select products.id,reference,title as product,stakeholder.business as supplier,categories.description as category
-            from products 
-            JOIN stakeholder ON stakeholder.id=products.supplier_id
-            JOIN categories ON categories.id=products.category_id
-            WHERE products.status_id = 1
-                $bar_code";
+            select p.id,p.reference,s.business as stakeholder,c.description as category,p.title as product,sum(i.quantity) as quantity
+            from inventory i
+            JOIN products p ON p.id=i.product_id
+            JOIN stakeholder s ON s.id=p.supplier_id
+            JOIN categories c ON c.id=p.category_id
+            $bar_code $entry_ware
+            group by 1,2,3,4,5
+                ";
 
 
         $products = DB::select($sql);
 
-        foreach ($products as $i => $value) {
-            $sql = "
-                    select coalesce(count(quantity),0) as total
-                    from entries_detail
-                    JOIN entries ON entries.id = entries_detail.entry_id 
-                    WHERE  product_id=" . $value->id . " $entry_ware";
-
-            $entry = DB::select($sql);
-            $products[$i]->available = $entry[0]->total;
-        }
 
         return response()->json(["data" => $products]);
     }
@@ -89,11 +87,15 @@ class StockController extends Controller {
                     ->first();
         }
 
+        $inv = Inventory::where("product_id", $id);
 
-        $entry = DB::table("entries_detail")->where("product_id", $id)->where("status_id", 1)->sum(DB::raw("quantity"));
+        if (isset($in["warehouse_id"])) {
+            $inv->where("warehouse_id", $in["warehouse_id"]);
+        }
 
+        $quantity = $inv->sum("quantity");
 
-        return response()->json(["response" => $response, "quantity" => $entry]);
+        return response()->json(["response" => $response, "quantity" => $quantity]);
     }
 
     public function getDetailSample(Request $req, $id) {

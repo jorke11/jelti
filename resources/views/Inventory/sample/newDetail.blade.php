@@ -10,8 +10,8 @@
                 <input type="hidden" id="id" name="id" class="input-detail">
                 <input type="hidden" id="sample_id" name="sample_id">
                 <input type="hidden" id="rowItem">
-                
-                
+
+
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -63,18 +63,23 @@
 
                 </div>
                 @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Quantity real</label>
-                            <input type="text" class="form-control input-detail input-sm" id="real_quantity" name='real_quantity' min='0' placeholder="Quantity real" data-type="number"
-                                   <?php echo (Auth::user()->role != 4) ? '' : "readonly" ?>>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Description</label>
-                            <textarea class="form-control input-detail" id="description" name="description"></textarea>
+                <div id="lotes">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-bordered table-condensed" id="tableLot">
+                                <thead>
+                                    <tr>
+                                        <th>Lote</th>
+                                        <th>Disponible</th>
+                                        <th>Vencimiento</th>
+                                        <th>Cantidad necesaria</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

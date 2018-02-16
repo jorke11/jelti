@@ -35,10 +35,10 @@ function Stock() {
             columns: [
                 {data: "id"},
                 {data: "reference"},
-                {data: "supplier"},
+                {data: "stakeholder"},
                 {data: "category"},
                 {data: "product"},
-                {data: "available"},
+                {data: "quantity"},
             ],
             order: [[5, 'ASC']],
             aoColumnDefs: [

@@ -15,7 +15,6 @@
                         <th>Proveedor</th>
                         <th>Description</th>
                         <th>Date</th>
-                        <th>Invoice</th>
                         <th>Warehouse</th>
                         <th>City</th>
                         <th>Status</th>
@@ -31,7 +30,6 @@
                         <th>Proveedor</th>
                         <th>Description</th>
                         <th>Date</th>
-                        <th>Invoice</th>
                         <th>Warehouse</th>
                         <th>City</th>
                         <th>Status</th>

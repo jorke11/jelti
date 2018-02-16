@@ -31,6 +31,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Administration\PricesSpecial;
 use App\Http\Controllers\LogController;
 use App\Models\Sales\BriefCase;
+use App\Models\Inventory\Inventory;
+use App\Models\Inventory\InventoryHold;
 
 class DepartureController extends Controller {
 
@@ -173,14 +175,6 @@ class DepartureController extends Controller {
         }
 
 
-//        if (isset($in["supplier_id"]) && $in["supplier_id"] != '' && $in["supplier_id"] != 0) {
-//            $pro = Products::select("id")->where("supplier_id", $in["supplier_id"])->get();
-//            
-//            DB::select("")
-//            
-//            dd($pro);
-//        }
-
         return Datatables::queryBuilder($query)->make(true);
     }
 
@@ -219,32 +213,6 @@ class DepartureController extends Controller {
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
 
-    public function pdf($id) {
-        $data = [
-            'foo' => 'bar'
-        ];
-        $pdf = PDF::loadView('departure.pdf', $data);
-        return $pdf->stream('document.pdf');
-    }
-
-    public function getInvoiceHtml($id) {
-        $sale = Sales::where("departure_id", $id)->first();
-        $detail = SaleDetail::select("quantity,tax,description,product_id,products.title product")
-                ->join("products", "Sales.product_id", "products_id")
-                ->where("sale_id", $sale["id"])
-                ->get();
-        $cli = Stakeholder::findOrFail($sale["client_id"]);
-        $data = [
-            'client' => $cli,
-            'detail' => $detail,
-        ];
-
-        dd($detail);
-        exit;
-
-        return view("departure.pdf", compact("data"));
-    }
-
     public function formatDate($date) {
         $month = date("m", strtotime($date));
         $monthtext = '';
@@ -279,12 +247,6 @@ class DepartureController extends Controller {
 
     public function getInvoice($id) {
         $this->mails = array();
-
-//        if(file_exists(public_path()."/images/superfuds.png")){
-//            echo "asd";exit;
-//        }
-//        
-//        echo public_path()."/images/superfuds.png";exit;
 
         $sale = Sales::where("departure_id", $id)->first();
         $detail = $this->formatDetailSales($sale["id"]);
@@ -399,22 +361,16 @@ class DepartureController extends Controller {
 
     public function getRemission($id) {
         $this->mails = array();
-
         $dep = Departures::find($id);
 
-
-
         $detail = DB::table("departures_detail")
-                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder", "departures_detail.real_quantity as quantity")
+                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.real_quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.real_quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder", "departures_detail.real_quantity as quantity")
                 ->join("products", "departures_detail.product_id", "products.id")
                 ->join("stakeholder", "products.supplier_id", "stakeholder.id")
                 ->where("departures_detail.departure_id", $id)
                 ->where("departures_detail.real_quantity", "<>", 0)
                 ->get();
 
-//        dd($detail);
-//        $detail = $this->formatDetail($id);
-//        dd($detail);
 
         $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")
                 ->where("stakeholder_id", $dep["client_id"])
@@ -429,11 +385,9 @@ class DepartureController extends Controller {
         }
 
         $user = Users::find($dep["responsible_id"]);
-
         $ware = Warehouses::find($dep["warehouse_id"]);
 
         $this->email[] = $user->email;
-
 
         $term = 7;
 
@@ -473,8 +427,6 @@ class DepartureController extends Controller {
         }
 
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $dep["id"])->first();
-
-//        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
 
 
         $shipping_cost_tax = 0;
@@ -527,32 +479,48 @@ class DepartureController extends Controller {
             DB::beginTransaction();
             $row = Departures::find($id);
 
-            $ayer = date("Y-m-d", strtotime("-5 day", strtotime(date("Y-m-d"))));
+            $row_detail = DeparturesDetail::where("departure_id", $id)->where("real_quantity", ">", 0)->get();
 
+            if ($row->status_id == 2) {
 
-            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 5 || Auth::user()->id == 2) {
-                $sal = Sales::where("departure_id", $id)->first();
-                if ($sal != null) {
-                    $detail = SaleDetail::where("sale_id", $sal->id)->get();
+                $ayer = date("Y-m-d", strtotime("-5 day", strtotime(date("Y-m-d"))));
 
-                    foreach ($detail as $value) {
-                        $det = SaleDetail::find($value->id);
-                        $det->delete();
+                if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 5 || Auth::user()->id == 2) {
+                    $sal = Sales::where("departure_id", $id)->first();
+
+                    $this->tool->addInventoryReverse($row, $row_detail);
+
+                    if ($sal != null) {
+                        $detail = SaleDetail::where("sale_id", $sal->id)->get();
+
+                        foreach ($detail as $value) {
+                            $det = SaleDetail::find($value->id);
+                            $det->delete();
+                        }
+                        $sal->delete();
                     }
-                    $sal->delete();
+
+                    foreach ($row_detail as $value) {
+                        $det = DeparturesDetail::find($value->id);
+                        $det->real_quantity = 0;
+                        $det->status_id = 1;
+                        $det->save();
+                    }
+
+
+                    $row->status_id = 1;
+                    $row->save();
+                    DB::commit();
+                    $dep = Departures::find($id);
+
+                    $this->sendNofication($dep, "reverse");
+
+                    return response()->json(["success" => true, "header" => $dep]);
+                } else {
+                    return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
                 }
-
-                $row->status_id = 1;
-                $row->save();
-                DB::commit();
-                $dep = Departures::find($id);
-
-
-                $this->sendNofication($dep, "reverse");
-
-                return response()->json(["success" => true, "header" => $dep]);
             } else {
-                return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+                return response()->json(['success' => false, "msg" => "No se puede reversar porque el pedido tiene estado Nuevo"], 409);
             }
         } catch (Exception $exp) {
             DB::rollback();
@@ -828,46 +796,26 @@ class DepartureController extends Controller {
                                     ]
                             );
 
-                            $detail = DeparturesDetail::where("departure_id", $input["id"])->get();
+                            $detail = DeparturesDetail::where("departure_id", $input["id"])->where("real_quantity", ">", 0)->get();
 
                             $cont = 0;
                             $sale = Sales::find($id);
 
+
                             foreach ($detail as $value) {
+
                                 $rowDep = DeparturesDetail::find($value->id);
+                                $this->tool->substract($value->id, $value);
+                                $pro = Products::find($value->product_id);
 
-                                if ($value->real_quantity > 0) {
+                                SaleDetail::insert([
+                                    "sale_id" => $id, "product_id" => $value->product_id,
+                                    "category_id" => $value->category_id, "quantity" => $value->real_quantity,
+                                    "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
+                                    "account_id" => 1, "order" => $cont, "type_nature" => 1, "packaging" => $value->packaging
+                                ]);
 
-//                                    $entries = \App\Models\Inventory\EntriesDetail::where("product_id", $value->product_id)
-//                                                    ->where("status_id", 1)
-//                                                    ->take($value->real_quantity)
-//                                                    ->orderBy("expiration_date")->get();
-//
-//                                    if (count($entries) > 0) {
-//                                        $ids = [];
-//
-//                                        foreach ($entries as $value) {
-//                                            $row = \App\Models\Inventory\EntriesDetail::find($value->id);
-//                                            $row->status_id = 2;
-//                                            $row->save();
-//                                            $ids[] = $value->id;
-//                                        }
-//
-//                                        $rowDep->entry_detail_id = json_encode($ids);
-//                                        $rowDep->save();
-//                                    }
-
-                                    $pro = Products::find($value->product_id);
-
-                                    SaleDetail::insert([
-                                        "sale_id" => $id, "product_id" => $value->product_id,
-                                        "category_id" => $value->category_id, "quantity" => $value->real_quantity,
-                                        "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
-                                        "account_id" => 1, "order" => $cont, "type_nature" => 1, "packaging" => $value->packaging
-                                    ]);
-
-                                    $cont++;
-                                }
+                                $cont++;
                             }
 
                             $con = Departures::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
@@ -900,7 +848,7 @@ class DepartureController extends Controller {
 
                             $departure->save();
 
-                            //Log 
+//Log 
                             $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $departure->invoice);
 
                             $cli = Stakeholder::find($departure->client_id);
@@ -1190,8 +1138,14 @@ class DepartureController extends Controller {
     }
 
     public function getDetail($id) {
-        $detail = DeparturesDetail::FindOrFail($id);
-        return response()->json($detail);
+
+        $detail = DeparturesDetail::Find($id);
+
+        $header = Departures::find($detail->departure_id);
+
+        $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->get();
+
+        return response()->json(["row" => $detail, "inventory" => $inventory]);
     }
 
     public function getAllDetail($departue_id) {
@@ -1259,19 +1213,33 @@ class DepartureController extends Controller {
     }
 
     public function cancelInvoice(Request $request, $id) {
+
         $in = $request->all();
         $row = Departures::Find($id);
-
-
-
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
 
         if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || Auth::user()->role_id == 1) {
+
+            $detail = DeparturesDetail::where("departure_id", $id)->where("real_quantity", ">", 0)->get();
+
+            foreach ($detail as $value) {
+                $det_json = json_decode($value->quantity_lots);
+
+                foreach ($det_json as $val) {
+                    $pro = Products::find($value->product_id);
+                    $this->tool->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf);
+                }
+            }
+
             $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
             $row->status_id = 4;
             $row->save();
             $resp = Departures::FindOrFail($id);
+
+
+
+
             $this->sendNofication($resp, "canceled");
             return response()->json(['success' => true, "data" => $resp]);
         } else {
@@ -1350,70 +1318,34 @@ class DepartureController extends Controller {
     public function updateDetail(Request $request, $id) {
         $input = $request->all();
 
-        $header = Departures::find($input["departure_id"]);
+        $row = DeparturesDetail::Find($input["header"]["id"]);
 
-        $entry = DeparturesDetail::FindOrFail($id);
+        $header = Departures::find($row->departure_id);
 
-        $special = PricesSpecial::where("product_id", $input["product_id"])->where("client_id", $header->client_id)->first();
+        $special = PricesSpecial::where("product_id", $input["header"]["product_id"])->where("client_id", $header->client_id)->first();
+
 
         if ($special == null) {
-            $pro = Products::find($input["product_id"]);
+            $pro = Products::find($input["header"]["product_id"]);
         } else {
-
-            $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["product_id"])->where("client_id", $header->client_id)->first();
+            $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
+                            ->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["header"]["product_id"])
+                            ->where("client_id", $header->client_id)->first();
         }
-
 
         $input["value"] = $pro->price_sf;
-//        $input["value"] = $pro->price_sf;
-        if (Auth::user()->role_id == 4) {
-            unset($input["real_quantity"]);
-            $result = $entry->fill($input)->save();
-            $resp = $this->formatDetail($input["departure_id"]);
-            $total = "$ " . number_format($this->total, 0, ",", ".");
-            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
+
+        $input["quantity_lots"] = json_encode($input["detail"]);
+        $input["real_quantity"] = $input["header"]["total"];
+        $input["status_id"] = 3;
+
+
+        foreach ($input["detail"] as $value) {
+            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
         }
 
-
-        $stock = new StockController();
-        $available = $stock->getDetailProductIn($header->client_id, $input["product_id"]);
-        $available = $available->getData(true);
-
-        $input["status_id"] = 3;
-//        if ($available["quantity"] == 0 && Auth::user()->role_id != 4) {
-//        if (Auth::user()->role_id != 4) {
-//            $input["real_quantity"] = 0;
-//            $input["description"] = "Inventario no disponible, guarda 0";
-//            $entry->fill($input)->save();
-//            $resp = $this->formatDetail($input["departure_id"]);
-//            $total = "$ " . number_format($this->total, 0, ",", ".");
-//            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total, "msg" => "No se puede agregar se deja en 0"]);
-//        }
-//        if ($input["real_quantity"] != 0) {
-//
-//            if ($available["quantity"] >= $input["real_quantity"]) {
-//                $result = $entry->fill($input)->save();
-//                if ($result) {
-//                    $resp = $this->formatDetail($input["departure_id"]);
-//                    $total = "$ " . number_format($this->total, 0, ",", ".");
-//                    return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-//                } else {
-//                    return response()->json(['success' => false, "msg" => "Quantity Not available"], 409);
-//                }
-//            } else {
-//                $available["quantity"] = ($available["quantity"] < 0) ? "0" . " Pending: " . ($available["quantity"] * -1) : $available["quantity"];
-//                return response()->json(['success' => false, "msg" => "Quantity Not available, " . $available["quantity"]]);
-//            }
-//        } else {
-//
-//            $entry->fill($input)->save();
-//            $resp = $this->formatDetail($input["departure_id"]);
-//            $total = "$ " . number_format($this->total, 0, ",", ".");
-//            return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
-//        }
-
-        $entry->fill($input)->save();
-        $resp = $this->formatDetail($input["departure_id"]);
+        $row->fill($input)->save();
+        $resp = $this->formatDetail($header->id);
         $total = "$ " . number_format($this->total, 0, ",", ".");
         return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
     }
@@ -1430,6 +1362,7 @@ class DepartureController extends Controller {
                     $det = DeparturesDetail::find($value->id);
                     $det->delete();
                 }
+
                 $row->delete();
 
                 if ($id) {
@@ -1446,7 +1379,11 @@ class DepartureController extends Controller {
     }
 
     public function destroyDetail($id) {
-        $entry = DeparturesDetail::FindOrFail($id);
+        $entry = DeparturesDetail::Find($id);
+
+        echo "asd";
+        exit;
+
         $result = $entry->delete();
         if ($result) {
             $header = Departures::find($entry["departure_id"]);
@@ -1504,6 +1441,9 @@ class DepartureController extends Controller {
         $con = Departures::select(DB::raw("count(*) +1 consecutive"))->whereNotNull("remission")->first();
         $row->status_id = 5;
         $row->remission = $con->consecutive;
+
+        $detail = DeparturesDetail::where("real_quantity", ">", 0)->where("departure_id", $id)->get();
+
         $row->save();
         return response()->json(['success' => true]);
     }

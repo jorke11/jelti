@@ -32,6 +32,7 @@ class DeparturesDetail extends Model {
         "subtotal_real",
         "total",
         "total_real",
+        "quantity_lots"
     ];
 
 }

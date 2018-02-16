@@ -13,7 +13,7 @@
                 </button>
                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 1)
                 <button class="btn btn-success btn-sm" id='btnSend' disabled>
-                    <span class="glyphicon glyphicon-send" aria-hidden="true"> Enviar</span>
+                    <span class="glyphicon glyphicon-send" aria-hidden="true"> Facturar</span>
                 </button>
 
                 <button class="btn btn-success btn-sm" id='btnDocument' disabled>

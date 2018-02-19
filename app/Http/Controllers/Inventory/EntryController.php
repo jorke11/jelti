@@ -187,13 +187,13 @@ class EntryController extends Controller {
 
                 foreach ($reader->get() as $i => $book) {
                     if ($book->url != '') {
-                        echo $book->url . "<br>";exit;
+                        echo $book->url . "<br>";
                         $handler = curl_init($book->url);
                         $response = curl_exec($handler);
-                        curl_close($handler);
-                        echo $book->url . "<br>";
+                        echo curl_close($handler);
+                        
                     }else{
-                        echo "vacio<br>";exit;
+                        echo "paso<br>";
                     }
 //                        $this->addInventory($this->warehouse_id, $book->sf_code, $book->total, $book->lote_real, $book->vencimiento_real);
                 }

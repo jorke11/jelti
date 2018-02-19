@@ -794,8 +794,10 @@ class ToolController extends Controller {
 
             $new["lot"] = $lot;
 
+            $user_id = (isset(Auth::user()->id) ? Auth::user()->id : 1);
+
             if (count($inv) > 0) {
-                $inv->update_id = Auth::user()->id;
+                $inv->update_id = $user_id;
                 $inv->quantity = $inv->quantity + $quantity;
                 $new["insert_id"] = $inv->update_id;
                 $new["update_id"] = $inv->update_id;
@@ -804,7 +806,7 @@ class ToolController extends Controller {
                 $inv->save();
                 echo " OK:" . $reference . " actualizado" . $expire . "\n";
             } else {
-                $new["insert_id"] = Auth::user()->id;
+                $new["insert_id"] = $user_id;
                 Inventory::create($new);
                 $new["type_move"] = "new";
                 InventoryLog::create($new);

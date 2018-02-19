@@ -33,16 +33,12 @@ class StockController extends Controller {
             $pro = Products::where("reference", $in["bar_code"])->first();
             $bar_code = "WHERE p.id=" . $pro->id;
         }
-
+        $ware = '';
 
         if ($in["warehouse_id"] != 0) {
-            if ($bar_code == '') {
-                
-            }
+            $ware = 'i.warehouse_id=' . $in["warehouse_id"];
 
-            $temp = 'i.warehouse_id=' . $in["warehouse_id"];
-
-            $temp = ($bar_code == '') ? ' WHERE ' . $temp : ' AND ' . $temp;
+            $ware = ($bar_code == '') ? ' WHERE ' . $ware : ' AND ' . $ware;
         }
 
 
@@ -52,10 +48,9 @@ class StockController extends Controller {
             JOIN products p ON p.id=i.product_id
             JOIN stakeholder s ON s.id=p.supplier_id
             JOIN categories c ON c.id=p.category_id
-            $bar_code $entry_ware
+            $bar_code $ware
             group by 1,2,3,4,5
                 ";
-
 
         $products = DB::select($sql);
 

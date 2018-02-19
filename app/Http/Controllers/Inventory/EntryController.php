@@ -186,10 +186,13 @@ class EntryController extends Controller {
             Excel::load($this->path, function($reader) {
 
                 foreach ($reader->get() as $i => $book) {
-                    $handler = curl_init($book->url);
-                    $response = curl_exec($handler);
-                    curl_close($handler);
-                    echo $book->url . "<br>";
+                    if ($book->url != '') {
+//                        echo $book->url . "<br>";
+                        $handler = curl_init($book->url);
+                        $response = curl_exec($handler);
+                        curl_close($handler);
+                        echo $book->url . "<br>";
+                    }
 //                        $this->addInventory($this->warehouse_id, $book->sf_code, $book->total, $book->lote_real, $book->vencimiento_real);
                 }
             })->get();

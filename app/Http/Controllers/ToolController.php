@@ -771,12 +771,16 @@ class ToolController extends Controller {
      * @param type $lot
      * @param type $expire
      */
-    public function addInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf) {
+    public function addInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf = null) {
 
         $expire = date("Y-m-d", strtotime($expire));
 
         $pro = Products::where("reference", $reference)->first();
         $w = Warehouses::find($warehouse_id);
+
+        if ($cost_sf == null) {
+            $cost_sf = $pro->cost_sf;
+        }
 
 
         if (strtotime($expire) > strtotime(date("Y-m-d"))) {
@@ -814,7 +818,7 @@ class ToolController extends Controller {
 
         foreach ($detail as $val) {
             $dataNew = json_decode($val->quantity_lots);
-            
+
             foreach ($dataNew as $value) {
                 $pro = Products::find($value->product_id);
                 $this->addInventory($header->warehouse_id, $pro->reference, $value->quantity, $value->lot, $value->expiration_date, $value->cost_sf);

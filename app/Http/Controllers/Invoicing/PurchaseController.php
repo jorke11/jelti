@@ -108,6 +108,8 @@ class PurchaseController extends Controller {
 
             unset($input["id"]);
 //            $user = Auth::User();
+            
+//            echo "<ore>";print_r($input);exit;
 
             if (isset($input["detail"])) {
 
@@ -127,13 +129,13 @@ class PurchaseController extends Controller {
                         $input["detail"][$i]["order"] = $i;
                         $input["detail"][$i]["value"] = $val["cost_sf"];
                         $input["detail"][$i]["units_supplier"] = (int) $input["detail"][$i]["units_supplier"];
-                        $input["detail"][$i]["real_quantity"] = 0;
+//                        $input["detail"][$i]["real_quantity"] = 0;
                         unset($input["detail"][$i]["cost_sf"]);
                         unset($input["detail"][$i]["title"]);
                         unset($input["detail"][$i]["debt"]);
                         unset($input["detail"][$i]["credit"]);
                         unset($input["detail"][$i]["total"]);
-
+                        
                         $detail_id = PurchasesDetail::create($input["detail"][$i])->id;
 
 //                        for ($j = 0; $j < $val["quantity"]; $j++) {
@@ -420,8 +422,7 @@ class PurchaseController extends Controller {
                 d.tax,d.value,
                 (d.quantity * d.units_supplier) quantity_total,d.purchase_id, (d.value * d.units_supplier * d.quantity) as total, d.quantity,
                 p.bar_code as ean,
-                d.real_quantity,
-                (d.value * d.units_supplier * d.real_quantity) as total_real
+                (d.value * d.units_supplier * d.quantity) as total_real
             from purchases_detail d 
             JOIN products p On p.id=d.product_id 
             where d.purchase_id=" . $id;

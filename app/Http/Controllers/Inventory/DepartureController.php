@@ -1318,33 +1318,34 @@ class DepartureController extends Controller {
 
     public function updateDetail(Request $request, $id) {
         $input = $request->all();
-
         $row = DeparturesDetail::Find($input["header"]["id"]);
 
         $header = Departures::find($row->departure_id);
 
-        $special = PricesSpecial::where("product_id", $input["header"]["product_id"])->where("client_id", $header->client_id)->first();
+        if (Auth::user()->role_id == 5) {
+            $special = PricesSpecial::where("product_id", $input["header"]["product_id"])->where("client_id", $header->client_id)->first();
+            if ($special == null) {
+                $pro = Products::find($input["header"]["product_id"]);
+            } else {
+                $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
+                                ->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["header"]["product_id"])
+                                ->where("client_id", $header->client_id)->first();
+            }
 
+            $input["value"] = $pro->price_sf;
 
-        if ($special == null) {
-            $pro = Products::find($input["header"]["product_id"]);
-        } else {
-            $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
-                            ->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["header"]["product_id"])
-                            ->where("client_id", $header->client_id)->first();
+            $input["quantity_lots"] = json_encode($input["detail"]);
+            $input["real_quantity"] = $input["header"]["total"];
+            $input["status_id"] = 3;
+
+            foreach ($input["detail"] as $value) {
+                $pro = Products::find($value["product_id"]);
+                $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
+            }
         }
 
-        $input["value"] = $pro->price_sf;
 
-        $input["quantity_lots"] = json_encode($input["detail"]);
-        $input["real_quantity"] = $input["header"]["total"];
-        $input["status_id"] = 3;
-
-        foreach ($input["detail"] as $value) {
-            $pro = Products::find($value["product_id"]);
-            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
-        }
-
+        $input["quantity"] = $input["header"]["quantity"];
         $row->fill($input)->save();
         $resp = $this->formatDetail($header->id);
         $total = "$ " . number_format($this->total, 0, ",", ".");

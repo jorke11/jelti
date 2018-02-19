@@ -485,6 +485,7 @@ function Departure() {
 
                     data.header.id = $("#frmDetail #id").val();
                     data.header.product_id = $("#frmDetail #product_id :selected").val();
+                    data.header.quantity = $("#frmDetail #quantity").val();
                     data.header.total = total;
                     data.detail = lots;
 

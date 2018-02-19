@@ -785,8 +785,8 @@ class DepartureController extends Controller {
                 $dep = Sales::where("departure_id", $input["id"])->get();
 
                 if ($val > 0) {
-                    $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
-                    if ($val == 0) {
+//                    $val = DeparturesDetail::where("departure_id", $departure["id"])->where("status_id", 1)->count();
+//                    if ($val == 0) {
                         if (count($dep) == 0) {
 
                             $id = DB::table("sales")->insertGetId(
@@ -953,10 +953,10 @@ class DepartureController extends Controller {
                             DB::rollback();
                             return response()->json(["success" => false, "msg" => 'Already sended']);
                         }
-                    } else {
-                        DB::rollback();
-                        return response()->json(["success" => false, "msg" => 'All item detail must be checked'], 409);
-                    }
+//                    } else {
+//                        DB::rollback();
+//                        return response()->json(["success" => false, "msg" => 'All item detail must be checked'], 409);
+//                    }
                 } else {
                     DB::rollback();
                     return response()->json(["success" => false, "msg" => 'Detail empty'], 409);

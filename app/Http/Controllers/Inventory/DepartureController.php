@@ -1173,6 +1173,10 @@ class DepartureController extends Controller {
         $entry = Departures::Find($id);
         $input = $request->all();
 
+        echo "<pre>";
+        print_r($input);
+        exit;
+
         unset($input["header"]["created_at"]);
 
         $query = DB::table("vbriefcase")
@@ -1356,7 +1360,7 @@ class DepartureController extends Controller {
         $row = Departures::Find($id);
 
 
-        if (Auth::user()->id == $row->responsible_id || Auth::user()->id == 2) {
+        if (Auth::user()->id == $row->insert_id || Auth::user()->id == 2) {
             if ($row->invoice == null) {
 
                 $detail = DeparturesDetail::where("departure_id", $row->id)->get();

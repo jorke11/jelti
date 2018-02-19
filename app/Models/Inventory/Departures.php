@@ -31,7 +31,8 @@ class Departures extends Model {
         "remission",
         "discount",
         "type_request",
-        "responsible"
+        "responsible",
+        'insert_id'
         ];
 
 }

@@ -804,13 +804,13 @@ class ToolController extends Controller {
                 $new["type_move"] = "update";
                 InventoryLog::create($new);
                 $inv->save();
-                echo " OK:" . $reference . " actualizado" . $expire . "\n";
+//                echo " OK:" . $reference . " actualizado" . $expire . "\n";
             } else {
                 $new["insert_id"] = $user_id;
                 Inventory::create($new);
                 $new["type_move"] = "new";
                 InventoryLog::create($new);
-                echo " OK:" . $reference . " creado" . $expire . "\n";
+//                echo " OK:" . $reference . " creado" . $expire . "\n";
             }
         } else {
             echo " ERROR: reference:" . $reference . " date not valid " . $expire . "\n";

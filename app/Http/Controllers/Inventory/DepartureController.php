@@ -502,7 +502,6 @@ class DepartureController extends Controller {
 
                     foreach ($row_detail as $value) {
                         $det = DeparturesDetail::find($value->id);
-                        $det->real_quantity = 0;
                         $det->status_id = 1;
                         $det->save();
                     }

@@ -481,14 +481,20 @@ class DepartureController extends Controller {
 
             $row_detail = DeparturesDetail::where("departure_id", $id)->where("real_quantity", ">", 0)->get();
 
-            if ($row->status_id == 2) {
+            if ($row->status_id == 2 || $row->status_id == 5) {
 
                 $ayer = date("Y-m-d", strtotime("-5 day", strtotime(date("Y-m-d"))));
 
                 if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || $row->status_id == 5 || Auth::user()->id == 2) {
                     $sal = Sales::where("departure_id", $id)->first();
 
-                    $this->tool->addInventoryReverse($row, $row_detail);
+
+                    if ($row->status_id == 2) {
+                        $this->tool->addInventoryReverse($row, $row_detail);
+                    } else {
+//                        $this->tool->substractHold($row, $quantity);
+                    }
+
 
                     if ($sal != null) {
                         $detail = SaleDetail::where("sale_id", $sal->id)->get();

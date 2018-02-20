@@ -1326,7 +1326,7 @@ class DepartureController extends Controller {
 
         $header = Departures::find($row->departure_id);
 
-        if (Auth::user()->role_id == 5) {
+        if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1) {
             $special = PricesSpecial::where("product_id", $input["header"]["product_id"])->where("client_id", $header->client_id)->first();
             if ($special == null) {
                 $pro = Products::find($input["header"]["product_id"]);
@@ -1347,7 +1347,6 @@ class DepartureController extends Controller {
                 $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
             }
         }
-
 
         $input["quantity"] = $input["header"]["quantity"];
         $row->fill($input)->save();

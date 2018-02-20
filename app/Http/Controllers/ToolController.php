@@ -849,7 +849,14 @@ class ToolController extends Controller {
 
             if (count($hold) > 0) {
                 $hold->update_id = Auth::user()->id;
-                $total = $hold->quantity - $quantity;
+
+                if ($quantity == 0) {
+                    $total = $quantity;
+                } else {
+                    $total = $hold->quantity - $quantity;
+                }
+
+
 
                 if ($hold->quantity != $quantity) {
                     if ($hold->quantity > $quantity) {

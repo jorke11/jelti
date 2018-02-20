@@ -468,11 +468,9 @@ function Departure() {
         var validate = $(".input-detail").validate();
 
         $(".input-lots").each(function () {
-            if ($(this).val() > 0) {
-                lots.push({lot: $(this).attr("lot"), quantity: $(this).val(), expiration_date: $(this).attr("expire")
-                    , cost_sf: $(this).attr("cost_sf"), product_id: $(this).attr("product_id")});
-                total += parseInt($(this).val());
-            }
+            lots.push({lot: $(this).attr("lot"), quantity: $(this).val(), expiration_date: $(this).attr("expire")
+                , cost_sf: $(this).attr("cost_sf"), product_id: $(this).attr("product_id")});
+            total += parseInt($(this).val());
         })
 
 

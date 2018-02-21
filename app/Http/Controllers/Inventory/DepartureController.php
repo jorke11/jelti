@@ -1392,8 +1392,7 @@ class DepartureController extends Controller {
     public function destroyDetail($id) {
         $entry = DeparturesDetail::Find($id);
 
-        echo "asd";
-        exit;
+        $this->tool->substract($entry->id);
 
         $result = $entry->delete();
         if ($result) {

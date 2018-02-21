@@ -857,7 +857,6 @@ class ToolController extends Controller {
                 }
 
 
-
                 if ($hold->quantity != $quantity) {
                     if ($hold->quantity > $quantity) {
                         $this->substractHold($hold->id, $total);

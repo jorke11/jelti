@@ -3,7 +3,7 @@
         <title>Document</title>
     </head>
     <body>
-        <strong style="color:red">Factura {{$invoice}} reversada</strong>
+        <strong style="color:red">{{$id}} - Factura #{{$invoice}} reversada</strong>
     </body>
 </html>
 

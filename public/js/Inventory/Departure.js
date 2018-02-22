@@ -890,11 +890,22 @@ function Departure() {
 
                 $("#tableLot tbody").empty();
 
+                var row_detail = JSON.parse(resp.row.quantity_lots);
+                var quantity = 0;
+
                 $.each(resp.inventory, function (i, val) {
+                    $.each(row_detail, function (j, value) {
+                        if (val.lot == value.lot && val.expiration_date == value.expiration_date && val.value == value.cost_sf) {
+                            quantity = value.quantity;
+                        }
+                    })
+
                     html += '<tr><td>' + val.lot + '</td>';
                     html += '<td>' + val.quantity + '</td>';
                     html += '<td>' + val.expiration_date + '</td>';
-                    html += '<td><input value="0" class="form-control input-lots" lot="' + val.lot + '" expire="' + val.expiration_date + '" cost_sf="' + val.value + '" product_id="' + val.product_id + '"></td></tr>';
+                    html += '<td><input class="form-control input-lots" lot="' + val.lot + '" expire="' + val.expiration_date + '" cost_sf="'
+                            + val.value + '" product_id="' + val.product_id + '" value="' + quantity + '"></td></tr>';
+                    quantity=0;
                 });
 
                 $("#tableLot tbody").html(html);

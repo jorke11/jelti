@@ -1306,8 +1306,9 @@ class DepartureController extends Controller {
             }
 
             if ($type_event == "reverse") {
-                $this->subject = "SuperFuds " . date("d/m") . " " . $departures->business . " " . $departures->description . " factura Reversada " . $departures->invoice;
+                $this->subject = "SuperFuds " . date("d/m") . " " . $departures->business . " " . $departures->description . " factura Reversada #" . $departures->invoice;
                 $user = Users::find($departures->responsible_id);
+                $input["id"] = $departures->id;
                 $input["invoice"] = $departures->invoice;
                 $input["environment"] = env("APP_ENV");
                 $this->notificationReversed($input);

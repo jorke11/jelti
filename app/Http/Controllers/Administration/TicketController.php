@@ -49,7 +49,8 @@ class TicketController extends Controller {
 //            $user = Auth::User();
             $result = TicketComment::create($input);
             if ($result) {
-                return response()->json(['success' => true]);
+                $detail = TicketComment::where("ticket_id", $input["ticket_id"])->orderBy("id")->get();
+                return response()->json(['success' => true, "detail" => $detail]);
             } else {
                 return response()->json(['success' => false]);
             }
@@ -57,8 +58,9 @@ class TicketController extends Controller {
     }
 
     public function edit($id) {
-        $suppliers = Ticket::FindOrFail($id);
-        return response()->json($suppliers);
+        $header = Ticket::FindOrFail($id);
+        $detail = TicketComment::where("ticket_id", $id)->orderBy("id")->get();
+        return response()->json(["header" => $header, "detail" => $detail]);
     }
 
     public function update(Request $request, $id) {

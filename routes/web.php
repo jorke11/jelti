@@ -325,27 +325,8 @@ Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 Route::resource('/prospect', 'Seller\ProspectsController');
 Route::post('/prospect/convert', 'Seller\ProspectsController@convertToClient');
 
-
-Route::resource('/activity', 'Seller\ActivityController');
 Route::resource('/contact', 'Administration\ContactController');
-Route::resource('/fulfillment', 'Seller\FulfillmentController');
-Route::get('/fulfillment/getInfo/{year}/{month}', 'Seller\FulfillmentController@getInfo');
-Route::get('/fulfillment/getMax/{id}', 'Seller\FulfillmentController@getMax');
-Route::get('/fulfillment/getSales/{id}', 'Seller\FulfillmentController@getSales');
-Route::post('/fulfillment/addTarjet', 'Seller\FulfillmentController@setTarjet');
-Route::put('/fulfillment/editTarjet/{id}', 'Seller\FulfillmentController@updateTarjet');
 
-Route::get('/fulfillment/getDetail/{id}', 'Seller\FulfillmentController@getDetail');
-
-Route::put('/fulfillment/updateDetail/{id}', 'Seller\FulfillmentController@updateDetail');
-Route::post('/fulfillment/addCommercial', 'Seller\FulfillmentController@store');
-
-
-
-
-
-Route::resource('/ticket', 'Administration\TicketController');
-Route::resource('/ticket/addComment', 'Administration\TicketController@addComment');
 Route::resource('/parameter', 'Administration\ParametersController');
 
 
@@ -397,12 +378,6 @@ Route::get('/api/lisCLient', function() {
 Route::get('/api/listParameter', function() {
     return Datatables::queryBuilder(
                     DB::table('parameters')->orderBy("id", "asc")
-            )->make(true);
-});
-
-Route::get('/api/listTicket', function() {
-    return Datatables::queryBuilder(
-                    DB::table('tickets')
             )->make(true);
 });
 
@@ -458,9 +433,7 @@ Route::get('/api/listProspect', function() {
     return Datatables::eloquent(Models\Seller\Prospect::query())->make(true);
 });
 
-Route::get('/api/listActivity', function() {
-    return Datatables::eloquent(Models\Seller\Activity::query())->make(true);
-});
+
 
 Route::get('/api/listContact', 'Clients\ClientController@getContact');
 
@@ -583,3 +556,4 @@ require __DIR__ . '/shop.php';
 require __DIR__ . '/blog.php';
 require __DIR__ . '/tool.php';
 require __DIR__ . '/chat.php';
+require __DIR__ . '/crm.php';

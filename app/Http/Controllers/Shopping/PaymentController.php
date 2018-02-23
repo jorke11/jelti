@@ -210,7 +210,13 @@ class PaymentController extends Controller {
         $in = $req->all();
 
         $in["expirate"] = $in["year"] . "/" . $in["month"];
+
+        $header = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
         $detail = $this->getDetailData();
+        
+        echo "<pre>";
+        print_r($header);
+        exit;
         $client = Stakeholder::where("email", Auth::user()->email)->first();
 
         $city = \App\Models\Administration\Cities::find($client->city_id);
@@ -232,9 +238,9 @@ class PaymentController extends Controller {
 //$apiLogin = "rHpg9EL98w905Nv";
         $merchantId = "508029";
         $accountId = "512321";
-        $referenceCode = 'invioce_004';
+        $referenceCode = 'invoice_004';
 
-        $TX_VALUE = $this->total;
+        $TX_VALUE = round($this->total);
         $TX_TAX = 0.19;
         $TX_TAX_RETURN_BASE = 1000;
 

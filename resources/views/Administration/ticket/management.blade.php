@@ -105,14 +105,20 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row">
-                <div class="col-lg-6">
-                    <table>
+            <div class="row row-center">
+                <div class="col-lg-6  col-lg-offset-3">
+                    <table class="table table-condensed table-bordered" id="tblComment">
                         <thead>
                             <tr>
-                                
+                                <td>#</td>
+                                <td>Comment</td>
+                                <td>Fecha</td>
+                                <td>Accion</td>
                             </tr>
                         </thead>
+                        <tbody>
+
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -130,11 +136,12 @@
             </div>
             <div class="modal-body">
                 {!! Form::open(['id'=>'frmComment']) !!}
+                <input type="hidden" id="ticket_id" name="ticket_id" class="input-detail">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="address" class="control-label">Comment</label>
-                            <textarea id="comment" name="comment" class="form-control input-ticket input-sm"></textarea>
+                            <textarea id="comment" name="comment" class="form-control input-detail input-sm"></textarea>
                         </div>
                     </div>
                 </div>

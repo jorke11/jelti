@@ -92,7 +92,7 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label for="last_name" class="control-label">Fecha Vencimiento</label>
-                            <input type="datetime" class="form-control  input-activity input-sm" id="expiration_date" name="expiration_date" required value="<?php echo date("Y-m-d H:i") ?>">
+                            <input type="datetime" class="form-control  input-activity input-sm form_datetime" id="expiration_date" name="expiration_date" required value="<?php echo date("Y-m-d H:i") ?>">
                         </div>
                     </div>
                     <div class="col-lg-4">

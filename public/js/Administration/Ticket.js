@@ -5,24 +5,30 @@ function Ticket() {
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
 
-        $("#btnComment").click(function(){
-            $("#modalComment").modal("show");
-        });
+        $("#btnComment").click(this.openFormComment);
         $("#btnCommentSave").click(this.addComment);
     }
 
+    this.openFormComment = function () {
+        $("#frmComment #ticket_id").val($("#frm #id").val());
+        $(".input-detail").cleanFields();
+        $("#modalComment").modal("show");
+    }
+
     this.addComment = function () {
-        var obj = {};
-        obj.comment = $("#frmComment #comment").val();
-        obj.ticket_id = $("#frm #id").val();
+        var data = {};
+        data.comment = $("#frmComment #comment").val();
+        data.ticket_id = $("#frmComment #ticket_id").val();
         $.ajax({
             url: '/ticket/addComment',
             method: 'POST',
-            data: obj,
+            data: data,
             dataType: 'JSON',
             success: function (data) {
                 if (data.success == true) {
+                    toastr.success("Comentario ok")
                     $("#modalComment").modal("hide");
+                    obj.reloadComments(data.detail);
                 }
             }
         })
@@ -30,6 +36,7 @@ function Ticket() {
 
     this.new = function () {
         $(".input-ticket").cleanFields();
+        $("#tblComment tbody").empty();
     }
 
     this.save = function () {
@@ -83,9 +90,23 @@ function Ticket() {
             dataType: 'JSON',
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
-                $(".input-ticket").setFields({data: data});
+                $(".input-ticket").setFields({data: data.header});
+                obj.reloadComments(data.detail);
             }
         })
+    }
+
+    this.reloadComments = function (data) {
+        var html = "";
+
+        $("#tblComment tbody").empty();
+
+        $.each(data, function (i, val) {
+            html += "<tr><td>" + val.id + "</td><td>" + val.comment + "</td><td>" + val.created_at + "</td><td>";
+            html += '<span class="glyphicon glyphicon-comment" aria-hidden="true" onclick=obj.openFormComment() style="cursor:pointer"></span></td></tr>';
+        })
+
+        $("#tblComment tbody").html(html);
     }
 
     this.delete = function (id) {

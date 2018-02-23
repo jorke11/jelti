@@ -20,13 +20,13 @@
             <div role="tabpanel" class="tab-pane active" id="list">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        @include('Sellers.activity.list')
+                        @include('crm.activity.list')
                     </div>
                 </div>
 
             </div>
             <div role="tabpanel" class="tab-pane " id="management">
-                @include('Sellers.activity.management')
+                @include('crm.activity.management')
             </div>
         </div>
     </div>
@@ -36,5 +36,5 @@
 
 
 
-{!!Html::script('js/Seller/Activity.js')!!}
+{!!Html::script('js/Crm/Activity.js')!!}
 @endsection

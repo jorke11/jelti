@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Seller;
+namespace App\Http\Controllers\Crm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,7 +13,7 @@ class ActivityController extends Controller {
     }
 
     public function index() {
-        return view("Sellers.activity.init");
+        return view("crm.activity.init");
     }
 
     public function store(Request $request) {

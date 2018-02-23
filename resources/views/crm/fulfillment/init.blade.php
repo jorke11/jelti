@@ -211,5 +211,5 @@
 
 
 
-{!!Html::script('js/Seller/Fulfillment.js')!!}
+{!!Html::script('js/Crm/Fulfillment.js')!!}
 @endsection

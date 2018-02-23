@@ -808,7 +808,6 @@ class DepartureController extends Controller {
                         $cont = 0;
                         $sale = Sales::find($id);
 
-
                         foreach ($detail as $value) {
 
                             $rowDep = DeparturesDetail::find($value->id);

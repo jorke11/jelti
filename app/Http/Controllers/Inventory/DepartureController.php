@@ -811,8 +811,7 @@ class DepartureController extends Controller {
                         foreach ($detail as $value) {
 
                             $rowDep = DeparturesDetail::find($value->id);
-//                            $this->tool->substrac
-//                            t($value->id, $value);
+                            $this->tool->substract($value->id, $value);
                             $pro = Products::find($value->product_id);
 
                             SaleDetail::insert([

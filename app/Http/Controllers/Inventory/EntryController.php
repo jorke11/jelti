@@ -187,7 +187,7 @@ class EntryController extends Controller {
 
                 foreach ($reader->get() as $i => $book) {
                     if ($book->url != '') {
-                        echo $book->url . "<br>";
+                        echo $book->url . "\n";
                         $handler = curl_init($book->url);
                         $response = curl_exec($handler);
                         echo curl_close($handler);

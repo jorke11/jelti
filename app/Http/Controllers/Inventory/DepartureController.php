@@ -592,8 +592,11 @@ class DepartureController extends Controller {
             $header["insert_id"] = Auth::user()->id;
 
             if (isset($header["branch_id"]) && $header["branch_id"] != 0) {
+
                 $bra = Branch::find($header["branch_id"]);
                 $header["responsible_id"] = $bra->responsible_id;
+            } else {
+                unset($header["branch_id"]);
             }
 
             if ($id == null) {
@@ -810,7 +813,12 @@ class DepartureController extends Controller {
                         foreach ($detail as $value) {
 
                             $rowDep = DeparturesDetail::find($value->id);
-                            $this->tool->substract($value->id, $value);
+                            $pro = Products::find($rowDep->product_id);
+
+                            if ($pro->category_id != -1) {
+                                $this->tool->substract($value->id, $value);
+                            }
+                            
                             $pro = Products::find($value->product_id);
 
                             SaleDetail::insert([
@@ -1143,12 +1151,20 @@ class DepartureController extends Controller {
     }
 
     public function getDetail($id) {
-
         $detail = DeparturesDetail::Find($id);
-
         $header = Departures::find($detail->departure_id);
 
-        $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->get();
+        $pro = Products::find($detail->product_id);
+
+
+        if ($pro->category_id != -1) {
+            $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->get();
+        } else {
+            $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
+                "value" => $pro->price_sf);
+        }
+
+
 
         return response()->json(["row" => $detail, "inventory" => $inventory]);
     }
@@ -1329,6 +1345,12 @@ class DepartureController extends Controller {
         $input = $request->all();
         $row = DeparturesDetail::Find($input["header"]["id"]);
 
+        $pro = Products::find($input["header"]["product_id"]);
+
+
+
+
+
         $header = Departures::find($row->departure_id);
 
         if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1) {
@@ -1342,20 +1364,22 @@ class DepartureController extends Controller {
             }
 
             $input["value"] = $pro->price_sf;
-
             $input["quantity_lots"] = json_encode($input["detail"]);
             $input["real_quantity"] = $input["header"]["total"];
             $input["status_id"] = 3;
 
             foreach ($input["detail"] as $value) {
                 $pro = Products::find($value["product_id"]);
-                $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], 
-                        $value["cost_sf"], $row->id);
+                if ($pro->category_id != -1) {
+                    $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
+                }
             }
+
+            $input["quantity"] = $input["header"]["quantity"];
+            $row->fill($input)->save();
         }
 
-        $input["quantity"] = $input["header"]["quantity"];
-        $row->fill($input)->save();
+
         $resp = $this->formatDetail($header->id);
         $total = "$ " . number_format($this->total, 0, ",", ".");
         return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);

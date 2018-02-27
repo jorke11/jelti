@@ -649,6 +649,7 @@ class DepartureController extends Controller {
                     $new["packaging"] = ($pro->packaging == null) ? 1 : $pro->packaging;
                     $new["tax"] = $pro->tax;
                     $new["value"] = $price_sf;
+                    $new["real_quantity"] = 0;
 
                     if ($pro->tax == '0.05') {
                         $tax5++;
@@ -656,7 +657,6 @@ class DepartureController extends Controller {
                     if ($pro->tax == '0.19') {
                         $tax19++;
                     }
-
 
                     $valpro = DeparturesDetail::where("product_id", $val["product_id"])->where("departure_id", $resp->id)->first();
 
@@ -679,7 +679,6 @@ class DepartureController extends Controller {
                 $listdetail = $this->formatDetail($result);
 
                 $ware = Warehouses::find($header["warehouse_id"]);
-
                 $client = Stakeholder::find($header["client_id"]);
 
                 $email = Email::where("description", "departures")->first();
@@ -1350,7 +1349,8 @@ class DepartureController extends Controller {
 
             foreach ($input["detail"] as $value) {
                 $pro = Products::find($value["product_id"]);
-                $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
+                $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], 
+                        $value["cost_sf"], $row->id);
             }
         }
 

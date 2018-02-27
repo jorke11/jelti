@@ -180,8 +180,13 @@ class BlogController extends Controller {
 
         $in = $req->all();
 
+        echo "<pre>";
+        print_r($in);
+        exit;
+
+        $in["email"] = trim($in["email"]);
         unset($in["_token"]);
-        $email = Stakeholder::where("email", $in["email"])->get();
+        $email = Stakeholder::where("email", trim($in["email"]))->get();
 
         if (count($email) > 0) {
             return response()->json(["msg" => "Email ya esta registrado en nuestro sistema!", "status" => false], 500);
@@ -197,7 +202,12 @@ class BlogController extends Controller {
 
         $this->mails[] = "jpinedom@hotmail.com";
 
-        $email = Email::where("description", "page")->first();
+        if ($in["type_stakeholder"] == 3) {
+            $email = Email::where("description", "page_supplier")->first();
+        } else {
+            $email = Email::where("description", "page")->first();
+        }
+
 
         if ($email != null) {
             $emDetail = EmailDetail::where("email_id", $email->id)->get();
@@ -208,6 +218,7 @@ class BlogController extends Controller {
                 }
             }
         }
+        
         $in["environment"] = env("APP_ENV");
 
         $this->subject = "Nuevo Registro";

@@ -10,11 +10,13 @@ function Page() {
             toastr.remove();
             if (!$("#agree").is(":checked")) {
                 toastr.error("acuerdo");
+                elem.attr("disabled", false);
                 return false;
             }
 
             if (isNaN($("#phone").val()) != false) {
                 toastr.error("Numero de telefono");
+                elem.attr("disabled", false);
                 return false;
             }
 

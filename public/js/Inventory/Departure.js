@@ -1071,6 +1071,7 @@ function Departure() {
                 {data: "status"},
                 {data: "total", render: function (data, type, row) {
                         if (row.status_id == 5) {
+//                            console.log(row);
                             html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + row.id + ')"></i> (' + row.remission + ')';
                         } else {
                             if (row.status_id != 1 && row.status_id != 8) {

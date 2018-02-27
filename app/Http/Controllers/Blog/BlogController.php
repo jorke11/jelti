@@ -32,8 +32,10 @@ class BlogController extends Controller {
     public function index() {
         $last = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category")->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")->first();
 
-        $data = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category")->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")
-                        ->where("posts.id", "<>", $last->id)->orderBy("posts.created_at")->paginate(10);
+        $data = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category", 
+                DB::raw("extract(days from now() - posts.created_at) || ' dias '|| extract(minutes from now() - posts.created_at) ||' minutos' as timepost"))
+                ->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")
+                        ->where("posts.id", "<>", $last->id)->orderBy("posts.created_at", "desc")->paginate(10);
 
         return view("Blog.content.init", compact("data", "last"));
     }
@@ -180,10 +182,6 @@ class BlogController extends Controller {
 
         $in = $req->all();
 
-        echo "<pre>";
-        print_r($in);
-        exit;
-
         $in["email"] = trim($in["email"]);
         unset($in["_token"]);
         $email = Stakeholder::where("email", trim($in["email"]))->get();
@@ -218,7 +216,7 @@ class BlogController extends Controller {
                 }
             }
         }
-        
+
         $in["environment"] = env("APP_ENV");
 
         $this->subject = "Nuevo Registro";

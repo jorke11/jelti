@@ -30,7 +30,7 @@ class BlogController extends Controller {
     }
 
     public function index() {
-        $last = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category")->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")->first();
+        $last = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category")->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")->orderBy("posts.created_at", "desc")->first();
 
         $data = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category", 
                 DB::raw("extract(days from now() - posts.created_at) || ' dias '|| extract(minutes from now() - posts.created_at) ||' minutos' as timepost"))

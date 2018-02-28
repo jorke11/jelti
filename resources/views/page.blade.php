@@ -462,7 +462,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
 
 
-        <section style="padding-top: 3%;padding-bottom: 2%" class="col-xs-offset-2">
+        <section style="padding-top: 3%;padding-bottom: 2%" >
             <div class="container-fluid">
                 <div class="row row-center row-space test">
                     <div class="col-lg-8">
@@ -479,7 +479,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </section>
 
 
-        <section class="col-xs-offset-2">
+        <section>
             <div class="container-fluid">
                 <div class="row row-center" >
                     <div class="col-lg-8" style="background-color: #2FC8AE;padding-bottom: .9%"><h2 class="color-font text-center" style="color:#fffbf2">Lo que Aman nuestros <b>Clientes</b> y <b>Proveedores</b></h2></div>
@@ -706,7 +706,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </div>
     </section>
 
-    <div class="container-fluid green-bk col-xs-offset-2">
+    <div class="container-fluid green-bk ">
         <div class="row row-space" style="padding-top: 1%">
             <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
                 <h2 class="col-lg-offset-2"  style="color:white">
@@ -733,7 +733,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     </div>
 
 
-        <section class="col-xs-offset-2">
+    <section>
         <div class="container-fluid grey-bk" style="padding-top: 3%">
             <div class="row">
                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
@@ -768,9 +768,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </div>
     </section>
 
-    <div class="container-fluid green-bk col-xs-offset-2">
-        @include("footer")
-    </div>
+    @include("footer")
+
 
 </body>
 <script>

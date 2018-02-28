@@ -62,24 +62,6 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     <!--End of Tawk.to Script-->
 
     <body>
-        <!--        <div class="container-fluid" id="container-video">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 " style="padding: 0;">
-                            <header id="headervideo" style="padding-top: 3%"> 
-                                <video autoplay="autoplay" loop="loop" id="video_background" preload="auto" volume="50" style="width:100%">
-                             <source src="images/fondo.mpeg" type="video/mpeg" />
-                                    <source src="images/fondo.mp4" type="video/mp4" />
-                                </video>
-                                <button type="button" class="btn btn-primary btn-lg" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
-                                    Registrate como<br>
-                                    <span style="font-weight: 900;font-size: 30px">Cliente o Proveedor</span>
-                                </button>
-                            </header>
-                        </div>
-                    </div>
-                </div>-->
-
-        <!-- Button trigger modal -->
 
         <style>
             .modal-content {
@@ -152,10 +134,23 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 </div>
             </div>
         </div>
+        <style>
+            @media screen and (max-width: 500px) {
+                #slider-main{
+                    padding-top: 23%
+                }
+            }
+            @media screen and (min-width: 800px) {
+                #slider-main{
+                    padding-top: 3%
+                }
+            }
+        </style>
+        <div class="col-xs-offset-2">
+            @include("header")
+        </div>
 
-        @include("header")
-
-        <section style="padding-top: 3%" >
+        <section id="slider-main">
             <div id="carousel-example-generic" class="carousel slide test" data-ride="carousel">
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
@@ -308,18 +303,19 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
             <br>
         </section>
 
-        <section style="padding-top: 1%;padding-bottom: 2%">   
+        <section style="padding-top: 1%;padding-bottom: 2%" class="hidden-xs">   
             <div class="container-fluid test">
                 <div class="row row-center">
-                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>
-                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
+                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-6"><h3 class="color-font">Lo Nuevo</h3></div>
+                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2">
+                        <a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
                 </div>
                 <div class="row row-center">
                     <div class="col-lg-8"><hr style="border-top: 1px solid #ccc"></div>
                 </div>
                 <div class="row row-center test" >
                     <div class="col-lg-8 col-md-8">
-                        <div class="carousel slide media-carousel" id="newproducts">
+                        <div class="carousel slide media-carousel" id="newproducts-xs">
                             <div class="carousel-inner">
                                 <div class="item  active">
                                     <div class="row" >
@@ -371,6 +367,84 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                 </div>
                             </div>
 
+                            <a class="left carousel-control" href="#newproducts-xs" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#newproducts-xs" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-top: 1%;padding-bottom: 2%" class="hidden-lg col-xs-offset-2">   
+            <div class="container-fluid test">
+                <div class="row row-center">
+                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>
+                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
+                </div>
+                <div class="row row-center">
+                    <div class="col-lg-8"><hr style="border-top: 1px solid #ccc"></div>
+                </div>
+                <div class="row row-center test" >
+                    <div class="col-lg-8 col-md-8 col-xs-12">
+                        <div class="carousel slide media-carousel" id="newproducts">
+                            <div class="carousel-inner">
+                                <div class="item  active">
+                                    <div class="row" >
+                                        <?php
+                                        $cont = 0;
+
+                                        foreach ($newproducts as $i => $value) {
+                                            ?>
+                                            <div class="col-md-3 col-sm-6 col-xs-6">
+                                                <div class="thumbnail" style="border: 0;padding: 0;">
+
+                                                    <img src="{{url("/")."/".$value->thumbnail}}" alt="image">
+                                                    <div class="caption" style="padding: 0">
+                                                        <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
+                                                        @if(!Auth::guest())
+                                                        <p>
+                                                        <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,2,",",".")}}</h4>
+                                                        </p>
+                                                        @endif
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                @if(!Auth::guest())
+                                                                <a href="/productDetail/{{$value->id}}" class="btn btn-success form-control" style="background-color: #30c594;">COMPRAR</a>
+                                                                @else
+                                                                <a href="/login" class="btn btn-success form-control" style="background-color: #30c594;">COMPRAR</a>
+                                                                @endif
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            $cont++;
+                                            if ($cont == 2) {
+                                                $cont = 0;
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="row">
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+
                             <a class="left carousel-control" href="#newproducts" role="button" data-slide="prev">
                                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                                 <span class="sr-only">Previous</span>
@@ -387,7 +461,8 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </section>
 
 
-        <section style="padding-top: 3%;padding-bottom: 2%">
+
+        <section style="padding-top: 3%;padding-bottom: 2%" class="col-xs-offset-2">
             <div class="container-fluid">
                 <div class="row row-center row-space test">
                     <div class="col-lg-8">
@@ -404,7 +479,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         </section>
 
 
-        <section>
+        <section class="col-xs-offset-2">
             <div class="container-fluid">
                 <div class="row row-center" >
                     <div class="col-lg-8" style="background-color: #2FC8AE;padding-bottom: .9%"><h2 class="color-font text-center" style="color:#fffbf2">Lo que Aman nuestros <b>Clientes</b> y <b>Proveedores</b></h2></div>
@@ -413,11 +488,6 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <div class="col-lg-8 " style="padding: 0">
                         <div id="carousel-refer" class="carousel slide" data-ride="carousel">
                             <!-- Indicators -->
-                            <!--                            <ol class="carousel-indicators">
-                                                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                                                        </ol>-->
 
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner" role="listbox">
@@ -461,7 +531,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
         </section>
 
-        <section style="padding-bottom: 2%;padding-top: 2%">
+        <section style="padding-bottom: 2%;padding-top: 2%" class="hidden-xs">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
@@ -544,98 +614,187 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
             </div>
         </section>
 
-        <div class="container-fluid green-bk">
-            <div class="row row-space" style="padding-top: 1%">
-                <div class="col-lg-5 col-md-5 col-sm-6">
-                    <h2 class="col-lg-offset-2"  style="color:white">
-                        Regístrate y recibe tips, recetas <br>
-                        y mucho más!
-                    </h2>
-                </div>
-                <div class="col-lg-7 col-md-7 col-sm-6">
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <input class="form-control input-lg" placeholder="Email">
+        <section style="padding-bottom: 2%;padding-top: 2%" class="hidden-lg">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-xs-offset-2">
+                        <div id="carousel-clients-xs" class="carousel slide" data-ride="carousel">
+
+                            <ol class="carousel-indicators">
+                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner" role="listbox">
+
+                                <div class="item active">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <img src="logos/olimpica.png" alt="..." class="img-responsive center-block">
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <img src="logos/la14.png" alt="..." class="img-responsive center-block">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="row" >
+                                        <div class="col-xs-6">
+                                            <img src="logos/farmatodo.png" alt="..." class="img-responsive center-block" >
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <img src="logos/rappi-3.png" alt="..." class="img-responsive center-block" >
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="item">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <img src="logos/click_clack-4.png" alt="..." class="img-responsive center-block">
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <img src="logos/locatel-5.png" alt="..." class="img-responsive center-block">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <img src="logos/altoque-6.png" alt="..." class="img-responsive center-block" >
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <img src="logos/cruz_verde-7.png" alt="..." class="img-responsive center-block">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <img src="logos/gastronomy-8.png" alt="..." class="img-responsive center-block" >
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <img src="logos/enjoy_fit-11.png" alt="..." class="img-responsive center-block" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <img src="logos/juliao-10.png" alt="..." class="img-responsive center-block" >
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <img src="logos/tiger_market-9.png" alt="..." class="img-responsive center-block">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <a class="left carousel-control" href="#carousel-clients-xs" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-clients-xs" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
-                    <br>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container-fluid green-bk col-xs-offset-2">
+        <div class="row row-space" style="padding-top: 1%">
+            <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                <h2 class="col-lg-offset-2"  style="color:white">
+                    Regístrate y recibe tips, recetas <br>
+                    y mucho más!
+                </h2>
+            </div>
+            <div class="col-lg-7 col-md-7 col-sm-6">
+                <br>
+                <div class="row">
+                    <div class="col-lg-10 col-xs-12">
+                        <input class="form-control input-lg" placeholder="Email">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button class="btn btn-default" style="color:green">Suscribete</button>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+
+
+        <section class="col-xs-offset-2">
+        <div class="container-fluid grey-bk" style="padding-top: 3%">
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
+                    <p class="text-center col-lg-offset-5"><img src="/images/movil.png" class="img-responsive"></p>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-6" style="padding-top: 5%">
                     <div class="row">
                         <div class="col-lg-12">
-                            <button class="btn btn-default" style="color:green">Suscribete</button>
+                            <h2 class="text-center" style="color:#4a4a4a">Descarga SuperFüds</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4 class="text-center" style="color:#4a4a4a">Para  que puedas  llevar  la vida saludable a todas partes</h4>
                         </div>
                     </div>
                     <br>
-                </div>
-            </div>
-        </div>
-
-
-        <section>
-            <div class="container-fluid grey-bk" style="padding-top: 3%">
-                <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-5">
-                        <p class="text-center col-lg-offset-5"><img src="/images/movil.png"></p>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <img src="/images/appstore.png" class="img-responsive">
+                        </div>
                     </div>
-                    <div class="col-lg-7 col-md-7 col-sm-7" style="padding-top: 5%">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h2 class="text-center" style="color:#4a4a4a">Descarga SuperFüds</h2>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h4 class="text-center" style="color:#4a4a4a">Para  que puedas  llevar  la vida saludable a todas partes</h4>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <img src="/images/appstore.png" >
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <img src="/images/googleplay.png">
-                            </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <img src="/images/googleplay.png" class="img-responsive">
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-
-
-
-        <div class="container-fluid green-bk">
-            @include("footer")
         </div>
+    </section>
 
-    </body>
-    <script>
-        $('#menuProduct').click(function () {
-            $("#menuProduct span").addClass("underline-green");
-            $("#menuInicio").removeClass("underline-green");
-            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
-                    && location.hostname == this.hostname) {
+    <div class="container-fluid green-bk col-xs-offset-2">
+        @include("footer")
+    </div>
 
-                var $target = $(this.hash);
+</body>
+<script>
+    $('#menuProduct').click(function () {
+        $("#menuProduct span").addClass("underline-green");
+        $("#menuInicio").removeClass("underline-green");
+        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+                && location.hostname == this.hostname) {
 
-                $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+            var $target = $(this.hash);
 
-                if ($target.length) {
-                    var targetOffset = $target.offset().top;
-                    $('html,body').animate({scrollTop: targetOffset}, 1000);
-                    return false;
-                }
+            $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+
+            if ($target.length) {
+                var targetOffset = $target.offset().top;
+                $('html,body').animate({scrollTop: targetOffset}, 1000);
+                return false;
             }
+        }
 
-        });
+    });
 
-    </script>
-    {!!Html::script('js/Page/page.js')!!}
+</script>
+{!!Html::script('js/Page/page.js')!!}
 
 </html>
 <?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario.       ?>

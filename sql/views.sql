@@ -77,6 +77,12 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
 		(select sum(real_quantity) from departures_detail where departure_id=d.id)
 		 END as quantity,
 		d.subtotal as subtotalnumeric,	
+CASE WHEN (d.status_id IN(1,8)) 
+        THEN 
+		(select sum(quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
+        ELSE 
+		(select sum(real_quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
+		 END as quantity_packaging,
         d.total,
             
 		CASE WHEN (d.status_id IN (1,8)) THEN 

@@ -968,19 +968,22 @@ class ToolController extends Controller {
 
     public function substract($row_id) {
         $hold = InventoryHold::where("row_id", $row_id)->first();
+        if ($hold != null) {
+            $up["row_id"] = $row_id;
+            $up["product_id"] = $hold->product_id;
+            $up["warehouse_id"] = $hold->warehouse_id;
+            $up["value"] = $hold->value;
+            $up["expiration_date"] = $hold->expiration_date;
+            $up["quantity"] = $hold->quantity;
+            $up["lot"] = $hold->lot;
+            $up["type_move"] = "substract_hold";
+            $up["insert_id"] = Auth::user()->id;
+            InventoryLog::create($up);
 
-        $up["row_id"] = $row_id;
-        $up["product_id"] = $hold->product_id;
-        $up["warehouse_id"] = $hold->warehouse_id;
-        $up["value"] = $hold->value;
-        $up["expiration_date"] = $hold->expiration_date;
-        $up["quantity"] = $hold->quantity;
-        $up["lot"] = $hold->lot;
-        $up["type_move"] = "substract_hold";
-        $up["insert_id"] = Auth::user()->id;
-        InventoryLog::create($up);
-
-        $hold->delete();
+            $hold->delete();
+        }else{
+            echo $row_id;exit;
+        }
     }
 
     public function addInventoryRow($row_id) {

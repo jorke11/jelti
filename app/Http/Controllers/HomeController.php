@@ -108,14 +108,21 @@ class HomeController extends Controller {
             $commercial = $commercial[0];
         }
 
+        $mes = date('m', strtotime('-1 month', strtotime(date("Y-m"))));
+        $year = date('Y', strtotime('-1 month', strtotime(date("Y-m"))));
+
+        $numero = cal_days_in_month(CAL_GREGORIAN, $mes, $year); // 31
+
         $ant = date('Y-m', strtotime('-1 month', strtotime(date("Y-m"))));
 
 
         $sql = "
                 SELECT count(*) estemes,(
                                         select count(*) 
-                                        from stakeholder where created_at between '" . $ant . "-01 00:00' and '" . $ant . "-30 23:59') mesanterior 
+                                        from stakeholder where created_at between '" . $ant . "-01 00:00' and '" . $ant . "-" . $numero . " 23:59') mesanterior 
                 FROM stakeholder where created_at > '" . date("Y-m") . "-01 00:00'";
+
+
 
         $newClient = DB::select($sql);
         if (count($newClient) > 0) {
@@ -127,7 +134,7 @@ class HomeController extends Controller {
             (select sum(d.quantity * d.value * d.units_supplier)
             from purchases_detail  d
             JOIN purchases p ON p.id=d.purchase_id
-            where d.product_id is not null and p.created_at between '" . $ant . "-01 00:00' and '" . $ant . "-30 23:59') mesanterior
+            where d.product_id is not null and p.created_at between '" . $ant . "-01 00:00' and '" . $ant . "-" . $numero . " 23:59') mesanterior
             from purchases_detail  d
             JOIN purchases p ON p.id=d.purchase_id
             where d.product_id is not null and p.created > '" . date("Y-m") . "-01 00:00'
@@ -161,16 +168,15 @@ class HomeController extends Controller {
             if ($users->status_id == 3) {
                 return view('activation', compact("users", "roles", "warehouses", "samples"));
             } else {
-                
+
                 return \Redirect::to('/');
             }
         } else {
-                    
+
             if (Auth::user()->role_id == 2) {
 
 //                return view('client', compact("product", "client", "supplier", "commercial", "samples", "category", "subcategory"));
                 return redirect('shopping/0');
-                
             } else {
                 return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples", "category"));
             }
@@ -187,10 +193,10 @@ class HomeController extends Controller {
             WHERE vdepartures.status_id IN (2,7)  AND client_id NOT IN(258,264,24)
             GROUP BY to_char(vdepartures.dispatched,'YYYY-Month'),to_char(dispatched,'YYYY-MM') 
             ORDER BY 2 ASC
-                ";         
+                ";
 
         $sales = DB::select($sql);
-   
+
         $cat = array();
         $total = array();
         $subtotal = array();

@@ -14,20 +14,20 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row ">
-                    <div class="col-lg-2">Nombre</div>
-                    <div class="col-lg-5">Jorge</div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-2">Apellido</div>
-                    <div class="col-lg-5">Pinedo</div>
+                    <div class="col-lg-2">Cliente</div>
+                    <div class="col-lg-5">{{$client->business}}</div>
                 </div>
                 <div class="row">
                     <div class="col-lg-2">Documento</div>
-                    <div class="col-lg-5"><b>103239555</b></div>
+                    <div class="col-lg-5"><b>{{$client->document}}</b></div>
                 </div>
-                <div class="row row-space">
+                <div class="row">
                     <div class="col-lg-2">Dirección Envio</div>
                     <div class="col-lg-5"><b>{{$client->address_send}}</b></div>
+                </div>
+                <div class="row row-space">
+                    <div class="col-lg-2">Total</div>
+                    <div class="col-lg-5"><b>{{$total}}</b></div>
                 </div>
                 <div class="row row-space">
                     <div class="col-lg-6">

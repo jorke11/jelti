@@ -138,6 +138,12 @@
 
                                 </div>
                             </div>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="email">Slug</label>
+                                    <input type="text" class="form-control input-product" id="slug" name='slug' readonly="">
+                                </div>
+                            </div>
                         </div>
 
                     </div>

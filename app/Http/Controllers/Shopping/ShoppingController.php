@@ -34,6 +34,7 @@ class ShoppingController extends Controller {
         if ($id == '0') {
             $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(16);
             $category = Categories::all();
+            
             return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
         } else {
 
@@ -169,12 +170,12 @@ class ShoppingController extends Controller {
     }
 
     public function getProduct($id) {
-        $product = DB::table("vproducts")->where("id", $id)->first();
+        $product = DB::table("vproducts")->where("slug", $id)->first();
 
 
         if ($product != null) {
 
-            $detail = ProductsImage::where("product_id", $id)->get();
+            $detail = ProductsImage::where("product_id", $product->id)->get();
 
             $relations = DB::table("vproducts")->where("category_id", $product->category_id)->whereNotNull("image")->get();
 
@@ -216,7 +217,7 @@ class ShoppingController extends Controller {
 
     public function managementOrder(Request $req) {
         $data = $req->all();
-        
+
         $order = Orders::where("stakeholder_id", Auth::user()->id)->where("status_id", 1)->first();
 
         if (count($order) > 0) {
@@ -226,8 +227,8 @@ class ShoppingController extends Controller {
             $new["status_id"] = 1;
             $order_id = Orders::create($new)->id;
         }
-        
-        
+
+
         for ($i = 0; $i < $data["quantity"]; $i++) {
             $pro = Products::findOrFail($data["product_id"]);
             $det["product_id"] = $data["product_id"];

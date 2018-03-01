@@ -10,9 +10,9 @@ class Departures extends Model {
     protected $primaryKey = "id";
     protected $fillable = [
         "id",
-        "responsible_id", 
-        "branch_id", 
-        "city_id", 
+        "responsible_id",
+        "branch_id",
+        "city_id",
         "client_id",
         "warehouse_id",
         "created",
@@ -32,7 +32,9 @@ class Departures extends Model {
         "discount",
         "type_request",
         "responsible",
-        'insert_id'
-        ];
+        'insert_id',
+        'type_insert_id',
+        "order_id"
+    ];
 
 }

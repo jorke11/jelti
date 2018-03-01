@@ -11,7 +11,6 @@ class Orders extends Model
     protected $fillable = [
         "id",
         "stakeholder_id", 
-        "address",
-        "phone",
+        "response_payu",
         "status_id"];
 }

@@ -3,6 +3,8 @@
 namespace App\Models\Administration;
 
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
 class Products extends Model {
 
@@ -39,9 +41,20 @@ class Products extends Model {
         "about",
         "why",
         "ingredients"
-        
     ];
     
     public $timestamp = false;
+    
+    use Sluggable,
+        SluggableScopeHelpers;
+    
+
+    public function sluggable() {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 
 }

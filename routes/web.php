@@ -14,6 +14,7 @@
 use App\Models;
 use Models\Administration\Categories;
 
+
 Auth::routes();
 
 Route::group(['namespace' => 'Api'], function () {
@@ -319,7 +320,7 @@ Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getCli
 /**
  * Shopping cart
  */
-Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
+
 
 
 Route::resource('/prospect', 'Seller\ProspectsController');

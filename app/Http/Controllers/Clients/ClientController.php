@@ -65,7 +65,7 @@ class ClientController extends Controller {
             $input["special_price"] = isset($input["special_price"]) ? true : false;
             $input["login_web"] = isset($input["login_web"]) ? true : false;
             $input["exclude_report"] = (isset($input["exclude_report"])) ? 1 : 0;
-            
+
             $input["document"] = trim($input["document"]);
             $input["email"] = trim($input["email"]);
 
@@ -311,6 +311,7 @@ class ClientController extends Controller {
         $new["password"] = $input["password"];
         $new["status_id"] = $input["status_id"];
         $new["role_id"] = 2;
+        $new["stakeholder_id"] = $id;
 
         if ($user == null) {
             Users::create($new);

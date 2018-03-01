@@ -49,7 +49,7 @@ select p.id,p.title,substring(p.description from 1 for 30) || ' ...' as descript
 p.cost_sf,p.tax,p.price_sf,
 (select path from products_image where product_id=p.id and main=true limit 1) as image,
 (select thumbnail from products_image where product_id=p.id and main=true limit 1) as thumbnail,status.description as status,p.status_id,p.category_id,p.supplier_id,
-p.short_description,p.packaging,p.characteristic,p.about,p.why,p.ingredients,p.warehouse
+p.short_description,p.packaging,p.characteristic,p.about,p.why,p.ingredients,p.warehouse,p.slug
 from products p
 JOIN stakeholder s ON s.id=p.supplier_id
 LEFT JOIN parameters as status ON status.code=p.status_id and status."group"='generic'
@@ -67,6 +67,7 @@ WHERE p.type_product_id IS NOT NULL
 
 
 --drop view vdepartures;
+
 create view vdepartures as 
 select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,sta.business_name,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
@@ -83,7 +84,14 @@ CASE WHEN (d.status_id IN(1,8))
         ELSE 
 		(select sum(real_quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
 		 END as quantity_packaging,
-        d.total,
+          CASE WHEN (d.status_id IN(1,8)) THEN 
+		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) 
+         from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
+		 ELSE 
+		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where departure_id=d.id)
+		 END+coalesce(d.shipping_cost,0)-coalesce(d.discount,0) +(Coalesce(d.shipping_cost,0) * coalesce(d.shipping_cost_tax,0) ) 
+         as total,
+        d.total as total2,
             
 		CASE WHEN (d.status_id IN (1,8)) THEN 
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id and departures_detail.tax=0.19)
@@ -109,7 +117,6 @@ CASE WHEN (d.status_id IN(1,8))
             JOIN cities dest ON dest.id = d.destination_id
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
-
 
 
 --drop view vdepartures;

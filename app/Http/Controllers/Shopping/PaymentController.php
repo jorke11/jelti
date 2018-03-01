@@ -13,6 +13,11 @@ use Session;
 use Illuminate\Support\Facades\Input;
 use App\Models\Administration\Stakeholder;
 use App\Models\Security\Users;
+use Log;
+use App\Models\Inventory\Departures;
+use App\Models\Inventory\DeparturesDetail;
+use App\Models\Administration\PricesSpecial;
+use App\Models\Administration\Products;
 
 class PaymentController extends Controller {
 
@@ -35,6 +40,7 @@ class PaymentController extends Controller {
     public $order;
 
     public function __construct() {
+
         $this->middleware("auth");
         $this->depObj = new DepartureController();
         $this->merchantId = "508029";
@@ -129,8 +135,10 @@ class PaymentController extends Controller {
         $order = Orders::find($id);
         $user = Users::find($order->stakeholder_id);
         $client = Stakeholder::where("email", $user->email)->first();
+        $detail = $this->getDetailData();
+        $total = $this->total;
 
-        return view("Ecommerce.payment.payment", compact("id", "client", "month", "years"));
+        return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total"));
     }
 
     public function getDetailData() {
@@ -153,27 +161,7 @@ class PaymentController extends Controller {
 
             $this->total = 0;
             $this->subtotal = 0;
-            foreach ($detail as $i => $value) {
-                $detail[$i]->valueFormated = "$" . number_format($value->value, 0, ",", ".");
-                $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
-
-                $detail[$i]->totalFormated = "$" . number_format($detail[$i]->total, 0, ",", ".");
-                $this->subtotal += $detail[$i]->total;
-
-                $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
-
-                if ($value->tax == 0) {
-                    $this->exento += $detail[$i]->total;
-                }
-
-                if ($value->tax == 0.05) {
-                    $this->tax5 += $detail[$i]->total * $value->tax;
-                }
-                if ($value->tax == 0.19) {
-                    $this->tax19 += $detail[$i]->total * $value->tax;
-                }
-            }
-
+            $detail = json_decode(json_encode($detail), true);
 
             return $detail;
         }
@@ -200,9 +188,32 @@ class PaymentController extends Controller {
             OrdersDetail::create($new);
         }
 
-
-
         return response()->json(["success" => true]);
+    }
+
+    public function createOrder() {
+        $row = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
+
+        $user = Users::find(Auth::user()->id);
+        $client = Stakeholder::find($user->stakeholder_id);
+
+        $new["warehouse_id"] = 3;
+        $new["responsible_id"] = 1;
+        $new["city_id"] = $client->city_id;
+        $new["created"] = date("Y-m-d H:i");
+        $new["status_id"] = 1;
+        $new["client_id"] = $user->stakeholder_id;
+        $new["destination_id"] = $client->city_id;
+        $new["address"] = $client->address_send;
+        $new["phone"] = $client->phone;
+        $new["shipping_cost"] = 0;
+        $new["insert_id"] = Auth::user()->id;
+        $new["type_insert_id"] = 2;
+        $new["order_id"] = $row->id;
+        $detail = $this->getDetailData();
+
+        $res = $this->depObj->processDeparture($new, $detail)->getData();
+        return $res;
     }
 
     public function payment(Request $req) {
@@ -211,12 +222,10 @@ class PaymentController extends Controller {
 
         $in["expirate"] = $in["year"] . "/" . $in["month"];
 
-        $header = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
+        $data_order = $this->createOrder();
+//        dd($data_order);
         $detail = $this->getDetailData();
-        
-        echo "<pre>";
-        print_r($header);
-        exit;
+
         $client = Stakeholder::where("email", Auth::user()->email)->first();
 
         $city = \App\Models\Administration\Cities::find($client->city_id);
@@ -228,7 +237,6 @@ class PaymentController extends Controller {
             exit("Tarjeta no reconocida");
         }
 
-
         $deviceSessionId = md5(session_id() . microtime());
 
         $url = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi";
@@ -238,9 +246,9 @@ class PaymentController extends Controller {
 //$apiLogin = "rHpg9EL98w905Nv";
         $merchantId = "508029";
         $accountId = "512321";
-        $referenceCode = 'invoice_004';
+        $referenceCode = 'invoice_009';
 
-        $TX_VALUE = round($this->total);
+        $TX_VALUE = round($data_order->header->total);
         $TX_TAX = 0.19;
         $TX_TAX_RETURN_BASE = 1000;
 
@@ -333,14 +341,10 @@ class PaymentController extends Controller {
             "cookie" => "pt1t38347bs6jc9ruv2ecpv7o2",
             "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
         );
-        echo "<pre>";
-        print_r($postData);
-        echo "<br>";
-        echo "Respuesta ......<br>";
+
+//        Log::info(print_r($postData, true));
 
         $data_string = json_encode($postData);
-
-
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -352,17 +356,31 @@ class PaymentController extends Controller {
             'Accept:application/json',
             'Content-Length: ' . strlen($data_string))
         );
-//print_r($data_string);exit;                        
+//        print_r($data_string);
+//        exit;
 
         $result = curl_exec($ch);
 
         $arr = json_decode($result, TRUE);
-        echo "<pre>";
-        print_r($arr);
 
-//        if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
-//            return redirect('shopping/0')->with("success", 'Payment success');
-//        }
+
+        if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
+            $row = Departures::find($data_order->header->id);
+            $row->paid_out = true;
+            $row->type_request = "ecommerce";
+            $row->save();
+
+            $row_order = Orders::find($row->order_id);
+            $row_order->response_payu = $result;
+            $row_order->status_id = 2;
+            $row_order->save();
+
+            return redirect('shopping/0')->with("success", 'Payment success');
+        } else {
+            echo "<pre>";
+            print_r($arr);
+            exit;
+        }
     }
 
     public function paymentCredit(Request $req) {

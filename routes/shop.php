@@ -10,6 +10,7 @@ Route::get('/productDetail/{id}', 'Shopping\ShoppingController@getProduct');
 Route::post('/addComment', 'Shopping\ShoppingController@addComment');
 Route::get('/getComment/{id}', 'Shopping\ShoppingController@getComment');
 
+Route::get('/getCounter', 'Shopping\ShoppingController@getCountOrders');
 
 Route::get('/comments', 'MainController@getcomments');
 Route::get('/comments/list/{id}', 'MainController@listComments');

@@ -38,6 +38,7 @@ class CreateDeparturesTable extends Migration {
             $table->boolean('paid_out')->nullable();
             $table->text('voucher')->nullable();
             $table->integer('discount')->nullable();
+            $table->integer('type_insert_id');
             $table->string('type_request')->nullable();
             $table->timestamps();
             $table->dateTime('dispatched');

@@ -8,6 +8,14 @@
 </div>
 {!! Form::open(['id'=>'frm','url'=>'payment/target']) !!}
 <input id="order_id" name="order_id" type="hidden" value='{{$id}}'>
+@if(Session::has('error'))
+<div class="row row-center">
+    <div class="col-lg-6">
+        <div class="alert alert-danger">{{Session::get('error')}}</div>
+    </div>
+</div>
+@endif
+
 
 <div class="row row-center">
     <div class="col-lg-6">

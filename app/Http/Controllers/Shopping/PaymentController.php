@@ -57,7 +57,6 @@ class PaymentController extends Controller {
 
     public function index() {
         $client = Stakeholder::where("document", Auth::user()->document)->first();
-//        dd($client);
         return view("Ecommerce.payment.init", compact("client"));
     }
 
@@ -107,11 +106,39 @@ class PaymentController extends Controller {
     public function getDetail() {
         $detail = $this->getDetailData();
         if ($detail != null) {
+
+            $this->formatedDetail($detail);
+
             $total = "$" . number_format($this->total, 0, ",", ".");
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
             return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal, "order" => $this->order_id]);
         } else {
             return response()->json(["success" => false, "total" => 0], 509);
+        }
+    }
+
+    public function formatedDetail($detail) {
+        $this->total = 0;
+        $this->subtotal = 0;
+        foreach ($detail as $i => $value) {
+            $detail[$i]["valueFormated"] = "$" . number_format($value["value"], 0, ",", ".");
+            $detail[$i]["total"] = $detail[$i]["quantity"] * $detail[$i]["value"] * $detail[$i]["units_sf"];
+            $detail[$i]["totalFormated"] = "$" . number_format($detail[$i]["total"], 0, ",", ".");
+            $this->subtotal += $detail[$i]["total"];
+
+
+            $this->total += $detail[$i]["total"] + ($detail[$i]["total"] * $value["tax"]);
+
+
+            if ($value["tax"] == 0) {
+                $this->exento += $detail[$i]["total"];
+            }
+            if ($value["tax"] == 0.05) {
+                $this->tax5 += $detail[$i]["total"] * $value->tax;
+            }
+            if ($value["tax"] == 0.19) {
+                $this->tax19 += $detail[$i]["total"] * $value->tax;
+            }
         }
     }
 
@@ -149,7 +176,7 @@ class PaymentController extends Controller {
 
             $sql = "
                 SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.value) as value,sum(d.quantity * d.value) total,p.image,p.thumbnail,
-                sum(d.units_sf) as units_sf,d.tax
+                sum(d.units_sf) as units_sf,d.tax,round(sum(d.quantity * d.value))::money as total_formated
                 FROM orders_detail d
                     JOIN vproducts p ON p.id=d.product_id
                     JOIN stakeholder s ON s.id=p.supplier_id
@@ -159,8 +186,6 @@ class PaymentController extends Controller {
 //            echo $sql;exit;
             $detail = DB::select($sql);
 
-            $this->total = 0;
-            $this->subtotal = 0;
             $detail = json_decode(json_encode($detail), true);
 
             return $detail;
@@ -195,6 +220,7 @@ class PaymentController extends Controller {
         $row = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
 
         $user = Users::find(Auth::user()->id);
+
         $client = Stakeholder::find($user->stakeholder_id);
 
         $new["warehouse_id"] = 3;
@@ -208,7 +234,7 @@ class PaymentController extends Controller {
         $new["phone"] = $client->phone;
         $new["shipping_cost"] = 0;
         $new["insert_id"] = Auth::user()->id;
-        $new["type_insert_id"] = 2;
+//        $new["type_insert_id"] = 2;
         $new["order_id"] = $row->id;
         $detail = $this->getDetailData();
 
@@ -233,56 +259,70 @@ class PaymentController extends Controller {
 //
         $type_card = $this->identifyCard($in["number"], $in["crc"], $in["expirate"]);
 
+        $error = '';
+
         if ($type_card == false) {
-            exit("Tarjeta no reconocida");
+            $error = " Tarjeta no reconocida";
         }
 
-        $deviceSessionId = md5(session_id() . microtime());
+        if ($error == '') {
 
-        $url = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi";
-        $apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
+            $deviceSessionId = md5(session_id() . microtime());
+
+            $url = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi";
+            $apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
 //$apiKey = "maGw8KQ5JlOEv64D79ma1N0l9G";
-        $apiLogin = "pRRXKOl8ikMmt9u";
+            $apiLogin = "pRRXKOl8ikMmt9u";
 //$apiLogin = "rHpg9EL98w905Nv";
-        $merchantId = "508029";
-        $accountId = "512321";
-        $referenceCode = 'invoice_009';
+            $merchantId = "508029";
+            $accountId = "512321";
+            $referenceCode = 'invoice_009';
 
-        $TX_VALUE = round($data_order->header->total);
-        $TX_TAX = 0.19;
-        $TX_TAX_RETURN_BASE = 1000;
+            $TX_VALUE = round($data_order->header->total);
+            $TX_TAX = 0.19;
+            $TX_TAX_RETURN_BASE = 1000;
 
-        $session_id = md5(session_id() . microtime());
-        $currency = "COP";
-        $postData["test"] = "true";
-        $postData["language"] = "en";
-        $postData["command"] = "SUBMIT_TRANSACTION";
+            $session_id = md5(session_id() . microtime());
+            $currency = "COP";
+            $postData["test"] = "true";
+            $postData["language"] = "en";
+            $postData["command"] = "SUBMIT_TRANSACTION";
 
-        $postData["merchant"] = array(
-            "apiKey" => $apiKey,
-            "apiLogin" => $apiLogin
-        );
+            $postData["merchant"] = array(
+                "apiKey" => $apiKey,
+                "apiLogin" => $apiLogin
+            );
 
-        $signature = md5($apiKey . "~" . $merchantId . "~" . $referenceCode . "~" . $TX_VALUE . "~" . $currency);
+            $signature = md5($apiKey . "~" . $merchantId . "~" . $referenceCode . "~" . $TX_VALUE . "~" . $currency);
 
-        $postData["transaction"] = array("order" => array(
-                "accountId" => $accountId,
-                "referenceCode" => $referenceCode,
-                "description" => "Pago " . $referenceCode,
-                "language" => "es",
-                "signature" => $signature,
-                "notifyUrl" => "http://localhost:8080/payu/tarjetas_credito.php",
-                "additionalValues" => array(
-                    "TX_VALUE" => array("value" => $TX_VALUE, "currency" => $currency),
-                    "TX_TAX" => array("value" => $TX_TAX, "currency" => $currency),
-                    "TX_TAX_RETURN_BASE" => array("value" => $TX_TAX_RETURN_BASE, "currency" => $currency),
-                ),
-                "buyer" => array(
-                    "merchantBuyerId" => "1",
-                    "fullName" => $client->business,
-                    "emailAddress" => $client->email,
-                    "contactPhone" => $client->phone,
-                    "dniNumber" => $client->document,
+            $postData["transaction"] = array("order" => array(
+                    "accountId" => $accountId,
+                    "referenceCode" => $referenceCode,
+                    "description" => "Pago " . $referenceCode,
+                    "language" => "es",
+                    "signature" => $signature,
+                    "notifyUrl" => "http://localhost:8080/payu/tarjetas_credito.php",
+                    "additionalValues" => array(
+                        "TX_VALUE" => array("value" => $TX_VALUE, "currency" => $currency),
+                        "TX_TAX" => array("value" => $TX_TAX, "currency" => $currency),
+                        "TX_TAX_RETURN_BASE" => array("value" => $TX_TAX_RETURN_BASE, "currency" => $currency),
+                    ),
+                    "buyer" => array(
+                        "merchantBuyerId" => "1",
+                        "fullName" => $client->business,
+                        "emailAddress" => $client->email,
+                        "contactPhone" => $client->phone,
+                        "dniNumber" => $client->document,
+                        "shippingAddress" => array(
+                            "street1" => $client->address_send,
+//                        "street2" => "5555487",
+                            "city" => $city->description,
+                            "state" => $department->description,
+                            "country" => "CO",
+                            "postalCode" => "000000",
+                            "phone" => $client->phone
+                        )
+                    ),
                     "shippingAddress" => array(
                         "street1" => $client->address_send,
 //                        "street2" => "5555487",
@@ -293,93 +333,85 @@ class PaymentController extends Controller {
                         "phone" => $client->phone
                     )
                 ),
-                "shippingAddress" => array(
-                    "street1" => $client->address_send,
+                "payer" => array(
+                    "merchantPayerId" => "1",
+                    "fullName" => $client->business,
+                    "emailAddress" => $client->email,
+                    "contactPhone" => $client->phone,
+                    "dniNumber" => $client->document,
+                    "billingAddress" => array(
+                        "street1" => $client->address_send,
 //                        "street2" => "5555487",
-                    "city" => $city->description,
-                    "state" => $department->description,
-                    "country" => "CO",
-                    "postalCode" => "000000",
-                    "phone" => $client->phone
-                )
-            ),
-            "payer" => array(
-                "merchantPayerId" => "1",
-                "fullName" => $client->business,
-                "emailAddress" => $client->email,
-                "contactPhone" => $client->phone,
-                "dniNumber" => $client->document,
-                "billingAddress" => array(
-                    "street1" => $client->address_send,
-//                        "street2" => "5555487",
-                    "city" => $city->description,
-                    "state" => $department->description,
-                    "country" => "CO",
-                    "postalCode" => "000000",
-                    "phone" => $client->phones
-                )
-            ),
-            "creditCard" => array(
+                        "city" => $city->description,
+                        "state" => $department->description,
+                        "country" => "CO",
+                        "postalCode" => "000000",
+                        "phone" => $client->phones
+                    )
+                ),
+                "creditCard" => array(
 //                "number" => "4097440000000004",
-                "number" => $in["number"],
+                    "number" => $in["number"],
 //                "securityCode" => "321",
-                "securityCode" => $in["crc"],
+                    "securityCode" => $in["crc"],
 //                "expirationDate" => "2019/02",
-                "expirationDate" => $in["expirate"],
-                "name" => $in["name"]
-            ),
-            "extraParameters" => array(
-                "INSTALLMENTS_NUMBER" => 1
-            ),
-            "type" => "AUTHORIZATION_AND_CAPTURE",
+                    "expirationDate" => $in["expirate"],
+                    "name" => $in["name"]
+                ),
+                "extraParameters" => array(
+                    "INSTALLMENTS_NUMBER" => 1
+                ),
+                "type" => "AUTHORIZATION_AND_CAPTURE",
 //            "paymentMethod" => "VISA",
-            "paymentMethod" => $type_card["paymentMethod"],
-            "paymentCountry" => "CO",
+                "paymentMethod" => $type_card["paymentMethod"],
+                "paymentCountry" => "CO",
 //            "deviceSessionId" => "vghs6tvkcle931686k1900o6e1",
-            "deviceSessionId" => $deviceSessionId,
-            "ipAddress" => "127.0.0.1",
-            "cookie" => "pt1t38347bs6jc9ruv2ecpv7o2",
-            "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
-        );
+                "deviceSessionId" => $deviceSessionId,
+                "ipAddress" => "127.0.0.1",
+                "cookie" => "pt1t38347bs6jc9ruv2ecpv7o2",
+                "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
+            );
 
 //        Log::info(print_r($postData, true));
 
-        $data_string = json_encode($postData);
+            $data_string = json_encode($postData);
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Host: sandbox.api.payulatam.com',
-            'Accept:application/json',
-            'Content-Length: ' . strlen($data_string))
-        );
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Host: sandbox.api.payulatam.com',
+                'Accept:application/json',
+                'Content-Length: ' . strlen($data_string))
+            );
 //        print_r($data_string);
 //        exit;
 
-        $result = curl_exec($ch);
+            $result = curl_exec($ch);
 
-        $arr = json_decode($result, TRUE);
+            $arr = json_decode($result, TRUE);
 
 
-        if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
-            $row = Departures::find($data_order->header->id);
-            $row->paid_out = true;
-            $row->type_request = "ecommerce";
-            $row->save();
+            if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
+                $row = Departures::find($data_order->header->id);
+                $row->paid_out = true;
+                $row->type_request = "ecommerce";
+                $row->save();
 
-            $row_order = Orders::find($row->order_id);
-            $row_order->response_payu = $result;
-            $row_order->status_id = 2;
-            $row_order->save();
+                $row_order = Orders::find($row->order_id);
+                $row_order->response_payu = $result;
+                $row_order->status_id = 2;
+                $row_order->save();
 
-            return redirect('shopping/0')->with("success", 'Payment success');
+                return redirect('shopping/0')->with("success", 'Payment success');
+            } else {
+                return back()->with("error", $arr["error"]);
+            }
         } else {
-            echo "<pre>";
-            print_r($arr);
-            exit;
+
+            return back()->with("error", $error);
         }
     }
 

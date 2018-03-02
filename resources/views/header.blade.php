@@ -59,11 +59,14 @@
                 @if(Auth::user()->role_id!=2)
                 <li><a href="/home" style="color:#00c98a;font-size:17px;font-weight: 100">Jelty</a></li>
                 @endif
+                 @if(Auth::user()->role_id == 2)
                 <li> <a href="/payment">
                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" style="font-size: 25px;color:#30c594"></span>
                         <span class="badge">
                             <span id="quantityOrders"></span>
                         </span></a></li>
+                <li>
+                    @endif
                 <li>
                     <a href="{{ url('/logout') }}"
                        onclick="event.preventDefault();

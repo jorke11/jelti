@@ -191,7 +191,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h4>Cantidad X{{$product->packaging}}</h4>
+                        <h4>Cantidad X{{$product->packaging}} (<b>Disponible</b>): <span class="badge badge-pill badge-success">{{$available}}</span></h4>
                     </div>
                 </div>
                 <div class="row">
@@ -200,9 +200,13 @@
                     </div>
                 </div>
                 <br>
+                @if(Auth::user()!=null)
+                @if(Auth::user()->role_id == 2)
                 <div class="row">
-                    <div class="col-lg-6 col-lg-offset-3">
+                    <div class="col-lg-6 col-lg-offset-3">  
+
                         <button class="btn btn-success form-control" id="AddProduct" style="background-color: #30c594">Comprar</button>
+
                     </div>
                 </div>
                 <br>
@@ -213,6 +217,8 @@
                         <span class="glyphicon glyphicon-comment" aria-hidden="true" style='cursor: pointer;font-size: 25px' onclick="obj.modalComment({{$product->id}})"></span>&nbsp;<span class="badge" >0</span>
                     </div>
                 </div>
+                @endif
+                @endif
             </div>        
         </div>
         <section style="background-color: rgba(255,252,245,.7);width: 100%">

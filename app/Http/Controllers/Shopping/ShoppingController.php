@@ -15,12 +15,16 @@ use App\Models\Administration\Stakeholder;
 use App\Models\Blog\Feedback;
 use Auth;
 use DB;
+use App\Http\Controllers\Inventory\StockController;
 
 class ShoppingController extends Controller {
 
-//    public function __construct() {
-//        $this->middleware("auth");
-//    }
+    public $stock;
+
+    public function __construct() {
+        $this->middleware("auth");
+        $this->stock = new StockController();
+    }
 
     public function index() {
         return view("Ecommerce.shopping.init");
@@ -34,7 +38,7 @@ class ShoppingController extends Controller {
         if ($id == '0') {
             $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(16);
             $category = Categories::all();
-            
+
             return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
         } else {
 
@@ -195,10 +199,10 @@ class ShoppingController extends Controller {
                     $product->characteristic = $cha;
                 }
             }
+            
+            $available = $this->stock->getInventory($product->id);
 
-
-
-            return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier"));
+            return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier", "available"));
         } else {
             return response(view('errors.503'), 404);
         }

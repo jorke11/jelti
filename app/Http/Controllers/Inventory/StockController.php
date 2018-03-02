@@ -93,6 +93,17 @@ class StockController extends Controller {
         return response()->json(["response" => $response, "quantity" => $quantity]);
     }
 
+    public function getInventory($product_id, $warehouse_id = null) {
+
+        $inv = Inventory::where("product_id", $product_id);
+
+        if ($warehouse_id != null) {
+            $inv->where("warehouse_id", $warehouse_id);
+        }
+
+        return $inv->sum("quantity");
+    }
+
     public function getDetailSample(Request $req, $id) {
         $in = $req->all();
         $special = null;

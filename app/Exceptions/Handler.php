@@ -5,9 +5,10 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class Handler extends ExceptionHandler
-{
+class Handler extends ExceptionHandler {
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -30,8 +31,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
-    {
+    public function report(Exception $exception) {
         parent::report($exception);
     }
 
@@ -42,9 +42,24 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
-    {
-        return parent::render($request, $exception);
+    public function render($request, Exception $e) {
+        if ($e instanceof ModelNotFoundException) {
+            $e = new NotFoundHttpException($e->getMessage(), $e);
+        }
+
+        if ($e instanceof TokenMismatchException) {
+            return redirect()->back()->withInput($request->except('password'))->withErrors(['Validation Token was expired. Please try again']);
+        }
+
+        // You can add your own exception here
+        // so redirect to the home route
+        if ($e instanceof NotFoundHttpException) {
+            return response()->view('errors.custom', [], 500);
+
+//            return redirect()->route();
+        }
+
+        return parent::render($request, $e);
     }
 
     /**
@@ -54,12 +69,12 @@ class Handler extends ExceptionHandler
      * @param  \Illuminate\Auth\AuthenticationException  $exception
      * @return \Illuminate\Http\Response
      */
-    protected function unauthenticated($request, AuthenticationException $exception)
-    {
+    protected function unauthenticated($request, AuthenticationException $exception) {
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
         return redirect()->guest('login');
     }
+
 }

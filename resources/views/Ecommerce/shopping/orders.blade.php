@@ -1,6 +1,6 @@
 @extends('layouts.client')
 @section('content')
-<div class="row" style="padding-bottom: 3%;padding-top: 3%">
+<div class="row" style="padding-bottom: 3%;padding-top: 5%">
     <div class="col-lg-12">
         <table class="table table-bordered  table-condensed" id="orderClient">
             <thead>

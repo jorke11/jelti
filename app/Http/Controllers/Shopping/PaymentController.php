@@ -276,7 +276,7 @@ class PaymentController extends Controller {
 //$apiLogin = "rHpg9EL98w905Nv";
             $merchantId = "508029";
             $accountId = "512321";
-            $referenceCode = 'invoice_009';
+            $referenceCode = 'invoice_011';
 
             $TX_VALUE = round($data_order->header->total);
             $TX_TAX = 0.19;
@@ -407,10 +407,14 @@ class PaymentController extends Controller {
 
                 return redirect('shopping/0')->with("success", 'Payment success');
             } else {
-                return back()->with("error", $arr["error"]);
+                $error = $arr["error"];
+                if ($arr["code"] == 'SUCCESS') {
+                    $error = $arr["transactionResponse"]["responseMessage"];
+                }
+
+                return back()->with("error", $error);
             }
         } else {
-
             return back()->with("error", $error);
         }
     }

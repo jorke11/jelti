@@ -280,8 +280,13 @@ class ShoppingController extends Controller {
 
         $orders = DB::select($sql);
         $orders = $orders[0];
+        
+        $sql = "select count(*) quantity, sum(subtotalnumeric) total from vdepartures where client_id=$user->stakeholder_id and status_id IN(1)";
 
-        return view("Ecommerce.shopping.profile", compact("client", "orders"));
+        $new = DB::select($sql);
+        $new = $new[0];
+
+        return view("Ecommerce.shopping.profile", compact("client", "orders","new"));
     }
 
     public function getMyOrders() {

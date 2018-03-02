@@ -127,16 +127,21 @@
                 </div>            
                 <div class="col-xs-12 divider text-center">
                     <div class="col-xs-12 col-sm-4 emphasis">
-                        <h2><strong> {{$orders->quantity}} </strong></h2>                    
-                        <p><small>Ordenes</small></p>
+                        <h2><strong> {{$new->quantity}} </strong></h2>                    
+                        <p><small>Pedidos</small></p>
                         <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Ver </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 emphasis">
+                        <h2><strong> {{$orders->quantity}} </strong></h2>                    
+                        <p><small>Facturados</small></p>
+                        <button class="btn btn-info btn-block"><span class="fa fa-user"></span> Ver</button>
                     </div>
                     <div class="col-xs-12 col-sm-4 emphasis">
                         <h2><strong>${{number_format($orders->total,0,",",".")}}</strong></h2>                    
                         <p><small>Total Ordenes</small></p>
-                        <button class="btn btn-info btn-block"><span class="fa fa-user"></span> Ver</button>
+                        <button class="btn btn-primary btn-block"><span class="fa fa-user"></span> Ver</button>
                     </div>
-                    <div class="col-xs-12 col-sm-4 emphasis">
+<!--                    <div class="col-xs-12 col-sm-4 emphasis">
                         <h2><strong>43</strong></h2>                    
                         <p><small>Snippets</small></p>
                         <div class="btn-group dropup btn-block">
@@ -154,7 +159,7 @@
                                 <li><a href="#" class="btn disabled" role="button"> Unfollow </a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>                 
         </div>

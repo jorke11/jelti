@@ -785,7 +785,7 @@ class ToolController extends Controller {
             }
 
 
-            if (strtotime($expire) > strtotime(date("Y-m-d"))) {
+            if (strtotime($expire) >= strtotime(date("Y-m-d"))) {
                 $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)->where("warehouse_id", $warehouse_id)->where("value", $cost_sf)->first();
 
                 $new["product_id"] = $pro->id;

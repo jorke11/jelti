@@ -14,6 +14,18 @@
 
         <!-- Styles -->
         {!!Html::style('/vendor/template/vendors/bootstrap/dist/css/bootstrap.min.css')!!}
+
+
+        {!!Html::script('/vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/ColReorder/js/dataTables.colReorder.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/jszip.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/pdfmake.min.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/vfs_fonts.js')!!}
+        {!!Html::script('/vendor/DataTables-1.10.13/buttons.html5.min.js')!!}
+
+        {!!Html::style('/vendor/DataTables-1.10.13/media/css/jquery.dataTables.css')!!}	
+
         <style>
             .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
                 margin-left:150px;

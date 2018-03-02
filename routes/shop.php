@@ -34,3 +34,11 @@ Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
 
 Route::get('myProfile', "Shopping\ShoppingController@getMyProfile");
 Route::get('myOrders', "Shopping\ShoppingController@getMyOrders");
+
+
+
+Route::get('api/listOrderClient', function() {
+    $user = \App\Models\Security\Users::where("id", Auth::user()->id)->first();
+    $query = DB::table('vdepartures')->where("client_id", $user->stakeholder_id);
+    return Datatables::queryBuilder($query)->make(true);
+});

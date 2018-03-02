@@ -31,3 +31,6 @@ Route::get('paymentest', "Payments\PaymentsController@index");
 
 Route::delete('/deleteDetail/{id}', 'Shopping\PaymentController@deleteItem');
 Route::post('/addDetail', 'Shopping\ShoppingController@managementOrder');
+
+Route::get('myProfile', "Shopping\ShoppingController@getMyProfile");
+Route::get('myOrders', "Shopping\ShoppingController@getMyOrders");

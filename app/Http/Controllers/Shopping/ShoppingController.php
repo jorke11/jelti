@@ -199,7 +199,7 @@ class ShoppingController extends Controller {
                     $product->characteristic = $cha;
                 }
             }
-            
+
             $available = $this->stock->getInventory($product->id);
 
             return view("Ecommerce.shopping.product", compact("product", "detail", "relations", "supplier", "available"));
@@ -269,6 +269,23 @@ class ShoppingController extends Controller {
                         ->where("row_id", $product_id)->get();
 
         return response()->json($feed);
+    }
+
+    public function getMyProfile() {
+        $user = \App\User::find(Auth::user()->id);
+        $client = DB::table("vclient")->where("id", $user->stakeholder_id)->first();
+
+
+        $sql = "select count(*) quantity, sum(subtotalnumeric) total from vdepartures where client_id=$user->stakeholder_id and status_id IN(2,7)";
+
+        $orders = DB::select($sql);
+        $orders = $orders[0];
+
+        return view("Ecommerce.shopping.profile", compact("client", "orders"));
+    }
+
+    public function getMyOrders() {
+        return view("Ecommerce.shopping.orders", compact("product"));
     }
 
 }

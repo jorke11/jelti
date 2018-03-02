@@ -55,11 +55,11 @@
                 <li><a href="/shopping/0" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
                 <li><a href="{{url("blog")}}" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
                 @if(Auth::user()!=null)
-                
+
                 @if(Auth::user()->role_id!=2)
                 <li><a href="/home" style="color:#00c98a;font-size:17px;font-weight: 100">Jelty</a></li>
                 @endif
-                 @if(Auth::user()->role_id == 2)
+                @if(Auth::user()->role_id == 2)
                 <li> <a href="/payment">
                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" style="font-size: 25px;color:#30c594"></span>
                         <span class="badge">
@@ -67,17 +67,29 @@
                         </span></a></li>
                 <li>
                     @endif
-                <li>
-                    <a href="{{ url('/logout') }}"
-                       onclick="event.preventDefault();
-                               document.getElementById('logout-form').submit();">
-                        Logout
-                    </a>
 
-                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"  style="font-size: 20px;color:#30c594"></span><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/myProfile">Perfil</a></li>
+                        <li><a href="/myOrders">Mis Ordenes</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="{{ url('/logout') }}"
+                               onclick="event.preventDefault();
+                               document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+
+                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        </li>
+                    </ul>
                 </li>
+
 
                 @endif
                 @if(Auth::user()==null)

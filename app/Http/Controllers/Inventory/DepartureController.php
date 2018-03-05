@@ -1441,7 +1441,9 @@ class DepartureController extends Controller {
     public function destroyDetail($id) {
         $entry = DeparturesDetail::Find($id);
 
-        $this->tool->substract($entry->id);
+        if ($entry->status_id == 3) {
+            $this->tool->substract($entry->id);
+        }
 
         $result = $entry->delete();
         if ($result) {

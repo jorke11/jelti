@@ -363,13 +363,34 @@ class DepartureController extends Controller {
         $this->mails = array();
         $dep = Departures::find($id);
 
-        $detail = DB::table("departures_detail")
-                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.real_quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.real_quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder", "departures_detail.real_quantity as quantity")
-                ->join("products", "departures_detail.product_id", "products.id")
-                ->join("stakeholder", "products.supplier_id", "stakeholder.id")
-                ->where("departures_detail.departure_id", $id)
-                ->where("departures_detail.real_quantity", "<>", 0)
-                ->get();
+//        $detail = DB::table("departures_detail")
+//                ->select("departures_detail.quantity", DB::raw("departures_detail.tax * 100 as tax"), DB::raw("coalesce(departures_detail.description,'') as description"), "products.title as product", "products.id as product_id", "departures_detail.value", "departures_detail.units_sf", DB::raw("departures_detail.units_sf * departures_detail.real_quantity as quantityTotal"), DB::raw("departures_detail.value * departures_detail.real_quantity * departures_detail.units_sf as valueTotal"), "stakeholder.business as stakeholder", "departures_detail.real_quantity as quantity")
+//                ->join("products", "departures_detail.product_id", "products.id")
+//                ->join("stakeholder", "products.supplier_id", "stakeholder.id")
+//                ->where("departures_detail.departure_id", $id)
+//                ->where("departures_detail.real_quantity", "<>", 0)
+//
+//                ->get();
+
+
+        $sql = "
+                SELECT 
+                    sum(departures_detail.quantity) as quantity,departures_detail.tax * 100 as tax,coalesce(departures_detail.description,'') as description,
+                    products.title as product,products.id as product_id,departures_detail.value,departures_detail.units_sf,
+                    stakeholder.business as stakeholder,sum(departures_detail.real_quantity) as quantity,
+                    sum(departures_detail.units_sf * departures_detail.real_quantity) as quantityTotal,
+                    sum(departures_detail.value * departures_detail.real_quantity * departures_detail.units_sf) as valueTotal
+                    
+                FROM departures_detail
+                JOIN products ON departures_detail.product_id = products.id
+                JOIN stakeholder ON products.supplier_id = stakeholder.id
+                WHERE departures_detail.departure_id = $id and 
+                    departures_detail.real_quantity <> 0
+                    GROUP BY 2,3,4,5,6,7,8
+                    ORDER BY products.supplier_id
+                ";
+        $detail = DB::select($sql);
+
 
 
         $cli = Branch::select("branch_office.id", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "cities.description as city", "branch_office.term")

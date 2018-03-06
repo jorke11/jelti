@@ -54,7 +54,7 @@
                 <li><a href="/" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" >Inicio</a></li>
                 <li><a href="/shopping/0" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
                 <li><a href="{{url("blog")}}" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
-                <li class="hidden-lg"><a href="#" style="color:#00c98a;font-size:17px;font-weight: 100" data-target="#myModal">Registrarme</a></li>
+                <li class="hidden-lg"><a href="#" class="anim-underline" onclick="objPage.openModal('myModal')" style="color:#00c98a;font-size:17px;font-weight: 100">Registrarme</a></li>
                 @if(Auth::user()!=null)
 
                 @if(Auth::user()->role_id!=2)

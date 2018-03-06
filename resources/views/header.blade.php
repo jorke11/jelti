@@ -54,6 +54,7 @@
                 <li><a href="/" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" >Inicio</a></li>
                 <li><a href="/shopping/0" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
                 <li><a href="{{url("blog")}}" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
+                <li class="hidden-lg"><a href="#"  style="color:#00c98a;font-size:17px;font-weight: 100" data-toggle="modal" data-target="#myModal">Registrarme</a></li>
                 @if(Auth::user()!=null)
 
                 @if(Auth::user()->role_id!=2)
@@ -75,12 +76,12 @@
                     <ul class="dropdown-menu">
                         <li><a href="/myProfile">Perfil</a></li>
                         <li><a href="/myOrders">Mis Ordenes</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#myModal">Registrarme</a></li>
+
                         <li role="separator" class="divider"></li>
                         <li>
                             <a href="{{ url('/logout') }}"
                                onclick="event.preventDefault();
-                               document.getElementById('logout-form').submit();">
+                                       document.getElementById('logout-form').submit();">
                                 Logout
                             </a>
 

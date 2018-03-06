@@ -1130,7 +1130,13 @@ class DepartureController extends Controller {
 
     public function formatDetailSales($id) {
         $detail = DB::table("sales_detail")->
-                        select("sales_detail.id", "sales_detail.quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "sales_detail.tax")->join("products", "sales_detail.product_id", "products.id")->join("stakeholder", "stakeholder.id", "products.supplier_id")->where("sale_id", $id)->orderBy("id", "asc")->get();
+                        select("sales_detail.id", "sales_detail.quantity", "sales_detail.value", 
+                                DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), 
+                                "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf",
+                                "sales_detail.tax")
+                ->join("products", "sales_detail.product_id", "products.id")
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id")
+                ->where("sale_id", $id)->orderBy("products.supplier_id", "asc")->orderBy(DB::raw("3"), "DESC")->get();
 
         $this->total = 0;
         $this->subtotal = 0;

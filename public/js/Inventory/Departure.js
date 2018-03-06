@@ -763,7 +763,7 @@ function Departure() {
 
             val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
 
-            id = (val.id != undefined) ? '' : ' (' + val.id + ')';
+            id = (val.id == undefined) ? '' : ' (' + val.id + ')';
 
             html += "<tr>";
             html += "<td>" + val.product + id + "</td>";

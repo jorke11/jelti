@@ -45,6 +45,8 @@
                             <th>Proveedor</th>
                             <th>Categoria</th>
                             <th>Producto</th>
+                            <th>Lote</th>
+                            <th>Fecha Vencimiento</th>
                             <th>Disponible</th>
                         </tr>
                     </thead>

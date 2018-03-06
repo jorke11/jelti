@@ -43,15 +43,16 @@ class StockController extends Controller {
 
 
         $sql = "
-            select p.id,p.reference,s.business as stakeholder,c.description as category,p.title as product,sum(i.quantity) as quantity
+            select p.id,p.reference,s.business as stakeholder,c.description as category,p.title as product,i.lot,i.expiration_date,sum(i.quantity) as quantity
             from inventory i
             JOIN products p ON p.id=i.product_id
             JOIN stakeholder s ON s.id=p.supplier_id
             JOIN categories c ON c.id=p.category_id
             $bar_code $ware
-            group by 1,2,3,4,5
+            group by 1,2,3,4,5,6,7
+            ORDER BY 3 DESC,5 ASC,7 ASC
                 ";
-
+//        echo $sql;exit;
         $products = DB::select($sql);
 
 

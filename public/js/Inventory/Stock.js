@@ -38,6 +38,8 @@ function Stock() {
                 {data: "stakeholder"},
                 {data: "category"},
                 {data: "product"},
+                {data: "lot"},
+                {data: "expiration_date"},
                 {data: "quantity"},
             ],
             order: [[5, 'ASC']],

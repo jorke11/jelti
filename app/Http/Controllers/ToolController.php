@@ -179,6 +179,16 @@ class ToolController extends Controller {
         }
     }
 
+    public function updateSlug() {
+        $pro = Products::all();
+
+        foreach ($pro as $value) {
+            $row = Products::find($value->id);
+            $row->description = $row->description;
+            $row->save();
+        }
+    }
+
     public function readImagesBanner() {
 
         $cmd = 'find  ' . public_path() . '/banner/ -name "*.jpg"';

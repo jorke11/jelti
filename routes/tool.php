@@ -14,4 +14,5 @@ Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct")
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}/{vencimiento}', "ToolController@addInventory");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}', "ToolController@addInventory");
 Route::get('/uinventory', "ToolController@formInventory");
+Route::get('/ulug', "ToolController@updateSlug");
 Route::post('/setinventory', "ToolController@storeInventory");

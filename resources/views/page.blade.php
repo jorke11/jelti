@@ -15,6 +15,7 @@ if (!isset($_COOKIE["mostrarModal"])) {
     # Ahora nuestra variable de control pasará a tener el valor TRUE (Verdadero)
     $exibirModal = true;
 }
+clearstatcache();
 ?>
 
 <!DOCTYPE html>

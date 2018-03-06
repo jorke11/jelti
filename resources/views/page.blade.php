@@ -138,7 +138,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         <style>
             @media screen and (max-width: 500px) {
                 #slider-main{
-                    padding-top: 23%
+                    padding-top: 28%
                 }
             }
             @media screen and (min-width: 800px) {
@@ -164,7 +164,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <div class="item active">
                         <img src="images/banner_main.jpg" alt="Bebés" class="img-responsive" width="100%">
                         <div class="carousel-caption" style="padding-left: 45%">
-                            <button type="button" class="btn btn-primary btn-lg" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
+                            <button type="button" class="btn btn-primary btn-lg hidden-xs" id="buttonMain" style="" data-toggle="modal" data-target="#myModal">
                                 Registrate como<br>
                                 <span style="font-size: 30px;color:#000"><b>Cliente</b> o <b>Proveedor</b></span>
                             </button>
@@ -173,7 +173,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     <div class="item">
                         <img src="images/banner_bebe.jpg" alt="Navidad" width="100%">
                         <div class="carousel-caption" style="padding-left: 40%">
-                            <a href="/shopping/18" style="color:white;background-color: #139c9e;border: 1px solid white;
+                            <a href="/shopping/18" class="hidden-xs" style="color:white;background-color: #139c9e;border: 1px solid white;
                                border-radius: 30px;padding:10px 40px 10px 40px;font-size: 40px;font-weight: 800">BEBES</a>
                         </div>
                     </div>
@@ -383,16 +383,17 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
             </div>
         </section>
 
-        <section style="padding-top: 1%;padding-bottom: 2%" class="hidden-lg col-xs-offset-2">   
-            <div class="container-fluid test">
+        <section style="padding-top: 1%;padding-bottom: 2%" class="hidden-lg">   
+            <div class="container-fluid">
                 <div class="row row-center">
-                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>
+                    <!--<div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>-->
+                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-xs-5 "><a href="shopping/0" class="anim-underline text-muted">Lo Nuevo</a></div>
                     <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
                 </div>
                 <div class="row row-center">
                     <div class="col-lg-8"><hr style="border-top: 1px solid #ccc"></div>
                 </div>
-                <div class="row row-center test" >
+                <div class="row" >
                     <div class="col-lg-8 col-md-8 col-xs-12">
                         <div class="carousel slide media-carousel" id="newproducts">
                             <div class="carousel-inner">
@@ -408,7 +409,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
 
                                                     <img src="{{url("/")."/".$value->thumbnail}}" alt="image" onclick="objPage.redirectProduct('{{$val->slug}}')" style="cursor: pointer">
                                                     <div class="caption" style="padding: 0">
-                                                        <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
+                                                        <h5 class="text-center" style="min-height: 45px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                                         @if(!Auth::guest())
                                                         <p>
                                                         <h4 class="text-center" style="color:black;font-weight: 400;">$ {{number_format($value->price_sf,2,",",".")}}</h4>

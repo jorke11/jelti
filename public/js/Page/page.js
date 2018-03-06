@@ -57,7 +57,7 @@ function Page() {
 
     }
 
- this.redirectProduct = function (url) {
+    this.redirectProduct = function (url) {
         window.location = PATH + "/productDetail/" + url;
     }
 

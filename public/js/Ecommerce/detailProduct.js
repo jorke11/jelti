@@ -13,6 +13,10 @@ function detailProduct() {
         $("#txtComment").val("");
         $("#modalComment").modal("show");
     }
+    
+     this.redirectProduct = function (url) {
+        window.location = PATH + "/productDetail/" + url;
+    }
 
     this.addProduct = function () {
         toastr.remove()

@@ -241,9 +241,9 @@
                                                 ?>
                                                 <div class="col-sm-3 col-lg-2 col-md-3">
                                                     <div class="thumbnail" style="padding: 0px">
-                                                        <img src="{{url($val->thumbnail)}}">
+                                                        <img src="{{url($val->thumbnail)}}" onclick="obj.redirectProduct('{{$val->slug}}')" style="cursor: pointer">
                                                         <div class="caption" style="padding: 0px">
-                                                            <h5 class="text-center" style="height: 35px"><a href="/productDetail/{{$val->id}}">{{$val->title}}</a></h5>
+                                                            <h5 class="text-center" style="height: 35px"><a href="/productDetail/{{$val->slug}}">{{$val->title}}</a></h5>
                                                             <p>
                                                             <h4 class="text-center">$ {{number_format($val->price_sf,2,",",".")}}</h4>
                                                             </p>

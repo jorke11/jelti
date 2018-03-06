@@ -917,8 +917,6 @@ class ToolController extends Controller {
                             $this->substractHold($hold->id, $quantity);
                             $this->outInventoryHold($warehouse_id, $reference, $total, $lot, $expire, $cost_sf);
                         } else {
-                            echo "esle1";
-                            exit;
                             $this->substractHold($hold->id, $quantity);
                         }
                     }

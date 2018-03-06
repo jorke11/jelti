@@ -17,6 +17,11 @@ function Detail() {
             }
         })
     }
+
+    this.redirectProduct = function (url) {
+        window.location = PATH + "/productDetail/" + url;
+    }
+
     this.selectedSubcategory = function (obj) {
 
         $(obj).attr("src", $(obj).attr("src"));

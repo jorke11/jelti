@@ -7,6 +7,7 @@
 
         <title>Superfuds</title>
         <link rel="shortcut icon" href="{{ asset('assets/images/logoico.png') }}">
+            <script>var PATH = '{{url("/")}}'</script>
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">

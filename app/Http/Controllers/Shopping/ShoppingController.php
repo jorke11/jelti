@@ -22,7 +22,7 @@ class ShoppingController extends Controller {
     public $stock;
 
     public function __construct() {
-        $this->middleware("auth");
+//        $this->middleware("auth");
         $this->stock = new StockController();
     }
 

@@ -2,6 +2,11 @@ function Page() {
     var id = 1;
     this.init = function () {
 
+
+        $('.input-number').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
         $(".box-client").addClass("back-green");
         $("#type_stakeholder").val(id);
         $("#register").click(function () {
@@ -9,7 +14,7 @@ function Page() {
             elem.attr("disabled", true);
             toastr.remove();
             if (!$("#agree").is(":checked")) {
-                toastr.error("acuerdo");
+                toastr.error("Necesita estar de acuerdo con los terminos Legales");
                 elem.attr("disabled", false);
                 return false;
             }
@@ -34,7 +39,8 @@ function Page() {
                         elem.attr("disabled", false);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
-                    toastr.error("Problemas con el procesamiento");
+
+                    toastr.error(xhr.responseJSON.msg);
                     elem.attr("disabled", false);
                 }
 

@@ -5,6 +5,8 @@ function Payment() {
 
         this.getDetail();
         this.getQuantity();
+
+
     }
 
     this.payu = function () {
@@ -35,10 +37,15 @@ function Payment() {
             },
             success: function (data) {
 
-                $.each(data.detail, function (i, val) {
+
+                if (data.success == false) {
+
+                } else {
+
+                    $.each(data.detail, function (i, val) {
 //                    image = (val.image == null) ? "../assets/images/default.jpg" : val.image;
-                    image = (val.thumbnail == null) ? "http://via.placeholder.com/200x150" : val.thumbnail;
-                    html += '<div class="row">\
+                        image = (val.thumbnail == null) ? "http://via.placeholder.com/200x150" : val.thumbnail;
+                        html += '<div class="row">\
                 <div class="col-lg-12">\
                     <div class="panel panel-default">\
                         <div class="panel-header">\
@@ -77,8 +84,9 @@ function Payment() {
                 </div>\
             </div>';
 
-                })
-                html += '</div>';
+                    })
+                    html += '</div>';
+                }
 
                 $("#content-detail").html(html);
 //                $("#tblReview").html('<tr><td colspan="4"><strong>Total</td><td>' + data.total + '</strong></td></tr>');
@@ -87,7 +95,8 @@ function Payment() {
                 $("#totalOrder").html("<h4>" + data.total + "</h4>");
                 $("#frm #order_id").val(data.order);
             }, error: function () {
-//                location.href = '/login';
+
+
             }
         })
     }

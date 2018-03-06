@@ -113,7 +113,7 @@ class PaymentController extends Controller {
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
             return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal, "order" => $this->order_id]);
         } else {
-            return response()->json(["success" => false, "total" => 0], 509);
+            return response()->json(["success" => false, "total" => 0]);
         }
     }
 
@@ -187,7 +187,6 @@ class PaymentController extends Controller {
             $detail = DB::select($sql);
 
             $detail = json_decode(json_encode($detail), true);
-
             return $detail;
         }
     }
@@ -556,7 +555,8 @@ class PaymentController extends Controller {
     public function deleteItem(Request $req, $id) {
         $input = $req->all();
         OrdersDetail::where("order_id", $id)->where("product_id", $input["product_id"])->delete();
-        return response()->json($input);
+
+        return response()->json(["status" => true, "order" => $id]);
     }
 
 }

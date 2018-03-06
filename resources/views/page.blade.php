@@ -112,7 +112,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                     </div>
                                     <div class="row row-space">
                                         <div class="col-lg-12">
-                                            <input class="form-control in-page" placeholder="Telefono" type="text" name="phone" id="phone">
+                                            <input class="form-control in-page input-number" placeholder="Telefono" type="text" name="phone" id="phone">
                                         </div>
                                     </div>
                                     <div class="row row-space">

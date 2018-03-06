@@ -36,7 +36,6 @@ function Page() {
                     if (data.status == true) {
                         toastr.success("Pronto te estaremos contactando");
                         $(".in-page").cleanFields();
-                        elem.attr("disabled", false);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error(xhr.responseJSON.msg);
@@ -44,6 +43,8 @@ function Page() {
                 }
 
             })
+
+            elem.attr("disabled", false);
         });
 
 

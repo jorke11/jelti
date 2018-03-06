@@ -60,6 +60,10 @@ function Page() {
         window.location = PATH + "/productDetail/" + url;
     }
 
+    this.openModal = function (modal) {
+        $("#" + modal).modal("show");
+    }
+
     this.search = function () {
 //        location.href = PATH + "/search/" + $("#formSearch #search").val();
         $("#formSearch").submit();

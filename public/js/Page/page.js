@@ -39,7 +39,6 @@ function Page() {
                         elem.attr("disabled", false);
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
-
                     toastr.error(xhr.responseJSON.msg);
                     elem.attr("disabled", false);
                 }

@@ -75,6 +75,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="/myProfile">Perfil</a></li>
                         <li><a href="/myOrders">Mis Ordenes</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#myModal">Registrarme</a></li>
                         <li role="separator" class="divider"></li>
                         <li>
                             <a href="{{ url('/logout') }}"

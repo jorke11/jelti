@@ -766,7 +766,7 @@ function Departure() {
             id = (val.id != undefined) ? '' : ' (' + val.id + ')';
 
             html += "<tr>";
-            html += "<td>" + val.product + val.id + "</td>";
+            html += "<td>" + val.product + id + "</td>";
             html += "<td>" + val.comment + "</td>";
             html += "<td>" + val.units_sf + "</td>";
             html += "<td>" + val.quantity + "</td>";

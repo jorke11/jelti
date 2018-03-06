@@ -25,6 +25,7 @@ if (!isset($_COOKIE["mostrarModal"])) {
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>SuperFüds</title>
+        <script>var PATH = '{{url("/")}}'</script>
         <link rel="shortcut icon" href="{{ asset('assets/images/logoico.png') }}">
         {!!Html::script('/vendor/template/vendors/jquery/dist/jquery.min.js')!!}
         <!-- Fonts -->
@@ -212,7 +213,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                                 ?>
                                                 <div class="col-md-2 col-sm-2 col-xs-2" style="padding:0px">
                                                     <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
-                                                        <img src="{{$val->image}}" alt="Image">
+                                                        <img src="{{$val->image}}" alt="Image" >
                                                     </a>
                                                 </div>
                                                 <?php
@@ -327,7 +328,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             <div class="col-md-3 col-sm-2 col-xs-2">
                                                 <div class="thumbnail" style="border: 0;padding: 0;">
 
-                                                    <img src="{{url("/")."/".$value->thumbnail}}" alt="image">
+                                                    <img src="{{url("/")."/".$value->thumbnail}}" alt="image"  onclick="objPage.redirectProduct('{{$value->slug}}')" style="cursor: pointer">
                                                     <div class="caption" style="padding: 0">
                                                         <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->slug}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                                         @if(!Auth::guest())
@@ -405,7 +406,7 @@ var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                                             <div class="col-md-3 col-sm-6 col-xs-6">
                                                 <div class="thumbnail" style="border: 0;padding: 0;">
 
-                                                    <img src="{{url("/")."/".$value->thumbnail}}" alt="image">
+                                                    <img src="{{url("/")."/".$value->thumbnail}}" alt="image" onclick="objPage.redirectProduct('{{$val->slug}}')" style="cursor: pointer">
                                                     <div class="caption" style="padding: 0">
                                                         <h5 class="text-center" style="min-height: 40px"><a href="/productDetail/{{$value->id}}" style="color:black;font-weight: 400;letter-spacing:2px"><?php echo $value->short_description; ?></a></h5>
                                                         @if(!Auth::guest())

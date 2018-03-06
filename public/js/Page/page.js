@@ -57,6 +57,10 @@ function Page() {
 
     }
 
+ this.redirectProduct = function (url) {
+        window.location = PATH + "/productDetail/" + url;
+    }
+
     this.search = function () {
 //        location.href = PATH + "/search/" + $("#formSearch #search").val();
         $("#formSearch").submit();

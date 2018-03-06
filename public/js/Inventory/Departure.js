@@ -739,7 +739,7 @@ function Departure() {
     }
 
     this.printDetail = function (data, btnEdit = true, btnDel = true) {
-        var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0;
+        var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0, id = '';
         $("#tblDetail tbody").empty();
         $.each(data.detail, function (i, val) {
 
@@ -762,8 +762,11 @@ function Departure() {
             }
 
             val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+
+            id = (val.id != undefined) ? '' : ' (' + val.id + ')';
+
             html += "<tr>";
-            html += "<td>" + val.product + "</td>";
+            html += "<td>" + val.product + val.id + "</td>";
             html += "<td>" + val.comment + "</td>";
             html += "<td>" + val.units_sf + "</td>";
             html += "<td>" + val.quantity + "</td>";
@@ -905,7 +908,7 @@ function Departure() {
                     html += '<td>' + val.expiration_date + '</td>';
                     html += '<td><input class="form-control input-lots" lot="' + val.lot + '" expire="' + val.expiration_date + '" cost_sf="'
                             + val.value + '" product_id="' + val.product_id + '" value="' + quantity + '"></td></tr>';
-                    quantity=0;
+                    quantity = 0;
                 });
 
                 $("#tableLot tbody").html(html);

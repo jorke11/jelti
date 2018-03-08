@@ -1251,7 +1251,13 @@ class DepartureController extends Controller {
             if (!isset($input["header"]["shipping_cost"])) {
                 $input["header"]["shipping_cost"] = 0;
             }
+            
+            
+            echo "<pre>";print_r($input["detail"]);exit;
+            
             $input["detail"] = array_values(array_filter($input["detail"]));
+            
+            
             $input["header"]["type_request"] = "web";
 
             return $this->processDeparture($input["header"], $input["detail"], $id);

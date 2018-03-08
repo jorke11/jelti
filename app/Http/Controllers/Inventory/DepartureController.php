@@ -1226,7 +1226,7 @@ class DepartureController extends Controller {
         $entry = Departures::Find($id);
         $input = $request->all();
 
-      
+
 
         unset($input["header"]["created_at"]);
 
@@ -1251,11 +1251,13 @@ class DepartureController extends Controller {
             if (!isset($input["header"]["shipping_cost"])) {
                 $input["header"]["shipping_cost"] = 0;
             }
-            
-            
+            echo "<pre>";
+            print_r(json_decode(json_encode($input["detail"]), true));
+            exit;
+
             $input["detail"] = array_values(array_filter(json_decode(json_encode($input["detail"]), true)));
-            
-            
+
+
             $input["header"]["type_request"] = "web";
 
             return $this->processDeparture($input["header"], $input["detail"], $id);

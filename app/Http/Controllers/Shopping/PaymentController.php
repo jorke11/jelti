@@ -105,6 +105,7 @@ class PaymentController extends Controller {
 
     public function getDetail() {
         $detail = $this->getDetailData();
+
         if ($detail != null) {
 
             $this->formatedDetail($detail);
@@ -113,7 +114,7 @@ class PaymentController extends Controller {
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
             return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal, "order" => $this->order_id]);
         } else {
-            return response()->json(["success" => false, "total" => 0]);
+            return response()->json(["success" => false, "total" => 0, "subtotal" => 0]);
         }
     }
 
@@ -121,6 +122,9 @@ class PaymentController extends Controller {
         $this->total = 0;
         $this->subtotal = 0;
         foreach ($detail as $i => $value) {
+//            echo "<pre>";
+//            print_r($value);
+//            exit;
             $detail[$i]["valueFormated"] = "$" . number_format($value["value"], 0, ",", ".");
             $detail[$i]["total"] = $detail[$i]["quantity"] * $detail[$i]["value"] * $detail[$i]["units_sf"];
             $detail[$i]["totalFormated"] = "$" . number_format($detail[$i]["total"], 0, ",", ".");
@@ -134,10 +138,10 @@ class PaymentController extends Controller {
                 $this->exento += $detail[$i]["total"];
             }
             if ($value["tax"] == 0.05) {
-                $this->tax5 += $detail[$i]["total"] * $value->tax;
+                $this->tax5 += $detail[$i]["total"] * $value["tax"];
             }
             if ($value["tax"] == 0.19) {
-                $this->tax19 += $detail[$i]["total"] * $value->tax;
+                $this->tax19 += $detail[$i]["total"] * $value["tax"];
             }
         }
     }
@@ -172,9 +176,12 @@ class PaymentController extends Controller {
         $detail = null;
         if (Auth::user() != null) {
             $this->order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
-            $this->order_id = $this->order->id;
+            if ($this->order != null) {
 
-            $sql = "
+
+                $this->order_id = $this->order->id;
+
+                $sql = "
                 SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.value) as value,sum(d.quantity * d.value) total,p.image,p.thumbnail,
                 sum(d.units_sf) as units_sf,d.tax,round(sum(d.quantity * d.value))::money as total_formated
                 FROM orders_detail d
@@ -184,10 +191,13 @@ class PaymentController extends Controller {
                 GROUP BY 1,2,3,4,product_id,p.image,d.tax,p.thumbnail
                 ORDER BY 1";
 //            echo $sql;exit;
-            $detail = DB::select($sql);
+                $detail = DB::select($sql);
 
-            $detail = json_decode(json_encode($detail), true);
-            return $detail;
+                $detail = json_decode(json_encode($detail), true);
+                return $detail;
+            } else {
+                return null;
+            }
         }
     }
 
@@ -275,7 +285,7 @@ class PaymentController extends Controller {
 //$apiLogin = "rHpg9EL98w905Nv";
             $merchantId = "508029";
             $accountId = "512321";
-            $referenceCode = 'invoice_011';
+            $referenceCode = 'invoice_' . microtime();
 
             $TX_VALUE = round($data_order->header->total);
             $TX_TAX = 0.19;
@@ -394,9 +404,11 @@ class PaymentController extends Controller {
 
 
             if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
+
                 $row = Departures::find($data_order->header->id);
                 $row->paid_out = true;
                 $row->type_request = "ecommerce";
+
                 $row->save();
 
                 $row_order = Orders::find($row->order_id);

@@ -12,10 +12,10 @@
        class="fb-xfbml-parse-ignore">Compartir</a></div>
 
 
-  <div id="fb-root"></div>
- <div class="fb-share-button" 
-    data-href="https://www.your-domain.com/your-page.html" 
-    data-layout="button_count"></div>
+<div id="fb-root"></div>
+<div class="fb-share-button" 
+     data-href="https://www.your-domain.com/your-page.html" 
+     data-layout="button_count"></div>
 
 <div class="container-fluid">
     <div class="row row-space row-center" style="padding-top: 2%;background-color: #FAF6EE;min-height: 100px;padding-bottom: 3%">
@@ -73,15 +73,15 @@
                                 ?>
                                 <div class="col-sm-3 col-lg-3 col-md-3">
                                     <div class="thumbnail" style="padding: 0px">
-                                        <img src="{{url($val->thumbnail)}}">
+                                        <img src="{{url($val->thumbnail)}}" onclick="objPage.redirectProduct('{{$value->slug}}')">
                                         <div class="caption" style="padding: 0px">
-                                            <h5 class="text-center" style="height: 35px"><a href="/productDetail/{{$val->id}}">{{$val->title}}</a></h5>
+                                            <h5 class="text-center" style="height: 35px"><a href="/productDetail/{{$val->slug}}">{{$val->title}}</a></h5>
                                             <p>
-                                            <h4 class="text-center">$ {{number_format($val->price_sf,2,",",".")}}</h4>
+                                            <h4 class="text-center">$ {{number_format($val->price_sf,0,",",".")}}</h4>
                                             </p>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <a href="/productDetail/{{$val->id}}" class="btn btn-success form-control" style="background-color: #30c594;border:0px  ">Comprar</a>
+                                                    <a href="/productDetail/{{$val->slug}}" class="btn btn-success form-control" style="background-color: #30c594;border:0px  ">Comprar</a>
                                                 </div>
                                             </div>
 
@@ -248,12 +248,16 @@
 
 </div>
 
-<script>(function(d, s, id) {
+<script>
+    (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
     js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1";
     fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+    }(document, 'script', 'facebook-jssdk'));
+
+    
+</script>
 
 @endsection

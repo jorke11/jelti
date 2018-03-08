@@ -17,6 +17,7 @@ class CreateOrdersTable extends Migration
             $table->integer('stakeholder_id');
             $table->string('response_payu')->nullable();
             $table->string('status_id');
+            $table->text('response_payu');
             $table->timestamps();
         });
     }

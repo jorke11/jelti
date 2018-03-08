@@ -90,7 +90,7 @@
                     <ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        @if(Auth::user()!=null)
+                        @if(Auth::user()!=null && Auth::user()->role_id == 1)
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administración <span class="caret"></span></a>
                             <ul class="dropdown-menu">

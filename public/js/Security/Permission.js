@@ -34,7 +34,6 @@ function Permission() {
             url = "permission/" + id;
             msg = "Edited Record";
         }
-        console.log(data)
 
         $.ajax({
             url: url,
@@ -42,7 +41,7 @@ function Permission() {
             data: data,
             dataType: 'JSON',
             success: function (data) {
-                if (data.success == 'true') {
+                if (data.success == true) {
                     objP.printList(data.data);
                     toastr.success(msg);
                 }
@@ -52,9 +51,8 @@ function Permission() {
 
     this.new = function () {
         toastr.remove();
-        $(".input-user").val("");
-        $("#typemenu_id").val(0);
-        $("#parent_id").val(0);
+        $(".input-permission").cleanFields();
+
 
     }
 
@@ -71,7 +69,7 @@ function Permission() {
                     method: "DELETE",
                     dataType: 'JSON',
                     success: function (data) {
-                        if (data.success == 'true') {
+                        if (data.success == true) {
                             toastr.warning("Ok");
                             objP.printList(data.data);
                         }

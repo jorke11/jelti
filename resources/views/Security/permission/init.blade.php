@@ -20,7 +20,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                   
+
                     <div class="col-lg-12 text-right">
                         <button class="btn btn-success btn-sm" type="button" id="btnNew">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -40,30 +40,11 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="email">Type Option:</label>
-                            <select  class="form-control input-permission" id="typemenu_id" name='typemenu_id'>
-                                <option value="0">Main</option>
-                                <option value="1">Submain</option>
-                                <option value="2">Form</option>
-                            </select>
+                            <label for="email">Title:</label>
+                            <input type="text" class="form-control input-permission" id="title" name='title'>
                         </div>
                     </div>
                 </div>
-                <div class="row" >
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="email">Parent:</label>
-                            <select class="form-control input-permission" id="parent_id" name='parent_id'>
-                                <option value="0">Selection</option>
-                                @foreach($parents as $val)
-                                <option value="{{$val->permission_id}}">{{$val->title}}</option>
-                                @endforeach
-                                
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -83,8 +64,25 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="email">Title:</label>
-                            <input type="text" class="form-control input-permission" id="title" name='title'>
+                            <label for="email">Type Option:</label>
+                            <select  class="form-control input-permission" id="typemenu_id" name='typemenu_id'>
+                                <option value="0">Main</option>
+                                <option value="1">Submain</option>
+                                <option value="2">Form</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="email">Parent:</label>
+                            <select class="form-control input-permission" id="parent_id" name='parent_id'>
+                                <option value="0">Selection</option>
+                                @foreach($parents as $val)
+                                <option value="{{$val->id}}">{{$val->title}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>

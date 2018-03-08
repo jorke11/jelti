@@ -11,7 +11,6 @@ use DB;
 class PermissionController extends Controller {
 
     public function index() {
-
         $parents = Permissions::where("typemenu_id", "=", 0)->where("parent_id", "=", 0)->orderBy('priority', 'asc')->get();
         return view("Security.permission.init", compact("parents"));
     }
@@ -23,6 +22,7 @@ class PermissionController extends Controller {
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
+            unset($input["id"]);
             unset($input["permission_id"]);
 //            $user = Auth::User();
 //            $input["users_id"] = 1;
@@ -30,6 +30,9 @@ class PermissionController extends Controller {
             if (!isset($input["parent_id"]) || $input["parent_id"] == '') {
                 $input["parent_id"] = 0;
             }
+
+            $input["event"] = (isset($input["event"])) ? 1 : 0;
+
             $result = Permissions::create($input);
             if ($result) {
                 return response()->json(['success' => true, 'data' => $this->getPermission()]);

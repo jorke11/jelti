@@ -14,7 +14,6 @@
 use App\Models;
 use Models\Administration\Categories;
 
-
 Auth::routes();
 
 Route::group(['namespace' => 'Api'], function () {
@@ -170,23 +169,7 @@ Route::post('/city/uploadExcel', 'Administration\CityController@storeExcel');
 Route::resource('/department', 'Administration\DepartmentController');
 Route::post('/department/uploadExcel', 'Administration\DepartmentController@storeExcel');
 
-Route::post('/user/uploadExcel', 'Security\UserController@storeExcel');
-Route::put('/user', 'Security\UserController@store');
-
 Route::resource('/characteristic', 'Administration\CharacteristicController');
-
-Route::resource('/user', 'Security\UserController');
-Route::get('/user/getListPermission/{id}', 'Security\UserController@getPermission');
-Route::put('/user/savePermission/{id}', 'Security\UserController@savePermission');
-
-Route::resource('/role', 'Security\RoleController');
-Route::put('/role/savePermission/{id}', 'Security\RoleController@savePermissionRole');
-
-Route::get('/getPermissionRole/{id}', 'Security\RoleController@getPermissionRole');
-
-Route::resource('/permission', 'Security\PermissionController');
-Route::get('/api/listPermission', 'Security\PermissionController@getPermission');
-Route::get('/permission/{id}/getMenu', ['uses' => 'Security\PermissionController@getMenu']);
 
 
 Route::resource('/purchase', 'Invoicing\PurchaseController');
@@ -273,8 +256,6 @@ Route::get('/departure/testDepNotification/{id}', 'Inventory\DepartureController
 Route::get('/departure/testInvoiceNotification/{id}', 'Inventory\DepartureController@testInvoiceNotification');
 
 
-
-
 Route::resource('/sample', 'Inventory\SampleController');
 Route::get('/sample/{id}/consecutive', ['uses' => 'Inventory\SampleController@getConsecutive']);
 Route::get('/sample/{id}/quantity', ['uses' => 'Inventory\SampleController@getQuantity']);
@@ -320,9 +301,6 @@ Route::get('/order/{id}/getClient', ['uses' => 'Inventory\OrderController@getCli
 /**
  * Shopping cart
  */
-
-
-
 Route::resource('/prospect', 'Seller\ProspectsController');
 Route::post('/prospect/convert', 'Seller\ProspectsController@convertToClient');
 
@@ -446,10 +424,6 @@ Route::get('/api/listPurchase', function() {
         $query->where("warehouse_id", Auth::user()->warehouse_id);
     }
 
-
-
-
-
     return Datatables::queryBuilder($query)->make(true);
 });
 
@@ -470,11 +444,8 @@ Route::get('/api/listEntry', function() {
         $query->where("warehouse_id", Auth::user()->warehouse_id);
     }
 
-
     return Datatables::queryBuilder($query)->make(true);
 });
-
-
 
 
 Route::get('/api/listOrder', function() {
@@ -548,7 +519,6 @@ Route::get('/briefcase/testPaidout/{id}', "Sales\BriefcaseController@testPaidout
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 
-
 require __DIR__ . '/cron.php';
 require __DIR__ . '/report.php';
 require __DIR__ . '/shop.php';
@@ -557,3 +527,4 @@ require __DIR__ . '/tool.php';
 require __DIR__ . '/chat.php';
 require __DIR__ . '/crm.php';
 require __DIR__ . '/page.php';
+require __DIR__ . '/security.php';

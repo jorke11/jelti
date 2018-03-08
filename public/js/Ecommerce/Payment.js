@@ -36,54 +36,76 @@ function Payment() {
                 $("#loading-super").removeClass("hidden");
             },
             success: function (data) {
-
-
                 if (data.success == false) {
-
+                    $("#btnPay").attr("disabled", true);
+                    $("#btnPayU").attr("disabled", true);
+                    
+                    html=  html += `
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <p style="color:red">No tienes productos en tu carrito de compras</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                    
+                        `;
+                    
                 } else {
 
                     $.each(data.detail, function (i, val) {
 //                    image = (val.image == null) ? "../assets/images/default.jpg" : val.image;
                         image = (val.thumbnail == null) ? "http://via.placeholder.com/200x150" : val.thumbnail;
-                        html += '<div class="row">\
-                <div class="col-lg-12">\
-                    <div class="panel panel-default">\
-                        <div class="panel-header">\
-                            <button type="button" class="close"  aria-label="Close" style="padding-right:1%" onclick=obj.deleteItem(' + val.product_id + ',' + val.order_id + ')><span aria-hidden="true">&times;</span></button>\
-                        </div>\
-                        <div class="panel-body">\
-                            <div class="row">\
-                                <div class="col-lg-4">\
-                                    <img src="' + image + '">\
-                                </div>\
-                                <div class="col-lg-7">\
-                                    <div class="row">\
-                                        <div class="col-lg-12">\
-                                            <h3>' + val.product + '</h3>\
-                                        </div>\
-                                    </div>\
-                                    <div class="row">\
-                                        <div class="col-lg-12">\
-                                            <div class="muted">' + val.supplier + '</div>\
-                                        </div>\
-                                    </div>\
-                                    <div class="row">\
-                                        <div class="col-lg-12">\
-                                            <h4>' + val.total_formated + '</h4>\
-                                        </div>\
-                                    </div>\
-                                    <div class="row">\
-                                        <div class="col-lg-4">\
-                                            <input type="number" id="quantity" name="quantity" class="form-control" min="1" value=' + val.quantity + ' onblur=obj.updateQuantity(' + val.order_id + ',' + val.product_id + ',this)>\
-                                        </div>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                        </div>\
-                    </div>\
-                </div>\
-            </div>';
-
+                        html += `
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-header">
+                                            <button type="button" class="close"  aria-label="Close" style="padding-right:1%" onclick=obj.deleteItem(${val.product_id},${val.order_id})><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                        
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <img src="${image}">
+                                            </div>
+                                            <div class="col-lg-7">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <h3>${val.product}</h3>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="muted">${val.supplier}</div>
+                                                    </div>
+                                                </div>
+                        
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <h4>${val.total_formated}</h4>
+                                                </div>
+                                            </div>
+                                                <div class="row">
+                                            <div class="col-lg-4">
+                                                <input type="number" id="quantity" name="quantity" class="form-control" min="1" value='${val.quantity}' onblur=obj.updateQuantity(${val.order_id},${val.product_id},this)>
+                                            </div>
+                                            </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                    
+                        `;
                     })
                     html += '</div>';
                 }
@@ -137,12 +159,12 @@ function Payment() {
     }
 
     this.deleteItem = function (product_id, order_id) {
-        var obj = {};
-        obj.product_id = product_id;
+        var data = {};
+        data.product_id = product_id;
         $.ajax({
             url: 'deleteDetail/' + order_id,
             method: 'DELETE',
-            data: obj,
+            data: data,
             dataType: 'JSON',
             success: function (data) {
                 obj.getDetail();

@@ -1226,9 +1226,7 @@ class DepartureController extends Controller {
         $entry = Departures::Find($id);
         $input = $request->all();
 
-        echo "<pre>";
-        print_r($input);
-        exit;
+      
 
         unset($input["header"]["created_at"]);
 

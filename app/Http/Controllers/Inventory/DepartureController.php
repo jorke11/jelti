@@ -1253,9 +1253,7 @@ class DepartureController extends Controller {
             }
             
             
-            echo "<pre>";print_r(json_decode($input["detail"]));exit;
-            
-            $input["detail"] = array_values(array_filter(json_decode($input["detail"])));
+            $input["detail"] = array_values(array_filter(json_decode(json_encode($input["detail"]), true)));
             
             
             $input["header"]["type_request"] = "web";

@@ -1252,7 +1252,7 @@ class DepartureController extends Controller {
                 $input["header"]["shipping_cost"] = 0;
             }
             echo "<pre>";
-            print_r(json_decode(json_encode($input["detail"]),TRUE));
+            print_r(json_encode($input["detail"]));
             exit;
 
             $input["detail"] = array_values(array_filter(json_decode(json_encode($input["detail"]), true)));

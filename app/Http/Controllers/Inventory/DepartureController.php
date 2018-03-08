@@ -1191,7 +1191,8 @@ class DepartureController extends Controller {
 
 
         if ($pro->category_id != -1) {
-            $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->where("expiration_date", ">", date("Y-m-d"))->get();
+            $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
+                    ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
         } else {
             $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
                 "value" => $pro->price_sf);

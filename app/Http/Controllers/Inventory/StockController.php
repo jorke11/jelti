@@ -83,7 +83,8 @@ class StockController extends Controller {
                     ->first();
         }
 
-        $inv = Inventory::where("product_id", $id);
+
+        $inv = Inventory::where("product_id", $id)->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))));
 
         if (isset($in["warehouse_id"])) {
             $inv->where("warehouse_id", $in["warehouse_id"]);

@@ -1159,7 +1159,6 @@ class DepartureController extends Controller {
         $this->total = 0;
         $this->subtotal = 0;
 
-
         foreach ($detail as $i => $value) {
             $detail[$i]->valueFormated = "$" . number_format($value->value, 2, ",", ".");
             $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
@@ -1189,7 +1188,6 @@ class DepartureController extends Controller {
 
         $pro = Products::find($detail->product_id);
 
-
         if ($pro->category_id != -1) {
             $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
                     ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
@@ -1197,8 +1195,6 @@ class DepartureController extends Controller {
             $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
                 "value" => $pro->price_sf);
         }
-
-
 
         return response()->json(["row" => $detail, "inventory" => $inventory]);
     }

@@ -80,15 +80,20 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
 		d.subtotal as subtotalnumeric,	
 CASE WHEN (d.status_id IN(1,8)) 
         THEN 
-		(select sum(quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
+		(select sum(quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) 
+                from departures_detail where departure_id=d.id)
         ELSE 
-		(select sum(real_quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) from departures_detail where departure_id=d.id)
+		(
+                select sum(real_quantity * (CASE  WHEN packaging=0 THEN 1 WHEN packaging IS NULL THEN 1 ELSE packaging END)) 
+                from departures_detail where departure_id=d.id)
 		 END as quantity_packaging,
+
           CASE WHEN (d.status_id IN(1,8)) THEN 
 		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) 
          from departures_detail JOIN departures ON departures.id= departures_detail.departure_id where departure_id=d.id)
 		 ELSE 
-		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where departure_id=d.id)
+		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) 
+                from sales_detail JOIN sales ON sales.id= sales_detail.sale_id where departure_id=d.id)
 		 END+coalesce(d.shipping_cost,0)-coalesce(d.discount,0) +(Coalesce(d.shipping_cost,0) * coalesce(d.shipping_cost_tax,0) ) 
          as total,
         d.total as total2,

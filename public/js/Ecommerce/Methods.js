@@ -8,9 +8,12 @@ function MethodsPayment() {
         $('.input-number').on('input', function () {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
+        
+        $('.input-alpha').on('input', function () {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
 
         $('.input-date').on('input', function () {
-
             this.value = this.value.replace(/[^0-9]/g, '');
         });
 

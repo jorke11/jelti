@@ -252,7 +252,7 @@ class PaymentController extends Controller {
     }
 
     public function payment(Request $req) {
-
+//        dd($_SERVER["HTTP_USER_AGENT"]);
         $in = $req->all();
 
         $in["expirate"] = $in["year"] . "/" . $in["month"];
@@ -288,8 +288,8 @@ class PaymentController extends Controller {
             $referenceCode = 'invoice_' . microtime();
 
             $TX_VALUE = round($data_order->header->total);
-            $TX_TAX = 0.19;
-            $TX_TAX_RETURN_BASE = 1000;
+            $TX_TAX = 0;
+            $TX_TAX_RETURN_BASE = 0;
 
             $session_id = md5(session_id() . microtime());
             $currency = "COP";
@@ -310,7 +310,8 @@ class PaymentController extends Controller {
                     "description" => "Pago " . $referenceCode,
                     "language" => "es",
                     "signature" => $signature,
-                    "notifyUrl" => "http://localhost:8080/payu/tarjetas_credito.php",
+//                    "notifyUrl" => "http://localhost:8080/payu/tarjetas_credito.php",
+                    "notifyUrl" => "",
                     "additionalValues" => array(
                         "TX_VALUE" => array("value" => $TX_VALUE, "currency" => $currency),
                         "TX_TAX" => array("value" => $TX_TAX, "currency" => $currency),
@@ -376,9 +377,9 @@ class PaymentController extends Controller {
                 "paymentCountry" => "CO",
 //            "deviceSessionId" => "vghs6tvkcle931686k1900o6e1",
                 "deviceSessionId" => $deviceSessionId,
-                "ipAddress" => "127.0.0.1",
+                "ipAddress" => $_SERVER["REMOTE_ADDR"],
                 "cookie" => "pt1t38347bs6jc9ruv2ecpv7o2",
-                "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
+                "userAgent" => $_SERVER["HTTP_USER_AGENT"]
             );
 
 //        Log::info(print_r($postData, true));
@@ -395,14 +396,13 @@ class PaymentController extends Controller {
                 'Accept:application/json',
                 'Content-Length: ' . strlen($data_string))
             );
-//        print_r($data_string);
-//        exit;
+//        dd( json_decode($data_string, TRUE));
 
             $result = curl_exec($ch);
 
             $arr = json_decode($result, TRUE);
 
-
+//            dd($arr);
             if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
 
                 $row = Departures::find($data_order->header->id);
@@ -493,8 +493,8 @@ class PaymentController extends Controller {
 
             //Dinnesrs
 
-            if (strlen($number) == 15 && strlen($cvc) == 4) {
-                if (preg_match('/^[35](?:0[0-5|[68][0-9]{11}$)|(^30[0-5]{11}$)|(^3095(\\d{10}$)|(^3[89](\\d{12})$/', trim($number))) {
+            if (strlen($number) == 14 && strlen($cvc) == 4) {
+                if (preg_match('/^(3(?:0[0-5]|[68][0-9])[0-9]{11})*$/', trim($number))) {
                     $response = array("paymentMethod" => 'Dinners', "status" => true);
                 }
             }

@@ -10,7 +10,9 @@ Route::put('/role/savePermission/{id}', 'Security\RoleController@savePermissionR
 Route::get('/getPermissionRole/{id}', 'Security\RoleController@getPermissionRole');
 
 Route::resource('/permission', 'Security\PermissionController');
+
 Route::get('/api/listPermission', 'Security\PermissionController@getPermission');
+
 Route::get('/permission/{id}/getMenu', ['uses' => 'Security\PermissionController@getMenu']);
 Route::post('/user/uploadExcel', 'Security\UserController@storeExcel');
 Route::put('/user', 'Security\UserController@store');

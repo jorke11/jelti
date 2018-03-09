@@ -15,7 +15,6 @@
                 <button class="btn btn-success btn-sm" id='btnSend' disabled>
                     <span class="glyphicon glyphicon-send" aria-hidden="true"> Facturar</span>
                 </button>
-
                 <button class="btn btn-success btn-sm" id='btnDocument' disabled>
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Pdf</span>
                 </button>
@@ -23,7 +22,6 @@
                 <button class="btn btn-success btn-sm" id='btnReverse'>
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true">Reversar</span>
                 </button>
-                
             </div>
         </div>
     </div>

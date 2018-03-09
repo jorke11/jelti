@@ -404,8 +404,6 @@ class PaymentController extends Controller {
 
             $arr = json_decode($result, TRUE);
 
-//            dd($arr);
-            
             if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
 
                 $row = Departures::find($data_order->header->id);
@@ -419,7 +417,7 @@ class PaymentController extends Controller {
                 $row_order->status_id = 2;
                 $row_order->save();
 
-                return redirect('shopping/0')->with("success", 'Payment success');
+                return redirect('shopping/0')->with("success", 'Payment success')->with("order_id", $arr["transactionResponse"]["orderId"]);
             } else {
                 $error = $arr["error"];
                 if ($arr["code"] == 'SUCCESS') {

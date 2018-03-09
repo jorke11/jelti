@@ -18,6 +18,7 @@ use App\Models\Inventory\Departures;
 use App\Models\Inventory\DeparturesDetail;
 use App\Models\Administration\PricesSpecial;
 use App\Models\Administration\Products;
+use App\Http\Tools\ValidateCreditCard;
 
 class PaymentController extends Controller {
 
@@ -266,12 +267,13 @@ class PaymentController extends Controller {
         $city = \App\Models\Administration\Cities::find($client->city_id);
         $department = \App\Models\Administration\Department::find($city->department_id);
 //
-        $type_card = $this->identifyCard($in["number"], $in["crc"], $in["expirate"]);
+        $type_card = ValidateCreditCard::identifyCard($in["number"], $in["crc"], $in["expirate"]);
 
         $error = '';
 
-        if ($type_card == false) {
-            $error = " Tarjeta no reconocida";
+
+        if ($type_card["status"] == false) {
+            $error = $type_card["msg"];
         }
 
         if ($error == '') {
@@ -379,11 +381,11 @@ class PaymentController extends Controller {
                 "deviceSessionId" => $deviceSessionId,
                 "ipAddress" => $_SERVER["REMOTE_ADDR"],
                 "cookie" => "pt1t38347bs6jc9ruv2ecpv7o2",
-                "userAgent" => $_SERVER["HTTP_USER_AGENT"]
+                "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
+//                "userAgent" => $_SERVER["HTTP_USER_AGENT"]
             );
 
 //        Log::info(print_r($postData, true));
-
             $data_string = json_encode($postData);
 
             $ch = curl_init($url);
@@ -403,6 +405,7 @@ class PaymentController extends Controller {
             $arr = json_decode($result, TRUE);
 
 //            dd($arr);
+            
             if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
 
                 $row = Departures::find($data_order->header->id);
@@ -478,55 +481,6 @@ class PaymentController extends Controller {
         return redirect('shopping/0')->with("success", 'Payment success');
     }
 
-    public function identifyCard($number, $cvc, $expire) {
-        $response = false;
-
-        if (preg_match('/[0-9]{4,}\/[0-9]{2,}$/', $expire)) {
-
-            //VISA
-            if (strlen($number) == 16 && strlen($cvc) == 3) {
-//                if (preg_match('/^4[0-9]{6,}$/', $number)) {
-                if (preg_match('/^(4)(\\d{12}|\\d{15})$|^(606374\\d{10}$)/', $number)) {
-                    $response = array("paymentMethod" => 'VISA', "status" => true);
-                }
-            }
-
-            //Dinnesrs
-
-            if (strlen($number) == 14 && strlen($cvc) == 4) {
-                if (preg_match('/^(3(?:0[0-5]|[68][0-9])[0-9]{11})*$/', trim($number))) {
-                    $response = array("paymentMethod" => 'Dinners', "status" => true);
-                }
-            }
-
-
-            //Mastercard
-
-            if (strlen($number) == 15 && strlen($cvc) == 4) {
-
-//                if (preg_match('/^5[1-5][0-9]{5,}|222[1-9][0-9]{3,}|22[3-9][0-9]{4,}|2[3-6][0-9]{5,}|27[01][0-9]{4,}|2720[0-9]{3,}$/', trim($number))) {
-                if (preg_match('/^(5[1-5]\\d{14}$)|^(2(?:2(?:2[1-9]|[3-9]\\d)|[3-6]\\d\\dd|7(?:[01]\\d|20))\\d{12}$)/', trim($number))) {
-                    $response = array("paymentMethod" => 'Mastercard', "status" => true);
-                }
-            }
-
-
-
-            //American express
-            if (strlen($number) == 15 && strlen($cvc) == 4) {
-
-//                if (preg_match('/^3[47][0-9]{5,}$/', $number)) {
-                if (preg_match('/^3[47]\\d{13}$/', $number)) {
-                    $response = array("paymentMethod" => 'AMEX', "status" => true);
-                }
-            }
-        } else {
-            $response = array("status" => true, "msg" => "Fecha de Expiracion invalida");
-        }
-
-        return $response;
-    }
-
     public function payu(Request $req) {
         $pet = '{
                     "test": false,
@@ -545,17 +499,17 @@ class PaymentController extends Controller {
 
 
         $ch = curl_init("https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi");
-        //a true, obtendremos una respuesta de la url, en otro caso, 
-        //true si es correcto, false si no lo es
+//a true, obtendremos una respuesta de la url, en otro caso, 
+//true si es correcto, false si no lo es
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_HEADER, array('Accept:application/json', 'Content-Type: application/json', 'Content-Length: ' . strlen($pet2)));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        //establecemos el verbo http que queremos utilizar para la petición
+//establecemos el verbo http que queremos utilizar para la petición
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        //enviamos el array data
+//enviamos el array data
         curl_setopt($ch, CURLOPT_POSTFIELDS, $pet2);
 //        curl_setopt($ch, CURLOPT_POSTFIELDS, build_query($data));
-        //obtenemos la respuesta
+//obtenemos la respuesta
         $response = curl_exec($ch);
 
         curl_close($ch);

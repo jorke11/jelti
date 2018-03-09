@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Tools;
+namespace App\Traits;
 
-class ValidateCreditCard {
+trait ValidateCreditCard {
 
     /**
      * validateFormatCreditCard
@@ -10,7 +10,7 @@ class ValidateCreditCard {
      * @param  string $cc
      * @return bool
      */
-    public static function validateFormatCreditCard($cc) {
+    public function validateFormatCreditCard($cc) {
         $pattern_1 = '/^((4[0-9]{12})|(4[0-9]{15})|(5[1-5][0-9]{14})|(3[47][0-9]{13})|(6011[0-9]{12}))$/';
         $pattern_2 = '/^((30[0-5][0-9]{11})|(3[68][0-9]{12})|(3[0-9]{15})|(2123[0-9]{12})|(1800[0-9]{12}))$/';
 
@@ -30,7 +30,7 @@ class ValidateCreditCard {
      * @param  string $digit
      * @return $total
      */
-    public static function sumDigits($digit) {
+    public function sumDigits($digit) {
         $total = 0;
         for ($x = 0; $x < strlen($digit); $x++) {
             $total += $digit[$x];
@@ -45,7 +45,7 @@ class ValidateCreditCard {
      * @param   integer $sum_digit
      * @return  integer
      */
-    public static function checkDigit($sum_digit) {
+    public function checkDigit($sum_digit) {
         return ($sum_digit % 10 == 0) ? 0 : 10 - ($sum_digit % 10);
     }
 
@@ -56,7 +56,7 @@ class ValidateCreditCard {
      * @param  string $credit_card
      * @return bool
      */
-    public static function calculateLuhn($credit_card) {
+    public function calculateLuhn($credit_card) {
         // largo del string
         $length = strlen($credit_card);
         // tarjeta de credito sin el digito de chequeo
@@ -67,21 +67,21 @@ class ValidateCreditCard {
         for ($i = $length - 2; $i >= 0; $i--) {
             if ($i % 2 == 0) {
                 // sumo cada uno de los digitos devueltos al duplicar
-                array_push($values, self::sumDigits((string) ($credit_card_user[$i] * 2)));
+                array_push($values, $this->sumDigits((string) ($credit_card_user[$i] * 2)));
             } else {
                 array_push($values, (int) $credit_card_user[$i]);
             }
         }
 
-        return (self::checkDigit(array_sum($values)) == $credit_card[$length - 1]);
+        return ($this->checkDigit(array_sum($values)) == $credit_card[$length - 1]);
     }
 
-    public static function identifyCard($number, $cvc, $expire) {
+    public function identifyCard($number, $cvc, $expire) {
         $response = false;
 
-        $validateFormat = (ValidateCreditCard::validateFormatCreditCard($number)) ? true : true;
+        $validateFormat = ($this->validateFormatCreditCard($number)) ? true : true;
 
-        $validateLuhn = (ValidateCreditCard::calculateLuhn($number)) ? true : true;
+        $validateLuhn = ($this->calculateLuhn($number)) ? true : true;
 
         if ($validateFormat) {
 

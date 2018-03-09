@@ -33,8 +33,10 @@ use App\Http\Controllers\LogController;
 use App\Models\Sales\BriefCase;
 use App\Models\Inventory\Inventory;
 use App\Models\Inventory\InventoryHold;
+use App\Traits\NumberToString;
 
 class DepartureController extends Controller {
+    use NumberToString;
 
     public $total;
     protected $total_real;
@@ -341,7 +343,7 @@ class DepartureController extends Controller {
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping_cost' => $dep->shipping_cost,
             'invoice' => $dep->invoice,
-            'textTotal' => trim($this->tool->to_word(round($totalWithTax))),
+            'textTotal' => $this->to_word(round($totalWithTax)),
             'discount' => $dep->discount
         ];
 
@@ -483,7 +485,7 @@ class DepartureController extends Controller {
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
             'invoice' => $dep->remission,
-            'textTotal' => trim($this->tool->to_word(round($totalWithTax)))
+            'textTotal' => $this->to_word(round($totalWithTax))
         ];
 
 
@@ -948,8 +950,7 @@ class DepartureController extends Controller {
                         $input["environment"] = env("APP_ENV");
                         $input["created_at"] = $departure->created_at;
                         $input["dispatched"] = $departure->dispatched;
-                        $input["textTotal"] = trim($this->tool->to_word(round($this->total)));
-
+                        $input["textTotal"] = $this->to_word(round($this->total));
 
                         $shipping_cost_tax = 0;
 
@@ -1190,7 +1191,7 @@ class DepartureController extends Controller {
 
         if ($pro->category_id != -1) {
             $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
-                    ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
+                            ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
         } else {
             $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
                 "value" => $pro->price_sf);

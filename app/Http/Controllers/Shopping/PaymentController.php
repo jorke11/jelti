@@ -18,9 +18,11 @@ use App\Models\Inventory\Departures;
 use App\Models\Inventory\DeparturesDetail;
 use App\Models\Administration\PricesSpecial;
 use App\Models\Administration\Products;
-use App\Http\Tools\ValidateCreditCard;
+use App\Traits\ValidateCreditCard;
 
 class PaymentController extends Controller {
+
+    use ValidateCreditCard;
 
     public $depObj;
     public $merchantId;
@@ -267,7 +269,7 @@ class PaymentController extends Controller {
         $city = \App\Models\Administration\Cities::find($client->city_id);
         $department = \App\Models\Administration\Department::find($city->department_id);
 //
-        $type_card = ValidateCreditCard::identifyCard($in["number"], $in["crc"], $in["expirate"]);
+        $type_card = $this->identifyCard($in["number"], $in["crc"], $in["expirate"]);
 
         $error = '';
 

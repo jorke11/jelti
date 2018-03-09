@@ -30,6 +30,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Administration\PricesSpecial;
 use App\Http\Controllers\LogController;
 use App\Models\Inventory\Inventory;
+use App\Traits\NumberToString;
 
 class SampleController extends Controller {
 
@@ -306,7 +307,7 @@ class SampleController extends Controller {
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping_cost' => $dep->shipping_cost,
             'invoice' => $dep->invoice,
-            'textTotal' => trim($this->tool->to_word(round($totalWithTax))),
+            'textTotal' => trim($this->to_word(round($totalWithTax))),
             'discount' => $dep->discount
         ];
 //dd($data);
@@ -413,7 +414,7 @@ class SampleController extends Controller {
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping' => "$ " . number_format((round($dep->shipping_cost)), 0, ',', '.'),
             'invoice' => $dep->remission,
-            'textTotal' => trim($this->tool->to_word(round($totalWithTax)))
+            'textTotal' => trim($this->to_word(round($totalWithTax)))
         ];
 
 
@@ -678,7 +679,7 @@ class SampleController extends Controller {
                                 $input["id"] = $departure->id;
                                 $input["environment"] = env("APP_ENV");
                                 $input["created_at"] = $departure->created_at;
-                                $input["textTotal"] = trim($this->tool->to_word(round($this->total)));
+                                $input["textTotal"] = trim($this->to_word(round($this->total)));
 
                                 $input["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
                                 $input["total"] = "$ " . number_format($this->total, 0, ",", ".");

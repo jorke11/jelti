@@ -17,9 +17,10 @@ use App\Models\Sales\CreditNoteDetail;
 use App\Http\Controllers\ToolController;
 use DB;
 use Datatables;
+use App\Traits\NumberToString;
 
 class creditnoteController extends Controller {
-
+    use NumberToString;
     protected $total;
     public $total_real;
     public $path;
@@ -215,7 +216,7 @@ class creditnoteController extends Controller {
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping' => "$ " . 0,
             'invoice' => $cre->id,
-            'textTotal' => trim($tool->to_word(round($totalWithTax)))
+            'textTotal' => trim($this->to_word(round($totalWithTax)))
         ];
         $pdf = \PDF::loadView('Sales.CreditNote.pdfcredit', [], $data, [
                     'title' => 'Invoice']);

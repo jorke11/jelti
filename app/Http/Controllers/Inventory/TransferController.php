@@ -23,9 +23,10 @@ use App\Models\Administration\EmailDetail;
 use App\Models\Administration\Cities;
 use App\Models\Administration\PricesSpecial;
 use App\Models\Security\Users;
+use App\Traits\NumberToString;
 
 class TransferController extends Controller {
-
+    use NumberToString;
     protected $total;
     protected $tool;
     protected $subtotal;
@@ -273,7 +274,7 @@ class TransferController extends Controller {
             'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
             'shipping_cost' => $dep->shipping_cost,
             'invoice' => $dep->invoice,
-            'textTotal' => trim($this->tool->to_word(round($totalWithTax))),
+            'textTotal' => trim($this->to_word(round($totalWithTax))),
             'discount' => $dep->discount
         ];
 //dd($data);
@@ -524,7 +525,7 @@ class TransferController extends Controller {
                                 $input["id"] = $departure->id;
                                 $input["environment"] = env("APP_ENV");
                                 $input["created_at"] = $departure->created_at;
-                                $input["textTotal"] = trim($this->tool->to_word(round($this->total)));
+                                $input["textTotal"] = trim($this->to_word(round($this->total)));
 
                                 $input["subtotal"] = "$ " . number_format($this->subtotal, 0, ",", ".");
                                 $input["total"] = "$ " . number_format($this->total, 0, ",", ".");

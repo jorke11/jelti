@@ -11,7 +11,10 @@ function Payment() {
 
     this.payu = function () {
         window.location.href = PATH + "/payment/" + $("#frm #order_id").val()
+    }
 
+    this.redirectProduct = function (url) {
+        window.location = PATH + "/productDetail/" + url;
     }
 
     this.getQuantity = function () {
@@ -39,8 +42,8 @@ function Payment() {
                 if (data.success == false) {
                     $("#btnPay").attr("disabled", true);
                     $("#btnPayU").attr("disabled", true);
-                    
-                    html=  html += `
+
+                    html = html += `
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="panel panel-default">
@@ -55,7 +58,7 @@ function Payment() {
                             </div>
                                     
                         `;
-                    
+
                 } else {
 
                     $.each(data.detail, function (i, val) {
@@ -113,6 +116,17 @@ function Payment() {
                 $("#content-detail").html(html);
 //                $("#tblReview").html('<tr><td colspan="4"><strong>Total</td><td>' + data.total + '</strong></td></tr>');
                 $("#loading-super").addClass("hidden");
+                if (data.totalnumeric < 10000) {
+                    $("#message-mount").removeClass("hidden");
+                    $("#btnPay").attr("disabled", true);
+                    $("#btnPayU").attr("disabled", true);
+
+                } else {
+                    $("#btnPay").attr("disabled", false);
+                    $("#btnPayU").attr("disabled", false);
+                    $("#message-mount").addClass("hidden");
+
+                }
                 $("#subtotalOrder").html("<h4>" + data.subtotal + "</h4>");
                 $("#totalOrder").html("<h4>" + data.total + "</h4>");
                 $("#frm #order_id").val(data.order);

@@ -115,7 +115,7 @@ class PaymentController extends Controller {
 
             $total = "$" . number_format($this->total, 0, ",", ".");
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
-            return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal, "order" => $this->order_id]);
+            return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal, "order" => $this->order_id, "totalnumeric" => $this->total]);
         } else {
             return response()->json(["success" => false, "total" => 0, "subtotal" => 0]);
         }
@@ -382,9 +382,9 @@ class PaymentController extends Controller {
 //            "deviceSessionId" => "vghs6tvkcle931686k1900o6e1",
                 "deviceSessionId" => $deviceSessionId,
                 "ipAddress" => $_SERVER["REMOTE_ADDR"],
-                "cookie" => "pt1t38347bs6jc9ruv2ecpv7o2",
-                "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
-//                "userAgent" => $_SERVER["HTTP_USER_AGENT"]
+                "cookie" => "",
+//                "userAgent" => "Mozilla/5.0 (Windows NT 5.1; rv:18.0) Gecko/20100101 Firefox/18.0"
+                "userAgent" => $_SERVER["HTTP_USER_AGENT"]
             );
 
 //        Log::info(print_r($postData, true));

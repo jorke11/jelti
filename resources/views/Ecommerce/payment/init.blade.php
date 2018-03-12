@@ -11,6 +11,11 @@
 
 <input id="order_id" name="order_id" type="hidden">
 
+<div class="row hidden" id="message-mount">
+    <div class=" col-lg-offset-1 col-lg-10">
+        <div class="alert alert-danger">El monto total debe ser Mayor a $10.000 Pesos</div>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-7 col-lg-offset-1">
         <div id="content-detail">
@@ -21,7 +26,6 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-12">
-
                         <button type="submit" class="btn btn-success" id="btnPay">
                             <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Payment
                         </button>

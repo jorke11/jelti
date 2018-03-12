@@ -149,6 +149,21 @@ function Departure() {
             // Toggle the visibility
             column.visible(!column.visible());
         })
+        $("#col-dispatched").click(function (e) {
+            e.preventDefault();
+            // Get the column API object
+            var column = table.column($(this).attr('data-column'));
+            // Toggle the visibility
+            column.visible(!column.visible());
+        })
+
+        $("#col-warehouse").click(function (e) {
+            e.preventDefault();
+            // Get the column API object
+            var column = table.column($(this).attr('data-column'));
+            // Toggle the visibility
+            column.visible(!column.visible());
+        })
 
         $("#col-business_name").click(function (e) {
             e.preventDefault();
@@ -1065,10 +1080,10 @@ function Departure() {
                 {data: "client"},
                 {data: "business_name", "visible": false},
                 {data: "responsible"},
-                {data: "warehouse"},
+                {data: "warehouse", "visible": false},
                 {data: "city"},
                 {data: "quantity"},
-                {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0),"visible": false},
                 {data: "subtotalnumeric", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "status"},
@@ -1132,15 +1147,15 @@ function Departure() {
 
             createdRow: function (row, data, index) {
                 if (data.status_id == 1) {
-                    $('td', row).eq(12).addClass('color-new');
+                    $('td', row).eq(11).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(12).addClass('color-pending');
+                    $('td', row).eq(11).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(12).addClass('color-checked');
+                    $('td', row).eq(11).addClass('color-checked');
                 } else if (data.status_id == 7) {
-                    $('td', row).eq(12).addClass('color-green');
+                    $('td', row).eq(11).addClass('color-green');
                 } else if (data.status_id == 8) {
-                    $('td', row).eq(12).addClass('color-red');
+                    $('td', row).eq(11).addClass('color-red');
                 }
             },
             footerCallback: function (row, data, start, end, display) {

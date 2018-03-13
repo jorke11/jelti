@@ -132,11 +132,14 @@ class ProductController extends Controller {
                             if (isset($book->tax) && $book->tax != '') {
                                 $pro->tax = $book->tax;
                             }
-                            if (isset($book->sf_price) && $book->sf_price != '') {
-                                $pro->price_sf = round($book->sf_price);
+                            if (isset($book->price_sf) && $book->price_sf != '') {
+                                $pro->price_sf = round($book->price_sf);
+                            }
+                            if (isset($book->cost_sf) && $book->cost_sf != '') {
+                                $pro->cost_sf = round($book->cost_sf);
                             }
 
-                            $this->response[] = array("sf_code" => $book->sf_code, "title" => $book->title, "price_sf" => $pro->price_sf, "msg" => "Actualizado", "status" => false);
+                            $this->response[] = array("sf_code" => $book->sf_code, "title" => $book->title, "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf, "msg" => "Actualizado", "status" => false);
 
                             $pro->save();
                         } else {

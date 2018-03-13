@@ -1257,9 +1257,9 @@ class DepartureController extends Controller {
 
 
 
-            $input["detail"] = json_encode($input["detail"]);
-
-
+            $input["detail"] = json_decode($input["detail"],true);
+            
+            
             $input["header"]["type_request"] = "web";
 
             return $this->processDeparture($input["header"], $input["detail"], $id);

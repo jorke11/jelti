@@ -36,6 +36,7 @@ use App\Models\Inventory\InventoryHold;
 use App\Traits\NumberToString;
 
 class DepartureController extends Controller {
+
     use NumberToString;
 
     public $total;
@@ -1254,7 +1255,9 @@ class DepartureController extends Controller {
 //            print_r(json_decode(json_encode(json_decode($input["detail"])), FALSE));
 //            exit;
 
-            $input["detail"] = array_values(array_filter(json_decode(json_encode($input["detail"]), true)));
+
+
+            $input["detail"] = json_encode($input["detail"]);
 
 
             $input["header"]["type_request"] = "web";

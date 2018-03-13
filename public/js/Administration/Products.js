@@ -97,7 +97,7 @@ function Product() {
         var html = "";
 
         $.each(detail, function (i, val) {
-            html += "<tr><td>" + val.sf_code + "</td><td>" + val.title + "</td><td>" + val.price_sf + "</td><td>" + val.msg + "</td></tr>";
+            html += "<tr><td>" + val.sf_code + "</td><td>" + val.title + "</td><td>" + val.price_sf + "</td><td>" + val.cost_sf + "</td><td>" + val.msg + "</td></tr>";
         })
         $("#tblUpload tbody").html(html);
     }

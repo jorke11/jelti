@@ -25,6 +25,7 @@
                     <th>Referencia</th>
                     <th>Titulo</th>
                     <th>Precio</th>
+                    <th>Costo</th>
                     <th>Respuesta</th>
                 </tr>
             </thead>

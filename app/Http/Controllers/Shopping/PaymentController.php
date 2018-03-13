@@ -373,7 +373,7 @@ class PaymentController extends Controller {
                     "name" => $in["name"]
                 ),
                 "extraParameters" => array(
-                    "INSTALLMENTS_NUMBER" => 1
+                    "INSTALLMENTS_NUMBER" => $in["dues"]
                 ),
                 "type" => "AUTHORIZATION_AND_CAPTURE",
 //            "paymentMethod" => "VISA",

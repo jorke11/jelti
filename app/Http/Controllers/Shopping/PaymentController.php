@@ -406,6 +406,9 @@ class PaymentController extends Controller {
 
             $arr = json_decode($result, TRUE);
 
+//            echo "<pre>";
+//            print_r($arr);exit;
+
             if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
 
                 $row = Departures::find($data_order->header->id);
@@ -421,9 +424,12 @@ class PaymentController extends Controller {
 
                 return redirect('shopping/0')->with("success", 'Payment success')->with("order_id", $arr["transactionResponse"]["orderId"]);
             } else {
+
                 $error = $arr["error"];
                 if ($arr["code"] == 'SUCCESS') {
                     $error = $arr["transactionResponse"]["responseMessage"];
+                } else {
+                    $error = "Tarjeta no aceptada en nuestro Sistema";
                 }
 
                 return back()->with("error", $error);

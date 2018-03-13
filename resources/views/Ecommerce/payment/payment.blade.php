@@ -53,34 +53,58 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="tgarjeta">Fecha de vencimiento</label>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <select class="form-control" id="month" name="month">
-                                        @foreach($month as $val)
-                                        <option value="{{$val}}">{{$val}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-6">
-                                    <select class="form-control" id="year" name="year">
-                                        @foreach($years as $val)
-                                        <option value="{{$val}}">{{$val}}</option>
-                                        @endforeach
-                                    </select>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="tgarjeta">Fecha de vencimiento</label>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <select class="form-control" id="month" name="month">
+                                                @foreach($month as $val)
+                                                <option value="{{$val}}">{{$val}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <select class="form-control" id="year" name="year">
+                                                @foreach($years as $val)
+                                                <option value="{{$val}}">{{$val}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="tgarjeta">Coutas</label>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <select id="dues" name="dues" class="form-control">
+                                                    <option value="1">1</option>
+                                                    @for($i=2;$i<=36;$i++)
+                                                    <option value="{{$i}}">{{$i}}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                </div>
+                            </div>
                         </div>
 
+
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="tgarjeta">Código de Seguridad</label>
                             <input type="text" class="form-control input-number" id="crc" name="crc" placeholder="Código de Seguridad" maxlength="4" required autocomplete="off">
                         </div>
                     </div>
+
                     <div class="col-lg-2">
                         <img src="{{url("images/tarjeta_codigo_seguridad.png")}}" width="70%">
                     </div>

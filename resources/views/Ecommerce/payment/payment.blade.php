@@ -18,7 +18,7 @@
 
 
 <div class="row row-center">
-    <div class="col-lg-6">
+    <div class="col-lg-4">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row ">
@@ -38,13 +38,15 @@
                     <div class="col-lg-5"><b>{{$total}}</b></div>
                 </div>
                 <div class="row row-space">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="form-group">
                             <label for="tgarjeta">Tarjeta de Credito</label>
                             <input type="text" class="form-control input input-payment input-number" id="number" name="number" placeholder="Numero de tarjeta" maxlength="16" required autocomplete="off">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
                         <div class="form-group">
                             <label for="tgarjeta">Nombre como aparece en la tarjeta</label>
                             <input type="text" class="form-control input input-payment input-alpha" id="name" name="name" placeholder="Nombre como aparece en la tarjeta" required autocomplete="off" maxlength="15">
@@ -52,71 +54,66 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="tgarjeta">Fecha de vencimiento</label>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <select class="form-control" id="month" name="month">
-                                                @foreach($month as $val)
-                                                <option value="{{$val}}">{{$val}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <select class="form-control" id="year" name="year">
-                                                @foreach($years as $val)
-                                                <option value="{{$val}}">{{$val}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="tgarjeta">Fecha de vencimiento</label>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <select class="form-control" id="month" name="month">
+                                        @foreach($month as $val)
+                                        <option value="{{$val}}">{{$val}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <select class="form-control" id="year" name="year">
+                                        @foreach($years as $val)
+                                        <option value="{{$val}}">{{$val}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="tgarjeta">Coutas</label>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <select id="dues" name="dues" class="form-control">
-                                                    <option value="1">1</option>
-                                                    @for($i=2;$i<=36;$i++)
-                                                    <option value="{{$i}}">{{$i}}</option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                </div>
-                            </div>
                         </div>
-
-
                     </div>
-                    <div class="col-lg-3">
+                </div>
+                <div class="row">
+
+
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="tgarjeta">Código de Seguridad</label>
                             <input type="text" class="form-control input-number" id="crc" name="crc" placeholder="Código de Seguridad" maxlength="4" required autocomplete="off">
                         </div>
                     </div>
-
-                    <div class="col-lg-2">
-                        <img src="{{url("images/tarjeta_codigo_seguridad.png")}}" width="70%">
+                    <div class="col-lg-3">
+                        <img src="{{url("images/tarjeta_codigo_seguridad.png")}}" class="img-responsive hidden-xs">
                     </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="tgarjeta">Coutas</label>
+                            <select id="dues" name="dues" class="form-control">
+                                <option value="1">1</option>
+                                @for($i=2;$i<=36;$i++)
+                                <option value="{{$i}}">{{$i}}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                </div> <div class="panel-footer">
+                    <button type="submit" id="btnPayment" class="btn btn-success">Pagar</button>
                 </div>
             </div>
-            <div class="panel-footer">
-                <button type="submit" id="btnPayment" class="btn btn-success">Pagar</button>
-            </div>
         </div>
-    </div>
-</div>
-{!!Form::close()!!}
 
-{!!Html::script('js/Ecommerce/Methods.js')!!}
-@endsection
+    </div>
+    {!!Form::close()!!}
+
+    {!!Html::script('js/Ecommerce/Methods.js')!!}
+    @endsection

@@ -48,6 +48,9 @@ function Product() {
     }
 
     this.uploadExcel = function () {
+
+        var elem = $(this);
+
         var formData = new FormData($("#frmFile")[0]);
 
         $.ajax({
@@ -58,7 +61,14 @@ function Product() {
             processData: false,
             cache: false,
             contentType: false,
+            beforeSend: function () {
+                $("#loading-super").removeClass("hidden");
+                $("#tblUpload tbody").empty();
+                elem.attr("disabled",true);
+            },
             success: function (data) {
+                elem.attr("disabled",false);
+                $("#loading-super").addClass("hidden");
                 obj.setDetailExcel(data.data)
             }
         })
@@ -66,6 +76,7 @@ function Product() {
     }
     this.uploadExcelCode = function () {
         var formData = new FormData($("#frmFileCode")[0]);
+
         $.ajax({
             url: 'product/uploadExcelCode',
             method: 'POST',
@@ -84,8 +95,9 @@ function Product() {
 
     this.setDetailExcel = function (detail) {
         var html = "";
+
         $.each(detail, function (i, val) {
-            html += "<tr><td>" + val.description + "</td></tr>";
+            html += "<tr><td>" + val.sf_code + "</td><td>" + val.title + "</td><td>" + val.price_sf + "</td><td>" + val.msg + "</td></tr>";
         })
         $("#tblUpload tbody").html(html);
     }

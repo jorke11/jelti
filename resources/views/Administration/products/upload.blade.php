@@ -6,9 +6,13 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-1">
+    <div class="col-lg-4">
         <button class="btn btn-success" id="btnUpload" type="button">Upload</button>
-
+    </div>
+    <div class="col-lg-2">
+        <a href="{{url("formats/upload_products.xlsx")}}" download="Formato.xlsx">
+            Descargar Archivo
+        </a>
     </div>
 </div>
 {!!Form::close()!!}
@@ -18,12 +22,10 @@
         <table class="table table-bordered" id="tblUpload">
             <thead>
                 <tr>
-                    <th>Bar Code</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>contact</th>
-                    <th>Telefono contact</th>
-                    <th>Email</th>
+                    <th>Referencia</th>
+                    <th>Titulo</th>
+                    <th>Precio</th>
+                    <th>Respuesta</th>
                 </tr>
             </thead>
             <tbody></tbody>

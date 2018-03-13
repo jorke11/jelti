@@ -25,6 +25,7 @@ class ProductController extends Controller {
     public $inserted;
     public $insertedArray;
     public $updated;
+    public $response;
 
     public function __construct() {
         $this->middleware("auth");
@@ -62,8 +63,8 @@ class ProductController extends Controller {
             if ($input["pvp"] == '') {
                 unset($input["pvp"]);
             }
-            
-            
+
+
             $input["packaging"] = ($input["packaging"] == '') ? 0 : $input["packaging"];
 
 
@@ -107,6 +108,8 @@ class ProductController extends Controller {
 
             $file->move("uploads/products/" . date("Y-m-d") . "/", $this->name);
 
+            $this->response = array();
+
             Excel::load($this->path, function($reader) {
                 $in["name"] = $this->name;
                 $in["path"] = $this->path;
@@ -116,73 +119,34 @@ class ProductController extends Controller {
 
                 foreach ($reader->get() as $book) {
 
-//                    if (trim($book->supplier) != '') {
-//                        $sup = Administration\Stakeholder::where("business", "ILIKE", trim($book->supplier))->first();
-//                        $cat = Administration\Categories::where("description", "like", trim($book->category))->first();
-//                        if (count($sup) > 0 && count($cat) > 0) {
-//                            $book->ean = (!isset($book->ean)) ? '' : trim($book->ean);
-//                            if($book->ean=='N/A'){
-//                            }
-//                            $product["category_id"] = $cat->id;
-//                            $product["supplier_id"] = $sup->id;
-//                            $product["stakeholder_id"] = $sup->id;
-//                            $product["account_id"] = 1;
-//                            $product["reference"] = (int) trim($book->sf_code);
-//                            $product["bar_code"] = (int) trim($book->ean);
-//                            $product["tax"] = trim($book->tax);
-//                            $product["units_supplier"] = (int) trim($book->supplier_packing);
-//                            $product["units_sf"] = (int) trim($book->sf_packing);
+                    if ($book->sf_code) {
+                        $pro = Products::where("reference", $book->sf_code)->where("status_id", 1)->first();
 
-//                    echo "<pre>";                    print_r($book);exit;
-                    
-                    $product["cost_sf"] = trim($book->packaging_cost);
-                    $product["price_sf"] = round(trim($book->sf_price_sin_iva));
+                        if ($pro != null) {
 
-                    if ($book->pvp_sugerido_iva != '') {
-                        $product["pvp"] = round(trim($book->pvp_sugerido_iva));
+                            $pro->price_sf = $book->sf_code;
+
+                            if (isset($book->title) && $book->title != '') {
+                                $pro->title = $book->title;
+                            }
+                            if (isset($book->tax) && $book->tax != '') {
+                                $pro->tax = $book->tax;
+                            }
+                            if (isset($book->sf_price) && $book->sf_price != '') {
+                                $pro->price_sf = round($book->sf_price);
+                            }
+
+                            $this->response[] = array("sf_code" => $book->sf_code, "title" => $book->title, "price_sf" => $pro->price_sf, "msg" => "Actualizado", "status" => false);
+
+                            $pro->save();
+                        } else {
+                            $this->response[] = array("sf_code" => $book->sf_code, "title" => $book->title, "msg" => "No existe o inactivo", "status" => false);
+                        }
                     }
-
-//                            $product["status_id"] = 2;
-//                            $product["margin_sf"] = (double) trim($book->sf_margin);
-//                            $product["margin"] = trim($book->margen);
-//                            $product["status_id"] = 3;
-//                            $product["minimum_stock"] = 15;
-//                    dd($book);
-                    $ware = array("3", "2");
-                    if (trim($book->status_bog_zona_1) == 'ACTIVE' && trim($book->status_bqlla_zona_2) == 'INACTIVO') {
-                        $ware = array("3");
-                    } else if (trim($book->status_bog_zona_1) == 'INACTIVO' && trim($book->status_bqlla_zona_2) == 'ACTIVE') {
-                        $ware = array("2");
-                    } else {
-                        $product["status_id"] = 2;
-                    }
-
-//                    if ($book->sf_code == '100002') {
-//                        print_r($ware);
-//                        dd($book);
-//                    }
-
-                    $product["warehouse"] = json_encode($ware);
-//                    dd($product);
-                    $pro = Products::where("reference", $book->sf_code)->first();
-
-                    if (count($pro) > 0) {
-
-                        $pro->fill($product)->save();
-                        $this->updated++;
-                    } else {
-//                                Products::create($product);
-                        $product["description"] = $book->title;
-                        $this->insertedArray[] = $product;
-                        $this->inserted++;
-                    }
-//                        }
-//                    }
                 }
             })->get();
 
-            return response()->json(["success" => true, "data" => Products::where("status_id", 3)->get(), "inserted" => $this->inserted,
-                        "updated" => $this->updated, "inserted_array" => $this->insertedArray]);
+            return response()->json(["success" => true, "data" => $this->response]);
         }
     }
 
@@ -256,7 +220,7 @@ class ProductController extends Controller {
         $input["status_id"] = (isset($input["status_id"])) ? 1 : 2;
         $input["packaging"] = ($input["packaging"] == '') ? 0 : $input["packaging"];
 
-        
+
         $result = $product->fill($input)->save();
         if ($result) {
             $product = Products::FindOrFail($id);

@@ -111,7 +111,7 @@ class PaymentController extends Controller {
 
         if ($detail != null) {
 
-            $this->formatedDetail($detail);
+            $detail = $this->formatedDetail($detail);
 
             $total = "$" . number_format($this->total, 0, ",", ".");
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
@@ -124,6 +124,8 @@ class PaymentController extends Controller {
     public function formatedDetail($detail) {
         $this->total = 0;
         $this->subtotal = 0;
+//        echo "<pre>";
+//    print_r($detail);exit;
         foreach ($detail as $i => $value) {
 //            echo "<pre>";
 //            print_r($value);
@@ -147,6 +149,7 @@ class PaymentController extends Controller {
                 $this->tax19 += $detail[$i]["total"] * $value["tax"];
             }
         }
+        return $detail;
     }
 
     public function methodsPayment($id) {
@@ -180,20 +183,16 @@ class PaymentController extends Controller {
         if (Auth::user() != null) {
             $this->order = Orders::where("status_id", 1)->where("stakeholder_id", Auth::user()->id)->first();
             if ($this->order != null) {
-
-
                 $this->order_id = $this->order->id;
-
                 $sql = "
-                SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,sum(d.value) as value,sum(d.quantity * d.value) total,p.image,p.thumbnail,
-                sum(d.units_sf) as units_sf,d.tax,round(sum(d.quantity * d.value))::money as total_formated
+                SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,d.value as value,sum(d.quantity * d.value) total,p.image,p.thumbnail,
+                d.units_sf,d.tax
                 FROM orders_detail d
                     JOIN vproducts p ON p.id=d.product_id
                     JOIN stakeholder s ON s.id=p.supplier_id
                 WHERE order_id=" . $this->order->id . "
-                GROUP BY 1,2,3,4,product_id,p.image,d.tax,p.thumbnail
+                GROUP BY 1,2,3,4,d.units_sf,product_id,p.image,d.tax,p.thumbnail,d.value
                 ORDER BY 1";
-//            echo $sql;exit;
                 $detail = DB::select($sql);
 
                 $detail = json_decode(json_encode($detail), true);

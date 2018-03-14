@@ -1,12 +1,9 @@
 function Payment() {
     this.init = function () {
-
         $("#btnPayU").click(this.payu);
 
         this.getDetail();
         this.getQuantity();
-
-
     }
 
     this.payu = function () {
@@ -92,7 +89,11 @@ function Payment() {
                         
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <h4>${val.total_formated}</h4>
+                                                        <h4>Total: ${val.totalFormated}</h4>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <h4>Unidad: ${val.valueFormated}</h4>
                                                 </div>
                                             </div>
                                                 <div class="row">

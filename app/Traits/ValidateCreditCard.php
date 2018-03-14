@@ -102,7 +102,7 @@ trait ValidateCreditCard {
                                 $response = array("paymentMethod" => 'MASTERCARD', "status" => true);
                             } else {
                                 if (preg_match('/(^[35](?:0[0-5]|[68][0-9])[0-9]{11}$)|(^30[0-5]{11}$)|(^3095(\d{10})$)|(^36{12}$)|(^3[89](\d{12})$)/', $number)) {
-                                    $response = array("paymentMethod" => 'MASTERCARD', "status" => true);
+                                    $response = array("paymentMethod" => 'DINERS', "status" => true);
                                 } else {
                                     if (preg_match('/^590712(\d{10})$/', $number)) {
                                         $response = array("paymentMethod" => 'CODENSA', "status" => true);

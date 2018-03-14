@@ -423,11 +423,10 @@ class PaymentController extends Controller {
 
                 return redirect('shopping/0')->with("success", 'Payment success')->with("order_id", $arr["transactionResponse"]["orderId"]);
             } else {
-                
                 $error = $arr["error"];
                 if ($arr["code"] == 'SUCCESS') {
                     if ($arr["transactionResponse"]["state"] == 'DECLINED') {
-                        $error = "Por favor verifique la informacion de la Tarjeta de credito";
+                        $error = "Por favor verifique la informacion de la Tarjeta de credito, ".$arr["transactionResponse"]["responseCode"];
                     } else {
                         $error = $arr["transactionResponse"]["responseMessage"];
                     }

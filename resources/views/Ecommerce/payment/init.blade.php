@@ -60,7 +60,7 @@
                                 <h4 class="text-left"><span id="tax5"></span></h4>
                             </div>
                         </div>
-                        <div class="row" id="divtax19">
+                        <div class="row hide" id="divtax19">
                             <div class="col-lg-6">
                                 <h4 class="text-right">Iva 19%</h4>
                             </div>

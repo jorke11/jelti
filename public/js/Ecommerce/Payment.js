@@ -139,7 +139,7 @@ function Payment() {
                     $("#divtax19").removeClass("hide");
                     $("#tax19").html(data.tax19);
                 } else {
-                    $("#divtax5").addClass("hide");
+                    $("#divtax19").addClass("hide");
                 }
 
                 $("#subtotalOrder").html("<h4>" + data.subtotal + "</h4>");

@@ -423,10 +423,14 @@ class PaymentController extends Controller {
 
                 return redirect('shopping/0')->with("success", 'Payment success')->with("order_id", $arr["transactionResponse"]["orderId"]);
             } else {
-
+                
                 $error = $arr["error"];
                 if ($arr["code"] == 'SUCCESS') {
-                    $error = $arr["transactionResponse"]["responseMessage"];
+                    if ($arr["transactionResponse"]["state"] == 'DECLINED') {
+                        $error = "Por favor verifique la informacion de la Tarjeta de credito";
+                    } else {
+                        $error = $arr["transactionResponse"]["responseMessage"];
+                    }
                 } else {
                     $error = "Tarjeta no aceptada en nuestro Sistema";
                 }

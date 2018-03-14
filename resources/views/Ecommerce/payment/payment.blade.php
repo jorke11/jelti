@@ -10,7 +10,7 @@
 <input id="order_id" name="order_id" type="hidden" value='{{$id}}'>
 @if(Session::has('error'))
 <div class="row row-center">
-    <div class="col-lg-6">
+    <div class="col-lg-4">
         <div class="alert alert-danger">{{Session::get('error')}}</div>
     </div>
 </div>

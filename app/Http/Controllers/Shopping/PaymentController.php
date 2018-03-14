@@ -115,7 +115,11 @@ class PaymentController extends Controller {
 
             $total = "$" . number_format($this->total, 0, ",", ".");
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
-            return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal, "order" => $this->order_id, "totalnumeric" => $this->total]);
+            $tax5 = "$" . number_format($this->tax5, 0, ",", ".");
+            $tax19 = "$" . number_format($this->tax19, 0, ",", ".");
+
+            return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal,
+                        "order" => $this->order_id, "totalnumeric" => $this->total,'tax5' => $tax5, "tax19" => $tax19]);
         } else {
             return response()->json(["success" => false, "total" => 0, "subtotal" => 0]);
         }
@@ -426,7 +430,7 @@ class PaymentController extends Controller {
                 $error = $arr["error"];
                 if ($arr["code"] == 'SUCCESS') {
                     if ($arr["transactionResponse"]["state"] == 'DECLINED') {
-                        $error = "Por favor verifique la informacion de la Tarjeta de credito, ".$arr["transactionResponse"]["responseCode"];
+                        $error = "Por favor verifique la informacion de la Tarjeta de credito, " . $arr["transactionResponse"]["responseCode"];
                     } else {
                         $error = $arr["transactionResponse"]["responseMessage"];
                     }

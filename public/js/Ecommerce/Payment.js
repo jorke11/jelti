@@ -128,6 +128,20 @@ function Payment() {
                     $("#message-mount").addClass("hidden");
 
                 }
+
+                if (data.tax5 != '$0') {
+                    $("#divtax5").removeClass("hide");
+                    $("#tax5").html(data.tax5);
+                } else {
+                    $("#divtax5").addClass("hidden");
+                }
+                if (data.tax19 != '$0') {
+                    $("#divtax19").removeClass("hide");
+                    $("#tax19").html(data.tax19);
+                } else {
+                    $("#divtax5").addClass("hide");
+                }
+
                 $("#subtotalOrder").html("<h4>" + data.subtotal + "</h4>");
                 $("#totalOrder").html("<h4>" + data.total + "</h4>");
                 $("#frm #order_id").val(data.order);

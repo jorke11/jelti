@@ -52,6 +52,22 @@
                                 <h4 class="text-left"><span id="subtotalOrder"></span></h4>
                             </div>
                         </div>
+                        <div class="row hide" id="divtax5">
+                            <div class="col-lg-6">
+                                <h4 class="text-right">Iva 5%</h4>
+                            </div>
+                            <div class="col-lg-6">
+                                <h4 class="text-left"><span id="tax5"></span></h4>
+                            </div>
+                        </div>
+                        <div class="row" id="divtax19">
+                            <div class="col-lg-6">
+                                <h4 class="text-right">Iva 19%</h4>
+                            </div>
+                            <div class="col-lg-6">
+                                <h4 class="text-left"><span id="tax19"></span></h4>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <h4 class="text-right">Total</h4>

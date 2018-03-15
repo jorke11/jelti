@@ -131,7 +131,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <img src="{{url("images/tarjeta_codigo_seguridad.png")}}" class="img-responsive hidden-xs">
+                        <img src="{{url("images/visa.png")}}" class="img-responsive hidden-xs">
                     </div>
                 </div>
             </div>

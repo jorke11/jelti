@@ -612,7 +612,7 @@ clearstatcache();
                         <img src="images/por_que_sf.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
                     </div>
                 </div>
-                <div class="row row-center test">
+                <div class="row row-center">
                     <div class="col-lg-8">
                         <img src="images/como_funciona.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
                     </div>

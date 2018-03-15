@@ -141,14 +141,14 @@ clearstatcache();
 
             /* Para 960px */  
             @media only screen and (max-width: 980px) and (min-width: 821px) {  
-                 #slider-main{
+                #slider-main{
                     padding-top: 100px
                 }
             }  
 
             /* Para 800px */  
             @media only screen and (max-width: 820px) and (min-width: 621px) {  
-                 #slider-main{
+                #slider-main{
                     padding-top: 98px
                 }
             }  
@@ -607,7 +607,7 @@ clearstatcache();
 
         <section style="padding-top: 3%;padding-bottom: 2%" >
             <div class="container-fluid">
-                <div class="row row-center row-space test">
+                <div class="row row-center row-space">
                     <div class="col-lg-8">
                         <img src="images/por_que_sf.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
                     </div>
@@ -617,7 +617,6 @@ clearstatcache();
                         <img src="images/como_funciona.jpg" alt="Sub Image" class="center-block img-responsive" width="100%">
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -873,8 +872,7 @@ clearstatcache();
             </div>
         </div>
     </div>
-
-
+        
 <!--    <section>
         <div class="container-fluid grey-bk" style="padding-top: 3%">
             <div class="row">

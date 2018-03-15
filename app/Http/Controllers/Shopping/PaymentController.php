@@ -204,8 +204,8 @@ class PaymentController extends Controller {
                 SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,d.value as value,sum(d.quantity * d.value) total,p.image,p.thumbnail,
                 d.units_sf,d.tax
                 FROM orders_detail d
-                    JOIN vproducts p ON p.id=d.product_id
-                    JOIN stakeholder s ON s.id=p.supplier_id
+                    LEFT JOIN vproducts p ON p.id=d.product_id
+                    LEFT JOIN stakeholder s ON s.id=p.supplier_id
                 WHERE order_id=" . $this->order->id . "
                 GROUP BY 1,2,3,4,d.units_sf,product_id,p.image,d.tax,p.thumbnail,d.value
                 ORDER BY 1";

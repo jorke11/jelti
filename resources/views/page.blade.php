@@ -759,7 +759,7 @@ clearstatcache();
         <section style="padding-bottom: 2%;padding-top: 2%" class="hidden-lg">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12 col-xs-offset-2">
+                    <div class="col-lg-12">
                         <div id="carousel-clients-xs" class="carousel slide" data-ride="carousel">
 
                             <ol class="carousel-indicators">

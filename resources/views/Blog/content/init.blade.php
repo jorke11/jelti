@@ -82,7 +82,7 @@
         @foreach($data as $val)
         <div class="col-lg-4">
             <div class="thumbnail" style="padding: 0">
-                <a href="{{url("blog/".$val["slug"])}}" ><img src="../{{$val["thumbnail"]}}" alt="..." class="img-responsive" ></a>
+                <a href="{{url("blog/".$val["slug"])}}" ><img src="../{{$val["thumbnail"]}}" alt="..." class="img-responsive"></a>
                 <div class="caption" >
                     <p class="text-center"><img src="../images_blog/category_line/belleza.png" alt="" width="30%"></p>
                     <h3 class="text-center"><a href="{{url("blog/".$val["slug"])}}">{{$val["title"]}}</a></h3>

@@ -6,12 +6,6 @@
 <meta property="og:description"   content="{{$data["title"]}}" />
 <meta property="og:image"         content="{{url($category->image)}}" />
 
-<div class="fb-share-button" data-href="http://www.superfuds.com/blog/top-10-nuestros-mejores-productos-2017" 
-     data-layout="button" data-size="small" data-mobile-iframe="true">
-    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.superfuds.com%2Fblog%2Ftop-10-nuestros-mejores-productos-2017&amp;src=sdkpreparse" 
-       class="fb-xfbml-parse-ignore">Compartir</a></div>
-
-
 <div id="fb-root"></div>
 <div class="fb-share-button" 
      data-href="https://www.your-domain.com/your-page.html" 
@@ -135,7 +129,7 @@
                 <div class="col-lg-7 col-lg-offset-3"  style="background-color: #fff;padding-left: 10%;padding-bottom: 5%">
                     <div class="row">
                         <div class="col-lg-3">
-                            <a target="__blank" href="https://www.facebook.com/sharer/sharer.php?u={{url(Request::path())}}&amp;src=sdkpreparse"><img  src="{{ asset('images/facebook.png') }}"></a>
+                            <a id="linkfb" href="https://www.facebook.com/sharer/sharer.php?u={{url(Request::path())}}&amp;src=sdkpreparse"><img  src="{{ asset('images/facebook.png') }}"></a>
                         </div>
                         <div class="col-lg-3">
                             <a href="#"><img  src="{{ asset('images/instagram.png') }}"></a>
@@ -257,7 +251,7 @@
     fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    
+
 </script>
 
 @endsection

@@ -180,12 +180,14 @@ class PaymentController extends Controller {
         $client = Stakeholder::where("email", $user->email)->first();
         $detail = $this->getDetailData();
 
-        $detail = $this->formatedDetail($detail);
-
-        echo "<pre>";
+         echo "<pre>";
         print_r($detail);
         exit;
 
+        
+        $detail = $this->formatedDetail($detail);
+
+       
         $total = "$" . number_format($this->total, 0, ",", ".");
         $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
 

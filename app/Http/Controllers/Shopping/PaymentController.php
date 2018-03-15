@@ -182,8 +182,10 @@ class PaymentController extends Controller {
 
         $detail = $this->formatedDetail($detail);
 
-        echo $this->total;exit;
-        
+        echo "<pre>";
+        print_r($detail);
+        exit;
+
         $total = "$" . number_format($this->total, 0, ",", ".");
         $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
 

@@ -209,9 +209,12 @@ class PaymentController extends Controller {
                 WHERE order_id=" . $this->order->id . "
                 GROUP BY 1,2,3,4,d.units_sf,product_id,p.image,d.tax,p.thumbnail,d.value
                 ORDER BY 1";
+                
                 $detail = DB::select($sql);
 
                 $detail = json_decode(json_encode($detail), true);
+                
+                echo "<pre>";print_r($detail);exit;
                 return $detail;
             } else {
                 return null;

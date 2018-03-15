@@ -119,7 +119,7 @@ class PaymentController extends Controller {
             $tax19 = "$" . number_format($this->tax19, 0, ",", ".");
 
             return response()->json(["detail" => $detail, "total" => $total, "exento" => $this->exento, "subtotal" => $subtotal,
-                        "order" => $this->order_id, "totalnumeric" => $this->total,'tax5' => $tax5, "tax19" => $tax19]);
+                        "order" => $this->order_id, "totalnumeric" => $this->total, 'tax5' => $tax5, "tax19" => $tax19]);
         } else {
             return response()->json(["success" => false, "total" => 0, "subtotal" => 0]);
         }
@@ -172,14 +172,20 @@ class PaymentController extends Controller {
             $years[] = $i;
         }
 
+        $countries[] = array("code" => "CO", "description" => "Colombia");
+
 
         $order = Orders::find($id);
         $user = Users::find($order->stakeholder_id);
         $client = Stakeholder::where("email", $user->email)->first();
         $detail = $this->getDetailData();
-        $total = $this->total;
 
-        return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total"));
+        $detail = $this->formatedDetail($detail);
+
+        $total = "$" . number_format($this->total, 0, ",", ".");
+        $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
+
+        return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal"));
     }
 
     public function getDetailData() {

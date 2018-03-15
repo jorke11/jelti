@@ -32,7 +32,7 @@
 
             <di                      v class="col-lg-8 col-lg-offset-2">
                 <div class="thumbnail">
-                    <img src="../{{$data["img"]}}">
+                    <img src="../{{$data["img"]}}" >
                     <div class="caption">
                         <h2 class="text-center">{{$data["title"]}}</h2>
                         <p class="text-justify">
@@ -135,7 +135,7 @@
                 <div class="col-lg-7 col-lg-offset-3"  style="background-color: #fff;padding-left: 10%;padding-bottom: 5%">
                     <div class="row">
                         <div class="col-lg-3">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{url(Request::path())}}&amp;src=sdkpreparse"><img  src="{{ asset('images/facebook.png') }}"></a>
+                            <a target="__blank" href="https://www.facebook.com/sharer/sharer.php?u={{url(Request::path())}}&amp;src=sdkpreparse"><img  src="{{ asset('images/facebook.png') }}"></a>
                         </div>
                         <div class="col-lg-3">
                             <a href="#"><img  src="{{ asset('images/instagram.png') }}"></a>

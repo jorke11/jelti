@@ -1401,7 +1401,7 @@ class DepartureController extends Controller {
                                     ->where("client_id", $header->client_id)->first();
                 }
 
-//                $input["value"] = $pro->price_sf;
+                $input["value"] = $pro->price_sf;
                 $input["quantity_lots"] = json_encode($input["detail"]);
                 $input["real_quantity"] = $input["header"]["total"];
                 $input["status_id"] = 3;

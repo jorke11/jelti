@@ -36,6 +36,7 @@ function Page() {
                     if (data.status == true) {
                         toastr.success("Pronto te estaremos contactando");
                         $(".in-page").cleanFields();
+                        $("#myModal").modal("hide");
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error(xhr.responseJSON.msg);

@@ -137,16 +137,42 @@ clearstatcache();
             </div>
         </div>
         <style>
-            @media screen and (max-width: 500px) {
-                #slider-main{
-                    padding-top: 28%
+
+
+            /* Para 960px */  
+            @media only screen and (max-width: 980px) and (min-width: 821px) {  
+                 #slider-main{
+                    padding-top: 100px
                 }
-            }
-            @media screen and (min-width: 800px) {
-                #slider-main{
-                    padding-top: 3%
+            }  
+
+            /* Para 800px */  
+            @media only screen and (max-width: 820px) and (min-width: 621px) {  
+                 #slider-main{
+                    padding-top: 98px
                 }
-            }
+            }  
+
+            /* Para 600px */  
+            @media only screen and (max-width: 620px) and (min-width: 501px) {  
+                #slider-main{
+                    padding-top: 98px
+                }
+            }  
+
+            /* Para 480px */  
+            @media only screen and (max-width: 500px) and (min-width: 341px) {  
+                #slider-main{
+                    padding-top: 98px
+                }
+            }  
+
+            /* Para 320px */  
+            @media only screen and (max-width: 340px) and (min-width: 5px)  {  
+                #slider-main{
+                    padding-top: 100px
+                }
+            } 
         </style>
         <div class="col-xs-offset-2">
             @include("header")
@@ -825,13 +851,12 @@ clearstatcache();
 
     <div class="container-fluid green-bk ">
         <div class="row row-space" style="padding-top: 1%">
-            <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
-                <h2 class="col-lg-offset-2"  style="color:white">
-                    Regístrate y recibe tips, recetas <br>
-                    y mucho más!
+            <div class="col-lg-6 col-md-5 col-sm-6 col-xs-12">
+                <h2 class="text-center"  style="color:white">
+                    Regístrate y recibe tips, recetas y mucho más!
                 </h2>
             </div>
-            <div class="col-lg-7 col-md-7 col-sm-6">
+            <div class="col-lg-6 col-md-7 col-sm-6">
                 <br>
                 <div class="row">
                     <div class="col-lg-10 col-xs-12">
@@ -850,7 +875,7 @@ clearstatcache();
     </div>
 
 
-    <section>
+<!--    <section>
         <div class="container-fluid grey-bk" style="padding-top: 3%">
             <div class="row">
                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
@@ -883,7 +908,7 @@ clearstatcache();
                 </div>
             </div>
         </div>
-    </section>
+    </section>-->
 
     @include("footer")
 

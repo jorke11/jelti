@@ -173,7 +173,7 @@
     </div>
 </div>
 
-<div class="row" style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%">
+<div class="row hidden-lg" style="background-color: #FAF6EE;padding-top: 1%;padding-bottom: 2%">
     <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
         <!--<div class="carousel slide media-carousel"  data-ride="carousel" id="newproducts2_{{$val->id}}">-->
         <div class="carousel slide media-carousel"  data-ride="carousel" id="{{$id}}-xs">

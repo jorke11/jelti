@@ -26,7 +26,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="tgarjeta">Subtotal</label>
-                            <input type="text" class="form-control input input-payment input-number" id="total" value="{{$subtotal}}" readonly="">
+                            <input type="text" class="form-control input input-payment input-number" id="subtotal" value="{{$subtotal}}" readonly="">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -52,7 +52,7 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label for="tgarjeta">Pais</label>
-                            <select class="form-control" id="country_id" name="country_id" >
+                            <select class="form-control" id="country_id">
                                 @foreach($countries as $val)
                                 <option value="{{$val["code"]}}">{{$val["description"]}}</option>
                                 @endforeach

@@ -179,7 +179,7 @@ clearstatcache();
 
             .go-top {
                 position: fixed;
-                bottom: 2em;
+                bottom: 4em;
                 right: 2em;
                 text-decoration: none;
                 color: #fff;

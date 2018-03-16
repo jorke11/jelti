@@ -187,11 +187,13 @@ clearstatcache();
                 font-size: 12px;
                 padding: 1em;
                 display: none;
-                z-index: 1000
+                z-index: 1000;
+                border-radius: 50% 50% 50% 50%;
             }
 
             .go-top:hover {
                 background-color: rgba(0, 0, 0, 0.6);
+                color:white;
             }
 
         </style>

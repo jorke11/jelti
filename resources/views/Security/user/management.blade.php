@@ -76,6 +76,12 @@
             </select>
         </div>
     </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label for="email">Alias Blog:</label>
+            <input type="text" class="form-control input-user" id="alias" name='alias'>
+        </div>
+    </div>
 
     <div class="col-lg-3">
         <div class="form-group">

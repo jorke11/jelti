@@ -470,7 +470,7 @@ clearstatcache();
             <br>
         </section>
 
-        <section style="padding-top: 1%;padding-bottom: 2%" class="hidden-xs">   
+        <section style="padding-top: 1%;padding-bottom: 2%" class="hidden-xs hidden-sm">   
             <div class="container-fluid test">
                 <div class="row row-center">
                     <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-6"><h3 class="color-font">Lo Nuevo</h3></div>
@@ -549,7 +549,7 @@ clearstatcache();
             </div>
         </section>
 
-        <section style="padding-top: 1%;padding-bottom: 2%" class="hidden-lg">   
+        <section style="padding-top: 1%;padding-bottom: 2%" class="hidden-lg hidden-md">   
             <div class="container-fluid">
                 <div class="row row-center">
                     <!--<div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>-->
@@ -714,16 +714,16 @@ clearstatcache();
                                 <div class="item active">
                                     <div class="row" style="padding-top: 3%;padding-bottom: 3%">
                                         <div class="col-lg-10 col-lg-offset-1">
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/olimpica.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/la14.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/farmatodo.png" alt="..." class="img-responsive center-block" width="40%" >
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/rappi-3.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
                                         </div>
@@ -732,16 +732,16 @@ clearstatcache();
                                 <div class="item">
                                     <div class="row" style="padding-top: 3%;padding-bottom: 3%">
                                         <div class="col-lg-10 col-lg-offset-1">
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/click_clack-4.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/locatel-5.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/altoque-6.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/cruz_verde-7.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
 
@@ -751,16 +751,16 @@ clearstatcache();
                                 <div class="item">
                                     <div class="row" style="padding-top: 3%;padding-bottom: 3%">
                                         <div class="col-lg-10 col-lg-offset-1">
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/gastronomy-8.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/enjoy_fit-11.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/juliao-10.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-3 col-md-3 col-sm-3">
                                                 <img src="logos/tiger_market-9.png" alt="..." class="img-responsive center-block" width="40%">
                                             </div>
                                         </div>
@@ -781,7 +781,7 @@ clearstatcache();
             </div>
         </section>
 
-        <section style="padding-bottom: 2%;padding-top: 2%" class="hidden-lg">
+        <section style="padding-bottom: 2%;padding-top: 2%" class="hidden-lg hidden-md hidden-sm">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
@@ -796,20 +796,20 @@ clearstatcache();
 
                                 <div class="item active">
                                     <div class="row">
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/olimpica.png" alt="..." class="img-responsive center-block">
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/la14.png" alt="..." class="img-responsive center-block">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="row" >
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/farmatodo.png" alt="..." class="img-responsive center-block" >
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/rappi-3.png" alt="..." class="img-responsive center-block" >
                                         </div>
                                     </div>
@@ -818,20 +818,20 @@ clearstatcache();
 
                                 <div class="item">
                                     <div class="row">
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/click_clack-4.png" alt="..." class="img-responsive center-block">
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/locatel-5.png" alt="..." class="img-responsive center-block">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="row">
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/altoque-6.png" alt="..." class="img-responsive center-block" >
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/cruz_verde-7.png" alt="..." class="img-responsive center-block">
                                         </div>
 
@@ -839,20 +839,20 @@ clearstatcache();
                                 </div>
                                 <div class="item">
                                     <div class="row">
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/gastronomy-8.png" alt="..." class="img-responsive center-block" >
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/enjoy_fit-11.png" alt="..." class="img-responsive center-block" >
                                         </div>
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="row">
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/juliao-10.png" alt="..." class="img-responsive center-block" >
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-xs-6 col-sm-6">
                                             <img src="logos/tiger_market-9.png" alt="..." class="img-responsive center-block">
                                         </div>
                                     </div>
@@ -884,13 +884,16 @@ clearstatcache();
                 <br>
                 <div class="row">
                     <div class="col-lg-10 col-xs-12">
-                        <input class="form-control input-lg" placeholder="Email">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                            <span class="input-group-addon" id="basic-addon2"style="color:green">Suscribete</span>
+                        </div>
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-lg-12">
-                        <button class="btn btn-default" style="color:green">Suscribete</button>
+
                     </div>
                 </div>
                 <br>

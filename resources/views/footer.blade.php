@@ -5,15 +5,15 @@
     </div>
     <div class="col-lg-5 col-md-5 col-sm-4 col-xs-6">
         <div class="row" style="padding-top: 20%;padding-bottom: 3%">
-            <div class="col-lg-3 col-md-4 col-sm-4 col-lg-offset-3 col-xs-4">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-lg-offset-3 col-xs-4">
                 <a href="https://www.facebook.com/superfuds/" target="_blank"><p class="text-center"><img src="/images/facebook.png" class="img-responsive"></p></a>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <a href="https://www.instagram.com/superfuds/?hl=es-la" target="_blank"><img src="/images/instagram.png" class="img-responsive"></a>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+<!--            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
                 <a href=""><img src="/images/twitter.png" class="img-responsive"></a>
-            </div>
+            </div>-->
         </div>
     </div
     <div class="col-lg-2 col-md-4 col-sm-4 col-lg-offset-1 col-xs-4" >

@@ -33,7 +33,7 @@
                             {!!$data["content"]!!}
                         </p>
                         <div class="ratings" style="padding-bottom: 2%">
-                            <p class="pull-right">{{$writer->name}} {{$writer->last_name}} ({{date("Y-m-d",strtotime($data["created_at"]))}})</p>
+                            <p class="pull-right">{{$author}} ({{date("Y-m-d",strtotime($data["created_at"]))}})</p>
                         </div>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                                 ?>
                                 <div class="col-sm-3 col-lg-3 col-md-3">
                                     <div class="thumbnail" style="padding: 0px">
-                                        <img src="{{url($val->thumbnail)}}" onclick="objPage.redirectProduct('{{$value->slug}}')">
+                                        <img src="{{url($val->thumbnail)}}" onclick="objPage.redirectProduct('{{$val->slug}}')">
                                         <div class="caption" style="padding: 0px">
                                             <h5 class="text-center" style="height: 35px"><a href="/productDetail/{{$val->slug}}">{{$val->title}}</a></h5>
                                             <p>

@@ -32,9 +32,8 @@ class BlogController extends Controller {
     public function index() {
         $last = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category")->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")->orderBy("posts.created_at", "desc")->first();
 
-        $data = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category", 
-                DB::raw("extract(days from now() - posts.created_at) || ' dias '|| extract(minutes from now() - posts.created_at) ||' minutos' as timepost"))
-                ->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")
+        $data = Post::select("posts.id", "posts.img", "posts.thumbnail", "posts.title", "posts.slug", "categories_blog.image as img_category", DB::raw("extract(days from now() - posts.created_at) || ' dias '|| extract(minutes from now() - posts.created_at) ||' minutos' as timepost"))
+                        ->leftjoin("categories_blog", "categories_blog.id", "posts.category_id")
                         ->where("posts.id", "<>", $last->id)->orderBy("posts.created_at", "desc")->paginate(10);
 
         return view("Blog.content.init", compact("data", "last"));
@@ -63,7 +62,13 @@ class BlogController extends Controller {
         $writer = Users::find($data->user_id);
         $comments = Blog\Feedback::where("row_id", $data->id)->orderBy("created_at", "desc")->get();
 
-        return view("Blog.content.detail", compact("data", "products", "comments", "writer", "category"));
+        $author = $writer->name . " " . $writer->last_name;
+
+        if ($writer->alias != '') {
+            $author = $writer->alias;
+        }
+
+        return view("Blog.content.detail", compact("data", "products", "comments", "author", "category"));
     }
 
     public function getAllPost() {

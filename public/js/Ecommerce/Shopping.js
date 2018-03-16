@@ -15,7 +15,7 @@ function Shop() {
                     html += '<div class="thumbnail" style="height:290px">'
                     html += '<img src="/' + val.image + '">'
                     html += '<div class="caption">'
-                    html += '<h4><a href="/shopping/' + val.id + '">' + val.description + '</a></h4>'
+                    html += '<h4><a href="/ecommerce/' + val.id + '">' + val.description + '</a></h4>'
                     html += '<p>' + val.short_description + '</p>'
                     html += '</div></div></div>';
                 })
@@ -55,7 +55,7 @@ function Shop() {
                     html += '<div class="thumbnail">'
                     html += '<img src="/' + val.image + '">'
                     html += '<div class="caption">'
-                    html += '<h4><a href="/shopping/' + val.id + '">' + val.description + '</a></h4>'
+                    html += '<h4><a href="/ecommerce/' + val.id + '">' + val.description + '</a></h4>'
                     html += '<p>' + val.short_description + '</p>'
                     html += '</div></div></div>';
                 })

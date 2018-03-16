@@ -63,7 +63,10 @@ clearstatcache();
     </script>
     <!--End of Tawk.to Script-->
 
+
     <body>
+
+
 
         <style>
             .modal-content {
@@ -173,10 +176,30 @@ clearstatcache();
                     padding-top: 100px
                 }
             } 
+
+            .go-top {
+                position: fixed;
+                bottom: 2em;
+                right: 2em;
+                text-decoration: none;
+                color: #fff;
+                background-color: rgba(0, 0, 0, 0.3);
+                font-size: 12px;
+                padding: 1em;
+                display: none;
+                z-index: 1000
+            }
+
+            .go-top:hover {
+                background-color: rgba(0, 0, 0, 0.6);
+            }
+
         </style>
         <div class="col-xs-offset-2">
             @include("header")
         </div>
+
+        <a class="go-top" href="#">Subir</a>
 
         <section id="slider-main">
             <div id="carousel-example-generic" class="carousel slide test" data-ride="carousel">
@@ -200,7 +223,7 @@ clearstatcache();
                     <div class="item">
                         <img src="images/banner_bebe.jpg" alt="Navidad" width="100%">
                         <div class="carousel-caption" style="padding-left: 40%">
-                            <a href="/shopping/18" class="hidden-xs" style="color:white;background-color: #139c9e;border: 1px solid white;
+                            <a href="/ecommerce/18" class="hidden-xs" style="color:white;background-color: #139c9e;border: 1px solid white;
                                border-radius: 30px;padding:10px 40px 10px 40px;font-size: 40px;font-weight: 800">BEBES</a>
                         </div>
                     </div>
@@ -239,7 +262,7 @@ clearstatcache();
                                             if ($val->image != '') {
                                                 ?>
                                                 <div class="col-md-2 col-sm-2 col-xs-2" style="padding:0px">
-                                                    <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
+                                                    <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="ecommerce/{{$val->id}}">
                                                         <img src="{{$val->image}}" alt="Image" >
                                                     </a>
                                                 </div>
@@ -292,7 +315,7 @@ clearstatcache();
                                                 <div class="col-md-2 col-sm-2 col-xs-2" >
 
                                                     <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
-                                                       href="shopping/_{{$val->id}}">
+                                                       href="ecommerce/_{{$val->id}}">
                                                         <img src="{{$val->img}}" alt="Image">
                                                     </a>
                                                 </div>
@@ -353,7 +376,7 @@ clearstatcache();
                                             if ($val->image != '') {
                                                 ?>
                                                 <div class="col-sm-2 col-xs-6" style="padding:0px">
-                                                    <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
+                                                    <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="ecommerce/{{$val->id}}">
                                                         <img src="{{$val->image}}" alt="Image" >
                                                     </a>
                                                 </div>
@@ -406,7 +429,7 @@ clearstatcache();
                                                 <div class="col-sm-2 col-xs-4" >
 
                                                     <a class="fancybox thumbnail img-subcategory" style="padding:0px;border:0px;background-color: rgba(0,0,0,0)" rel="gallery1" 
-                                                       href="shopping/_{{$val->id}}">
+                                                       href="ecommerce/_{{$val->id}}">
                                                         <img src="{{$val->img}}" alt="Image">
                                                     </a>
                                                 </div>
@@ -450,7 +473,7 @@ clearstatcache();
                 <div class="row row-center">
                     <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-6"><h3 class="color-font">Lo Nuevo</h3></div>
                     <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2">
-                        <a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
+                        <a href="ecommerce/0" class="anim-underline text-muted">Ver Todo</a></div>
                 </div>
                 <div class="row row-center">
                     <div class="col-lg-8"><hr style="border-top: 1px solid #ccc"></div>
@@ -528,8 +551,8 @@ clearstatcache();
             <div class="container-fluid">
                 <div class="row row-center">
                     <!--<div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-2 col-xs-5 "><h3 class="color-font">Lo Nuevo</h3></div>-->
-                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-xs-5 "><a href="shopping/0" class="anim-underline text-muted">Lo Nuevo</a></div>
-                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><a href="shopping/0" class="anim-underline text-muted">Ver Todo</a></div>
+                    <div class="col-lg-3 col-lg-offset-2 col-md-3 col-md-offset-2 col-sm-3 col-xs-5 "><a href="ecommerce/0" class="anim-underline text-muted">Lo Nuevo</a></div>
+                    <div class="col-lg-3 col-lg-offset-4 col-md-3 col-md-offset-3 col-sm-3 col-sm-offset-3 col-xs-5 col-xs-offset-2"><a href="ecommerce/0" class="anim-underline text-muted">Ver Todo</a></div>
                 </div>
                 <div class="row row-center">
                     <div class="col-lg-8"><hr style="border-top: 1px solid #ccc"></div>
@@ -872,41 +895,41 @@ clearstatcache();
             </div>
         </div>
     </div>
-        
+
 <!--    <section>
-        <div class="container-fluid grey-bk" style="padding-top: 3%">
+<div class="container-fluid grey-bk" style="padding-top: 3%">
+    <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
+            <p class="text-center col-lg-offset-5"><img src="/images/movil.png" class="img-responsive"></p>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-6" style="padding-top: 5%">
             <div class="row">
-                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
-                    <p class="text-center col-lg-offset-5"><img src="/images/movil.png" class="img-responsive"></p>
+                <div class="col-lg-12">
+                    <h2 class="text-center" style="color:#4a4a4a">Descarga SuperFüds</h2>
                 </div>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-6" style="padding-top: 5%">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h2 class="text-center" style="color:#4a4a4a">Descarga SuperFüds</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h4 class="text-center" style="color:#4a4a4a">Para  que puedas  llevar  la vida saludable a todas partes</h4>
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="/images/appstore.png" class="img-responsive">
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <img src="/images/googleplay.png" class="img-responsive">
-                        </div>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="text-center" style="color:#4a4a4a">Para  que puedas  llevar  la vida saludable a todas partes</h4>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <img src="/images/appstore.png" class="img-responsive">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <img src="/images/googleplay.png" class="img-responsive">
                 </div>
             </div>
         </div>
-    </section>-->
+    </div>
+</div>
+</section>-->
 
     @include("footer")
 
@@ -932,11 +955,10 @@ clearstatcache();
 {!!Html::script('js/Page/page.js')!!}
 
 </html>
-<?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario.       ?>
+
+<?php if ($exibirModal === true) : // Si nuestra variable de control "$exibirModal" es igual a TRUE activa nuestro modal y será visible a nuestro usuario.        ?>
     <script>
-        $(document).ready(function ()
-        {
-        // id de nuestro modal
+        $(function (){
         $("#myModal").modal("show");
         });
     </script>

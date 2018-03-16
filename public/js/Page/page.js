@@ -1,6 +1,21 @@
 function Page() {
     var id = 1;
     this.init = function () {
+        $(window).scroll(function () {
+
+            if ($(this).scrollTop() > 0) {
+                $('.go-top').slideDown(300);
+            } else {
+                $('.go-top').slideUp(300);
+            }
+        });
+
+        $('.go-top').click(function () {
+            $('body, html').animate({
+                scrollTop: '0px'
+            }, 300);
+        });
+
 
 
         $('.input-number').on('input', function () {

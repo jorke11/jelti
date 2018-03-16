@@ -17,11 +17,11 @@
 @endif
 
 
-<p style="background:url(https://maf.pagosonline.net/ws/fp?id=${deviceSessionId}usuarioId)"></p>
+<p style="background:url(https://maf.pagosonline.net/ws/fp?id={{$deviceSessionId}})"></p>
 
-<img src="https://maf.pagosonline.net/ws/fp/clear.png?id=${deviceSessionId}usuarioId">
-<script src="https://maf.pagosonline.net/ws/fp/check.js?id=${deviceSessionId}usuarioId"></script>
-<object type="application/x-shockwave-flash" data="https://maf.pagosonline.net/ws/fp/fp.swf?id=${deviceSessionId}usuarioId" width="1" height="1" id="thm_fp">
+<img src="https://maf.pagosonline.net/ws/fp/clear.png?id={{$deviceSessionId}}">
+<script src="https://maf.pagosonline.net/ws/fp/check.js?id={{$deviceSessionId}}"></script>
+<object type="application/x-shockwave-flash" data="https://maf.pagosonline.net/ws/fp/fp.swf?id={{$deviceSessionId}}" width="1" height="1" id="thm_fp">
     <param name="movie" value="https://maf.pagosonline.net/ws/fp/fp.swf?id=${deviceSessionId}usuarioId" />
 </object>
 
@@ -61,7 +61,7 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label for="tgarjeta">Pais</label>
-                            <select class="form-control" id="country_id">
+                            <select class="form-control" id="country_id" name="country_id" readonly>
                                 @foreach($countries as $val)
                                 <option value="{{$val["code"]}}">{{$val["description"]}}</option>
                                 @endforeach
@@ -121,11 +121,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row row-space">
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label for="tgarjeta">Código de Seguridad</label>
-                            <input type="text" class="form-control input-number" id="crc" name="crc" placeholder="Código de Seguridad" maxlength="4" required autocomplete="off">
+                            <input type="text" class="form-control input-number" id="crc" name="crc" placeholder="Código de Seguridad" maxlength="3" required autocomplete="off">
                         </div>
                     </div>
                     <div class="col-lg-3">
@@ -140,7 +140,43 @@
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <img src="{{url("images/visa.png")}}" class="img-responsive hidden-xs">
+                        <img src="{{url("images/visa.png")}}" class="img-responsive hidden-xs" id="imgCard">
+                    </div>
+                </div>
+                <div class="row row-space">
+                    <div class="col-lg-6">
+                        <input type="checkbox" id="checkpayer" name="checkpayer" checked=""> ¿Deseas que la informacion del pagador sea la misma?
+                    </div>
+                </div>
+
+                <div id="divaddpayer" class="hide">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="tgarjeta">Nombre Completo</label>
+                                <input type="text" class="form-control input input-payment input-alpha" id="name_payer" name="name_payer" placeholder="Nombre Completo" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="tgarjeta">Documento</label>
+                                <input type="text" class="form-control input input-payment input-number" id="document_payer" name="document_payer" placeholder="Numeo de Documento" autocomplete="off" maxlength="15">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="tgarjeta">Direccion</label>
+                                <input type="text" class="form-control input input-payment  input-alpha" id="addrees_payer" name="addrees_payer" placeholder="Dirección" maxlength="16" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="tgarjeta">Email</label>
+                                <input type="text" class="form-control input input-payment" id="email_payer" name="email_payer" placeholder="Email" autocomplete="off">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

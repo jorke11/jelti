@@ -1,7 +1,6 @@
 function Payment() {
     this.init = function () {
         $("#btnPayU").click(this.payu);
-
         this.getDetail();
         this.getQuantity();
     }
@@ -39,7 +38,6 @@ function Payment() {
                 if (data.success == false) {
                     $("#btnPay").attr("disabled", true);
                     $("#btnPayU").attr("disabled", true);
-
                     html = html += `
                             <div class="row">
                                 <div class="col-lg-12">
@@ -55,7 +53,6 @@ function Payment() {
                             </div>
                                     
                         `;
-
                 } else {
 
                     $.each(data.detail, function (i, val) {
@@ -117,16 +114,14 @@ function Payment() {
                 $("#content-detail").html(html);
 //                $("#tblReview").html('<tr><td colspan="4"><strong>Total</td><td>' + data.total + '</strong></td></tr>');
                 $("#loading-super").addClass("hidden");
-                if (data.totalnumeric < 10000) {
+                if (data.totalnumeric < 10000 | data.subtotal == 0) {
                     $("#message-mount").removeClass("hidden");
                     $("#btnPay").attr("disabled", true);
                     $("#btnPayU").attr("disabled", true);
-
                 } else {
                     $("#btnPay").attr("disabled", false);
                     $("#btnPayU").attr("disabled", false);
                     $("#message-mount").addClass("hidden");
-
                 }
 
                 if (data.tax5 != '$0') {
@@ -157,7 +152,6 @@ function Payment() {
         var param = {};
         param.product_id = product_id;
         param.quantity = input.value;
-
         $.ajax({
             url: 'getDetailQuantity/' + order_id,
             method: 'PUT',

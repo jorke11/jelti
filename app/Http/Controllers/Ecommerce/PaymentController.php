@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Shopping;
+namespace App\Http\Controllers\Ecommerce;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -184,14 +184,16 @@ class PaymentController extends Controller {
 //        print_r($detail);
 //        exit;
 
-        
+
         $detail = $this->formatedDetail($detail);
 
-       
+
         $total = "$" . number_format($this->total, 0, ",", ".");
         $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
 
-        return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal"));
+        $deviceSessionId = md5(session_id() . microtime()) . "80200";
+
+        return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId"));
     }
 
     public function getDetailData() {
@@ -213,7 +215,7 @@ class PaymentController extends Controller {
                 $detail = DB::select($sql);
 
                 $detail = json_decode(json_encode($detail), true);
-                
+
 //                echo "<pre>";print_r($detail);exit;
                 return $detail;
             } else {
@@ -276,6 +278,7 @@ class PaymentController extends Controller {
 //        dd($_SERVER["HTTP_USER_AGENT"]);
         $in = $req->all();
 
+        $country = $in["country_id"];
         $in["expirate"] = $in["year"] . "/" . $in["month"];
 
         $data_order = $this->createOrder();
@@ -298,7 +301,7 @@ class PaymentController extends Controller {
 
         if ($error == '') {
 
-            $deviceSessionId = md5(session_id() . microtime());
+            $deviceSessionId = md5(session_id() . microtime()) . "80200";
 
             $url = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi";
             $apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
@@ -326,7 +329,30 @@ class PaymentController extends Controller {
 
             $signature = md5($apiKey . "~" . $merchantId . "~" . $referenceCode . "~" . $TX_VALUE . "~" . $currency);
 
-            $postData["transaction"] = array("order" => array(
+            $payer_full_name = $client->business;
+            $payer_email = $client->email;
+            $payer_document = $client->document;
+            $payer_address = $client->address_invoice;
+
+
+
+            if (isset($in["checkpayer"])) {
+                if ($in["name_payer"] != '') {
+                    $payer_full_name = $in["name_payer"];
+                }
+                if ($in["email_payer"] != '') {
+                    $payer_email = $in["email_payer"];
+                }
+                if ($in["document_payer"] != '') {
+                    $payer_document = $in["document_payer"];
+                }
+                if ($in["addrees_payer"] != '') {
+                    $payer_address = $in["addrees_payer"];
+                }
+            }
+
+
+            $payer_fullName = $postData["transaction"] = array("order" => array(
                     "accountId" => $accountId,
                     "referenceCode" => $referenceCode,
                     "description" => "Pago " . $referenceCode,
@@ -340,7 +366,7 @@ class PaymentController extends Controller {
                         "TX_TAX_RETURN_BASE" => array("value" => $TX_TAX_RETURN_BASE, "currency" => $currency),
                     ),
                     "buyer" => array(
-                        "merchantBuyerId" => "1",
+                        "merchantBuyerId" => $client->id,
                         "fullName" => $client->business,
                         "emailAddress" => $client->email,
                         "contactPhone" => $client->phone,
@@ -350,7 +376,7 @@ class PaymentController extends Controller {
 //                        "street2" => "5555487",
                             "city" => $city->description,
                             "state" => $department->description,
-                            "country" => "CO",
+                            "country" => $country,
                             "postalCode" => "000000",
                             "phone" => $client->phone
                         )
@@ -360,23 +386,23 @@ class PaymentController extends Controller {
 //                        "street2" => "5555487",
                         "city" => $city->description,
                         "state" => $department->description,
-                        "country" => "CO",
+                        "country" => $country,
                         "postalCode" => "000000",
                         "phone" => $client->phone
                     )
                 ),
                 "payer" => array(
                     "merchantPayerId" => "1",
-                    "fullName" => $client->business,
-                    "emailAddress" => $client->email,
+                    "fullName" => $payer_full_name,
+                    "emailAddress" => $payer_email,
                     "contactPhone" => $client->phone,
-                    "dniNumber" => $client->document,
+                    "dniNumber" => $payer_document,
                     "billingAddress" => array(
-                        "street1" => $client->address_send,
+                        "street1" => $payer_address,
 //                        "street2" => "5555487",
                         "city" => $city->description,
                         "state" => $department->description,
-                        "country" => "CO",
+                        "country" => $country,
                         "postalCode" => "000000",
                         "phone" => $client->phones
                     )
@@ -396,7 +422,7 @@ class PaymentController extends Controller {
                 "type" => "AUTHORIZATION_AND_CAPTURE",
 //            "paymentMethod" => "VISA",
                 "paymentMethod" => $type_card["paymentMethod"],
-                "paymentCountry" => "CO",
+                "paymentCountry" => $country,
 //            "deviceSessionId" => "vghs6tvkcle931686k1900o6e1",
                 "deviceSessionId" => $deviceSessionId,
                 "ipAddress" => $_SERVER["REMOTE_ADDR"],
@@ -440,7 +466,7 @@ class PaymentController extends Controller {
                 $row_order->status_id = 2;
                 $row_order->save();
 
-                return redirect('shopping/0')->with("success", 'Payment success')->with("order_id", $arr["transactionResponse"]["orderId"]);
+                return redirect('ecommerce/0')->with("success", 'Payment success')->with("order_id", $arr["transactionResponse"]["orderId"]);
             } else {
                 $error = $arr["error"];
                 if ($arr["code"] == 'SUCCESS') {
@@ -505,7 +531,7 @@ class PaymentController extends Controller {
         $order->status_id = 2;
         $order->save();
 
-        return redirect('shopping/0')->with("success", 'Payment success');
+        return redirect('ecommerce/0')->with("success", 'Payment success');
     }
 
     public function payu(Request $req) {

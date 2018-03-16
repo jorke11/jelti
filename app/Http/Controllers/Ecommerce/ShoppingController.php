@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Shopping;
+namespace App\Http\Controllers\Ecommerce;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -32,14 +32,12 @@ class ShoppingController extends Controller {
 
     public function getDetailProduct($id) {
 
-
         $subcategory = Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->orderBy("order", "asc")->get();
 
         if ($id == '0') {
             $products = DB::table("vproducts")->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(16);
             $category = Categories::all();
-
-            return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
+            return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory", "deviceSessionId"));
         } else {
 
             if (strpos($id, "_") !== false) {
@@ -50,7 +48,6 @@ class ShoppingController extends Controller {
 
                 $products = DB::table("vproducts")->where(DB::raw("characteristic->>0"), $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
 
-
                 return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
             } if (strpos($id, "sub") !== false) {
                 $id = str_replace("sub", "", $id);
@@ -58,8 +55,6 @@ class ShoppingController extends Controller {
                 $category = Categories::find($id);
 
                 $products = DB::table("vproducts")->where("category_id", $id)->whereNotNull("image")->whereNotNull("warehouse")->orderBy("title", "desc")->paginate(12);
-
-
                 return view("Ecommerce.shopping.specific", compact("category", "products", "subcategory"));
             } else {
 
@@ -107,7 +102,6 @@ class ShoppingController extends Controller {
                 }
 
                 $subcategory = Characteristic::where("status_id", 1)->whereNotNull("img")->where("type_subcategory_id", 1)->whereIn("id", $sub)->orderBy("order", "asc")->get();
-
 
                 return view("Ecommerce.shopping.detail", compact("category", "categoryAssoc", "subcategory", "id"));
             }
@@ -280,13 +274,13 @@ class ShoppingController extends Controller {
 
         $orders = DB::select($sql);
         $orders = $orders[0];
-        
+
         $sql = "select count(*) quantity, sum(subtotalnumeric) total from vdepartures where client_id=$user->stakeholder_id and status_id IN(1)";
 
         $new = DB::select($sql);
         $new = $new[0];
 
-        return view("Ecommerce.shopping.profile", compact("client", "orders","new"));
+        return view("Ecommerce.shopping.profile", compact("client", "orders", "new"));
     }
 
     public function getMyOrders() {

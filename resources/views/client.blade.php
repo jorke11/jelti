@@ -142,7 +142,7 @@
                             if ($val->image != '') {
                                 ?>
                                 <div class="col-md-2" style="padding:0px">
-                                    <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="shopping/{{$val->id}}">
+                                    <a class="fancybox thumbnail" style="padding:0px;border:0px;" rel="gallery1" href="ecommerce/{{$val->id}}">
                                         <img src="{{$val->image}}" alt="">
                                     </a>
                                 </div>

@@ -176,7 +176,7 @@ class HomeController extends Controller {
             if (Auth::user()->role_id == 2) {
 
 //                return view('client', compact("product", "client", "supplier", "commercial", "samples", "category", "subcategory"));
-                return redirect('shopping/0');
+                return redirect('ecommerce/0');
             } else {
                 return view('dashboard', compact("product", "client", "supplier", "commercial", "newClient", "purchase", "samples", "category"));
             }

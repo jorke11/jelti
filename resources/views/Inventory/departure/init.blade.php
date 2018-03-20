@@ -41,7 +41,7 @@
                 <ul>
                     <li><a id="col-warehouse" style="cursor: pointer" data-column="8">Bodega</a></li>
                     <li><a id="col-dispatched" style="cursor: pointer" data-column="4">Despachado</a></li>
-                    <li><a id="col-credit_note" style="cursor: pointer" data-column="4">Nota Credito</a></li>
+                    <li><a id="col-credit_note" style="cursor: pointer" data-column="11">Nota Credito</a></li>
                     <li><a id="col-business_name" style="cursor: pointer" data-column="6">Razón Social</a></li>
                 </ul>
                 <p></p>

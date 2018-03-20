@@ -149,7 +149,7 @@ function Departure() {
             // Toggle the visibility
             column.visible(!column.visible());
         })
-        $("#col-dispatched").click(function (e) {
+        $("#col-credit_note").click(function (e) {
             e.preventDefault();
             // Get the column API object
             var column = table.column($(this).attr('data-column'));

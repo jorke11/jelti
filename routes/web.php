@@ -168,7 +168,6 @@ Route::post('/city/uploadExcel', 'Administration\CityController@storeExcel');
 
 Route::resource('/department', 'Administration\DepartmentController');
 Route::post('/department/uploadExcel', 'Administration\DepartmentController@storeExcel');
-
 Route::resource('/characteristic', 'Administration\CharacteristicController');
 
 

@@ -446,7 +446,7 @@ class PaymentController extends Controller {
                 'Accept:application/json',
                 'Content-Length: ' . strlen($data_string))
             );
-        dd( json_decode($data_string, TRUE));
+//        dd( json_decode($data_string, TRUE));
 
             $result = curl_exec($ch);
 

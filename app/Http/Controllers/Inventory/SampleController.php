@@ -34,6 +34,8 @@ use App\Traits\NumberToString;
 
 class SampleController extends Controller {
 
+    use NumberToString;
+
     protected $total;
     protected $tool;
     protected $subtotal;

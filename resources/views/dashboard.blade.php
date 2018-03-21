@@ -21,6 +21,7 @@
         color: white;
         background-color: #d9534f;
     }
+    
     .panel-blue > .panel-heading {
         border-color: #4e859a;
         color: white;

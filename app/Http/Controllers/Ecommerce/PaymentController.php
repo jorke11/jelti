@@ -335,8 +335,7 @@ class PaymentController extends Controller {
             $payer_address = $client->address_invoice;
             $payer_phone = $client->phone;
 
-
-            if (isset($in["checkpayer"])) {
+            if (!isset($in["checkpayer"])) {
                 if ($in["name_payer"] != '') {
                     $payer_full_name = $in["name_payer"];
                 }
@@ -369,13 +368,13 @@ class PaymentController extends Controller {
                         "TX_TAX_RETURN_BASE" => array("value" => $TX_TAX_RETURN_BASE, "currency" => $currency),
                     ),
                     "buyer" => array(
-                        "merchantBuyerId" => "1",
-                        "fullName" => $payer_full_name,
-                        "emailAddress" => $payer_email,
-                        "contactPhone" => $payer_phone,
-                        "dniNumber" => $payer_document,
+                        "merchantBuyerId" => $client->id,
+                        "fullName" => $client->business,
+                        "emailAddress" => $client->email,
+                        "contactPhone" => $client->phone,
+                        "dniNumber" => $client->document,
                         "shippingAddress" => array(
-                            "street1" => $payer_address,
+                            "street1" => $client->address_send,
 //                        "street2" => "5555487",
                             "city" => $city->description,
                             "state" => $department->description,
@@ -395,13 +394,13 @@ class PaymentController extends Controller {
                     )
                 ),
                 "payer" => array(
-                    "merchantPayerId" => $client->id,
-                    "fullName" => $client->business,
-                    "emailAddress" => $client->email,
-                    "contactPhone" => $client->phone,
-                    "dniNumber" => $client->document,
+                    "merchantPayerId" => "1",
+                    "fullName" => $payer_full_name,
+                    "emailAddress" => $payer_email,
+                    "contactPhone" => $payer_phone,
+                    "dniNumber" => $payer_document,
                     "billingAddress" => array(
-                        "street1" => $client->address_send,
+                        "street1" => $payer_address,
 //                        "street2" => "5555487",
                         "city" => $city->description,
                         "state" => $department->description,
@@ -447,14 +446,14 @@ class PaymentController extends Controller {
                 'Accept:application/json',
                 'Content-Length: ' . strlen($data_string))
             );
-//        dd( json_decode($data_string, TRUE));
+        dd( json_decode($data_string, TRUE));
 
             $result = curl_exec($ch);
 
             $arr = json_decode($result, TRUE);
 
-//            echo "<pre>";
-//            print_r($arr);exit;
+            echo "<pre>";
+            print_r($arr);exit;
 
             if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
 

@@ -68,7 +68,7 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerar</button>
                 <button type="button" class="btn btn-success" id="btnCancel">Guardar</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
 

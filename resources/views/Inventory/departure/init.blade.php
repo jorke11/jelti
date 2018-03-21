@@ -75,6 +75,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -102,6 +104,15 @@
                         <div class="form-group">
                             <label for="email">Factura:</label>
                             <input type="text" id="invoice_filter" class="form-control modal-filter">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Estados:</label>
+                            <select class="form-control input-departure modal-filter" id="status_id_filter" name='status_id_filter' data-api="/api/getStatus" multiple=""> 
+                            </select>
                         </div>
                     </div>
                 </div>

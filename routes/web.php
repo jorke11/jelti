@@ -500,6 +500,7 @@ Route::get('/api/getNotification', 'Administration\SeekController@getNotificatio
 Route::get('/api/getCommercial', 'Administration\SeekController@getCommercial');
 Route::get('/api/getBranch', 'Administration\SeekController@getBranch');
 Route::get('/api/getAccount', 'Administration\SeekController@getAccount');
+Route::get('api/getStatus', "Administration\SeekController@getStatus");
 
 Route::get('/report/sale/{init}/{end}', 'Report\SalesController@getTotalSales');
 Route::get('/report/fulfillmentSup/{init}/{end}', 'Report\SalesController@getFulfillmentSup');
@@ -516,6 +517,7 @@ Route::get('/briefcase/testnotificaction/{id}/{commercial}', "Sales\BriefcaseCon
 Route::get('/briefcase/testPaidout/{id}', "Sales\BriefcaseController@testPaidout");
 
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
+
 
 
 require __DIR__ . '/cron.php';

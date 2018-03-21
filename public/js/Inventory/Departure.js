@@ -1044,6 +1044,7 @@ function Departure() {
         param.responsible_filter = $("#responsible_filter").val();
         param.id_filter = $("#id_filter").val();
         param.invoice_filter = $("#invoice_filter").val();
+        param.status_id_filter = $("#status_id_filter").val();
 
         var html = '';
         table = $('#tbl').DataTable({

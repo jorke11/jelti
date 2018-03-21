@@ -138,6 +138,11 @@ class DepartureController extends Controller {
             $cont++;
             $query->where("created_at", "<=", $in["end_filter"] . " 00:00");
         }
+        if (isset($in["status_id_filter"]) && $in["status_id_filter"] != '') {
+            $cont++;
+//            print_r($value)
+            $query->whereIn("status_id", $in["status_id_filter"]);
+        }
 
 
         if ($in["client_filter"] != 0 && $in["client_filter"] != '') {
@@ -162,6 +167,8 @@ class DepartureController extends Controller {
 //                exit;
 //                $query->where("created_at", ">=", $this->initdate . " 00:00");
             }
+        } else {
+            $query->where("warehouse_id", Auth::user()->warehouse_id);
         }
 
         if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {
@@ -169,7 +176,7 @@ class DepartureController extends Controller {
         }
 
         if (Auth::user()->role_id == 5) {
-            $query->where("warehouse_id", Auth::user()->warehouse_id)->whereIn("status_id", array(1, 8, 5));
+            $query->where("warehouse_id", Auth::user()->warehouse_id);
         }
 
 

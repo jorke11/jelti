@@ -71,6 +71,23 @@ class SeekController extends Controller {
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
 
+    public function getStatus(Request $req) {
+        $in = $req->all();
+
+        $query = Parameters::select("code as id", "description as text");
+        if (isset($in["q"]) && $in["q"] == "0") {
+            $query->where("id", Auth::user()->city_id)->get();
+        } else if (isset($in["id"])) {
+            $query->where("id", $in["id"])->get();
+        } else {
+            $query->where("description", "ilike", "%" . $in["q"] . "%")->get();
+        }
+
+        $result = $query->where("group","entry")->get();
+
+        return response()->json(['items' => $result, "pages" => count($result)]);
+    }
+
     public function getClient(Request $req) {
         $this->in = $req->all();
         $result = array();

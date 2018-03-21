@@ -25,7 +25,7 @@ function MethodsPayment() {
 
         $("#frm").submit(function () {
 
-            if ($("#checkpayer").is(":checked")) {
+            if (!$("#checkpayer").is(":checked")) {
 
                 var validate = $(".input-extern").validate();
                 if (validate.length > 0) {

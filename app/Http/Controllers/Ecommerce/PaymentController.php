@@ -336,7 +336,7 @@ class PaymentController extends Controller {
             $payer_phone = $client->phone;
 
 
-            if (!isset($in["checkpayer"])) {
+            if (isset($in["checkpayer"])) {
                 if ($in["name_payer"] != '') {
                     $payer_full_name = $in["name_payer"];
                 }

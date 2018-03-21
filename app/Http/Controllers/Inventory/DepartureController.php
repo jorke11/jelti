@@ -156,15 +156,13 @@ class DepartureController extends Controller {
 
         if ($cont == 0) {
 
+            $query->whereIn("status_id", array(1, 5, 8));
+
             if (isset($in["init_filter"]) && $in["init_filter"] != '') {
                 $query->where("created_at", ">=", $in["init_filter"] . " 00:00");
             } else {
-//                echo "else";
-//                exit;
-//                $query->where("created_at", ">=", $this->initdate . " 00:00");
+                
             }
-        } else {
-            $query->where("warehouse_id", Auth::user()->warehouse_id);
         }
 
         if (Auth::user()->role_id != 1 && Auth::user()->role_id != 5) {

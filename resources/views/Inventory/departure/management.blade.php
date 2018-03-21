@@ -161,10 +161,22 @@
                     <input type="text" class="form-control input-departure" id="discount" name="discount">
                 </div>
             </div>
-               <div class="col-lg-2">
+            <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Novedad:</label>
                     <input type="text" class="form-control" id="novelty" readonly="">
+                </div>
+            </div>
+            <div class="col-lg-2 col-lg-offset-4">
+                <div class="form-group">
+                    <label for="email">Orden Compra:</label>
+                    <input type="text" class="form-control input-departure input-fillable" id="purchase_order" name="purchase_order">
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="email">Fecha Cita:</label>
+                    <input type="text" class="form-control input-departure input-fillable" id="date_appointment" name="date_appointment">
                 </div>
             </div>
         </div>

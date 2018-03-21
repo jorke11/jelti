@@ -18,7 +18,9 @@ function MethodsPayment() {
         $("#checkpayer").click(function () {
             if ($(this).is(":checked")) {
                 $("#divaddpayer").addClass("hide");
+                $(".input-extern").removeAttr("required");
             } else {
+                $(".input-extern").prop("required", "required");
                 $("#divaddpayer").removeClass("hide");
             }
         })
@@ -32,8 +34,6 @@ function MethodsPayment() {
                     toastr.error("Datos pendientes");
                     return false;
                 }
-            } else {
-                return true;
             }
 
 

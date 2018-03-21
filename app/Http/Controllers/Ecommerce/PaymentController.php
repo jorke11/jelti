@@ -333,7 +333,7 @@ class PaymentController extends Controller {
             $payer_email = $client->email;
             $payer_document = $client->document;
             $payer_address = $client->address_invoice;
-
+            $payer_phone = $client->phone;
 
 
             if (!isset($in["checkpayer"])) {

@@ -23,6 +23,17 @@ function MethodsPayment() {
             }
         })
 
+        $("#frm").submit(function () {
+
+            var validate = $(".input-extern").validate();
+            if (validate.length > 0) {
+                toastr.error("Datos pendientes");
+                return false;
+            }
+
+
+        })
+
     }
 
     this.validateTarjet = function () {

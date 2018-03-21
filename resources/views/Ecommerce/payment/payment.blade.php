@@ -154,13 +154,13 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Nombre Completo</label>
-                                <input type="text" class="form-control input input-payment input-alpha" id="name_payer" name="name_payer" placeholder="Nombre Completo" autocomplete="off">
+                                <input type="text" class="form-control input input-payment input-alpha input-extern" id="name_payer" name="name_payer" placeholder="Nombre Completo" autocomplete="off" required>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Documento</label>
-                                <input type="text" class="form-control input input-payment input-number" id="document_payer" name="document_payer" placeholder="Numeo de Documento" autocomplete="off" maxlength="15">
+                                <input type="text" class="form-control input input-payment input-number input-extern" id="document_payer" name="document_payer" placeholder="Numeo de Documento" autocomplete="off" maxlength="15" required>
                             </div>
                         </div>
                     </div>
@@ -168,13 +168,21 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Direccion</label>
-                                <input type="text" class="form-control input input-payment  input-alpha" id="addrees_payer" name="addrees_payer" placeholder="Dirección" maxlength="16" autocomplete="off">
+                                <input type="text" class="form-control input input-payment  input-alpha input-extern" id="addrees_payer" name="addrees_payer" placeholder="Dirección" autocomplete="off" required>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Email</label>
-                                <input type="text" class="form-control input input-payment" id="email_payer" name="email_payer" placeholder="Email" autocomplete="off">
+                                <input type="text" class="form-control input input-payment input-extern" id="email_payer" name="email_payer" placeholder="Email" autocomplete="off" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="tgarjeta">Telefono de contacto</label>
+                                <input type="text" class="form-control input input-payment  input-number input-extern" id="phone_contact" name="phone_contact" placeholder="Dirección" maxlength="16" autocomplete="off" required>
                             </div>
                         </div>
                     </div>

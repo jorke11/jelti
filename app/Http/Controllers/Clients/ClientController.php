@@ -741,6 +741,14 @@ class ClientController extends Controller {
                                 $price = PricesSpecial::where("item", $item)->first();
                             }
 
+
+                            if ($book->sf_code != '') {
+                                $pro = Products::where("reference", $book->sf_code)->first();
+                                $price = PricesSpecial::where("product_id", $pro->id)->first();
+                            }
+                            
+
+
                             $new["client_id"] = $this->in["client_id"];
                             $new["product_id"] = $product->id;
                             $new["price_sf"] = round($book->price_sf);

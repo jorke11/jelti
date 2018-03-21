@@ -42,6 +42,8 @@ class CreateDeparturesTable extends Migration {
             $table->string('type_request')->nullable();
             $table->timestamps();
             $table->dateTime('dispatched');
+            $table->string('purchase_order');
+            $table->date('date_appointment');
             $table->unique('invoice');
         });
     }

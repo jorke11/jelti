@@ -349,6 +349,9 @@ class PaymentController extends Controller {
                 if ($in["addrees_payer"] != '') {
                     $payer_address = $in["addrees_payer"];
                 }
+                if ($in["addrees_payer"] != '') {
+                    $payer_phone = $in["phone_payer"];
+                }
             }
 
 
@@ -366,13 +369,13 @@ class PaymentController extends Controller {
                         "TX_TAX_RETURN_BASE" => array("value" => $TX_TAX_RETURN_BASE, "currency" => $currency),
                     ),
                     "buyer" => array(
-                        "merchantBuyerId" => $client->id,
-                        "fullName" => $client->business,
-                        "emailAddress" => $client->email,
-                        "contactPhone" => $client->phone,
-                        "dniNumber" => $client->document,
+                        "merchantBuyerId" => "1",
+                        "fullName" => $payer_full_name,
+                        "emailAddress" => $payer_email,
+                        "contactPhone" => $payer_phone,
+                        "dniNumber" => $payer_document,
                         "shippingAddress" => array(
-                            "street1" => $client->address_send,
+                            "street1" => $payer_address,
 //                        "street2" => "5555487",
                             "city" => $city->description,
                             "state" => $department->description,
@@ -392,13 +395,13 @@ class PaymentController extends Controller {
                     )
                 ),
                 "payer" => array(
-                    "merchantPayerId" => "1",
-                    "fullName" => $payer_full_name,
-                    "emailAddress" => $payer_email,
+                    "merchantPayerId" => $client->id,
+                    "fullName" => $client->business,
+                    "emailAddress" => $client->email,
                     "contactPhone" => $client->phone,
-                    "dniNumber" => $payer_document,
+                    "dniNumber" => $client->document,
                     "billingAddress" => array(
-                        "street1" => $payer_address,
+                        "street1" => $client->address_send,
 //                        "street2" => "5555487",
                         "city" => $city->description,
                         "state" => $department->description,

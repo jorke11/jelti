@@ -132,7 +132,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Flete:</label>
-                    <input type="text" class="form-control input-departure" id="shipping_cost" name="shipping_cost" data-type="number">
+                    <input type="text" class="form-control input-departure input-number" id="shipping_cost" name="shipping_cost" data-type="number">
                 </div>
             </div>
             <div class="col-lg-4">
@@ -144,7 +144,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Factura:</label>
-                    <input type="text" class="form-control input-departure" id="invoice" readonly>
+                    <input type="text" class="form-control input-departure input-number" id="invoice" readonly>
                 </div>
             </div>
             <div class="col-lg-2">
@@ -158,7 +158,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Descuento:</label>
-                    <input type="text" class="form-control input-departure" id="discount" name="discount">
+                    <input type="text" class="form-control input-departure input-number" id="discount" name="discount">
                 </div>
             </div>
             <div class="col-lg-2">
@@ -176,7 +176,7 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label for="email">Fecha Cita:</label>
-                    <input type="text" class="form-control input-departure input-fillable" id="date_appointment" name="date_appointment">
+                    <input type="text" class="form-control input-departure input-fillable form_date" id="date_appointment" name="date_appointment">
                 </div>
             </div>
         </div>

@@ -168,7 +168,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Direccion</label>
-                                <input type="text" class="form-control input input-payment  input-alpha input-extern" id="addrees_payer" name="addrees_payer" placeholder="Dirección" autocomplete="off" required>
+                                <input type="text" class="form-control input input-payment input-extern" id="addrees_payer" name="addrees_payer" placeholder="Dirección" autocomplete="off" required>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -182,7 +182,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Telefono de contacto</label>
-                                <input type="text" class="form-control input input-payment  input-number input-extern" id="phone_contact" name="phone_contact" placeholder="Dirección" maxlength="16" autocomplete="off" required>
+                                <input type="text" class="form-control input input-payment  input-number input-extern" id="phone_payer" name="phone_payer" placeholder="Telefono de contacto" maxlength="16" autocomplete="off" required>
                             </div>
                         </div>
                     </div>

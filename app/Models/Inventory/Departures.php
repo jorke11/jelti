@@ -34,7 +34,9 @@ class Departures extends Model {
         "responsible",
         'insert_id',
         'type_insert_id',
-        "order_id"
+        "order_id",
+        "purchase_order",
+        "date_appointment"
     ];
 
 }

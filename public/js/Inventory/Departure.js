@@ -4,6 +4,15 @@ function Departure() {
     var quantity_total = 0;
 
     this.init = function () {
+
+        $('.input-number').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        $('.input-alpha').on('input', function () {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
+
         table = this.table();
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
@@ -1084,7 +1093,7 @@ function Departure() {
                 {data: "warehouse", "visible": false},
                 {data: "city"},
                 {data: "quantity"},
-                {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0),"visible": false},
+                {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0), "visible": false},
                 {data: "subtotalnumeric", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "status"},

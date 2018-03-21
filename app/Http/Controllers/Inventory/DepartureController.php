@@ -169,7 +169,7 @@ class DepartureController extends Controller {
         }
 
         if (Auth::user()->role_id == 5) {
-            $query->where("warehouse_id", Auth::user()->warehouse_id);
+            $query->where("warehouse_id", Auth::user()->warehouse_id)->whereIn("status_id", array(1, 8, 5));
         }
 
 
@@ -1257,9 +1257,9 @@ class DepartureController extends Controller {
 
 
 
-            $input["detail"] = json_decode($input["detail"],true);
-            
-            
+            $input["detail"] = json_decode($input["detail"], true);
+
+
             $input["header"]["type_request"] = "web";
 
             return $this->processDeparture($input["header"], $input["detail"], $id);

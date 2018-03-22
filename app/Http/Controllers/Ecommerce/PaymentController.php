@@ -128,8 +128,8 @@ class PaymentController extends Controller {
     public function formatedDetail($detail) {
         $this->total = 0;
         $this->subtotal = 0;
-//        echo "<pre>";
-//    print_r($detail);exit;
+        echo "<pre>";
+    print_r($detail);exit;
         foreach ($detail as $i => $value) {
 //            echo "<pre>";
 //            print_r($value);

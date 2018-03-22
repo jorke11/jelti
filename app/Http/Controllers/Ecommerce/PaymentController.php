@@ -458,9 +458,9 @@ class PaymentController extends Controller {
 
             $arr = json_decode($result, TRUE);
 
-            echo "<pre>";
-            print_r($arr);
-            exit;
+//            echo "<pre>";
+//            print_r($arr);
+//            exit;
 
             if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
 

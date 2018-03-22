@@ -152,11 +152,10 @@ class DepartureController extends Controller {
             $query->where("dispatched", "<=", $in["end_filter"] . " 00:00");
         }
 
-
-
         if ($cont == 0) {
-
-            $query->whereIn("status_id", array(1, 5, 8));
+            if (Auth::user()->role_id == 5) {
+                $query->whereIn("status_id", array(1, 5, 8));
+            }
 
             if (isset($in["init_filter"]) && $in["init_filter"] != '') {
                 $query->where("created_at", ">=", $in["init_filter"] . " 00:00");

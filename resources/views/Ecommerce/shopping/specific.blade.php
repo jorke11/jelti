@@ -22,7 +22,7 @@
     @if(Session::has('error'))
     <div class="row">
         <div class="col-lg-12">
-            <div class="alert alert-success"><strong>{{Session::get('error')}}</strong></div>
+            <div class="alert alert-danger"><strong>{{Session::get('error')}}</strong></div>
         </div>
     </div>
     @endif

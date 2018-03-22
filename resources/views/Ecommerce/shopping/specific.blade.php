@@ -18,6 +18,14 @@
         </div>
     </div>
     @endif
+    
+    @if(Session::has('error'))
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-success"><strong>{{Session::get('error')}}</strong></div>
+        </div>
+    </div>
+    @endif
 
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">

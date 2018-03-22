@@ -198,7 +198,7 @@ class PaymentController extends Controller {
 
             return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId"));
         } else {
-            return redirect('ecommerce/0');
+            return redirect('ecommerce/0')->with("error","Informacion no existe");
         }
     }
 

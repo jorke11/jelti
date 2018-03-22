@@ -155,7 +155,8 @@ class PaymentController extends Controller {
             }
             return $detail;
         } else {
-            return back()->with("error", "Detalle no existe");
+            return redirect('ecommerce/0')->with("error", "Detalle no existe");
+//            return back()->with("error", "Detalle no existe");
         }
     }
 

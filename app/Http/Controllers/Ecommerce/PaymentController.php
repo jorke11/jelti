@@ -128,32 +128,35 @@ class PaymentController extends Controller {
     public function formatedDetail($detail) {
         $this->total = 0;
         $this->subtotal = 0;
-        echo "<pre>";
-    print_r($detail);exit;
-        foreach ($detail as $i => $value) {
+        
+        if (count($detail) > 0) {
+            foreach ($detail as $i => $value) {
 //            echo "<pre>";
 //            print_r($value);
 //            exit;
-            $detail[$i]["valueFormated"] = "$" . number_format($value["value"], 0, ",", ".");
-            $detail[$i]["total"] = $detail[$i]["quantity"] * $detail[$i]["value"] * $detail[$i]["units_sf"];
-            $detail[$i]["totalFormated"] = "$" . number_format($detail[$i]["total"], 0, ",", ".");
-            $this->subtotal += $detail[$i]["total"];
+                $detail[$i]["valueFormated"] = "$" . number_format($value["value"], 0, ",", ".");
+                $detail[$i]["total"] = $detail[$i]["quantity"] * $detail[$i]["value"] * $detail[$i]["units_sf"];
+                $detail[$i]["totalFormated"] = "$" . number_format($detail[$i]["total"], 0, ",", ".");
+                $this->subtotal += $detail[$i]["total"];
 
 
-            $this->total += $detail[$i]["total"] + ($detail[$i]["total"] * $value["tax"]);
+                $this->total += $detail[$i]["total"] + ($detail[$i]["total"] * $value["tax"]);
 
 
-            if ($value["tax"] == 0) {
-                $this->exento += $detail[$i]["total"];
+                if ($value["tax"] == 0) {
+                    $this->exento += $detail[$i]["total"];
+                }
+                if ($value["tax"] == 0.05) {
+                    $this->tax5 += $detail[$i]["total"] * $value["tax"];
+                }
+                if ($value["tax"] == 0.19) {
+                    $this->tax19 += $detail[$i]["total"] * $value["tax"];
+                }
             }
-            if ($value["tax"] == 0.05) {
-                $this->tax5 += $detail[$i]["total"] * $value["tax"];
-            }
-            if ($value["tax"] == 0.19) {
-                $this->tax19 += $detail[$i]["total"] * $value["tax"];
-            }
+            return $detail;
+        } else {
+            return back()->with("error", "Detalle no existe");
         }
-        return $detail;
     }
 
     public function methodsPayment($id) {
@@ -453,7 +456,8 @@ class PaymentController extends Controller {
             $arr = json_decode($result, TRUE);
 
             echo "<pre>";
-            print_r($arr);exit;
+            print_r($arr);
+            exit;
 
             if ($arr["transactionResponse"]["responseCode"] == 'APPROVED') {
 

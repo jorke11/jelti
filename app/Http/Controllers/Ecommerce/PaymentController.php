@@ -198,7 +198,7 @@ class PaymentController extends Controller {
 
             return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId"));
         } else {
-            return redirect('ecommerce/0')->with("error","Informacion no existe");
+            return redirect('ecommerce/0')->with("error", "Informacion no existe");
         }
     }
 
@@ -374,13 +374,13 @@ class PaymentController extends Controller {
                         "TX_TAX_RETURN_BASE" => array("value" => $TX_TAX_RETURN_BASE, "currency" => $currency),
                     ),
                     "buyer" => array(
-                        "merchantBuyerId" => $client->id,
-                        "fullName" => $client->business,
-                        "emailAddress" => $client->email,
-                        "contactPhone" => $client->phone,
-                        "dniNumber" => $client->document,
+                        "merchantBuyerId" => "1",
+                        "fullName" => $payer_full_name,
+                        "emailAddress" => $payer_email,
+                        "contactPhone" => $payer_phone,
+                        "dniNumber" => $payer_document,
                         "shippingAddress" => array(
-                            "street1" => $client->address_send,
+                            "street1" => $payer_address,
 //                        "street2" => "5555487",
                             "city" => $city->description,
                             "state" => $department->description,
@@ -400,13 +400,13 @@ class PaymentController extends Controller {
                     )
                 ),
                 "payer" => array(
-                    "merchantPayerId" => "1",
-                    "fullName" => $payer_full_name,
-                    "emailAddress" => $payer_email,
-                    "contactPhone" => $payer_phone,
-                    "dniNumber" => $payer_document,
+                    "merchantPayerId" => $client->id,
+                    "fullName" => $client->business,
+                    "emailAddress" => $client->email,
+                    "contactPhone" => $client->phone,
+                    "dniNumber" => $client->document,
                     "billingAddress" => array(
-                        "street1" => $payer_address,
+                        "street1" => $client->address_send,
 //                        "street2" => "5555487",
                         "city" => $city->description,
                         "state" => $department->description,
@@ -452,7 +452,7 @@ class PaymentController extends Controller {
                 'Accept:application/json',
                 'Content-Length: ' . strlen($data_string))
             );
-//        dd( json_decode($data_string, TRUE));
+        dd( json_decode($data_string, TRUE));
 
             $result = curl_exec($ch);
 

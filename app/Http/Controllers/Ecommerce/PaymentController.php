@@ -386,7 +386,7 @@ class PaymentController extends Controller {
                             "state" => $department->description,
                             "country" => $country,
                             "postalCode" => "000000",
-                            "phone" => $client->phone
+                            "phone" => $payer_phone
                         )
                     ),
                     "shippingAddress" => array(

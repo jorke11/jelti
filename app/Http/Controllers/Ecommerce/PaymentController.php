@@ -128,7 +128,7 @@ class PaymentController extends Controller {
     public function formatedDetail($detail) {
         $this->total = 0;
         $this->subtotal = 0;
-        
+
         if (count($detail) > 0) {
             foreach ($detail as $i => $value) {
 //            echo "<pre>";
@@ -155,8 +155,7 @@ class PaymentController extends Controller {
             }
             return $detail;
         } else {
-            return redirect('ecommerce/0')->with("error", "Detalle no existe");
-//            return back()->with("error", "Detalle no existe");
+            return false;
         }
     }
 
@@ -191,13 +190,16 @@ class PaymentController extends Controller {
 
         $detail = $this->formatedDetail($detail);
 
+        if ($detail) {
+            $total = "$" . number_format($this->total, 0, ",", ".");
+            $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
 
-        $total = "$" . number_format($this->total, 0, ",", ".");
-        $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
+            $deviceSessionId = md5(session_id() . microtime()) . "80200";
 
-        $deviceSessionId = md5(session_id() . microtime()) . "80200";
-
-        return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId"));
+            return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId"));
+        } else {
+            return redirect('ecommerce/0');
+        }
     }
 
     public function getDetailData() {

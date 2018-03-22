@@ -145,7 +145,7 @@
                 </div>
                 <div class="row row-space">
                     <div class="col-lg-6">
-                        <input type="checkbox" id="checkpayer" name="checkpayer" checked=""> ¿Deseas que la informacion del pagador sea la misma?
+                        <input type="checkbox" id="checkbuyer" name="checkpayer" checked=""> ¿Deseas que la informacion del pagador sea la misma?
                     </div>
                 </div>
 
@@ -154,13 +154,29 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Nombre Completo</label>
-                                <input type="text" class="form-control input input-payment input-alpha input-extern" id="name_payer" name="name_payer" placeholder="Nombre Completo" autocomplete="off">
+                                <input type="text" class="form-control input input-payment input-alpha input-extern" id="name_buyer" name="name_buyer" placeholder="Nombre Completo" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Documento</label>
-                                <input type="text" class="form-control input input-payment input-number input-extern" id="document_payer" name="document_payer" placeholder="Numeo de Documento" autocomplete="off" maxlength="15">
+                                <input type="text" class="form-control input input-payment input-number input-extern" id="document_buyer" name="document_buyer" placeholder="Numeo de Documento" autocomplete="off" maxlength="15">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="tgarjeta">Departamento</label>
+                                <select class="form-control input-departure input-extern" id="department_buyer_id" name='department_buyer_id' width="100%" data-api="/api/getDepartment" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="email">Ciudad Origen:</label>
+                                <select class="form-control input-departure input-extern" id="city_buyer_id" name='city_buyer_id' width="100%" required>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -168,13 +184,13 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Direccion</label>
-                                <input type="text" class="form-control input input-payment input-extern" id="addrees_payer" name="addrees_payer" placeholder="Dirección" autocomplete="off">
+                                <input type="text" class="form-control input input-payment input-extern" id="addrees_buyer" name="addrees_buyer" placeholder="Dirección" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Email</label>
-                                <input type="text" class="form-control input input-payment input-extern" id="email_payer" name="email_payer" placeholder="Email" autocomplete="off">
+                                <input type="text" class="form-control input input-payment input-extern" id="email_buyer" name="email_buyer" placeholder="Email" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -182,7 +198,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Telefono de contacto</label>
-                                <input type="text" class="form-control input input-payment  input-number input-extern" id="phone_payer" name="phone_payer" placeholder="Telefono de contacto" maxlength="16" autocomplete="off">
+                                <input type="text" class="form-control input input-payment  input-number input-extern" id="phone_buyer" name="phone_buyer" placeholder="Telefono de contacto" maxlength="16" autocomplete="off">
                             </div>
                         </div>
                     </div>

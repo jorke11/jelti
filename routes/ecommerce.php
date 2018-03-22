@@ -34,6 +34,7 @@ Route::post('/addDetail', 'Ecommerce\ShoppingController@managementOrder');
 
 Route::get('myProfile', "Ecommerce\ShoppingController@getMyProfile");
 Route::get('myOrders', "Ecommerce\ShoppingController@getMyOrders");
+Route::get('payment/getCity/{department_id}', "Ecommerce\ShoppingController@getCities");
 
 
 

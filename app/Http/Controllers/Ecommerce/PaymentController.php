@@ -335,27 +335,38 @@ class PaymentController extends Controller {
 
             $signature = md5($apiKey . "~" . $merchantId . "~" . $referenceCode . "~" . $TX_VALUE . "~" . $currency);
 
-            $payer_full_name = $client->business;
-            $payer_email = $client->email;
-            $payer_document = $client->document;
-            $payer_address = $client->address_invoice;
-            $payer_phone = $client->phone;
+            $buyer_full_name = $client->business;
+            $buyer_email = $client->email;
+            $buyer_document = $client->document;
+            $buyer_address = $client->address_invoice;
+            $buyer_phone = $client->phone;
+            $buyer_city = $client->description;
+            $buyer_department = $department->description;
 
-            if (!isset($in["checkpayer"])) {
-                if ($in["name_payer"] != '') {
-                    $payer_full_name = $in["name_payer"];
+            $city_buyer = \App\Models\Administration\Cities::find($in["city_buyer_id"]);
+            $department_buyer = \App\Models\Administration\Department::find($in["department_buyer_id"]);
+
+            if (!isset($in["checkbuyer"])) {
+                if ($in["name_buyer"] != '') {
+                    $buyer_full_name = $in["name_buyer"];
                 }
-                if ($in["email_payer"] != '') {
-                    $payer_email = $in["email_payer"];
+                if ($in["email_buyer"] != '') {
+                    $buyer_email = $in["email_buyer"];
                 }
-                if ($in["document_payer"] != '') {
-                    $payer_document = $in["document_payer"];
+                if ($in["document_buyer"] != '') {
+                    $buyer_document = $in["document_buyer"];
                 }
-                if ($in["addrees_payer"] != '') {
-                    $payer_address = $in["addrees_payer"];
+                if ($in["addrees_buyer"] != '') {
+                    $buyer_address = $in["addrees_buyer"];
                 }
-                if ($in["addrees_payer"] != '') {
-                    $payer_phone = $in["phone_payer"];
+                if ($in["addrees_buyer"] != '') {
+                    $buyer_phone = $in["phone_buyer"];
+                }
+                if ($in["city_buyer_id"] != '') {
+                    $buyer_city = $city_buyer->description;
+                }
+                if ($in["department_buyer_id"] != '') {
+                    $buyer_department = $department_buyer->description;
                 }
             }
 
@@ -375,18 +386,18 @@ class PaymentController extends Controller {
                     ),
                     "buyer" => array(
                         "merchantBuyerId" => "1",
-                        "fullName" => $payer_full_name,
-                        "emailAddress" => $payer_email,
-                        "contactPhone" => $payer_phone,
-                        "dniNumber" => $payer_document,
+                        "fullName" => $buyer_full_name,
+                        "emailAddress" => $buyer_email,
+                        "contactPhone" => $buyer_phone,
+                        "dniNumber" => $buyer_document,
                         "shippingAddress" => array(
-                            "street1" => $payer_address,
+                            "street1" => $buyer_address,
 //                        "street2" => "5555487",
-                            "city" => $city->description,
-                            "state" => $department->description,
+                            "city" => $buyer_city,
+                            "state" => $buyer_department,
                             "country" => $country,
                             "postalCode" => "000000",
-                            "phone" => $payer_phone
+                            "phone" => $buyer_phone
                         )
                     ),
                     "shippingAddress" => array(
@@ -412,7 +423,7 @@ class PaymentController extends Controller {
                         "state" => $department->description,
                         "country" => $country,
                         "postalCode" => "000000",
-                        "phone" => $client->phones
+                        "phone" => $client->phone
                     )
                 ),
                 "creditCard" => array(
@@ -452,7 +463,7 @@ class PaymentController extends Controller {
                 'Accept:application/json',
                 'Content-Length: ' . strlen($data_string))
             );
-//        dd( json_decode($data_string, TRUE));
+//            dd(json_decode($data_string, TRUE));
 
             $result = curl_exec($ch);
 

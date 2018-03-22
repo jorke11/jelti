@@ -15,19 +15,25 @@ function MethodsPayment() {
 
         $("#number").blur(this.validateTarjet);
 
-        $("#checkpayer").click(function () {
+        $("#checkbuyer").click(function () {
             if ($(this).is(":checked")) {
                 $("#divaddpayer").addClass("hide");
                 $(".input-extern").removeAttr("required");
             } else {
+                $(".input-extern").cleanFields();
                 $(".input-extern").prop("required", "required");
                 $("#divaddpayer").removeClass("hide");
             }
         })
 
-        $("#frm").submit(function () {
+        $("#frm #department_buyer_id").on('select2:closing', function (evt) {
+            if ($(this).val() != 0) {
+                obj.setSelectCity($(this).val());
+            }
+        })
 
-            if (!$("#checkpayer").is(":checked")) {
+        $("#frm").submit(function () {
+            if (!$("#checkbuyer").is(":checked")) {
 
                 var validate = $(".input-extern").validate();
                 if (validate.length > 0) {
@@ -35,8 +41,26 @@ function MethodsPayment() {
                     return false;
                 }
             }
+        })
 
 
+    }
+
+    this.setSelectCity = function (department_id) {
+        var html = '';
+
+        $.ajax({
+            url: 'getCity/' + department_id,
+            method: 'get',
+            dataType: 'JSON',
+            success: function (data) {
+                $("#city_buyer_id").empty();
+                $.each(data, function (i, val) {
+                    html += "<option value='" + val.id + "'>" + val.description + "</option>"
+                })
+
+                $("#city_buyer_id").html(html);
+            }
         })
 
     }

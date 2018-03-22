@@ -108,6 +108,11 @@ class ShoppingController extends Controller {
         }
     }
 
+    public function getCities($department_id) {
+        $data = \App\Models\Administration\Cities::where("department_id", $department_id)->get();
+        return response()->json($data);
+    }
+
     public function getDetailProductAllCategory($id, $subcategory_id) {
         $category = Categories::find($id);
 

@@ -483,7 +483,7 @@ class PaymentController extends Controller {
                     $row_order->status_id = 2;
                     $row_order->save();
 
-                    return redirect('ecommerce/0')->with("success", 'Compra Realizada! Orden #' . $row->order_id);
+                    return redirect('ecommerce/0')->with("success", 'Compra Realizada! Orden #' . $arr["transactionResponse"]["orderId"]);
                 } else if ($arr["transactionResponse"]["state"] == 'PENDING') {
                     $row = Departures::find($data_order->header->id);
                     $row->paid_out = false;
@@ -497,7 +497,7 @@ class PaymentController extends Controller {
                     $row_order->save();
 
                     return redirect('ecommerce/0')
-                                    ->with("success", 'En un tiempo de Aproximado de 4 Horas te llegara la notificación del pago mientras realizamos validaciones de seguridad, gracias por preferirnos')
+                                    ->with("success", 'En un tiempo de aproximado de 4 Horas te llegará la notificación del pago mientras realizamos validaciones de seguridad, gracias por preferirnos')
                                     ->with("order_id", $arr["transactionResponse"]["orderId"]);
                 } else {
                     $error = $arr["error"];

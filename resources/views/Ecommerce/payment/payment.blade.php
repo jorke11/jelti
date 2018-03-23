@@ -145,7 +145,7 @@
                 </div>
                 <div class="row row-space">
                     <div class="col-lg-6">
-                        <input type="checkbox" id="checkbuyer" name="checkpayer" checked=""> ¿Deseas que la informacion del pagador sea la misma?
+                        <input type="checkbox" id="checkbuyer" name="checkbuyer" checked=""> ¿Deseas que la informacion del pagador sea la misma?
                     </div>
                 </div>
 
@@ -168,14 +168,14 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="tgarjeta">Departamento</label>
-                                <select class="form-control input-departure input-extern" id="department_buyer_id" name='department_buyer_id' width="100%" data-api="/api/getDepartment" required>
+                                <select class="form-control input-departure input-extern" id="department_buyer_id" name='department_buyer_id' width="100%" data-api="/api/getDepartment">
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="email">Ciudad Origen:</label>
-                                <select class="form-control input-departure input-extern" id="city_buyer_id" name='city_buyer_id' width="100%" required>
+                                <select class="form-control input-departure input-extern" id="city_buyer_id" name='city_buyer_id' width="100%">
                                 </select>
                             </div>
                         </div>

@@ -183,9 +183,6 @@ class PaymentController extends Controller {
         $client = Stakeholder::where("email", $user->email)->first();
         $detail = $this->getDetailData();
 
-//         echo "<pre>";
-//        print_r($detail);
-//        exit;
 
 
         $detail = $this->formatedDetail($detail);
@@ -195,8 +192,9 @@ class PaymentController extends Controller {
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
 
             $deviceSessionId = md5(session_id() . microtime());
+            $deviceSessionId_concat = md5(session_id() . microtime()). "80200";
 
-            return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId"));
+            return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId","deviceSessionId_concat"));
         } else {
             return redirect('ecommerce/0')->with("error", "Informacion no existe");
         }
@@ -465,7 +463,7 @@ class PaymentController extends Controller {
                     'Accept:application/json',
                     'Content-Length: ' . strlen($data_string))
                 );
-            dd(json_decode($data_string, TRUE));
+//            dd(json_decode($data_string, TRUE));
 
                 $result = curl_exec($ch);
 

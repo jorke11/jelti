@@ -17,12 +17,12 @@
 @endif
 
 
-<p style="background:url(https://maf.pagosonline.net/ws/fp?id={{$deviceSessionId . "80200"}})"></p>
+<p style="background:url(https://maf.pagosonline.net/ws/fp?id={{$deviceSessionId_concat}})"></p>
 
-<img src="https://maf.pagosonline.net/ws/fp/clear.png?id={{$deviceSessionId . "80200"}}">
-<script src="https://maf.pagosonline.net/ws/fp/check.js?id={{$deviceSessionId . "80200"}}"></script>
-<object type="application/x-shockwave-flash" data="https://maf.pagosonline.net/ws/fp/fp.swf?id={{$deviceSessionId . "80200"}}" width="1" height="1" id="thm_fp">
-    <param name="movie" value="https://maf.pagosonline.net/ws/fp/fp.swf?id={{deviceSessionId}usuarioId. "80200"}}" />
+<img src="https://maf.pagosonline.net/ws/fp/clear.png?id={{$deviceSessionId_concat}}">
+<script src="https://maf.pagosonline.net/ws/fp/check.js?id={{$deviceSessionId_concat}}"></script>
+<object type="application/x-shockwave-flash" data="https://maf.pagosonline.net/ws/fp/fp.swf?id={{$deviceSessionId_concat}}" width="1" height="1" id="thm_fp">
+    <param name="movie" value="https://maf.pagosonline.net/ws/fp/fp.swf?id={{$deviceSessionId_concat}}" />
 </object>
 
 

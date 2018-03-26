@@ -194,7 +194,7 @@ class PaymentController extends Controller {
             $total = "$" . number_format($this->total, 0, ",", ".");
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
 
-            $deviceSessionId = md5(session_id() . microtime()) . "80200";
+            $deviceSessionId = md5(session_id() . microtime());
 
             return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId"));
         } else {
@@ -309,7 +309,8 @@ class PaymentController extends Controller {
 
             if ($error == '') {
 
-                $deviceSessionId = md5(session_id() . microtime());
+                $deviceSessionId = $in["devicesessionid"];
+//                $deviceSessionId = md5(session_id() . microtime());
 
                 $url = "https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi";
                 $apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
@@ -464,7 +465,7 @@ class PaymentController extends Controller {
                     'Accept:application/json',
                     'Content-Length: ' . strlen($data_string))
                 );
-//            dd(json_decode($data_string, TRUE));
+            dd(json_decode($data_string, TRUE));
 
                 $result = curl_exec($ch);
 

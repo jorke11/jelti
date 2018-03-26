@@ -17,12 +17,12 @@
 @endif
 
 
-<p style="background:url(https://maf.pagosonline.net/ws/fp?id={{$deviceSessionId}})"></p>
+<p style="background:url(https://maf.pagosonline.net/ws/fp?id={{$deviceSessionId . "80200"}})"></p>
 
-<img src="https://maf.pagosonline.net/ws/fp/clear.png?id={{$deviceSessionId}}">
-<script src="https://maf.pagosonline.net/ws/fp/check.js?id={{$deviceSessionId}}"></script>
-<object type="application/x-shockwave-flash" data="https://maf.pagosonline.net/ws/fp/fp.swf?id={{$deviceSessionId}}" width="1" height="1" id="thm_fp">
-    <param name="movie" value="https://maf.pagosonline.net/ws/fp/fp.swf?id=${deviceSessionId}usuarioId" />
+<img src="https://maf.pagosonline.net/ws/fp/clear.png?id={{$deviceSessionId . "80200"}}">
+<script src="https://maf.pagosonline.net/ws/fp/check.js?id={{$deviceSessionId . "80200"}}"></script>
+<object type="application/x-shockwave-flash" data="https://maf.pagosonline.net/ws/fp/fp.swf?id={{$deviceSessionId . "80200"}}" width="1" height="1" id="thm_fp">
+    <param name="movie" value="https://maf.pagosonline.net/ws/fp/fp.swf?id={{deviceSessionId}usuarioId. "80200"}}" />
 </object>
 
 
@@ -30,6 +30,7 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
+                <input type="hidden" value="{{$deviceSessionId}}" name="devicesessionid">
 
                 <div class="row">
                     <div class="col-lg-6">

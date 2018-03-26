@@ -16,7 +16,8 @@
             <th>Nota Credito</th>
             <th>SubTotal</th>
             <th>Total</th>
-            <th>Estatus</th>
+            <th>Estado</th>
+            <th>Cartera</th>
             <th tipo="prueba" width="1%">Action</th>
         </tr>
     </thead>

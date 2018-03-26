@@ -1097,6 +1097,10 @@ function Departure() {
                 {data: "subtotalnumeric", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "status"},
+                {data: "paid_out", render(data, type, row) {
+                        return (row.paid_out == true) ? 'Pagado' : '';
+                    }
+                },
                 {data: "total", render: function (data, type, row) {
                         if (row.status_id == 5) {
 //                            console.log(row);
@@ -1156,16 +1160,23 @@ function Departure() {
             },
 
             createdRow: function (row, data, index) {
+                var row_status = 10;
+                var row_cartera = 11;
+
+                if (data.paid_out == true) {
+                    $('td', row).eq(row_cartera).addClass('color-green');
+                }
+
                 if (data.status_id == 1) {
-                    $('td', row).eq(10).addClass('color-new');
+                    $('td', row).eq(row_status).addClass('color-new');
                 } else if (data.status_id == 2) {
-                    $('td', row).eq(10).addClass('color-pending');
+                    $('td', row).eq(row_status).addClass('color-pending');
                 } else if (data.status_id == 3) {
-                    $('td', row).eq(10).addClass('color-checked');
+                    $('td', row).eq(row_status).addClass('color-checked');
                 } else if (data.status_id == 7) {
-                    $('td', row).eq(10).addClass('color-green');
+                    $('td', row).eq(row_status).addClass('color-green');
                 } else if (data.status_id == 8) {
-                    $('td', row).eq(10).addClass('color-red');
+                    $('td', row).eq(row_status).addClass('color-red');
                 }
             },
             footerCallback: function (row, data, start, end, display) {

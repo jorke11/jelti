@@ -15,7 +15,7 @@ Route::get('/getCounter', 'Ecommerce\ShoppingController@getCountOrders');
 Route::get('/comments', 'MainController@getcomments');
 Route::get('/comments/list/{id}', 'MainController@listComments');
 
-Route::get('/payment', 'Ecommerce\PaymentController@index');
+Route::get('/checkout', 'Ecommerce\PaymentController@index');
 Route::get('/payment/{order_id}', 'Ecommerce\PaymentController@methodsPayment');
 Route::get('/getDetail', 'Ecommerce\PaymentController@getDetail');
 Route::put('/getDetailQuantity/{order_id}', 'Ecommerce\PaymentController@setQuantity');

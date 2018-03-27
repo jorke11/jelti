@@ -64,7 +64,7 @@
                 <li><a href="/home" style="color:#00c98a;font-size:17px;font-weight: 100">Jelty</a></li>
                 @endif
                 @if(Auth::user()->role_id == 2)
-                <li> <a href="/payment">
+                <li> <a href="/checkout">
                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" style="font-size: 25px;color:#30c594"></span>
                         <span class="badge">
                             <span id="quantityOrders"></span>

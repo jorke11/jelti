@@ -1,22 +1,22 @@
 @extends('layouts.client')
 @section('content')
 
-    <!--<div class="row" style="padding-bottom: 2%">
-        <div class="col-lg-12" style="padding: 0;">
-            <img src="http://via.placeholder.com/2000x100" class="img-responsive">
-        </div>
-    </div>-->
+<!--<div class="row" style="padding-bottom: 2%">
+    <div class="col-lg-12" style="padding: 0;">
+        <img src="http://via.placeholder.com/2000x100" class="img-responsive">
+    </div>
+</div>-->
 
 {!! Form::open(['id'=>'frm','url' => 'payment/credit']) !!}
 
 <input id="order_id" name="order_id" type="hidden">
 
-<div class="row hidden" id="message-mount" style="padding-top: 2%">
+<div class="row hidden" id="message-mount" >
     <div class=" col-lg-offset-1 col-lg-10">
         <div class="alert alert-danger">El monto total debe ser Mayor a $10.000 Pesos</div>
     </div>
 </div>
-<div class="row">
+<div class="row" style="padding-top: 5%">
     <div class="col-lg-7 col-lg-offset-1">
         <div id="content-detail">
         </div>

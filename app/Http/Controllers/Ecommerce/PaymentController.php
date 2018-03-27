@@ -192,9 +192,9 @@ class PaymentController extends Controller {
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
 
             $deviceSessionId = md5(session_id() . microtime());
-            $deviceSessionId_concat = $deviceSessionId. "80200";
+            $deviceSessionId_concat = $deviceSessionId . "80200";
 
-            return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId","deviceSessionId_concat"));
+            return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId", "deviceSessionId_concat"));
         } else {
             return redirect('ecommerce/0')->with("error", "Informacion no existe");
         }
@@ -502,7 +502,7 @@ class PaymentController extends Controller {
                     $error = $arr["error"];
                     if ($arr["code"] == 'SUCCESS') {
                         if ($arr["transactionResponse"]["state"] == 'DECLINED') {
-                            $error = "Por favor verifique la informacion de la Tarjeta de credito, " . $arr["transactionResponse"]["responseCode"];
+                            $error = "Por favor verifique la informacion de la Tarjeta de credito, vuelve a intentarlo. Petición #" . $arr["transactionResponse"]["orderId"] . "";
                         } else {
                             $error = $arr["transactionResponse"]["responseMessage"];
                         }

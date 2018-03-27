@@ -192,7 +192,7 @@ class PaymentController extends Controller {
             $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
 
             $deviceSessionId = md5(session_id() . microtime());
-            $deviceSessionId_concat = md5(session_id() . microtime()). "80200";
+            $deviceSessionId_concat = $deviceSessionId. "80200";
 
             return view("Ecommerce.payment.payment", compact("id", "client", "month", "years", "total", "countries", "subtotal", "deviceSessionId","deviceSessionId_concat"));
         } else {

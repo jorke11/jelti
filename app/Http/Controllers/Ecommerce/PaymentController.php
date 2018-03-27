@@ -502,7 +502,7 @@ class PaymentController extends Controller {
                     $error = $arr["error"];
                     if ($arr["code"] == 'SUCCESS') {
                         if ($arr["transactionResponse"]["state"] == 'DECLINED') {
-                            $error = "Por favor verifique la informacion de la Tarjeta de credito, vuelve a intentarlo. Petición #" . $arr["transactionResponse"]["orderId"] . "";
+                            $error = "Por favor verifique la informacion de la Tarjeta de credito, vuelve a intentarlo. Orden Id #" . $arr["transactionResponse"]["orderId"] . "";
                         } else {
                             $error = $arr["transactionResponse"]["responseMessage"];
                         }

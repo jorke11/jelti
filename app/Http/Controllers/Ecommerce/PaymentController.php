@@ -496,7 +496,7 @@ class PaymentController extends Controller {
                     $row_order->save();
 
                     return redirect('ecommerce/0')
-                                    ->with("success", 'En un tiempo de aproximado de 4 Horas te llegará la notificación del pago mientras realizamos validaciones de seguridad, gracias por preferirnos')
+                                    ->with("success", 'En un tiempo de aproximado de 4 Horas te llegará la notificación del pago mientras realizamos validaciones de seguridad, gracias por preferirnos, Orden Id # '.$arr["transactionResponse"]["orderId"])
                                     ->with("order_id", $arr["transactionResponse"]["orderId"]);
                 } else {
                     $error = $arr["error"];

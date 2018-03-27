@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/ecommerce', 'Ecommerce\ShoppingController@index');
+//Route::get('/ecommerce', 'Ecommerce\ShoppingController@index');
 Route::get('/ecommerce/{id}', 'Ecommerce\ShoppingController@getDetailProduct');
 Route::get('ecommerce/all/{id}/{subcategory_id}', 'Ecommerce\ShoppingController@getDetailProductAllCategory');
 Route::get('/ecommerce/{categrory_id}/{subcategrory_id}', 'Ecommerce\ShoppingController@getDetailProductFilter');
@@ -15,7 +15,7 @@ Route::get('/getCounter', 'Ecommerce\ShoppingController@getCountOrders');
 Route::get('/comments', 'MainController@getcomments');
 Route::get('/comments/list/{id}', 'MainController@listComments');
 
-Route::get('/checkout', 'Ecommerce\PaymentController@index');
+Route::get('/ecommerce', 'Ecommerce\PaymentController@index');
 Route::get('/payment/{order_id}', 'Ecommerce\PaymentController@methodsPayment');
 Route::get('/getDetail', 'Ecommerce\PaymentController@getDetail');
 Route::put('/getDetailQuantity/{order_id}', 'Ecommerce\PaymentController@setQuantity');

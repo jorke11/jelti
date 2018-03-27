@@ -54,7 +54,7 @@
                 <li><a href="/" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" >Inicio</a></li>
                 <li><a href="/ecommerce/0" class="anim-underline" style="color:#00c98a;font-size:17px;font-weight: 100" id="menuProduct" ><span class="">Productos</span></a></li>
                 <li><a href="{{url("blog")}}" class="anim-underline"  style="color:#00c98a;font-size:17px;font-weight: 100">Blog</a></li>
-                
+
                 @if(Auth::user()==null)
                 <li ><a href="#" class="anim-underline" onclick="objPage.openModal('myModal')" style="color:#00c98a;font-size:17px;font-weight: 100">Registrarme</a></li>
                 @endif
@@ -64,13 +64,13 @@
                 <li><a href="/home" style="color:#00c98a;font-size:17px;font-weight: 100">Jelty</a></li>
                 @endif
                 @if(Auth::user()->role_id == 2)
-                <li> <a href="{{url("/checkout")}}">
+                <li> <a href="/ecommerce">
                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" style="font-size: 25px;color:#30c594"></span>
                         <span class="badge">
                             <span id="quantityOrders"></span>
                         </span></a></li>
                 <li>
-                @endif
+                    @endif
 
 
                 <li class="dropdown">

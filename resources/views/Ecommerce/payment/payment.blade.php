@@ -1,11 +1,6 @@
 @extends('layouts.client')
 @section('content')
 
-<div class="row" style="padding-bottom: 2%">
-    <div class="col-lg-12" style="padding: 0;">
-        <img src="http://via.placeholder.com/2000x100" class="img-responsive">
-    </div>
-</div>
 {!! Form::open(['id'=>'frm','url'=>'payment/target']) !!}
 <input id="order_id" name="order_id" type="hidden" value='{{$id}}'>
 @if(Session::has('error'))
@@ -26,7 +21,7 @@
 </object>
 
 
-<div class="row row-center">
+<div class="row row-center" style="padding-bottom: 5%">
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">

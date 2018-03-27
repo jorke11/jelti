@@ -11,7 +11,7 @@
 
 <input id="order_id" name="order_id" type="hidden">
 
-<div class="row hidden" id="message-mount">
+<div class="row hidden" id="message-mount" style="padding-top: 2%">
     <div class=" col-lg-offset-1 col-lg-10">
         <div class="alert alert-danger">El monto total debe ser Mayor a $10.000 Pesos</div>
     </div>
@@ -41,7 +41,7 @@
                                 <h4 class="text-right">Facturado</h4>
                             </div>
                             <div class="col-lg-6">
-                               
+                                <h4 class="text-left">{{$client->business}}</h4>
                             </div>
                         </div>
                         <div class="row">

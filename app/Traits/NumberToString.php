@@ -172,4 +172,36 @@ trait NumberToString {
         return trim(implode($this->glue, array_filter($convertedNumber)));
     }
 
+     public function formatDate($date) {
+        $month = date("m", strtotime($date));
+        $monthtext = '';
+        if ($month == '01')
+            $monthtext = 'enero';
+        if ($month == '02')
+            $monthtext = 'febrero';
+        if ($month == '03')
+            $monthtext = 'marzo';
+        if ($month == '04')
+            $monthtext = 'abril';
+        if ($month == '05')
+            $monthtext = 'mayo';
+        if ($month == '06')
+            $monthtext = 'junio';
+        if ($month == '07')
+            $monthtext = 'julio';
+        if ($month == '08')
+            $monthtext = 'agosto';
+        if ($month == '09')
+            $monthtext = 'septiembre';
+        if ($month == '10')
+            $monthtext = 'octubre';
+        if ($month == '11')
+            $monthtext = 'noviembre';
+        if ($month == '12')
+            $monthtext = 'diciembre';
+
+
+        return date("d", strtotime($date)) . " de " . ucwords($monthtext) . " de " . date("Y", strtotime($date));
+    }
+    
 }

@@ -215,38 +215,7 @@ class DepartureController extends Controller {
 
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
-
-    public function formatDate($date) {
-        $month = date("m", strtotime($date));
-        $monthtext = '';
-        if ($month == '01')
-            $monthtext = 'enero';
-        if ($month == '02')
-            $monthtext = 'febrero';
-        if ($month == '03')
-            $monthtext = 'marzo';
-        if ($month == '04')
-            $monthtext = 'abril';
-        if ($month == '05')
-            $monthtext = 'mayo';
-        if ($month == '06')
-            $monthtext = 'junio';
-        if ($month == '07')
-            $monthtext = 'julio';
-        if ($month == '08')
-            $monthtext = 'agosto';
-        if ($month == '09')
-            $monthtext = 'septiembre';
-        if ($month == '10')
-            $monthtext = 'octubre';
-        if ($month == '11')
-            $monthtext = 'noviembre';
-        if ($month == '12')
-            $monthtext = 'diciembre';
-
-
-        return date("d", strtotime($date)) . " de " . ucwords($monthtext) . " de " . date("Y", strtotime($date));
-    }
+   
 
     public function getInvoice($id) {
         $this->mails = array();
@@ -1199,7 +1168,10 @@ class DepartureController extends Controller {
                 "value" => $pro->price_sf);
         }
 
-        return response()->json(["row" => $detail, "inventory" => $inventory]);
+        $hold = InventoryHold::select("inventory_hold.id","inventory_hold.quantity")->join("products","products.id","inventory_hold.product_id")
+                ->where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->get();
+
+        return response()->json(["row" => $detail, "inventory" => $inventory, "hold" => $hold]);
     }
 
     public function getAllDetail($departue_id) {

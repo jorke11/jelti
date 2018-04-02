@@ -668,6 +668,7 @@ class DepartureController extends Controller {
 
                 $data["header"] = $resp;
                 $listdetail = $this->formatDetailJSON($data, $result);
+                
 
                 $ware = Warehouses::find($header["warehouse_id"]);
                 $client = Stakeholder::find($header["client_id"]);
@@ -700,7 +701,7 @@ class DepartureController extends Controller {
                     $header["phone"] = $user->phone;
                     $header["warehouse"] = $ware->description;
                     $header["address"] = $ware->address;
-                    $header["detail"] = $listdetail;
+                    $header["detail"] = $listdetail["detail"];
                     $header["id"] = $result;
                     $header["environment"] = env("APP_ENV");
                     $header["created_at"] = $resp->created_at;

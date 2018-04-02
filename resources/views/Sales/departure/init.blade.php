@@ -18,13 +18,13 @@
         <div role="tabpanel" class="tab-pane active" id="list">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    @include('Inventory.departure.list')
+                    @include('Sales.departure.list')
                 </div>
             </div>
 
         </div>
         <div role="tabpanel" class="tab-pane " id="management">
-            @include('Inventory.departure.management')
+            @include('Sales.departure.management')
         </div>
 
     </div>
@@ -124,8 +124,9 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-@include('Inventory.departure.newDetail')
-@include('Inventory.departure.newService')
-@include('Inventory.departure.upload')
-{!!Html::script('js/Inventory/Departure.js')!!}
+
+@include('Sales.departure.newDetail')
+@include('Sales.departure.newService')
+@include('Sales.departure.upload')
+{!!Html::script('js/Sales/Departure.js')!!}
 @endsection

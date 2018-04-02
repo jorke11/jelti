@@ -219,7 +219,7 @@
                         </tr>
                         <tr>
                             <th>Producto</th>
-                            <th>Comentario</th>
+                            <th>Iva</th>
                             <th>Embalaje</th>
                             <th>Cantidad</th>
                             <th>Unidad</th>

@@ -24,9 +24,12 @@ use App\Models\Administration\Cities;
 use App\Models\Administration\PricesSpecial;
 use App\Models\Security\Users;
 use App\Traits\NumberToString;
+use App\Traits\StringExtra;
 
 class TransferController extends Controller {
     use NumberToString;
+    use StringExtra;
+    
     protected $total;
     protected $tool;
     protected $subtotal;
@@ -256,8 +259,8 @@ class TransferController extends Controller {
 
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost + (- $dep->discount);
 
-        $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
-        $cli["business"] = $this->tool->cleanText($cli["business"]);
+        $cli["business_name"] = $this->cleanText($cli["business_name"]);
+        $cli["business"] = $this->cleanText($cli["business"]);
         $cli["address_invoice"] = $dep->address_invoice;
 //        dd($cli);
 

@@ -18,9 +18,11 @@ use App\Http\Controllers\ToolController;
 use DB;
 use Datatables;
 use App\Traits\NumberToString;
+use App\Traits\StringExtra;
 
 class creditnoteController extends Controller {
     use NumberToString;
+    use StringExtra;
     protected $total;
     public $total_real;
     public $path;
@@ -196,10 +198,7 @@ class creditnoteController extends Controller {
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5;
 
-        $tool = new ToolController();
-
-
-        $cli["business_name"] = $tool->cleanText($cli["business_name"]);
+        $cli["business_name"] = $this->cleanText($cli["business_name"]);
 
         $data = [
             'rete' => 0,

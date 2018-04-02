@@ -31,10 +31,12 @@ use App\Models\Administration\PricesSpecial;
 use App\Http\Controllers\LogController;
 use App\Models\Inventory\Inventory;
 use App\Traits\NumberToString;
+use App\Traits\StringExtra;
 
 class SampleController extends Controller {
 
     use NumberToString;
+    use StringExtra;
 
     protected $total;
     protected $tool;
@@ -291,8 +293,8 @@ class SampleController extends Controller {
 
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost + (- $dep->discount);
 
-        $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
-        $cli["business"] = $this->tool->cleanText($cli["business"]);
+        $cli["business_name"] = $this->cleanText($cli["business_name"]);
+        $cli["business"] = $this->cleanText($cli["business"]);
         $cli["address_invoice"] = $dep->address_invoice;
 //        dd($cli);
 
@@ -400,7 +402,7 @@ class SampleController extends Controller {
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost;
 
-        $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
+        $cli["business_name"] = $this->cleanText($cli["business_name"]);
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],

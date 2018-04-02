@@ -222,39 +222,6 @@ Route::post('/entry/uploadExcel', 'Inventory\EntryController@storeExcel');
 Route::put('/entry/{id}/setDetail', 'Inventory\EntryController@setDetail');
 
 
-Route::resource('/departure', 'Inventory\DepartureController');
-Route::get('/departure/{id}/consecutive', ['uses' => 'Inventory\DepartureController@getConsecutive']);
-Route::get('/departure/{id}/quantity', ['uses' => 'Inventory\DepartureController@getQuantity']);
-Route::get('/departure/{id}/getDetailProduct', ['uses' => 'Inventory\StockController@getDetailProduct']);
-Route::get('/departure/{id}/detail', ['uses' => 'Inventory\DepartureController@getDetail']);
-Route::get('/departure/{id}/editExt', ['uses' => 'Inventory\DepartureController@getOrderExt']);
-Route::post('/departure/storeDetail', 'Inventory\DepartureController@storeDetail');
-Route::put('/departure/detail/{id}', 'Inventory\DepartureController@updateDetail');
-Route::delete('/departure/detail/{id}', 'Inventory\DepartureController@destroyDetail');
-Route::get('/departure/getOrder/{id}', 'Inventory\DepartureController@showOrder');
-Route::post('/departure/storeExt', 'Inventory\DepartureController@storeExtern');
-Route::post('/departure/setSale/', 'Inventory\DepartureController@setSale');
-Route::get('/departure/{id}/getInvoice', ['uses' => 'Inventory\DepartureController@getInvoice']);
-Route::get('/departure/{id}/getRemission', ['uses' => 'Inventory\DepartureController@getRemission']);
-Route::get('/departure/{id}/getInvoiceHtml', ['uses' => 'Inventory\DepartureController@getInvoiceHtml']);
-Route::get('/departure/{id}/detailAll/', 'Inventory\DepartureController@getAllDetail');
-Route::put('/departure/generateInvoice/{id}', 'Inventory\DepartureController@generateInvoice');
-Route::put('/departure/generateRemission/{id}', 'Inventory\DepartureController@generateRemission');
-
-Route::get('/departure/{id}/getClient', ['uses' => 'Inventory\DepartureController@getClient']);
-Route::get('/departure/{id}/getBranch', ['uses' => 'Inventory\DepartureController@getBranch']);
-Route::post('/departure/uploadExcel', 'Inventory\DepartureController@storeExcel');
-Route::put('/departure/{id}/cancelInvoice', ['uses' => 'Inventory\DepartureController@cancelInvoice']);
-
-Route::get('/departure/{id}/{init}/{end}/', ['uses' => 'Inventory\DepartureController@index']);
-Route::get('/departure/{id}/{init}/{end}/{product}/{supplier}', ['uses' => 'Inventory\DepartureController@index']);
-Route::get('/departure/{id}/{init}/{end}/{user_id}', ['uses' => 'Inventory\DepartureController@index']);
-Route::get('/api/listDeparture', 'Inventory\DepartureController@listTable');
-Route::put('/departure/{id}/reverseInvoice', 'Inventory\DepartureController@reverse');
-Route::get('/departure/testDepNotification/{id}', 'Inventory\DepartureController@testDepNotification');
-Route::get('/departure/testInvoiceNotification/{id}', 'Inventory\DepartureController@testInvoiceNotification');
-
-
 Route::resource('/sample', 'Inventory\SampleController');
 Route::get('/sample/{id}/consecutive', ['uses' => 'Inventory\SampleController@getConsecutive']);
 Route::get('/sample/{id}/quantity', ['uses' => 'Inventory\SampleController@getQuantity']);
@@ -517,6 +484,9 @@ Route::get('/briefcase/testnotificaction/{id}/{commercial}', "Sales\BriefcaseCon
 Route::get('/briefcase/testPaidout/{id}', "Sales\BriefcaseController@testPaidout");
 
 Route::get('api/productByClient', "Report\ClientController@getProductClient");
+
+
+require __DIR__ . '/sales/orders.php';
 
 
 

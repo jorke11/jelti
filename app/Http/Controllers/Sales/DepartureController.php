@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Inventory;
+namespace App\Http\Controllers\Sales;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -34,22 +34,16 @@ use App\Models\Sales\BriefCase;
 use App\Models\Inventory\Inventory;
 use App\Models\Inventory\InventoryHold;
 use App\Traits\NumberToString;
+use App\Traits\StringExtra;
+use App\Traits\Invoice;
 
 class DepartureController extends Controller {
 
     use NumberToString;
+    use StringExtra;
+    use Invoice;
 
-    public $total;
-    protected $total_real;
     protected $tool;
-    public $subtotal;
-    protected $subtotal_real;
-    protected $exento;
-    protected $exento_real;
-    protected $tax19;
-    protected $tax19_real;
-    protected $tax5;
-    protected $tax5_real;
     public $path;
     public $name;
     public $listProducts;
@@ -95,7 +89,7 @@ class DepartureController extends Controller {
         $initdate = $this->initdate;
 
 
-        return view("Inventory.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id", "initdate"));
+        return view("Sales.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id", "initdate"));
     }
 
     public function listTable(Request $req) {
@@ -215,7 +209,6 @@ class DepartureController extends Controller {
 
         return response()->json(["header" => $entry, "detail" => $detail]);
     }
-   
 
     public function getInvoice($id) {
         $this->mails = array();
@@ -295,8 +288,8 @@ class DepartureController extends Controller {
 
         $totalWithTax = $this->subtotal + $this->tax19 + $this->tax5 + (- $dep->discount);
 
-        $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
-        $cli["business"] = $this->tool->cleanText($cli["business"]);
+        $cli["business_name"] = $this->cleanText($cli["business_name"]);
+        $cli["business"] = $this->cleanText($cli["business"]);
         $cli["address_invoice"] = $dep->address_invoice;
 
 
@@ -439,7 +432,7 @@ class DepartureController extends Controller {
         $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + (- $dep->discount);
 
 
-        $cli["business_name"] = $this->tool->cleanText($cli["business_name"]);
+        $cli["business_name"] = $this->cleanText($cli["business_name"]);
         $data = [
             'rete' => 0,
 //            'rete' => $rete["value"],
@@ -673,7 +666,8 @@ class DepartureController extends Controller {
                     $resp->save();
                 }
 
-                $listdetail = $this->formatDetail($result);
+                $data["header"] = $resp;
+                $listdetail = $this->formatDetailJSON($data, $result);
 
                 $ware = Warehouses::find($header["warehouse_id"]);
                 $client = Stakeholder::find($header["client_id"]);
@@ -759,8 +753,11 @@ class DepartureController extends Controller {
                 DB::commit();
 
                 $total = "$ " . number_format($this->total, 0, ",", ".");
+                $data["success"] = true;
+                $data["header"] = $resp;
+                $response = $this->formatDetailJSON($data, $result);
 
-                return response()->json(['success' => true, "header" => $resp, "detail" => $listdetail, "total" => $total]);
+                return response()->json($response);
             } else {
                 return response()->json(['success' => false]);
             }
@@ -1070,87 +1067,15 @@ class DepartureController extends Controller {
     }
 
     public function edit($id) {
-        $entry = Departures::FindOrFail($id);
+        $header = Departures::FindOrFail($id);
 
-        $detail = $this->formatDetail($id);
-        $branch = '';
-        $data_branch = '';
-        if ($entry->branch_id != null) {
-            $branch = Branch::where("stakeholder_id", $entry->client_id)->get();
-            $data_branch = Branch::find($entry->branch_id);
-        }
-        $total = "$ " . number_format($this->total, 0, ",", ".");
-        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "branch" => $branch, "data_branch" => $data_branch]);
-    }
-
-    public function formatDetail($id) {
-        $detail = DB::table("departures_detail")->
-                        select("departures_detail.id", "departures_detail.status_id", "departures_detail.product_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "departures_detail.tax")->join("products", "departures_detail.product_id", "products.id")
-                        ->join("stakeholder", "stakeholder.id", "products.supplier_id")->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))->where("departure_id", $id)->orderBy("id", "asc")->get();
-
-        $this->total = 0;
-        $this->subtotal = 0;
-        foreach ($detail as $i => $value) {
-            $detail[$i]->valueFormated = "$" . number_format($value->value, 0, ",", ".");
-            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
-            $detail[$i]->total_real = $detail[$i]->real_quantity * $detail[$i]->value * $detail[$i]->units_sf;
-
-            $detail[$i]->totalFormated = "$" . number_format($detail[$i]->total, 0, ",", ".");
-            $detail[$i]->totalFormated_real = "$" . number_format($detail[$i]->total_real, 0, ",", ".");
-            $this->subtotal += $detail[$i]->total;
-            $this->subtotal_real += $detail[$i]->total_real;
-
-            $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
-            $this->total_real += $detail[$i]->total_real + ($detail[$i]->total_real * $value->tax);
-
-            if ($value->tax == 0) {
-                $this->exento += $detail[$i]->total;
-                $this->exento_real += $detail[$i]->total_real;
-            }
-            if ($value->tax == 0.05) {
-                $this->tax5 += $detail[$i]->total * $value->tax;
-                $this->tax5_real += $detail[$i]->total_real * $value->tax;
-            }
-            if ($value->tax == 0.19) {
-                $this->tax19 += $detail[$i]->total * $value->tax;
-                $this->tax19_real += $detail[$i]->total_real * $value->tax;
-            }
+        if ($header->branch_id != null) {
+            $data["branch"] = Branch::where("stakeholder_id", $header->client_id)->get();
+            $data["data_branch"] = Branch::find($header->branch_id);
         }
 
-        return $detail;
-    }
-
-    public function formatDetailSales($id) {
-        $detail = DB::table("sales_detail")->
-                        select("sales_detail.id", "sales_detail.quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "sales_detail.tax")
-                        ->join("products", "sales_detail.product_id", "products.id")
-                        ->join("stakeholder", "stakeholder.id", "products.supplier_id")
-                        ->where("sale_id", $id)->orderBy("products.supplier_id", "asc")->orderBy(DB::raw("3"), "DESC")->get();
-
-        $this->total = 0;
-        $this->subtotal = 0;
-
-        foreach ($detail as $i => $value) {
-            $detail[$i]->valueFormated = "$" . number_format($value->value, 2, ",", ".");
-            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
-            $detail[$i]->totalFormated = "$" . number_format($detail[$i]->total, 2, ",", ".");
-
-            $this->subtotal += $detail[$i]->total;
-            $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
-
-            if ($value->tax == 0) {
-                $this->exento += $detail[$i]->total;
-            }
-            if ($value->tax == 0.05) {
-                $this->tax5 += $detail[$i]->total * $value->tax;
-            }
-            if ($value->tax == 0.19) {
-                $this->tax19 += $detail[$i]->total * $value->tax;
-            }
-        }
-
-
-        return $detail;
+        $data["header"] = $header;
+        return response()->json($this->formatDetailJSON($data, $id));
     }
 
     public function getDetail($id) {
@@ -1168,30 +1093,10 @@ class DepartureController extends Controller {
                 "value" => $pro->price_sf);
         }
 
-        $hold = InventoryHold::select("inventory_hold.id","inventory_hold.quantity")->join("products","products.id","inventory_hold.product_id")
-                ->where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->get();
+        $hold = InventoryHold::select("inventory_hold.id", "inventory_hold.quantity")->join("products", "products.id", "inventory_hold.product_id")
+                        ->where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->get();
 
         return response()->json(["row" => $detail, "inventory" => $inventory, "hold" => $hold]);
-    }
-
-    public function getAllDetail($departue_id) {
-        $departure = Departures::find($departue_id);
-        $detail = $this->formatDetail($departue_id);
-
-        return response()->json(["detail" => $detail,
-                    "total" => "$ " . number_format($this->total - $departure->discount, 0, ",", "."),
-                    "total_real" => "$ " . number_format($this->total_real - $departure->discount, 0, ",", "."),
-                    "subtotal" => "$ " . number_format($this->subtotal, 0, ",", "."),
-                    "subtotal_real" => "$ " . number_format($this->subtotal_real, 0, ",", "."),
-                    "tax5" => "$ " . number_format($this->tax5, 0, ",", "."),
-                    "tax5_real" => "$ " . number_format($this->tax5_real, 0, ",", "."),
-                    "tax19" => "$ " . number_format($this->tax19, 0, ",", "."),
-                    "tax19_real" => "$ " . number_format($this->tax19_real, 0, ",", "."),
-                    "exento" => "$ " . number_format($this->exento, 0, ",", "."),
-                    "exento_real" => "$ " . number_format($this->exento_real, 0, ",", "."),
-                    "discount" => "$ " . number_format($departure->discount, 0, ",", "."),
-                    "shipping_cost" => "$ " . number_format($departure->shipping_cost, 0, ",", ".")
-        ]);
     }
 
     public function update(Request $request, $id) {
@@ -1223,11 +1128,6 @@ class DepartureController extends Controller {
             if (!isset($input["header"]["shipping_cost"])) {
                 $input["header"]["shipping_cost"] = 0;
             }
-//            echo "<pre>";
-//            print_r(json_decode(json_encode(json_decode($input["detail"])), FALSE));
-//            exit;
-
-
 
             $input["detail"] = json_decode($input["detail"], true);
 
@@ -1238,14 +1138,6 @@ class DepartureController extends Controller {
         } else {
             return response()->json(['success' => false, "msg" => "detail Empty"], 409);
         }
-
-//        if ($result) {
-//            $detail = $this->formatDetail($id);
-//            $total = "$ " . number_format($this->total, 0, ",", ".");
-//            return response()->json(["header" => $entry, "detail" => $detail, "total" => $total, "success" => true]);
-//        } else {
-//            return response()->json(['success' => false]);
-//        }
     }
 
     public function cancelInvoice(Request $request, $id) {
@@ -1253,7 +1145,6 @@ class DepartureController extends Controller {
         $in = $request->all();
         $row = Departures::Find($id);
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
-
 
         if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || Auth::user()->role_id == 1) {
 
@@ -1273,9 +1164,6 @@ class DepartureController extends Controller {
             $row->status_id = 4;
             $row->save();
             $resp = Departures::FindOrFail($id);
-
-
-
 
             $this->sendNofication($resp, "canceled");
             return response()->json(['success' => true, "data" => $resp]);
@@ -1400,10 +1288,11 @@ class DepartureController extends Controller {
 
 
             if (count($errors) == 0) {
-                $resp = $this->formatDetail($header->id);
-                $total = "$ " . number_format($this->total, 0, ",", ".");
                 DB::commit();
-                return response()->json(['success' => true, "header" => $header, "detail" => $resp, "total" => $total]);
+                $data["header"] = $row;
+                $data["success"] = true;
+                $resp = $this->formatDetailJSON($data, $header->id);
+                return response()->json($resp);
             } else {
                 DB::rollback();
                 return response()->json(['success' => true, "msg" => "Problemas con la cantidad del item", "errors" => $errors]);
@@ -1415,8 +1304,6 @@ class DepartureController extends Controller {
 
     public function destroy($id) {
         $row = Departures::Find($id);
-
-
         if (Auth::user()->id == $row->insert_id || Auth::user()->id == 2) {
             if ($row->invoice == null) {
 

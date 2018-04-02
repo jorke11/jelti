@@ -16,7 +16,7 @@ use App\Models\Administration\Branch;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Administration\Products;
 use App\Models\Security\Users;
-use App\Ţrait\StringExtra;
+use App\Traits\StringExtra;
 
 class ClientController extends Controller {
        use StringExtra;

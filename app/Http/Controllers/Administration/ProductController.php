@@ -120,6 +120,8 @@ class ProductController extends Controller {
                 foreach ($reader->get() as $book) {
 
                     if ($book->sf_code) {
+
+                        
                         $pro = Products::where("reference", $book->sf_code)->where("status_id", 1)->first();
 
                         if ($pro != null) {
@@ -138,6 +140,19 @@ class ProductController extends Controller {
                             if (isset($book->cost_sf) && $book->cost_sf != '') {
                                 $pro->cost_sf = round($book->cost_sf);
                             }
+                            if (isset($book->unit_pvp_sugerido_sf_iva) && $book->unit_pvp_sugerido_sf_iva != '') {
+                                $pro->pvp = round($book->unit_pvp_sugerido_sf_iva);
+                            }
+
+                            if (isset($book->estatus) && $book->estatus != '') {
+                                $status = 0;
+                                if ($book->estatus == 'si') {
+                                    $pro->status_id = 1;
+                                } else {
+                                    $pro->status_id = 2;
+                                }
+                            }
+
 
                             $this->response[] = array("sf_code" => $book->sf_code, "title" => $book->title, "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf, "msg" => "Actualizado", "status" => false);
 
@@ -171,6 +186,7 @@ class ProductController extends Controller {
 
                 foreach ($reader->get() as $book) {
                     if (trim($book->sf_code) != '') {
+
                         $pro = Products::where("reference", $book->sf_code)->first();
                         if (count($pro) > 0) {
                             $pro->alias_reference = $book->item;

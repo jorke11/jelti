@@ -311,7 +311,7 @@ class DepartureController extends Controller {
         ];
 
 //        dd($data);
-        $pdf = \PDF::loadView('Inventory.departure.pdf', [], $data, [
+        $pdf = \PDF::loadView('Sales.departure.pdf', [], $data, [
                     'title' => 'Invoice',
                     'margin_top' => -12, "margin_bottom" => 1]);
 
@@ -452,7 +452,7 @@ class DepartureController extends Controller {
         ];
 
 
-        $pdf = \PDF::loadView('Inventory.departure.remission', [], $data, [
+        $pdf = \PDF::loadView('Sales.departure.remission', [], $data, [
                     'title' => 'Invoice']);
 //  
         header('Content-Type: application/pdf');

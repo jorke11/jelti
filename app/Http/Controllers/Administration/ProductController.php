@@ -120,13 +120,13 @@ class ProductController extends Controller {
                 foreach ($reader->get() as $book) {
 
                     if ($book->sf_code) {
-
+//                        dd($book);
                         
                         $pro = Products::where("reference", $book->sf_code)->where("status_id", 1)->first();
 
                         if ($pro != null) {
 
-                            $pro->price_sf = $book->sf_code;
+//                            $pro->price_sf = $book->sf_code;
 
                             if (isset($book->title) && $book->title != '') {
                                 $pro->title = $book->title;
@@ -134,11 +134,11 @@ class ProductController extends Controller {
                             if (isset($book->tax) && $book->tax != '') {
                                 $pro->tax = $book->tax;
                             }
-                            if (isset($book->price_sf) && $book->price_sf != '') {
-                                $pro->price_sf = round($book->price_sf);
+                            if (isset($book->unit_sf_price_sin_iva) && $book->unit_sf_price_sin_iva != '') {
+                                $pro->price_sf = round($book->unit_sf_price_sin_iva);
                             }
-                            if (isset($book->cost_sf) && $book->cost_sf != '') {
-                                $pro->cost_sf = round($book->cost_sf);
+                            if (isset($book->costo_unitario_sin_iva) && $book->costo_unitario_sin_iva != '') {
+                                $pro->cost_sf = round($book->costo_unitario_sin_iva);
                             }
                             if (isset($book->unit_pvp_sugerido_sf_iva) && $book->unit_pvp_sugerido_sf_iva != '') {
                                 $pro->pvp = round($book->unit_pvp_sugerido_sf_iva);

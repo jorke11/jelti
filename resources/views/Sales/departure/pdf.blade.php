@@ -62,7 +62,7 @@ $cont = 0;
 for ($i = 1; $i <= $count; $i++) {
     ?>
 
-    @include('Inventory.departure.pdfheader')
+    @include('Sales.departure.pdfheader')
 
     <table width='100%' id="detail">
         <thead>
@@ -110,7 +110,7 @@ for ($i = 1; $i <= $count; $i++) {
                             }
                             ?>
                             </table>
-                            @include('Inventory.departure.pdffooter')
+                            @include('Sales.departure.pdffooter')
 
 
                             <?php

@@ -122,7 +122,8 @@ class ProductController extends Controller {
                     if ($book->sf_code) {
 //                        dd($book);
                         
-                        $pro = Products::where("reference", $book->sf_code)->where("status_id", 1)->first();
+//                        $pro = Products::where("reference", $book->sf_code)->where("status_id", 1)->first();
+                        $pro = Products::where("reference", $book->sf_code)->first();
 
                         if ($pro != null) {
 

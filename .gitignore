@@ -13,7 +13,7 @@ bootstrap/cache/
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
-public
+#public
 
 /node_modules
 /public/storage

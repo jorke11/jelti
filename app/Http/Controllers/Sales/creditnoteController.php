@@ -40,7 +40,7 @@ class creditnoteController extends Controller {
         $this->listProducts = array();
         $this->errors = array();
 
-        $this->objDep = new \App\Http\Controllers\Inventory\DepartureController();
+        $this->objDep = new \App\Http\Controllers\Sales\DepartureController();
     }
 
     public function index() {

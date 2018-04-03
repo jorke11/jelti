@@ -22,7 +22,6 @@ use App\Models\Inventory\InventoryLog;
 use App\Models\Inventory\InventoryHold;
 use Auth;
 
-
 class ToolController extends Controller {
 
     private $UNIDADES = array(
@@ -625,53 +624,63 @@ class ToolController extends Controller {
      */
     public function addInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf = null) {
 
-        if ($quantity > 0) {
+        if (Auth::user() != null) {
+            $ware = Warehouses::find($warehouse_id);
 
-            $expire = date("Y-m-d", strtotime($expire));
+            if (Auth::user()->id == $ware->responsible_id || Auth::user()->id == 2) {
+                if ($quantity > 0) {
 
-            $pro = Products::where("reference", $reference)->first();
-            $w = Warehouses::find($warehouse_id);
+                    $expire = date("Y-m-d", strtotime($expire));
 
-            if ($cost_sf == null) {
-                $cost_sf = $pro->cost_sf;
-            }
+                    $pro = Products::where("reference", $reference)->first();
+                    $w = Warehouses::find($warehouse_id);
+
+                    if ($cost_sf == null) {
+                        $cost_sf = $pro->cost_sf;
+                    }
 
 
-            if (strtotime($expire) > strtotime(date("Y-m-d"))) {
-                $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)->where("warehouse_id", $warehouse_id)->where("value", $cost_sf)->first();
+                    if (strtotime($expire) > strtotime(date("Y-m-d"))) {
+                        $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)->where("warehouse_id", $warehouse_id)->where("value", $cost_sf)->first();
 
-                $new["product_id"] = $pro->id;
-                $new["warehouse_id"] = $warehouse_id;
-                $new["value"] = $cost_sf;
-                $new["expiration_date"] = $expire;
-                $new["quantity"] = $quantity;
+                        $new["product_id"] = $pro->id;
+                        $new["warehouse_id"] = $warehouse_id;
+                        $new["value"] = $cost_sf;
+                        $new["expiration_date"] = $expire;
+                        $new["quantity"] = $quantity;
 
-                $new["lot"] = $lot;
+                        $new["lot"] = $lot;
 
-                $user_id = (isset(Auth::user()->id) ? Auth::user()->id : 1);
+                        $user_id = (isset(Auth::user()->id) ? Auth::user()->id : 1);
 
-                if (count($inv) > 0) {
-                    $inv->update_id = $user_id;
-                    $inv->quantity = $inv->quantity + $quantity;
-                    $new["insert_id"] = $inv->update_id;
-                    $new["update_id"] = $inv->update_id;
-                    $new["type_move"] = "update";
-                    InventoryLog::create($new);
-                    $inv->save();
+                        if (count($inv) > 0) {
+                            $inv->update_id = $user_id;
+                            $inv->quantity = $inv->quantity + $quantity;
+                            $new["insert_id"] = $inv->update_id;
+                            $new["update_id"] = $inv->update_id;
+                            $new["type_move"] = "update";
+                            InventoryLog::create($new);
+                            $inv->save();
 //                echo " OK:" . $reference . " actualizado" . $expire . "\n";
-                } else {
-                    $new["insert_id"] = $user_id;
-                    Inventory::create($new);
-                    $new["type_move"] = "new";
-                    InventoryLog::create($new);
+                        } else {
+                            $new["insert_id"] = $user_id;
+                            Inventory::create($new);
+                            $new["type_move"] = "new";
+                            InventoryLog::create($new);
 //                echo " OK:" . $reference . " creado" . $expire . "\n";
+                        }
+                    } else {
+                        echo " ERROR: reference:" . $reference . " date not valid " . $expire . "\n";
+                        exit;
+                    }
+                } else {
+                    return " ERROR: reference:" . $reference . " quantity = 0\n";
                 }
             } else {
-                echo " ERROR: reference:" . $reference . " date not valid " . $expire . "\n";
-                exit;
+                return "No tienes permiso de agregar inventario";
             }
         } else {
-            return " ERROR: reference:" . $reference . " quantity = 0\n";
+            return "Debes estar logueado al sistema";
         }
     }
 

@@ -253,7 +253,17 @@ class DepartureController extends Controller {
         $cli["address_send"] = $sale["address"];
 
         $cli["emition"] = $this->formatDate($sale["dispatched"]);
-        $cli["observations"] = $sale["description"];
+        $description = $sale["description"];
+
+        if ($dep["purchase_order"] != '') {
+            $description .= " Orden de compra" . $dep["purchase_order"];
+        }
+
+        if ($dep["purchase_order"] != '') {
+            $description .= " Fecha Cita: " . $dep["date_appointment"];
+        }
+
+        $cli["observations"] = $description;
         $cli["expiration"] = $this->formatDate($expiration);
 
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
@@ -668,7 +678,7 @@ class DepartureController extends Controller {
 
                 $data["header"] = $resp;
                 $listdetail = $this->formatDetailJSON($data, $result);
-                
+
 
                 $ware = Warehouses::find($header["warehouse_id"]);
                 $client = Stakeholder::find($header["client_id"]);

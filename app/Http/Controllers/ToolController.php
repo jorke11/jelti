@@ -627,7 +627,7 @@ class ToolController extends Controller {
         if (Auth::user() != null) {
             $ware = Warehouses::find($warehouse_id);
 
-            if (Auth::user()->id == $ware->responsible_id || Auth::user()->id == 2) {
+            
                 if ($quantity > 0) {
 
                     $expire = date("Y-m-d", strtotime($expire));
@@ -676,9 +676,6 @@ class ToolController extends Controller {
                 } else {
                     return " ERROR: reference:" . $reference . " quantity = 0\n";
                 }
-            } else {
-                return "No tienes permiso de agregar inventario";
-            }
         } else {
             return "Debes estar logueado al sistema";
         }

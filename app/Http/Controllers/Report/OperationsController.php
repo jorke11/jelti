@@ -107,7 +107,7 @@ class OperationsController extends Controller {
         }
 
         $sql = "
-            select to_char(dispatched,'YYYY-MM-DD') fecha,to_char(dispatched,'day') dia,sum(subtotalnumeric) subtotal
+            select to_char(dispatched,'YYYY-MM-DD') fecha,to_char(dispatched,'day') dia,sum(subtotal) subtotal
             from vdepartures d
             WHERE status_id IN(2,7) AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and d.client_id NOT IN(258,264) $ware
             group by 1,2
@@ -130,7 +130,7 @@ class OperationsController extends Controller {
         }
 
         $sql = "
-            select to_char(dispatched,'day') dia,sum(subtotalnumeric) subtotal
+            select to_char(dispatched,'day') dia,sum(subtotal) subtotal
             from vdepartures d
             WHERE status_id IN(2,7) AND d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and d.client_id NOT IN(258,264)
                 $ware

@@ -224,7 +224,7 @@
             <td>{{$overview->invoices}}</td>
             <td>{{number_format($overview->tax5,0,".",",")}}</td>
             <td>{{number_format($overview->tax19,0,".",",")}}</td>
-            <td>{{number_format($overview->subtotalnumeric,0,".",",")}}</td>
+            <td>{{number_format($overview->subtotal,0,".",",")}}</td>
             <td>{{number_format($overview->total,0,".",",")}}</td>
         </tr>
     </tbody>

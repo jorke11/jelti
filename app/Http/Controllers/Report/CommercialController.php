@@ -26,7 +26,7 @@ class CommercialController extends Controller {
 
     function getListCommercial($init, $end) {
         $sql = "
-            SELECT vdepartures.responsible_id,responsible as vendedor,sum(subtotalnumeric) as subtotal,sum(total) total,sum(quantity_packaging) as quantity
+            SELECT vdepartures.responsible_id,responsible as vendedor,sum(subtotal) as subtotal,sum(total) total,sum(quantity_packaging) as quantity
             from vdepartures 
             JOIN stakeholder sta ON sta.id=vdepartures.client_id and sta.type_stakeholder=1
             WHERE dispatched BETWEEN '" . $init . " 00:00' AND '" . $end . " 23:59' and vdepartures.status_id IN(2,7) AND client_id NOT IN(258,264,24)

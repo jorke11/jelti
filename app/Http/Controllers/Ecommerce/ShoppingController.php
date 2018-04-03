@@ -275,12 +275,12 @@ class ShoppingController extends Controller {
         $client = DB::table("vclient")->where("id", $user->stakeholder_id)->first();
 
 
-        $sql = "select count(*) quantity, sum(subtotalnumeric) total from vdepartures where client_id=$user->stakeholder_id and status_id IN(2,7)";
+        $sql = "select count(*) quantity, sum(subtotal) total from vdepartures where client_id=$user->stakeholder_id and status_id IN(2,7)";
 
         $orders = DB::select($sql);
         $orders = $orders[0];
 
-        $sql = "select count(*) quantity, sum(subtotalnumeric) total from vdepartures where client_id=$user->stakeholder_id and status_id IN(1)";
+        $sql = "select count(*) quantity, sum(subtotal) total from vdepartures where client_id=$user->stakeholder_id and status_id IN(1)";
 
         $new = DB::select($sql);
         $new = $new[0];

@@ -205,7 +205,7 @@ ORDER BY p.code
 --     drop view vcreditnote
 create view  vcreditnote as 
             select id,coalesce(invoice,'') invoice, created_at, client,warehouse,
-            city,status,status_id,responsible_id, responsible,subtotalnumeric,total,
+            city,status,status_id,responsible_id, responsible,subtotal,total,
             (select count(*) from credit_note where credit_note.departure_id=vdepartures.id) credit_note_quantity,
             (select array_agg(id) from credit_note where credit_note.departure_id=vdepartures.id) credit_note_dep,credit_note
             from vdepartures

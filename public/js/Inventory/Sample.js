@@ -970,7 +970,7 @@ function Sale() {
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "quantity"},
-                {data: "subtotalnumeric", render: $.fn.dataTable.render.number('.', ',', 2)},
+                {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 2)},
                 {data: "status"},
             ],

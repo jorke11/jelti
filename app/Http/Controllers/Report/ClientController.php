@@ -63,7 +63,7 @@ class ClientController extends Controller {
 
         $sql = "
             SELECT 
-                stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,sum(tax19) tax19,sum(tax5) tax5,
+                stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotal) subtotal,sum(tax19) tax19,sum(tax5) tax5,
                 sum(vdepartures.shipping_cost) shipping,sum(quantity_packaging) as quantity_packaging
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and type_stakeholder=1
@@ -164,7 +164,7 @@ class ClientController extends Controller {
 
 
         $cli = "
-            SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
+            SELECT destination_id,destination,sum(subtotal) subtotal,sum(quantity) quantity 
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
             WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vdepartures.status_id IN(2,7)
@@ -257,7 +257,7 @@ class ClientController extends Controller {
             $resta += $this->dias_transcurridos($detail[$i - 1]->created, $detail[$i]->created);
         }
 
-        $sql = "SELECT sum(subtotalnumeric) subtotal,sum(quantity) quantity 
+        $sql = "SELECT sum(subtotal) subtotal,sum(quantity) quantity 
             FROM vdepartures
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1 
             and vdepartures.client_id NOT IN(258,264,24)
@@ -383,7 +383,7 @@ class ClientController extends Controller {
         }
 
         $sql = "
-                SELECT count(vdepartures.*) invoices,sum(subtotalnumeric) as subtotal
+                SELECT count(vdepartures.*) invoices,sum(subtotal) as subtotal
                 FROM vdepartures 
                 JOIN stakeholder s ON s.id=vdepartures.client_id and s.type_stakeholder=1
                 WHERE vdepartures.status_id IN(2,7)  AND vdepartures.client_id NOT IN(258,264)
@@ -536,7 +536,7 @@ class ClientController extends Controller {
 
         $sql = "
                 SELECT 
-                    warehouse,to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,
+                    warehouse,to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotal) as subtotal,
                     sum(tax19) tax19,sum(total) total, sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost,warehouse_id,sum(quantity_packaging) as quantity_packaging
                 FROM vdepartures 
                 JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1

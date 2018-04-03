@@ -35,7 +35,7 @@ function Detail() {
             columns: [
                 {data: "id"},
                 {data: "invoice"},
-                {data: "subtotalnumeric", render: $.fn.dataTable.render.number(',', '.', 0)},
+                {data: "subtotal", render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: "total", render: $.fn.dataTable.render.number(',', '.', 0)},
                 {data: "status"},
             ],

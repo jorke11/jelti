@@ -155,7 +155,7 @@ class ComparativeController extends Controller {
 
     function reportSalesCommercial($data) {
         $sql = "
-            select responsible_id as id,responsible as description,sum(subtotalnumeric)::money as total,sum(quantity_packaging) as quantity_packaging
+            select responsible_id as id,responsible as description,sum(subtotal)::money as total,sum(quantity_packaging) as quantity_packaging
             from vdepartures
             WHERE status_id IN(2,7) and client_id NOT IN(258,264,24)
             group by 1,2
@@ -167,7 +167,7 @@ class ComparativeController extends Controller {
         foreach ($pro as $i => $value) {
             $sql = "
             select 
-                to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,sum(subtotalnumeric)::money as total,
+                to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,sum(subtotal)::money as total,
                 sum(quantity_packaging) as quantity_packaging
             from vdepartures
             WHERE responsible_id=" . $value->id . "
@@ -303,7 +303,7 @@ class ComparativeController extends Controller {
     function reportSalesClient($data, $where, $date) {
 
         $sql = "
-            SELECT vdepartures.business_name as description,client_id,sum(subtotalnumeric)::money total,sum(quantity_packaging) as quantity_packaging
+            SELECT vdepartures.business_name as description,client_id,sum(subtotal)::money total,sum(quantity_packaging) as quantity_packaging
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             WHERE vdepartures.status_id IN(2,7) AND client_id  NOT IN(258,264,24) $date
@@ -318,7 +318,7 @@ class ComparativeController extends Controller {
 
         foreach ($cli as $i => $value) {
             $sql = "
-            SELECT to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,coalesce(sum(subtotalnumeric),0)::money total,
+            SELECT to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,coalesce(sum(subtotal),0)::money total,
             sum(quantity_packaging) as quantity_packaging
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1

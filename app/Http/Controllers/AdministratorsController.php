@@ -122,7 +122,7 @@ class AdministratorsController extends Controller {
         }
 
         $sql = "
-            SELECT client,sum(total) total,sum(subtotalnumeric) subtotal,sum(quantity) as unidades
+            SELECT client,sum(total) total,sum(subtotal) subtotal,sum(quantity) as unidades
             FROM vdepartures
             WHERE dispatched BETWEEN '" . date("Y-m") . "-01 00:00' and '" . date("Y-m-d") . " 23:59' AND status_id IN (2,7)
                 AND client_id NOT IN(258,264,24)
@@ -239,7 +239,7 @@ class AdministratorsController extends Controller {
 
     public function getSales() {
         $sql = "
-            SELECT to_char(dispatched,'YYYY-Month') as fecha,sum(subtotalnumeric) subtotal ,sum(total) total,sum(quantity) as quantity
+            SELECT to_char(dispatched,'YYYY-Month') as fecha,sum(subtotal) subtotal ,sum(total) total,sum(quantity) as quantity
             FROM vdepartures 
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             WHERE vdepartures.status_id=2  AND client_id <>258

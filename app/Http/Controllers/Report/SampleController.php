@@ -49,7 +49,7 @@ class SampleController extends Controller {
     public function getListClient($init, $end, $where = '', $limit = '') {
         $sql = "
             SELECT 
-                stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotalnumeric) subtotal,
+                stakeholder.id,stakeholder.business as client,sum(total) total,sum(subtotal) subtotal,
                 sum(vsample.shipping_cost) shipping
             FROM vsample
             JOIN stakeholder ON stakeholder.id=vsample.client_id and type_stakeholder=1
@@ -135,7 +135,7 @@ class SampleController extends Controller {
         }
 
         $cli = "
-            SELECT destination_id,destination,sum(subtotalnumeric) subtotal,sum(quantity) quantity 
+            SELECT destination_id,destination,sum(subtotal) subtotal,sum(quantity) quantity 
             FROM vsample
             JOIN stakeholder ON stakeholder.id=vsample.client_id and stakeholder.type_stakeholder = 1 
             WHERE dispatched BETWEEN'" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' and vsample.status_id=2
@@ -246,7 +246,7 @@ class SampleController extends Controller {
         }
 
         $sql = "
-                SELECT count(vsample.*) invoices,sum(subtotalnumeric) as subtotal
+                SELECT count(vsample.*) invoices,sum(subtotal) as subtotal
                 FROM vsample 
                 JOIN stakeholder s ON s.id=vsample.client_id and s.type_stakeholder=1
                 WHERE vsample.status_id=2 
@@ -382,7 +382,7 @@ class SampleController extends Controller {
     function getSalesUnitsData($init, $end) {
         $sql = "
                 SELECT 
-                    to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(total) total,
+                    to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotal) as subtotal,sum(total) total,
                     sum(vsample.shipping_cost) shipping_cost
                 FROM vsample 
                 JOIN stakeholder ON stakeholder.id=vsample.client_id and stakeholder.type_stakeholder=1

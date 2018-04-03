@@ -570,7 +570,7 @@ class ClientController extends Controller {
     function getSalesUnitsData($init, $end) {
         $sql = "
                 SELECT 
-                    to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotalnumeric) as subtotal,sum(tax19) tax19,sum(total) total,
+                    to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotal) as subtotal,sum(tax19) tax19,sum(total) total,
                     sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost,sum(quantity_packaging) as quantity_packaging
                 FROM vdepartures 
                 JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1

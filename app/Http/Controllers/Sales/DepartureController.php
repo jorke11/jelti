@@ -931,6 +931,7 @@ class DepartureController extends Controller {
                         if ($client->term != null) {
                             $term = $client->term;
                         }
+                        
                         $input["client"] = ucwords($client->business);
                         $input["address"] = ucwords($client->business);
                         $input["document"] = $client->document;
@@ -960,7 +961,7 @@ class DepartureController extends Controller {
                             $shipping_cost_tax = $this->tax19_real;
                         }
 
-                        $this->subtotal_real += $departure->shipping_cost;
+                        
                         $this->total_real = $this->subtotal_real + $this->tax19_real + $this->tax5_real - $departure->discount;
 
                         $input["subtotal"] = "$" . number_format($this->subtotal_real, 0, ",", ".");

@@ -30,3 +30,4 @@
 @include('Sales.CreditNote.newDetail')
 {!!Html::script('js/Sales/CreditNote.js')!!}
 @endsection
+

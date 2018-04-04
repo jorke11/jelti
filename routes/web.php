@@ -339,9 +339,9 @@ Route::get('/api/listClient', function() {
 
     $query = DB::table('vclient');
 
-    if (Auth::user()->role_id != 1) {
-        $query->where("responsible_id", Auth::user()->id);
-    }
+//    if (Auth::user()->role_id != 1) {
+//        $query->where("responsible_id", Auth::user()->id);
+//    }
     return Datatables::queryBuilder($query)->make(true);
 });
 

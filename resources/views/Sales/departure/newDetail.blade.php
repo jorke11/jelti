@@ -85,6 +85,30 @@
                 </div>
                 @endif
                 {!!Form::close()!!}
+
+                <div id="hold_inventory">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table class="table table-bordered table-condensed" id="tableHold">
+                                <thead>
+                                    <tr style="background: #0ab8ec">
+                                        <th colspan="4" style=" text-align: center;">Inventario Hold</th>
+                                    </tr>
+                                    <tr style="background: #0ab8ec">
+                                        <th>Cliente</th>
+                                        <th>Cantidad</th>
+                                        <th>Fecha Creacion</th>
+                                        <th>Bodega</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>

@@ -765,7 +765,7 @@ function Departure() {
     this.printDetail = function (data, btnEdit = true, btnDel = true) {
         var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0, id = '';
         $("#tblDetail tbody").empty();
-        
+
         $.each(data.detail, function (i, val) {
 
             quantityTotal += val.quantity;
@@ -806,18 +806,18 @@ function Departure() {
         });
 
         html += '<tr><td colspan="3" align="right"><Strong>Unidades</strong></td><td>' + quantityTotal + '</td><td></td><td><b></b></td><td></td><td></td><td></td><td></td></tr>';
-        html += '<tr><td colspan="3" align="right"><Strong>Subtotal</strong></td><td></td><td></td><td><b>' + data.subtotal + '</b></td><td></td><td></td><td><b>'+data.subtotal_real+'</b></td><td></td></tr>';
+        html += '<tr><td colspan="3" align="right"><Strong>Subtotal</strong></td><td></td><td></td><td><b>' + data.subtotal + '</b></td><td></td><td></td><td><b>' + data.subtotal_real + '</b></td><td></td></tr>';
         if (data.discount != '$ 0') {
-            html += '<tr><td colspan="3" align="right"><Strong>Descuento</strong></td><td></td><td></td><td><b>' + data.discount + '</b></td><td></td><td></td><td><b>'+data.discount+'</b></td><td></td></tr>';
+            html += '<tr><td colspan="3" align="right"><Strong>Descuento</strong></td><td></td><td></td><td><b>' + data.discount + '</b></td><td></td><td></td><td><b>' + data.discount + '</b></td><td></td></tr>';
         }
         if (data.tax5 != '$ 0') {
-            html += '<tr><td colspan="3" align="right"><Strong>Iva 5</strong></td><td></td><td></td><td><b>' + data.tax5 + '</b></td><td></td><td></td><td><b>'+data.tax5_real+'</b></td><td></td></tr>';
+            html += '<tr><td colspan="3" align="right"><Strong>Iva 5</strong></td><td></td><td></td><td><b>' + data.tax5 + '</b></td><td></td><td></td><td><b>' + data.tax5_real + '</b></td><td></td></tr>';
         }
         if (data.tax19 != '$ 0') {
-            html += '<tr><td colspan="3" align="right"><Strong>Iva 19</strong></td><td></td><td></td><td><b>' + data.tax19 + '</b></td><td></td><td></td><td><b>'+data.tax19_real+'</b></td><td></td></tr>';
+            html += '<tr><td colspan="3" align="right"><Strong>Iva 19</strong></td><td></td><td></td><td><b>' + data.tax19 + '</b></td><td></td><td></td><td><b>' + data.tax19_real + '</b></td><td></td></tr>';
         }
 
-        html += '<tr><td colspan="3" align="right"><Strong>Total</strong></td><td></td><td></td><td><b>' + data.total + '</b></td><td></td><td></td><td><b>'+data.total_real+'</b></td><td></td></tr>';
+        html += '<tr><td colspan="3" align="right"><Strong>Total</strong></td><td></td><td></td><td><b>' + data.total + '</b></td><td></td><td></td><td><b>' + data.total_real + '</b></td><td></td></tr>';
         $("#tblDetail tbody").html(html);
     }
 
@@ -941,15 +941,31 @@ function Departure() {
                         }
                     })
 
-                    html += '<tr><td>' + val.lot + '</td>';
-                    html += '<td>' + val.quantity + '</td>';
-                    html += '<td>' + val.expiration_date + '</td>';
-                    html += '<td><input class="form-control input-lots" lot="' + val.lot + '" expire="' + val.expiration_date + '" cost_sf="'
-                            + val.value + '" product_id="' + val.product_id + '" value="' + quantity + '"></td></tr>';
+                    html += `
+                            <tr><td>${val.lot}</td>
+                            <td>${val.quantity}</td>
+                            <td>${val.expiration_date}</td>
+                            <td><input class="form-control input-lots" lot="${val.lot}" expire="${val.expiration_date}" 
+                            cost_sf="${val.value}" product_id="${val.product_id}" value="${quantity}"></td></tr>`;
                     quantity = 0;
                 });
 
                 $("#tableLot tbody").html(html);
+
+                $("#tableHold tbody").empty();
+                html = '';
+                $.each(resp.hold, function (i, val) {
+
+                    html += `
+                            <tr><td>${val.client}</td>
+                            <td>${val.quantity}</td>
+                            <td>${val.created_at}</td>
+                            <td>${val.warehouse}</td>
+                            </tr>`;
+                    quantity = 0;
+                });
+
+                $("#tableHold tbody").html(html);
 
 
             }, error(xhr, responseJSON, thrown) {

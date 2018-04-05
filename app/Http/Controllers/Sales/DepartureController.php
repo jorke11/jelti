@@ -931,7 +931,7 @@ class DepartureController extends Controller {
                         if ($client->term != null) {
                             $term = $client->term;
                         }
-                        
+
                         $input["client"] = ucwords($client->business);
                         $input["address"] = ucwords($client->business);
                         $input["document"] = $client->document;
@@ -961,7 +961,7 @@ class DepartureController extends Controller {
                             $shipping_cost_tax = $this->tax19_real;
                         }
 
-                        
+
                         $this->total_real = $this->subtotal_real + $this->tax19_real + $this->tax5_real - $departure->discount;
 
                         $input["subtotal"] = "$" . number_format($this->subtotal_real, 0, ",", ".");
@@ -1125,8 +1125,12 @@ class DepartureController extends Controller {
                 "value" => $pro->price_sf);
         }
 
-        $hold = InventoryHold::select("inventory_hold.id", "inventory_hold.quantity")->join("products", "products.id", "inventory_hold.product_id")
-                        ->where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)->get();
+        $hold = InventoryHold::select("inventory_hold.id", "inventory_hold.quantity", "products.title as product", "inventory_hold.lot", "inventory_hold.created_at"
+                                , "vdepartures.client", "vdepartures.warehouse")
+                        ->join("products", "products.id", "inventory_hold.product_id")
+                        ->join("departures_detail", "departures_detail.id", "inventory_hold.row_id")
+                        ->join("vdepartures", "vdepartures.id", "departures_detail.departure_id")
+                        ->where("inventory_hold.product_id", $detail->product_id)->where("inventory_hold.warehouse_id", $header->warehouse_id)->get();
 
         return response()->json(["row" => $detail, "inventory" => $inventory, "hold" => $hold]);
     }

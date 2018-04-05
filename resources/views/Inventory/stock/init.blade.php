@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label for="email">Codigo Barras</label>
+                            <label for="email">Busqueda</label>
                             <input type="text" id="bar_code" name="bar_code" class="form-control">
                         </div>
                     </div>
@@ -48,6 +48,7 @@
                             <th>Lote</th>
                             <th>Fecha Vencimiento</th>
                             <th>Disponible</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>

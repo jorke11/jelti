@@ -439,8 +439,6 @@ Route::get('/api/listPuc', function() {
     return Datatables::eloquent(Models\Administration\Puc::query())->make(true);
 });
 
-Route::get('/stock', 'Inventory\StockController@index');
-Route::get('/api/listStock', 'Inventory\StockController@getStock');
 
 Route::get('/api/listSpecial', 'Clients\ClientController@getSpecial');
 Route::get('/api/listBranch', 'Administration\StakeholderController@getBranch');
@@ -487,6 +485,7 @@ Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 
 require __DIR__ . '/sales/orders.php';
+require __DIR__ . '/inventory/stock.php';
 
 
 

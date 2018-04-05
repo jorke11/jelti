@@ -8,6 +8,28 @@ function Stock() {
         })
     }
 
+    this.delete = function (id) {
+        toastr.remove();
+        if (confirm("Deseas eliminar")) {
+            var token = $("input[name=_token]").val();
+            var url = "/stock/" + id;
+            $.ajax({
+                url: url,
+                headers: {'X-CSRF-TOKEN': token},
+                method: "DELETE",
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.success == true) {
+                        table.ajax.reload();
+                        toastr.warning("Ok");
+                    }
+                }, error: function (err) {
+                    toastr.error("No se puede borrra Este registro");
+                }
+            })
+        }
+    }
+
     this.table = function () {
         var param = {};
         param.warehouse_id = $("#warehouse_id").val();
@@ -48,6 +70,15 @@ function Stock() {
                     aTargets: [2],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
+                    }
+                },
+                {
+                    targets: [8],
+                    searchable: false,
+                    mData: null,
+                    mRender: function (data, type, full) {
+                        console.log(data)
+                        return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }
             ],

@@ -1309,7 +1309,7 @@ class DepartureController extends Controller {
                     if ($pro->category_id != -1) {
 
                         $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
-
+                        
                         if ($validate["status"]) {
                             $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
                         } else {

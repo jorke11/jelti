@@ -733,10 +733,10 @@ class ToolController extends Controller {
 
                     $total = $hold->quantity - $quantity;
 
-                    if ($quantity == 0) {
-                        echo $total . " asdasdasd";
-                        exit;
-                    }
+//                    if ($quantity == 0) {
+//                        echo $total . " asdasdasd";
+//                        exit;
+//                    }
 
 
                     if ($hold->quantity > $quantity) {

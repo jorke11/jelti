@@ -48,6 +48,7 @@
                             <th>Lote</th>
                             <th>Fecha Vencimiento</th>
                             <th>Disponible</th>
+                            <th>Total</th>
                             <th>Action</th>
                         </tr>
                     </thead>

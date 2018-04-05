@@ -63,6 +63,7 @@ function Stock() {
                 {data: "lot"},
                 {data: "expiration_date"},
                 {data: "quantity"},
+                {data: "price_sf", render: $.fn.dataTable.render.number(',', '.', 0), "visible": true},
             ],
             order: [[5, 'ASC']],
             aoColumnDefs: [
@@ -73,11 +74,10 @@ function Stock() {
                     }
                 },
                 {
-                    targets: [8],
+                    targets: [9],
                     searchable: false,
                     mData: null,
                     mRender: function (data, type, full) {
-                        console.log(data)
                         return '<button class="btn btn-danger btn-xs" onclick="obj.delete(' + data.id + ')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>';
                     }
                 }

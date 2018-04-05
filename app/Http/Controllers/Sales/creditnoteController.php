@@ -9,7 +9,7 @@ use App\Models\Administration\Parameters;
 use App\Models\Administration\Stakeholder;
 use App\Models\Administration\Warehouses;
 use App\Models\Security\Users;
-use App\Models\Sales\Departures;
+use App\Models\Inventory\Departures;
 use App\Models\Invoicing\Sales;
 use App\Models\Invoicing\SaleDetail;
 use App\Models\Sales\CreditNote;

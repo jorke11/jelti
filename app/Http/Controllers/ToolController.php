@@ -703,8 +703,11 @@ class ToolController extends Controller {
     public function validateInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf) {
         $pro = Products::where("reference", $reference)->first();
 
+        echo "asd";exit;
+        
         $valid = Inventory::where("warehouse_id", $warehouse_id)->where("product_id", $pro->id)
                         ->where("lot", $lot)->where("expiration_date", $expire)->where("cost_sf", $cost_sf)->where("quantity", ">=", $quantity)->first();
+        
         $resp = array("status" => false, "quantity" => 0);
         if (count($valid) > 0) {
             $resp = array("status" => true, "quantity" => $valid->quantity);

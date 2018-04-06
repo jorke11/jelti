@@ -1296,6 +1296,7 @@ class DepartureController extends Controller {
                                     ->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["header"]["product_id"])
                                     ->where("client_id", $header->client_id)->first();
                 }
+                
 
                 $input["price_sf"] = $pro->price_sf;
                 $input["cost_sf"] = $pro->cost_sf;
@@ -1308,7 +1309,9 @@ class DepartureController extends Controller {
                 foreach ($input["detail"] as $value) {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
-
+                            
+                        dd($value);
+                        
                         $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
 
                         if ($validate["status"]) {

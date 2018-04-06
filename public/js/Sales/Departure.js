@@ -946,7 +946,7 @@ function Departure() {
                             <td>${val.quantity}</td>
                             <td>${val.expiration_date}</td>
                             <td><input class="form-control input-lots" lot="${val.lot}" expire="${val.expiration_date}" 
-                            cost_sf="${val.value}" product_id="${val.product_id}" value="${quantity}"></td></tr>`;
+                            cost_sf="${val.cost_sf}" product_id="${val.product_id}" value="${quantity}"></td></tr>`;
                     quantity = 0;
                 });
 

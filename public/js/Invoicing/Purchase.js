@@ -468,6 +468,7 @@ function Purchase() {
                 {data: "city"},
                 {data: "status"},
             ],
+             lengthMenu: [[30, 100, 300, -1], [30, 100, 300, 'All']],
             order: [[2, 'DESC']],
             aoColumnDefs: [
                 {

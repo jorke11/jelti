@@ -56,7 +56,7 @@ class StockController extends Controller {
 
         $sql = "
             select i.id,p.id as product_id,p.reference,s.business as stakeholder,c.description as category,p.title as product,i.lot,i.expiration_date,
-            sum(i.quantity) as quantity,(i.price_sf * i.quantity) as price_sf
+            sum(i.quantity) as quantity,(i.cost_sf * i.quantity) as price_sf
             from inventory i
             JOIN vproducts p ON p.id=i.product_id
             JOIN stakeholder s ON s.id=p.supplier_id

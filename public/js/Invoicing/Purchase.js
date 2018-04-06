@@ -463,7 +463,7 @@ function Purchase() {
                 {data: "id"},
                 {data: "description"},
                 {data: "created_at"},
-                {data: "business"},
+                {data: "stakeholder"},
                 {data: "warehouse"},
                 {data: "city"},
                 {data: "status"},

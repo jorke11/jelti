@@ -59,7 +59,7 @@ class SampleController extends Controller {
             ORDER BY 3 DESC
             $limit
             ";
-
+//            echo $sql;exit;
         $res = DB::select($sql);
 
         foreach ($res as $i => $value) {

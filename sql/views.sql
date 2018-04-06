@@ -69,7 +69,8 @@ WHERE p.type_product_id IS NOT NULL
 
 
 --drop view vdepartures;
-create view vsampless as 
+--drop view vsamples
+create view vsamples as 
 
 select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,sta.business_name,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
@@ -91,11 +92,9 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
 		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) 
          from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id)
 		 ELSE 
-		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from samples_detail JOIN sales ON sales.id= samples_detail.sample_id where sample_id=d.id)
+		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id)
 		 END+coalesce(d.shipping_cost,0)-coalesce(d.discount,0) +(Coalesce(d.shipping_cost,0) * coalesce(d.shipping_cost_tax,0) ) 
          as total,
-		
-        
 		 (select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id) 
 		 +coalesce(d.shipping_cost,0)-coalesce(d.discount,0) as totalnew,
 		 
@@ -107,7 +106,7 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
                 from samples_detail 
                 JOIN samples ON samples.id= samples_detail.sample_id 
                 where samples.id=d.id) 
-        END  as subtotalnumeric,	 
+        END  as subtotal,	 
         
         (select (round(coalesce(sum(quantity * units_sf * value),0))) 
         	from samples_detail 
@@ -118,7 +117,7 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
 		CASE WHEN (d.status_id IN (1,8)) THEN 
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id and samples_detail.tax=0.19)
 		ELSE
-		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from samples_detail JOIN sales ON sales.id= samples_detail.sample_id where sales.sample_id=d.id and samples_detail.tax=0.19) 
+		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from samples_detail JOIN sales ON sales.id= samples_detail.sample_id where samples_detail.sample_id=d.id and samples_detail.tax=0.19) 
             END as tax19,
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id and samples_detail.tax=0.19)
 		as tax19new,
@@ -126,14 +125,11 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
             CASE WHEN (d.status_id IN(1,8)) THEN 
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id and samples_detail.tax=0.05)
         ELSE
-		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from samples_detail JOIN sales ON sales.id= samples_detail.sample_id where sales.sample_id=d.id and samples_detail.tax=0.05) 
+		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from samples_detail JOIN sales ON sales.id= samples_detail.sample_id where samples_detail.sample_id=d.id and samples_detail.tax=0.05) 
             END as tax5,
 		(select round(coalesce(sum(quantity * units_sf * value * tax),0)) from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id and samples_detail.tax=0.05)
 		as tax5new,   
-             ( SELECT sum(vcreditnote_detail_row.valuetotaltax) AS sum
-           FROM vcreditnote_detail_row
-             JOIN credit_note c_1 ON c_1.id = vcreditnote_detail_row.id
-          WHERE c_1.sample_id = d.id) AS credit_note,d.discount,
+             d.discount,
             
            sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost,d.dispatched ,d.paid_out,d.description
             from samples d

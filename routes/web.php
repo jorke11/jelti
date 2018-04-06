@@ -487,11 +487,11 @@ Route::get('api/productByClient', "Report\ClientController@getProductClient");
 
 require __DIR__ . '/sales/orders.php';
 require __DIR__ . '/inventory/stock.php';
+require __DIR__ . '/report/report.php';
 
 
 
 require __DIR__ . '/cron.php';
-require __DIR__ . '/report.php';
 require __DIR__ . '/ecommerce.php';
 require __DIR__ . '/blog.php';
 require __DIR__ . '/tool.php';

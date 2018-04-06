@@ -1292,7 +1292,7 @@ class DepartureController extends Controller {
                 if ($special == null) {
                     $pro = Products::find($input["header"]["product_id"]);
                 } else {
-                    $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
+                    $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf","products.cost_sf", 'products.tax')
                                     ->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["header"]["product_id"])
                                     ->where("client_id", $header->client_id)->first();
                 }

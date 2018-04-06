@@ -1310,8 +1310,6 @@ class DepartureController extends Controller {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
                             
-                        dd($value);
-                        
                         $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
 
                         if ($validate["status"]) {

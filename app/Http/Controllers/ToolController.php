@@ -627,55 +627,62 @@ class ToolController extends Controller {
         if (Auth::user() != null) {
             $ware = Warehouses::find($warehouse_id);
 
-            
-                if ($quantity > 0) {
+            if ($quantity > 0) {
 
-                    $expire = date("Y-m-d", strtotime($expire));
+                $expire = date("Y-m-d", strtotime($expire));
 
-                    $pro = Products::where("reference", $reference)->first();
-                    $w = Warehouses::find($warehouse_id);
+                $pro = Products::where("reference", $reference)->first();
+                $w = Warehouses::find($warehouse_id);
 
-                    if ($cost_sf == null) {
-                        $cost_sf = $pro->cost_sf;
-                    }
+                if ($cost_sf == null) {
+                    $cost_sf = $pro->cost_sf;
+                }
 
+                if (strtotime($expire) > strtotime(date("Y-m-d"))) {
 
-                    if (strtotime($expire) > strtotime(date("Y-m-d"))) {
-                        $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)->where("warehouse_id", $warehouse_id)->where("value", $cost_sf)->first();
+                    $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)
+                            ->where("warehouse_id", $warehouse_id)
+                            ->where("expiration_date", date("Y-m-d", strtotime($expire)))
+                            ->where("cost_sf", $cost_sf)
+                            ->first();
 
-                        $new["product_id"] = $pro->id;
-                        $new["warehouse_id"] = $warehouse_id;
-                        $new["value"] = $cost_sf;
-                        $new["expiration_date"] = $expire;
-                        $new["quantity"] = $quantity;
+                    $new["product_id"] = $pro->id;
+                    $new["warehouse_id"] = $warehouse_id;
+                    $new["cost_sf"] = $cost_sf;
+                    $new["expiration_date"] = $expire;
+                    $new["quantity"] = $quantity;
 
-                        $new["lot"] = $lot;
+                    $new["lot"] = $lot;
 
-                        $user_id = (isset(Auth::user()->id) ? Auth::user()->id : 1);
+                    $user_id = (isset(Auth::user()->id) ? Auth::user()->id : 1);
 
-                        if (count($inv) > 0) {
-                            $inv->update_id = $user_id;
-                            $inv->quantity = $inv->quantity + $quantity;
-                            $new["insert_id"] = $inv->update_id;
-                            $new["update_id"] = $inv->update_id;
-                            $new["type_move"] = "update";
-                            InventoryLog::create($new);
-                            $inv->save();
+                    if (count($inv) > 0) {
+                        $new["previous_quantity"] = $inv->quantity;
+                        $inv->update_id = $user_id;
+                        $inv->quantity = $inv->quantity + $quantity;
+                        $new["insert_id"] = $inv->update_id;
+                        $new["update_id"] = $inv->update_id;
+                        $new["type_move"] = "add";
+                        InventoryLog::create($new);
+                        $inv->save();
+
 //                echo " OK:" . $reference . " actualizado" . $expire . "\n";
-                        } else {
-                            $new["insert_id"] = $user_id;
-                            Inventory::create($new);
-                            $new["type_move"] = "new";
-                            InventoryLog::create($new);
-//                echo " OK:" . $reference . " creado" . $expire . "\n";
-                        }
                     } else {
-                        echo " ERROR: reference:" . $reference . " date not valid " . $expire . "\n";
-                        exit;
+                        $new["insert_id"] = $user_id;
+
+                        Inventory::create($new);
+                        $new["type_move"] = "new";
+                        $new["previous_quantity"] = 0;
+                        InventoryLog::create($new);
+//                echo " OK:" . $reference . " creado" . $expire . "\n";
                     }
                 } else {
-                    return " ERROR: reference:" . $reference . " quantity = 0\n";
+                    echo " ERROR: reference:" . $reference . " date not valid " . $expire . "\n";
+                    exit;
                 }
+            } else {
+                return " ERROR: reference:" . $reference . " quantity = 0\n";
+            }
         } else {
             return "Debes estar logueado al sistema";
         }
@@ -697,7 +704,7 @@ class ToolController extends Controller {
         $pro = Products::where("reference", $reference)->first();
 
         $valid = Inventory::where("warehouse_id", $warehouse_id)->where("product_id", $pro->id)
-                        ->where("lot", $lot)->where("expiration_date", $expire)->where("value", $cost_sf)->where("quantity", ">=", $quantity)->first();
+                        ->where("lot", $lot)->where("expiration_date", $expire)->where("cost_sf", $cost_sf)->where("quantity", ">=", $quantity)->first();
         $resp = array("status" => false, "quantity" => 0);
         if (count($valid) > 0) {
             $resp = array("status" => true, "quantity" => $valid->quantity);
@@ -717,11 +724,11 @@ class ToolController extends Controller {
 
             if (strtotime($expire) > strtotime(date("Y-m-d"))) {
                 $hold = InventoryHold::where("row_id", $id)->where("product_id", $pro->id)->where("lot", $lot)
-                                ->where("expiration_date", $expire)->where("value", $cost_sf)->first();
+                                ->where("expiration_date", $expire)->where("cost_sf", $cost_sf)->first();
 
                 $new["product_id"] = $pro->id;
                 $new["warehouse_id"] = $warehouse_id;
-                $new["value"] = $cost_sf;
+                $new["cost_sf"] = $cost_sf;
                 $new["expiration_date"] = $expire;
                 $new["quantity"] = $quantity;
                 $new["lot"] = $lot;
@@ -797,11 +804,11 @@ class ToolController extends Controller {
     public function outInventoryHold($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf) {
         $pro = Products::where("reference", $reference)->first();
         $w = Warehouses::find($warehouse_id);
-        $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)->where("warehouse_id", $warehouse_id)->where("value", $cost_sf)->first();
+        $inv = Inventory::where("product_id", $pro->id)->where("lot", $lot)->where("warehouse_id", $warehouse_id)->where("cost_sf", $cost_sf)->first();
 
         $up["product_id"] = $pro->id;
         $up["warehouse_id"] = $warehouse_id;
-        $up["value"] = $cost_sf;
+        $up["cost_sf"] = $cost_sf;
         $up["expiration_date"] = $expire;
         $up["quantity"] = $quantity;
         $up["lot"] = $lot;
@@ -826,7 +833,7 @@ class ToolController extends Controller {
 
         $up["product_id"] = $hold->product_id;
         $up["warehouse_id"] = $hold->warehouse_id;
-        $up["value"] = $hold->value;
+        $up["cost_sf"] = $hold->cosst_sf;
         $up["expiration_date"] = $hold->expiration_date;
         $up["quantity"] = $hold->quantity;
         $up["lot"] = $hold->lot;
@@ -850,7 +857,7 @@ class ToolController extends Controller {
             $up["row_id"] = $row_id;
             $up["product_id"] = $hold->product_id;
             $up["warehouse_id"] = $hold->warehouse_id;
-            $up["value"] = $hold->value;
+            $up["cost_sf"] = $hold->cost_sf;
             $up["expiration_date"] = $hold->expiration_date;
             $up["quantity"] = $hold->quantity;
             $up["lot"] = $hold->lot;
@@ -869,11 +876,11 @@ class ToolController extends Controller {
         $hold = InventoryHold::where("row_id", $row_id)->first();
         $pro = Products::find($hold->product_id);
 
-        $this->addInventory($hold->warehouse_id, $pro->reference, $hold->quantity, $hold->lot, $hold->expiration_date, $hold->value);
+        $this->addInventory($hold->warehouse_id, $pro->reference, $hold->quantity, $hold->lot, $hold->expiration_date, $hold->cost_sf);
         $up["row_id"] = $row_id;
         $up["product_id"] = $hold->product_id;
         $up["warehouse_id"] = $hold->warehouse_id;
-        $up["value"] = $hold->value;
+        $up["cost_sf"] = $hold->cost_sf;
         $up["expiration_date"] = $hold->expiration_date;
         $up["quantity"] = $hold->quantity;
         $up["lot"] = $hold->lot;

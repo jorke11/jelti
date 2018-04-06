@@ -77,6 +77,7 @@ Route::get('/', function ($search = null) {
     }
 });
 
+
 Route::get("/admins/login", "AdministratorsController@showLoginForm");
 Route::post("/admins/login", "AdministratorsController@login");
 Route::get("/admins/home", "AdministratorsController@index");

@@ -1297,7 +1297,8 @@ class DepartureController extends Controller {
                                     ->where("client_id", $header->client_id)->first();
                 }
 
-                $input["value"] = $pro->price_sf;
+                $input["price_sf"] = $pro->price_sf;
+                $input["cost_sf"] = $pro->cost_sf;
                 $input["quantity_lots"] = json_encode($input["detail"]);
                 $input["real_quantity"] = $input["header"]["total"];
                 $input["status_id"] = 3;
@@ -1309,7 +1310,7 @@ class DepartureController extends Controller {
                     if ($pro->category_id != -1) {
 
                         $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
-                        
+
                         if ($validate["status"]) {
                             $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
                         } else {

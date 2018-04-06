@@ -20,6 +20,7 @@ class CreateInventoryLogTable extends Migration {
             $table->decimal('value', 15, 2);
             $table->date('expiration_date');
             $table->integer('quantity');
+            $table->integer('previous_quantity')->nullable();
             $table->string('type_move');
             $table->text('lot');
             $table->text('description')->nullable();

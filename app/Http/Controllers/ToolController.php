@@ -703,8 +703,6 @@ class ToolController extends Controller {
     public function validateInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf) {
         $pro = Products::where("reference", $reference)->first();
 
-        echo "asd";exit;
-        
         $valid = Inventory::where("warehouse_id", $warehouse_id)->where("product_id", $pro->id)
                         ->where("lot", $lot)->where("expiration_date", $expire)->where("cost_sf", $cost_sf)->where("quantity", ">=", $quantity)->first();
         
@@ -747,8 +745,6 @@ class ToolController extends Controller {
 //                        echo $total . " asdasdasd";
 //                        exit;
 //                    }
-
-
                     if ($hold->quantity > $quantity) {
                         $this->substractHold($hold->id, $quantity);
                         $this->addInventory($warehouse_id, $reference, $total, $lot, $expire, $cost_sf);

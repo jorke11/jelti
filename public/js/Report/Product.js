@@ -43,6 +43,14 @@ function Product() {
                 url: "/api/reportProduct",
                 data: param,
             },
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
             destroy: true,
             columns: [
                 {data: "product"},
@@ -77,6 +85,16 @@ function Product() {
                 url: "/api/reportProductByClient",
                 data: param,
             },
+
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
+
             destroy: true,
             columns: [
 //                {data: "dispatched"},
@@ -118,6 +136,14 @@ function Product() {
                 url: "/api/reportProductCity",
                 data: param,
             },
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
             destroy: true,
             columns: [
                 {data: "city"},

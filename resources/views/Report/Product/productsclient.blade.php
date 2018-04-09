@@ -13,7 +13,7 @@
                     <table class="table" id="tblProductsClient">
                         <thead>
                             <tr>
-                                <td>Fecha</td>
+                                <!--<td>Fecha</td>-->
                                 <td>Cliente</td>
                                 <td>Producto</td>
                                 <td>Total Unidades</td>

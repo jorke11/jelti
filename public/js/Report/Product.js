@@ -79,7 +79,7 @@ function Product() {
             },
             destroy: true,
             columns: [
-                {data: "dispatched"},
+//                {data: "dispatched"},
                 {data: "client"},
                 {data: "product"},
                 {data: "quantityproducts"},

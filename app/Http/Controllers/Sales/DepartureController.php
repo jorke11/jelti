@@ -1369,7 +1369,7 @@ class DepartureController extends Controller {
     public function destroyDetail($id) {
         $entry = DeparturesDetail::Find($id);
 
-        if ($entry->status_id == 3 && $entry->quantity > 0) {
+        if ($entry->status_id == 3 && $entry->real_quantity > 0) {
             $this->tool->substract($entry->id);
         }
 

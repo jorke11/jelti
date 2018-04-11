@@ -17,9 +17,12 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Administration\Products;
 use App\Models\Security\Users;
 use App\Traits\StringExtra;
+use Log;
 
 class ClientController extends Controller {
-       use StringExtra;
+
+    use StringExtra;
+
     public $name;
     public $in;
     public $typestakeholder;
@@ -172,6 +175,9 @@ class ClientController extends Controller {
         $input["packaging"] = ($input["packaging"] == '') ? 1 : $input["packaging"];
         $input["units_sf"] = (int) $input["units_sf"];
         $price->fill($input)->save();
+        $input["uinsert"] = Auth::user()->id;
+        Log::info("update_price:method(UpdatePrice_id): " . json_encode($input));
+
 
         return response()->json(["success" => true]);
     }
@@ -344,7 +350,7 @@ class ClientController extends Controller {
     public function destroyPrice($id) {
         $row = PricesSpecial::find($id);
         $result = $row->delete();
-
+        Log::info("update_price:method(destroyPrice): " . json_encode($input));
         if ($result) {
             return response()->json(['success' => true]);
         } else {
@@ -698,7 +704,7 @@ class ClientController extends Controller {
                                 $pro = Products::where("reference", $book->sf_code)->first();
                                 $price = PricesSpecial::where("product_id", $pro->id)->first();
                             }
-                            
+
 
 
                             $new["client_id"] = $this->in["client_id"];
@@ -718,6 +724,9 @@ class ClientController extends Controller {
                                 $this->updated++;
                                 $p = PricesSpecial::find($price->id);
                                 $p->fill($new)->save();
+                                $new["uinsert"] = Auth::user()->id;
+                                Log::info("update_price:method(storeExcelCode): " . json_encode($new));
+                                
                             }
                         }
                     } else {

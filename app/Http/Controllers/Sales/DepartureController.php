@@ -1309,10 +1309,10 @@ class DepartureController extends Controller {
                 foreach ($input["detail"] as $value) {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
-                            
                         $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
-
+                        
                         if ($validate["status"]) {
+                            
                             $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
                         } else {
                             $errors[] = $pro->reference . " No cuenta con inventario disponible " . $validate["quantity"];

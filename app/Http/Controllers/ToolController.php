@@ -623,7 +623,7 @@ class ToolController extends Controller {
      * @param type $expire
      */
     public function addInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf = null) {
-
+        
         if (Auth::user() != null) {
             $ware = Warehouses::find($warehouse_id);
 
@@ -716,6 +716,7 @@ class ToolController extends Controller {
 
     public function addInventoryHold($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf, $id) {
         try {
+            
             DB::beginTransaction();
 
             $expire = date("Y-m-d", strtotime($expire));
@@ -745,6 +746,7 @@ class ToolController extends Controller {
 //                        echo $total . " asdasdasd";
 //                        exit;
 //                    }
+                    
                     if ($hold->quantity > $quantity) {
                         $this->substractHold($hold->id, $quantity);
                         $this->addInventory($warehouse_id, $reference, $total, $lot, $expire, $cost_sf);
@@ -766,6 +768,7 @@ class ToolController extends Controller {
 
                         $hold->save();
                     } else {
+                        
                         if ($hold->quantity != $quantity) {
                             $total = $quantity - $hold->quantity;
                             $this->substractHold($hold->id, $quantity);
@@ -779,7 +782,6 @@ class ToolController extends Controller {
                     if ($quantity > 0) {
                         $new["insert_id"] = Auth::user()->id;
                         $new["row_id"] = $id;
-
                         $this->outInventoryHold($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf);
 
                         InventoryHold::create($new);
@@ -832,7 +834,7 @@ class ToolController extends Controller {
 
         $up["product_id"] = $hold->product_id;
         $up["warehouse_id"] = $hold->warehouse_id;
-        $up["cost_sf"] = $hold->cosst_sf;
+        $up["cost_sf"] = $hold->cost_sf;
         $up["expiration_date"] = $hold->expiration_date;
         $up["quantity"] = $hold->quantity;
         $up["lot"] = $hold->lot;

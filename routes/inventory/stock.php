@@ -3,6 +3,7 @@
 Route::get('/stock', 'Inventory\StockController@index');
 Route::delete('/stock/{id}', 'Inventory\StockController@destroy');
 Route::get('/api/listStock', 'Inventory\StockController@getStock');
+Route::get('/api/listStockTransit', 'Inventory\StockController@getStockTransit');
 
 
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");

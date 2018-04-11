@@ -30,14 +30,14 @@ class StockController extends Controller {
         $bar_code = '';
 
         if ($in["bar_code"] != '') {
-            
-                        
+
+
             $in["bar_code"] = trim(strtolower($in["bar_code"]));
             $ref = "";
-            
+
             if (is_numeric($in["bar_code"])) {
-                
-                $ref = "p.reference = " . $in["bar_code"]." OR ";
+
+                $ref = "p.reference = " . $in["bar_code"] . " OR ";
             }
 
             $bar_code = "
@@ -58,6 +58,55 @@ class StockController extends Controller {
             select i.id,p.id as product_id,p.reference,s.business as stakeholder,c.description as category,p.title as product,i.lot,i.expiration_date,
             sum(i.quantity) as quantity,(i.cost_sf * i.quantity) as price_sf
             from inventory i
+            JOIN vproducts p ON p.id=i.product_id
+            JOIN stakeholder s ON s.id=p.supplier_id
+            JOIN categories c ON c.id=p.category_id
+            $bar_code $ware
+            group by 1,2,3,4,5,6,7
+            ORDER BY 3 DESC,5 ASC,7 ASC
+                ";
+//        echo $sql;
+//        exit;
+        $products = DB::select($sql);
+
+
+        return response()->json(["data" => $products]);
+    }
+
+    public function getStockTransit(Request $req) {
+        $in = $req->all();
+        $entry_ware = '';
+        $bar_code = '';
+
+        if ($in["bar_code"] != '') {
+
+
+            $in["bar_code"] = trim(strtolower($in["bar_code"]));
+            $ref = "";
+
+            if (is_numeric($in["bar_code"])) {
+
+                $ref = "p.reference = " . $in["bar_code"] . " OR ";
+            }
+
+            $bar_code = "
+                    WHERE ($ref i.lot ilike '%" . $in["bar_code"] . "%'
+                    OR p.title ilike  '%" . $in["bar_code"] . "%' OR p.supplier ilike '%" . $in["bar_code"] . "%')";
+        }
+
+        $ware = '';
+
+        if ($in["warehouse_id"] != 0) {
+            $ware = 'i.warehouse_id=' . $in["warehouse_id"];
+
+            $ware = ($bar_code == '') ? ' WHERE ' . $ware : ' AND ' . $ware;
+        }
+
+
+        $sql = "
+            select i.id,p.id as product_id,p.reference,s.business as stakeholder,c.description as category,p.title as product,i.lot,i.expiration_date,
+            sum(i.quantity) as quantity,(i.cost_sf * i.quantity) as price_sf
+            from inventory_hold i
             JOIN vproducts p ON p.id=i.product_id
             JOIN stakeholder s ON s.id=p.supplier_id
             JOIN categories c ON c.id=p.category_id

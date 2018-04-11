@@ -903,13 +903,13 @@ class SampleController extends Controller {
             $pro = Products::find($input["header"]["product_id"]);
         } else {
             $pro = DB::table("products")
-                    ->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
+                    ->select("products.id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", 'products.tax',"products.reference")
                     ->join("prices_special", "prices_special.product_id", "=", "products.id")
                     ->where("products.id", $input["header"]["product_id"])
                     ->first();
         }
 
-        $input["value"] = $pro->price_sf;
+        $input["cost_sf"] = $pro->cost_sf;
 
         $input["quantity_lots"] = json_encode($input["detail"]);
         $input["real_quantity"] = $input["header"]["total"];

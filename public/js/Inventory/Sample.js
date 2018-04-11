@@ -829,7 +829,7 @@ function Sale() {
                     html += '<tr><td>' + val.lot + '</td>';
                     html += '<td>' + val.quantity + '</td>';
                     html += '<td>' + val.expiration_date + '</td>';
-                    html += '<td><input value="0" class="form-control input-lots" lot="' + val.lot + '" expire="' + val.expiration_date + '" cost_sf="' + val.value + '" product_id="' + val.product_id + '"></td></tr>';
+                    html += '<td><input value="0" class="form-control input-lots" lot="' + val.lot + '" expire="' + val.expiration_date + '" cost_sf="' + val.cost_sf + '" product_id="' + val.product_id + '"></td></tr>';
                 });
 
                 $("#tableLot tbody").html(html);

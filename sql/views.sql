@@ -163,8 +163,6 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
             ORDER BY d.status_id,d.id asc;
 
 
-
-
 create view vcities as 
 select c.id,c.description city,d.description department,c.code
 from cities c

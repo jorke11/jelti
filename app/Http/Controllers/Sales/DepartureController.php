@@ -842,7 +842,7 @@ class DepartureController extends Controller {
                             ]
                     );
 
-                    $detail = DeparturesDetail::where("departure_id", $input["id"])->where("real_quantity", ">", 0)->get();
+                    $detail = DeparturesDetail::where("departure_id", $input["id"])->where("real_quantity", ">", 0)->where("status_id",3)->get();
 
                     $cont = 0;
                     $sale = Sales::find($id);
@@ -1128,18 +1128,18 @@ class DepartureController extends Controller {
                             ->where("expiration_date", ">", date('Y-m-d'))->get();
         } else {
             $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
-                "value" => $pro->price_sf);
+                "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf);
         }
 
         if ($detail->quantity_lots != '') {
             foreach (json_decode($detail->quantity_lots) as $value) {
                 $inventory[] = array("lot" => $value->lot, "quantity" => $value->quantity,
                     "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
-                    "value" => $value->cost_sf);
+                    "cost_sf" => $value->cost_sf
+//                        , "price_sf" => $value->price_sf
+                );
             }
         }
-
-
 
 
         $hold = InventoryHold::select("inventory_hold.id", "inventory_hold.quantity", "products.title as product", "inventory_hold.lot", "inventory_hold.created_at"

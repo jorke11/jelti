@@ -64,17 +64,32 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Fecha Inicio:</label>
+                            <label for="email">Fecha Inicio Creado:</label>
+                            <input type="text" id="finit_filter_created" class="form-control form_date modal-filter">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Fecha Fin Creado:</label>
+                            <input type="text" id="fend_filter_created" class="form-control form_date modal-filter">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Fecha Inicio Despachado:</label>
                             <input type="text" id="finit_filter" class="form-control form_date modal-filter">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Fecha Fin:</label>
+                            <label for="email">Fecha Fin Despachado:</label>
                             <input type="text" id="fend_filter" class="form-control form_date modal-filter">
                         </div>
                     </div>
                 </div>
+
 
 
                 <div class="row">

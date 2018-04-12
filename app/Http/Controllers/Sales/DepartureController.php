@@ -631,7 +631,7 @@ class DepartureController extends Controller {
                         $pro = Products::find($product_id);
                     } else {
                         $pro = DB::table("products")
-                                ->select("products.id", "prices_special.price_sf", "prices_special.units_sf", 'prices_special.tax', "prices_special.packaging","products.cost_sf")
+                                ->select("products.id", "prices_special.price_sf", "prices_special.units_sf", 'prices_special.tax', "prices_special.packaging", "products.cost_sf")
                                 ->join("prices_special", "prices_special.product_id", "products.id")
                                 ->where("prices_special.id", $special->id)
                                 ->first();
@@ -665,7 +665,7 @@ class DepartureController extends Controller {
 
                     $valpro = DeparturesDetail::where("product_id", $val["product_id"])->where("departure_id", $resp->id)->first();
 
-                    
+
                     if ($valpro == null) {
                         DeparturesDetail::create($new);
                     }
@@ -1131,6 +1131,17 @@ class DepartureController extends Controller {
                 "value" => $pro->price_sf);
         }
 
+        if ($detail->quantity_lots != '') {
+            foreach (json_decode($detail->quantity_lots) as $value) {
+                $inventory[] = array("lot" => $value->lot, "quantity" => $value->quantity,
+                    "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
+                    "value" => $value->cost_sf);
+            }
+        }
+
+
+
+
         $hold = InventoryHold::select("inventory_hold.id", "inventory_hold.quantity", "products.title as product", "inventory_hold.lot", "inventory_hold.created_at"
                                 , "vdepartures.client", "vdepartures.warehouse")
                         ->join("products", "products.id", "inventory_hold.product_id")
@@ -1298,11 +1309,11 @@ class DepartureController extends Controller {
                 if ($special == null) {
                     $pro = Products::find($input["header"]["product_id"]);
                 } else {
-                    $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf","products.cost_sf", 'products.tax')
+                    $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", "products.cost_sf", 'products.tax')
                                     ->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["header"]["product_id"])
                                     ->where("client_id", $header->client_id)->first();
                 }
-                
+
 
                 $input["price_sf"] = $pro->price_sf;
                 $input["cost_sf"] = $pro->cost_sf;
@@ -1316,9 +1327,9 @@ class DepartureController extends Controller {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
                         $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
-                        
+
                         if ($validate["status"]) {
-                            
+
                             $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
                         } else {
                             $errors[] = $pro->reference . " No cuenta con inventario disponible " . $validate["quantity"];

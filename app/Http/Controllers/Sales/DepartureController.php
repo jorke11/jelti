@@ -127,10 +127,6 @@ class DepartureController extends Controller {
             }
         }
 
-        if (isset($in["end_filter"]) && $in["end_filter"] != '') {
-            $cont++;
-            $query->where("created_at", "<=", $in["end_filter"] . " 00:00");
-        }
         if (isset($in["status_id_filter"]) && $in["status_id_filter"] != '') {
             $cont++;
             $query->whereIn("status_id", $in["status_id_filter"]);
@@ -142,6 +138,7 @@ class DepartureController extends Controller {
         }
 
         if (isset($in["init_filter"]) && $in["init_filter"] != '' & isset($in["end_filter"]) && $in["end_filter"] != '') {
+             $cont++;
             $query->where("dispatched", ">=", $in["init_filter"] . " 00:00");
             $query->where("dispatched", "<=", $in["end_filter"] . " 00:00");
         }

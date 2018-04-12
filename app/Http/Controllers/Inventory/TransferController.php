@@ -25,11 +25,13 @@ use App\Models\Administration\PricesSpecial;
 use App\Models\Security\Users;
 use App\Traits\NumberToString;
 use App\Traits\StringExtra;
+use App\Models\Inventory\Inventory;
 
 class TransferController extends Controller {
+
     use NumberToString;
     use StringExtra;
-    
+
     protected $total;
     protected $tool;
     protected $subtotal;
@@ -576,55 +578,14 @@ class TransferController extends Controller {
     public function getProducts(Request $req, $id) {
         $in = $req->all();
 
-        $entry_ware = '';
-        $sales_ware = '';
-        if ($in["warehouse_id"] != 0) {
-            $entry_ware = ' AND entries.warehouse_id=' . $in["warehouse_id"];
-            $sales_ware = ' AND sales.warehouse_id=' . $in["warehouse_id"];
-        }
-        $bar_code = '';
+
+        $inv = Inventory::where("product_id", $id)->where("warehouse_id", $in["warehouse_id"])
+                ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))));
+
+        $quantity = $inv->sum("quantity");
 
 
-//            $pro = Products::where("reference", $in["bar_code"])->first();
-        $pro = Products::find($id);
-        $bar_code = "WHERE products.id=" . $pro->id;
-
-
-
-        $sql = "
-            select products.id,reference,title as product,stakeholder.business as supplier,categories.description as category,price_sf,packaging,
-            category_id,units_sf
-            from products 
-            JOIN stakeholder ON stakeholder.id=products.supplier_id
-            JOIN categories ON categories.id=products.category_id
-                $bar_code";
-
-        $products = DB::select($sql);
-        
-        foreach ($products as $i => $value) {
-            $sql = "
-                    select coalesce(sum(quantity),0) as total
-                    from entries_detail
-                    JOIN entries ON entries.id = entries_detail.entry_id 
-                    WHERE entries.status_id=2 and product_id=" . $value->id . " $entry_ware";
-            $entry = DB::select($sql);
-
-
-            $sql = "
-                    select coalesce(sum(quantity),0)  AS total
-                    from sales_detail
-                    JOIN sales ON sales.id=sales_detail.sale_id
-                    WHERE sales_detail.product_id is not null and product_id=" . $value->id . "
-                     $sales_ware";
-
-            $sale = DB::select($sql);
-
-            $products[$i]->entries = $entry[0]->total;
-            $products[$i]->sales = $sale[0]->total;
-            $products[$i]->available = $products[$i]->entries - $products[$i]->sales;
-        }
-
-        return response()->json(["response" => $products[0]]);
+        return response()->json(["response" => $quantity]);
     }
 
     public function testDepNotification($id) {

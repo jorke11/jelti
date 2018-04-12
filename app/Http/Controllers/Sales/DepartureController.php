@@ -627,7 +627,7 @@ class DepartureController extends Controller {
                         $pro = Products::find($product_id);
                     } else {
                         $pro = DB::table("products")
-                                ->select("products.id", "prices_special.price_sf", "prices_special.units_sf", 'prices_special.tax', "prices_special.packaging")
+                                ->select("products.id", "prices_special.price_sf", "prices_special.units_sf", 'prices_special.tax', "prices_special.packaging","products.cost_sf")
                                 ->join("prices_special", "prices_special.product_id", "products.id")
                                 ->where("prices_special.id", $special->id)
                                 ->first();
@@ -648,6 +648,7 @@ class DepartureController extends Controller {
                     $new["packaging"] = ($pro->packaging == null) ? 1 : $pro->packaging;
                     $new["tax"] = $pro->tax;
                     $new["value"] = $price_sf;
+                    $new["cost_sf"] = $pro->cost_sf;
                     $new["real_quantity"] = 0;
                     $new["type_insert_id"] = 1;
 
@@ -660,6 +661,7 @@ class DepartureController extends Controller {
 
                     $valpro = DeparturesDetail::where("product_id", $val["product_id"])->where("departure_id", $resp->id)->first();
 
+                    
                     if ($valpro == null) {
                         DeparturesDetail::create($new);
                     }

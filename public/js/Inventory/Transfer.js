@@ -90,7 +90,7 @@ function Transfer() {
             warehouse_id = (warehouse_id == null) ? $("#frm #origin_id :selected").val() : warehouse_id;
             param.warehouse_id = warehouse_id;
             $.ajax({
-                url: 'transfer/' + $(this).val() + '/getProductTransfer',
+                url: 'departure/' + $(this).val() + '/getDetailProduct',
                 method: 'GET',
                 data: param,
                 dataType: 'JSON',
@@ -98,9 +98,9 @@ function Transfer() {
                     dataProduct = resp.response;
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val((resp.response.price_sf / resp.response.packaging)).formatNumber()
-                    $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.response.available + ")")
-                    if (resp.response.available > 0) {
-                        available = resp.response.available;
+                    $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
+                    if (resp.quantity > 0) {
+                        available = resp.quantity;
                         $("#newDetail").attr("disabled", false);
                     } else {
                         $("#newDetail").attr("disabled", true);

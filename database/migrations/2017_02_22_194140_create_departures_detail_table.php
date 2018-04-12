@@ -20,6 +20,7 @@ class CreateDeparturesDetailTable extends Migration {
             $table->integer('quantity');
             $table->integer('real_quantity')->nullable();
             $table->decimal('value', 15, 2);
+            $table->decimal('cost_sf', 15, 2);
             $table->decimal('tax', 5, 2);
             $table->decimal('units_sf', 15, 2)->nullable();
             $table->string('description')->nullable();

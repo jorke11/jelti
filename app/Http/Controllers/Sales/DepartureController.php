@@ -1373,12 +1373,15 @@ class DepartureController extends Controller {
                 $input["status_id"] = 3;
                 $errors = array();
 
-
+                $val_quantity = 0;
                 foreach ($input["detail"] as $value) {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
                         $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
                         if ($validate["status"]) {
+
+                            $val_quantity += $value["quantity"];
+
                             $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"]);
 //                            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
                         } else {
@@ -1388,6 +1391,12 @@ class DepartureController extends Controller {
                 }
 
                 $input["quantity"] = $input["header"]["quantity"];
+
+                if ($val_quantity == 0) {
+                    $input["quantity_lots"] = null;
+                    $input["status_id"] = 1;
+                }
+
                 $row->fill($input)->save();
             }
 

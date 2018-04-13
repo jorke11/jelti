@@ -36,12 +36,14 @@ use App\Models\Inventory\InventoryHold;
 use App\Traits\NumberToString;
 use App\Traits\StringExtra;
 use App\Traits\Invoice;
+use App\Traits\ToolInventory;
 
 class DepartureController extends Controller {
 
     use NumberToString;
     use StringExtra;
     use Invoice;
+    use ToolInventory;
 
     protected $tool;
     public $path;
@@ -1128,8 +1130,12 @@ class DepartureController extends Controller {
     }
 
     public function getDetail($id) {
+
         $detail = DeparturesDetail::Find($id);
+
+
         $header = Departures::find($detail->departure_id);
+
 
         $pro = Products::find($detail->product_id);
 
@@ -1142,11 +1148,44 @@ class DepartureController extends Controller {
                 "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf);
         }
 
+
+
         if ($detail->quantity_lots != '') {
-            foreach (json_decode($detail->quantity_lots) as $value) {
-                $inventory[] = array("lot" => $value->lot, "quantity" => $value->quantity,
+
+            $inventory_real = [];
+
+            if (count($inventory) > 0) {
+
+
+
+                foreach ($inventory as $val) {
+
+                    foreach (json_decode($detail->quantity_lots) as $value) {
+
+                        if ($val->id == $value->inventory_id) {
+                            $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
+                                "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
+                                "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
+//                        , "price_sf" => $value->price_sf
+                            );
+                        }
+                    }
+                }
+            } else {
+                foreach (json_decode($detail->quantity_lots) as $value) {
+                    $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
+                        "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
+                        "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
+//                        , "price_sf" => $value->price_sf
+                    );
+                }
+            }
+        } else {
+
+            foreach ($inventory as $value) {
+                $inventory_real[] = array("lot" => $value->lot, "available" => $value->quantity, "quantity" => 0,
                     "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
-                    "cost_sf" => $value->cost_sf
+                    "cost_sf" => $value->cost_sf, "inventory_id" => $value->id
 //                        , "price_sf" => $value->price_sf
                 );
             }
@@ -1160,7 +1199,7 @@ class DepartureController extends Controller {
                         ->join("vdepartures", "vdepartures.id", "departures_detail.departure_id")
                         ->where("inventory_hold.product_id", $detail->product_id)->where("inventory_hold.warehouse_id", $header->warehouse_id)->get();
 
-        return response()->json(["row" => $detail, "inventory" => $inventory, "hold" => $hold]);
+        return response()->json(["row" => $detail, "inventory" => $inventory_real, "hold" => $hold]);
     }
 
     public function update(Request $request, $id) {
@@ -1309,6 +1348,7 @@ class DepartureController extends Controller {
         try {
             DB::beginTransaction();
             $input = $request->all();
+
             $row = DeparturesDetail::Find($input["header"]["id"]);
 
             $pro = Products::find($input["header"]["product_id"]);
@@ -1338,10 +1378,9 @@ class DepartureController extends Controller {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
                         $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
-
                         if ($validate["status"]) {
-
-                            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
+                            $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"]);
+//                            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
                         } else {
                             $errors[] = $pro->reference . " No cuenta con inventario disponible " . $validate["quantity"];
                         }

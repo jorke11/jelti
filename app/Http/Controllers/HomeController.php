@@ -146,7 +146,7 @@ class HomeController extends Controller {
 
 
         $sql = "
-            select sum(quantity) unidades,sum(quantity * value) subtotal
+            select sum(d.quantity) unidades,sum(d.quantity * value) subtotal
             from samples_detail d
             JOIN samples s ON s.id=d.sample_id
             WHERE s.dispatched between '" . $ant . "-01 00:00' and '" . date("Y-m-d") . " 23:59' and s.status_id=2";

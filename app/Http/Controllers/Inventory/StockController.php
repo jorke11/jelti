@@ -28,7 +28,7 @@ class StockController extends Controller {
         $in = $req->all();
         $entry_ware = '';
         $bar_code = '';
-
+        
         if ($in["bar_code"] != '') {
 
 
@@ -53,17 +53,19 @@ class StockController extends Controller {
             $ware = ($bar_code == '') ? ' WHERE ' . $ware : ' AND ' . $ware;
         }
 
-
         $sql = "
-            select i.id,p.id as product_id,p.reference,s.business as stakeholder,c.description as category,p.title as product,i.lot,i.expiration_date,
-            sum(i.quantity) as quantity,(i.cost_sf * i.quantity) as price_sf
-            from inventory i
-            JOIN vproducts p ON p.id=i.product_id
-            JOIN stakeholder s ON s.id=p.supplier_id
-            JOIN categories c ON c.id=p.category_id
+            select id,reference,supplier,category,title as product,
+            coalesce((select sum(quantity) from inventory where product_id=vproducts.id),0) as in_warehouse,
+            coalesce((select sum(quantity) from inventory_hold where product_id=vproducts.id),0) as in_hold,
+            coalesce((
+                                            select sum(departures_detail.quantity) 
+                                            from departures_detail 
+                                            JOIN departures ON departures.id= departures_detail.departure_id AND departures.status_id IN(2,8)
+                                            where departures_detail.product_id=vproducts.id),0) as request_client,
+            coalesce((select sum(quantity*cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf,minimum_stock
+            from vproducts
+            ORDER BY 6 ASC
             $bar_code $ware
-            group by 1,2,3,4,5,6,7
-            ORDER BY 3 DESC,5 ASC,7 ASC
                 ";
 //        echo $sql;
 //        exit;
@@ -71,6 +73,14 @@ class StockController extends Controller {
 
 
         return response()->json(["data" => $products]);
+    }
+
+    public function detailInventory($id) {
+        $inventory = Inventory::select("inventory.id", "products.title as product", "quantity", "expiration_date", "lot", "inventory.cost_sf", "inventory.price_sf"
+                , DB::raw("(inventory.cost_sf * inventory.quantity) as total_cost"), DB::raw("(inventory.price_sf * inventory.quantity) as total_price"))
+                        ->join("products", "products.id", "inventory.product_id")
+                        ->where("product_id", $id)->get();
+        return response()->json(["inventory" => $inventory]);
     }
 
     public function getStockTransit(Request $req) {

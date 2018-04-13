@@ -751,14 +751,6 @@ class ToolController extends Controller {
                         $this->substractHold($hold->id, $quantity);
                         $this->addInventory($warehouse_id, $reference, $total, $lot, $expire, $cost_sf);
 
-//                        if ($hold->quantity > $quantity) {
-//                            $this->substractHold($hold->id, $total);
-//                            $this->addInventory($warehouse_id, $reference, $total, $lot, $expire, $cost_sf);
-//                        } else {
-//                            $this->substractHold($hold->id, $quantity);
-//                            $this->addInventory($warehouse_id, $reference, $total, $lot, $expire, $cost_sf);
-//                        }
-
                         $hold->quantity = $quantity;
                         $new["insert_id"] = Auth::user()->id;
                         $new["update_id"] = $hold->update_id;

@@ -493,12 +493,12 @@ function Departure() {
 
         $(".input-lots").each(function () {
             lots.push({lot: $(this).attr("lot"), quantity: $(this).val(), expiration_date: $(this).attr("expire")
-                , cost_sf: $(this).attr("cost_sf"), product_id: $(this).attr("product_id")});
+                , cost_sf: $(this).attr("cost_sf"), product_id: $(this).attr("product_id"), inventory_id: $(this).attr("inventory_id")});
             total += parseInt($(this).val());
         })
 
 
-        if (quantity_total >= total) {
+//        if (quantity_total >= total) {
             if (validate.length == 0) {
 
                 if (id != '') {
@@ -602,9 +602,9 @@ function Departure() {
             } else {
                 toastr.error("input required");
             }
-        } else {
-            toastr.error("Cantidad solicitada no disponible");
-        }
+//        } else {
+//            toastr.error("Cantidad solicitada no disponible");
+//        }
 
     }
     this.saveService = function () {
@@ -943,10 +943,10 @@ function Departure() {
 
                     html += `
                             <tr><td>${val.lot}</td>
-                            <td>${val.quantity}</td>
+                            <td>${val.available}</td>
                             <td>${val.expiration_date}</td>
                             <td><input class="form-control input-lots" lot="${val.lot}" expire="${val.expiration_date}" 
-                            cost_sf="${val.cost_sf}" product_id="${val.product_id}" value="${quantity}"></td></tr>`;
+                            cost_sf="${val.cost_sf}" product_id="${val.product_id}" value="${val.quantity}" inventory_id="${val.inventory_id}"></td></tr>`;
                     quantity = 0;
                 });
 

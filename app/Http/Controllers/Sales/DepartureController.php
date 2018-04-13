@@ -1149,10 +1149,11 @@ class DepartureController extends Controller {
         }
 
 
+        $inventory_real = [];
 
         if ($detail->quantity_lots != '') {
 
-            $inventory_real = [];
+
 
             if (count($inventory) > 0) {
 

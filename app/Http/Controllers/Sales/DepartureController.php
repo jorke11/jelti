@@ -88,7 +88,6 @@ class DepartureController extends Controller {
 
         $initdate = $this->initdate;
 
-
         return view("Sales.departure.init", compact("category", "status", "client_id", "init", "end", "product_id", "supplier_id", "commercial_id", "initdate"));
     }
 
@@ -136,7 +135,6 @@ class DepartureController extends Controller {
             $query->whereIn("status_id", $in["status_id_filter"]);
         }
 
-
         if ($in["client_filter"] != 0 && $in["client_filter"] != '') {
             $query->whereIn("client_id", $in["client_filter"]);
         }
@@ -170,11 +168,9 @@ class DepartureController extends Controller {
             $query->where("warehouse_id", Auth::user()->warehouse_id);
         }
 
-
         if (isset($in["commercial_id"]) && $in["commercial_id"] != '') {
             $query->where("status_id", 2)->where("responsible_id", $in["commercial_id"]);
         }
-
 
         return Datatables::queryBuilder($query)->make(true);
     }
@@ -591,6 +587,8 @@ class DepartureController extends Controller {
             DB::beginTransaction();
             $header["insert_id"] = Auth::user()->id;
 
+//            dd($detail);
+
             if (isset($header["branch_id"]) && $header["branch_id"] != 0) {
 
                 $bra = Branch::find($header["branch_id"]);
@@ -619,10 +617,13 @@ class DepartureController extends Controller {
                 $price_sf = 0;
                 $tax19 = 0;
                 $tax5 = 0;
-
+                $total_quantity = 0;
+                $total_quantity_packaging = 0;
                 foreach ($detail as $i => $val) {
                     $product_id = (is_array($val)) ? $val["product_id"] : $val->product_id;
                     $quantity = (is_array($val)) ? $val["quantity"] : $val->quantity;
+
+                    $total_quantity += $quantity;
 
                     $special = PricesSpecial::where("product_id", $product_id)
                                     ->where("client_id", $header["client_id"])->first();
@@ -655,6 +656,9 @@ class DepartureController extends Controller {
                     $new["cost_sf"] = $pro->cost_sf;
                     $new["real_quantity"] = 0;
                     $new["type_insert_id"] = 1;
+
+                    $total_quantity_packaging += $new["packaging"] * $quantity;
+
 
                     if ($pro->tax == '0.05') {
                         $tax5++;
@@ -750,6 +754,8 @@ class DepartureController extends Controller {
                         $this->mails = Auth::User()->email;
                     }
 
+                    $resp->quantity_packaging = $total_quantity_packaging;
+                    $resp->quantity = $total_quantity;
                     $resp->exento = $this->exento;
 
                     $resp->tax5 = $this->tax5;
@@ -842,11 +848,12 @@ class DepartureController extends Controller {
                             ]
                     );
 
-                    $detail = DeparturesDetail::where("departure_id", $input["id"])->where("real_quantity", ">", 0)->where("status_id",3)->get();
+                    $detail = DeparturesDetail::where("departure_id", $input["id"])->where("real_quantity", ">", 0)->where("status_id", 3)->get();
 
                     $cont = 0;
                     $sale = Sales::find($id);
-
+                    $total_quantity = 0;
+                    $total_quantity_packaging = 0;
                     foreach ($detail as $value) {
 
                         $rowDep = DeparturesDetail::find($value->id);
@@ -864,6 +871,8 @@ class DepartureController extends Controller {
                             "value" => $value->value, "tax" => $pro["tax"], "units_sf" => $value->units_sf,
                             "account_id" => 1, "order" => $cont, "type_nature" => 1, "packaging" => $value->packaging
                         ]);
+                        $total_quantity += $value->real_quantity;
+                        $total_quantity_packaging += $value->real_quantity * $value->packaging;
 
                         $cont++;
                     }
@@ -883,6 +892,8 @@ class DepartureController extends Controller {
                     $sale->invoice = $departure->invoice;
 
 
+                    $departure->quantity = $total_quantity;
+                    $departure->quantity_packaging = $total_quantity;
                     $departure->exento = $this->exento;
 
                     $sale->save();

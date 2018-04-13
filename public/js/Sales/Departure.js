@@ -105,7 +105,7 @@ function Departure() {
                 success: function (resp) {
                     dataProduct = resp.response;
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
-                    $("#frmDetail #value").val(resp.response.price_sf).formatNumber()
+                    $("#frmDetail #value").val($.formatNumber(resp.response.price_sf));
                     $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
                 }
             })
@@ -1079,10 +1079,10 @@ function Departure() {
 
         param.init_filter = $("#finit_filter").val();
         param.end_filter = $("#fend_filter").val();
-        
+
         param.init_filter_created = $("#finit_filter_created").val();
         param.end_filter_created = $("#fend_filter_created").val();
-        
+
         param.client_filter = $("#client_filter").val();
         param.responsible_filter = $("#responsible_filter").val();
         param.id_filter = $("#id_filter").val();

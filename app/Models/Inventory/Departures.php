@@ -36,7 +36,9 @@ class Departures extends Model {
         'type_insert_id',
         "order_id",
         "purchase_order",
-        "date_appointment"
+        "date_appointment",
+        "quantity",
+        "quantity_packaging"
     ];
 
 }

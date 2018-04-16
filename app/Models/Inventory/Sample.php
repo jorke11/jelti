@@ -31,6 +31,9 @@ class Sample extends Model {
         "remission",
         "discount",
         "type_inventory_id",
+        "total",
+        "subtotal",
+        "quantity",
     ];
 
 }

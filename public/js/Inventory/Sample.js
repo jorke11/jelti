@@ -52,7 +52,7 @@ function Sale() {
 
         $("#quantity").change(function () {
             $("#quantity_units").val(dataProduct.cost_sf * $(this).val());
-            $("#value_units").val(dataProduct.cost_sf).formatNumber();
+            $("#value_units").val($.formatNumber(dataProduct.cost_sf))
         });
         if ($("#id_orderext").val() != '') {
             obj.infomationExt($("#id_orderext").val(), true);
@@ -100,7 +100,7 @@ function Sale() {
                 success: function (resp) {
                     dataProduct = resp.response;
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
-                    $("#frmDetail #value").val((resp.response.cost_sf / resp.response.packaging)).formatNumber()
+                    $("#frmDetail #value").val($.formatNumber((resp.response.cost_sf / resp.response.packaging)))
                     $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.cost_sf) + ") Available: (" + resp.quantity + ")")
                 }
             })

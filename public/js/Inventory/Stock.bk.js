@@ -6,8 +6,6 @@ function Stock() {
         $("#btnFind").click(function () {
             obj.table();
         })
-
-
         $("#tabTransit").click(function () {
             obj.tableTransit();
         })
@@ -122,12 +120,12 @@ function Stock() {
             }
         });
     }
-    
+
     this.table = function () {
         var param = {};
         param.warehouse_id = $("#warehouse_id").val();
         param.bar_code = $("#bar_code").val();
-        return $('#tbl').DataTable({
+        table = $('#tbl').DataTable({
             "dom":
                     "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
                     "<'row'<'col-sm-12't>>" +
@@ -148,15 +146,21 @@ function Stock() {
                 },
             ],
             columns: [
-                {data: "id"},
+                {
+                    className: 'details-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    searchable: false,
+                },
                 {data: "reference"},
-                {data: "stakeholder"},
+                {data: "supplier"},
                 {data: "category"},
                 {data: "product"},
-                {data: "lot"},
-                {data: "expiration_date"},
-                {data: "quantity"},
-                {data: "price_sf", render: $.fn.dataTable.render.number(',', '.', 0), "visible": true},
+                {data: "in_warehouse"},
+                {data: "request_client"},
+                {data: "in_hold"},
+                {data: "cost_sf", render: $.fn.dataTable.render.number(',', '.', 0), "visible": true},
             ],
             order: [[5, 'ASC']],
             aoColumnDefs: [
@@ -186,31 +190,111 @@ function Stock() {
                 };
 
 
-                total = api
-                        .column(8)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-                quantity = api
-                        .column(7)
-                        .data()
-                        .reduce(function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
-
-                $(api.column(7).footer()).html(
-                        '(' + quantity + ')'
-                        );
-                $(api.column(8).footer()).html(
-                        '(' + obj.formatCurrency(total, "$") + ')'
-                        );
-
-
-                console.log(total)
+//                total = api
+//                        .column(8)
+//                        .data()
+//                        .reduce(function (a, b) {
+//                            return intVal(a) + intVal(b);
+//                        }, 0);
+//                quantity = api
+//                        .column(7)
+//                        .data()
+//                        .reduce(function (a, b) {
+//                            return intVal(a) + intVal(b);
+//                        }, 0);
+//
+//                $(api.column(7).footer()).html(
+//                        '(' + quantity + ')'
+//                        );
+//                $(api.column(8).footer()).html(
+//                        '(' + obj.formatCurrency(total, "$") + ')'
+//                        );
+//
+//
+//                console.log(total)
             }
         });
+
+        $('#tbl tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+
+                row.child(obj.format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+
+        return table;
+
     }
+
+    this.format = function (d) {
+        var url = "/stock/" + d.id + "/detailInventory";
+
+        var html = `<br>
+                    <table class="table-detail">
+                        <thead>
+                            <tr>
+                                <th colspan="7" align="center">Disponible en Bodega</th>
+                            </tr>
+                            <tr>
+                                <th>Lote</th>
+                                <th>Disponible</th>
+                                <th>Vencimiento</th>
+                                <th>Costo</th>
+                                <th>Precio</th>
+                                <th>Total Costo</th>
+                                <th>Total Precio</th>
+                            </tr>
+                        </thead>`;
+        $.ajax({
+            url: url,
+            method: "GET",
+            dataType: 'JSON',
+            async: false,
+            success: function (data) {
+                html += "<tbody>";
+
+                var total_cost = 0, total_price = 0;
+
+                $.each(data.inventory, function (i, val) {
+                    html += `
+                        <tr>
+                            <td>${val.lot}</td>
+                            <td>${val.quantity}</td>
+                            <td>${val.expiration_date}</td>
+                            <td>${val.cost_sf}</td>
+                            <td>${val.price_sf}</td>
+                            <td>${parseInt(val.total_cost)}</td>
+                            <td>${parseInt(val.total_price)}</td>
+                        </tr>`;
+                    total_cost += parseInt(val.total_cost);
+                    total_price += parseInt(val.total_price);
+                });
+
+                html += `
+                            <tr>
+                                <td colspan="5" align="right"><b>Totales</b></td><td>${total_cost}</td><td>${total_price}</td>
+                            <tr>
+                        </tbody>
+                        </table>
+                        `;
+            }
+        })
+        return html;
+    }
+
+    this.formatCurrency = function (n, currency) {
+        return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
+    }
+
+
 
     this.formatCurrency = function (n, currency) {
         return currency + " " + n.toFixed(2).replace(/./g, function (c, i, a) {

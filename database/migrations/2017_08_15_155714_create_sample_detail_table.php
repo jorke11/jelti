@@ -23,6 +23,7 @@ class CreateSampleDetailTable extends Migration {
             $table->decimal('value', 15, 2);
             $table->decimal('tax', 5, 2);
             $table->decimal('units_sf', 15, 2)->nullable();
+            $table->decimal('cost_sf', 15, 2)->nullable();
             $table->string('description')->nullable();
             $table->json("quantity_lots")->nullable();
             $table->timestamps();

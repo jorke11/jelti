@@ -1,6 +1,7 @@
 <?php
 
 Route::get('/stock', 'Inventory\StockController@index');
+Route::get('/stock/{id}/detailInventory', 'Inventory\StockController@detailInventory');
 Route::delete('/stock/{id}', 'Inventory\StockController@destroy');
 Route::get('/api/listStock', 'Inventory\StockController@getStock');
 Route::get('/api/listStockTransit', 'Inventory\StockController@getStockTransit');

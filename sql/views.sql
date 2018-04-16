@@ -143,16 +143,13 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
             JOIN users u ON u.id = d.responsible_id
 
 
+drop view vsample
 create view vsample as 
 select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN d.branch_id IS NULL THEN sta.business ELSE CASE WHEN s.business IS NULL THEN sta.business ELSE s.business END END client,w.description as warehouse,
             c.description as city,p.description status,d.status_id,d.responsible_id,u.name ||' '|| u.last_name as responsible,d.warehouse_id,
             (select coalesce(sum(quantity),0)::int from samples_detail where sample_id=d.id) quantity,
             (select coalesce(sum(quantity),0)::int from samples_detail where samples_detail.sample_id=d.id) quantity_packaging,
-		(select (round(coalesce(sum(quantity * units_sf * value * tax),0) + coalesce(sum(quantity * units_sf * value),0))) from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id)
-		+d.shipping_cost as total,
-		 
-		(select (round(coalesce(sum(quantity * units_sf * value),0))) from samples_detail JOIN samples ON samples.id= samples_detail.sample_id where sample_id=d.id) as subtotalnumeric,	 
-           sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost,d.dispatched
+		d.total,d.subtotal, sta.id as client_id,d.created,dest.description as destination,d.destination_id,d.shipping_cost,d.dispatched
             from samples d
             LEFT JOIN branch_office s ON s.id = d.branch_id
             JOIN stakeholder sta ON sta.id = d.client_id

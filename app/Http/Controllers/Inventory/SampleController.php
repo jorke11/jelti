@@ -32,19 +32,15 @@ use App\Http\Controllers\LogController;
 use App\Models\Inventory\Inventory;
 use App\Traits\NumberToString;
 use App\Traits\StringExtra;
+use App\Traits\SampleTool;
 
 class SampleController extends Controller {
 
     use NumberToString;
     use StringExtra;
+    use SampleTool;
 
-    protected $total;
     protected $tool;
-    protected $subtotal;
-    protected $exento;
-    protected $tax19;
-    protected $tax5;
-    public $total_real;
     public $path;
     public $name;
     public $listProducts;
@@ -57,12 +53,7 @@ class SampleController extends Controller {
     public function __construct() {
         $this->middleware("auth");
         $this->tool = new ToolController();
-        $this->exento = 0;
-        $this->tax19 = 0;
-        $this->tax5 = 0;
-        $this->total = 0;
-        $this->subtotal = 0;
-        $this->total_real = 0;
+
         $this->path = '';
         $this->name = '';
         $this->listProducts = array();
@@ -492,15 +483,9 @@ class SampleController extends Controller {
                         $resp = Sample::Find($result);
 
                         $input["detail"] = array_values(array_filter($input["detail"]));
-                        $price_sf = 0;
 
                         foreach ($input["detail"] as $i => $val) {
-
                             $pro = Products::find($val["product_id"]);
-
-                            $price_sf = $pro->cost_sf / (($pro->packaging == null) ? 1 : $pro->packaging);
-
-
                             $detail["product_id"] = $val["product_id"];
                             $detail["sample_id"] = $result;
                             $detail["status_id"] = 1;
@@ -508,7 +493,8 @@ class SampleController extends Controller {
                             $detail["units_sf"] = $pro->units_sf;
                             $detail["packaging"] = ($pro->packaging == null) ? 1 : $pro->packaging;
                             $detail["tax"] = $pro->tax;
-                            $detail["value"] = $price_sf;
+                            $detail["value"] = $pro->price_sf;
+                            $detail["cost_sf"] = $pro->cost_sf;
 
                             SampleDetail::create($detail);
                         }
@@ -572,8 +558,13 @@ class SampleController extends Controller {
                                 $msj->to($this->mails);
                             });
 
-                            $this->log->logClient($client->id, "Genero Orden de venta " . $result);
+                            $this->log->logClient($client->id, "Genero Muestra " . $result);
                         }
+                        $resp->subtotal = $this->subtotal;
+                        $resp->quantity = $this->quantity;
+                        $resp->total = $this->total;
+                        $resp->save();
+
                         DB::commit();
 
                         $total = "$ " . number_format($this->total, 0, ",", ".");
@@ -707,6 +698,11 @@ class SampleController extends Controller {
                                 });
                             }
 
+                            $departure->quantity = $this->quantity_real;
+                            $departure->total = $this->total_real + $departure->shipping_cost;
+                            $departure->subtotal = $this->subtotal_real;
+                            $departure->save();
+
                             DB::commit();
                             return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" => $total]);
                         } else {
@@ -808,45 +804,9 @@ class SampleController extends Controller {
     }
 
     public function edit($id) {
-        $entry = Sample::FindOrFail($id);
-        $detail = $this->formatDetail($id);
-        $total = "$ " . number_format($this->total, 0, ",", ".");
-        return response()->json(["header" => $entry, "detail" => $detail, "total" => $total]);
-    }
-
-    public function formatDetail($id) {
-        $detail = DB::table("samples_detail")
-                ->select("samples_detail.id", "samples_detail.status_id", DB::raw("coalesce(samples_detail.description,'') as comment"), "samples_detail.real_quantity", "samples_detail.quantity", "samples_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "samples_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "samples_detail.tax")
-                ->join("products", "samples_detail.product_id", "products.id")
-                ->join("stakeholder", "stakeholder.id", "products.supplier_id")
-                ->join("parameters", "samples_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
-                ->where("sample_id", $id)
-                ->orderBy("id", "asc")
-                ->get();
-
-        $this->total = 0;
-        $this->subtotal = 0;
-        foreach ($detail as $i => $value) {
-            $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
-            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
-            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
-            $detail[$i]->total_real = $detail[$i]->real_quantity * $detail[$i]->value;
-            $detail[$i]->totalFormated_real = "$ " . number_format($detail[$i]->total_real, 2, ",", ".");
-            $this->subtotal += $detail[$i]->total;
-            $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
-            $this->total_real += $detail[$i]->total_real;
-
-            if ($value->tax == 0) {
-                $this->exento += $detail[$i]->total;
-            }
-            if ($value->tax == 0.05) {
-                $this->tax5 += $detail[$i]->total * $value->tax;
-            }
-            if ($value->tax == 0.19) {
-                $this->tax19 += $detail[$i]->total * $value->tax;
-            }
-        }
-        return $detail;
+        $header = Sample::FindOrFail($id);
+        $data["header"] = $header;
+        return response()->json($this->formatDetailJSON($data, $id));
     }
 
     public function getDetail($id) {
@@ -903,7 +863,7 @@ class SampleController extends Controller {
             $pro = Products::find($input["header"]["product_id"]);
         } else {
             $pro = DB::table("products")
-                    ->select("products.id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", 'products.tax',"products.reference")
+                    ->select("products.id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", 'products.tax', "products.reference")
                     ->join("prices_special", "prices_special.product_id", "=", "products.id")
                     ->where("products.id", $input["header"]["product_id"])
                     ->first();

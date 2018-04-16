@@ -41,6 +41,9 @@ class CreateSampleTable extends Migration
             $table->integer('type_inventory_id');
             $table->timestamps();
             $table->dateTime('dispatched')->nullable();
+            $table->decimal('subtotal', 15, 2)->nullable();
+            $table->decimal('total', 15, 2)->nullable();
+            $table->integer('quantity')->nullable();
         });
     }
 

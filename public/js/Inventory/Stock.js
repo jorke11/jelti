@@ -158,7 +158,7 @@ var Stock = (function () {
 
                     html += `
                             <tr>
-                                <td colspan="4" align="right"><b>Totales</b></td><td>${total_quantity}</td><td>${$.formatNumber(total_cost)}</td><td>${$.formatNumber(total_price)}</td>
+                                <td colspan="5" align="right"><b>Totales</b></td><td>${total_quantity}</td><td>${$.formatNumber(total_cost)}</td><td>${$.formatNumber(total_price)}</td>
                             <tr>
                         </tbody>
                         </table>

@@ -27,12 +27,8 @@ Route::get('/api/reportSupplierDash', "HomeController@getListSupplier");
 Route::get('/api/reportClientCities', "Report\ClientController@listCities");
 Route::get('api/reportProductByClient', "Report\CommercialController@getProductByClient");
 
-Route::get('/api/reportSample', "Report\SampleController@getList");
-Route::get('/api/reportClientTarget', "Report\SampleController@getListTarger");
-Route::get('/api/reportSampleProduct', "Report\SampleController@getListProduct");
-Route::get('/api/reportClientProductUnits', "HomeController@getListProductUnits");
-Route::get('/api/reportSampleCities', "Report\ClientController@listCities");
-Route::get('/api/reportProductByCategorySample', "Report\SampleController@getProductByCategory");
+
+
 
 Route::get('/api/reportResponse', "Report\OperationsController@getResponse");
 Route::get('/operations/getAverageTime', "Report\OperationsController@getAverageTime");

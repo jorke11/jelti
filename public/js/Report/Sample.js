@@ -5,6 +5,7 @@ function Sample() {
         this.tableProduct();
         this.tableCities();
         this.tableProductByCategory();
+        this.tableSamples();
 
         $("#Detail #finit").datetimepicker({format: 'Y-m-d'});
         $("#Detail #fend").datetimepicker({format: 'Y-m-d'});
@@ -16,6 +17,7 @@ function Sample() {
             objCli.tableProduct();
             objCli.tableCities();
             objCli.tableProductByCategory();
+            objCli.tableSamples();
         })
     }
 
@@ -279,7 +281,7 @@ function Sample() {
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
-        
+
         return $('#tblProductbyCategory').DataTable({
             destroy: true,
             ajax: {
@@ -293,6 +295,41 @@ function Sample() {
                 {data: "category"},
                 {data: "quantity"},
                 {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 0)},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
+    }
+
+    this.tableSamples = function () {
+        
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+
+        return $('#tblSampleGeneral').DataTable({
+            destroy: true,
+            ajax: {
+                url: "/api/reportSampleGeneral",
+                data: obj,
+            },
+            order: [[1, "desc"]],
+            scrollX: true,
+            "pageLength": 20,
+            columns: [
+                {data: "client"},
+                {data: "supplier"},
+                {data: "product"},
+                {data: "quantity"},
+                {data: "total_cost", render: $.fn.dataTable.render.number('.', ',', 0)},
             ],
             aoColumnDefs: [
                 {

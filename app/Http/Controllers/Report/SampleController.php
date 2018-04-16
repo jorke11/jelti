@@ -11,6 +11,7 @@ use App\Models\Administration\Warehouses;
 use App\Http\Controllers\Report\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Report\CommercialController;
+use App\Models\Inventory\SampleDetail;
 use Auth;
 use Session;
 
@@ -123,7 +124,7 @@ class SampleController extends Controller {
 
         return response()->json(["category" => $cat, "data" => $total, "quantity" => $quantity]);
     }
-    
+
     public function listCities(Request $req) {
         $input = $req->all();
         $ware = "";
@@ -142,12 +143,10 @@ class SampleController extends Controller {
                 $ware
             GROUP BY destination_id,2
             ";
-      
+
 
         $res = DB::select($cli);
 
-
-//echo $cli;exit;
         $cat = array();
         $total = array();
         $quantity = array();
@@ -418,6 +417,30 @@ class SampleController extends Controller {
         $this->total = ($total == 0) ? 1 : $total;
         $this->quantity = ($quantity == 0) ? 1 : $quantity;
         return $res;
+    }
+
+    public function getSampleGeneral(Request $req) {
+        $in = $req->all();
+//        dd($in);
+//        DB::select("")
+
+        $sql = "
+            select cli.business_name as client, sta.business_name as supplier,p.title as product,sum(s.real_quantity * s.cost_sf) as total_cost,sum(s.real_quantity) as quantity
+            from samples_detail s
+            JOIN samples sam ON sam.id=s.sample_id
+            JOIN stakeholder cli ON cli.id=sam.client_id
+            JOIN products p ON p.id=s.product_id
+            JOIN stakeholder sta ON sta.id=p.supplier_id
+            WHERE sam.dispatched BETWEEN '" . $in["init"] . " 00:00' and '" . $in["end"] . " 23:59'
+            group by 1,2,3
+            order by 1
+            ";
+        $res = DB::select($sql);
+
+        return response()->json(["data" => $res]);
+
+//        return Datatables::eloquent(DB::select($sql))->make(true);
+//        return Datatables::query($sql)->make(true);
     }
 
 }

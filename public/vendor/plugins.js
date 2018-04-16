@@ -285,19 +285,15 @@ jQuery.fn.capital = function (str) {
     });
 }
 
-jQuery.fn.formatNumber = function () {
-    this.each(function () {
-        var elem = $(this), resp = 0;
-        var number = elem.val();
-        var div = number.split(".");
-        resp = div[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-        if (div[1] != undefined) {
-            resp += "," + div[1];
-        }
+$.formatNumber = function (n, currency) {
+    
+    if (currency == undefined) {
+        currency="$";
+    }
 
-        elem.val('$' + resp);
-    })
-
+    return currency + " " + parseFloat(n).toFixed(2).replace(/./g, function (c, i, a) {
+        return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+    });
 }
 
 jQuery.fn.getData = function () {

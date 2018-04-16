@@ -139,7 +139,6 @@ var Stock = (function () {
                     var total_cost = 0, total_price = 0, total_quantity = 0;
 
                     $.each(data.inventory, function (i, val) {
-                        console.log(val)
                         html += `
                         <tr>
                             <td>${val.lot}</td>

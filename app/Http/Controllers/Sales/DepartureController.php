@@ -504,11 +504,11 @@ class DepartureController extends Controller {
                         $sal->delete();
                     }
 
-                    foreach ($row_detail as $value) {
-                        $det = DeparturesDetail::find($value->id);
-                        $det->status_id = 1;
-                        $det->save();
-                    }
+//                    foreach ($row_detail as $value) {
+//                        $det = DeparturesDetail::find($value->id);
+//                        $det->status_id = 1;
+//                        $det->save();
+//                    }
 
 
                     $row->status_id = 1;

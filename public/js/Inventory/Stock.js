@@ -116,9 +116,10 @@ var Stock = (function () {
                     <table class="table-detail">
                         <thead>
                             <tr>
-                                <th colspan="7" align="center">Disponible en Bodega</th>
+                                <th colspan="8" align="center">Disponible en Bodega</th>
                             </tr>
                             <tr>
+                                <th>Bodega</th>
                                 <th>Lote</th>
                                 <th>Vencimiento</th>
                                 <th>Costo</th>
@@ -141,8 +142,8 @@ var Stock = (function () {
                     $.each(data.inventory, function (i, val) {
                         html += `
                         <tr>
+                            <td>${val.warehouse}</td>
                             <td>${val.lot}</td>
-                            
                             <td>${val.expiration_date}</td>
                             <td>${$.formatNumber(val.cost_sf)}</td>
                             <td>${$.formatNumber(val.price_sf)}</td>

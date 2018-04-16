@@ -77,8 +77,9 @@ class StockController extends Controller {
 
     public function detailInventory($id) {
         $inventory = Inventory::select("inventory.id", "products.title as product", "quantity", "expiration_date", "lot", "inventory.cost_sf", "inventory.price_sf"
-                , DB::raw("(inventory.cost_sf * inventory.quantity) as total_cost"), DB::raw("(inventory.price_sf * inventory.quantity) as total_price"))
+                , DB::raw("(inventory.cost_sf * inventory.quantity) as total_cost"), DB::raw("(inventory.price_sf * inventory.quantity) as total_price"),"warehouses.description as warehouse")
                         ->join("products", "products.id", "inventory.product_id")
+                        ->join("warehouses", "warehouses.id", "inventory.warehouse_id")
                         ->where("product_id", $id)->get();
         return response()->json(["inventory" => $inventory]);
     }

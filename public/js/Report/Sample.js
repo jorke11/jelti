@@ -321,7 +321,7 @@ function Sample() {
                 url: "/api/reportSampleGeneral",
                 data: obj,
             },
-            order: [[1, "desc"]],
+//            order: [[1, "desc"]],
             scrollX: true,
             "pageLength": 20,
             columns: [

@@ -39,6 +39,10 @@ function Product() {
 
 
         return $('#tbl').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-1'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-4 col-md-4 col-lg-5'i><'col-xs-6 col-sm-6 col-md-6 col-lg-7 text-center'p>>",
             ajax: {
                 url: "/api/reportProduct",
                 data: param,
@@ -51,6 +55,16 @@ function Product() {
                     titleAttr: 'Excel'
                 },
             ],
+
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
+
             destroy: true,
             columns: [
                 {data: "product"},
@@ -81,6 +95,10 @@ function Product() {
         param.end = $("#Detail #fend").val();
 
         return $('#tblProductsClient').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-1'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-4 col-md-4 col-lg-5'i><'col-xs-6 col-sm-6 col-md-6 col-lg-7 text-center'p>>",
             ajax: {
                 url: "/api/reportProductByClient",
                 data: param,
@@ -132,6 +150,10 @@ function Product() {
         param.end = $("#Detail #fend").val();
 
         return $('#tblProducts').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-1'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-4 col-md-4 col-lg-5'i><'col-xs-6 col-sm-6 col-md-6 col-lg-7 text-center'p>>",
             ajax: {
                 url: "/api/reportProductCity",
                 data: param,

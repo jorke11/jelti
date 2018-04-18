@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 namespace App\Http\Controllers\Sales;
 
@@ -895,6 +895,7 @@ class DepartureController extends Controller {
                     $sale->invoice = $departure->invoice;
 
 
+                    $departure->status_briefcase_id = 2;
                     $departure->quantity = $total_quantity;
                     $departure->quantity_packaging = $total_quantity;
                     $departure->exento = $this->exento;

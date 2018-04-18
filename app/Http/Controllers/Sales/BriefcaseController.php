@@ -220,6 +220,7 @@ class BriefcaseController extends Controller {
             $row->outstanding = $in["saldo"];
             $row->update_id = Auth::user()->id;
             $row->status_id = 7;
+            $row->status_briefcase_id = 3;
             $row->save();
 
 
@@ -241,7 +242,7 @@ class BriefcaseController extends Controller {
                 $header["client"] = $row->client;
                 $header["responsible"] = $row->responsible;
                 $header["description"] = $row->description;
-                
+
 
                 $this->subject = "SuperFuds " . date("d/m") . " Pago cartera " . $row->client;
 

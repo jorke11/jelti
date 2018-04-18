@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 namespace App\Http\Controllers\Sales;
 
@@ -562,6 +562,7 @@ class DepartureController extends Controller {
 
                 $status = (count($validateBriefcase) > 0) ? 8 : 1;
                 $input["header"]["status_id"] = $status;
+                $input["header"]["status_briefcase_id"] = 1;
 
                 if (!isset($input["header"]["shipping_cost"])) {
                     $input["header"]["shipping_cost"] = 0;

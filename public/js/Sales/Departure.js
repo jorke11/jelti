@@ -54,7 +54,7 @@ function Departure() {
 
         $("#quantity").change(function () {
             $("#quantity_units").val(dataProduct.units_sf * $(this).val());
-            $("#value_units").val(dataProduct.units_sf * $(this).val() * dataProduct.price_sf).formatNumber();
+            $("#value_units").val($.formatNumber(dataProduct.units_sf * $(this).val() * dataProduct.price_sf));
         });
         if ($("#id_orderext").val() != '') {
             obj.infomationExt($("#id_orderext").val(), true);

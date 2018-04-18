@@ -38,7 +38,8 @@ class Departures extends Model {
         "purchase_order",
         "date_appointment",
         "quantity",
-        "quantity_packaging"
+        "quantity_packaging",
+        "status_briefcase_id"
     ];
 
 }

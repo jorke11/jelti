@@ -49,7 +49,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="email">Expiration Date:</label>
-                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d H:i") ?>" class="form_datetime input-detail input-sm form-control" required>
+                            <input size="16" type="text" name="expiration_date" id="expiration_date" value="<?php echo date("Y-m-d") ?>" class="form_datetime input-detail input-sm form-control" required>
                         </div>
                     </div>
                 </div>

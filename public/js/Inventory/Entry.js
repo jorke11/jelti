@@ -340,7 +340,7 @@ function Entry() {
 
         $("#tblDetail tbody").empty();
 
-
+        var real_quantity = 0;
         $.each(detail, function (i, val) {
             if (val != undefined) {
 //                if (data.header.status_id == 1) {
@@ -348,13 +348,15 @@ function Entry() {
                 htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
 //                }
 
+                real_quantity = (val.real_quantity != undefined) ? val.real_quantity : 0;
+
                 html += '<tr id="row_' + val.id + '">';
                 html += "<td>" + val.id + "</td>"
                 html += "<td>" + val.product + "</td>"
                 html += "<td>" + val.quantity + "</td>"
                 html += "<td>" + val.value + "</td>"
                 html += "<td>" + val.total + "</td>"
-                html += "<td>" + val.real_quantity + "</td>"
+                html += "<td>" + real_quantity + "</td>"
                 html += "<td>" + val.value + "</td>"
                 html += "<td>" + val.total_real + "</td>"
                 html += '<td>' + htmlEdit + htmlDel + "</td>";
@@ -410,27 +412,6 @@ function Entry() {
         })
 
     }
-
-//    this.editDetail = function (id) {
-//
-//        var url = "/entry/" + id + "/" + $("#frm #id").val() + "/detail";
-//        var param = {};
-//
-//        if (showDetail) {
-//            $.ajax({
-//                url: url,
-//                method: "GET",
-//                dataType: 'JSON',
-//                success: function (data) {
-//                    obj.reloadTableDetail(id, data);
-//                }
-//            })
-//            showDetail = false;
-//        } else {
-//            $(".add_" + id).remove();
-//            showDetail = true;
-//        }
-//    }
 
     this.reloadTableDetail = function (id, data) {
 
@@ -614,7 +595,7 @@ function Entry() {
                     searchable: false,
                 },
                 {data: "id"},
-                {data: "business"},
+                {data: "stakeholder"},
                 {data: "description"},
                 {data: "created_at"},
                 {data: "warehouse"},

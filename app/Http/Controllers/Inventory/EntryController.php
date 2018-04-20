@@ -21,8 +21,11 @@ use App\Models\Uploads\Base;
 use Auth;
 use App;
 use App\Http\Controllers\ToolController;
+use App\Traits\ToolInventory;
 
 class EntryController extends Controller {
+
+    use ToolInventory;
 
     public $total;
     public $total_real;
@@ -127,42 +130,6 @@ class EntryController extends Controller {
             $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
 
             return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
-
-//            $purc = Purchases::find($input["purchase_id"]);
-//
-//            if (count($purc) > 0) {
-//                $purc->status_id = 3;
-//                $purc->save();
-//
-//
-//                $input["status_id"] = 1;
-//                $result = Entries::create($input)->id;
-//
-//                if ($result) {
-//
-//                    $resp = Entries::FindOrFail($result);
-//
-//                    $detail = PurchasesDetail::where("purchase_id", $input["purchase_id"])->whereNotNull('product_id')->get();
-//
-//                    foreach ($detail as $value) {
-//                        EntriesDetail::insert([
-//                            "entry_id" => $result, "product_id" => $value->product_id, "quantity" => $value->quantity,
-//                            "value" => $value->value, "units_supplier" => $value->units_supplier, "status_id" => 1
-//                        ]);
-//                    }
-//
-//                    $detailEntry = $this->formatDetail($result);
-//
-//                    $total = "$ " . number_format($this->total, 2, ',', '.');
-//                    $total_real = "$ " . number_format($this->total_real, 2, ',', '.');
-//
-//                    return response()->json(['success' => true, "header" => $resp, "detail" => $detailEntry, "total" => $total, "total_real" => $total_real]);
-//                } else {
-//                    return response()->json(['success' => false]);
-//                }
-//            } else {
-//                return response()->json(['success' => false, "msg" => "Requied Purchase(Order)"], 409);
-//            }
         }
     }
 
@@ -191,8 +158,7 @@ class EntryController extends Controller {
                         $handler = curl_init($book->url);
                         $response = curl_exec($handler);
                         echo curl_close($handler);
-                        
-                    }else{
+                    } else {
                         echo "paso<br>";
                     }
 //                        $this->addInventory($this->warehouse_id, $book->sf_code, $book->total, $book->lote_real, $book->vencimiento_real);
@@ -213,9 +179,9 @@ class EntryController extends Controller {
 
                 foreach ($input["detail"] as $value) {
                     $pro = Products::find($value["product_id"]);
-
-                    if ($value["real_quantity"] > 0) {
-                        $this->tool->addInventory($input["header"]["warehouse_id"], $pro->reference, trim($value["real_quantity"]), trim($value["lot"]), trim($value["expiration_date"]), $pro->cost_sf);
+                    
+                    if (isset($value["real_quantity"]) && $value["real_quantity"] > 0) {
+                        $this->addInventory($input["header"]["warehouse_id"], $pro->reference, trim($value["real_quantity"]), trim($value["lot"]), trim($value["expiration_date"]), $pro->cost_sf, $pro->price_sf);
                     }
                 }
 
@@ -225,6 +191,7 @@ class EntryController extends Controller {
 
                 return response()->json(["success" => true, "header" => $purc]);
             } else {
+                echo "else";
                 return response()->json(["success" => false, "msg" => "Entry is already generate"], 404);
             }
         } else {

@@ -14,6 +14,51 @@ trait ToolInventory {
         
     }
 
+    public function addInventory($warehouse_id, $reference, $quantity, $lot, $expiration_date, $cost_sf, $price_sf) {
+        $expire = date("Y-m-d", strtotime($expiration_date));
+
+        $response = array("status" => true);
+
+        $pro = \App\Models\Administration\Products::where("reference", $reference)->first();
+
+        if ($pro != null) {
+
+            if (strtotime($expire) > strtotime(date("Y-m-d"))) {
+                $new["warehouse_id"] = $warehouse_id;
+                $new["product_id"] = $pro->id;
+                $new["cost_sf"] = $cost_sf;
+                $new["price_sf"] = $price_sf;
+                $new["lot"] = $lot;
+                $new["quantity"] = $quantity;
+                $new["insert_id"] = Auth::user()->id;
+                $new["expiration_date"] = $expiration_date;
+
+                $inv = Inventory::where("warehouse_id", $warehouse_id)->where("product_id", $pro->product_id)->where("cost_sf", $pro->cost_sf)->where("price_sf", $pro->price_sf)->where("lot", $lot)->first();
+
+                if ($inv != null) {
+                    $inv->quantity = $inventory->quantity + $quantity;
+                    $inv->save();
+                    $new["previous_quantity"] = $inventory->quantity;
+                    $new["type_move"] = "Add new Inventory to product existance";
+                    InventoryLog::create($new);
+                } else {
+                    Inventory::create($new);
+                    $new["previous_quantity"] = 0;
+                    $new["type_move"] = "Add new Inventory";
+                    InventoryLog::create($new);
+                }
+
+                $response = array("status" => true);
+            } else {
+                $response = array("status" => false, "msg" => "Fecha de vencimiento no valida");
+            }
+        } else {
+            $response = array("status" => false, "msg" => "producto no existe");
+        }
+
+        return $response;
+    }
+
     public function moveHold($row_id, $inventory_id, $quantity) {
         $hold = InventoryHold::where("row_id", $row_id)->first();
         $inventory = Inventory::find($inventory_id);

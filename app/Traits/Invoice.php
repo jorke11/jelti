@@ -60,8 +60,14 @@ trait Invoice {
     }
 
     function formatDetail($id) {
+        
         $detail = DB::table("departures_detail")->
-                        select("departures_detail.id", "departures_detail.status_id", "departures_detail.product_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "departures_detail.tax")->join("products", "departures_detail.product_id", "products.id")
+                        select("departures_detail.id", "departures_detail.status_id", "departures_detail.product_id", 
+                                DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity",
+                                "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), 
+                                "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", 
+                                "products.bar_code", "products.units_sf", "departures_detail.tax","departures_detail.cost_sf")->join("products", "departures_detail.product_id", "products.id"
+                                )
                         ->join("stakeholder", "stakeholder.id", "products.supplier_id")->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))->where("departure_id", $id)->orderBy("id", "asc")->get();
 
         $this->total = 0;

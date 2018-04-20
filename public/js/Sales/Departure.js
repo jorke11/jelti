@@ -493,29 +493,58 @@ function Departure() {
 
         $(".input-lots").each(function () {
             lots.push({lot: $(this).attr("lot"), quantity: $(this).val(), expiration_date: $(this).attr("expire")
-                , cost_sf: $(this).attr("cost_sf"), product_id: $(this).attr("product_id"), inventory_id: $(this).attr("inventory_id")});
+                , cost_sf: $(this).attr("cost_sf"), product_id: $(this).attr("product_id"), inventory_id: $(this).attr("inventory_id"), price_sf: $(this).attr("price_sf")}
+            );
+
             total += parseInt($(this).val());
         })
 
 
 //        if (quantity_total >= total) {
-            if (validate.length == 0) {
+        if (validate.length == 0) {
 
-                if (id != '') {
-                    data.header = {};
-                    data.detail = [];
+            if (id != '') {
+                data.header = {};
+                data.detail = [];
 
-                    data.header.id = $("#frmDetail #id").val();
-                    data.header.product_id = $("#frmDetail #product_id :selected").val();
-                    data.header.quantity = $("#frmDetail #quantity").val();
-                    data.header.total = total;
-                    data.detail = lots;
+                data.header.id = $("#frmDetail #id").val();
+                data.header.product_id = $("#frmDetail #product_id :selected").val();
+                data.header.quantity = $("#frmDetail #quantity").val();
+                data.header.total = total;
+                data.detail = lots;
 
 
-                    var url = "/departure/detail/" + id;
+                var url = "/departure/detail/" + id;
+                $.ajax({
+                    url: url,
+                    method: "PUT",
+                    data: data,
+                    dataType: 'JSON',
+                    success: function (resp) {
+                        if (resp.success == true) {
+                            $("#modalDetail").modal("hide");
+                            obj.printDetail(resp);
+                            $("#frmDetail #product_id").text("");
+                            $("#frmDetail #value").val("");
+                            $("#frmDetail #quantity").val("");
+                            $("#frmDetail #quantity_units").val("");
+                            $("#frmDetail #value_units").val("");
+                        } else {
+                            toastr.error(resp.success.msg);
+                        }
+                    }, error(xhr, responseJSON, thrown) {
+                        toastr.error(xhr.responseJSON.msg);
+                    }
+                })
+
+            } else {
+                if (statusRecord == true) {
+                    var frm = $("#frmDetail");
+                    var data = frm.serialize();
+                    var url = "/departure/storeDetail";
                     $.ajax({
                         url: url,
-                        method: "PUT",
+                        method: "POST",
                         data: data,
                         dataType: 'JSON',
                         success: function (resp) {
@@ -534,74 +563,47 @@ function Departure() {
                             toastr.error(xhr.responseJSON.msg);
                         }
                     })
-
                 } else {
-                    if (statusRecord == true) {
-                        var frm = $("#frmDetail");
-                        var data = frm.serialize();
-                        var url = "/departure/storeDetail";
-                        $.ajax({
-                            url: url,
-                            method: "POST",
-                            data: data,
-                            dataType: 'JSON',
-                            success: function (resp) {
-                                if (resp.success == true) {
-                                    $("#modalDetail").modal("hide");
-                                    obj.printDetail(resp);
-                                    $("#frmDetail #product_id").text("");
-                                    $("#frmDetail #value").val("");
-                                    $("#frmDetail #quantity").val("");
-                                    $("#frmDetail #quantity_units").val("");
-                                    $("#frmDetail #value_units").val("");
-                                } else {
-                                    toastr.error(resp.success.msg);
-                                }
-                            }, error(xhr, responseJSON, thrown) {
-                                toastr.error(xhr.responseJSON.msg);
-                            }
-                        })
-                    } else {
-                        if ($("#frmDetail #rowItem").val() == '-1') {
-                            listProducts.push({
-                                row: listProducts.length,
-                                product_id: $("#frmDetail #product_id").val(),
-                                product: $.trim($("#frmDetail #product_id").text()),
-                                price_tax: dataProduct.price_sf * dataProduct.units_sf * dataProduct.tax,
-                                price_sf: dataProduct.price_sf,
-                                units_sf: parseFloat(dataProduct.units_sf),
-                                quantity: $("#frmDetail #quantity").val(),
-                                valueFormated: $("#frmDetail #value").val(),
-                                totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
-                                total: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf) + (dataProduct.price_sf * dataProduct.units_sf * $("#frmDetail #quantity").val() * dataProduct.tax),
-                                real_quantity: '',
-                                totalFormated_real: '',
-                                comment: '',
-                                status: 'new'
-                            });
-                            //                    $(".input-detail").cleanFields();
-                            $("#frmDetail #product_id").text("");
-                            $("#frmDetail #value").val("");
-                            $("#frmDetail #quantity").val("");
-                            $("#frmDetail #quantity_units").val("");
-                            $("#frmDetail #value_units").val("");
+                    if ($("#frmDetail #rowItem").val() == '-1') {
+                        listProducts.push({
+                            row: listProducts.length,
+                            product_id: $("#frmDetail #product_id").val(),
+                            product: $.trim($("#frmDetail #product_id").text()),
+                            price_tax: dataProduct.price_sf * dataProduct.units_sf * dataProduct.tax,
+                            price_sf: dataProduct.price_sf,
+                            units_sf: parseFloat(dataProduct.units_sf),
+                            quantity: $("#frmDetail #quantity").val(),
+                            valueFormated: $("#frmDetail #value").val(),
+                            totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
+                            total: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf) + (dataProduct.price_sf * dataProduct.units_sf * $("#frmDetail #quantity").val() * dataProduct.tax),
+                            real_quantity: '',
+                            totalFormated_real: '',
+                            comment: '',
+                            status: 'new'
+                        });
+                        //                    $(".input-detail").cleanFields();
+                        $("#frmDetail #product_id").text("");
+                        $("#frmDetail #value").val("");
+                        $("#frmDetail #quantity").val("");
+                        $("#frmDetail #quantity_units").val("");
+                        $("#frmDetail #value_units").val("");
 //                    $("#frmDetail #value").val("");
-                            msg += " add";
-                        } else {
-                            listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
-                            listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
-                            msg += " edited";
-                        }
-                        obj.printDetailTmp();
+                        msg += " add";
+                    } else {
+                        listProducts[$("#frmDetail #rowItem").val()].quantity = $("#frmDetail #quantity").val();
+                        listProducts[$("#frmDetail #rowItem").val()].totalFormated = dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf
+                        msg += " edited";
                     }
-
-
-                    toastr.success(msg);
+                    obj.printDetailTmp();
                 }
 
-            } else {
-                toastr.error("input required");
+
+                toastr.success(msg);
             }
+
+        } else {
+            toastr.error("input required");
+        }
 //        } else {
 //            toastr.error("Cantidad solicitada no disponible");
 //        }
@@ -618,6 +620,7 @@ function Departure() {
         var validate = $(".input-service").validate();
         if (validate.length == 0) {
             if (id != '') {
+                console.log("si 1");
                 var id = $("#frmServices #id").val();
                 var frm = $("#frmServices");
                 var data = frm.serialize();
@@ -643,6 +646,7 @@ function Departure() {
 
             } else {
                 if (statusRecord == true) {
+                    console.log("si");
                     var frm = $("#frmServices");
                     var data = frm.serialize();
                     var url = "/departure/storeDetail";
@@ -666,6 +670,7 @@ function Departure() {
                     })
                 } else {
                     if ($("#frmServices #rowItem").val() == '-1') {
+                        console.log("else ");
                         listProducts.push({
                             row: listProducts.length,
                             product_id: $("#frmServices #product_id").val(),
@@ -805,8 +810,13 @@ function Departure() {
             html += "</tr>";
         });
 
-        html += '<tr><td colspan="3" align="right"><Strong>Unidades</strong></td><td>' + quantityTotal + '</td><td></td><td><b></b></td><td></td><td></td><td></td><td></td></tr>';
-        html += '<tr><td colspan="3" align="right"><Strong>Subtotal</strong></td><td></td><td></td><td><b>' + data.subtotal + '</b></td><td></td><td></td><td><b>' + data.subtotal_real + '</b></td><td></td></tr>';
+        html += `
+                <tr>
+                    <td colspan="3" align="right"><Strong>Unidades</strong></td><td>${quantityTotal}</td><td></td><td><b></b></td><td></td><td></td><td></td><td></td></tr>';
+                <tr>
+                    <td colspan="3" align="right"><Strong>Subtotal</strong></td><td></td><td></td><td><b>${data.subtotal}</b></td>
+                    <td></td><td></td><td><b>${data.subtotal_real}</b></td><td></td></tr>`;
+
         if (data.discount != '$ 0') {
             html += '<tr><td colspan="3" align="right"><Strong>Descuento</strong></td><td></td><td></td><td><b>' + data.discount + '</b></td><td></td><td></td><td><b>' + data.discount + '</b></td><td></td></tr>';
         }
@@ -940,13 +950,13 @@ function Departure() {
                             quantity = value.quantity;
                         }
                     })
-
+                    
                     html += `
                             <tr><td>${val.lot}</td>
                             <td>${val.available}</td>
                             <td>${val.expiration_date}</td>
                             <td><input class="form-control input-lots" lot="${val.lot}" expire="${val.expiration_date}" 
-                            cost_sf="${val.cost_sf}" product_id="${val.product_id}" value="${val.quantity}" inventory_id="${val.inventory_id}"></td></tr>`;
+                            cost_sf="${val.cost_sf}" product_id="${val.product_id}" value="${val.quantity}" inventory_id="${val.inventory_id}" price_sf="${val.price_sf}"></td></tr>`;
                     quantity = 0;
                 });
 

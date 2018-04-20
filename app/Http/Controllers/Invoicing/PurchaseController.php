@@ -55,7 +55,7 @@ class PurchaseController extends Controller {
         $stakeholder->delivery = date('Y-m-d', strtotime('+' . $stakeholder->lead_time . ' days', strtotime(date('Y-m-d'))));
 
         $products = Products::select("id as product_id", "tax", "title", "cost_sf", "units_supplier", "category_id")
-                        ->where("supplier_id", $stakeholder->id)->orderBy("title", "asc")->get();
+                        ->where("supplier_id", $stakeholder->id)->where("status_id", 1)->orderBy("title", "asc")->get();
         return response()->json(["response" => $stakeholder, "products" => $products]);
     }
 

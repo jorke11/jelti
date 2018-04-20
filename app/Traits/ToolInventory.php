@@ -59,6 +59,63 @@ trait ToolInventory {
         return $response;
     }
 
+    public function substractForSale($row_id) {
+        $hold = InventoryHold::where("row_id", $row_id)->first();
+        if ($hold != null) {
+            $up["row_id"] = $row_id;
+            $up["product_id"] = $hold->product_id;
+            $up["warehouse_id"] = $hold->warehouse_id;
+            $up["cost_sf"] = $hold->cost_sf;
+            $up["expiration_date"] = $hold->expiration_date;
+            $up["quantity"] = $hold->quantity;
+            $up["lot"] = $hold->lot;
+            $up["type_move"] = "out product hold";
+            $up["insert_id"] = Auth::user()->id;
+            InventoryLog::create($up);
+            $hold->delete();
+        } else {
+            echo $row_id;
+            exit;
+        }
+    }
+
+    public function reverseInventoyHold($data, $detail) {
+
+        foreach ($detail as $value) {
+            if ($value->quantity_lots != null) {
+                $hold = json_decode($value->quantity_lots);
+
+                foreach ($hold as $val) {
+
+                    $new["row_id"] = $data->id;
+                    $new["product_id"] = $val->product_id;
+                    $new["warehouse_id"] = $data->warehouse_id;
+                    $new["cost_sf"] = $val->cost_sf;
+                    $new["expiration_date"] = $val->expiration_date;
+                    $new["quantity"] = $val->quantity;
+                    $new["lot"] = $val->lot;
+                    $new["price_sf"] = $val->price_sf;
+                    $new["insert_id"] = Auth::user()->id;
+
+                    $hold = InventoryHold::where("price_sf", $val->price_sf)->where("lot", $val->lot)->where("expiration_date", $val->expiration_date)
+                                    ->where("cost_sf", $val->cost_sf)->where("warehouse_id", $data->warehouse_id)->where("product_id", $val->product_id)->first();
+
+
+                    $new["type_move"] = "Add inventory for reverse invoice";
+                    if ($hold != null) {
+                        $hold->quantity = $hold->quantity + $hold->quantity;
+                        $hold->save();
+                        $new["previous_quantity"] = $hold->quantity;
+                    } else {
+                        InventoryHold::create($new);
+                        $new["previous_quantity"] = 0;
+                    }
+                    InventoryLog::create($new);
+                }
+            }
+        }
+    }
+
     public function moveHold($row_id, $inventory_id, $quantity) {
         $hold = InventoryHold::where("row_id", $row_id)->first();
         $inventory = Inventory::find($inventory_id);

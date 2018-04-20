@@ -488,7 +488,8 @@ class DepartureController extends Controller {
 
 
                     if ($row->status_id == 2) {
-                        $this->tool->addInventoryReverse($row, $row_detail);
+//                        $this->tool->addInventoryReverse($row, $row_detail);
+                        $this->reverseInventoyHold($row, $row_detail);
                     } else {
 //                        $this->tool->substractHold($row, $quantity);
                     }
@@ -863,7 +864,7 @@ class DepartureController extends Controller {
                         $pro = Products::find($rowDep->product_id);
 
                         if ($pro->category_id != -1) {
-                            $this->tool->substract($value->id, $value);
+                            $this->substractForSale($value->id, $value);
                         }
 
                         $pro = Products::find($value->product_id);
@@ -887,7 +888,11 @@ class DepartureController extends Controller {
                     }
 
 
-                    $detail = $this->formatDetail($input["id"]);
+
+                    $data["success"] = true;
+                    $data["header"] = $departure;
+                    $data["detail"] = $detail;
+                    $detail = $this->formatDetailJSON($data, $departure->id);
 
                     $total = "$ " . number_format($this->total, 0, ",", ".");
 
@@ -1011,7 +1016,7 @@ class DepartureController extends Controller {
                     }
 
                     DB::commit();
-                    return response()->json(["success" => true, "header" => $departure, "detail" => $detail, "total" => $total]);
+                    return response()->json($detail);
                 } else {
                     DB::rollback();
                     return response()->json(["success" => false, "msg" => 'Already sended']);
@@ -1128,6 +1133,8 @@ class DepartureController extends Controller {
         }
 
         $data["header"] = $header;
+
+
         return response()->json($this->formatDetailJSON($data, $id));
     }
 
@@ -1142,6 +1149,7 @@ class DepartureController extends Controller {
         $pro = Products::find($detail->product_id);
 
         if ($pro->category_id != -1) {
+
             $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
 //                            ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
                             ->where("expiration_date", ">", date('Y-m-d'))->get();
@@ -1155,26 +1163,21 @@ class DepartureController extends Controller {
 
         if ($detail->quantity_lots != '') {
 
-
-
             if (count($inventory) > 0) {
-
-
-
                 foreach ($inventory as $val) {
-
                     foreach (json_decode($detail->quantity_lots) as $value) {
 
                         if ($val->id == $value->inventory_id) {
                             $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
                                 "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
                                 "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
-//                        , "price_sf" => $value->price_sf
+                                , "price_sf" => $val->price_sf
                             );
                         }
                     }
                 }
             } else {
+
                 foreach (json_decode($detail->quantity_lots) as $value) {
                     $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
                         "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
@@ -1189,7 +1192,7 @@ class DepartureController extends Controller {
                 $inventory_real[] = array("lot" => $value->lot, "available" => $value->quantity, "quantity" => 0,
                     "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
                     "cost_sf" => $value->cost_sf, "inventory_id" => $value->id
-//                        , "price_sf" => $value->price_sf
+                    , "price_sf" => $value->price_sf
                 );
             }
         }
@@ -1208,8 +1211,6 @@ class DepartureController extends Controller {
     public function update(Request $request, $id) {
         $entry = Departures::Find($id);
         $input = $request->all();
-
-
 
         unset($input["header"]["created_at"]);
 
@@ -1351,7 +1352,7 @@ class DepartureController extends Controller {
         try {
             DB::beginTransaction();
             $input = $request->all();
-
+            
             $row = DeparturesDetail::Find($input["header"]["id"]);
 
             $pro = Products::find($input["header"]["product_id"]);
@@ -1384,7 +1385,6 @@ class DepartureController extends Controller {
                         if ($validate["status"]) {
 
                             $val_quantity += $value["quantity"];
-
                             $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"]);
 //                            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
                         } else {

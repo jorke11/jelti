@@ -40,7 +40,12 @@ class Products extends Model {
         "is_new",
         "about",
         "why",
-        "ingredients"
+        "ingredients",
+        "measure_product",
+        "measure_box",
+        "measure_master",
+        "content_product",
+        "expire_month"
     ];
     
     public $timestamp = false;

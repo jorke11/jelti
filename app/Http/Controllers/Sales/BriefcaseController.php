@@ -223,8 +223,6 @@ class BriefcaseController extends Controller {
             $row->status_briefcase_id = 3;
             $row->save();
 
-
-
             $email = Email::where("description", "payments")->first();
 
             if ($email != null) {
@@ -234,7 +232,6 @@ class BriefcaseController extends Controller {
             if (count($emDetail) > 0) {
                 $this->mails = array();
 
-
                 $row = DB::table("vdepartures")->where("id", $id)->first();
 
                 $header["invoice"] = $row->invoice;
@@ -242,7 +239,6 @@ class BriefcaseController extends Controller {
                 $header["client"] = $row->client;
                 $header["responsible"] = $row->responsible;
                 $header["description"] = $row->description;
-
 
                 $this->subject = "SuperFuds " . date("d/m") . " Pago cartera " . $row->client;
 

@@ -258,6 +258,50 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading personal">
+                        <h4 class="panel-title">Medidas</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Medida producto:</label>
+                                    <input type="text" class="form-control input-product" id="measure_product" name='measure_product' data-type="number">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Medida Caja</label>
+                                    <input type="text" class="form-control input-product" id="measure_box" name='measure_box' data-type="number">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Medida master</label>
+                                    <input type="text" class="form-control input-product" id="measure_master" name='measure_master' data-type="number">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Contenido</label>
+                                    <input type="text" class="form-control input-product" id="content_product" name='content_product' data-type="number">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group" class="control-label">
+                                    <label for="email" class="control-label">Vencimiento(Meses)</label>
+                                    <input type="text" class="form-control input-product"  id="expire_month" name='expire_month' required data-type="number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading personal">
                         <h4 class="panel-title">Imagenes</h4>
                     </div>
                     <div class="panel-body">

@@ -184,6 +184,8 @@ Route::get('/purchase/{id}/getDetailProduct', ['uses' => 'Inventory\StockControl
 Route::post('/purchase/sendPurchase', 'Invoicing\PurchaseController@sendPurchase');
 Route::get('/purchase/testNotification/{id}', 'Invoicing\PurchaseController@testNotification');
 
+Route::get('/purchase/{id}/detailAll/', 'Invoicing\PurchaseController@getAllDetail');
+
 Route::put('/purchase/{id}/reverseInvoice', 'Invoicing\PurchaseController@reverse');
 Route::get('/reportPurchase', 'Report\PurchaseController@index');
 

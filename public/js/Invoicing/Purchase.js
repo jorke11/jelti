@@ -155,7 +155,7 @@ function Purchase() {
             color = (listProducts[i].quantity == 0) ? '' : 'info';
             quantity_total = val.units_supplier * val.quantity;
 
-            
+
             price_total = val.cost_sf * quantity_total;
             total += price_total;
             html += '<tr id="row_' + val.product_id + '" class="' + color + '">';
@@ -455,12 +455,24 @@ function Purchase() {
 
 
     this.table = function () {
-        return $('#tbl').DataTable({
+        table = $('#tbl').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            destroy: true,
             "processing": true,
             "serverSide": true,
             "ajax": "/api/listPurchase",
             columns: [
-                {data: "id"},
+                {
+                    className: 'details-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    searchable: false,
+                },
+//                {data: "id"},
                 {data: "description"},
                 {data: "created_at"},
                 {data: "stakeholder"},
@@ -468,11 +480,36 @@ function Purchase() {
                 {data: "city"},
                 {data: "status"},
             ],
-             lengthMenu: [[30, 100, 300, -1], [30, 100, 300, 'All']],
+
+            buttons: [
+                {
+
+                    className: 'btn btn-primary glyphicon glyphicon-filter',
+                    action: function (e, dt, node, config) {
+                        $("#modalFilter").modal("show");
+                        $(".modal-filter").cleanFields();
+                    }
+                },
+                {
+
+                    className: 'btn btn-primary glyphicon glyphicon-eye-open',
+                    action: function (e, dt, node, config) {
+                        $("#modalColumns").modal("show");
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
+
+            lengthMenu: [[30, 100, 300, -1], [30, 100, 300, 'All']],
             order: [[2, 'DESC']],
             aoColumnDefs: [
                 {
-                    aTargets: [0, 1, 2, 3, 4, 5, 6],
+                    aTargets: [1, 2, 3, 4, 5, 6],
                     mRender: function (data, type, full) {
                         return '<a href="#" onclick="obj.showModal(' + full.id + ')">' + data + '</a>';
                     }
@@ -487,6 +524,71 @@ function Purchase() {
                 }
             ],
         });
+
+
+        $('#tbl tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+
+                row.child(obj.format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+
+        return table;
+
+    }
+
+    this.format = function (d) {
+        var url = "/purchase/" + d.id + "/detailAll";
+        var html = `<br>
+                <table class="table-detail">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Information</th>
+                            <th colspan="3" class="center-rowspan">Orden</th>
+                        </tr>
+                    </thead>`;
+        $.ajax({
+            url: url,
+            method: "GET",
+            dataType: 'JSON',
+            async: false,
+            success: function (data) {
+                html += "<tbody>";
+                $.each(data.detail, function (i, val) {
+                    val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+                    html += "<tr>";
+                    html += "<td>" + val.id + "</td>";
+                    html += "<td>" + val.product + "</td>";
+                    html += "<td>" + (val.tax * 100) + "%</td>";
+                    html += "<td>" + val.quantity + "</td>";
+                    html += "<td>" + val.valueFormated + "</td>";
+                    html += "<td>" + val.totalFormated + "</td>";
+                    html += "</tr>";
+                });
+
+                if (data.tax5 != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Iva 5%</b></td><td>' + data.tax5 + '</td><tr>';
+                }
+                html += '<tr><td colspan="5" align="right"><b>Iva 19%</b></td><td>' + data.tax19 + '</td><tr>';
+                if (data.discount != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.discount + '</td><tr>';
+                }
+                if (data.shipping_cost != '$ 0') {
+                    html += '<tr><td colspan="5" align="right"><b>Descuento</b></td><td>' + data.shipping_cost + '</td><tr>';
+                }
+
+                html += '<tr><td colspan="5" align="right"><b>Subtotal</b></td><td>' + data.subtotal + '</td><tr>';
+                html += '<tr><td colspan="5" align="right"><b>Total</b></td><td>' + data.total + '</td><tr>';
+                html += "</tbody></table><br>";
+            }
+        })
+        return html;
     }
 
 }

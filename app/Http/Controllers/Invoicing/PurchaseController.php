@@ -101,6 +101,26 @@ class PurchaseController extends Controller {
         }
     }
 
+    public function getAllDetail($purchase_id) {
+        $departure = Purchases::find($purchase_id);
+        $detail = $this->formatDetail($purchase_id);
+
+        return response()->json(["detail" => $detail,
+                    "total" => "$ " . number_format($this->total - $departure->discount, 0, ",", "."),
+//                    "total_real" => "$ " . number_format($this->total_real - $departure->discount, 0, ",", "."),
+                    "subtotal" => "$ " . number_format($this->subtotal, 0, ",", "."),
+//                    "subtotal_real" => "$ " . number_format($this->subtotal_real, 0, ",", "."),
+                    "tax5" => "$ " . number_format($this->tax5, 0, ",", "."),
+//                    "tax5_real" => "$ " . number_format($this->tax5_real, 0, ",", "."),
+                    "tax19" => "$ " . number_format($this->tax19, 0, ",", "."),
+//                    "tax19_real" => "$ " . number_format($this->tax19_real, 0, ",", "."),
+//                    "exento" => "$ " . number_format($this->exento, 0, ",", "."),
+//                    "exento_real" => "$ " . number_format($this->exento_real, 0, ",", "."),
+                    "discount" => "$ " . number_format($departure->discount, 0, ",", "."),
+                    "shipping_cost" => "$ " . number_format($departure->shipping_cost, 0, ",", ".")
+        ]);
+    }
+
     public function store(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
@@ -108,7 +128,6 @@ class PurchaseController extends Controller {
 
             unset($input["id"]);
 //            $user = Auth::User();
-            
 //            echo "<ore>";print_r($input);exit;
 
             if (isset($input["detail"])) {
@@ -135,7 +154,7 @@ class PurchaseController extends Controller {
                         unset($input["detail"][$i]["debt"]);
                         unset($input["detail"][$i]["credit"]);
                         unset($input["detail"][$i]["total"]);
-                        
+
                         $detail_id = PurchasesDetail::create($input["detail"][$i])->id;
 
 //                        for ($j = 0; $j < $val["quantity"]; $j++) {

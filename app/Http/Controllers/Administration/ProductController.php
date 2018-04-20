@@ -81,6 +81,20 @@ class ProductController extends Controller {
         }
     }
 
+    public function listProduct(Request $req) {
+        $in = $req->all();
+        $query = DB::table('vproducts');
+        if ($in["status_id"] == 1) {
+
+            $query->where("status_id", 1);
+        } else if ($in["status_id"] == 2) {
+            $query->where("status_id", 2);
+        }
+
+
+        return Datatables::queryBuilder($query)->make(true);
+    }
+
     public function storeSpecial(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
@@ -121,7 +135,6 @@ class ProductController extends Controller {
 
                     if ($book->sf_code) {
 //                        dd($book);
-                        
 //                        $pro = Products::where("reference", $book->sf_code)->where("status_id", 1)->first();
                         $pro = Products::where("reference", $book->sf_code)->first();
 

@@ -315,10 +315,8 @@ Route::get('/api/listClient', function() {
     return Datatables::queryBuilder($query)->make(true);
 });
 
-Route::get('/api/listProduct', function() {
-    $query = DB::table('vproducts');
-    return Datatables::queryBuilder($query)->make(true);
-});
+Route::get('/api/listProduct', 'Administration\ProductController@listProduct');
+
 Route::get('/api/listServices', function() {
     $query = DB::table('vservices');
     return Datatables::queryBuilder($query)->make(true);

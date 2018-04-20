@@ -45,6 +45,10 @@ function Product() {
 
         $("#btnUpload").click(this.uploadExcel)
         $("#btnUpload_code").click(this.uploadExcelCode)
+
+        $("#btnFilter").click(function () {
+            table = obj.table();
+        })
     }
 
     this.uploadExcel = function () {
@@ -64,10 +68,10 @@ function Product() {
             beforeSend: function () {
                 $("#loading-super").removeClass("hidden");
                 $("#tblUpload tbody").empty();
-                elem.attr("disabled",true);
+                elem.attr("disabled", true);
             },
             success: function (data) {
-                elem.attr("disabled",false);
+                elem.attr("disabled", false);
                 $("#loading-super").addClass("hidden");
                 obj.setDetailExcel(data.data)
             }
@@ -318,6 +322,10 @@ function Product() {
     }
 
     this.table = function () {
+
+        var param = {};
+        param.status_id = $("#frmFilter #status_id").val();
+
         return $('#tblProducts').DataTable({
             "processing": true,
             "dom":
@@ -325,7 +333,11 @@ function Product() {
                     "<'row'<'col-sm-12't>>" +
                     "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
             "serverSide": true,
-            "ajax": "/api/listProduct",
+            destroy: true,
+            ajax: {
+                url: "/api/listProduct",
+                data: param
+            },
             scrollX: true,
             "lengthMenu": [[30, 100, 300, -1], [30, 100, 300, 'All']],
             columns: [
@@ -350,6 +362,7 @@ function Product() {
                 {data: "status"},
                 {data: "id"},
             ],
+
             order: [[1, 'ASC']],
             aoColumnDefs: [
                 {
@@ -373,6 +386,13 @@ function Product() {
 //                    text: '<i class="fa fa-file-excel-o"></i>',
                     className: 'btn btn-primary glyphicon glyphicon-download',
                     titleAttr: 'Excel'
+                },
+                {
+
+                    className: 'btn btn-primary glyphicon glyphicon-filter',
+                    action: function (e, dt, node, config) {
+                        $("#modalFilter").modal("show");
+                    }
                 },
             ],
         });

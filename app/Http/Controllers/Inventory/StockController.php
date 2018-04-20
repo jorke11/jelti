@@ -62,7 +62,12 @@ class StockController extends Controller {
                                             from departures_detail 
                                             JOIN departures ON departures.id= departures_detail.departure_id AND departures.status_id IN(1,8)
                                             where departures_detail.product_id=vproducts.id),0) as request_client,
-            coalesce((select sum(quantity*cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf,minimum_stock
+            coalesce((
+                                            select sum(purchases_detail.quantity) 
+                                            from purchases_detail 
+                                            JOIN purchases ON purchases.id= purchases_detail.purchase_id AND purchases.status_id =2
+                                            where purchases_detail.product_id=vproducts.id),0) as request_supplier,                                
+            coalesce((select sum(quantity * cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf,minimum_stock
             from vproducts
             ORDER BY 6 ASC
             $bar_code $ware

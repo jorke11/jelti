@@ -15,6 +15,7 @@
                             <th>En bodega</th>
                             <th>Pedidos</th>
                             <th>En espera</th>
+                            <th>Comprado</th>
                             <th>Costo Total</th>
                             <th>Action</th>
                         </tr>

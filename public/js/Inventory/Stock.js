@@ -44,6 +44,8 @@ var Stock = (function () {
                     {data: "in_warehouse"},
                     {data: "request_client"},
                     {data: "in_hold"},
+                    {data: "request_supplier"},
+                    {data: "in_hold"},
                     {data: "cost_sf", render: $.fn.dataTable.render.number(',', '.', 0), "visible": true},
                 ],
                 order: [[6, 'ASC']],
@@ -55,7 +57,7 @@ var Stock = (function () {
                         }
                     },
                     {
-                        targets: [9],
+                        targets: [10],
                         searchable: false,
                         mData: null,
                         mRender: function (data, type, full) {

@@ -1156,7 +1156,7 @@ class DepartureController extends Controller {
 
             $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
 //                            ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
-                            ->where("expiration_date", ">", date('Y-m-d'))->get();
+            ->where("expiration_date", ">", date('Y-m-d'))->orderBy("expiration_date", "asc")->get();
         } else {
             $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
                 "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf);
@@ -1209,7 +1209,7 @@ class DepartureController extends Controller {
                         ->join("vdepartures", "vdepartures.id", "departures_detail.departure_id")
                         ->where("inventory_hold.product_id", $detail->product_id)->where("inventory_hold.warehouse_id", $header->warehouse_id)->get();
 
-        return response()->json(["row" => $detail, "inventory" => $inventory_real, "hold" => $hold, "image" => $pro->image,"category"=>$pro->category]);
+        return response()->json(["row" => $detail, "inventory" => $inventory_real, "hold" => $hold, "image" => $pro->image, "category" => $pro->category]);
     }
 
     public function update(Request $request, $id) {

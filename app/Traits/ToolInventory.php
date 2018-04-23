@@ -92,7 +92,7 @@ trait ToolInventory {
                         $val->price_sf = $pro->price_sf;
                     }
 
-                    $new["row_id"] = $data->id;
+                    $new["row_id"] = $value->id;
                     $new["product_id"] = $val->product_id;
                     $new["warehouse_id"] = $data->warehouse_id;
                     $new["cost_sf"] = $val->cost_sf;
@@ -106,6 +106,8 @@ trait ToolInventory {
                                     ->where("cost_sf", $val->cost_sf)->where("warehouse_id", $data->warehouse_id)->where("product_id", $val->product_id)->first();
 
                     $new["type_move"] = "Add inventory for reverse invoice";
+                    
+                    
                     if ($hold != null) {
                         $hold->quantity = $hold->quantity + $hold->quantity;
                         $hold->save();

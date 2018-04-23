@@ -187,6 +187,7 @@ class BlogController extends Controller {
 
         $in = $req->all();
 
+
         $in["email"] = trim($in["email"]);
         unset($in["_token"]);
         $email = Stakeholder::where("email", trim($in["email"]))->get();
@@ -201,7 +202,7 @@ class BlogController extends Controller {
             
         }
 
-        unset($in["type_stakeholder"]);
+//        unset($in["type_stakeholder"]);
 
         $this->mails[] = "jpinedom@hotmail.com";
 

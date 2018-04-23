@@ -187,13 +187,14 @@ function Departure() {
         })
 
         $("#btnRem").click(this.saveRem);
-        
-        
-        $("#frmDetail").submit(function(){
-           obj.saveDetail();
-           return false
+
+
+        $("#frmDetail").submit(function () {
+            obj.saveDetail();
+
+            return false
         });
-        
+
     }
 
     this.saveRem = function () {
@@ -540,6 +541,8 @@ function Departure() {
                             $("#frmDetail #quantity").val("");
                             $("#frmDetail #quantity_units").val("");
                             $("#frmDetail #value_units").val("");
+                            $("#frmDetail #txtCategory").html("Sin Seleccionar");
+                            $("#frmDetail #txtValue").html("Sin Selecccionar");
                         } else {
                             toastr.error(resp.success.msg);
                         }
@@ -567,6 +570,8 @@ function Departure() {
                                 $("#frmDetail #quantity").val("");
                                 $("#frmDetail #quantity_units").val("");
                                 $("#frmDetail #value_units").val("");
+                                $("#frmDetail #txtCategory").html("Sin Seleccionar");
+                                $("#frmDetail #txtValue").html("Sin Selecccionar");
                             } else {
                                 toastr.error(resp.success.msg);
                             }

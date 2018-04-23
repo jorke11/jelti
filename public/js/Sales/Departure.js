@@ -187,6 +187,13 @@ function Departure() {
         })
 
         $("#btnRem").click(this.saveRem);
+        
+        
+        $("#frmDetail").submit(function(){
+           obj.saveDetail();
+           return false
+        });
+        
     }
 
     this.saveRem = function () {

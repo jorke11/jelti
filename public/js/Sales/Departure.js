@@ -543,6 +543,7 @@ function Departure() {
                             $("#frmDetail #value_units").val("");
                             $("#frmDetail #txtCategory").html("Sin Seleccionar");
                             $("#frmDetail #txtValue").html("Sin Selecccionar");
+                            $("#frmDetail #imgProduct").attr("src", "");
                         } else {
                             toastr.error(resp.success.msg);
                         }
@@ -572,6 +573,7 @@ function Departure() {
                                 $("#frmDetail #value_units").val("");
                                 $("#frmDetail #txtCategory").html("Sin Seleccionar");
                                 $("#frmDetail #txtValue").html("Sin Selecccionar");
+                                $("#frmDetail #imgProduct").attr("src", "");
                             } else {
                                 toastr.error(resp.success.msg);
                             }
@@ -603,6 +605,9 @@ function Departure() {
                         $("#frmDetail #quantity").val("");
                         $("#frmDetail #quantity_units").val("");
                         $("#frmDetail #value_units").val("");
+                        $("#frmDetail #txtCategory").html("Sin Seleccionar");
+                        $("#frmDetail #txtValue").html("Sin Selecccionar");
+                        $("#frmDetail #imgProduct").attr("src", "");
 //                    $("#frmDetail #value").val("");
                         msg += " add";
                     } else {

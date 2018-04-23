@@ -76,6 +76,9 @@ function Departure() {
 
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
+            $("#frmDetail #txtCategory").html("Sin Seleccionar");
+            $("#frmDetail #txtValue").html("Sin Seleccionar");
+            $("#frmDetail #imgProduct").attr("src", "");
             $(".input-detail").cleanFields();
             $("#frmDetail #rowItem").val(-1);
             if ($("#frm #status_id").val() == 1) {
@@ -104,8 +107,9 @@ function Departure() {
                 dataType: 'JSON',
                 success: function (resp) {
                     dataProduct = resp.response;
-                    $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
-                    $("#frmDetail #value").val($.formatNumber(resp.response.price_sf));
+                    $("#frmDetail #imgProduct").attr("src", resp.response.image);
+                    $("#frmDetail #txtCategory").html("Categoria: " + resp.response.caterory)
+                    $("#frmDetail #txtValue").html("Valor: " + $.formatNumber(resp.response.price_sf));
                     $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
                 }
             })
@@ -620,7 +624,6 @@ function Departure() {
         var validate = $(".input-service").validate();
         if (validate.length == 0) {
             if (id != '') {
-                console.log("si 1");
                 var id = $("#frmServices #id").val();
                 var frm = $("#frmServices");
                 var data = frm.serialize();
@@ -646,7 +649,6 @@ function Departure() {
 
             } else {
                 if (statusRecord == true) {
-                    console.log("si");
                     var frm = $("#frmServices");
                     var data = frm.serialize();
                     var url = "/departure/storeDetail";
@@ -670,7 +672,6 @@ function Departure() {
                     })
                 } else {
                     if ($("#frmServices #rowItem").val() == '-1') {
-                        console.log("else ");
                         listProducts.push({
                             row: listProducts.length,
                             product_id: $("#frmServices #product_id").val(),
@@ -718,10 +719,8 @@ function Departure() {
     }
 
     this.getItem = function (product_id) {
-        console.log(product_id)
 
         $.each(listProducts, function (i, val) {
-            console.log(val)
             if (val.product_id == product_id) {
                 rowItem = i;
                 row = val;
@@ -950,7 +949,7 @@ function Departure() {
                             quantity = value.quantity;
                         }
                     })
-                    
+
                     html += `
                             <tr><td>${val.lot}</td>
                             <td>${val.available}</td>
@@ -963,7 +962,9 @@ function Departure() {
                 $("#tableLot tbody").html(html);
 
                 $("#tableHold tbody").empty();
+
                 html = '';
+
                 $.each(resp.hold, function (i, val) {
 
                     html += `
@@ -1147,7 +1148,6 @@ function Departure() {
                 },
                 {data: "total", render: function (data, type, row) {
                         if (row.status_id == 5) {
-//                            console.log(row);
                             html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + row.id + ')"></i> (' + row.remission + ')';
                         } else {
                             if (row.status_id != 1 && row.status_id != 8) {

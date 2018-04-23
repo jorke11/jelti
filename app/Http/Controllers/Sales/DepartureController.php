@@ -219,6 +219,8 @@ class DepartureController extends Controller {
         $detail = $this->formatDetailSales($sale["id"]);
 
         $dep = Departures::find($id);
+
+
         $cli = null;
         if ($dep->branch_id != '') {
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term", "branch_office.phone")
@@ -679,6 +681,7 @@ class DepartureController extends Controller {
                     }
                 }
 
+
                 if ($header["shipping_cost"] != 0) {
                     if ($tax19 > 0) {
                         $resp->shipping_cost_tax = 0.19;
@@ -689,6 +692,7 @@ class DepartureController extends Controller {
                     }
                     $resp->save();
                 }
+
 
                 $data["header"] = $resp;
                 $listdetail = $this->formatDetailJSON($data, $result);
@@ -1146,7 +1150,7 @@ class DepartureController extends Controller {
         $header = Departures::find($detail->departure_id);
 
 
-        $pro = Products::find($detail->product_id);
+        $pro = DB::table("vproducts")->where("id", $detail->product_id)->first();
 
         if ($pro->category_id != -1) {
 
@@ -1205,7 +1209,7 @@ class DepartureController extends Controller {
                         ->join("vdepartures", "vdepartures.id", "departures_detail.departure_id")
                         ->where("inventory_hold.product_id", $detail->product_id)->where("inventory_hold.warehouse_id", $header->warehouse_id)->get();
 
-        return response()->json(["row" => $detail, "inventory" => $inventory_real, "hold" => $hold]);
+        return response()->json(["row" => $detail, "inventory" => $inventory_real, "hold" => $hold, "image" => $pro->image,"category"=>$pro->category]);
     }
 
     public function update(Request $request, $id) {
@@ -1352,7 +1356,7 @@ class DepartureController extends Controller {
         try {
             DB::beginTransaction();
             $input = $request->all();
-            
+
             $row = DeparturesDetail::Find($input["header"]["id"]);
 
             $pro = Products::find($input["header"]["product_id"]);

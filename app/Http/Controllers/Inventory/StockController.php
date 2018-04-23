@@ -141,27 +141,28 @@ class StockController extends Controller {
     public function getDetailProduct(Request $req, $id) {
         $in = $req->all();
         $special = null;
+        
         if (isset($in["client_id"]) && $in["client_id"] != '') {
             $special = PricesSpecial::where("product_id", $id)->where("client_id", $in["client_id"])->first();
         }
 
-
         if ($special) {
-
-            $response = DB::table("products")
-                            ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier")
-                            ->join("categories", "categories.id", "=", "products.category_id")
-                            ->join("prices_special", "prices_special.product_id", "=", "products.id")
-                            ->where("products.id", $id)
+            
+            $response = DB::table("vproducts")
+                            ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier","vproducts.image")
+                            ->join("categories", "categories.id", "=", "vproducts.category_id")
+                            ->join("prices_special", "prices_special.product_id", "=", "vproducts.id")
+                            ->where("vproducts.id", $id)
                             ->where("prices_special.client_id", $in["client_id"])->first();
         } else {
-            $response = DB::table("products")
-                    ->select("products.id", "products.title", "products.tax", "categories.description as caterory", "categories.id as category_id", "products.price_sf", "products.cost_sf", "products.units_sf", "products.units_supplier", "products.margin_sf", "products.packaging")
-                    ->leftjoin("categories", "categories.id", "=", "products.category_id")
-                    ->where("products.id", $id)
+            $response = DB::table("vproducts")
+                    ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", 
+                            "vproducts.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier",
+                            "vproducts.packaging","vproducts.image")
+                    ->leftjoin("categories", "categories.id", "=", "vproducts.category_id")
+                    ->where("vproducts.id", $id)
                     ->first();
         }
-
 
         $inv = Inventory::where("product_id", $id)->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))));
 

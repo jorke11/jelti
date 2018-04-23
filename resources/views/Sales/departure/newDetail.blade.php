@@ -14,106 +14,93 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Product:</label>
-                            <select class="form-control input-detail" id="product_id" name='product_id' data-api="/api/getProduct" required>
-                            </select>
-                        </div>
 
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="email">Product:</label>
+                                    <select class="form-control input-detail" id="product_id" name='product_id' data-product="/api/getProduct" required>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="email">Quantity <span id="quantityMax" style="color: red;"></span></label>
+                                    <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' placeholder="Quantity" required>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Category:</label>
-                            <select class="form-control input-detail input-sm" id="category_id">
-                                @foreach($category as $cat)
-                                <option value="{{$cat->id}}">{{$cat->description}}</option>
-                                @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">Información</li>
+                                    <li class="list-group-item" id="txtCategory">Sin seleccionar</li>
+                                    <li class="list-group-item" id="txtValue">$0</li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6">
+                                <img src="" id="imgProduct" width="80%">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Quantity <span id="quantityMax" style="color: red;"></span></label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' placeholder="Quantity" required>
+
+                    @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
+                    <div id="lotes">
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table class="table table-bordered table-condensed" id="tableLot">
+                                    <thead>
+                                        <tr>
+                                            <th>Lote</th>
+                                            <th>Disponible</th>
+                                            <th>Vencimiento</th>
+                                            <th>Cantidad necesaria</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Value:</label>
-                            <input type="text" class="form-control input-detail input-sm" id="value" name='value' required readonly>
+                    @endif
+                    {!!Form::close()!!}
+
+                    <div id="hold_inventory">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table class="table table-bordered table-condensed" id="tableHold">
+                                    <thead>
+                                        <tr style="background: #0ab8ec">
+                                            <th colspan="4" style=" text-align: center;">Inventario Hold</th>
+                                        </tr>
+                                        <tr style="background: #0ab8ec">
+                                            <th>Cliente</th>
+                                            <th>Cantidad</th>
+                                            <th>Fecha Creacion</th>
+                                            <th>Bodega</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
                 </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Quantity with units_sf</label>
-                            <input type="text" class="form-control input-detail input-sm" id="quantity_units" readonly="">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="email">Value with units_sf</label>
-                            <input type="text" class="form-control input-detail input-sm" id="value_units" readonly="">
-                        </div>
-                    </div>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+                    <button type="button" class="btn btn-success" id='newDetail'>Guardar</button>
                 </div>
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
-                <div id="lotes">
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <table class="table table-bordered table-condensed" id="tableLot">
-                                <thead>
-                                    <tr>
-                                        <th>Lote</th>
-                                        <th>Disponible</th>
-                                        <th>Vencimiento</th>
-                                        <th>Cantidad necesaria</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                {!!Form::close()!!}
-
-                <div id="hold_inventory">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <table class="table table-bordered table-condensed" id="tableHold">
-                                <thead>
-                                    <tr style="background: #0ab8ec">
-                                        <th colspan="4" style=" text-align: center;">Inventario Hold</th>
-                                    </tr>
-                                    <tr style="background: #0ab8ec">
-                                        <th>Cliente</th>
-                                        <th>Cantidad</th>
-                                        <th>Fecha Creacion</th>
-                                        <th>Bodega</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
-                <button type="button" class="btn btn-success" id='newDetail'>Guardar</button>
             </div>
         </div>
     </div>
-</div>

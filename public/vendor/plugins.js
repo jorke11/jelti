@@ -1,8 +1,22 @@
 function formatRepo(data) {
+
     return data.text;
 }
 
 function formatRepoSelection(data) {
+    return data.text;
+}
+
+function formatRepoProduct(data) {
+    var text = '';
+    if (data.image != null) {
+        text = '<img src="' + data.image + '" width=10%>';
+    }
+
+    return text + data.text;
+}
+
+function formatRepoSelectionProduct(data) {
     return data.text;
 }
 
@@ -87,6 +101,89 @@ jQuery.fn.getSeeker = function (param) {
     })
 }
 
+jQuery.fn.getSeekerProduct = function (param) {
+    param = param || {};
+    this.each(function () {
+        var elem = $(this);
+
+        if (typeof param.api === 'undefined') {
+            param.api = elem.data("product");
+        }
+
+
+        if (typeof param.default !== 'undefined') {
+
+            if (param.default == true) {
+                var obj = {};
+                obj.id = param.default;
+                $.ajax({
+                    url: param.api + "?q=0",
+                    type: 'GET',
+                    data: obj,
+                    async: false,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.items.length > 0) {
+                            elem.append('<option value=' + data.items[0].id + '>' + data.items[0].text + '</option>');
+                            elem.select2({'data': [{'id': data.items[0].id, 'text': data.items[0].text}]});
+                            elem.val(data.items[0].id).trigger('change');
+                        }
+                    }
+                })
+            }
+        }
+
+        if (typeof param.disabled !== 'undefined') {
+            if (param.default == true) {
+                elem.prop("disabled", true);
+            } else {
+                elem.prop("disabled", false);
+            }
+        }
+        var multiple = false;
+        if (elem.attr("multiple") != undefined) {
+            multiple = true;
+        }
+
+        if (elem.data("product") != undefined) {
+
+            elem.select2({
+                placeholder: "Select",
+                multiple: multiple,
+                ajax: {
+                    url: elem.data("product"),
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page,
+                            filter: param.filter
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    }
+                },
+                escapeMarkup: function (markup) {
+                    return markup;
+                }, // let our custom formatter work
+                minimumInputLength: 1,
+                templateResult: formatRepoProduct, // omitted for brevity, see the source of this page
+                templateSelection: formatRepoSelectionProduct, // omitted for brevity, see the source of this page
+
+            });
+        }
+
+    })
+}
+
 
 jQuery.fn.setFields = function (param) {
     param = param || {};
@@ -126,6 +223,32 @@ jQuery.fn.setFields = function (param) {
                         }
                     })
                     elem.getSeeker(elem.data("api"));
+                } else if (elem.data("product") != undefined) {
+
+                    var obj = {};
+                    obj.id = val;
+                    $.ajax({
+                        url: elem.data("product"),
+                        type: 'GET',
+                        data: obj,
+                        async: false,
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if (data.items.length > 0) {
+                                var sel = [];
+                                elem.empty();
+                                $.each(data.items, function (i, val) {
+                                    elem.append('<option value=' + val.id + '>' + val.text + '</option>');
+                                    elem.select2({'data': [{'id': val.id, 'text': val.text}]});
+                                    sel.push(val.id);
+                                });
+
+                                elem.val(sel).trigger('change');
+                            }
+                        }
+                    })
+                    elem.getSeeker(elem.data("product"));
+
                 } else {
                     if (elem.attr('type') == 'checkbox') {
                         (val == 1) ? elem.prop('checked', true) : elem.prop('checked', false);
@@ -181,6 +304,9 @@ jQuery.fn.cleanFields = function (param) {
             if (typeof elem.data("api") !== 'undefined') {
                 elem.val(0);
                 elem.getSeeker({api: elem.data("api")});
+            } else if (typeof elem.data("product") !== 'undefined') {
+                elem.val(0);
+                elem.getSeekerProduct({api: elem.data("api")});
             } else {
 //                elem.val(0).select2();
                 elem.val(0);
@@ -286,9 +412,9 @@ jQuery.fn.capital = function (str) {
 }
 
 $.formatNumber = function (n, currency) {
-    
+
     if (currency == undefined) {
-        currency="$";
+        currency = "$";
     }
 
     return currency + " " + parseFloat(n).toFixed(2).replace(/./g, function (c, i, a) {

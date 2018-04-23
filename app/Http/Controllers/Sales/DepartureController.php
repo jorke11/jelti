@@ -534,6 +534,33 @@ class DepartureController extends Controller {
         }
     }
 
+    public function repair($id, $warehouse_id) {
+        $detail = DeparturesDetail::where("departure_id", $id)->get();
+
+        foreach ($detail as $value) {
+
+            if ($value->quantity_lots != null) {
+
+                $row = json_decode($value->quantity_lots);
+                foreach ($row as $val) {
+                    $pro = Products::find($val->product_id);
+                    $new["product_id"] = $val->product_id;
+                    $new["lot"] = $val->lot;
+                    $new["price_sf"] = $pro->price_sf;
+                    $new["cost_sf"] = $pro->cost_sf;
+                    $new["warehouse_id"] = $warehouse_id;
+                    $new["insert_id"] = 2;
+                    $new["row_id"] = $value->id;
+                    $new["expiration_date"] = $val->expiration_date;
+                    $new["quantity"] = $val->quantity;
+                    $new["inventory_id"] = $val->inventory_id;
+
+                    InventoryHold::create($new);
+                }
+            }
+        }
+    }
+
     public function getQuantity($id) {
         $product = \App\Models\Invoicing\PurchaseDetail::where("product_id", $id)->first();
         return response()->json(["response" => $product]);

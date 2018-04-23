@@ -18,6 +18,7 @@ Route::get('/departure/{id}/getInvoiceHtml', ['uses' => 'Sales\DepartureControll
 Route::get('/departure/{id}/detailAll/', 'Sales\DepartureController@getAllDetail');
 Route::put('/departure/generateInvoice/{id}', 'Sales\DepartureController@generateInvoice');
 Route::put('/departure/generateRemission/{id}', 'Sales\DepartureController@generateRemission');
+Route::get('/departure/repair/{id}/{warehouse_id}', 'Sales\DepartureController@repair');
 
 Route::get('/departure/{id}/getClient', ['uses' => 'Sales\DepartureController@getClient']);
 Route::get('/departure/{id}/getBranch', ['uses' => 'Sales\DepartureController@getBranch']);

@@ -1,7 +1,7 @@
 function Departure() {
-
     var table, maxDeparture = 0, listProducts = [], dataProduct, row = {}, rowItem, statusRecord = false, client_id = null, warehouse_id = null;
     var quantity_total = 0;
+    var row_current = {}
 
     this.init = function () {
 
@@ -592,7 +592,7 @@ function Departure() {
                             price_sf: dataProduct.price_sf,
                             units_sf: parseFloat(dataProduct.units_sf),
                             quantity: $("#frmDetail #quantity").val(),
-                            valueFormated: $("#frmDetail #value").val(),
+                            valueFormated: $.formatNumber(dataProduct.price_sf, "$"),
                             totalFormated: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf),
                             total: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf) + (dataProduct.price_sf * dataProduct.units_sf * $("#frmDetail #quantity").val() * dataProduct.tax),
                             real_quantity: '',
@@ -698,7 +698,7 @@ function Departure() {
                             price_sf: dataProduct.price_sf,
                             units_sf: parseFloat(dataProduct.units_sf),
                             quantity: 1,
-                            valueFormated: $("#frmServices #value").val(),
+                            valueFormated: $.formatNumber(dataProduct.price_sf, "$"),
                             totalFormated: (dataProduct.price_sf * 1 * dataProduct.units_sf),
                             total: (dataProduct.price_sf * $("#frmDetail #quantity").val() * dataProduct.units_sf) + (dataProduct.price_sf * dataProduct.units_sf * 1 * dataProduct.tax),
                             real_quantity: '',
@@ -734,6 +734,10 @@ function Departure() {
         $("#frmDetail #rowItem").val(rowItem);
         $(".input-detail").cleanFields();
         $(".input-detail").setFields({data: row});
+
+        console.log("asdasd")
+        console.log(row)
+        console.log(rowItem)
     }
 
     this.getItem = function (product_id) {
@@ -749,6 +753,9 @@ function Departure() {
     this.printDetailTmp = function (data, btnEdit = true, btnDel = true) {
         var html = "", htmlEdit = "", htmlDel = "", total = 0;
         $("#tblDetail tbody").html("");
+
+        console.log(listProducts)
+
         $.each(listProducts, function (i, val) {
 
             if (val != undefined) {
@@ -787,6 +794,8 @@ function Departure() {
     this.printDetail = function (data, btnEdit = true, btnDel = true) {
         var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0, id = '';
         $("#tblDetail tbody").empty();
+
+
 
         $.each(data.detail, function (i, val) {
 
@@ -952,7 +961,7 @@ function Departure() {
             dataType: 'JSON',
             success: function (resp) {
                 quantity_total = resp.row.quantity;
-
+                row_current = resp.row;
                 $("#modalDetail").modal("show");
                 $(".input-detail").setFields({data: resp.row})
 
@@ -995,7 +1004,6 @@ function Departure() {
                 });
 
                 $("#tableHold tbody").html(html);
-
 
             }, error(xhr, responseJSON, thrown) {
                 toastr.error(responseJSON.msg)

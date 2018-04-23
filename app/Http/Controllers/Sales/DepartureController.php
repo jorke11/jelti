@@ -1153,7 +1153,6 @@ class DepartureController extends Controller {
         $pro = DB::table("vproducts")->where("id", $detail->product_id)->first();
 
         if ($pro->category_id != -1) {
-
             $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
 //                            ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
                             ->where("expiration_date", ">", date('Y-m-d'))->orderBy("expiration_date", "asc")->get();
@@ -1161,7 +1160,6 @@ class DepartureController extends Controller {
             $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
                 "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf);
         }
-
 
         $inventory_real = [];
 

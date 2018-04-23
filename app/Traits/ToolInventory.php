@@ -87,6 +87,11 @@ trait ToolInventory {
 
                 foreach ($hold as $val) {
 
+                    if (!isset($val->price_sf) || $val->price_sf == "null") {
+                        $pro = \App\Models\Administration\Products::find($val->product_id);
+                        $val->price_sf = $pro->price_sf;
+                    }
+
                     $new["row_id"] = $data->id;
                     $new["product_id"] = $val->product_id;
                     $new["warehouse_id"] = $data->warehouse_id;
@@ -96,13 +101,7 @@ trait ToolInventory {
                     $new["lot"] = $val->lot;
                     $new["price_sf"] = $val->price_sf;
                     $new["insert_id"] = Auth::user()->id;
-                    
-                    
-                    if ($val->price_sf == "null") {
-                        $pro = \App\Models\Administration\Products::find($val->product_id);
-                        $val->price_sf = $pro->price_sf;
-                    }
-                    
+
                     $hold = InventoryHold::where("price_sf", $val->price_sf)->where("lot", $val->lot)->where("expiration_date", $val->expiration_date)
                                     ->where("cost_sf", $val->cost_sf)->where("warehouse_id", $data->warehouse_id)->where("product_id", $val->product_id)->first();
 
@@ -115,7 +114,7 @@ trait ToolInventory {
                         InventoryHold::create($new);
                         $new["previous_quantity"] = 0;
                     }
-                    
+
                     InventoryLog::create($new);
                 }
             }

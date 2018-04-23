@@ -754,8 +754,6 @@ function Departure() {
         var html = "", htmlEdit = "", htmlDel = "", total = 0;
         $("#tblDetail tbody").html("");
 
-        console.log(listProducts)
-
         $.each(listProducts, function (i, val) {
 
             if (val != undefined) {

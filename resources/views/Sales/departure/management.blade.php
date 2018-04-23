@@ -235,3 +235,5 @@
         </div>
     </div>
 </div>
+
+@include('Sales.departure.upload')

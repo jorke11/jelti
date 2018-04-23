@@ -142,6 +142,6 @@
 
 @include('Sales.departure.newDetail')
 @include('Sales.departure.newService')
-@include('Sales.departure.upload')
+
 {!!Html::script('js/Sales/Departure.js')!!}
 @endsection

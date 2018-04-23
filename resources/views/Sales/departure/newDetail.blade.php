@@ -28,7 +28,7 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="email">Quantity <span id="quantityMax" style="color: red;"></span></label>
-                                    <input type="text" class="form-control input-detail input-sm" id="quantity" name='quantity' placeholder="Quantity" required>
+                                    <input type="text" class="form-control input-detail input-sm input-number" id="quantity" name='quantity' placeholder="Quantity" required>
                                 </div>
                             </div>
                         </div>

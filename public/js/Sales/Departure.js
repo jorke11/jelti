@@ -190,6 +190,7 @@ function Departure() {
 
 
         $("#frmDetail").submit(function () {
+            var validate = $(".input-detail").validate();
             obj.saveDetail();
 
             return false

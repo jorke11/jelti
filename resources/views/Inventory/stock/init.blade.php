@@ -34,14 +34,10 @@
 
 </div>
 
-
-
 <div class="row">
-
-    <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist" id='myTabs'>
         <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">Inventario</a></li>
-        <li role="presentation" id="tabTransit"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">En Transito</a>
+        <li role="presentation" id="tabLog"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Log</a>
         </li>
     </ul>
 

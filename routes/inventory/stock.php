@@ -6,6 +6,8 @@ Route::delete('/stock/{id}', 'Inventory\StockController@destroy');
 Route::get('/api/listStock', 'Inventory\StockController@getStock');
 Route::get('/api/listStockTransit', 'Inventory\StockController@getStockTransit');
 
+Route::get('/api/listStockLog', 'Inventory\StockController@getStockLog');
+
 
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
 Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}/{vencimiento}', "ToolController@addInventory");

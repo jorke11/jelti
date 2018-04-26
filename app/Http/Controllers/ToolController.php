@@ -864,23 +864,4 @@ class ToolController extends Controller {
             exit;
         }
     }
-
-    public function addInventoryRow($row_id) {
-        $hold = InventoryHold::where("row_id", $row_id)->first();
-        $pro = Products::find($hold->product_id);
-
-        $this->addInventory($hold->warehouse_id, $pro->reference, $hold->quantity, $hold->lot, $hold->expiration_date, $hold->cost_sf);
-        $up["row_id"] = $row_id;
-        $up["product_id"] = $hold->product_id;
-        $up["warehouse_id"] = $hold->warehouse_id;
-        $up["cost_sf"] = $hold->cost_sf;
-        $up["expiration_date"] = $hold->expiration_date;
-        $up["quantity"] = $hold->quantity;
-        $up["lot"] = $hold->lot;
-        $up["type_move"] = "substract_hold";
-        $up["insert_id"] = Auth::user()->id;
-        InventoryLog::create($up);
-        $hold->delete();
-    }
-
 }

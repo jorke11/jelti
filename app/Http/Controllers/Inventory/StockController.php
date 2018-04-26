@@ -28,7 +28,7 @@ class StockController extends Controller {
         $in = $req->all();
         $entry_ware = '';
         $bar_code = '';
-        
+
         if ($in["bar_code"] != '') {
 
 
@@ -80,9 +80,61 @@ class StockController extends Controller {
         return response()->json(["data" => $products]);
     }
 
+    public function getStockLog(Request $req) {
+        $in = $req->all();
+        $entry_ware = '';
+        $bar_code = '';
+
+        if ($in["bar_code"] != '') {
+
+
+            $in["bar_code"] = trim(strtolower($in["bar_code"]));
+            $ref = "";
+
+            if (is_numeric($in["bar_code"])) {
+
+                $ref = "p.reference = " . $in["bar_code"] . " OR ";
+            }
+
+            $bar_code = "
+                    WHERE ($ref i.lot ilike '%" . $in["bar_code"] . "%'
+                    OR p.title ilike  '%" . $in["bar_code"] . "%' OR p.supplier ilike '%" . $in["bar_code"] . "%')";
+        }
+
+        $ware = '';
+
+        if ($in["warehouse_id"] != 0) {
+            $ware = 'i.warehouse_id=' . $in["warehouse_id"];
+
+            $ware = ($bar_code == '') ? ' WHERE ' . $ware : ' AND ' . $ware;
+        }
+
+        $sql = "
+            select 
+                i.id,title as product,i.quantity,lot,i.cost_sf,i.price_sf,i.expiration_date,w.description warehouse,type_move,i.previous_quantity,
+                i.created_at,d.id as order,d.invoice
+            from inventory_log i
+            JOIN products as p ON p.id=i.product_id
+            JOIN warehouses w ON w.id=i.warehouse_id
+            LEFT JOIN departures_detail dep ON dep.id=row_id
+            LEFT JOIN vdepartures d ON d.id=dep.departure_id
+            $bar_code $ware
+            ORDER BY i.created_at DESC
+                ";
+
+//        echo $sql;
+//        exit;
+        $products = DB::select($sql);
+
+//              return Datatables::queryBuilder($query)->make(true);
+
+
+        return response()->json(["data" => $products]);
+    }
+
     public function detailInventory($id) {
         $inventory = Inventory::select("inventory.id", "products.title as product", "quantity", "expiration_date", "lot", "inventory.cost_sf", "inventory.price_sf"
-                , DB::raw("(inventory.cost_sf * inventory.quantity) as total_cost"), DB::raw("(inventory.price_sf * inventory.quantity) as total_price"),"warehouses.description as warehouse")
+                                , DB::raw("(inventory.cost_sf * inventory.quantity) as total_cost"), DB::raw("(inventory.price_sf * inventory.quantity) as total_price"), "warehouses.description as warehouse")
                         ->join("products", "products.id", "inventory.product_id")
                         ->join("warehouses", "warehouses.id", "inventory.warehouse_id")
                         ->where("product_id", $id)->get();
@@ -141,24 +193,22 @@ class StockController extends Controller {
     public function getDetailProduct(Request $req, $id) {
         $in = $req->all();
         $special = null;
-        
+
         if (isset($in["client_id"]) && $in["client_id"] != '') {
             $special = PricesSpecial::where("product_id", $id)->where("client_id", $in["client_id"])->first();
         }
 
         if ($special) {
-            
+
             $response = DB::table("vproducts")
-                            ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier","vproducts.image")
+                            ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier", "vproducts.image")
                             ->join("categories", "categories.id", "=", "vproducts.category_id")
                             ->join("prices_special", "prices_special.product_id", "=", "vproducts.id")
                             ->where("vproducts.id", $id)
                             ->where("prices_special.client_id", $in["client_id"])->first();
         } else {
             $response = DB::table("vproducts")
-                    ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", 
-                            "vproducts.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier",
-                            "vproducts.packaging","vproducts.image")
+                    ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", "vproducts.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier", "vproducts.packaging", "vproducts.image")
                     ->leftjoin("categories", "categories.id", "=", "vproducts.category_id")
                     ->where("vproducts.id", $id)
                     ->first();

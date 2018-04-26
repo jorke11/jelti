@@ -1188,21 +1188,25 @@ class DepartureController extends Controller {
                 "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf);
         }
 
+
+
         $inventory_real = [];
 
         if ($detail->quantity_lots != '') {
 
             if (count($inventory) > 0) {
-                foreach ($inventory as $val) {
-                    foreach (json_decode($detail->quantity_lots) as $value) {
 
-                        if ($val->id == $value->inventory_id) {
+                foreach ($inventory as $val) {
+
+                    foreach (json_decode($detail->quantity_lots) as $value) {
+                        
+//                        if ($val->id == $value->inventory_id) {
                             $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
                                 "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
                                 "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
                                 , "price_sf" => $val->price_sf
                             );
-                        }
+//                        }
                     }
                 }
             } else {
@@ -1216,7 +1220,6 @@ class DepartureController extends Controller {
                 }
             }
         } else {
-
             foreach ($inventory as $value) {
                 $inventory_real[] = array("lot" => $value->lot, "available" => $value->quantity, "quantity" => 0,
                     "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
@@ -1225,6 +1228,7 @@ class DepartureController extends Controller {
                 );
             }
         }
+
 
 
         $hold = InventoryHold::select("inventory_hold.id", "inventory_hold.quantity", "products.title as product", "inventory_hold.lot", "inventory_hold.created_at"

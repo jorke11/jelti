@@ -1191,7 +1191,7 @@ function Departure() {
 
                     }
                 },
-                {data: "total", "visible": false},
+                {data: "subtotal", "visible": false},
             ],
 
             buttons: [

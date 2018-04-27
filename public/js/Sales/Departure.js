@@ -1170,6 +1170,7 @@ function Departure() {
                         return (row.paid_out == true) ? 'Pagado' : '';
                     }
                 },
+
                 {data: "total", render: function (data, type, row) {
                         if (row.status_id == 5) {
                             html = '<i style="cursor:pointer" class="fa fa-file-pdf-o" aria-hidden="true" onclick="obj.viewRemission(' + row.id + ')"></i> (' + row.remission + ')';
@@ -1190,6 +1191,7 @@ function Departure() {
 
                     }
                 },
+                {data: "total", "visible": false},
             ],
 
             buttons: [

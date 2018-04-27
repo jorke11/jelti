@@ -1164,6 +1164,7 @@ function Departure() {
                 {data: "quantity"},
                 {data: "credit_note", render: $.fn.dataTable.render.number(',', '.', 0), "visible": false},
                 {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 0)},
+                {data: "subtotal", "visible": false},
                 {data: "total", render: $.fn.dataTable.render.number('.', ',', 0)},
                 {data: "status"},
                 {data: "paid_out", render(data, type, row) {
@@ -1191,7 +1192,7 @@ function Departure() {
 
                     }
                 },
-                {data: "subtotal", "visible": false},
+                
             ],
 
             buttons: [

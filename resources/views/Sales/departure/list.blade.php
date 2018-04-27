@@ -15,10 +15,13 @@
             <th>Unidades</th>
             <th>Nota Credito</th>
             <th>SubTotal</th>
+            <th>Subtotal2</th>
             <th>Total</th>
             <th>Estado</th>
             <th>Cartera</th>
+
             <th tipo="prueba" width="1%">Action</th>
+
         </tr>
     </thead>
     <tbody>

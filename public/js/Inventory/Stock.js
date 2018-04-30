@@ -231,7 +231,7 @@ function Stock() {
                 tr.removeClass('shown');
             } else {
 
-                row.child(Stock.format(row.data())).show();
+                row.child(obj.format(row.data())).show();
                 tr.addClass('shown');
             }
         });

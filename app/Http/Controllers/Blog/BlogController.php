@@ -184,9 +184,7 @@ class BlogController extends Controller {
     }
 
     public function newVisitan(Request $req) {
-
         $in = $req->all();
-
 
         $in["email"] = trim($in["email"]);
         unset($in["_token"]);
@@ -198,8 +196,6 @@ class BlogController extends Controller {
 
         if ($in["type_stakeholder"] == 1) {
             $new = Prospect::create($in);
-        } else {
-            
         }
 
 //        unset($in["type_stakeholder"]);
@@ -207,11 +203,12 @@ class BlogController extends Controller {
         $this->mails[] = "jpinedom@hotmail.com";
 
         if ($in["type_stakeholder"] == 3) {
+            $in["type"] = "Proveedor";
             $email = Email::where("description", "page_supplier")->first();
         } else {
+            $in["type"] = "Cliente";
             $email = Email::where("description", "page")->first();
         }
-
 
         if ($email != null) {
             $emDetail = EmailDetail::where("email_id", $email->id)->get();

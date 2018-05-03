@@ -268,3 +268,9 @@ JOIN roles ON roles.id =users.role_id
 LEFT JOIN stakeholder ON stakeholder.id= users.stakeholder_id
 LEFT JOIN cities ON cities.id =users.city_id
 LEFT JOIN parameters ON parameters.code = users.status_id and parameters.group='generic'
+
+
+select i.id,w.description as warehouse,p.title as product,i.cost_sf,i.price_sf,i.quantity
+from inventory i
+JOIN products p ON p.id=i.product_id
+JOIN warehouses w ON w.id=i.warehouse_id

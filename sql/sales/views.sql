@@ -123,7 +123,7 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
         d.quantity_packaging,
 
           CASE WHEN (d.status_id IN(1,8)) THEN d.total ELSE  d.total_real END as total,
-		CASE WHEN (d.status_id IN(1,8)) THEN d.subtotal ELSE  d.subtotal_real END as subtotal,
+		CASE WHEN (d.status_id IN(1,8)) THEN round(d.subtotal) ELSE  round(d.subtotal_real) END as subtotal,
 		CASE WHEN (d.status_id IN (1,8)) THEN d.tax19 ELSE d.tax19_real END as tax19,
 		CASE WHEN (d.status_id IN (1,8)) THEN d.tax5 ELSE d.tax5_real END as tax5,
 		
@@ -140,6 +140,5 @@ select d.id,coalesce(d.invoice,'') invoice,d.branch_id, d.created_at, CASE WHEN 
             JOIN cities dest ON dest.id = d.destination_id
             JOIN parameters p ON p.code = d.status_id AND p.group='entry'
             JOIN users u ON u.id = d.responsible_id
-
 
 

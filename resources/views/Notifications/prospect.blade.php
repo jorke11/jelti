@@ -33,6 +33,10 @@
                 <td colspan="2"><hr></td>
             </tr>
             <tr style="border-spacing: 5px;">
+                <td>Tipo </td>
+                <td>(<b>{{(isset($type))?$type:''}}</b>)</td>
+            </tr>
+            <tr style="border-spacing: 5px;">
                 <td>Empresa </td>
                 <td>(<b>{{(isset($business))?$business:''}}</b>)</td>
             </tr>

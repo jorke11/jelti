@@ -236,4 +236,6 @@
     </div>
 </div>
 
+@include('Sales.departure.newService')
+
 @include('Sales.departure.upload')

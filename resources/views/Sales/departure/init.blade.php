@@ -141,7 +141,7 @@
 </div><!-- /.modal -->
 
 @include('Sales.departure.newDetail')
-@include('Sales.departure.newService')
+
 
 {!!Html::script('js/Sales/Departure.js')!!}
 @endsection

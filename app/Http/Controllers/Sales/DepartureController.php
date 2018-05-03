@@ -600,6 +600,8 @@ class DepartureController extends Controller {
                 $input["detail"] = array_values(array_filter($input["detail"]));
                 $input["header"]["type_request"] = "web";
 
+                
+                
                 return $this->processDeparture($input["header"], $input["detail"]);
             } else {
                 return response()->json(['success' => false, "msg" => "detail Empty"], 409);
@@ -647,6 +649,8 @@ class DepartureController extends Controller {
                 $resp = Departures::Find($result);
 
                 $detail = array_values(array_filter($detail));
+                
+                
                 $price_sf = 0;
                 $tax19 = 0;
                 $tax5 = 0;
@@ -703,9 +707,9 @@ class DepartureController extends Controller {
                     $valpro = DeparturesDetail::where("product_id", $val["product_id"])->where("departure_id", $resp->id)->first();
 
 
-                    if ($valpro == null) {
+//                    if ($valpro == null) {
                         DeparturesDetail::create($new);
-                    }
+//                    }
                 }
 
 

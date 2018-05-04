@@ -624,7 +624,7 @@ class ToolController extends Controller {
      */
     public function addInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf = null) {
         
-        if (Auth::user() != null) {
+//        if (Auth::user() != null) {
             $ware = Warehouses::find($warehouse_id);
 
             if ($quantity > 0) {
@@ -683,9 +683,9 @@ class ToolController extends Controller {
             } else {
                 return " ERROR: reference:" . $reference . " quantity = 0\n";
             }
-        } else {
-            return "Debes estar logueado al sistema";
-        }
+//        } else {
+//            return "Debes estar logueado al sistema";
+//        }
     }
 
     public function addInventoryReverse($header, $detail) {

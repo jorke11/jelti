@@ -194,35 +194,43 @@ class StockController extends Controller {
         $in = $req->all();
         $special = null;
 
-        if (isset($in["client_id"]) && $in["client_id"] != '') {
-            $special = PricesSpecial::where("product_id", $id)->where("client_id", $in["client_id"])->first();
-        }
+        $pro = Products::find($id);
 
-        if ($special) {
+        if ($pro->category_id != -1) {
 
-            $response = DB::table("vproducts")
-                            ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier", "vproducts.image")
-                            ->join("categories", "categories.id", "=", "vproducts.category_id")
-                            ->join("prices_special", "prices_special.product_id", "=", "vproducts.id")
-                            ->where("vproducts.id", $id)
-                            ->where("prices_special.client_id", $in["client_id"])->first();
+            if (isset($in["client_id"]) && $in["client_id"] != '') {
+                $special = PricesSpecial::where("product_id", $id)->where("client_id", $in["client_id"])->first();
+            }
+
+            if ($special) {
+
+                $response = DB::table("vproducts")
+                                ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", "prices_special.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier", "vproducts.image")
+                                ->join("categories", "categories.id", "=", "vproducts.category_id")
+                                ->join("prices_special", "prices_special.product_id", "=", "vproducts.id")
+                                ->where("vproducts.id", $id)
+                                ->where("prices_special.client_id", $in["client_id"])->first();
+            } else {
+                $response = DB::table("vproducts")
+                        ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", "vproducts.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier", "vproducts.packaging", "vproducts.image")
+                        ->leftjoin("categories", "categories.id", "=", "vproducts.category_id")
+                        ->where("vproducts.id", $id)
+                        ->first();
+            }
+
+            $inv = Inventory::where("product_id", $id)->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))));
+
+            if (isset($in["warehouse_id"])) {
+                $inv->where("warehouse_id", $in["warehouse_id"]);
+            }
+
+            $quantity = $inv->sum("quantity");
+
+            return response()->json(["response" => $response, "quantity" => $quantity]);
         } else {
-            $response = DB::table("vproducts")
-                    ->select("vproducts.id", "vproducts.title", "vproducts.tax", "categories.description as caterory", "categories.id as category_id", "vproducts.price_sf", "vproducts.cost_sf", "vproducts.units_sf", "vproducts.units_supplier", "vproducts.packaging", "vproducts.image")
-                    ->leftjoin("categories", "categories.id", "=", "vproducts.category_id")
-                    ->where("vproducts.id", $id)
-                    ->first();
+
+            return response()->json(["response" => $pro]);
         }
-
-        $inv = Inventory::where("product_id", $id)->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))));
-
-        if (isset($in["warehouse_id"])) {
-            $inv->where("warehouse_id", $in["warehouse_id"]);
-        }
-
-        $quantity = $inv->sum("quantity");
-
-        return response()->json(["response" => $response, "quantity" => $quantity]);
     }
 
     public function getInventory($product_id, $warehouse_id = null) {

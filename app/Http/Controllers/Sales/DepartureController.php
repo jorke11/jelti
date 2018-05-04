@@ -1180,72 +1180,88 @@ class DepartureController extends Controller {
 
         $pro = DB::table("vproducts")->where("id", $detail->product_id)->first();
 
-        if ($pro->category_id != -1) {
+        if ($pro != null) {
 
-            $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
+            if ($pro->category_id != -1) {
+
+                $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
 //                            ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
-                            ->where("expiration_date", ">", date('Y-m-d'))->orderBy("expiration_date", "asc")->get();
-        } else {
+                                ->where("expiration_date", ">", date('Y-m-d'))->orderBy("expiration_date", "asc")->get();
+            } else {
 
-            $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
-                "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf);
-        }
+                $inventory[] = array("lot" => "services", "quantity" => 1, "expiration_date" => date("Y-m-d H:i"), "product_id" => $detail->product_id,
+                    "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf);
+            }
 
-        $inventory_real = [];
+            $inventory_real = [];
 
-        if ($detail->quantity_lots != '') {
+            if ($detail->quantity_lots != '') {
 
 
-            if (count($inventory) > 0) {
+                if (count($inventory) > 0) {
 
-                foreach ($inventory as $val) {
-                    if ($detail->quantity_lots != "[]") {
-                        foreach (json_decode($detail->quantity_lots) as $value) {
-                            if ($val->id == $value->inventory_id) {
-                                $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
-                                    "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
-                                    "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
-                                    , "price_sf" => $val->price_sf
-                                );
+                    foreach ($inventory as $val) {
+                        if ($detail->quantity_lots != "[]") {
+                            foreach (json_decode($detail->quantity_lots) as $value) {
+                                if ($val->id == $value->inventory_id) {
+                                    $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
+                                        "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
+                                        "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
+                                        , "price_sf" => $val->price_sf
+                                    );
+                                }
                             }
+                        } else {
+
+                            $inventory_real[] = array("lot" => $val->lot, "available" => $val->quantity, "quantity" => 0,
+                                "expiration_date" => $val->expiration_date, "product_id" => $val->product_id,
+                                "cost_sf" => $val->cost_sf, "inventory_id" => $val->id
+                                , "price_sf" => $val->price_sf
+                            );
                         }
-                    } else {
-                        
-                        $inventory_real[] = array("lot" => $val->lot, "available" => $val->quantity, "quantity" => 0,
-                            "expiration_date" => $val->expiration_date, "product_id" => $val->product_id,
-                            "cost_sf" => $val->cost_sf, "inventory_id" => $val->id
-                            , "price_sf" => $val->price_sf
+                    }
+                } else {
+
+                    foreach (json_decode($detail->quantity_lots) as $value) {
+                        $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
+                            "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
+                            "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
+                            , "price_sf" => $value->price_sf
                         );
                     }
                 }
             } else {
-
-                foreach (json_decode($detail->quantity_lots) as $value) {
-                    $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
+                foreach ($inventory as $value) {
+                    $inventory_real[] = array("lot" => $value->lot, "available" => $value->quantity, "quantity" => 0,
                         "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
-                        "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
+                        "cost_sf" => $value->cost_sf, "inventory_id" => $value->id
                         , "price_sf" => $value->price_sf
                     );
                 }
             }
+
+            $hold = InventoryHold::select("inventory_hold.id", "inventory_hold.quantity", "products.title as product", "inventory_hold.lot", "inventory_hold.created_at"
+                                    , "vdepartures.client", "vdepartures.warehouse")
+                            ->join("products", "products.id", "inventory_hold.product_id")
+                            ->join("departures_detail", "departures_detail.id", "inventory_hold.row_id")
+                            ->join("vdepartures", "vdepartures.id", "departures_detail.departure_id")
+                            ->where("inventory_hold.product_id", $detail->product_id)->where("inventory_hold.warehouse_id", $header->warehouse_id)->get();
+
+            return response()->json(["row" => $detail, "inventory" => $inventory_real, "hold" => $hold, "image" => $pro->image, "category" => $pro->category]);
         } else {
-            foreach ($inventory as $value) {
-                $inventory_real[] = array("lot" => $value->lot, "available" => $value->quantity, "quantity" => 0,
-                    "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
-                    "cost_sf" => $value->cost_sf, "inventory_id" => $value->id
-                    , "price_sf" => $value->price_sf
-                );
-            }
+            $pro = Products::find($detail->product_id);
+
+            $hold = [];
+
+            $inventory_real[] = array("lot" => "Services", "available" => 1, "quantity" => 1,
+                "expiration_date" => date("Y-m-d"), "product_id" => $detail->product_id,
+                "cost_sf" => $pro->cost_sf, "inventory_id" => 0
+                , "price_sf" => $pro->price_sf
+            );
+
+            $row["product_id"] = $detail->product_id;
+            return response()->json(["row" => $row, "inventory" => $inventory_real, "type" => "services"]);
         }
-
-        $hold = InventoryHold::select("inventory_hold.id", "inventory_hold.quantity", "products.title as product", "inventory_hold.lot", "inventory_hold.created_at"
-                                , "vdepartures.client", "vdepartures.warehouse")
-                        ->join("products", "products.id", "inventory_hold.product_id")
-                        ->join("departures_detail", "departures_detail.id", "inventory_hold.row_id")
-                        ->join("vdepartures", "vdepartures.id", "departures_detail.departure_id")
-                        ->where("inventory_hold.product_id", $detail->product_id)->where("inventory_hold.warehouse_id", $header->warehouse_id)->get();
-
-        return response()->json(["row" => $detail, "inventory" => $inventory_real, "hold" => $hold, "image" => $pro->image, "category" => $pro->category]);
     }
 
     public function update(Request $request, $id) {

@@ -224,9 +224,6 @@ Route::post('/entry/setPurchase', 'Inventory\EntryController@sendPurchase');
 Route::post('/entry/uploadExcel', 'Inventory\EntryController@storeExcel');
 Route::put('/entry/{id}/setDetail', 'Inventory\EntryController@setDetail');
 
-
-
-
 Route::resource('/order', 'Inventory\OrderController');
 Route::get('/order/{id}/consecutive', ['uses' => 'Inventory\OrderController@getConsecutive']);
 Route::get('/order/{id}/quantity', ['uses' => 'Inventory\OrderController@getQuantity']);

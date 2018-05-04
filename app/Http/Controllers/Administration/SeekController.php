@@ -386,7 +386,7 @@ class SeekController extends Controller {
                 $query->where($key, $val);
             }
         } else if (isset($this->input["id"])) {
-            $query->where("id", $this->input["id"])->get();
+            $query->where("products.id", $this->input["id"])->get();
         }
 
         if (isset($this->input["q"]) && $this->input["q"] != "0") {

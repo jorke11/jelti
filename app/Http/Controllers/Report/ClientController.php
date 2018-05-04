@@ -571,14 +571,14 @@ class ClientController extends Controller {
         $sql = "
                 SELECT 
                     to_char(dispatched,'YYYY-MM') dates,count(*) invoices,sum(subtotal) as subtotal,sum(tax19) tax19,sum(total) total,
-                    sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost,sum(quantity_packaging) as quantity_packaging
+                    sum(tax5) tax5,sum(vdepartures.shipping_cost) shipping_cost,sum(real_quantity) as quantity_packaging
                 FROM vdepartures 
                 JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
                 WHERE vdepartures.status_id IN(2,7) AND dispatched BETWEEN '" . $init . " 00:00' and '" . $end . " 23:59'
                     AND client_id  NOT IN(258,264,24)
                 group by 1";
-        
-        
+
+
         $res = DB::select($sql);
 
         $total = 0;

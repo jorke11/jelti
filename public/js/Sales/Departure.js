@@ -127,9 +127,7 @@ function Departure() {
                 dataType: 'JSON',
                 success: function (resp) {
                     dataProduct = resp.response;
-                    $("#frmServices #value").val(resp.response.price_sf).formatNumber()
-
-
+                    $("#frmServices #value").val(resp.response.price_sf)
                 }
             })
         });
@@ -962,7 +960,6 @@ function Departure() {
                 row_current = resp.row;
                 $("#modalDetail").modal("show");
                 $(".input-detail").setFields({data: resp.row})
-
                 $("#tableLot tbody").empty();
 
                 var row_detail = JSON.parse(resp.row.quantity_lots);
@@ -1192,7 +1189,6 @@ function Departure() {
 
                     }
                 },
-                
             ],
 
             buttons: [

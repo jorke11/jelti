@@ -1444,8 +1444,6 @@ class DepartureController extends Controller {
 
                 $input["quantity"] = $input["header"]["quantity"];
 
-
-
                 $det = [];
                 foreach ($input["detail"] as $value) {
                     if ($value["quantity"] > 0) {
@@ -1480,6 +1478,31 @@ class DepartureController extends Controller {
         } catch (Exception $e) {
             return response()->json(['success' => false, "msg" => "Problemas con el inventario"]);
         }
+    }
+
+    public function caseFunat($id) {
+        $det = DeparturesDetail::where("departure_id", $id)->get();
+
+        foreach ($det as $value) {
+            $quant["expiration_date"] = date("Y-m-d");
+            $quant["product_id"] = $value->product_id;
+            $quant["cost_sf"] = $value->cost_sf;
+            $quant["price_sf"] = $value->value;
+            $quant["quantity"] = $value->quantity;
+            $quant["lot"] = "pedido funat";
+
+
+            $row = DeparturesDetail::find($value->id);
+            $row->quantity_lots = json_encode($quant);
+            $row->save();
+
+            $quant["row_id"] = $value->id;
+            $quant["warehouse_id"] = 3;
+            $quant["insert_id"] = 1;
+            InventoryHold::create($quant);
+        }
+
+        echo "Finalizo";
     }
 
     public function destroy($id) {

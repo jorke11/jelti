@@ -20,6 +20,8 @@ class CreateInventoryTable extends Migration {
             $table->date('expiration_date');
             $table->integer('quantity');
             $table->text('lot');
+            $table->string("type");
+            $table->string("subtype");
             $table->text('description')->nullable();
             $table->integer('insert_id');
             $table->integer('update_id')->nullable();

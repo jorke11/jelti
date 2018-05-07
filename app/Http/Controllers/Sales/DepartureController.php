@@ -507,13 +507,6 @@ class DepartureController extends Controller {
                         $sal->delete();
                     }
 
-//                    foreach ($row_detail as $value) {
-//                        $det = DeparturesDetail::find($value->id);
-//                        $det->status_id = 1;
-//                        $det->save();
-//                    }
-
-
                     $row->status_id = 1;
                     $row->save();
                     DB::commit();
@@ -1318,7 +1311,8 @@ class DepartureController extends Controller {
                 if ($det_json != null) {
                     foreach ($det_json as $val) {
                         $pro = Products::find($value->product_id);
-                        $this->tool->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf);
+                        $this->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf,$pro->price_sf,
+                                "cancel_to_inv");
                     }
                 }
             }
@@ -1451,10 +1445,7 @@ class DepartureController extends Controller {
 
                 $input["quantity"] = $input["header"]["quantity"];
 
-                if ($val_quantity == 0) {
-                    $input["quantity_lots"] = null;
-                    $input["status_id"] = 1;
-                }
+
 
                 $det = [];
                 foreach ($input["detail"] as $value) {
@@ -1464,6 +1455,14 @@ class DepartureController extends Controller {
                 }
 
                 $input["quantity_lots"] = json_encode($det);
+
+                if ($val_quantity == 0) {
+                    $input["quantity_lots"] = null;
+                    $input["status_id"] = 1;
+                    $input["quantity_lots"] = null;
+                    $rowD = InventoryHold::where("row_id", $id)->first();
+                    InventoryHold::find($rowD->id)->delete();
+                }
 
                 $row->fill($input)->save();
             }

@@ -14,15 +14,12 @@ trait ToolInventory {
         
     }
 
-    public function addInventory($warehouse_id, $reference, $quantity, $lot, $expiration_date, $cost_sf, $price_sf) {
+    public function addInventory($warehouse_id, $reference, $quantity, $lot, $expiration_date, $cost_sf, $price_sf, $type_move = 'supplier_to_inv') {
         $expire = date("Y-m-d", strtotime($expiration_date));
-
         $response = array("status" => true);
-
         $pro = \App\Models\Administration\Products::where("reference", $reference)->first();
 
         if ($pro != null) {
-
             if (strtotime($expire) > strtotime(date("Y-m-d"))) {
                 $new["warehouse_id"] = $warehouse_id;
                 $new["product_id"] = $pro->id;
@@ -36,15 +33,19 @@ trait ToolInventory {
                 $inv = Inventory::where("warehouse_id", $warehouse_id)->where("product_id", $pro->product_id)->where("cost_sf", $pro->cost_sf)->where("price_sf", $pro->price_sf)->where("lot", $lot)->first();
 
                 if ($inv != null) {
+                    $new["current_quantity"] = $inventory->quantity;
                     $inv->quantity = $inventory->quantity + $quantity;
                     $inv->save();
                     $new["previous_quantity"] = $inventory->quantity;
-                    $new["type_move"] = "Add new Inventory to product existance";
+                    $new["type_move"] = $type_move;
+                    $new["subtype"] = "update_inv_add";
                     InventoryLog::create($new);
                 } else {
                     Inventory::create($new);
+                    $new["current_quantity"] = 0;
                     $new["previous_quantity"] = 0;
-                    $new["type_move"] = "Add new Inventory";
+                    $new["type_move"] = $type_move;
+                    $new["subtype"] = "create_inv_add";
                     InventoryLog::create($new);
                 }
 
@@ -69,7 +70,9 @@ trait ToolInventory {
             $up["expiration_date"] = $hold->expiration_date;
             $up["quantity"] = $hold->quantity;
             $up["lot"] = $hold->lot;
-            $up["type_move"] = "out product hold";
+            $up["type_move"] = "hold_to_client";
+            $up["subtype"] = "update_hold_substract";
+            $up["current_quantity"] = $hold->quantity;
             $up["insert_id"] = Auth::user()->id;
             InventoryLog::create($up);
             $hold->delete();
@@ -105,15 +108,20 @@ trait ToolInventory {
                     $hold = InventoryHold::where("price_sf", $val->price_sf)->where("lot", $val->lot)->where("expiration_date", $val->expiration_date)
                                     ->where("cost_sf", $val->cost_sf)->where("warehouse_id", $data->warehouse_id)->where("product_id", $val->product_id)->first();
 
-                    $new["type_move"] = "Add inventory for reverse invoice";
-                    
-                    
+                    $new["type_move"] = "client_to_inv";
+                    $new["subtype"] = "update";
+
+
                     if ($hold != null) {
+                        $new["current_quantity"] = $hold->quantity;
                         $hold->quantity = $hold->quantity + $hold->quantity;
                         $hold->save();
+                        $new["subtype"] = "update_hold_add";
                         $new["previous_quantity"] = $hold->quantity;
                     } else {
                         InventoryHold::create($new);
+                        $new["current_quantity"] = 0;
+                        $new["subtype"] = "create_hold_add";
                         $new["previous_quantity"] = 0;
                     }
 
@@ -144,15 +152,19 @@ trait ToolInventory {
                     $quit_inventory = $quantity - $hold->quantity;
                     $hold->quantity = $quantity;
                     $inventory->quantity = $inventory->quantity - $quit_inventory;
+                    $new["current_quantity"] = $inventory->quantity;
                     $new["quantity"] = $hold->quantity;
-                    $new["type_move"] = "Add quantity to inventory existence";
+                    $new["type_move"] = "inv_to_hold";
+                    $new["subtype"] = "update_hold_add";
                     InventoryLog::create($new);
                 } else {
                     $add_inventory = $hold->quantity - $quantity;
                     $hold->quantity = $quantity;
                     $inventory->quantity = $inventory->quantity + $add_inventory;
+                    $new["current_quantity"] = $inventory->quantity;
                     $new["quantity"] = $hold->quantity;
-                    $new["type_move"] = "delete quantity to inventory existence";
+                    $new["type_move"] = "hold_to_inv";
+                    $new["subtype"] = "update_hold_subtract";
                     InventoryLog::create($new);
                 }
                 $inventory->save();
@@ -163,7 +175,9 @@ trait ToolInventory {
             $new["previous_quantity"] = $inventory->quantity;
             $inventory->quantity = $inventory->quantity - $quantity;
             $inventory->save();
-            $new["type_move"] = "Insert to Hold";
+            $new["current_quantity"] = $inventory->quantity;
+            $new["type_move"] = "inv_to_hold";
+            $new["subtype"] = "create_hold_add";
             InventoryLog::create($new);
         }
     }

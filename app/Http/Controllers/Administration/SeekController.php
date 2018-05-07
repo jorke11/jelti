@@ -319,27 +319,30 @@ class SeekController extends Controller {
 
     public function getProduct(Request $req) {
         $this->input = $req->all();
-        $query = DB::table("vproducts")
-                ->select("vproducts.id", DB::raw("vproducts.reference ||' - '|| vproducts.title || ' - ' || stakeholder.business  as text"), "vproducts.image")
-                ->join("stakeholder", "stakeholder.id", "vproducts.supplier_id");
+//        $query = DB::table("vproducts")
+//                ->select("vproducts.id", DB::raw("vproducts.reference ||' - '|| vproducts.title || ' - ' || stakeholder.business  as text"), "vproducts.image")
+//                ->join("stakeholder", "stakeholder.id", "vproducts.supplier_id");
+        $query = Products::
+                select("products.id", DB::raw("products.reference ||' - '|| products.title || ' - ' || stakeholder.business  as text"), "products.image")
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id");
 
         if (isset($this->input["filter"]) && $this->input["filter"] != '') {
             foreach ($this->input["filter"] as $key => $val) {
                 $query->where($key, $val);
             }
         } else if (isset($this->input["id"])) {
-            $query->where("vproducts.id", $this->input["id"])->get();
+            $query->where("products.id", $this->input["id"])->get();
         }
 
         if (isset($this->input["q"]) && $this->input["q"] != "0") {
             $query->where(function($query) {
-                $query->where("vproducts.title", "ILIKE", "%" . $this->input["q"] . "%")
+                $query->where("products.title", "ILIKE", "%" . $this->input["q"] . "%")
                         ->OrWhere("stakeholder.business", "ILIKE", "%" . $this->input["q"] . "%")
-                        ->OrWhere("vproducts.bar_code", "ILIKE", "%" . $this->input["q"] . "%")
-                        ->OrWhere(DB::raw("vproducts.reference::text"), "ILIKE", "%" . $this->input["q"] . "%");
+                        ->OrWhere("products.bar_code", "ILIKE", "%" . $this->input["q"] . "%")
+                        ->OrWhere(DB::raw("products.reference::text"), "ILIKE", "%" . $this->input["q"] . "%");
             });
         }
-        $query->where("vproducts.status_id", 1);
+        $query->where("products.status_id", 1);
 //        $query->whereNull("type_product_id");
 
         $result = $query->get();

@@ -229,7 +229,7 @@ class StockController extends Controller {
             return response()->json(["response" => $response, "quantity" => $quantity]);
         } else {
 
-            return response()->json(["response" => $pro]);
+            return response()->json(["response" => $pro, "quantity" => 1]);
         }
     }
 

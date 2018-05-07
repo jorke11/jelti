@@ -962,7 +962,11 @@ function Departure() {
                 $(".input-detail").setFields({data: resp.row})
                 $("#tableLot tbody").empty();
 
-                var row_detail = JSON.parse(resp.row.quantity_lots);
+                var row_detail = null;
+                if (resp.row.quantity_lots != null) {
+                    row_detail = JSON.parse(resp.row.quantity_lots);
+                }
+
                 var quantity = 0;
 
                 $.each(resp.inventory, function (i, val) {

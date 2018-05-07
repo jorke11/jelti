@@ -1252,8 +1252,8 @@ class DepartureController extends Controller {
                 , "price_sf" => $pro->price_sf
             );
 
-            $row["product_id"] = $detail->product_id;
-            return response()->json(["row" => $row, "inventory" => $inventory_real, "type" => "services"]);
+
+            return response()->json(["row" => ["product_id" => $pro->id, "id" => $id], "inventory" => $inventory_real, "hold" => $hold, "category" => "services"]);
         }
     }
 
@@ -1311,8 +1311,7 @@ class DepartureController extends Controller {
                 if ($det_json != null) {
                     foreach ($det_json as $val) {
                         $pro = Products::find($value->product_id);
-                        $this->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf,$pro->price_sf,
-                                "cancel_to_inv");
+                        $this->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf, $pro->price_sf, "cancel_to_inv");
                     }
                 }
             }
@@ -1456,7 +1455,7 @@ class DepartureController extends Controller {
 
                 $input["quantity_lots"] = json_encode($det);
 
-                if ($val_quantity == 0) {
+                if ($val_quantity == 0 && $pro->category_id != -1) {
                     $input["quantity_lots"] = null;
                     $input["status_id"] = 1;
                     $input["quantity_lots"] = null;
@@ -1545,7 +1544,6 @@ class DepartureController extends Controller {
 
                 $product = Products::find($input["product_id"]);
             } else {
-
                 $product = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", 'products.tax')
                         ->join("prices_special", "prices_special.product_id", "=", "products.id")->where("products.id", $input["product_id"])
                         ->where("prices_special.client_id", $header->client_id)

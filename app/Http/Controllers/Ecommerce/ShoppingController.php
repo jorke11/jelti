@@ -258,7 +258,7 @@ class ShoppingController extends Controller {
     }
 
     public function getDataCountOrders() {
-        $order = Orders::where("stakeholder_id", Auth::user()->id)->where("status_id", 1)->first();
+        $order = Orders::where("insert_id", Auth::user()->id)->where("status_id", 1)->first();
         return OrdersDetail::where("order_id", $order["id"])->sum("quantity");
     }
 

@@ -29,52 +29,58 @@ class StockController extends Controller {
         $entry_ware = '';
         $bar_code = '';
 
-        if ($in["bar_code"] != '') {
-
-
-            $in["bar_code"] = trim(strtolower($in["bar_code"]));
-            $ref = "";
-
-            if (is_numeric($in["bar_code"])) {
-
-                $ref = "p.reference = " . $in["bar_code"] . " OR ";
-            }
-
-            $bar_code = "
-                    WHERE ($ref i.lot ilike '%" . $in["bar_code"] . "%'
-                    OR p.title ilike  '%" . $in["bar_code"] . "%' OR p.supplier ilike '%" . $in["bar_code"] . "%')";
-        }
-
         $ware = '';
 
         if ($in["warehouse_id"] != 0) {
-            $ware = 'i.warehouse_id=' . $in["warehouse_id"];
-
-            $ware = ($bar_code == '') ? ' WHERE ' . $ware : ' AND ' . $ware;
+            $ware = 'AND warehouse_id=' . $in["warehouse_id"];
         }
 
-        $sql = "
-            select id,reference,supplier,category,title as product,
-            coalesce((select sum(quantity) from inventory where product_id=vproducts.id),0) as in_warehouse,
-            coalesce((select sum(quantity) from inventory_hold where product_id=vproducts.id),0) as in_hold,
-            coalesce((
+        $query = DB::table("vproducts")->select(
+                "id", "reference", "supplier", "category", "title as product", DB::raw("coalesce((select sum(quantity) from inventory where product_id=vproducts.id $ware),0) as in_warehouse"), DB::raw("coalesce((select sum(quantity) from inventory_hold where product_id=vproducts.id $ware),0) as in_hold"), DB::raw("coalesce((
                                             select sum(departures_detail.quantity) 
                                             from departures_detail 
                                             JOIN departures ON departures.id= departures_detail.departure_id AND departures.status_id IN(1,8)
-                                            where departures_detail.product_id=vproducts.id),0) as request_client,
-            coalesce((
+                                            where departures_detail.product_id=vproducts.id),0) as request_client"), DB::raw("coalesce((
                                             select sum(purchases_detail.quantity) 
                                             from purchases_detail 
                                             JOIN purchases ON purchases.id= purchases_detail.purchase_id AND purchases.status_id =2
-                                            where purchases_detail.product_id=vproducts.id),0) as request_supplier,                                
-            coalesce((select sum(quantity * cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf,minimum_stock
-            from vproducts
-            ORDER BY 6 ASC
-            $bar_code $ware
-                ";
-//        echo $sql;
-//        exit;
-        $products = DB::select($sql);
+                                            where purchases_detail.product_id=vproducts.id),0) as request_supplier"), DB::raw("coalesce((select sum(quantity * cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf"), "minimum_stock"
+        );
+
+
+
+        if ($in["bar_code"] != '') {
+            
+            $query = $query->where(function($q) use($in) {
+                $q->where("vproducts.title", "like", "'%" . $in["bar_code"] . "%'");
+                $q->orWhere("vproducts.supplier", "like", "'%" . $in["bar_code"] . "%'");
+                $q->orWhere(DB::raw("vproducts.reference::text"), "like", "'%" . $in["bar_code"] . "%'");
+            });
+        }
+
+//        $sql = "
+//            select id,reference,supplier,category,title as product,
+//            coalesce((select sum(quantity) from inventory where product_id=vproducts.id $ware),0) as in_warehouse,
+//            coalesce((select sum(quantity) from inventory_hold where product_id=vproducts.id $ware),0) as in_hold,
+//            coalesce((
+//                                            select sum(departures_detail.quantity) 
+//                                            from departures_detail 
+//                                            JOIN departures ON departures.id= departures_detail.departure_id AND departures.status_id IN(1,8)
+//                                            where departures_detail.product_id=vproducts.id),0) as request_client,
+//            coalesce((
+//                                            select sum(purchases_detail.quantity) 
+//                                            from purchases_detail 
+//                                            JOIN purchases ON purchases.id= purchases_detail.purchase_id AND purchases.status_id =2
+//                                            where purchases_detail.product_id=vproducts.id),0) as request_supplier,                                
+//            coalesce((select sum(quantity * cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf,minimum_stock
+//            from vproducts
+//            $bar_code
+//            ORDER BY 6 ASC
+//                ";
+//        echo $products = $query->toSql();exit;
+        $products = $query->get();
+//        echo $sql;exit;
+//        $products = DB::select($sql);
 
 
         return response()->json(["data" => $products]);

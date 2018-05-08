@@ -15,6 +15,11 @@ function Stock() {
             tab = 1;
         })
 
+        $("#btnFind").click(function () {
+            obj.table();
+        })
+
+
 
     }
 

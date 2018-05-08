@@ -565,6 +565,7 @@ class DepartureController extends Controller {
 
             $input["detail"] = json_decode($input["detail"], true);
 
+
 //            unset($input["id"]);
 //            $user = Auth::User();
 
@@ -700,9 +701,9 @@ class DepartureController extends Controller {
                     $valpro = DeparturesDetail::where("product_id", $val["product_id"])->where("departure_id", $resp->id)->first();
 
 
-//                    if ($valpro == null) {
-                    DeparturesDetail::create($new);
-//                    }
+                    if ($valpro == null) {
+                        DeparturesDetail::create($new);
+                    }
                 }
 
 

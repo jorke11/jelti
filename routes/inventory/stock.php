@@ -10,7 +10,7 @@ Route::get('/api/listStockLog', 'Inventory\StockController@getStockLog');
 
 
 Route::get('/inventory/{warehouse_id}/{reference}', "ToolController@getProduct");
-Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}/{vencimiento}', "ToolController@addInventory");
+Route::get('/inventory/{warehouse_id}/{reference}/{quantity}/{lot}/{vencimiento}', "ToolController@addInventoryUrl");
 Route::get('/uinventory', "ToolController@formInventory");
 Route::get('/ulug', "ToolController@updateSlug");
 Route::post('/setinventory', "ToolController@storeInventory");

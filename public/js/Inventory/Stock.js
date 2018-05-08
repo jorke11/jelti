@@ -45,6 +45,12 @@ function Stock() {
                     extend: 'excelHtml5',
                     className: 'btn btn-primary glyphicon glyphicon-download',
                     titleAttr: 'Excel'
+                }, 
+                {
+                    extend: 'csv',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'csv'
                 },
             ],
             columns: [

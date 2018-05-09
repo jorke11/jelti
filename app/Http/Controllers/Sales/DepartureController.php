@@ -117,10 +117,7 @@ class DepartureController extends Controller {
 
         if (isset($in["responsible_filter"]) && $in["responsible_filter"] != '') {
             $cont++;
-
-            foreach ($in["responsible_filter"] as $value) {
-                $query->Orwhere("responsible_id", $value);
-            }
+            $query->whereIn("responsible_id", $in["responsible_filter"]);
         }
 
         if (isset($in["end_filter"]) && $in["end_filter"] != '') {

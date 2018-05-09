@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Traits;
-
 use DB;
 use App\Models\Administration\Comment;
+use Auth;
 
 trait Invoice {
 

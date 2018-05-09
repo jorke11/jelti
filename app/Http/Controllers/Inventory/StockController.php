@@ -36,15 +36,19 @@ class StockController extends Controller {
         }
 
         $query = DB::table("vproducts")->select(
-                "id", "reference", "supplier", "category", "title as product", DB::raw("coalesce((select sum(quantity) from inventory where product_id=vproducts.id $ware),0) as in_warehouse"), DB::raw("coalesce((select sum(quantity) from inventory_hold where product_id=vproducts.id $ware),0) as in_hold"), DB::raw("coalesce((
+                "id", "reference", "supplier", "category", "title as product", 
+                DB::raw("coalesce((select sum(quantity) from inventory where product_id=vproducts.id $ware),0) as in_warehouse"), 
+                DB::raw("coalesce((select sum(quantity) from inventory_hold where product_id=vproducts.id $ware),0) as in_hold"), DB::raw("coalesce((
                                             select sum(departures_detail.quantity) 
                                             from departures_detail 
                                             JOIN departures ON departures.id= departures_detail.departure_id AND departures.status_id IN(1,8)
-                                            where departures_detail.product_id=vproducts.id),0) as request_client"), DB::raw("coalesce((
+                                            where departures_detail.product_id=vproducts.id),0) as request_client"), 
+                DB::raw("coalesce((
                                             select sum(purchases_detail.quantity) 
                                             from purchases_detail 
                                             JOIN purchases ON purchases.id= purchases_detail.purchase_id AND purchases.status_id =2
-                                            where purchases_detail.product_id=vproducts.id),0) as request_supplier"), DB::raw("coalesce((select sum(quantity * cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf"), "minimum_stock"
+                                            where purchases_detail.product_id=vproducts.id),0) as request_supplier"), 
+                DB::raw("coalesce((select sum(quantity * cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf"), "minimum_stock"
         );
 
 

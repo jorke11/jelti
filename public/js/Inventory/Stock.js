@@ -45,7 +45,7 @@ function Stock() {
                     extend: 'excelHtml5',
                     className: 'btn btn-primary glyphicon glyphicon-download',
                     titleAttr: 'Excel'
-                }, 
+                },
                 {
                     extend: 'csv',
 //                    text: '<i class="fa fa-file-excel-o"></i>',
@@ -182,7 +182,7 @@ function Stock() {
                 {data: "request_client"},
                 {data: "in_hold"},
                 {data: "request_supplier"},
-                {data: "in_hold"},
+                {data: "cost_sf", render: $.fn.dataTable.render.number(',', '.', 0), "visible": true},
                 {data: "cost_sf", render: $.fn.dataTable.render.number(',', '.', 0), "visible": true},
             ],
             order: [[6, 'ASC']],

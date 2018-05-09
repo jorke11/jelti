@@ -142,7 +142,7 @@ class DepartureController extends Controller {
         }
         if (isset($in["init_filter_created"]) && $in["init_filter_created"] != '' & isset($in["end_filter_created"]) && $in["end_filter_created"] != '') {
             $query->where("created_at", ">=", $in["init_filter_created"] . " 00:00");
-            $query->where("created_at", "<=", $in["end_filter_created"] . " 00:00");
+            $query->where("created_at", "<=", $in["end_filter_created"] . " 23:59");
         }
 
         if ($cont == 0) {
@@ -168,6 +168,8 @@ class DepartureController extends Controller {
         if (isset($in["commercial_id"]) && $in["commercial_id"] != '') {
             $query->where("status_id", 2)->where("responsible_id", $in["commercial_id"]);
         }
+
+//        echo $query->toSql();exit;
 
         return Datatables::queryBuilder($query)->make(true);
     }

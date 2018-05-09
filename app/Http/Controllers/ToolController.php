@@ -799,7 +799,6 @@ class ToolController extends Controller {
             $up["type_move"] = "substract_hold";
             $up["insert_id"] = Auth::user()->id;
             InventoryLog::create($up);
-
             $hold->delete();
         } else {
             echo $row_id;

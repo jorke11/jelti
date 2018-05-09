@@ -33,3 +33,4 @@ Route::put('/departure/{id}/reverseInvoice', 'Sales\DepartureController@reverse'
 Route::get('/departure/testDepNotification/{id}', 'Sales\DepartureController@testDepNotification');
 Route::get('/departure/testInvoiceNotification/{id}', 'Sales\DepartureController@testInvoiceNotification');
 Route::get('/departure/funat/{id}', 'Sales\DepartureController@caseFunat');
+Route::post('/processDeparture', 'Sales\DepartureController@processDeparture');

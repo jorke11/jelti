@@ -24,12 +24,10 @@ use App\Models\Invoicing\Sales;
 use Session;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Inventory\StockController;
-use App\Http\Controllers\ToolController;
 use Mail;
 use Datatables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Administration\PricesSpecial;
-use App\Http\Controllers\LogController;
 use App\Models\Sales\BriefCase;
 use App\Models\Inventory\Inventory;
 use App\Models\Inventory\InventoryHold;
@@ -52,13 +50,11 @@ class DepartureController extends Controller {
     public $errors;
     public $email;
     public $mails;
-    public $log;
     public $in;
     public $initdate;
 
     public function __construct() {
         $this->middleware("auth");
-        $this->tool = new ToolController();
         $this->exento = 0;
         $this->exento_real = 0;
         $this->tax19 = 0;
@@ -75,7 +71,6 @@ class DepartureController extends Controller {
         $this->email = array();
         $this->in = array();
         $this->mails = array();
-        $this->log = new LogController();
         $this->initdate = date('Y-m-d', strtotime('-1 month', strtotime(date('Y-m-d'))));
     }
 
@@ -803,7 +798,7 @@ class DepartureController extends Controller {
                         $msj->to($this->mails);
                     });
 
-                    $this->log->logClient($client->id, "Genero Orden de venta " . $result);
+                    $this->logClient($client->id, "Genero Orden de venta " . $result);
                 }
 
                 DB::commit();
@@ -948,7 +943,7 @@ class DepartureController extends Controller {
                     $departure->save();
 
 //Log 
-                    $this->log->logClient($departure->client_id, "Genero Factura de venta # " . $departure->invoice);
+                    $this->logClient($departure->client_id, "Genero Factura de venta # " . $departure->invoice);
 
                     $cli = Stakeholder::find($departure->client_id);
                     $cli->update_at = $sale->dispatched;
@@ -1430,7 +1425,8 @@ class DepartureController extends Controller {
                 foreach ($input["detail"] as $value) {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
-                        $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
+//                        $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
+                        $validate = $this->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
 
 
                         if ($validate["status"]) {
@@ -1536,7 +1532,7 @@ class DepartureController extends Controller {
         $entry = DeparturesDetail::Find($id);
 
         if ($entry->status_id == 3 && $entry->real_quantity > 0) {
-            $this->tool->substract($entry->id);
+            $this->substractForDelete($entry->id);
         }
 
         $result = $entry->delete();

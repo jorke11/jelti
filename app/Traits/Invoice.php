@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use DB;
+use App\Models\Administration\Comment;
 
 trait Invoice {
 
@@ -129,6 +130,13 @@ trait Invoice {
 
 
         return $detail;
+    }
+
+    public function logClient($client_id, $comment) {
+        $in["user_id"] = Auth::user()->id;
+        $in["stakeholder_id"] = $client_id;
+        $in["description"] = $comment;
+        Comment::create($in);
     }
 
 }

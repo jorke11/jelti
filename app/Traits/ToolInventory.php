@@ -60,6 +60,20 @@ trait ToolInventory {
         return $response;
     }
 
+    public function validateInventory($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf) {
+        $pro = Products::where("reference", $reference)->first();
+
+        $valid = Inventory::where("warehouse_id", $warehouse_id)->where("product_id", $pro->id)
+                        ->where("lot", $lot)->where("expiration_date", $expire)->where("cost_sf", $cost_sf)->where("quantity", ">=", $quantity)->first();
+
+        $resp = array("status" => false, "quantity" => 0);
+        if (count($valid) > 0) {
+            $resp = array("status" => true, "quantity" => $valid->quantity);
+        }
+
+        return $resp;
+    }
+
     public function substractForSale($row_id) {
         $hold = InventoryHold::where("row_id", $row_id)->first();
         if ($hold != null) {
@@ -71,6 +85,28 @@ trait ToolInventory {
             $up["quantity"] = $hold->quantity;
             $up["lot"] = $hold->lot;
             $up["type_move"] = "hold_to_client";
+            $up["subtype"] = "update_hold_substract";
+            $up["current_quantity"] = $hold->quantity;
+            $up["insert_id"] = Auth::user()->id;
+            InventoryLog::create($up);
+            $hold->delete();
+        } else {
+            echo $row_id;
+            exit;
+        }
+    }
+    
+    public function substractForDelete($row_id) {
+        $hold = InventoryHold::where("row_id", $row_id)->first();
+        if ($hold != null) {
+            $up["row_id"] = $row_id;
+            $up["product_id"] = $hold->product_id;
+            $up["warehouse_id"] = $hold->warehouse_id;
+            $up["cost_sf"] = $hold->cost_sf;
+            $up["expiration_date"] = $hold->expiration_date;
+            $up["quantity"] = $hold->quantity;
+            $up["lot"] = $hold->lot;
+            $up["type_move"] = "hold_to_inv";
             $up["subtype"] = "update_hold_substract";
             $up["current_quantity"] = $hold->quantity;
             $up["insert_id"] = Auth::user()->id;

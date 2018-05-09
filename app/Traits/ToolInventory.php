@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\Inventory\InventoryHold;
 use App\Models\Inventory\Inventory;
 use App\Models\Inventory\InventoryLog;
+use App\Models\Administration\Products;
 use DB;
 use Auth;
 

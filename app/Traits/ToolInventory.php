@@ -16,6 +16,7 @@ trait ToolInventory {
 
     public function addInventory($warehouse_id, $reference, $quantity, $lot, $expiration_date, $cost_sf, $price_sf, $type_move = 'supplier_to_inv') {
         $expire = date("Y-m-d", strtotime($expiration_date));
+        
         $response = array("status" => true);
         $pro = \App\Models\Administration\Products::where("reference", $reference)->first();
 
@@ -28,7 +29,7 @@ trait ToolInventory {
                 $new["lot"] = $lot;
                 $new["quantity"] = $quantity;
                 $new["insert_id"] = Auth::user()->id;
-                $new["expiration_date"] = $expiration_date;
+                $new["expiration_date"] = $expire;
 
                 $inv = Inventory::where("warehouse_id", $warehouse_id)->where("product_id", $pro->product_id)->where("cost_sf", $pro->cost_sf)->where("price_sf", $pro->price_sf)->where("lot", $lot)->first();
 

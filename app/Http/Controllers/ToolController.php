@@ -627,7 +627,7 @@ class ToolController extends Controller {
      */
     public function addInventoryUrl($warehouse_id, $reference, $quantity, $lot, $expire, $cost_sf = null) {
         $pro = Products::where("reference", $reference)->first();
-        $this->addInventory($warehouse_id, $reference, $quantity, $lot, $expiration_date, $cost_sf, $pro->price_sf);
+        $this->addInventory($warehouse_id, $reference, $quantity, $lot, $expire, $pro->cost_sf, $pro->price_sf);
     }
 
     public function addInventoryReverse($header, $detail) {

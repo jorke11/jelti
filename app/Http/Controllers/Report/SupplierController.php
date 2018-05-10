@@ -85,7 +85,7 @@ class SupplierController extends Controller {
                 SELECT sta.id,sta.business,sum(d.quantity * d.units_sf) totalunidades, 
                     SUM(d.quantity * d.value * d.units_sf) + SUM(d.quantity * d.value * d.units_sf * d.tax) total,json_agg(DISTINCT dep.invoice) invoices
                 FROM departures_detail d 
-                JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7) NOT IN(258,264,24)
+                JOIN departures dep ON dep.id=d.departure_id and dep.status_id IN(2,7) and dep.client_id NOT IN(258,264,24)
                 JOIN products p ON p.id=d.product_id 
                 JOIN stakeholder sta ON sta.id=dep.client_id 
                 WHERE d.product_id IS NOT NULL 

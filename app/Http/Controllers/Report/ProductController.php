@@ -61,7 +61,7 @@ class ProductController extends Controller {
             JOIN departures s ON s.id=d.departure_id and s.status_id IN(2,7)
             JOIN stakeholder ON stakeholder.id=s.client_id and stakeholder.type_stakeholder=1
             JOIN products p ON p.id=d.product_id 
-            JOIN stakeholder sup ON stakeholder.id=p.supplier_id 
+            JOIN stakeholder sup ON sup.id=p.supplier_id 
             WHERE s.dispatched BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' AND s.client_id NOT IN(258,264,24) AND p.category_id<>-1
             $where
             GROUP by 1,2,3

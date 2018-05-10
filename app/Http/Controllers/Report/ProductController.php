@@ -49,12 +49,13 @@ class ProductController extends Controller {
 
 
         $res = $this->getListProduct($input["init"], $input["end"], $where);
+        
         return response()->json(["data" => $res]);
     }
 
     public function getListProduct($init, $end, $where = '', $limit = '') {
         $sql = "
-          SELECT p.id,p.title as product, sum(CASE WHEN d.real_quantity IS NULL THEN 0 ELSE d.real_quantity end * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
+          SELECT p.id,p.title as product,stakeholder.business_name, sum(CASE WHEN d.real_quantity IS NULL THEN 0 ELSE d.real_quantity end * CASE WHEN d.packaging=0 THEN 1 WHEN d.packaging IS NULL THEN 1 ELSE d.packaging END) quantity,
          sum(d.value * CASE WHEN d.real_quantity IS NULL THEN 0 ELSE d.real_quantity end * d.units_sf) as subtotal 
             FROM departures_detail d 
             JOIN departures s ON s.id=d.departure_id and s.status_id IN(2,7)
@@ -62,7 +63,7 @@ class ProductController extends Controller {
             JOIN products p ON p.id=d.product_id 
             WHERE s.dispatched BETWEEN'" . $init . " 00:00' AND '" . $end . " 23:59' AND s.client_id NOT IN(258,264,24) AND p.category_id<>-1
             $where
-            GROUP by 1,2
+            GROUP by 1,2,3
             ORDER BY 4 DESC
             $limit
             ";

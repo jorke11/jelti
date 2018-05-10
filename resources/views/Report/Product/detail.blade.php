@@ -9,6 +9,7 @@
                         <thead>
                             <tr>
                                 <td>Producto</td>
+                                <td>Proveedor</td>
                                 <td>Total Unidades</td>
                                 <td>Valor Total</td>
                             </tr>

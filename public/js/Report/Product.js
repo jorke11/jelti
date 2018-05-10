@@ -68,6 +68,7 @@ function Product() {
             destroy: true,
             columns: [
                 {data: "product"},
+                {data: "business_name"},
                 {data: "quantity"},
                 {data: "subtotal", render: $.fn.dataTable.render.number('.', ',', 2)},
             ],

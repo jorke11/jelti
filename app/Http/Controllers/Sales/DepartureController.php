@@ -1421,6 +1421,7 @@ class DepartureController extends Controller {
                 $errors = array();
 
                 $val_quantity = 0;
+
                 foreach ($input["detail"] as $value) {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
@@ -1438,6 +1439,7 @@ class DepartureController extends Controller {
                     }
                 }
 
+                
                 $input["quantity"] = $input["header"]["quantity"];
 
                 $det = [];
@@ -1449,11 +1451,16 @@ class DepartureController extends Controller {
 
                 $input["quantity_lots"] = json_encode($det);
 
+
+
                 if ($val_quantity == 0 && $pro->category_id != -1) {
+
                     $input["quantity_lots"] = null;
                     $input["status_id"] = 1;
                     $input["quantity_lots"] = null;
                     $rowD = InventoryHold::where("row_id", $id)->first();
+
+
                     if ($rowD != null) {
                         InventoryHold::find($rowD->id)->delete();
                     }
@@ -1463,7 +1470,7 @@ class DepartureController extends Controller {
             }
 
 
-            if (count($errors) == 0) {
+            if (count($errors) == 0 || $val_quantity == 0) {
                 DB::commit();
                 $data["header"] = $row;
                 $data["success"] = true;

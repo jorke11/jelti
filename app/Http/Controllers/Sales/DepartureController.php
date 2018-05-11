@@ -1454,7 +1454,9 @@ class DepartureController extends Controller {
                     $input["status_id"] = 1;
                     $input["quantity_lots"] = null;
                     $rowD = InventoryHold::where("row_id", $id)->first();
-                    InventoryHold::find($rowD->id)->delete();
+                    if ($rowD != null) {
+                        InventoryHold::find($rowD->id)->delete();
+                    }
                 }
 
                 $row->fill($input)->save();

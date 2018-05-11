@@ -1211,7 +1211,7 @@ class DepartureController extends Controller {
                 } else {
 
                     foreach (json_decode($detail->quantity_lots) as $value) {
-                        $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
+                        $inventory_real[] = array("lot" => $value->lot, "available" => $value->quantity, "quantity" => $value->quantity,
                             "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
                             "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
                             , "price_sf" => $value->price_sf

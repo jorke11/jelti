@@ -678,7 +678,6 @@ class ClientController extends Controller {
                     $price = null;
                     if ($book->price_sf != '') {
                         if ($book->item != '') {
-
                             if (trim($book->sf_code) != '') {
                                 $product = Products::where("reference", trim($book->sf_code))->first();
                             } else {
@@ -696,13 +695,13 @@ class ClientController extends Controller {
 
                         if ($product != '') {
                             if ($item != '') {
-                                $price = PricesSpecial::where("item", $item)->first();
+                                $price = PricesSpecial::where("item", $item)->where("client_id", $this->in["client_id"])->first();
                             }
 
 
                             if ($book->sf_code != '') {
                                 $pro = Products::where("reference", $book->sf_code)->first();
-                                $price = PricesSpecial::where("product_id", $pro->id)->first();
+                                $price = PricesSpecial::where("product_id", $pro->id)->where("client_id", $this->in["client_id"])->first();
                             }
 
 
@@ -726,7 +725,6 @@ class ClientController extends Controller {
                                 $p->fill($new)->save();
                                 $new["uinsert"] = Auth::user()->id;
                                 Log::info("update_price:method(storeExcelCode): " . json_encode($new));
-                                
                             }
                         }
                     } else {

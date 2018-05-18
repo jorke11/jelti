@@ -1512,6 +1512,7 @@ class DepartureController extends Controller {
 
             $row = DeparturesDetail::find($value->id);
             $row->quantity_lots = json_encode(array($quant));
+            $row->real_quantity = $quant["quantity"];
             $row->status_id = 3;
             $row->save();
 

@@ -1164,6 +1164,12 @@ class DepartureController extends Controller {
     public function getDetail($id) {
         $detail = DeparturesDetail::Find($id);
 
+         if ($detail->status_id == 1) {
+                $row->quantity_lots = null;
+                $row->save();
+            }
+
+        
         $header = Departures::find($detail->departure_id);
 
         $pro = DB::table("vproducts")->where("id", $detail->product_id)->first();

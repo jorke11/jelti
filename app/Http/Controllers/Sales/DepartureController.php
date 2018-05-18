@@ -1509,10 +1509,10 @@ class DepartureController extends Controller {
             $quant["price_sf"] = $value->value;
             $quant["quantity"] = $value->quantity;
             $quant["lot"] = "pedido funat";
-            $quant["status_id"] = 3;
 
             $row = DeparturesDetail::find($value->id);
-            $row->quantity_lots = json_encode($quant);
+            $row->quantity_lots = json_encode(array($quant));
+            $row->status_id = 3;
             $row->save();
 
             $quant["row_id"] = $value->id;

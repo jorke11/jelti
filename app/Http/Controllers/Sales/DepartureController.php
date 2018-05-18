@@ -1165,8 +1165,8 @@ class DepartureController extends Controller {
         $detail = DeparturesDetail::Find($id);
 
          if ($detail->status_id == 1) {
-                $row->quantity_lots = null;
-                $row->save();
+                $detail->quantity_lots = null;
+                $detail->save();
             }
 
         

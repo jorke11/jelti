@@ -1164,12 +1164,12 @@ class DepartureController extends Controller {
     public function getDetail($id) {
         $detail = DeparturesDetail::Find($id);
 
-         if ($detail->status_id == 1) {
-                $detail->quantity_lots = null;
-                $detail->save();
-            }
+        if ($detail->status_id == 1) {
+            $detail->quantity_lots = null;
+            $detail->save();
+        }
 
-        
+
         $header = Departures::find($detail->departure_id);
 
         $pro = DB::table("vproducts")->where("id", $detail->product_id)->first();
@@ -1299,7 +1299,7 @@ class DepartureController extends Controller {
         $row = Departures::Find($id);
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
-        if ($row->status_id == 1) {
+        if ($row->status_id == 1 || $row->status_id == 8) {
             $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
             $row->status_id = 4;
             $row->save();

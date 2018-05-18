@@ -1298,7 +1298,7 @@ class DepartureController extends Controller {
             $row->status_id = 4;
             $row->save();
             $resp = Departures::FindOrFail($id);
-            
+
             return response()->json(['success' => true, "data" => $resp]);
         } else {
 
@@ -1404,6 +1404,11 @@ class DepartureController extends Controller {
             $input = $request->all();
 
             $row = DeparturesDetail::Find($input["header"]["id"]);
+
+            if ($row->status_id == 1) {
+                $row->quantity_lots = null;
+                $row->save();
+            }
 
             $pro = Products::find($input["header"]["product_id"]);
 

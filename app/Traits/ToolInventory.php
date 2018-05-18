@@ -17,7 +17,7 @@ trait ToolInventory {
 
     public function addInventory($warehouse_id, $reference, $quantity, $lot, $expiration_date, $cost_sf, $price_sf, $type_move = 'supplier_to_inv') {
         $expire = date("Y-m-d", strtotime($expiration_date));
-        
+
         $response = array("status" => true);
         $pro = \App\Models\Administration\Products::where("reference", $reference)->first();
 
@@ -97,7 +97,7 @@ trait ToolInventory {
             exit;
         }
     }
-    
+
     public function substractForDelete($row_id) {
         $hold = InventoryHold::where("row_id", $row_id)->first();
         if ($hold != null) {
@@ -125,6 +125,8 @@ trait ToolInventory {
         foreach ($detail as $value) {
             if ($value->quantity_lots != null) {
                 $hold = json_decode($value->quantity_lots);
+
+
 
                 foreach ($hold as $val) {
 
@@ -218,6 +220,8 @@ trait ToolInventory {
             $new["subtype"] = "create_hold_add";
             InventoryLog::create($new);
         }
+
+        return $inventory->id;
     }
 
 }

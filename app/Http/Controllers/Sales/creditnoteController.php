@@ -21,8 +21,10 @@ use App\Traits\NumberToString;
 use App\Traits\StringExtra;
 
 class creditnoteController extends Controller {
+
     use NumberToString;
     use StringExtra;
+
     protected $total;
     public $total_real;
     public $path;
@@ -52,14 +54,23 @@ class creditnoteController extends Controller {
     public function edit($id) {
         $entry = Sales::where("departure_id", $id)->first();
         $departure = Departures::find($id);
-        $detail = $this->formatDetail($entry);
+        $detail = $this->formatDetailCredit($id);
+
+        return response()->json(["header" => $departure, "detail" => $detail]);
+    }
+
+    public function getDetailDeparture($id) {
+
+        $sale = Sales::where("departure_id", $id)->first();
+        $departure = Departures::find($id);
+        $detail = $this->formatDetail($sale);
 
         return response()->json(["header" => $departure, "detail" => $detail]);
     }
 
     public function store(Request $req) {
         $input = $req->all();
-
+//        dd($input);
         $sales = Sales::where("departure_id", $input["id"])->first();
 
         $dep = Departures::find($input["id"]);
@@ -68,22 +79,19 @@ class creditnoteController extends Controller {
         $new["departure_id"] = $input["id"];
         $new["description"] = $input["description"];
         if (count($input["detail"]) > 0) {
-
             $id = CreditNote::create($new)->id;
             foreach ($input["detail"] as $value) {
-                if (isset($value["quantity"]) && $value["quantity"] != 0) {
+                if (isset($value["quantity_note"]) && $value["quantity_note"] != 0) {
                     $cre = new CreditNoteDetail();
                     $cre->creditnote_id = $id;
                     $cre->row_id = $value["id"];
-                    $cre->quantity = $value["real_quantity"];
+                    $cre->quantity = $value["quantity_note"];
                     $cre->product_id = $value["product_id"];
                     $cre->save();
                 }
             }
             $dep->credinote_id = $id;
             $this->objDep->sendNofication($dep, 'credit_note');
-
-
 
             return response()->json(["success" => true]);
         } else {
@@ -96,6 +104,34 @@ class creditnoteController extends Controller {
                         ->join("products", "products.id", "credit_note_detail.product_id")
                         ->where("creditnote_id", $id)->get();
         return response()->json(["success" => true, "detail" => $res]);
+    }
+
+    public function formatDetailCredit($id) {
+        $sale = Sales::where("departure_id", $id)->first();
+        $credit = CreditNote::where("departure_id", $id)->first();
+        $detail = [];
+
+        if ($credit != null) {
+            $detail = CreditNoteDetail::select("credit_note_detail.id", "credit_note_detail.quantity", "products.title as product"
+                            , "departures_detail.value", "departures_detail.real_quantity")
+                    ->join("products", "products.id", "credit_note_detail.product_id")
+                    ->join("credit_note", "credit_note.id", "credit_note_detail.creditnote_id")
+                    ->join("vdepartures", "vdepartures.id", "credit_note.departure_id")
+                    ->join("departures_detail", "departures_detail.departure_id", DB::raw("credit_note.departure_id and departures_detail.product_id=credit_note_detail.product_id"))
+                    ->where("credit_note_detail.creditnote_id", $credit->id)
+                    ->get();
+            foreach ($detail as $i => $value) {
+//            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
+                $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
+                $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value;
+                $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
+                $detail[$i]->total_real = $detail[$i]->real_quantity * $detail[$i]->value;
+                $detail[$i]->totalFormated_real = "$ " . number_format($detail[$i]->total_real, 2, ",", ".");
+                $this->total += $detail[$i]->total;
+                $this->total_real += $detail[$i]->total_real;
+            }
+        }
+        return $detail;
     }
 
     public function formatDetail($sale) {

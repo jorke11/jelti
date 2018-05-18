@@ -1182,7 +1182,7 @@ function Departure() {
 
 
                                 html = '<img src="' + PATH + '/assets/images/pdf_23.png" style="cursor:pointer" onclick="obj.viewPdf(' + row.id + ')" title="Ver Factura">';
-                                if (row.status_id == 4 && row.invoice == '') {
+                                if (row.status_id == 4 && row.status_id == 8 && && row.invoice == '') {
                                     html = "";
                                 }
 

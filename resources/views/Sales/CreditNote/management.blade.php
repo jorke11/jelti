@@ -135,27 +135,23 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-lg-4">Detalle</div>
+                    <div class="col-lg-12 text-right">
+                        <button class="btn btn-info btn-sm" id='btnAdd'>
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true" > Agregar</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="panel-body">
                 <table class="table table-bordered table-condensed" id="tblDetail">
                     <thead>
                         <tr>
-                            <th colspan="2" class="center-rowspan">Información</th>
-                            <th colspan="3" class="center-rowspan">Pedido</th>
-                            <th colspan="3" class="center-rowspan">Despachado</th>
-                            <th rowspan="2" class="center-rowspan">Actiones</th>
-                        </tr>
-                        <tr>
                             <th>Producto</th>
                             <th>Comentario</th>
                             <th>Cantidad</th>
                             <th>Unidad</th>
                             <th>Total</th>
-                            <th>Cantidad</th>
-                            <th>Unidades</th>
-                            <th>Total</th>
+                            <th>Acccion</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -192,6 +188,36 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" role="dialog" id="modalDetail">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Detail factura</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-condensed table-hover" id="tblDetailDeparture" width='100%'>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+                            <th>Cantidad Disponible</th>
+                            <th>Cantidad</th>
+                            <th>Tipo</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
 

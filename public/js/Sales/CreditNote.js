@@ -54,6 +54,7 @@ function CreditNote() {
 
         });
 
+
         $("#frmDetail #product_id").change(function () {
             $.ajax({
                 url: 'creditnote/' + $(this).val() + '/getDetailProduct',
@@ -64,8 +65,6 @@ function CreditNote() {
                     $("#frmDetail #category_id").val(resp.response.category_id).trigger('change');
                     $("#frmDetail #value").val(resp.response.price_sf).formatNumber()
                     $("#frmDetail #quantityMax").html("(X " + parseInt(resp.response.units_sf) + ") Available: (" + resp.quantity + ")")
-
-
                 }
             })
         });
@@ -100,6 +99,82 @@ function CreditNote() {
         })
         $("#tabNota").click(this.tableNote)
 
+        $("#btnAdd").click(function () {
+            $("#modalDetail").modal("show");
+            $.ajax({
+                url: '/creditnote/' + $("#frm #id").val() + '/getDetail',
+                method: 'GET',
+                dataType: 'JSON',
+                success: function (resp) {
+                    listProductsStatic = resp.detail;
+                    obj.printDetailDep()
+                }
+            })
+        })
+    }
+
+    this.printDetailDep = function () {
+        $("#tblDetailDeparture tbody").empty();
+        var html = "";
+
+        $.each(listProductsStatic, function (i, val) {
+            listProductsStatic[i].quantity_temp = val.real_quantity - ((val.quantity_note != undefined) ? val.quantity_note : 0)
+            html += `
+                        <tr id="row_${val.id}">
+                            <td>${val.id}</td>
+                            <td>${val.product}</td>
+                            <td>${val.real_quantity}</td>
+                            <td><input type="number" value='${listProductsStatic[i].quantity_temp}' id="quantity_${val.id}" class="form-control input-xs"></td>
+                            <td>
+                                <select class="form-control" id="type_credit_note_${val.id}">
+                                    <option value="1">Devolución</option>
+                                    <option value="2">Averia</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-info" onclick=obj.addDetail(${val.id})>
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        `
+        })
+        $("#tblDetailDeparture tbody").html(html);
+    }
+
+    this.addDetail = function (id) {
+        var row_data = {};
+
+        $.each(listProductsStatic, function (i, val) {
+            if (val.id == id) {
+                listProductsStatic[i].quantity_temp = parseInt(listProductsStatic[i].quantity_temp) + parseInt($("#quantity_" + id).val());
+                row_data = val
+            }
+        })
+
+        row_data.quantity_note = $("#quantity_" + id).val();
+        row_data.type_credit_note = $("#type_credit_note_" + id).val();
+        row_data.total_note = $("#quantity_" + id).val() * row_data.value;
+        row_data.totalFormated_note = $.formatNumber(row_data.total_real, "$");
+
+        if (parseInt($("#quantity_" + id).val()) == parseInt(row_data.real_quantity)) {
+            $("#tblDetailDeparture #row_" + id).remove()
+        }
+
+        let cont = 0;
+
+        this.getItem(row_data.product_id);
+
+        if (row.product_id != undefined) {
+            listProducts[rowItem].quantity_note = parseInt($("#quantity_" + id).val())
+
+        } else {
+            console.log(row_data)
+            listProducts.push(row_data);
+        }
+
+        this.printDetailTmp();
+        this.printDetailDep();
 
     }
 
@@ -153,7 +228,6 @@ function CreditNote() {
                 $.each(resp.data.branch, function (i, val) {
                     html += '<option value="' + val.id + '">' + val.address_invoice + "</option>";
                 })
-
                 $("#frm #branch_id").html(html);
             }
         })
@@ -161,6 +235,8 @@ function CreditNote() {
 
     this.save = function () {
         toastr.remove();
+
+
         $("#frm #warehouse_id").prop("disabled", false);
         $("#frm #responsible_id").prop("disabled", false);
         $("#frm #city_id").prop("disabled", false);
@@ -263,23 +339,20 @@ function CreditNote() {
         var html = "", htmlEdit = "", htmlDel = "";
         $("#tblDetail tbody").html("");
         $.each(listProducts, function (i, val) {
-
             if (val != undefined) {
-                htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + i + ')>Edit</button>'
+//                htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + i + ')>Edit</button>'
                 htmlDel = '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteItem(' + val.product_id + ',' + i + ')>Delete</button>'
 
-                val.real_quantity = (val.real_quantity != null) ? val.real_quantity : '';
+                val.quantity_note = (val.quantity_note != null) ? val.quantity_note : '';
+                val.quantity_temp = (val.quantity_temp != null) ? val.quantity_temp : '';
                 val.comment = (val.comment != null) ? val.comment : '';
 
                 html += '<tr id="row_' + i + '">';
                 html += "<td>" + val.product + "</td>";
                 html += "<td>" + val.comment + "</td>";
-                html += "<td>" + val.quantity + "</td>";
+                html += "<td>" + val.quantity_note + "</td>";
                 html += "<td>" + val.valueFormated + "</td>";
-                html += "<td>" + val.totalFormated + "</td>";
-                html += "<td>" + val.real_quantity + "</td>";
-                html += "<td>" + val.valueFormated + "</td>";
-                html += "<td>" + val.totalFormated_real + "</td>";
+                html += "<td>" + val.totalFormated_note + "</td>";
                 html += '<td>' + htmlEdit + htmlDel + "</td>";
                 html += "</tr>";
             }
@@ -538,7 +611,7 @@ function CreditNote() {
                 }
             }
         });
-        
+
         $('#tbl tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = table.row(tr);

@@ -2,14 +2,11 @@
 @section('content')
 @section('title','Notas Credito')
 @section('subtitle','Administracion')
-
 <div class="row">
-
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist" id='myTabs'>
         <li role="presentation" class="active" id="tabList"><a href="#list" aria-controls="home" role="tab" data-toggle="tab">Facturas</a></li>
         <li role="presentation" id="insideManagement"><a href="#management" aria-controls="profile" role="tab" data-toggle="tab">Administración</a></li>
-       
     </ul>
 
     <!-- Tab panes -->
@@ -24,7 +21,6 @@
         <div role="tabpanel" class="tab-pane " id="management">
             @include('Sales.CreditNote.management')
         </div>
-
     </div>
 </div>
 @include('Sales.CreditNote.newDetail')

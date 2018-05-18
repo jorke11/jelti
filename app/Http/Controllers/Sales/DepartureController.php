@@ -1169,9 +1169,7 @@ class DepartureController extends Controller {
         $pro = DB::table("vproducts")->where("id", $detail->product_id)->first();
 
         if ($pro != null) {
-
             if ($pro->category_id != -1) {
-
                 $inventory = Inventory::where("product_id", $detail->product_id)->where("warehouse_id", $header->warehouse_id)
 //                            ->where("expiration_date", ">", date('Y-m-d', strtotime('+30 day', strtotime(date('Y-m-d')))))->get();
                                 ->where("expiration_date", ">", date('Y-m-d'))->orderBy("expiration_date", "asc")->get();
@@ -1185,11 +1183,11 @@ class DepartureController extends Controller {
 
             if ($detail->quantity_lots != '') {
 
-
                 if (count($inventory) > 0) {
 
                     foreach ($inventory as $val) {
                         if ($detail->quantity_lots != "[]") {
+
                             foreach (json_decode($detail->quantity_lots) as $value) {
                                 if ($val->id == $value->inventory_id) {
                                     $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
@@ -1200,7 +1198,6 @@ class DepartureController extends Controller {
                                 }
                             }
                         } else {
-
                             $inventory_real[] = array("lot" => $val->lot, "available" => $val->quantity, "quantity" => 0,
                                 "expiration_date" => $val->expiration_date, "product_id" => $val->product_id,
                                 "cost_sf" => $val->cost_sf, "inventory_id" => $val->id
@@ -1209,7 +1206,6 @@ class DepartureController extends Controller {
                         }
                     }
                 } else {
-
                     foreach (json_decode($detail->quantity_lots) as $value) {
                         $inventory_real[] = array("lot" => $value->lot, "available" => $value->quantity, "quantity" => $value->quantity,
                             "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
@@ -1297,29 +1293,39 @@ class DepartureController extends Controller {
         $row = Departures::Find($id);
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
-        if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || Auth::user()->role_id == 1) {
-
-            $detail = DeparturesDetail::where("departure_id", $id)->where("real_quantity", ">", 0)->get();
-
-            foreach ($detail as $value) {
-                $det_json = json_decode($value->quantity_lots);
-                if ($det_json != null) {
-                    foreach ($det_json as $val) {
-                        $pro = Products::find($value->product_id);
-                        $this->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf, $pro->price_sf, "cancel_to_inv");
-                    }
-                }
-            }
-
+        if ($row->status_id == 1) {
             $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
             $row->status_id = 4;
             $row->save();
             $resp = Departures::FindOrFail($id);
-
-            $this->sendNofication($resp, "canceled");
+            
             return response()->json(['success' => true, "data" => $resp]);
         } else {
-            return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+
+            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || Auth::user()->role_id == 1) {
+
+                $detail = DeparturesDetail::where("departure_id", $id)->where("real_quantity", ">", 0)->get();
+
+                foreach ($detail as $value) {
+                    $det_json = json_decode($value->quantity_lots);
+                    if ($det_json != null) {
+                        foreach ($det_json as $val) {
+                            $pro = Products::find($value->product_id);
+                            $this->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf, $pro->price_sf, "cancel_to_inv");
+                        }
+                    }
+                }
+
+                $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
+                $row->status_id = 4;
+                $row->save();
+                $resp = Departures::FindOrFail($id);
+
+                $this->sendNofication($resp, "canceled");
+                return response()->json(['success' => true, "data" => $resp]);
+            } else {
+                return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+            }
         }
     }
 
@@ -1421,8 +1427,8 @@ class DepartureController extends Controller {
                 $errors = array();
 
                 $val_quantity = 0;
-
-                foreach ($input["detail"] as $value) {
+//                dd($input["detail"]);
+                foreach ($input["detail"] as $i => $value) {
                     $pro = Products::find($value["product_id"]);
                     if ($pro->category_id != -1) {
 //                        $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
@@ -1430,8 +1436,9 @@ class DepartureController extends Controller {
 
 
                         if ($validate["status"]) {
+
                             $val_quantity += $value["quantity"];
-                            $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"]);
+                            $input["detail"][$i]["inventory_id"] = $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"]);
 //                            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
                         } else {
                             $errors[] = $pro->reference . " No cuenta con inventario disponible " . $validate["quantity"];
@@ -1439,7 +1446,7 @@ class DepartureController extends Controller {
                     }
                 }
 
-                
+
                 $input["quantity"] = $input["header"]["quantity"];
 
                 $det = [];
@@ -1450,8 +1457,6 @@ class DepartureController extends Controller {
                 }
 
                 $input["quantity_lots"] = json_encode($det);
-
-
 
                 if ($val_quantity == 0 && $pro->category_id != -1) {
 
@@ -1465,10 +1470,8 @@ class DepartureController extends Controller {
                         InventoryHold::find($rowD->id)->delete();
                     }
                 }
-
                 $row->fill($input)->save();
             }
-
 
             if (count($errors) == 0 || $val_quantity == 0) {
                 DB::commit();

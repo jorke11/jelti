@@ -515,6 +515,7 @@ function Departure() {
         if (validate.length == 0) {
 
             if (id != '') {
+                var total = 0;
                 data.header = {};
                 data.detail = [];
 
@@ -524,32 +525,43 @@ function Departure() {
                 data.header.total = total;
                 data.detail = lots;
 
+                var elem;
 
-                var url = "/departure/detail/" + id;
-                $.ajax({
-                    url: url,
-                    method: "PUT",
-                    data: data,
-                    dataType: 'JSON',
-                    success: function (resp) {
-                        if (resp.success == true) {
-                            $("#modalDetail").modal("hide");
-                            obj.printDetail(resp);
-                            $("#frmDetail #product_id").text("");
-                            $("#frmDetail #value").val("");
-                            $("#frmDetail #quantity").val("");
-                            $("#frmDetail #quantity_units").val("");
-                            $("#frmDetail #value_units").val("");
-                            $("#frmDetail #txtCategory").html("Sin Seleccionar");
-                            $("#frmDetail #txtValue").html("Sin Selecccionar");
-                            $("#frmDetail #imgProduct").attr("src", "");
-                        } else {
-                            toastr.error(resp.success.msg);
-                        }
-                    }, error(xhr, responseJSON, thrown) {
-                        toastr.error(xhr.responseJSON.msg);
-                    }
+                $(".input-lots").each(function (i, val) {
+                    total += parseInt($(this).val());
                 })
+
+
+                if (quantity_total >= total) {
+
+                    var url = "/departure/detail/" + id;
+                    $.ajax({
+                        url: url,
+                        method: "PUT",
+                        data: data,
+                        dataType: 'JSON',
+                        success: function (resp) {
+                            if (resp.success == true) {
+                                $("#modalDetail").modal("hide");
+                                obj.printDetail(resp);
+                                $("#frmDetail #product_id").text("");
+                                $("#frmDetail #value").val("");
+                                $("#frmDetail #quantity").val("");
+                                $("#frmDetail #quantity_units").val("");
+                                $("#frmDetail #value_units").val("");
+                                $("#frmDetail #txtCategory").html("Sin Seleccionar");
+                                $("#frmDetail #txtValue").html("Sin Selecccionar");
+                                $("#frmDetail #imgProduct").attr("src", "");
+                            } else {
+                                toastr.error(resp.success.msg);
+                            }
+                        }, error(xhr, responseJSON, thrown) {
+                            toastr.error(xhr.responseJSON.msg);
+                        }
+                    })
+                } else {
+                    toastr.error("No puedes pedir mas de lo solicitado!");
+                }
 
             } else {
                 if (statusRecord == true) {

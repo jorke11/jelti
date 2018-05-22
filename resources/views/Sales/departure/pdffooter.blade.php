@@ -90,7 +90,7 @@
 </table>
 <br>
 <br>
-<table style="padding-bottom: 11%;">
+<table >
     <tr>
         <td class="resolution">La presente Factura se asemeja en todos sus efectos a un Título Valor Art. 1 Ley 1231 de 2008. En caso de
             mora se causarán intereses a la tasa máxima legal estipulada por la ley, o en el respectivo contrato (conforme al art. 884 del Código de Comercio).</td>
@@ -105,4 +105,13 @@
         <td class="resolution"><b>Si el pago es por consignacion fuera de Bogota, favor agregar al valor al final $11.000 pesos.</b></td>
     </tr>
 </table>
-
+<br>
+<table style="padding-bottom: 10%;">
+    <tr>
+        <td class="resolution"><b>Información Importante:</b></td>
+    </tr>
+    <tr>
+        <td class="resolution"><i>Cualquier inconformidad con el pedido debe ser notificada en la guía de la transportadora al momento de recibir la mercancía / o a SuperFüds en los siguiente 3 días hábiles, de lo contrario SuperFüds no puede hacerse responsable debido a la naturaleza de los productos. En dado caso de encontrar inconsistencias favor NO recibir la mercancía
+            Favor revisar Políticas de Devolución</i></td>
+    </tr>
+</table>

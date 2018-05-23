@@ -764,6 +764,8 @@ function Departure() {
         var html = "", htmlEdit = "", htmlDel = "", total = 0;
         $("#tblDetail tbody").html("");
 
+
+
         $.each(listProducts, function (i, val) {
 
             if (val != undefined) {
@@ -803,10 +805,9 @@ function Departure() {
         var html = "", htmlEdit = "", htmlDel = "", quantityTotal = 0, total = 0, id = '';
         $("#tblDetail tbody").empty();
 
-
-
+        var bg = '';
         $.each(data.detail, function (i, val) {
-
+            bg = 'danger';
             quantityTotal += val.quantity;
             total += val.total;
             if (val.status_id == 3 && $("#role_id").val() == 4) {
@@ -815,12 +816,12 @@ function Departure() {
                 if (data.header.status_id == 2) {
                     htmlEdit = '';
                 } else {
-                    htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>';
+                    htmlEdit = `<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(${val.id})>Edit</button>`;
                 }
             }
 
             if ((btnDel == true && val.status_id != 3) || btnDel == true) {
-                htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ',' + val.status_id + ')>Delete</button>'
+                htmlDel = ` <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(${val.id},${val.status_id}>Delete</button>`
             } else {
                 htmlDel = '';
             }
@@ -829,19 +830,26 @@ function Departure() {
 
             id = (val.id == undefined) ? '' : ' (' + val.id + ')';
 
-            html += "<tr>";
-            html += "<td>" + val.product + id + "</td>";
-            html += "<td>" + val.tax + "</td>";
-            html += "<td>" + val.units_sf + "</td>";
-            html += "<td>" + val.quantity + "</td>";
-            html += "<td>" + val.valueFormated + "</td>";
-            html += "<td>" + val.totalFormated + "</td>";
-            html += "<td>" + val.real_quantity + "</td>";
-            html += "<td>" + val.valueFormated + "</td>";
-            html += "<td>" + val.totalFormated_real + "</td>";
-            html += '<td>' + val.status + "</td>";
-            html += '<td>' + htmlEdit + htmlDel + "</td>";
-            html += "</tr>";
+            if (val.quantity == val.real_quantity) {
+                bg = '';
+            }
+
+
+
+            html += `
+            <tr class="${bg}">
+                <td>${val.product + id}</td>
+                <td>${val.tax}</td>
+                <td>${val.units_sf}</td>
+                <td>${val.quantity}</td>
+                <td>${val.valueFormated}</td>
+                <td>${val.totalFormated}</td>
+                <td>${val.real_quantity}</td>
+                <td>${val.valueFormated}</td>
+                <td>${val.totalFormated_real}</td>
+                <td>${val.status}</td>
+                <td>${htmlEdit + htmlDel}</td>
+                </tr>`;
         });
 
         html += `
@@ -852,11 +860,12 @@ function Departure() {
                     <td></td><td></td><td><b>${data.subtotal_real}</b></td><td></td></tr>`;
 
         if (data.discount != '$ 0') {
-            html += '<tr><td colspan="3" align="right"><Strong>Descuento</strong></td><td></td><td></td><td><b>' + data.discount + '</b></td><td></td><td></td><td><b>' + data.discount + '</b></td><td></td></tr>';
+            html += `<tr><td colspan="3" align="right"><Strong>Descuento</strong></td><td></td><td></td><td><b>${data.discount}</b></td><td></td><td></td><td><b>' + data.discount + '</b></td><td></td></tr>`;
         }
         if (data.tax5 != '$ 0') {
-            html += '<tr><td colspan="3" align="right"><Strong>Iva 5</strong></td><td></td><td></td><td><b>' + data.tax5 + '</b></td><td></td><td></td><td><b>' + data.tax5_real + '</b></td><td></td></tr>';
+            html += `<tr><td colspan="3" align="right"><Strong>Iva 5</strong></td><td></td><td></td><td><b>${data.tax5}</b></td><td></td><td></td><td><b>${data.tax5_real}</b></td><td></td></tr>`;
         }
+
         if (data.tax19 != '$ 0') {
             html += '<tr><td colspan="3" align="right"><Strong>Iva 19</strong></td><td></td><td></td><td><b>' + data.tax19 + '</b></td><td></td><td></td><td><b>' + data.tax19_real + '</b></td><td></td></tr>';
         }

@@ -1440,7 +1440,7 @@ class DepartureController extends Controller {
                 $errors = array();
 
                 $val_quantity = 0;
-                
+
                 foreach ($input["detail"] as $i => $value) {
                     $pro = Products::find($value["product_id"]);
 
@@ -1450,7 +1450,7 @@ class DepartureController extends Controller {
 //                        if ($validate["status"]) {
                         $val_quantity += $value["quantity"];
 
-                        $input["detail"][$i]["inventory_id"] = $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"],$value["lot"]);
+                        $input["detail"][$i]["inventory_id"] = $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"], $value["lot"]);
 //                            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
 //                        } else {
 //                            $errors[] = $pro->reference . " No cuenta con inventario disponible " . $validate["quantity"];
@@ -1613,7 +1613,7 @@ class DepartureController extends Controller {
 
     public function generateRemission($id) {
         $row = Departures::find($id);
-        $con = Departures::select(DB::raw("count(*) +1 consecutive"))->whereNotNull("remission")->first();
+        $con = Departures::select(DB::raw("remission::int +1 consecutive"))->whereNotNull("remission")->orderBy(DB::raw("remission::int "), "desc")->first();
         $row->status_id = 5;
         $row->remission = $con->consecutive;
 

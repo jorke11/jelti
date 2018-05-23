@@ -1440,6 +1440,7 @@ class DepartureController extends Controller {
                 $errors = array();
 
                 $val_quantity = 0;
+                
                 foreach ($input["detail"] as $i => $value) {
                     $pro = Products::find($value["product_id"]);
 
@@ -1459,6 +1460,7 @@ class DepartureController extends Controller {
 
 
                 $input["quantity"] = $input["header"]["quantity"];
+                $input["real_quantity"] = $val_quantity;
 
                 $det = [];
                 foreach ($input["detail"] as $value) {

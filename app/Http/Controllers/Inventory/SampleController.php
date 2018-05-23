@@ -595,11 +595,13 @@ class SampleController extends Controller {
 
                 $dep = Sample::where("id", $input["id"])->where("status_id", 2)->get();
                 if ($val > 0) {
-                    $val = SampleDetail::where("sample_id", $departure["id"])->where("status_id", 1)->count();
-                    if ($val == 0) {
+//                    $val = SampleDetail::where("sample_id", $departure["id"])->where("status_id", 1)->count();
+                    $val = SampleDetail::where("sample_id", $departure["id"])->where("real_quantity", ">", 0)->where("status_id", 3)->get();
+
+                    if ($val != null) {
                         if (count($dep) == 0) {
 
-                            $con = Sample::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy("invoice", "desc")->first();
+                            $con = Sample::select(DB::raw("(invoice::int + 1) consecutive"))->whereNotNull("invoice")->orderBy(DB::raw("invoice::int "), "desc")->first();
 
                             if ($departure->invoice == '') {
                                 $consecutive = ($con == null) ? 1 : $con->consecutive;
@@ -608,7 +610,6 @@ class SampleController extends Controller {
 
                             $departure->status_id = 2;
                             $departure->dispatched = date("Y-m-d H:i:s");
-
                             $departure->save();
 
                             $detail = SampleDetail::where("sample_id", $input["id"])->where("real_quantity", ">", 0)->get();

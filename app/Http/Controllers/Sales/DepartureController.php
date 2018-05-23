@@ -35,6 +35,7 @@ use App\Traits\NumberToString;
 use App\Traits\StringExtra;
 use App\Traits\Invoice;
 use App\Traits\ToolInventory;
+use Log;
 
 class DepartureController extends Controller {
 
@@ -887,7 +888,7 @@ class DepartureController extends Controller {
                         $pro = Products::find($rowDep->product_id);
 
                         if ($pro->category_id != -1) {
-                            $this->substractForSale($value->id, $value);
+                            $this->substractForSale($value->id, $value->quantity_lots);
                         }
 
                         $pro = Products::find($value->product_id);
@@ -1409,6 +1410,7 @@ class DepartureController extends Controller {
             DB::beginTransaction();
             $input = $request->all();
 
+
             $row = DeparturesDetail::Find($input["header"]["id"]);
 
             if ($row->status_id == 1) {
@@ -1438,22 +1440,20 @@ class DepartureController extends Controller {
                 $errors = array();
 
                 $val_quantity = 0;
-//                dd($input["detail"]);
                 foreach ($input["detail"] as $i => $value) {
                     $pro = Products::find($value["product_id"]);
+
                     if ($pro->category_id != -1) {
 //                        $validate = $this->tool->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
-                        $validate = $this->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
+//                        $validate = $this->validateInventory($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"]);
+//                        if ($validate["status"]) {
+                        $val_quantity += $value["quantity"];
 
-
-                        if ($validate["status"]) {
-
-                            $val_quantity += $value["quantity"];
-                            $input["detail"][$i]["inventory_id"] = $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"]);
+                        $input["detail"][$i]["inventory_id"] = $this->moveHold($input["header"]["id"], $value["inventory_id"], $value["quantity"],$value["lot"]);
 //                            $this->tool->addInventoryHold($header->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $row->id);
-                        } else {
-                            $errors[] = $pro->reference . " No cuenta con inventario disponible " . $validate["quantity"];
-                        }
+//                        } else {
+//                            $errors[] = $pro->reference . " No cuenta con inventario disponible " . $validate["quantity"];
+//                        }
                     }
                 }
 

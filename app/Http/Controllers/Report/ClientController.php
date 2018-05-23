@@ -519,7 +519,7 @@ class ClientController extends Controller {
     public function getSalesUnits(Request $req) {
         $in = $req->all();
         $res = $this->getSalesUnitsData($in["init"], $in["end"]);
-
+//        dd($res);
         return response()->json(["data" => $res]);
     }
 
@@ -580,7 +580,7 @@ class ClientController extends Controller {
 
 
         $res = DB::select($sql);
-
+        
         $total = 0;
         $subtotal = 0;
         $quantity = 0;
@@ -593,6 +593,8 @@ class ClientController extends Controller {
             $total += $value->total;
             $quantity += $res[$i]->quantity_packaging;
         }
+        
+//        dd($res);
 
         $this->subtotal = ($subtotal == 0) ? 1 : $subtotal;
         $this->total = ($total == 0) ? 1 : $total;

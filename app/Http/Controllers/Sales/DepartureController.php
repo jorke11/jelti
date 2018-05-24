@@ -1300,39 +1300,44 @@ class DepartureController extends Controller {
         $row = Departures::Find($id);
         $ayer = date("Y-m-d", strtotime("-1 day", strtotime(date("Y-m-d"))));
 
-        if ($row->status_id == 1 || $row->status_id == 8) {
-            $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
-            $row->status_id = 4;
-            $row->save();
-            $resp = Departures::FindOrFail($id);
+        if (Auth::user()->id == 2) {
 
-            return response()->json(['success' => true, "data" => $resp]);
-        } else {
-
-            if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || Auth::user()->role_id == 1) {
-
-                $detail = DeparturesDetail::where("departure_id", $id)->where("real_quantity", ">", 0)->get();
-
-                foreach ($detail as $value) {
-                    $det_json = json_decode($value->quantity_lots);
-                    if ($det_json != null) {
-                        foreach ($det_json as $val) {
-                            $pro = Products::find($value->product_id);
-                            $this->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf, $pro->price_sf, "cancel_to_inv");
-                        }
-                    }
-                }
-
+            if ($row->status_id == 1 || $row->status_id == 8) {
                 $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
                 $row->status_id = 4;
                 $row->save();
                 $resp = Departures::FindOrFail($id);
 
-                $this->sendNofication($resp, "canceled");
                 return response()->json(['success' => true, "data" => $resp]);
             } else {
-                return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+
+                if (strtotime($ayer) <= strtotime(date("Y-m-d", strtotime($row->dispatched))) || Auth::user()->role_id == 1) {
+
+                    $detail = DeparturesDetail::where("departure_id", $id)->where("real_quantity", ">", 0)->get();
+
+                    foreach ($detail as $value) {
+                        $det_json = json_decode($value->quantity_lots);
+                        if ($det_json != null) {
+                            foreach ($det_json as $val) {
+                                $pro = Products::find($value->product_id);
+                                $this->addInventory($row->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf, $pro->price_sf, "cancel_to_inv");
+                            }
+                        }
+                    }
+
+                    $row->description = "Cancelado: " . $in["description"] . ", " . $row->description;
+                    $row->status_id = 4;
+                    $row->save();
+                    $resp = Departures::FindOrFail($id);
+
+                    $this->sendNofication($resp, "canceled");
+                    return response()->json(['success' => true, "data" => $resp]);
+                } else {
+                    return response()->json(['success' => false, "msg" => "Fecha de emisión supera el tiempo permitido, 1 día"], 409);
+                }
             }
+        } else {
+            return response()->json(['success' => false, "msg" => "No tienes permisos Para Cancelar"], 409);
         }
     }
 

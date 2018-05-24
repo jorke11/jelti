@@ -834,8 +834,6 @@ function Departure() {
                 bg = '';
             }
 
-
-
             html += `
             <tr class="${bg}">
                 <td>${val.product + id}</td>

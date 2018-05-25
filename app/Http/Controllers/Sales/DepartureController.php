@@ -211,9 +211,7 @@ class DepartureController extends Controller {
         $this->mails = array();
 
         $sale = Sales::where("departure_id", $id)->first();
-
         $detail = $this->formatDetailSales($sale["id"]);
-
         $dep = Departures::find($id);
 
         $cli = null;
@@ -1184,17 +1182,20 @@ class DepartureController extends Controller {
                     "price_sf" => $pro->price_sf, "cost_sf" => $pro->cost_sf);
             }
 
+
             $inventory_real = [];
 
             if ($detail->quantity_lots != '') {
 
                 if (count($inventory) > 0) {
-
+                    $ids = [];
                     foreach ($inventory as $val) {
+
                         if ($detail->quantity_lots != "[]") {
 
                             foreach (json_decode($detail->quantity_lots) as $value) {
                                 if ($val->id == $value->inventory_id) {
+                                    $ids[] = $val->id;
                                     $inventory_real[] = array("lot" => $value->lot, "available" => $val->quantity, "quantity" => $value->quantity,
                                         "expiration_date" => $value->expiration_date, "product_id" => $value->product_id,
                                         "cost_sf" => $value->cost_sf, "inventory_id" => $val->id
@@ -1208,6 +1209,16 @@ class DepartureController extends Controller {
                                 "cost_sf" => $val->cost_sf, "inventory_id" => $val->id
                                 , "price_sf" => $val->price_sf
                             );
+                        }
+                    }
+
+                    foreach ($inventory as $val) {
+                        if (!in_array($val->id, $ids)) {
+                            $inventory_real[] = array("lot" => $val->lot, "available" => $val->quantity, "quantity" => 0,
+                                "expiration_date" => $val->expiration_date, "product_id" => $val->product_id,
+                                "cost_sf" => $val->cost_sf, "inventory_id" => $val->id
+                                , "price_sf" => $val->price_sf
+                            );  
                         }
                     }
                 } else {

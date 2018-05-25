@@ -359,7 +359,10 @@ class ClientController extends Controller {
     }
 
     public function destroyBranch($id) {
-        $stakeholder = Branch::FindOrFail($id);
+        $stakeholder = Branch::Find($id);
+//        $stakeholder->status_id = 2;
+//        $result = $stakeholder->save();
+
         $result = $stakeholder->delete();
 
         if ($result) {

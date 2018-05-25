@@ -1000,7 +1000,8 @@ function Departure() {
                             <td>${val.available}</td>
                             <td>${val.expiration_date}</td>
                             <td><input class="form-control input-lots" lot="${val.lot}" expire="${val.expiration_date}" 
-                            cost_sf="${val.cost_sf}" product_id="${val.product_id}" value="${val.quantity}" inventory_id="${val.inventory_id}" price_sf="${val.price_sf}"></td></tr>`;
+                            cost_sf="${val.cost_sf}" product_id="${val.product_id}" value="${val.quantity}" inventory_id="${val.inventory_id}" price_sf="${val.price_sf}"
+                            onchange=obj.validateQuantity(${val.available},this)></td></tr>`;
                     quantity = 0;
                 });
 
@@ -1029,6 +1030,16 @@ function Departure() {
             }
         })
     }
+
+
+    this.validateQuantity = function (available, elem) {
+        if (available < $(elem).val()) {
+            toastr.error("La cantidad no puede ser mayor que la disponible")
+            $(elem).val('')
+            $(elem).focus();
+        }
+    }
+
 
     this.confirmItem = function () {
         var id = $("#frmDetail #id").val();

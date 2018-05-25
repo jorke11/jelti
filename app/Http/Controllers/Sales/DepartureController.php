@@ -215,8 +215,6 @@ class DepartureController extends Controller {
 
         $dep = Departures::find($id);
 
-        dd($dep);exit;
-        
 
         $cli = null;
         if ($dep->branch_id != '') {
@@ -225,17 +223,17 @@ class DepartureController extends Controller {
                     ->first();
         } else {
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term", "stakeholder.phone")
-                    ->where("stakeholder.id", $sale["client_id"])
+                    ->where("stakeholder.id", $dep->client_id)
                     ->first();
         }
 
-        
+
 
         $city_send = Cities::find($dep->destination_id);
         $city_inv = Cities::find($dep->city_id);
 
         dd($cli);
-        
+
         $cli->city_send = $city_send->description;
         $cli->city_inv = $city_inv->description;
 

@@ -215,7 +215,7 @@ class DepartureController extends Controller {
 
         $dep = Departures::find($id);
 
-        dd($sale);exit;
+        dd($dep);exit;
         
 
         $cli = null;

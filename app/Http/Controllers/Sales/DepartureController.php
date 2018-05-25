@@ -211,6 +211,9 @@ class DepartureController extends Controller {
         $this->mails = array();
 
         $sale = Sales::where("departure_id", $id)->first();
+        
+        dd($sale);
+        
         $detail = $this->formatDetailSales($sale["id"]);
 
         $dep = Departures::find($id);

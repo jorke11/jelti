@@ -227,7 +227,7 @@ class DepartureController extends Controller {
                     ->first();
         }
 
-
+        dd($dep);
 
         $city_send = Cities::find($dep->destination_id);
         $city_inv = Cities::find($dep->city_id);

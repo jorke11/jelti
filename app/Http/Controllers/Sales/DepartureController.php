@@ -211,22 +211,21 @@ class DepartureController extends Controller {
         $this->mails = array();
 
         $sale = Sales::where("departure_id", $id)->first();
-        
-        dd($sale);
-        
+
         $detail = $this->formatDetailSales($sale["id"]);
 
         $dep = Departures::find($id);
 
-
         $cli = null;
         if ($dep->branch_id != '') {
+            echo "asd";exit;
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term", "branch_office.phone")
                     ->where("id", $dep->branch_id)
                     ->first();
         } else {
+            echo "else";exit;
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term", "stakeholder.phone")
-                    ->where("stakeholder.id", $dep->client_id)
+                    ->where("stakeholder.id", $sale["client_id"])
                     ->first();
         }
 

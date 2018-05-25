@@ -215,6 +215,8 @@ class DepartureController extends Controller {
 
         $dep = Departures::find($id);
 
+        dd($sale);exit;
+        
 
         $cli = null;
         if ($dep->branch_id != '') {

@@ -217,6 +217,7 @@ class DepartureController extends Controller {
         $dep = Departures::find($id);
 
         $cli = null;
+        dd($dep);
         if ($dep->branch_id != '') {
             echo "asd";exit;
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term", "branch_office.phone")

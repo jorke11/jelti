@@ -217,25 +217,18 @@ class DepartureController extends Controller {
         $dep = Departures::find($id);
 
         $cli = null;
-        dd($dep);
         if ($dep->branch_id != '') {
-            echo "asd";exit;
             $cli = Branch::select("branch_office.id", "branch_office.business", "branch_office.business_name", "branch_office.document", "branch_office.address_invoice", "branch_office.term", "branch_office.phone")
                     ->where("id", $dep->branch_id)
                     ->first();
         } else {
-            echo "else";exit;
             $cli = Stakeholder::select("stakeholder.id", "stakeholder.business", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "stakeholder.term", "stakeholder.phone")
                     ->where("stakeholder.id", $sale["client_id"])
                     ->first();
         }
 
-
-
         $city_send = Cities::find($dep->destination_id);
         $city_inv = Cities::find($dep->city_id);
-
-        dd($cli);
 
         $cli->city_send = $city_send->description;
         $cli->city_inv = $city_inv->description;

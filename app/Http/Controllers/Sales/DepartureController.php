@@ -1813,5 +1813,103 @@ class DepartureController extends Controller {
             return response()->json(["success" => true, "data" => $this->listProducts, "error" => $this->errors, "total" => "$ " . number_format(($this->total), 0, ',', '.')]);
         }
     }
+    
+//    public function storeExcel(Request $request) {
+//        if ($request->ajax()) {
+//            $error = 0;
+//            $this->in = $request->all();
+//            $this->name = '';
+//            $this->path = '';
+//            $file = array_get($this->in, 'file_excel');
+//            $this->name = $file->getClientOriginalName();
+//            $this->name = str_replace(" ", "_", $this->name);
+//            $this->path = "uploads/departures/" . date("Y-m-d") . "/" . $this->name;
+//
+//            $file->move("uploads/departures/" . date("Y-m-d") . "/", $this->name);
+//
+//            Excel::load($this->path, function($reader) {
+//                $special = null;
+//                foreach ($reader->get() as $i => $book) {
+//
+//                    if ($book->unidades_total != 0) {
+//                        if (isset($book->item) && $book->item != '') {
+//
+//                            $special = PricesSpecial::where("item", (int) $book->item)->where("client_id", $this->in["client_id"])->first();
+////                            echo "<pre>";print_r($special);exit;
+//                            if ($special == null) {
+//                                $product_id = 0;
+//                            } else {
+//                                $product_id = $special->product_id;
+//                            }
+//
+//                            $pro = Products::find($product_id);
+//                            if ($pro == null) {
+//                                $pro = Products::where("reference", (int) $book->sf_code)->first();
+//                            }
+//
+//                            if ($pro == null) {
+//                                $pro = Products::where("bar_code", $book->ean)->first();
+//                            }
+//                        } else if (isset($book->ean) && $book->ean != '') {
+//                            if (isset($book->ean) && $book->ean != '') {
+//                                $pro = Products::where("bar_code", $book->ean)->first();
+//                            } else {
+//                                $pro = Products::where("reference", (int) $book->sf_code)->first();
+//                            }
+//                            if ($pro != null) {
+//                                $special = PricesSpecial::where("product_id", $pro->id)->where("client_id", $this->in["client_id"])->first();
+//                            }
+//                        } else {
+//
+//                            if (isset($book->sf_code) && $book->sf_code != '') {
+//
+//                                $pro = Products::where("reference", $book->sf_code)->first();
+//
+//
+//                                if ($pro != null) {
+//                                    $special = PricesSpecial::where("product_id", $pro->id)->where("client_id", $this->in["client_id"])->first();
+//                                }
+//                            }
+//                        }
+//
+//                        if ($pro != null) {
+//                            if ($special == null) {
+//                                $price_sf = $pro->price_sf;
+//                            } else {
+//                                $price_sf = $special->price_sf;
+//                            }
+//
+//                            if (Auth::user()->role_id == 1) {
+//                                if (isset($book->precio_unitario) && !empty($book->precio_unitario)) {
+//                                    $price_sf = $book->precio_unitario;
+//                                }
+//                            }
+//
+//                            $this->listProducts[] = array(
+//                                "row" => $i,
+//                                "product_id" => $pro->id,
+//                                "product" => $pro->reference . " - " . $pro->title,
+//                                "quantity" => $book->unidades_total,
+//                                "units_sf" => $pro->units_sf,
+//                                'price_sf' => $price_sf,
+//                                "valueFormated" => "$ " . number_format(($price_sf), 2, ',', '.'),
+//                                "totalFormated" => "$ " . number_format(($pro->units_sf * $price_sf * $book->unidades_total), 2, ',', '.'),
+//                                "real_quantity" => "",
+//                                "totalFormated_real" => "",
+//                                "comment" => "",
+//                                "status" => "new",
+//                            );
+//
+//                            $this->total += ($price_sf * $book->unidades_total * $pro->units_sf);
+//                        } else {
+//                            $this->errors[] = $book;
+//                        }
+//                    }
+//                }
+//            })->get();
+//
+//            return response()->json(["success" => true, "data" => $this->listProducts, "error" => $this->errors, "total" => "$ " . number_format(($this->total), 0, ',', '.')]);
+//        }
+//    }
 
 }

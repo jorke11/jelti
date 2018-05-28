@@ -190,7 +190,7 @@
 </div>
 
 <div class="modal fade" role="dialog" id="modalDetail">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg" role="document" style="width: 1000px">
         <div class="modal-content ">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -203,6 +203,8 @@
                             <th>#</th>
                             <th>Producto</th>
                             <th>Cantidad Disponible</th>
+                            <th>Lote</th>
+                            <th>Fecha Vencimiento</th>
                             <th>Cantidad</th>
                             <th>Tipo</th>
                             <th>Acción</th>

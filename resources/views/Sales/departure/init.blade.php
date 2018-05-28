@@ -26,7 +26,6 @@
         <div role="tabpanel" class="tab-pane " id="management">
             @include('Sales.departure.management')
         </div>
-
     </div>
 </div>
 

@@ -472,7 +472,7 @@ function Purchase() {
                     defaultContent: '',
                     searchable: false,
                 },
-//                {data: "id"},
+                {data: "id"},
                 {data: "description"},
                 {data: "created_at"},
                 {data: "stakeholder"},
@@ -515,7 +515,7 @@ function Purchase() {
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [8],
                     searchable: false,
                     "mData": null,
                     "mRender": function (data, type, full) {

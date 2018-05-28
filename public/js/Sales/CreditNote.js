@@ -106,7 +106,12 @@ function CreditNote() {
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
+
                     listProductsStatic = resp.detail;
+
+                    console.log(resp.detail)
+
+
                     obj.printDetailDep()
                 }
             })
@@ -115,16 +120,22 @@ function CreditNote() {
 
     this.printDetailDep = function () {
         $("#tblDetailDeparture tbody").empty();
-        var html = "";
+        var html = "", detail = [];
 
         $.each(listProductsStatic, function (i, val) {
             listProductsStatic[i].quantity_temp = val.real_quantity - ((val.quantity_note != undefined) ? val.quantity_note : 0)
-            html += `
+
+            detail = JSON.parse(val.quantity_lots);
+
+            $.each(detail, function (i, value) {
+                html += `
                         <tr id="row_${val.id}">
                             <td>${val.id}</td>
                             <td>${val.product}</td>
                             <td>${val.real_quantity}</td>
-                            <td><input type="number" value='${listProductsStatic[i].quantity_temp}' id="quantity_${val.id}" class="form-control input-xs"></td>
+                            <td>${value.lot}</td>
+                            <td>${value.expiration_date}</td>
+                            <td><input type="number" value='${value.quantity}' id="quantity_${val.id}" class="form-control input-xs"></td>
                             <td>
                                 <select class="form-control" id="type_credit_note_${val.id}">
                                     <option value="1">Devolución</option>
@@ -138,7 +149,9 @@ function CreditNote() {
                             </td>
                         </tr>
                         `
-        })
+            })
+       })
+       
         $("#tblDetailDeparture tbody").html(html);
     }
 
@@ -169,7 +182,7 @@ function CreditNote() {
             listProducts[rowItem].quantity_note = parseInt($("#quantity_" + id).val())
 
         } else {
-            
+
             listProducts.push(row_data);
         }
 

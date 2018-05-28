@@ -169,7 +169,7 @@ function CreditNote() {
             listProducts[rowItem].quantity_note = parseInt($("#quantity_" + id).val())
 
         } else {
-            console.log(row_data)
+            
             listProducts.push(row_data);
         }
 
@@ -235,7 +235,6 @@ function CreditNote() {
 
     this.save = function () {
         toastr.remove();
-
 
         $("#frm #warehouse_id").prop("disabled", false);
         $("#frm #responsible_id").prop("disabled", false);

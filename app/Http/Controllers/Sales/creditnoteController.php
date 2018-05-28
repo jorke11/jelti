@@ -14,19 +14,22 @@ use App\Models\Invoicing\Sales;
 use App\Models\Invoicing\SaleDetail;
 use App\Models\Sales\CreditNote;
 use App\Models\Sales\CreditNoteDetail;
+use App\Models\Administration\Products;
 use App\Http\Controllers\ToolController;
 use DB;
 use Datatables;
 use App\Traits\NumberToString;
 use App\Traits\StringExtra;
+use App\Traits\ToolInventory;
+use App\Traits\Invoice;
 
 class creditnoteController extends Controller {
 
     use NumberToString;
     use StringExtra;
+    use ToolInventory;
+    use Invoice;
 
-    protected $total;
-    public $total_real;
     public $path;
     public $name;
     public $listProducts;
@@ -63,7 +66,7 @@ class creditnoteController extends Controller {
 
         $sale = Sales::where("departure_id", $id)->first();
         $departure = Departures::find($id);
-        $detail = $this->formatDetail($sale);
+        $detail = $this->formatDetail($id, true);
 
         return response()->json(["header" => $departure, "detail" => $detail]);
     }
@@ -82,6 +85,14 @@ class creditnoteController extends Controller {
             $id = CreditNote::create($new)->id;
             foreach ($input["detail"] as $value) {
                 if (isset($value["quantity_note"]) && $value["quantity_note"] != 0) {
+                    if ($value["type_credit_note"] == 1) {
+                        $detail = json_decode($value["quantity_lots"]);
+                        foreach ($detail as $val) {
+                            $pro = Products::find($value["product_id"]);
+                            $this->addInventory($dep->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf, $val->price_sf,"note_to_inv");
+                        }
+                    }
+
                     $cre = new CreditNoteDetail();
                     $cre->creditnote_id = $id;
                     $cre->row_id = $value["id"];
@@ -130,31 +141,6 @@ class creditnoteController extends Controller {
                 $this->total += $detail[$i]->total;
                 $this->total_real += $detail[$i]->total_real;
             }
-        }
-        return $detail;
-    }
-
-    public function formatDetail($sale) {
-
-        $detail = DB::table("sales_detail")
-                        ->select("sales_detail.id", "sales_detail.quantity", "sales_detail.quantity as real_quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title as product"), "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "products.id as product_id")
-                        ->join("products", "sales_detail.product_id", "products.id")
-                        ->join("stakeholder", "stakeholder.id", "products.supplier_id")
-                        ->where("sale_id", $sale->id)
-                        ->whereNotNull("sales_detail.product_id")
-                        ->orderBy("id", "asc")->get();
-        $this->total = 0;
-
-
-        foreach ($detail as $i => $value) {
-//            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
-            $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
-            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value;
-            $detail[$i]->totalFormated = "$ " . number_format($detail[$i]->total, 2, ",", ".");
-            $detail[$i]->total_real = $detail[$i]->real_quantity * $detail[$i]->value;
-            $detail[$i]->totalFormated_real = "$ " . number_format($detail[$i]->total_real, 2, ",", ".");
-            $this->total += $detail[$i]->total;
-            $this->total_real += $detail[$i]->total_real;
         }
         return $detail;
     }

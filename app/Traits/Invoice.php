@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Traits;
+
 use DB;
 use App\Models\Administration\Comment;
 use Auth;
@@ -60,13 +61,22 @@ trait Invoice {
         return $data;
     }
 
-    function formatDetail($id) {
+    function formatDetail($id, $zero = null) {
 
         $detail = DB::table("departures_detail")->
-                        select("departures_detail.id", "departures_detail.status_id", "departures_detail.product_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "departures_detail.tax", "departures_detail.cost_sf", "products.category_id")
-                        ->join("products", "departures_detail.product_id", "products.id"
-                        )
-                        ->join("stakeholder", "stakeholder.id", "products.supplier_id")->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))->where("departure_id", $id)->orderBy("id", "asc")->get();
+                select("departures_detail.id", "departures_detail.status_id", "departures_detail.product_id", DB::raw("coalesce(departures_detail.description,'') as comment"), "departures_detail.real_quantity", "departures_detail.quantity", "departures_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.description", "parameters.description as status", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "departures_detail.tax", "departures_detail.cost_sf", "products.category_id", "departures_detail.quantity_lots")
+                ->join("products", "departures_detail.product_id", "products.id")
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id")
+                ->join("parameters", "departures_detail.status_id", DB::raw("parameters.id and parameters.group='entry'"))
+                ->where("departure_id", $id);
+
+
+        if ($zero == true) {
+            $detail->where("real_quantity", ">", 0);
+        }
+
+        $detail = $detail->orderBy("id", "asc")->get();
+
 
         $this->total = 0;
         $this->subtotal = 0;

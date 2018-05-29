@@ -506,7 +506,7 @@ function Purchase() {
             ],
 
             lengthMenu: [[30, 100, 300, -1], [30, 100, 300, 'All']],
-            order: [[2, 'DESC']],
+            order: [[3, 'DESC']],
             aoColumnDefs: [
                 {
                     aTargets: [1, 2, 3, 4, 5, 6],

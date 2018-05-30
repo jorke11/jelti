@@ -234,10 +234,10 @@ create view vcreditnote_detail_row as
 select c.id,d.quantity,s.tax,p.title product,s.product_id,s.value,s.units_sf,st.business as stakeholder,d.quantity * s.units_sf as  quantitytotal,
 d.quantity * s.units_sf* s.value as valuetotal,(d.quantity * s.units_sf* s.value * s.tax) + (d.quantity * s.units_sf* s.value) as valuetotaltax,c.created_at
 from credit_note_detail d
-JOIN credit_note c ON c.id=d.creditnote_id
-JOIN sales_detail s ON s.id=d.row_id
-JOIN products p ON p.id=d.product_id
-JOIN stakeholder st ON st.id=p.supplier_id;
+LEFT JOIN credit_note c ON c.id=d.creditnote_id
+LEFT JOIN departures_detail s ON s.id=d.row_id
+LEFT JOIN products p ON p.id=d.product_id
+LEFT JOIN stakeholder st ON st.id=p.supplier_id
 
 
 create view vcategories as 

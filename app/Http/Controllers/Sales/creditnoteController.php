@@ -183,8 +183,6 @@ class creditnoteController extends Controller {
                 ->where("id", $cre->id)
                 ->get();
 
-        dd($detail);
-
         $dep = Departures::find($cre->departure_id);
 
         $cli = Stakeholder::select("stakeholder.id", "stakeholder.business_name", "stakeholder.document", "stakeholder.address_invoice", "cities.description as city", "stakeholder.term")

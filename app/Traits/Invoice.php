@@ -13,6 +13,7 @@ trait Invoice {
     private $subtotal;
     private $subtotal_real;
     private $exento;
+    private $exento_real;
     private $tax19;
     private $tax19_real;
     private $tax5;
@@ -29,6 +30,7 @@ trait Invoice {
         $this->tax5 = 0;
         $this->tax5_real = 0;
         $this->exento = 0;
+        $this->exento_real = 0;
     }
 
     function formatDetailJSON($data, $id) {

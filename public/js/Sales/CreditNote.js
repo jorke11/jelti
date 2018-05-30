@@ -106,12 +106,7 @@ function CreditNote() {
                 method: 'GET',
                 dataType: 'JSON',
                 success: function (resp) {
-
                     listProductsStatic = resp.detail;
-
-                    console.log(resp.detail)
-
-
                     obj.printDetailDep()
                 }
             })
@@ -127,7 +122,9 @@ function CreditNote() {
 
             detail = JSON.parse(val.quantity_lots);
 
-            $.each(detail, function (i, value) {
+            var product = "";
+            $.each(detail, function (j, value) {
+                product = obj.getCleanedString(val.product)
                 html += `
                         <tr id="row_${val.id}">
                             <td>${val.id}</td>
@@ -135,7 +132,7 @@ function CreditNote() {
                             <td>${val.real_quantity}</td>
                             <td>${value.lot}</td>
                             <td>${value.expiration_date}</td>
-                            <td><input type="number" value='${value.quantity}' id="quantity_${val.id}" class="form-control input-xs"></td>
+                            <td><input type="number" value='${value.quantity}' id="quantity_${value.lot}_${i}" class="form-control input-xs"></td>
                             <td>
                                 <select class="form-control" id="type_credit_note_${val.id}">
                                     <option value="1">Devolución</option>
@@ -143,52 +140,61 @@ function CreditNote() {
                                 </select>
                             </td>
                             <td>
-                                <button class="btn btn-info" onclick=obj.addDetail(${val.id})>
+                                <button class="btn btn-info" onclick=obj.addDetail(${val.id},'${product}',${JSON.stringify(value)},'quantity_${value.lot}_${i}')>
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                 </button>
                             </td>
                         </tr>
                         `
             })
-       })
-       
+        })
         $("#tblDetailDeparture tbody").html(html);
     }
 
-    this.addDetail = function (id) {
+    this.addDetail = function (id, product, elem, elemQuantity) {
         var row_data = {};
-
-        $.each(listProductsStatic, function (i, val) {
-            if (val.id == id) {
-                listProductsStatic[i].quantity_temp = parseInt(listProductsStatic[i].quantity_temp) + parseInt($("#quantity_" + id).val());
-                row_data = val
-            }
-        })
-
-        row_data.quantity_note = $("#quantity_" + id).val();
+        row_data.id = id;
+        row_data.product_id = elem.product_id;
+        row_data.cost_sf = elem.cost_sf;
+        row_data.price_sf = elem.price_sf;
+        row_data.lot = elem.lot;
+        row_data.expiration_date = elem.expiration_date;
+        row_data.product = product;
+        row_data.valueFormated = $.formatNumber(elem.price_sf, '$');
+        row_data.quantity = $("#" + elemQuantity).val();
         row_data.type_credit_note = $("#type_credit_note_" + id).val();
-        row_data.total_note = $("#quantity_" + id).val() * row_data.value;
-        row_data.totalFormated_note = $.formatNumber(row_data.total_real, "$");
+        row_data.total = elem.price_sf * $("#" + elemQuantity).val();
+        row_data.totalFormated = $.formatNumber(row_data.total, "$");
 
-        if (parseInt($("#quantity_" + id).val()) == parseInt(row_data.real_quantity)) {
-            $("#tblDetailDeparture #row_" + id).remove()
-        }
-
-        let cont = 0;
-
-        this.getItem(row_data.product_id);
-
-        if (row.product_id != undefined) {
-            listProducts[rowItem].quantity_note = parseInt($("#quantity_" + id).val())
-
-        } else {
-
-            listProducts.push(row_data);
-        }
-
+        listProducts.push(row_data);
         this.printDetailTmp();
-        this.printDetailDep();
+//        this.printDetailDep();
 
+    }
+
+    this.getCleanedString = function (cadena) {
+        // Definimos los caracteres que queremos eliminar
+        var specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,.";
+
+        // Los eliminamos todos
+        for (var i = 0; i < specialChars.length; i++) {
+            cadena = cadena.replace(new RegExp("\\" + specialChars[i], 'gi'), '');
+        }
+
+        // Lo queremos devolver limpio en minusculas
+        cadena = cadena.toLowerCase();
+
+        // Quitamos espacios y los sustituimos por _ porque nos gusta mas asi
+        cadena = cadena.replace(/ /g, "_");
+
+        // Quitamos acentos y "ñ". Fijate en que va sin comillas el primer parametro
+        cadena = cadena.replace(/á/gi, "a");
+        cadena = cadena.replace(/é/gi, "e");
+        cadena = cadena.replace(/í/gi, "i");
+        cadena = cadena.replace(/ó/gi, "o");
+        cadena = cadena.replace(/ú/gi, "u");
+        cadena = cadena.replace(/ñ/gi, "n");
+        return cadena;
     }
 
     this.new = function () {
@@ -285,6 +291,7 @@ function CreditNote() {
                             }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
+                            $("#loading-super").addClass("hidden");
                             toastr.error(xhr.responseJSON.msg);
                         },
                     })
@@ -354,17 +361,15 @@ function CreditNote() {
             if (val != undefined) {
 //                htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + i + ')>Edit</button>'
                 htmlDel = '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteItem(' + val.product_id + ',' + i + ')>Delete</button>'
-
-                val.quantity_note = (val.quantity_note != null) ? val.quantity_note : '';
-                val.quantity_temp = (val.quantity_temp != null) ? val.quantity_temp : '';
+                val.product = (val.product).replace(/_/g, " ");
                 val.comment = (val.comment != null) ? val.comment : '';
 
                 html += '<tr id="row_' + i + '">';
                 html += "<td>" + val.product + "</td>";
                 html += "<td>" + val.comment + "</td>";
-                html += "<td>" + val.quantity_note + "</td>";
+                html += "<td>" + val.quantity + "</td>";
                 html += "<td>" + val.valueFormated + "</td>";
-                html += "<td>" + val.totalFormated_note + "</td>";
+                html += "<td>" + val.totalFormated + "</td>";
                 html += '<td>' + htmlEdit + htmlDel + "</td>";
                 html += "</tr>";
             }

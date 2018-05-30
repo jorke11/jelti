@@ -22,6 +22,7 @@ use App\Traits\NumberToString;
 use App\Traits\StringExtra;
 use App\Traits\ToolInventory;
 use App\Traits\Invoice;
+use App\Models\Inventory\DeparturesDetail;
 
 class creditnoteController extends Controller {
 
@@ -73,40 +74,63 @@ class creditnoteController extends Controller {
 
     public function store(Request $req) {
         $input = $req->all();
-//        dd($input);
-        $sales = Sales::where("departure_id", $input["id"])->first();
 
-        $dep = Departures::find($input["id"]);
+        try {
+            $error=[];
+            DB::beginTransaction();
+//            dd($input);
+            $sales = Sales::where("departure_id", $input["id"])->first();
 
-        $new["sale_id"] = $sales->id;
-        $new["departure_id"] = $input["id"];
-        $new["description"] = $input["description"];
-        if (count($input["detail"]) > 0) {
-            $id = CreditNote::create($new)->id;
-            foreach ($input["detail"] as $value) {
-                if (isset($value["quantity_note"]) && $value["quantity_note"] != 0) {
-                    if ($value["type_credit_note"] == 1) {
-                        $detail = json_decode($value["quantity_lots"]);
-                        foreach ($detail as $val) {
+            $dep = Departures::find($input["id"]);
+
+            $new["sale_id"] = $sales->id;
+            $new["departure_id"] = $input["id"];
+            $new["description"] = $input["description"];
+            if (count($input["detail"]) > 0) {
+                $id = CreditNote::create($new)->id;
+                foreach ($input["detail"] as $value) {
+                    if (isset($value["quantity"]) && $value["quantity"] != 0) {
+
+                        $row_det = DeparturesDetail::find($value["id"]);
+                        $row_cre = CreditNoteDetail::where("row_id", $value["id"])->first();
+
+                        if ($row_cre != null) {
+                            $value["quantity"] = $value["quantity"] + $row_cre->quantity;
+                        }
+
+                        if ($row_det->real_quantity < $value["quantity"]) {
+                            $error[] = array("msg" => "La cantidad solicitudad", "produc" => $value["product"]);
+                        }
+
+                        $cre = new CreditNoteDetail();
+                        $cre->creditnote_id = $id;
+                        $cre->row_id = $value["id"];
+                        $cre->quantity = $value["quantity"];
+                        $cre->product_id = $value["product_id"];
+                        $cre->save();
+
+                        if ($value["type_credit_note"] == 1) {
                             $pro = Products::find($value["product_id"]);
-                            $this->addInventory($dep->warehouse_id, $pro->reference, $val->quantity, $val->lot, $val->expiration_date, $val->cost_sf, $val->price_sf,"note_to_inv");
+                            $this->addInventory($dep->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $value["price_sf"], "note_to_inv");
                         }
                     }
-
-                    $cre = new CreditNoteDetail();
-                    $cre->creditnote_id = $id;
-                    $cre->row_id = $value["id"];
-                    $cre->quantity = $value["quantity_note"];
-                    $cre->product_id = $value["product_id"];
-                    $cre->save();
                 }
-            }
-            $dep->credinote_id = $id;
-            $this->objDep->sendNofication($dep, 'credit_note');
 
-            return response()->json(["success" => true]);
-        } else {
-            return response()->json(["success" => false, "msg" => "Detalle debe contener información!"], 500);
+                if (count($error) > 0) {
+                    DB::rollback();
+                    return response()->json(["success" => false, "msg" => "Problemas con la petición, por la cantidad solicitada!"], 500);
+                } else {
+                    $dep->credinote_id = $id;
+                    $this->objDep->sendNofication($dep, 'credit_note');
+                    DB::commit();
+                    return response()->json(["success" => true]);
+                }
+            } else {
+                return response()->json(["success" => false, "msg" => "Detalle debe contener información!"], 500);
+            }
+        } catch (Exception $exc) {
+            DB::rollback();
+            return response()->json(["success" => false, "msg" => "Problemas con la ejecucion, por favor revise!"], 500);
         }
     }
 

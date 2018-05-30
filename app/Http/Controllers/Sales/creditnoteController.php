@@ -183,7 +183,7 @@ class creditnoteController extends Controller {
                 ->where("id", $cre->id)
                 ->get();
 
-
+        dd($detail);
 
         $dep = Departures::find($cre->departure_id);
 

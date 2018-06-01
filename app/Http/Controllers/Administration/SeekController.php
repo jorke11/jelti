@@ -270,7 +270,7 @@ class SeekController extends Controller {
         } else {
             if (isset($in["q"]))
                 $query->where("name", "ilike", "%" . $in["q"] . "%")
-                        ->where("role_id", 4)
+                        ->whereIn("role_id", array(1, 4))
                         ->get();
         }
         $result = $query->get();

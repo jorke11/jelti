@@ -8,6 +8,7 @@ use App\Models\Administration\Categories;
 use Session;
 use Mail;
 use App\Models\Administration\Parameters;
+use File;
 
 class CategoryController extends Controller {
 
@@ -17,7 +18,7 @@ class CategoryController extends Controller {
 
     public function index() {
         $types = Parameters::where("group", "type_category")->get();
-        $categories = Categories::orderBy("description","asc")->get();
+        $categories = Categories::orderBy("description", "asc")->get();
 
         return view("Administration.category.init", compact("types", "categories"));
     }
@@ -61,10 +62,20 @@ class CategoryController extends Controller {
             if ($banner != null) {
                 if (file_exists($row->banner))
                     unlink($row->banner);
+
                 $namebanner = $banner->getClientOriginalName();
-                $pathbanner = "images/category/" . $id . "/header/";
+                $pathbanner = "/images/category/" . $id . "/header/";
+                $folder = public_path() . $pathbanner . $namebanner;
+
+                echo $folder;exit;
+                
+                if (!file_exists($folder)) {
+                    File::makeDirectory($folder);
+                }
+
                 $namebanner = str_replace(" ", "", $namebanner);
-                $banner->move($pathbanner, $namebanner);
+//                echo $pathbanner . $namebanner;exit;
+                $banner->move($folder, $banner->getClientOriginalName());
                 $pathbanner .= $namebanner;
                 $row->banner = $pathbanner;
             }

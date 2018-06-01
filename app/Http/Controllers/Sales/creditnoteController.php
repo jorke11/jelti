@@ -176,12 +176,14 @@ class creditnoteController extends Controller {
 
         $sale = Sales::where("departure_id", $cre->departure_id)->first();
 
-
+//        dd($cre->id);
         $detail = DB::table("vcreditnote_detail_row")
                 ->select("id", "quantity", "tax", "product", "product_id", "value", "units_sf", "stakeholder", "quantitytotal", "valuetotal")
                 ->whereNotNull("product_id")
                 ->where("id", $cre->id)
                 ->get();
+        
+//        dd($detail);
 
         $dep = Departures::find($cre->departure_id);
 

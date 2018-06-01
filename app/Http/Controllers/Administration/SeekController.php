@@ -262,7 +262,7 @@ class SeekController extends Controller {
 
     public function getCommercial(Request $req) {
         $in = $req->all();
-        $query = Users::select("id", "name as text");
+        $query = Users::select("id", DB::raw("name || ' ' || last_name as text"));
         if (isset($in["q"]) && $in["q"] == "0") {
             $query->where("id", Auth::user()->warehouse_id)->get();
         } else if (isset($in["id"]) && $in["id"] != '') {
@@ -270,7 +270,7 @@ class SeekController extends Controller {
         } else {
             if (isset($in["q"]))
                 $query->where("name", "ilike", "%" . $in["q"] . "%")
-//                    ->where("role_id", 4)
+                        ->where("role_id", 4)
                         ->get();
         }
         $result = $query->get();
@@ -346,7 +346,7 @@ class SeekController extends Controller {
 //        $query->whereNull("type_product_id");
 
         $result = $query->get();
-        
+
         return response()->json(['items' => $result, "pages" => count($result)]);
     }
 

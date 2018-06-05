@@ -96,9 +96,9 @@ class SampleController extends Controller {
             $query->where("responsible_id", Auth::user()->id);
         }
 
-        if (Auth::user()->role_id == 5) {
-            $query->where("warehouse_id", Auth::user()->warehouse_id);
-        }
+//        if (Auth::user()->role_id == 5) {
+//            $query->where("warehouse_id", Auth::user()->warehouse_id);
+//        }
 
         if (isset($in["commercial_id"]) && $in["commercial_id"] != '') {
             $query->where("status_id", 2)->where("responsible_id", $in["commercial_id"]);

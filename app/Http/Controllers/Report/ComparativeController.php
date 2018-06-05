@@ -311,9 +311,7 @@ class ComparativeController extends Controller {
             group by 1,2
             order by 3 DESC
             ";
-
-
-
+        echo $sql;exit;
         $cli = DB::select($sql);
 
         foreach ($cli as $i => $value) {

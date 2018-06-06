@@ -88,19 +88,20 @@ class creditnoteController extends Controller {
             $new["description"] = $input["description"];
             if (count($input["detail"]) > 0) {
                 $id = CreditNote::create($new)->id;
-                $valquantity = 0;
                 foreach ($input["detail"] as $value) {
+                    $valquantity = 0;
                     if (isset($value["quantity"]) && $value["quantity"] != 0) {
 
                         $row_det = DeparturesDetail::find($value["id"]);
                         $row_cre = CreditNoteDetail::where("row_id", $value["id"])->sum("quantity");
 
                         if ($row_cre != null) {
-                            $valquantity = $value["quantity"] + $row_cre;
+                            $valquantity = (int) $value["quantity"] + (int) $row_cre;
                         }
 
                         if ((int) $valquantity > (int) $row_det->real_quantity) {
-//                            dd($row_det);
+
+                            dd($value);
                             echo "pedido " . $valquantity . " cantidad real = " . $row_det->real_quantity . " producto: " . $value["product"];
                             exit;
                             $error[] = array("msg" => "La cantidad solicitudad", "produc" => $value["product"], "cant_sol" => $value["quantity"],

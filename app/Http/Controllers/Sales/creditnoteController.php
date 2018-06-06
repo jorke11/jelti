@@ -119,7 +119,7 @@ class creditnoteController extends Controller {
 
                 if (count($error) > 0) {
                     DB::rollback();
-                    return response()->json(["success" => false, "msg" => "Problemas con la petición, por la cantidad solicitada!"], 500);
+                    return response()->json(["success" => false, "msg" => "Problemas con la petición, por la cantidad solicitada!", "error" => $error], 500);
                 } else {
                     $dep->credinote_id = $id;
                     $this->objDep->sendNofication($dep, 'credit_note');

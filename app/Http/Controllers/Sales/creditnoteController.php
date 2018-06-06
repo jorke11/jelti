@@ -101,9 +101,7 @@ class creditnoteController extends Controller {
 
                         
 
-                        if ((int) $row_det->real_quantity <= (int) $valquantity) {
-                            echo ((int) $row_det->real_quantity <= (int) $valquantity);
-                            echo $row_det->real_quantity . " - " . $valquantity;exit;
+                        if ((int) $row_det->real_quantity > (int) $valquantity) {
                             $error[] = array("msg" => "La cantidad solicitudad", "produc" => $value["product"], "cant_sol" => $value["quantity"], "disponible" => $row_det->real_quantity);
                         }
 

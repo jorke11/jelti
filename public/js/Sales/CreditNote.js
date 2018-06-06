@@ -137,6 +137,7 @@ function CreditNote() {
                                 <select class="form-control" id="type_credit_note_${val.id}">
                                     <option value="1">Devolución</option>
                                     <option value="2">Averia</option>
+                                    <option value="3">Faltante</option>
                                 </select>
                             </td>
                             <td>

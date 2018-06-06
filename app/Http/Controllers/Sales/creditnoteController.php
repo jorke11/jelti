@@ -76,7 +76,7 @@ class creditnoteController extends Controller {
         $input = $req->all();
 
         try {
-            $error=[];
+            $error = [];
             DB::beginTransaction();
 //            dd($input);
             $sales = Sales::where("departure_id", $input["id"])->first();
@@ -88,17 +88,18 @@ class creditnoteController extends Controller {
             $new["description"] = $input["description"];
             if (count($input["detail"]) > 0) {
                 $id = CreditNote::create($new)->id;
+                $valquantity = 0;
                 foreach ($input["detail"] as $value) {
                     if (isset($value["quantity"]) && $value["quantity"] != 0) {
 
                         $row_det = DeparturesDetail::find($value["id"]);
-                        $row_cre = CreditNoteDetail::where("row_id", $value["id"])->first();
+                        $row_cre = CreditNoteDetail::where("row_id", $value["id"])->sum("quantity");
 
                         if ($row_cre != null) {
-                            $value["quantity"] = $value["quantity"] + $row_cre->quantity;
+                            $valquantity = $value["quantity"] + $row_cre;
                         }
 
-                        if ($row_det->real_quantity < $value["quantity"]) {
+                        if ($row_det->real_quantity < $valquantity) {
                             $error[] = array("msg" => "La cantidad solicitudad", "produc" => $value["product"]);
                         }
 
@@ -182,7 +183,7 @@ class creditnoteController extends Controller {
                 ->whereNotNull("product_id")
                 ->where("id", $cre->id)
                 ->get();
-        
+
 //        dd($detail);
 
         $dep = Departures::find($cre->departure_id);

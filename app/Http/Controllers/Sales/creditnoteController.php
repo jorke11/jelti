@@ -99,7 +99,7 @@ class creditnoteController extends Controller {
                             $valquantity = $value["quantity"] + $row_cre;
                         }
 
-                        if ($row_det->real_quantity < $valquantity) {
+                        if ($row_det->real_quantity <= $valquantity) {
                             $error[] = array("msg" => "La cantidad solicitudad", "produc" => $value["product"]);
                         }
 

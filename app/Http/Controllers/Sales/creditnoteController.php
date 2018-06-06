@@ -99,23 +99,20 @@ class creditnoteController extends Controller {
                             $valquantity = $value["quantity"] + $row_cre;
                         }
 
-
-
                         if ((int) $valquantity > (int) $row_det->real_quantity) {
-                            dd($row_cre);
                             $error[] = array("msg" => "La cantidad solicitudad", "produc" => $value["product"], "cant_sol" => $value["quantity"], "disponible" => $row_det->real_quantity);
-                        }
+                        } else {
+                            $cre = new CreditNoteDetail();
+                            $cre->creditnote_id = $id;
+                            $cre->row_id = $value["id"];
+                            $cre->quantity = $value["quantity"];
+                            $cre->product_id = $value["product_id"];
+                            $cre->save();
 
-                        $cre = new CreditNoteDetail();
-                        $cre->creditnote_id = $id;
-                        $cre->row_id = $value["id"];
-                        $cre->quantity = $value["quantity"];
-                        $cre->product_id = $value["product_id"];
-                        $cre->save();
-
-                        if ($value["type_credit_note"] == 1) {
-                            $pro = Products::find($value["product_id"]);
-                            $this->addInventory($dep->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $value["price_sf"], "note_to_inv");
+                            if ($value["type_credit_note"] == 1) {
+                                $pro = Products::find($value["product_id"]);
+                                $this->addInventory($dep->warehouse_id, $pro->reference, $value["quantity"], $value["lot"], $value["expiration_date"], $value["cost_sf"], $value["price_sf"], "note_to_inv");
+                            }
                         }
                     }
                 }

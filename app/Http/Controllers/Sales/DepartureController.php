@@ -264,40 +264,33 @@ class DepartureController extends Controller {
         $cli["responsible"] = ucwords($user->name . " " . $user->last_name);
         $cli["phone"] = $cli->phone;
 
-        $totalExemp = 0;
-        $totalTax5 = 0;
-        $totalTax19 = 0;
-        $tax = 0;
-        $totalSum = 0;
+//        $totalExemp = 0;
+//        $totalTax5 = 0;
+//        $totalTax19 = 0;
+//        $totalSum = 0;
 
 
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
 
 //        $totalWithTax = $totalSum + $totalTax19 + $totalTax5 + $dep->shipping_cost - ($rete["value"]);
-        $shipping_cost_tax = 0;
-
-        if ($dep->shipping_cost_tax == 0.05) {
-            $shipping_cost_tax = $dep->shipping_cost * $dep->shipping_cost_tax;
-
-            $this->tax5 += $shipping_cost_tax;
-        }
-
-
+//        $shipping_cost_tax = 0;
+//        if ($dep->shipping_cost_tax == 0.05) {
+//            $shipping_cost_tax = $dep->shipping_cost * $dep->shipping_cost_tax;
+//
+//            $this->tax5 += $shipping_cost_tax;
+//        }
 //        echo $dep->shipping_cost_tax;exit;
-        if ($dep->shipping_cost_tax == 0.19) {
-            $shipping_cost_tax = $dep->shipping_cost * $dep->shipping_cost_tax;
-            $this->tax19 += $shipping_cost_tax;
-        }
+//        if ($dep->shipping_cost_tax == 0.19) {
+//            $shipping_cost_tax = $dep->shipping_cost * $dep->shipping_cost_tax;
+//            $this->tax19 += $shipping_cost_tax;
+//        }
+//        $this->subtotal += $dep->shipping_cost;
 
-        $this->subtotal += $dep->shipping_cost;
-
-        $totalWithTax = $this->subtotal + $this->tax19 + $this->tax5 + (- $dep->discount);
+//        $totalWithTax = $this->subtotal + $this->tax19 + $this->tax5 + (- $dep->discount);
 
         $cli["business_name"] = $this->cleanText($cli["business_name"]);
         $cli["business"] = $this->cleanText($cli["business"]);
         $cli["address_invoice"] = $dep->address_invoice;
-
-
 
         $data = [
             'rete' => 0,
@@ -308,10 +301,11 @@ class DepartureController extends Controller {
             'tax5' => $this->tax5,
             'tax19' => $this->tax19,
             'totalInvoice' => "$ " . number_format(($this->subtotal), 0, ',', '.'),
-            'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
+//            'totalWithTax' => "$ " . number_format(($totalWithTax), 0, ',', '.'),
+            'totalWithTax' => "$ " . number_format(($this->total_real), 0, ',', '.'),
             'shipping_cost' => $dep->shipping_cost,
             'invoice' => $dep->invoice,
-            'textTotal' => $this->to_word(round($totalWithTax)),
+            'textTotal' => $this->to_word(round($this->total_real)),
             'discount' => $dep->discount
         ];
 

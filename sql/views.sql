@@ -231,13 +231,15 @@ JOIN products p On p.id=s.product_id;
 
 drop view vcreditnote_detail_row
 create view vcreditnote_detail_row as 
-select c.id,d.quantity,s.tax,p.title product,s.product_id,s.value,s.units_sf,st.business as stakeholder,d.quantity * s.units_sf as  quantitytotal,
+select c.id,d.quantity,s.tax,p.reference ||' - ' ||p.title || ' - ' || st.business  as product,s.product_id,s.value,s.units_sf,
+st.business as stakeholder,d.quantity * s.units_sf as  quantitytotal,
 d.quantity * s.units_sf* s.value as valuetotal,(d.quantity * s.units_sf* s.value * s.tax) + (d.quantity * s.units_sf* s.value) as valuetotaltax,c.created_at
 from credit_note_detail d
 LEFT JOIN credit_note c ON c.id=d.creditnote_id
 LEFT JOIN departures_detail s ON s.departure_id=c.departure_id and s.product_id=d.product_id
 LEFT JOIN products p ON p.id=d.product_id
 LEFT JOIN stakeholder st ON st.id=p.supplier_id
+ORDER BY p.supplier_id asc,4 desc
 
 
 create view vcategories as 

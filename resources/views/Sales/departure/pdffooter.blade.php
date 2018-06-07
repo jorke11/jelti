@@ -82,13 +82,11 @@
     </tr>
 
 </table>
-
 <table>
     <tr>
         <td><?php echo $textTotal . ', Total artículos: ' . count($detail) . ' Total de Items: ' . $quantity; ?></td>
     </tr>
 </table>
-<br>
 <table >
     <tr>
         <td class="resolution">La presente Factura se asemeja en todos sus efectos a un Título Valor Art. 1 Ley 1231 de 2008. En caso de

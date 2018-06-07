@@ -95,9 +95,12 @@ class creditnoteController extends Controller {
                         $row_det = DeparturesDetail::find($value["id"]);
                         $row_cre = CreditNoteDetail::where("row_id", $value["id"])->sum("quantity");
 
+                        $valquantity = (int) $value["quantity"];
+
                         if ($row_cre != null) {
                             $valquantity = (int) $value["quantity"] + (int) $row_cre;
                         }
+
 
                         if ((int) $valquantity > (int) $row_det->real_quantity) {
                             $error[] = array("msg" => "La cantidad solicitudad", "produc" => $value["product"], "cant_sol" => $value["quantity"],
@@ -236,10 +239,11 @@ class creditnoteController extends Controller {
                 $totalTax5 += $value->valuetotal * $tax;
             }
             if ($value->tax == 0.19) {
-
                 $totalTax19 += $value->valuetotal * $tax;
             }
         }
+
+
 
         $rete = SaleDetail::where("description", "rete")->where("sale_id", $sale["id"])->first();
 

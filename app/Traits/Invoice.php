@@ -112,11 +112,17 @@ trait Invoice {
     }
 
     function formatDetailSales($id) {
+        $sale = \App\Models\Invoicing\Sales::find($id);
+        $dep = \App\Models\Inventory\Departures::find($sale->departure_id);
+
+//        dd($dep);
         $detail = DB::table("sales_detail")->
                         select("sales_detail.id", "sales_detail.quantity", "sales_detail.value", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "sales_detail.description", "stakeholder.business as stakeholder", "products.bar_code", "products.units_sf", "sales_detail.tax")
                         ->join("products", "sales_detail.product_id", "products.id")
                         ->join("stakeholder", "stakeholder.id", "products.supplier_id")
-                        ->where("sale_id", $id)->orderBy("products.supplier_id", "asc")->orderBy(DB::raw("3"), "DESC")->get();
+                        ->where("sale_id", $id)
+                        ->orderBy("products.supplier_id", "asc")
+                        ->orderBy(DB::raw("3"), "ASC")->get();
 
         $this->total = 0;
         $this->subtotal = 0;
@@ -141,6 +147,17 @@ trait Invoice {
         }
 
 
+        if ($dep->shipping_cost_tax == 0.05) {
+            $this->tax5 += $dep->shipping_cost * $dep->shipping_cost_tax;
+        }
+
+        if ($dep->shipping_cost_tax == 0.19) {
+            $this->tax19 += $dep->shipping_cost * $dep->shipping_cost_tax;
+        }
+
+        $this->subtotal += $dep->shipping_cost;
+
+        $this->total_real = $this->subtotal + $this->tax19 + $this->tax5 + (- $dep->discount);
         return $detail;
     }
 

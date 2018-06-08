@@ -324,6 +324,7 @@ class ComparativeController extends Controller {
             JOIN stakeholder ON stakeholder.id=vdepartures.client_id and stakeholder.type_stakeholder=1
             WHERE vdepartures.status_id IN(2,7) AND client_id  NOT IN(258,264,24)
             AND client_id=" . $value->client_id . " $date
+                $where
             group by 1,2
             order by 1 ASC";
 //            echo $sql;exit;

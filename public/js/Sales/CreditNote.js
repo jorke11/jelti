@@ -358,6 +358,7 @@ function CreditNote() {
     this.printDetailTmp = function () {
         var html = "", htmlEdit = "", htmlDel = "";
         $("#tblDetail tbody").html("");
+        
         $.each(listProducts, function (i, val) {
             if (val != undefined) {
 //                htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + i + ')>Edit</button>'

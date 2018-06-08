@@ -152,14 +152,19 @@ class creditnoteController extends Controller {
         $detail = [];
 
         if ($credit != null) {
-            $detail = CreditNoteDetail::select("credit_note_detail.id", "credit_note_detail.quantity", "products.title as product"
-                            , "departures_detail.value", "departures_detail.real_quantity")
+            $detail = CreditNoteDetail::select("credit_note_detail.id", "credit_note_detail.quantity", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.value", "departures_detail.real_quantity")
                     ->join("products", "products.id", "credit_note_detail.product_id")
+                    ->join("stakeholder", "stakeholder.id", "products.supplier_id")
                     ->join("credit_note", "credit_note.id", "credit_note_detail.creditnote_id")
                     ->join("vdepartures", "vdepartures.id", "credit_note.departure_id")
                     ->join("departures_detail", "departures_detail.departure_id", DB::raw("credit_note.departure_id and departures_detail.product_id=credit_note_detail.product_id"))
                     ->where("credit_note_detail.creditnote_id", $credit->id)
+                    ->orderBy("products.supplier_id", "asc")
+                    ->orderBy(DB::raw("3"), "ASC")
                     ->get();
+            
+            
+            
             foreach ($detail as $i => $value) {
 //            $detail[$i]->real_quantity = ($detail[$i]->real_quantity == null) ? $detail[$i]->quantity : $detail[$i]->real_quantity;
                 $detail[$i]->valueFormated = "$ " . number_format($value->value, 2, ",", ".");
@@ -170,7 +175,13 @@ class creditnoteController extends Controller {
                 $this->total += $detail[$i]->total;
                 $this->total_real += $detail[$i]->total_real;
             }
+            
+            
+            
         }
+        
+        
+        
         return $detail;
     }
 

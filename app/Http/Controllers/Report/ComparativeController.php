@@ -311,10 +311,12 @@ class ComparativeController extends Controller {
             group by 1,2
             order by 3 DESC
             ";
-        echo $sql;exit;
+        
         $cli = DB::select($sql);
 
         foreach ($cli as $i => $value) {
+            
+            
             $sql = "
             SELECT to_char(dispatched,'YYYY-MM') as dates,to_char(dispatched,'YYYY-Mon') datestxt,coalesce(sum(subtotal),0)::money total,
             sum(quantity_packaging) as quantity_packaging
@@ -326,6 +328,9 @@ class ComparativeController extends Controller {
             order by 1 ASC";
 //            echo $sql;exit;
             $det = DB::select($sql);
+//            var_dump($value);
+//            dd($det);
+            
             $cli[$i]->detail = $det;
 
             foreach ($det as $val) {

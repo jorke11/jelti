@@ -77,7 +77,9 @@ trait Invoice {
             $detail->where("real_quantity", ">", 0);
         }
 
-        $detail = $detail->orderBy("id", "asc")->get();
+        $detail = $detail
+                        ->orderBy("products.supplier_id", "asc")
+                        ->orderBy(DB::raw("8"), "ASC")->get();
 
 
         $this->total = 0;
@@ -123,6 +125,63 @@ trait Invoice {
                         ->where("sale_id", $id)
                         ->orderBy("products.supplier_id", "asc")
                         ->orderBy(DB::raw("3"), "ASC")->get();
+
+        $this->total = 0;
+        $this->subtotal = 0;
+
+        foreach ($detail as $i => $value) {
+            $detail[$i]->valueFormated = "$" . number_format($value->value, 2, ",", ".");
+            $detail[$i]->total = $detail[$i]->quantity * $detail[$i]->value * $detail[$i]->units_sf;
+            $detail[$i]->totalFormated = "$" . number_format($detail[$i]->total, 2, ",", ".");
+
+            $this->subtotal += $detail[$i]->total;
+            $this->total += $detail[$i]->total + ($detail[$i]->total * $value->tax);
+
+            if ($value->tax == 0) {
+                $this->exento += $detail[$i]->total;
+            }
+            if ($value->tax == 0.05) {
+                $this->tax5 += $detail[$i]->total * $value->tax;
+            }
+            if ($value->tax == 0.19) {
+                $this->tax19 += $detail[$i]->total * $value->tax;
+            }
+        }
+
+
+        if ($dep->shipping_cost_tax == 0.05) {
+            $this->tax5 += $dep->shipping_cost * $dep->shipping_cost_tax;
+        }
+
+        if ($dep->shipping_cost_tax == 0.19) {
+            $this->tax19 += $dep->shipping_cost * $dep->shipping_cost_tax;
+        }
+
+        $this->subtotal += $dep->shipping_cost;
+
+        $this->total_real = $this->subtotal + $this->tax19 + $this->tax5 + (- $dep->discount);
+        return $detail;
+    }
+
+    function formatDetailNote($id) {
+
+        $sale = Sales::where("departure_id", $id)->first();
+        $credit = CreditNote::where("departure_id", $id)->first();
+
+        $dep = \App\Models\Inventory\Departures::find($sale->departure_id);
+
+//        dd($dep);
+
+        $detail = CreditNoteDetail::select("credit_note_detail.id", "credit_note_detail.quantity", DB::raw("products.reference ||' - ' ||products.title || ' - ' || stakeholder.business  as product"), "departures_detail.value", "departures_detail.real_quantity")
+                ->join("products", "products.id", "credit_note_detail.product_id")
+                ->join("stakeholder", "stakeholder.id", "products.supplier_id")
+                ->join("credit_note", "credit_note.id", "credit_note_detail.creditnote_id")
+                ->join("vdepartures", "vdepartures.id", "credit_note.departure_id")
+                ->join("departures_detail", "departures_detail.departure_id", DB::raw("credit_note.departure_id and departures_detail.product_id=credit_note_detail.product_id"))
+                ->where("credit_note_detail.creditnote_id", $credit->id)
+                ->orderBy("products.supplier_id", "asc")
+                ->orderBy(DB::raw("3"), "ASC")
+                ->get();
 
         $this->total = 0;
         $this->subtotal = 0;

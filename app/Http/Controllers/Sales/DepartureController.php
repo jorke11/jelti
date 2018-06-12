@@ -285,7 +285,6 @@ class DepartureController extends Controller {
 //            $this->tax19 += $shipping_cost_tax;
 //        }
 //        $this->subtotal += $dep->shipping_cost;
-
 //        $totalWithTax = $this->subtotal + $this->tax19 + $this->tax5 + (- $dep->discount);
 
         $cli["business_name"] = $this->cleanText($cli["business_name"]);
@@ -1212,7 +1211,7 @@ class DepartureController extends Controller {
                                 "expiration_date" => $val->expiration_date, "product_id" => $val->product_id,
                                 "cost_sf" => $val->cost_sf, "inventory_id" => $val->id
                                 , "price_sf" => $val->price_sf
-                            );  
+                            );
                         }
                     }
                 } else {
@@ -1430,9 +1429,11 @@ class DepartureController extends Controller {
 
             $header = Departures::find($row->departure_id);
 
+
             if (Auth::user()->role_id == 5 || Auth::user()->role_id == 1) {
                 $special = PricesSpecial::where("product_id", $input["header"]["product_id"])->where("client_id", $header->client_id)->first();
-                if ($special == null) {
+
+                if (count($special) == 0) {
                     $pro = Products::find($input["header"]["product_id"]);
                 } else {
                     $pro = DB::table("products")->select("products.id", "prices_special.price_sf", "products.units_sf", "products.cost_sf", 'products.tax')
@@ -1807,7 +1808,7 @@ class DepartureController extends Controller {
             return response()->json(["success" => true, "data" => $this->listProducts, "error" => $this->errors, "total" => "$ " . number_format(($this->total), 0, ',', '.')]);
         }
     }
-    
+
 //    public function storeExcel(Request $request) {
 //        if ($request->ajax()) {
 //            $error = 0;
@@ -1905,5 +1906,4 @@ class DepartureController extends Controller {
 //            return response()->json(["success" => true, "data" => $this->listProducts, "error" => $this->errors, "total" => "$ " . number_format(($this->total), 0, ',', '.')]);
 //        }
 //    }
-
 }

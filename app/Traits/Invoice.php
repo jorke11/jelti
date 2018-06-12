@@ -81,7 +81,6 @@ trait Invoice {
                         ->orderBy("products.supplier_id", "asc")
                         ->orderBy(DB::raw("8"), "ASC")->get();
 
-
         $this->total = 0;
         $this->subtotal = 0;
         foreach ($detail as $i => $value) {

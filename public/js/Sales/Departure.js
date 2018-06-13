@@ -534,8 +534,6 @@ function Departure() {
                     total += parseInt($(this).val());
                 })
 
-                console.log(quantity_total)
-                console.log(total)
                 if (quantity_total >= total) {
 
                     var url = "/departure/detail/" + id;

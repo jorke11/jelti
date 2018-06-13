@@ -123,7 +123,7 @@ trait Invoice {
                         ->join("stakeholder", "stakeholder.id", "products.supplier_id")
                         ->where("sale_id", $id)
                         ->orderBy("products.supplier_id", "asc")
-                        ->orderBy(DB::raw("3"), "ASC")->get();
+                        ->orderBy(DB::raw("4"), "ASC")->get();
 
         $this->total = 0;
         $this->subtotal = 0;

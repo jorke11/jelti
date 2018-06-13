@@ -44,7 +44,8 @@ class StockController extends Controller {
                                             select sum(purchases_detail.quantity) 
                                             from purchases_detail 
                                             JOIN purchases ON purchases.id= purchases_detail.purchase_id AND purchases.status_id =2
-                                            where purchases_detail.product_id=vproducts.id),0) as request_supplier"), DB::raw("coalesce((select sum(quantity * cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf"), "minimum_stock"
+                                            where purchases_detail.product_id=vproducts.id),0) as request_supplier"), 
+                DB::raw("coalesce((select sum(quantity * cost_sf) from inventory where product_id=vproducts.id),0) as cost_sf"), "minimum_stock"
         );
 
 
@@ -78,7 +79,8 @@ class StockController extends Controller {
 //            ORDER BY 6 ASC
 //                ";
 //        echo $products = $query->toSql();exit;
-        $products = $query->where("vproducts.status_id", 1)->get();
+//        $products = $query->where("vproducts.status_id", 1)->get();
+        $products = $query->get();
 //        echo $sql;exit;
 //        $products = DB::select($sql);
 

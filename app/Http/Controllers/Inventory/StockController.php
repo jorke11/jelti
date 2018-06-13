@@ -79,8 +79,8 @@ class StockController extends Controller {
 //            ORDER BY 6 ASC
 //                ";
 //        echo $products = $query->toSql();exit;
-//        $products = $query->where("vproducts.status_id", 1)->get();
-        $products = $query->get();
+        $products = $query->where("vproducts.status_id", 1)->get();
+//        $products = $query->get();
 //        echo $sql;exit;
 //        $products = DB::select($sql);
 

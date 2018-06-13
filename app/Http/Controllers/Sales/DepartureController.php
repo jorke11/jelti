@@ -1253,7 +1253,7 @@ class DepartureController extends Controller {
             );
 
 
-            return response()->json(["row" => ["product_id" => $pro->id, "id" => $id], "inventory" => $inventory_real, "hold" => $hold, "category" => "services"]);
+            return response()->json(["row" => ["product_id" => $pro->id, "id" => $id, "quantity" => $detail->quantity], "inventory" => $inventory_real, "hold" => $hold, "category" => "services"]);
         }
     }
 
@@ -1441,7 +1441,7 @@ class DepartureController extends Controller {
                                     ->where("client_id", $header->client_id)->first();
                 }
 
-                
+
                 $input["value"] = $pro->price_sf;
                 $input["cost_sf"] = $pro->cost_sf;
 
@@ -1450,6 +1450,7 @@ class DepartureController extends Controller {
                 $errors = array();
 
                 $val_quantity = 0;
+
 
                 foreach ($input["detail"] as $i => $value) {
                     $pro = Products::find($value["product_id"]);
@@ -1493,8 +1494,15 @@ class DepartureController extends Controller {
                         InventoryHold::find($rowD->id)->delete();
                     }
                 }
+
+
+                if ($pro->category_id == -1) {
+                    $input["real_quantity"] = 1;
+                }
+
                 unset($input["detail"]);
                 unset($input["header"]);
+//                dd($input);
                 $row->fill($input)->save();
             }
 

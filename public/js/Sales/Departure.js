@@ -495,6 +495,9 @@ function Departure() {
         toastr.remove();
         var lots = [];
         $("#frmDetail #departure_id").val($("#frm #id").val());
+        
+        
+        
         var data = {}, value = 0, total = 0;
         var url = "", method = "";
         var id = $("#frmDetail #id").val();
@@ -531,7 +534,8 @@ function Departure() {
                     total += parseInt($(this).val());
                 })
 
-
+                console.log(quantity_total)
+                console.log(total)
                 if (quantity_total >= total) {
 
                     var url = "/departure/detail/" + id;

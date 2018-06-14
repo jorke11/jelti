@@ -90,7 +90,6 @@ function CreditNote() {
         });
 
         $("#tabList").click(function () {
-            console.log("asdasdasd");
             table.ajax.reload();
         })
 
@@ -136,8 +135,8 @@ function CreditNote() {
                             <td><input type="number" value='${value.quantity}' id="quantity_${value.lot}_${i}" class="form-control input-xs"></td>
                             <td>
                                 <select class="form-control" id="type_credit_note_${val.id}">
-                                    <option value="1">Devolución</option>
                                     <option value="2">Averia</option>
+                                    <option value="1">Devolución</option>
                                     <option value="3">Faltante</option>
                                 </select>
                             </td>
@@ -380,8 +379,8 @@ function CreditNote() {
                             <td><input type="number" value='${value.quantity}' id="quantity_${value.product_id}_${i}_${j}" class="form-control input-xs"></td>
                             <td>
                                 <select class="form-control input-xs" id="type_credit_note_${val.id}">
-                                    <option value="1">Devolución</option>
                                     <option value="2">Averia</option>
+                                    <option value="1">Devolución</option>
                                     <option value="3">Faltante</option>
                                 </select>
                             </td>
@@ -676,10 +675,10 @@ function CreditNote() {
         });
 
         $('#tbl tbody').on('click', 'td.details-control', function () {
-            
+
             var tr = $(this).closest('tr');
             var row = table.row(tr);
-            
+
             if (row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');

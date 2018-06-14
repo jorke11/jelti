@@ -145,7 +145,7 @@
                     <th>Lote</th>
                     <th>Vencimiento</th>
                     <th width="8%">Cantidad</th>
-                    <th>Razon</th>
+                    <th width="15%">Razon</th>
                     <th>Agregar</th>
                 </tr>
             </thead>

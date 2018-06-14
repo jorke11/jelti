@@ -396,7 +396,7 @@ function CreditNote() {
         });
 
         $("#tblDetail tbody").html(html);
-        $("#tblDetailSelecteds tbody").html(html);
+        $("#tblDetailSelected tbody").empty();
     }
 
     this.printDetailSelected = function (detail) {
@@ -409,7 +409,7 @@ function CreditNote() {
             product = obj.getCleanedString(val.product)
             html += `
                         <tr id="row_${val.id}">
-                            <td>${product}</td>
+                            <td width="100">${product}</td>
                             <td>${val.type_credit_note_text}</td>
                             <td>${val.quantity}</td>
                             <td>

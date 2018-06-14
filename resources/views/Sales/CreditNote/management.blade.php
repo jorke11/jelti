@@ -159,7 +159,7 @@
                     <th colspan="8" ><h4>Detalle Seleccion</h4></th>
                 </tr>
                 <tr>
-                    <th>Producto</th>
+                    <th >Producto</th>
                     <th>Razon</th>
                     <th>Cantidad</th>
                     <th>Borrar</th>

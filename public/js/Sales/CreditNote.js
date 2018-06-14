@@ -290,6 +290,7 @@ function CreditNote() {
                                 table.ajax.reload();
                                 toastr.success(msg);
                                 $("#loading-super").addClass("hidden");
+                                listProducts=[];
                             }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -376,7 +377,7 @@ function CreditNote() {
                             <td>${value.expiration_date}</td>
                             <td><input type="number" value='${value.quantity}' id="quantity_${value.lot}_${i}_${j}" class="form-control input-xs"></td>
                             <td>
-                                <select class="form-control" id="type_credit_note_${val.id}">
+                                <select class="form-control input-xs" id="type_credit_note_${val.id}">
                                     <option value="1">Devolución</option>
                                     <option value="2">Averia</option>
                                     <option value="3">Faltante</option>

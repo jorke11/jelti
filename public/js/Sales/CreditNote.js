@@ -376,7 +376,7 @@ function CreditNote() {
                             <td>${val.real_quantity}</td>
                             <td>${value.lot}</td>
                             <td>${value.expiration_date}</td>
-                            <td><input type="number" value='${value.quantity}' id="quantity_${value.lot}_${i}_${j}" class="form-control input-xs"></td>
+                            <td><input type="number" value='${value.quantity}' id="quantity_${value.product_id}_${i}_${j}" class="form-control input-xs"></td>
                             <td>
                                 <select class="form-control input-xs" id="type_credit_note_${val.id}">
                                     <option value="1">Devolución</option>

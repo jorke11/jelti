@@ -368,6 +368,7 @@ function CreditNote() {
             var product = "";
             $.each(detail, function (j, value) {
                 product = obj.getCleanedString(val.product)
+//                product = product.
                 html += `
                         <tr id="row_${val.id}">
                             <td>${val.id}</td>
@@ -384,7 +385,7 @@ function CreditNote() {
                                 </select>
                             </td>
                             <td>
-                                <button class="btn btn-info" onclick=obj.addDetail(${val.id},'${product}',${JSON.stringify(value)},'quantity_${value.lot}_${i}_${j}')>
+                                <button class="btn btn-info" onclick=obj.addDetail(${val.id},'${product}',${JSON.stringify(value)},'quantity_${value.product_id}_${i}_${j}')>
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                 </button>
                             </td>
@@ -435,6 +436,7 @@ function CreditNote() {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header, disabled: true});
                 $("#frm #description").attr("disabled", false);
+                listProducts=[]
                 listProductsStatic = data.detail;
                 obj.printDetailTmp(data.detail);
                 tableNote = obj.tableNote(id);

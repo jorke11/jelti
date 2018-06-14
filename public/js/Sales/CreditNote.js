@@ -676,6 +676,7 @@ function CreditNote() {
         });
 
         $('#tbl tbody').on('click', 'td.details-control', function () {
+            console.log("asd");
             var tr = $(this).closest('tr');
             var row = table.row(tr);
             if (row.child.isShown()) {

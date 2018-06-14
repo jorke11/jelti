@@ -106,6 +106,13 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @include('Report.Operations.total_cost')
+            </div>
+        </div>
+    </div>
 </div>
 <div class="row">
     <!-- Nav tabs -->

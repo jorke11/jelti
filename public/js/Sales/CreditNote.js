@@ -401,7 +401,6 @@ function CreditNote() {
         $("#tblDetailSelected tbody").html("");
         var product = '';
 
-        console.log(listProducts);
 
         $.each(listProducts, function (i, val) {
             product = obj.getCleanedString(val.product)

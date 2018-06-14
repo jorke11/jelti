@@ -17,7 +17,6 @@
                                 <td>Valor Despachado</td>
                                 <td>Valor No despachado</td>
                                 <td>NS Valor</td>
-                                
                             </tr>
                         </thead>
                         <tbody></tbody>

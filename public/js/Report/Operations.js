@@ -5,6 +5,7 @@ function Operations() {
         this.tableProductDay();
         this.tableClientAverage();
         this.tableShipping_cost();
+        this.tableTotal_cost();
         this.tableMaxMin();
 
         this.tableNivel();
@@ -245,7 +246,50 @@ function Operations() {
             ],
         });
     }
-    
+
+    this.tableTotal_cost = function () {
+        console.log("asd");
+        var obj = {};
+        obj.init = $("#Detail #finit").val();
+        obj.end = $("#Detail #fend").val();
+        obj.warehouse_id = $("#Detail #warehouse_id").val();
+        obj.client_id = $("#Detail #client_id").val();
+
+        return $('#tblTotal_cost').DataTable({
+            "dom":
+                    "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-xs-3 col-sm-3 col-md-3 col-lg-3'i><'col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center'p><'col-xs-3 col-sm-3 col-md-3 col-lg-3'>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+//                    text: '<i class="fa fa-file-excel-o"></i>',
+                    className: 'btn btn-primary glyphicon glyphicon-download',
+                    titleAttr: 'Excel'
+                },
+            ],
+            destroy: true,
+            ajax: {
+                url: "/operations/getTotalCost",
+                data: obj,
+            },
+            scrollX: true,
+            columns: [
+                {data: "warehouse"},
+                {data: "total", render: $.fn.dataTable.render.number('.', ',', 0)},
+            ],
+            aoColumnDefs: [
+                {
+                    aTargets: [0, 1],
+                    mRender: function (data, type, full) {
+                        return '<a href="#" onclick="objCli.getDetail(' + full.id + ')">' + data + '</a>';
+                    }
+                }
+
+            ],
+        });
+    }
+
     this.tableNivelService = function () {
         var obj = {};
         obj.init = $("#Detail #finit").val();

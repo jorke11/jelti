@@ -42,6 +42,32 @@ class OperationsController extends Controller {
         return response()->json(["data" => $res]);
     }
 
+    public function getTotalCost(Request $req) {
+        $input = $req->all();
+
+        $ware = "";
+        if ($input["warehouse_id"] != 0) {
+            $ware = " AND d.warehouse_id=" . $input["warehouse_id"];
+        }
+
+        if ($input["client_id"] != 0) {
+            $ware .= " AND d.client_id=" . $input["client_id"];
+        }
+
+        $sql = "
+
+            SELECT d.warehouse,sum(det.real_quantity * det.cost_sf)::money as total
+            FROM departures_detail det 
+            JOIN vdepartures d ON d.id=det.departure_id and d.status_id IN(2,7)
+            WHERE d.client_id NOT IN(258,264)and d.dispatched BETWEEN '" . $input["init"] . " 00:00' AND '" . $input["end"] . " 23:59' $ware
+                GROUP BY 1
+            ";
+//        echo $sql;exit;
+        $res = DB::select($sql);
+
+        return response()->json(["data" => $res]);
+    }
+
     public function getShippingCostClient(Request $req) {
         $input = $req->all();
 
@@ -196,8 +222,8 @@ class OperationsController extends Controller {
     public function getNivelService(Request $req) {
         $in = $req->all();
 
-        
-        
+
+
         $ware = "";
         if ($in["warehouse_id"] != 0) {
             $ware = " AND dep.warehouse_id=" . $in["warehouse_id"];
@@ -223,17 +249,17 @@ class OperationsController extends Controller {
                 WHERE dep.dispatched BETWEEN '" . $in["init"] . " 00:00' AND '" . $in["end"] . "' $ware
             GROUP BY 1
             ";
-        
-        
+
+
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
-        
     }
+
     public function getNoShipped(Request $req) {
         $in = $req->all();
 
-        
-        
+
+
         $ware = "";
         if ($in["warehouse_id"] != 0) {
             $ware = " AND dep.warehouse_id=" . $in["warehouse_id"];
@@ -243,8 +269,8 @@ class OperationsController extends Controller {
             $ware .= " AND dep.client_id=" . $in["client_id"];
         }
 
-        
-        
+
+
         $sql = "
              SELECT p.title as product,dep.warehouse,
  		sum(d.quantity*d.packaging) unit_order,
@@ -261,10 +287,10 @@ class OperationsController extends Controller {
             order by 1,2
              
             ";
-        
+
 //        echo $sql;exit;
-        
-        
+
+
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }

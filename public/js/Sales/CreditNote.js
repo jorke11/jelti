@@ -90,6 +90,7 @@ function CreditNote() {
         });
 
         $("#tabList").click(function () {
+            console.log("asdasdasd");
             table.ajax.reload();
         })
 
@@ -570,7 +571,6 @@ function CreditNote() {
                 row.child.hide();
                 tr.removeClass('shown');
             } else {
-
                 row.child(obj.formatNote(row.data())).show();
                 tr.addClass('shown');
             }
@@ -676,9 +676,10 @@ function CreditNote() {
         });
 
         $('#tbl tbody').on('click', 'td.details-control', function () {
-            console.log("asd");
+            
             var tr = $(this).closest('tr');
             var row = table.row(tr);
+            
             if (row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');

@@ -1,5 +1,5 @@
 <div class="modal fade" role="dialog" id='modalDetail'>
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -36,6 +36,33 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cantidad</th>
+                                    <th>Fecha de Vencimiento</th>
+                                    <th>Lote</th>
+                                    <th>Descripción</th>
+                                    <th>Add</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="number" class="form-control" placeholder="Cantidad" id="detail_quantity"></th>
+                                    <th><input type="text" class="form-control " placeholder="Fecha de Vencimiento" id="detail_expiration_date"></th>
+                                    <th><input type="text" class="form-control" placeholder="Lote" id="detail_lot"></th>
+                                    <th><input type="text" class="form-control" placeholder="Descripcion" id="detail_description"></th>
+                                    <th>
+                                        <button></button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">

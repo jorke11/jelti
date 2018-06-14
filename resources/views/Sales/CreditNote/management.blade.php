@@ -144,7 +144,7 @@
                     <th>Disponible</th>
                     <th>Lote</th>
                     <th>Vencimiento</th>
-                    <th width="8%">Cantidad</th>
+                    <th width="10%">Cantidad</th>
                     <th width="15%">Razon</th>
                     <th>Agregar</th>
                 </tr>

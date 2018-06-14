@@ -374,7 +374,7 @@ function CreditNote() {
                             <td>${val.real_quantity}</td>
                             <td>${value.lot}</td>
                             <td>${value.expiration_date}</td>
-                            <td><input type="number" value='${value.quantity}' id="quantity_${value.lot}_${i}" class="form-control input-xs"></td>
+                            <td><input type="number" value='${value.quantity}' id="quantity_${value.lot}_${i}_${j}" class="form-control input-xs"></td>
                             <td>
                                 <select class="form-control" id="type_credit_note_${val.id}">
                                     <option value="1">Devolución</option>
@@ -383,7 +383,7 @@ function CreditNote() {
                                 </select>
                             </td>
                             <td>
-                                <button class="btn btn-info" onclick=obj.addDetail(${val.id},'${product}',${JSON.stringify(value)},'quantity_${value.lot}_${i}')>
+                                <button class="btn btn-info" onclick=obj.addDetail(${val.id},'${product}',${JSON.stringify(value)},'quantity_${value.lot}_${i}_${j}')>
                                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                 </button>
                             </td>

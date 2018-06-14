@@ -290,7 +290,7 @@ function CreditNote() {
                                 table.ajax.reload();
                                 toastr.success(msg);
                                 $("#loading-super").addClass("hidden");
-                                listProducts=[];
+                                listProducts = [];
                             }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
@@ -368,7 +368,7 @@ function CreditNote() {
             var product = "";
             $.each(detail, function (j, value) {
                 product = obj.getCleanedString(val.product)
-                product = product.substring(0, 50);
+
                 html += `   
                         <tr id="row_${val.id}">
                             <td>${val.id}</td>
@@ -396,6 +396,7 @@ function CreditNote() {
         });
 
         $("#tblDetail tbody").html(html);
+        $("#tblDetailSelecteds tbody").html(html);
     }
 
     this.printDetailSelected = function (detail) {
@@ -436,7 +437,7 @@ function CreditNote() {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header, disabled: true});
                 $("#frm #description").attr("disabled", false);
-                listProducts=[]
+                listProducts = []
                 listProductsStatic = data.detail;
                 obj.printDetailTmp(data.detail);
                 tableNote = obj.tableNote(id);

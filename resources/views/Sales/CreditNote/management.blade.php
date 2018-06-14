@@ -131,34 +131,74 @@
 
 
 <div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-lg-12 text-right">
-                        <button class="btn btn-info btn-sm" id='btnAdd'>
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true" > Agregar</span>
-                        </button>
+
+    <div class="col-lg-7">
+        <table class="table table-bordered table-condensed" id="tblDetail">
+            <thead>
+                <tr>
+                    <th colspan="8" ><h4>Detalle Orden</h4></th>
+                </tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Producto</th>
+                    <th>Disponible</th>
+                    <th>Lote</th>
+                    <th>Vencimiento</th>
+                    <th>Cantidad</th>
+                    <th>Razon</th>
+                    <th>Agregar</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="col-lg-5">
+        <table class="table table-bordered table-condensed" id="tblDetailSelected">
+            <thead>
+                <tr>
+                    <th colspan="8" ><h4>Detalle Seleccion</h4></th>
+                </tr>
+                <tr>
+                    <th>Producto</th>
+                    <th>Razon</th>
+                    <th>Cantidad</th>
+                    <th>Borrar</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!--    <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-12 text-right">
+                            <button class="btn btn-info btn-sm" id='btnAdd'>
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true" > Agregar</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-condensed" id="tblDetail">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Producto</th>
+                                <th>Disponible</th>
+                                <th>Lote</th>
+                                <th>Vencimiento</th>
+                                <th>Cantidad</th>
+                                <th>razon</th>
+                                <th>Agregar</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
-            <div class="panel-body">
-                <table class="table table-bordered table-condensed" id="tblDetail">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Comentario</th>
-                            <th>Cantidad</th>
-                            <th>Unidad</th>
-                            <th>Total</th>
-                            <th>Acccion</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+        </div>-->
 </div>
 <div class="row">
     <div class="col-lg-12">

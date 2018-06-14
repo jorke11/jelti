@@ -164,11 +164,12 @@ function CreditNote() {
         row_data.valueFormated = $.formatNumber(elem.price_sf, '$');
         row_data.quantity = $("#" + elemQuantity).val();
         row_data.type_credit_note = $("#type_credit_note_" + id).val();
+        row_data.type_credit_note_text = $("#type_credit_note_" + id + " option:selected").text();
         row_data.total = elem.price_sf * $("#" + elemQuantity).val();
         row_data.totalFormated = $.formatNumber(row_data.total, "$");
 
         listProducts.push(row_data);
-        this.printDetailTmp();
+        this.printDetailSelected();
 //        this.printDetailDep();
 
     }
@@ -355,29 +356,70 @@ function CreditNote() {
         })
     }
 
-    this.printDetailTmp = function () {
+    this.printDetailTmp = function (detail) {
         var html = "", htmlEdit = "", htmlDel = "";
         $("#tblDetail tbody").html("");
-        
-        $.each(listProducts, function (i, val) {
-            if (val != undefined) {
-//                htmlEdit = '<button type="button" class="btn btn-xs btn-primary" onclick=obj.editItem(' + val.product_id + ',' + i + ')>Edit</button>'
-                htmlDel = '<button type="button" class="btn btn-xs btn-warning" onclick=obj.deleteItem(' + val.product_id + ',' + i + ')>Delete</button>'
-                val.product = (val.product).replace(/_/g, " ");
-                val.comment = (val.comment != null) ? val.comment : '';
 
-                html += '<tr id="row_' + i + '">';
-                html += "<td>" + val.product + "</td>";
-                html += "<td>" + val.comment + "</td>";
-                html += "<td>" + val.quantity + "</td>";
-                html += "<td>" + val.valueFormated + "</td>";
-                html += "<td>" + val.totalFormated + "</td>";
-                html += '<td>' + htmlEdit + htmlDel + "</td>";
-                html += "</tr>";
-            }
+        $.each(detail, function (i, val) {
+
+            detail = JSON.parse(val.quantity_lots);
+
+            var product = "";
+            $.each(detail, function (j, value) {
+                product = obj.getCleanedString(val.product)
+                html += `
+                        <tr id="row_${val.id}">
+                            <td>${val.id}</td>
+                            <td>${val.product}</td>
+                            <td>${val.real_quantity}</td>
+                            <td>${value.lot}</td>
+                            <td>${value.expiration_date}</td>
+                            <td><input type="number" value='${value.quantity}' id="quantity_${value.lot}_${i}" class="form-control input-xs"></td>
+                            <td>
+                                <select class="form-control" id="type_credit_note_${val.id}">
+                                    <option value="1">Devolución</option>
+                                    <option value="2">Averia</option>
+                                    <option value="3">Faltante</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-info" onclick=obj.addDetail(${val.id},'${product}',${JSON.stringify(value)},'quantity_${value.lot}_${i}')>
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        `
+            })
+
         });
 
         $("#tblDetail tbody").html(html);
+    }
+
+    this.printDetailSelected = function (detail) {
+        var html = "", htmlEdit = "", htmlDel = "";
+        $("#tblDetailSelected tbody").html("");
+        var product = '';
+
+        console.log(listProducts);
+
+        $.each(listProducts, function (i, val) {
+            product = obj.getCleanedString(val.product)
+            html += `
+                        <tr id="row_${val.id}">
+                            <td>${product}</td>
+                            <td>${val.type_credit_note_text}</td>
+                            <td>${val.quantity}</td>
+                            <td>
+                                <button class="btn btn-warning" onclick=obj.addDetail(${val.id},'${product}',${JSON.stringify(value)},'quantity_${value.lot}_${i}')>
+                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        `
+        })
+
+        $("#tblDetailSelected tbody").html(html);
     }
 
     this.showModal = function (id) {
@@ -393,9 +435,8 @@ function CreditNote() {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-departure").setFields({data: data.header, disabled: true});
                 $("#frm #description").attr("disabled", false);
-                listProducts = data.detail;
                 listProductsStatic = data.detail;
-                obj.printDetailTmp(data.detail, btnEdit, btnDel);
+                obj.printDetailTmp(data.detail);
                 tableNote = obj.tableNote(id);
             }
         })

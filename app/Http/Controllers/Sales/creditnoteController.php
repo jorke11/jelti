@@ -58,7 +58,7 @@ class creditnoteController extends Controller {
     public function edit($id) {
         $entry = Sales::where("departure_id", $id)->first();
         $departure = Departures::find($id);
-        $detail = $this->formatDetailCredit($id);
+        $detail = $this->formatDetail($id);
 
         return response()->json(["header" => $departure, "detail" => $detail]);
     }

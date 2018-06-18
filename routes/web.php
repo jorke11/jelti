@@ -220,7 +220,7 @@ Route::get('/entry/{id}/getDetailPurchase', ['uses' => 'Inventory\EntryControlle
 Route::post('/entry/storeDetail', 'Inventory\EntryController@storeDetail');
 Route::put('/entry/detail/{id}', 'Inventory\EntryController@updateDetail');
 Route::delete('/entry/detail/{id}', 'Inventory\EntryController@destroyDetail');
-Route::post('/entry/setPurchase', 'Inventory\EntryController@sendPurchase');
+Route::post('/entry/setInventory', 'Inventory\EntryController@setInventory');
 Route::post('/entry/uploadExcel', 'Inventory\EntryController@storeExcel');
 Route::put('/entry/{id}/setDetail', 'Inventory\EntryController@setDetail');
 

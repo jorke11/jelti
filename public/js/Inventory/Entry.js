@@ -1,9 +1,16 @@
 function Entry() {
-    var table, showDetail = true, detail = [], price_sf = 0, row = {};
-
+    var table, showDetail = true, detail = [], price_sf = 0, row = {}, listProducts = [];
     this.init = function () {
         table = this.table();
-
+        $('.input-number').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        $('.input-alpha').on('input', function () {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
+        $('.input-date').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
         $("#btnNew").click(this.new);
         $("#btnSave").click(this.save);
         $("#newDetail").click(this.saveDetail);
@@ -13,7 +20,6 @@ function Entry() {
         $("#tabManagement").click(function () {
             $('#myTabs a[href="#management"]').tab('show');
         });
-
         $("#supplier_id").change(function () {
             if ($(this).val() != 0) {
                 obj.getSupplier($(this).val());
@@ -23,7 +29,6 @@ function Entry() {
                 $("#frm #phone_supplier").val("");
             }
         });
-
         $("#insideManagement").click(function () {
             $(".input-entry").cleanFields({disabled: true});
             $("#btnSave").attr("disabled", true);
@@ -35,12 +40,10 @@ function Entry() {
             $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
             $("#tblDetail tbody").empty();
         });
-
         $("#btnmodalDetail").click(function () {
             $("#modalDetail").modal("show");
             $(".input-detail").cleanFields();
             $("#frmDetail #product_id").val(0).getSeeker({filter: {supplier_id: $("#frm #supplier_id").val()}});
-
             $("#frmDetail #id").val("");
             $("#frmDetail #quantity").val("");
             $("#frmDetail #value").val("");
@@ -61,14 +64,76 @@ function Entry() {
                 }
             })
         });
-
         $("#btnUpload").click(this.upload);
+    }
+
+    this.addDetail = function () {
+        var det = {};
+        var valida = $(".row-detail").validate();
+        det.quantity = $("#detail_quantity").val();
+        det.expiration_date = $("#detail_expiration_date").val();
+        det.lot = $("#detail_lot").val();
+        det.description = $("#detail_description").val();
+        if (parseInt(row.quantity) < (obj.validaQuantity() + parseInt(det.quantity))) {
+            toastr.error("La cantidad es superior a la del item pedido");
+        } else {
+
+            if (valida.length == 0) {
+                listProducts.push(det);
+                obj.printTableProducts();
+            } else {
+                toastr.error("Campos requeridos");
+            }
+        }
+
 
     }
 
+    this.validaQuantity = function () {
+        var total = 0
+        $.each(listProducts, function (i, val) {
+            if (val != undefined)
+                total += parseInt(val.quantity);
+        })
+
+        return total;
+    }
+
+    this.printTableProducts = function () {
+        var html = '';
+        $("#tbldetail_entry tbody").empty();
+        $.each(listProducts, function (i, val) {
+            if (val != undefined) {
+                html += `
+                <tr id="row_${val.lot}">
+                    <td>${val.quantity}</td>
+                    <td>${val.expiration_date}</td>
+                    <td>${val.lot}</td>
+                    <td>${val.description}</td>
+                    <td>
+                        <button class="btn btn-error" type="button" onclick=obj.deleteTemp('${val.lot}')>Borrar</button>
+                    </td>
+                </tr>`
+            }
+        });
+        $("#tbldetail_entry tbody").html(html);
+    }
+
+    this.deleteTemp = function (lot) {
+        listProducts.forEach(function (val, i) {
+            if (val.lot == lot) {
+                delete listProducts[i]
+            }
+        })
+
+        listProducts.filter(val => val)
+
+        this.printTableProducts()
+    }
+
+
     this.upload = function () {
         var formData = new FormData($("#frmFile")[0]);
-
         $.ajax({
             url: 'entry/uploadExcel',
             method: 'POST',
@@ -87,9 +152,7 @@ function Entry() {
 
     this.new = function () {
         toastr.remove();
-
         $(".input-entry").cleanFields();
-
         $(".input-fillable").prop("readonly", false);
         $("#tblDetail tbody").empty();
         $("#tblDetail tfoot").empty();
@@ -99,20 +162,16 @@ function Entry() {
         $("#frm #warehouse_id").getSeeker({default: true, api: '/api/getWarehouse', disabled: true});
         $("#frm #responsible_id").getSeeker({default: true, api: '/api/getResponsable', disabled: true});
         $("#frm #city_id").getSeeker({default: true, api: '/api/getCity', disabled: true});
-
     }
 
     this.send = function () {
         toastr.remove();
-
         var param = {};
-
         param.header = $(".input-entry").getData();
         param.detail = detail;
-
         if (confirm("¿Deseas ingresar el pedido?")) {
             $.ajax({
-                url: 'entry/setPurchase',
+                url: 'entry/setInventory',
                 method: 'POST',
                 data: param,
                 dataType: 'JSON',
@@ -152,7 +211,6 @@ function Entry() {
                     resp.response.name = (resp.response.name == null) ? '' : resp.response.name + " ";
                     resp.response.last_name = (resp.response.last_name == null) ? '' : resp.response.last_name + " ";
                     $("#frm #name_supplier").val(resp.response.name + resp.response.last_name + resp.response.business_name);
-
 //                    $("#frm #name_supplier").val(resp.response.name + " " + resp.response.last_name);
                     $("#frm #address_supplier").val(resp.response.address);
                     $("#frm #phone_supplier").val(resp.response.phone);
@@ -167,22 +225,15 @@ function Entry() {
         $("#frm #city_id").prop("disabled", false);
         var data = {};
         var validate = $(".input-entry").validate();
-
         if (validate.length == 0) {
             var url = "entry", method = "";
             var id = $("#frm #id").val();
             var msg = '';
-
-
             data.header = $(".input-entry").getData();
             data.detail = detail;
-
-
-
             if (id == '') {
                 method = 'POST';
                 msg = "Created Record";
-
             } else {
                 method = 'PUT';
                 url += "/" + id;
@@ -204,7 +255,6 @@ function Entry() {
                         $("#btnmodalDetail").attr("disabled", false);
                         $("#btnSend").prop("disabled", false);
                         $(".btnEditClass").prop("disabled", false);
-
                     }
                 }, error: function (xhr, ajaxOptions, thrownError) {
                     toastr.error(xhr.responseJSON.msg);
@@ -217,25 +267,52 @@ function Entry() {
 
     this.saveDetail = function () {
         $("#frmDetail #entry_id").val($("#frm #id").val());
-
-        var validate = $(".input-detail").validate();
-
-        if (validate.length == 0) {
-
-            var frm = $("#frmDetail");
-            var data = frm.serialize();
-            var url = "entry/", method = "";
-            var id = $("#frmDetail #id").val();
-            var msg = 'Record Detail';
-            if (id == '') {
+        var frm = $("#frmDetail");
+        var data = frm.serialize();
+        var url = "entry/", method = "";
+        var id = $("#frmDetail #id").val();
+        var msg = 'Record Detail';
+        if (listProducts.length == 0) {
+            if (confirm("No hay productos ingresado, quedara en 0, Desea continuar?")) {
                 obj.createDetail();
             } else {
-                obj.setDetail(id);
+                return false;
             }
         } else {
-            toastr.warning("Input required");
+            obj.createDetail();
         }
+
+
+//        if (id == '') {
+//            obj.createDetail();
+//        } else {
+//            obj.setDetail(id);
+//        }
+
     }
+
+    this.createDetail = function () {
+        var param = {};
+        param.purchase_id = $("#frm #id").val()
+        param.detail = listProducts;
+        $.ajax({
+            url: PATH + "/purchase/detail/" + $("#frmDetail #id").val(),
+            method: "PUT",
+            data: param,
+            dataType: 'JSON',
+            success: function (data) {
+
+                if (data.success == true) {
+                    $("#modalDetail").modal("hide");
+                    detail = data.detail
+                    obj.printDetail()
+                }
+            }, error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(xhr.responseJSON.msg);
+            },
+        })
+    }
+
 
 
     this.setDetail = function (id) {
@@ -254,41 +331,14 @@ function Entry() {
 
 
 
-    this.createDetail = function () {
-
-        detail.push({
-            id: detail.length + 1,
-            product_id: $("#frmDetail #product_id").val(),
-            product: $.trim($("#frmDetail #product_id").text()),
-            quantity: $("#frmDetail #quantity").val(),
-            real_quantity: $("#frmDetail #real_quantity").val(),
-            expiration_date: $("#frmDetail #expiration_date").val(),
-            lot: $("#frmDetail #lot").val(),
-            description: $("#frmDetail #description").val(),
-            value: price_sf,
-            total: price_sf * $("#frmDetail #quantity").val(),
-            total_real: price_sf * $("#frmDetail #real_quantity").val()
-        });
-
-
-
-        $("#frmDetail #product_id").text("");
-        toastr.success("Producto Agregado");
-
-        obj.printDetail();
-        $(".input-detail").cleanFields();
-
-    }
 
     this.editDetail = function (id) {
-
-
+        listProducts = [];
+        $(".row-detail").cleanFields();
         if ($("#frm #status_id").val() != 2) {
             var url = "/purchase/" + id + "/detail";
             var param = {};
-
             if (showDetail) {
-                console.log("asd");
                 $.ajax({
                     url: url,
                     method: "GET",
@@ -304,23 +354,16 @@ function Entry() {
             }
         } else {
             $("#modalDetail").modal("show");
-
             this.getDetail(id)
 
-//            var row = {
-//                id: id,
-//                product_id: $("#frmDetail #product_id").val(),
-//                product: $.trim($("#frmDetail #product_id").text()),
-//                quantity: $("#frmDetail #quantity").val(),
-//                real_quantity: $("#frmDetail #real_quantity").val(),
-//                expiration_date: $("#frmDetail #expiration_date").val(),
-//                lot: $("#frmDetail #lot").val(),
-//                description: $("#frmDetail #description").val(),
-//                value: price_sf,
-//                total: price_sf * $("#frmDetail #quantity").val()
-//            };
-
             $(".input-detail").setFields({data: row})
+            $("#detail_quantity").val(row.quantity)
+
+            if (row.detail != null) {
+                listProducts = JSON.parse(row.detail);
+            }
+
+            obj.printTableProducts()
         }
     }
 
@@ -334,36 +377,36 @@ function Entry() {
 
     this.printDetail = function () {
         var html = '';
-
         var htmlEdit = ''
         var htmlDel = ''
 
         $("#tblDetail tbody").empty();
-
         var real_quantity = 0;
         $.each(detail, function (i, val) {
             if (val != undefined) {
-//                if (data.header.status_id == 1) {
-                htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
-                htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
-//                }
-
+                htmlEdit = '';
+                htmlDel = '';
+                if (val.status_id == 1 || val.status_id == 2) {
+                    htmlEdit = '<button type="button" class="btn btn-xs btn-primary btnEditClass" onclick=obj.editDetail(' + val.id + ')>Edit</button>'
+//                    htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
+                }
                 real_quantity = (val.real_quantity != undefined) ? val.real_quantity : 0;
-
-                html += '<tr id="row_' + val.id + '">';
-                html += "<td>" + val.id + "</td>"
-                html += "<td>" + val.product + "</td>"
-                html += "<td>" + val.quantity + "</td>"
-                html += "<td>" + val.value + "</td>"
-                html += "<td>" + val.total + "</td>"
-                html += "<td>" + real_quantity + "</td>"
-                html += "<td>" + val.value + "</td>"
-                html += "<td>" + val.total_real + "</td>"
-                html += '<td>' + htmlEdit + htmlDel + "</td>";
-                html += "</tr>"
+                val.total_real = (val.total_real == null) ? 0 : val.total_real;
+                html += `
+                        <tr id="row_${val.id}">
+                            <td>${val.id}</td>
+                            <td>${val.product}</td>
+                            <td>${val.quantity}</td>
+                            <td>${$.formatNumber(val.value)}</td>
+                            <td>${$.formatNumber(val.total)}</td>
+                            <td>${real_quantity}</td>
+                            <td>${$.formatNumber(val.value)}</td>
+                            <td>${$.formatNumber(val.total_real, "$")}</td>
+                            <td>${val.status_id}</td>
+                            <td>${htmlEdit}${htmlDel}</td>
+                        </tr>`
             }
         });
-
         $("#tblDetail tbody").html(html);
     }
 
@@ -373,7 +416,6 @@ function Entry() {
         var frm = $("#frmEdit");
         var data = frm.serialize();
         var url = "/purchase/" + id + "/edit";
-
         $.ajax({
             url: url,
             method: "GET",
@@ -382,7 +424,6 @@ function Entry() {
             success: function (data) {
                 $('#myTabs a[href="#management"]').tab('show');
                 $(".input-entry").setFields({data: data.header, disabled: true});
-
                 if (data.header.supplier_id != 0) {
                     obj.getSupplier(data.header.supplier_id);
                 }
@@ -394,12 +435,10 @@ function Entry() {
                 if (data.header.id != '') {
                     $("#btnmodalDetail").attr("disabled", false);
                 }
-
+                listProducts = [];
                 detail = data.detail
                 obj.printDetail();
-
                 if (data.header.status_id != 2) {
-
                     $("#btnmodalDetail").prop("disabled", true);
                     $(".btnEditClass").prop("disabled", true);
                     $(".btnDeleteClass").prop("disabled", true);
@@ -415,10 +454,8 @@ function Entry() {
 
     this.reloadTableDetail = function (id, data) {
 
-
         var html = "<tr class='add_" + id + "'><table>";
         $(".add_" + id).remove();
-
         html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='7'><br></td></tr>";
         html += "<tr class='add_" + id + "'><td style='background-color:#ddd' colspan='3'></td>";
         html += "<td align='center'><button type='button' class='btn btn-info input-sm' onclick='obj.repeatData(" + id + ")'>Replicar</button></td>";
@@ -437,15 +474,11 @@ function Entry() {
             html += "</tr>";
             cont += parseInt(val.real_quantity);
         });
-
         html += "<tr class='add_" + id + "'><td colspan='3' style='background-color:#ddd'></td><td></td><td><b>Total</b> x" + data[0].units_supplier + "</td><td>" + (cont) + "</td><td>" + (data[0].units_supplier * cont) + "</td></tr>";
         html += "<tr class='add_" + id + "' style='background-color:#ddd'><td colspan='6'><br></td></tr>";
         html += "</table></tr>";
         $("#row_" + id).after(html);
-
         $(".form_datetime").datetimepicker({format: 'Y-m-d'});
-
-
     }
 
     this.reCalculate = function (elem, id, units_supplier) {
@@ -456,8 +489,6 @@ function Entry() {
     this.saveData = function (id) {
         $("#entry_id").val($("#frm #id").val());
         var data = $("#frmSetDetail").serialize();
-
-
         $.ajax({
             url: 'entry/' + id + '/setDetail',
             method: "PUT",
@@ -497,7 +528,6 @@ function Entry() {
             })
         }
         cont = 0;
-
         if ($(".detail_date_" + id)[0].value != '') {
 
             $(".detail_date_" + id).each(function () {
@@ -512,7 +542,6 @@ function Entry() {
         }
 
         cont = 0;
-
         if ($(".detail_quantity_" + id)[0].value != '') {
 
             $(".detail_quantity_" + id).each(function () {
@@ -557,7 +586,6 @@ function Entry() {
 
             $("#row_" + id).remove();
             delete detail[id - 1];
-
 //            var token = $("input[name=_token]").val();
 //            var url = "/entry/detail/" + id;
 //            var param = {};
@@ -651,7 +679,6 @@ function Entry() {
                 }
             },
         });
-
         $('#tbl tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = table.row(tr);
@@ -664,7 +691,6 @@ function Entry() {
                 tr.addClass('shown');
             }
         });
-
         return table;
     }
 

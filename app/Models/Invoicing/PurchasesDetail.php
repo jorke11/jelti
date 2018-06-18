@@ -27,6 +27,9 @@ class PurchasesDetail extends Model {
         "units_supplier",
         "tax",
         "parent_id",
+        "detail",
+        "status_id",
+        "real_quantity"
         ];
 
 }

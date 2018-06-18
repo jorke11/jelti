@@ -169,27 +169,37 @@ class EntryController extends Controller {
         }
     }
 
-    public function sendPurchase(Request $request) {
+    public function setInventory(Request $request) {
         if ($request->ajax()) {
             $input = $request->all();
 
             $purc = Purchases::find($input["header"]["id"]);
 
             if ($purc->status_id == 2) {
+                $detail = PurchasesDetail::where("purchase_id", $purc->id)->get();
 
-                foreach ($input["detail"] as $value) {
+                foreach ($detail as $value) {
+                    $row = PurchasesDetail::find($value->id);
+
                     $pro = Products::find($value["product_id"]);
-                    
-                    if (isset($value["real_quantity"]) && $value["real_quantity"] > 0) {
-                        $this->addInventory($input["header"]["warehouse_id"], $pro->reference, trim($value["real_quantity"]), trim($value["lot"]), trim($value["expiration_date"]), $pro->cost_sf, $pro->price_sf);
-                    }
-                }
 
+
+                    if ($value["detail"] != null) {
+                        foreach (json_decode($value["detail"]) as $val) {
+                            if (isset($val->quantity) && $val->quantity > 0) {
+                                $this->addInventory($input["header"]["warehouse_id"], $pro->reference, trim((int) $val->quantity), trim($val->lot), trim($val->expiration_date), $pro->cost_sf, $pro->price_sf);
+                            }
+                        }
+                    }
+
+                    $row->status_id = 3;
+                    $row->save();
+                }
 
                 $purc->status_id = 3;
                 $purc->save();
 
-                return response()->json(["success" => true, "header" => $purc]);
+                return response()->json(["success" => true, "header" => $purc, "detail" => $detail]);
             } else {
                 echo "else";
                 return response()->json(["success" => false, "msg" => "Entry is already generate"], 404);
@@ -199,7 +209,7 @@ class EntryController extends Controller {
         }
     }
 
-    public function sendPurchase2(Request $request) {
+    public function sendPurchase(Request $request) {
         if ($request->ajax()) {
 
             $input = $request->all();
@@ -374,26 +384,25 @@ class EntryController extends Controller {
     }
 
     public function updateDetail(Request $request, $id) {
-        $entry = EntriesDetail::FindOrFail($id);
+        $entry = PurchasesDetail::Find($id);
         $input = $request->all();
 
         $input["status_id"] = 3;
 
-        if ($input["real_quantity"] <= $input["quantity"]) {
+        if (isset($input["detail"])) {
+            $input["detail"] = json_encode($input["detail"]);
+        }
 
-            $result = $entry->fill($input)->save();
+        $result = $entry->fill($input)->save();
 
-            if ($result) {
-                $detail = $this->formatDetail($input["entry_id"]);
-                $total = "$ " . number_format($this->total, 2, ',', '.');
-                $real = "$ " . number_format($this->total_real, 2, ',', '.');
+        if ($result) {
+            $detail = $this->formatDetail($entry->id);
+            $total = "$ " . number_format($this->total, 2, ',', '.');
+            $real = "$ " . number_format($this->total_real, 2, ',', '.');
 
-                return response()->json(['success' => true, "detail" => $detail, "total" => $total, "total_real" => $real]);
-            } else {
-                return response()->json(['success' => false]);
-            }
+            return response()->json(['success' => true, "detail" => $detail, "total" => $total, "total_real" => $real]);
         } else {
-            return response()->json(['success' => false, "msg" => "Can not exceeded the amount " . $input["quantity"]], 409);
+            return response()->json(['success' => false], 409);
         }
     }
 

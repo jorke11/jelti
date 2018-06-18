@@ -132,8 +132,6 @@ class PurchaseController extends Controller {
 
             if (isset($input["detail"])) {
 
-
-
                 $purchase_id = Purchases::create($input["header"])->id;
 
                 foreach ($input["detail"] as $i => $val) {
@@ -145,6 +143,8 @@ class PurchaseController extends Controller {
                         $input["detail"][$i]["purchase_id"] = $purchase_id;
                         $input["detail"][$i]["account_id"] = $account->id;
                         $input["detail"][$i]["type_nature"] = 1;
+                        $input["detail"][$i]["status_id"] = 1;
+                        $input["detail"][$i]["real_quantity"] = 0;
                         $input["detail"][$i]["order"] = $i;
                         $input["detail"][$i]["value"] = $val["cost_sf"];
                         $input["detail"][$i]["units_supplier"] = (int) $input["detail"][$i]["units_supplier"];
@@ -391,12 +391,33 @@ class PurchaseController extends Controller {
 
     public function updateDetail(Request $request, $id) {
 
-        $row = PurchasesDetail::FindOrFail($id);
+        $row = PurchasesDetail::Find($id);
         $input = $request->all();
+        $purchase_id = $input["purchase_id"];
+
+        unset($input["purchase_id"]);
+        $input["real_quantity"] = 0;
+
+        if (isset($input["detail"])) {
+            $det = [];
+            foreach ($input["detail"] as $value) {
+                
+                if (isset($value["quantity"]) && $value["quantity"] > 0) {
+                    $det[] = $value;
+                    $input["real_quantity"] += (int) $value["quantity"];
+                }
+            }
+            $input["detail"] = json_encode($det);
+        } else {
+            $input["detail"] = null;
+        }
+
+        $input["status_id"] = 2;
+
         $result = $row->fill($input)->save();
 
         if ($result) {
-            $detail = $this->formatDetail($input["purchase_id"]);
+            $detail = $this->formatDetail($purchase_id);
             $this->subtotal = "$ " . number_format($this->subtotal, 0, ',', '.');
             $this->total = "$ " . number_format($this->total, 0, ',', '.');
             $this->tax5 = "$ " . number_format($this->tax5, 0, ',', '.');
@@ -441,10 +462,16 @@ class PurchaseController extends Controller {
                 d.tax,d.value,
                 (d.quantity * d.units_supplier) quantity_total,d.purchase_id, (d.value * d.units_supplier * d.quantity) as total, d.quantity,
                 p.bar_code as ean,
-                (d.value * d.units_supplier * d.quantity) as total_real
-            from purchases_detail d 
+                (d.value * d.units_supplier * d.real_quantity) as total_real,
+                d.status_id,
+                d.real_quantity,
+                d.detail
+            from purchases_detail d
             JOIN products p On p.id=d.product_id 
-            where d.purchase_id=" . $id;
+            where d.purchase_id=" . $id . "
+                ORDER by id
+                ";
+
 
         $detail = DB::select($sql);
 

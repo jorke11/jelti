@@ -2,12 +2,12 @@
     <div class="page-title" style="height: 0;">
         <div class="row">
             <div class="col-lg-12 text-right">
-                <button class="btn btn-success btn-sm" id='btnNew'>
+<!--                <button class="btn btn-success btn-sm" id='btnNew'>
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"> Nuevo</span>
                 </button>
                 <button class="btn btn-success btn-sm" id='btnSave' disabled>
                     <span class="glyphicon glyphicon-save" aria-hidden="true" > Guardar</span>
-                </button>
+                </button>-->
                 <button class="btn btn-success btn-sm" id='btnSend'>
                     <span class="glyphicon glyphicon-send" aria-hidden="true" > Ingresar</span>
                 </button>
@@ -134,6 +134,7 @@
                             <th colspan="2" class="center-rowspan">Information</th>
                             <th colspan="3" class="center-rowspan">Order</th>
                             <th colspan="3" class="center-rowspan">Real</th>
+                            <th rowspan="2" class="center-rowspan">Estado</th>
                             <th rowspan="2" class="center-rowspan">Actions</th>
                         </tr>
                         <tr>
@@ -145,6 +146,7 @@
                             <th>Quantity</th>
                             <th>Value</th>
                             <th>Total</th>
+                            <th></th>
 
                         </tr>
                     </thead>

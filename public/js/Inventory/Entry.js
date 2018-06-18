@@ -381,7 +381,7 @@ function Entry() {
         var htmlDel = ''
 
         $("#tblDetail tbody").empty();
-        var real_quantity = 0;
+        var real_quantity = 0, status = '';
         $.each(detail, function (i, val) {
             if (val != undefined) {
                 htmlEdit = '';
@@ -391,6 +391,7 @@ function Entry() {
 //                    htmlDel = ' <button type="button" class="btn btn-xs btn-warning btnDeleteClass" onclick=obj.deleteDetail(' + val.id + ')>Delete</button>'
                 }
                 real_quantity = (val.real_quantity != undefined) ? val.real_quantity : 0;
+                status = (val.status_id == 1) ? "Nuevo" : "Revisado";
                 val.total_real = (val.total_real == null) ? 0 : val.total_real;
                 html += `
                         <tr id="row_${val.id}">
@@ -402,7 +403,7 @@ function Entry() {
                             <td>${real_quantity}</td>
                             <td>${$.formatNumber(val.value)}</td>
                             <td>${$.formatNumber(val.total_real, "$")}</td>
-                            <td>${val.status_id}</td>
+                            <td>${status}</td>
                             <td>${htmlEdit}${htmlDel}</td>
                         </tr>`
             }

@@ -250,7 +250,6 @@ class OperationsController extends Controller {
             GROUP BY 1
             ";
 
-
         $res = DB::select($sql);
         return response()->json(["data" => $res]);
     }

@@ -44,7 +44,6 @@ function Operations() {
         param.warehouse_id = $("#Detail #warehouse_id").val();
         param.client_id = $("#Detail #client_id").val();
 
-
         $.ajax({
             url: "operations/getMaxMin/",
             method: 'GET',
@@ -95,13 +94,10 @@ function Operations() {
 
                 })
 
-
-
                 $("#tblmaxmin tbody").html(html);
 //                $.each(del, function (i, val) {
 //                    $("#row_" + val).remove();
 //                });
-
             },
             complete: function () {
                 $("#loading-super").addClass("hidden");
@@ -154,13 +150,16 @@ function Operations() {
     }
 
     this.tableNivel = function () {
+
+        console.log("asdasdasd");
+
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
         obj.warehouse_id = $("#Detail #warehouse_id").val();
         obj.client_id = $("#Detail #client_id").val();
 
-        return $('#tblService').DataTable({
+        return $('#tblservice').DataTable({
             "dom":
                     "R<'row'<'col-sm-4'l><'col-sm-2 toolbar text-right'><'col-sm-3'B><'col-sm-3'f>>" +
                     "<'row'<'col-sm-12't>>" +
@@ -248,7 +247,6 @@ function Operations() {
     }
 
     this.tableTotal_cost = function () {
-        console.log("asd");
         var obj = {};
         obj.init = $("#Detail #finit").val();
         obj.end = $("#Detail #fend").val();
@@ -506,7 +504,6 @@ function Operations() {
             method: 'GET',
             data: obj,
             success: function (data) {
-
                 Highcharts.chart('container_product', {
                     chart: {
                         zoomType: 'xy'
@@ -570,7 +567,6 @@ function Operations() {
                             tooltip: {
                                 valueSuffix: ' $'
                             }
-
                         },
                         {
                             name: 'Unidades',
@@ -663,7 +659,6 @@ function Operations() {
                             tooltip: {
                                 valueSuffix: ' $'
                             }
-
                         }
                         ,
                         {
@@ -678,10 +673,7 @@ function Operations() {
                     ]
                 });
             }
-
         })
-
-
     }
 
     this.tableProductByCategory = function () {

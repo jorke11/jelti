@@ -310,9 +310,9 @@ class OperationsController extends Controller {
         $sql = "
              SELECT p.title as product,dep.warehouse,
  		sum(d.quantity*d.packaging) unit_order,
- 		sum(d.real_quantity*d.packaging) units_dispatched,
-        sum((d.quantity*d.packaging) - (d.real_quantity*d.packaging)) no_shipped_units,
-        (sum(d.quantity*d.packaging-d.real_quantity*d.packaging) * d.value) value_dispatched
+ 		sum(d.real_quantity) units_dispatched,
+        sum((d.quantity) - (d.real_quantity)) no_shipped_units,
+        (sum(d.quantity-d.real_quantity) * d.value) value_dispatched
             FROM departures_detail d
             JOIN vdepartures dep ON dep.id=d.departure_id and dep.status_id IN (2,7) AND dep.client_id NOT IN(258,264,24)
             JOIN stakeholder ON stakeholder.id=dep.client_id and type_stakeholder=1

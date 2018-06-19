@@ -180,7 +180,7 @@ function Operations() {
 
             scrollX: true,
             columns: [
-                {data: "warehouse"},
+                {data: "product"},
                 {data: "invoices"},
                 {data: "orders_units"},
                 {data: "dispatched_units"},

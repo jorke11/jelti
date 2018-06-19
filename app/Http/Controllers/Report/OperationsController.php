@@ -318,7 +318,7 @@ class OperationsController extends Controller {
             JOIN stakeholder ON stakeholder.id=dep.client_id and type_stakeholder=1
             JOIN products p ON p.id=d.product_id
             WHERE dep.dispatched BETWEEN '" . $in["init"] . " 00:00' AND '" . $in["end"] . " 23:59' $ware
-            and d.real_quantity<>d.quantity
+            and d.real_quantity < d.quantity
             GROUP BY 1,2,d.value
             order by 1,2
              

@@ -116,6 +116,16 @@
 </div>
 <div class="row">
     <!-- Nav tabs -->
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @include('Report.Operations.products_shipped')
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <!-- Nav tabs -->
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-body">

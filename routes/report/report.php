@@ -36,6 +36,7 @@ Route::get('/operations/getShippingCostClient', "Report\OperationsController@get
 Route::get('/operations/getTotalCost', "Report\OperationsController@getTotalCost");
 Route::get('/operations/getMaxMin', "Report\OperationsController@getMinMax");
 Route::get('operations/getNivelService', "Report\OperationsController@getNivelService");
+Route::get('operations/getProductsNoSend', "Report\OperationsController@getProductsNoSend");
 Route::get('operations/getNoShipped', "Report\OperationsController@getNoShipped");
 
 Route::get('/api/reportCommercial', "Report\CommercialController@listCommercial");

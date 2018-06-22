@@ -35,6 +35,7 @@ use App\Traits\NumberToString;
 use App\Traits\StringExtra;
 use App\Traits\Invoice;
 use App\Traits\ToolInventory;
+use App\Traits\EmailNotification;
 use Log;
 
 class DepartureController extends Controller {
@@ -43,6 +44,7 @@ class DepartureController extends Controller {
     use StringExtra;
     use Invoice;
     use ToolInventory;
+    use EmailNotification;
 
     protected $tool;
     public $path;
@@ -550,9 +552,6 @@ class DepartureController extends Controller {
             $input["detail"] = json_decode($input["detail"], true);
 
 
-//            unset($input["id"]);
-//            $user = Auth::User();
-
             $query = DB::table("vbriefcase")
                     ->where("client_id", $input["header"]["client_id"])
                     ->where("dias_vencidos", ">", 0);
@@ -595,12 +594,10 @@ class DepartureController extends Controller {
      * @param type $detail
      * @return type
      */
-    public function processDeparture($header, $detail, $id = null) {
+    public function processDeparture($header, $detail, $id = null, $send = true) {
         try {
             DB::beginTransaction();
             $header["insert_id"] = Auth::user()->id;
-
-//            dd($detail);
 
             if (isset($header["branch_id"]) && $header["branch_id"] != 0) {
 
@@ -620,14 +617,11 @@ class DepartureController extends Controller {
                 $result = $id;
             }
 
-
             if ($result) {
                 $emDetail = null;
 
                 $resp = Departures::Find($result);
-
                 $detail = array_values(array_filter($detail));
-
 
                 $price_sf = 0;
                 $tax19 = 0;
@@ -674,7 +668,6 @@ class DepartureController extends Controller {
 
                     $total_quantity_packaging += $new["packaging"] * $quantity;
 
-
                     if ($pro->tax == '0.05') {
                         $tax5++;
                     }
@@ -683,7 +676,6 @@ class DepartureController extends Controller {
                     }
 
                     $valpro = DeparturesDetail::where("product_id", $val["product_id"])->where("departure_id", $resp->id)->first();
-
 
                     if ($valpro == null) {
                         DeparturesDetail::create($new);
@@ -702,100 +694,46 @@ class DepartureController extends Controller {
                     $resp->save();
                 }
 
-
                 $data["header"] = $resp;
                 $listdetail = $this->formatDetailJSON($data, $result);
 
-
-                $ware = Warehouses::find($header["warehouse_id"]);
                 $client = Stakeholder::find($header["client_id"]);
 
-                $email = Email::where("description", "departures")->first();
+                $this->subtotal += ($resp->shipping_cost);
+                $shipping_cost_tax = 0;
 
-                if ($email != null) {
-                    $emDetail = EmailDetail::where("email_id", $email->id)->get();
+                if ($resp->shipping_cost_tax == 0.05) {
+                    $this->tax5 += $resp->shipping_cost_tax * $resp->shipping_cost;
+                    $shipping_cost_tax = $this->tax5;
+                } else if ($resp->shipping_cost_tax == 0.19) {
+                    $this->tax19 += $resp->shipping_cost_tax * $resp->shipping_cost;
+                    $shipping_cost_tax = $this->tax19;
                 }
 
-                if (count($emDetail) > 0) {
-                    $this->mails = array();
+                $this->total = $this->subtotal + $this->tax5 + $this->tax19 - $resp->discount;
 
-                    $userware = Users::find($ware->responsible_id);
-                    $this->mails[] = $userware->email;
+                $resp->quantity_packaging = $total_quantity_packaging;
+                $resp->quantity = $total_quantity;
+                $resp->exento = $this->exento;
+                $resp->tax5 = $this->tax5;
+                $resp->tax19 = $this->tax19;
+                $resp->subtotal = $this->subtotal;
+                $resp->total = $this->total;
 
-                    foreach ($emDetail as $value) {
-                        $this->mails[] = $value->description;
-                    }
-
-                    $cit = Cities::find($ware->city_id);
-
-                    $this->subject = "SuperFuds " . date("d/m") . " " . $client->business . " " . $cit->description . " " . $result;
-                    $header["city"] = $cit->description;
-
-                    $user = Users::find($header["responsible_id"]);
-
-                    $header["name"] = ucwords($user->name);
-                    $header["last_name"] = ucwords($user->last_name);
-                    $header["phone"] = $user->phone;
-                    $header["warehouse"] = $ware->description;
-                    $header["address"] = $ware->address;
-                    $header["detail"] = $listdetail["detail"];
-                    $header["id"] = $result;
-                    $header["environment"] = env("APP_ENV");
-                    $header["created_at"] = $resp->created_at;
-
-                    $this->subtotal += ($resp->shipping_cost);
-                    $shipping_cost_tax = 0;
-
-                    if ($resp->shipping_cost_tax == 0.05) {
-                        $this->tax5 += $resp->shipping_cost_tax * $resp->shipping_cost;
-                        $shipping_cost_tax = $this->tax5;
-                    } else if ($resp->shipping_cost_tax == 0.19) {
-                        $this->tax19 += $resp->shipping_cost_tax * $resp->shipping_cost;
-                        $shipping_cost_tax = $this->tax19;
-                    }
-
-                    $this->total = $this->subtotal + $this->tax5 + $this->tax19 - $resp->discount;
-
-                    $header["subtotal"] = "$" . number_format($this->subtotal, 0, ",", ".");
-                    $header["total"] = "$" . number_format($this->total, 0, ",", ".");
-                    $header["exento"] = $this->exento;
-                    $header["tax5"] = $this->tax5;
-                    $header["tax19"] = $this->tax19;
-                    $header["flete"] = $resp->shipping_cost;
-                    $header["discount"] = $resp->discount;
-                    $header["status_id"] = $resp->status_id;
-
-                    $this->mails[] = $user->email;
-
-                    if ($header["environment"] == 'local') {
-                        $this->mails = Auth::User()->email;
-                    }
-
-                    $resp->quantity_packaging = $total_quantity_packaging;
-                    $resp->quantity = $total_quantity;
-                    $resp->exento = $this->exento;
-
-                    $resp->tax5 = $this->tax5;
-                    $resp->tax19 = $this->tax19;
-                    $resp->subtotal = $this->subtotal;
-                    $resp->total = $this->total;
-
-                    $resp->save();
-
-                    Mail::send("Notifications.departure", $header, function($msj) {
-                        $msj->subject($this->subject);
-                        $msj->to($this->mails);
-                    });
-
-                    $this->logClient($client->id, "Genero Orden de venta " . $result);
-                }
-
-                DB::commit();
+                $resp->save();
+                $this->logClient($client->id, "Genero Orden de venta " . $result);
 
                 $total = "$ " . number_format($this->total, 0, ",", ".");
                 $data["success"] = true;
                 $data["header"] = $resp;
                 $response = $this->formatDetailJSON($data, $result);
+
+                DB::commit();
+
+                if ($send == true) {
+                    $this->sendRequestOrder($resp->id);
+                }
+
 
                 return response()->json($response);
             } else {
@@ -1053,24 +991,7 @@ class DepartureController extends Controller {
     }
 
     public function testDepNotification($id) {
-        $name = "jorge";
-        $last_name = "Pinedo";
-        $id = 1;
-        $created_at = date("Y-m-d H:i");
-        $warehouse = "jorge";
-        $detail = $this->formatDetail(1133);
-        $subtotal = "$" . number_format($this->subtotal, 0, ",", ".");
-        $total = "$" . number_format($this->total, 0, ",", ".");
-        $exento = "$" . number_format($this->total, 0, ",", ".");
-        $tax5f = "$" . number_format($this->tax5, 0, ",", ".");
-        $tax5 = $this->tax5;
-        $tax19f = "$" . number_format($this->tax19, 0, ",", ".");
-        $tax19 = $this->tax19;
-        $flete = 10000;
-        $environment = "production";
-        $discount = 0;
-        $status_id = 1;
-        return view("Notifications.departure", compact("name", "last_name", "id", "created_at", "detail", "warehouse", "subtotal", "total", "exento", "tax5f", "tax5", "tax19f", "tax19", "environment", "flete", "discount", "status_id"));
+        $this->sendRequestOrder($id);
     }
 
     public function testInvoiceNotification($id) {

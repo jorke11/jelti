@@ -19,12 +19,9 @@
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Pdf</span>
                 </button>
                 @endif
-
-                @if(Auth::user()->id == 2)
                 <button class="btn btn-success btn-sm" id='btnReverse'>
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true">Reversar</span>
                 </button>
-                @endif
             </div>
         </div>
     </div>

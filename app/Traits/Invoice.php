@@ -218,6 +218,35 @@ trait Invoice {
         $this->total_real = $this->subtotal + $this->tax19 + $this->tax5 + (- $dep->discount);
         return $detail;
     }
+    
+    public function formatDetailOrder($order) {
+        $detail = null;
+        if (Auth::user() != null) {
+            
+            if ($order != null) {
+                
+                $sql = "
+                SELECT p.title product,s.business as supplier,d.product_id,d.order_id,sum(d.quantity) quantity,d.price_sf as value,sum(d.quantity * d.price_sf) total,
+                p.image,p.thumbnail,
+                d.units_sf,d.tax
+                FROM orders_detail d
+                    LEFT JOIN vproducts p ON p.id=d.product_id
+                    LEFT JOIN stakeholder s ON s.id=p.supplier_id
+                WHERE order_id=" . $order->id . "
+                GROUP BY 1,2,3,4,d.units_sf,product_id,p.image,d.tax,p.thumbnail,d.price_sf
+                ORDER BY 1";
+                $detail = DB::select($sql);
+                
+                dd($detail);
+
+                $detail = json_decode(json_encode($detail), true);
+                return $detail;
+            } else {
+                return null;
+            }
+        }
+    }
+    
 
     public function logClient($client_id, $comment) {
         $in["user_id"] = Auth::user()->id;
